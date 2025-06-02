@@ -1,0 +1,176 @@
+/* src/styles/components/pageTransitions.css */
+/* Add this file to your project and import it in your App.jsx */
+
+/* Page transition container */
+.page-transition-container {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Page content wrapper */
+  .page-content {
+    width: 100%;
+    flex-grow: 1;
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+    
+  }
+  
+  /* Animation for new page - slide from right */
+  .page-enter {
+    animation-name: slideInRight;
+  }
+  
+  /* Animation for exiting page - slide to left */
+  .page-exit {
+    animation-name: slideOutLeft;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Animation for back navigation - slide from left */
+  .page-enter-back {
+    animation-name: slideInLeft;
+  }
+  
+  /* Animation for back navigation - slide to right */
+  .page-exit-back {
+    animation-name: slideOutRight;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Define the slide animations */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutLeft {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-30%);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(30%);
+      opacity: 0;
+    }
+  }
+  
+  /* Fade animations for tab navigation */
+  .page-tab-enter {
+    animation-name: fadeIn;
+    animation-duration: 0.25s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Make sure content doesn't shift during animation */
+  .content-with-bottom-nav {
+    padding-bottom: 70px; /* Match the height of bottom nav */
+  }
+
+  /* src/styles/components/pageTransitions.css - Refined animations */
+
+/* Page transition container */
+.page-transition-container {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Page content wrapper */
+  .page-content {
+    width: 100%;
+    flex-grow: 1;
+    animation-duration: 0.2s; /* Shorter duration */
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+    display: flex;
+  }
+  
+  /* Animation for new page - subtle fade */
+  .page-enter {
+    animation-name: subtleFadeIn;
+  }
+  
+  /* Animation for tab navigation - just a fade */
+  .page-tab-enter {
+    animation-name: simpleFade;
+    animation-duration: 0.15s; /* Even faster for tabs */
+  }
+  
+  /* Define the subtle animations */
+  @keyframes subtleFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px); /* Much smaller distance */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes simpleFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Make sure content doesn't shift during animation */
+  .content-with-bottom-nav {
+    padding-bottom: 70px; /* Match the height of bottom nav */
+  }

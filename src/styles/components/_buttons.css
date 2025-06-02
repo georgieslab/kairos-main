@@ -1,0 +1,144 @@
+/* src/styles/components/_buttons.css */
+
+:root {
+  --color-brand: #558B6E;
+  --color-brand-light: #88A38F;
+  --color-brand-dark: #2B463C;
+  --color-background: #1E1E1E;
+  --color-surface: rgba(46, 70, 60, 0.8);
+  --color-surface-dark: rgba(30, 30, 30, 0.95);
+  --color-text-primary: #F5F5F0;
+  --color-text-secondary: #D8D8D0;
+  --color-accent: #E6B89C;
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    
+    --blur-light: blur(8px);
+    --blur-heavy: blur(16px);
+  }
+  
+  /* Base button styles */
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--color-brand), var(--color-brand-dark));
+    color: white;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-base:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(85, 139, 110, 0.3);
+  }
+  
+  .btn-base:active {
+    transform: translateY(0);
+  }
+  
+  .btn-base::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    transform: translateY(-100%);
+    transition: transform 0.6s ease;
+  }
+  
+  .btn-base:hover::after {
+    transform: translateY(100%);
+  }
+  
+  /* Secondary button */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: rgba(31, 41, 55, 0.7);
+    color: var(--color-text-primary);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: var(--blur-light);
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(31, 41, 55, 0.9);
+    border-color: var(--color-brand);
+  }
+  
+  /* Text button */
+  .btn-text {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-text:hover {
+    color: var(--color-text-primary);
+  }
+  
+  /* Icon button */
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-icon:hover {
+    background: rgba(31, 41, 55, 0.9);
+    border-color: var(--color-brand);
+    transform: translateY(-2px);
+  }
+  
+  /* Disabled state for all buttons */
+  .btn-base:disabled,
+  .btn-secondary:disabled,
+  .btn-text:disabled,
+  .btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .btn-base:disabled::after {
+    display: none;
+  }
+
+  

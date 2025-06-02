@@ -1,0 +1,92 @@
+/* src/styles/main.css */
+/* src/styles/main.css */
+
+/* Base styles */
+@import './base/_variables.css';
+@import './base/_typography.css';
+@import './base/_reset.css';
+
+/* Component styles */
+@import './components/_buttons.css';
+@import './components/_cards.css';
+@import './components/_forms.css';
+@import './components/welcome.css';
+@import './components/signup.css';
+@import './components/journey.css';
+@import './components/JournalUpload.css';  /* Make sure this is imported */
+@import './components/analysis.css';
+@import './components/completion.css';
+@import './components/journal-archive.css';
+@import './components/pathSelection.css';
+@import './components/bottomNavigation.css';
+@import './components/pathIndicator.css';
+@import './components/WriteTab.css';       /* Make sure this is imported */
+@import './components/feedback.css';
+@import './components/settings.css';
+@import './components/profile.css';
+@import './components/homeScreen.css';
+@import './components/loader.css';
+@import './components/floatingActionButton.css';
+@import './components/PageLayout.css';
+@import './components/pageTransitions.css';
+@import './components/versionDisplay.css';
+@import './components/analysisLoading.css';
+@import './components/about-help.css';
+
+/* Layout styles */
+@import './layouts/_containers.css';
+
+/* Page styles */
+@import './pages/analyticsDashboard.css';
+
+/* Add any missing imports here */
+
+
+
+
+/* Global Styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Container Classes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Glass Card Effect */
+.glass-card {
+  background: var(--color-surface);
+  backdrop-filter: var(--blur-light);
+  border: 1px solid rgba(244, 162, 97, 0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-lg);
+}
+
+/* Text Styles */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-light));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Form Elements */
+.input-glassy {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-brand);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  backdrop-filter: var(--blur-light);
+}
+
+.input-glassy:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--color-brand-dark);
+}

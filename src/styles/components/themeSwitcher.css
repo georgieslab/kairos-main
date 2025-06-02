@@ -1,0 +1,135 @@
+/* src/styles/components/themeSwitcher.css */
+.theme-switcher {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.theme-switcher:hover {
+  transform: translateY(-2px);
+}
+
+.theme-switcher:active {
+  transform: translateY(0);
+}
+
+/* Retro Switcher */
+.retro-switcher {
+  width: 48px;
+  height: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.retro-switch-track {
+  width: 100%;
+  height: 16px;
+  background: #E0E0E0;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
+}
+
+.retro-switcher.dark .retro-switch-track {
+  background: #313945dd;
+}
+
+.retro-switch-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: -2px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.retro-switcher.light .retro-switch-handle {
+  left: 2px;
+  background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+  border: 1px solid #FFD54F;
+}
+
+.retro-switcher.dark .retro-switch-handle {
+  left: calc(100% - 22px);
+  background: linear-gradient(135deg, #64748B, #475569);
+  border: 1px solid #334155;
+}
+
+.retro-icons {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6px;
+  z-index: 1;
+}
+
+.retro-sun {
+  color: #FF9800;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.retro-moon {
+  color: #64748B;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.retro-switcher.light .retro-sun {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(255, 152, 0, 0.3));
+}
+
+.retro-switcher.dark .retro-sun {
+  opacity: 0.5;
+}
+
+.retro-switcher.light .retro-moon {
+  opacity: 0.5;
+}
+
+.retro-switcher.dark .retro-moon {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(100, 116, 139, 0.3));
+}
+
+/* Animation states */
+.theme-switcher.animating .retro-switch-handle {
+  animation: pulseEffect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pulseEffect {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Focus styles for accessibility */
+.theme-switcher:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .retro-switcher {
+    width: 44px;
+    height: 24px;
+  }
+  
+  .retro-switch-handle {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .retro-switcher.dark .retro-switch-handle {
+    left: calc(100% - 20px);
+  }
+}

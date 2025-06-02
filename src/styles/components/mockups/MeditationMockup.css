@@ -1,0 +1,487 @@
+/* src/styles/components/mockups/MeditationMockup.css */
+
+.meditation-mockup-container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 2rem;
+  perspective: 1000px;
+}
+
+/* Phone mockup */
+.mockup-phone {
+  position: relative;
+  width: 100%;
+  border-radius: 2.5rem;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    inset 0 0 20px rgba(0, 0, 0, 0.2);
+  transform: rotateX(5deg) rotateY(-2deg);
+  transform-style: preserve-3d;
+  padding: 8px;
+  aspect-ratio: 9/19;
+  z-index: 10;
+}
+
+/* Phone screen */
+.mockup-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #111827, #1e293b);
+  border-radius: 2rem;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App header */
+.mockup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  z-index: 10;
+}
+
+.back-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f3f4f6;
+  cursor: pointer;
+}
+
+.app-name {
+  color: #f3f4f6;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.header-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.header-icon span {
+  width: 4px;
+  height: 4px;
+  background: #f3f4f6;
+  border-radius: 50%;
+}
+
+/* Meditation info with image */
+.meditation-info {
+  width: 100%;
+  position: relative;
+}
+
+.meditation-image {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+  position: relative;
+  overflow: hidden;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+.image-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem;
+  z-index: 2;
+}
+
+.meditation-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #10B981;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.meditation-title {
+  color: #f3f4f6;
+  font-size: 1.5rem;
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.meditation-subtitle {
+  color: rgba(243, 244, 246, 0.8);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Audio container */
+.audio-container {
+  padding: 1.5rem;
+}
+
+/* Audio visualizer */
+.audio-visualizer {
+  height: 3rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 0.5rem;
+}
+
+.visualizer-bar {
+  width: 4px;
+  background: linear-gradient(to top, rgba(16, 185, 129, 0.5), rgba(16, 185, 129, 1));
+  border-radius: 2px;
+  transition: height 0.5s ease;
+}
+
+/* Meditation text */
+.meditation-text {
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  color: #f3f4f6;
+  font-size: 0.9375rem;
+  text-align: center;
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid #10B981;
+}
+
+/* Progress bar */
+.progress-container {
+  padding: 0 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2.5px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #10B981;
+  border-radius: 2.5px;
+  transition: width 1s linear;
+}
+
+.time-indicators {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(243, 244, 246, 0.6);
+  font-size: 0.75rem;
+}
+
+/* Player controls */
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.control-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(243, 244, 246, 0.7);
+  transition: transform 0.2s, color 0.2s;
+}
+
+.control-button:hover {
+  transform: scale(1.1);
+  color: #f3f4f6;
+}
+
+.control-button.play,
+.control-button.pause {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  color: #f3f4f6;
+}
+
+.control-button.play svg,
+.control-button.pause svg {
+  width: 24px;
+  height: 24px;
+}
+
+.control-button.rewind svg,
+.control-button.forward svg,
+.control-button.skip-back svg,
+.control-button.skip-forward svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Meditation info cards */
+.meditation-info-cards {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  width: 48%;
+}
+
+.info-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-label {
+  font-size: 0.7rem;
+  color: rgba(243, 244, 246, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 0.75rem;
+  color: #f3f4f6;
+  font-weight: 500;
+}
+
+/* Bottom navigation hint */
+.bottom-nav-hint {
+  margin-top: auto;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-pill {
+  width: 30%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+/* Floating decoration elements */
+.floating-element {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.bubble-1 {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.3), transparent);
+  top: -20px;
+  left: -30px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.bubble-2 {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), transparent);
+  bottom: 60px;
+  right: -20px;
+  animation: float 10s ease-in-out infinite 1s;
+}
+
+.bubble-3 {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.25), transparent);
+  top: 80px;
+  right: 10px;
+  animation: float 7s ease-in-out infinite 0.5s;
+}
+
+.leaf-1 {
+  width: 30px;
+  height: 30px;
+  background: rgba(16, 185, 129, 0.3);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 22s16-2 19-9M9 18l-7 4m19-11L4 22l10-6 5-5z'/%3E%3C/svg%3E") no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 22s16-2 19-9M9 18l-7 4m19-11L4 22l10-6 5-5z'/%3E%3C/svg%3E") no-repeat center / contain;
+  bottom: 30px;
+  left: 10px;
+  animation: spin 15s linear infinite;
+}
+
+.leaf-2 {
+  width: 25px;
+  height: 25px;
+  background: rgba(16, 185, 129, 0.3);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 22s16-2 19-9M9 18l-7 4m19-11L4 22l10-6 5-5z'/%3E%3C/svg%3E") no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 22s16-2 19-9M9 18l-7 4m19-11L4 22l10-6 5-5z'/%3E%3C/svg%3E") no-repeat center / contain;
+  top: 40px;
+  left: 30px;
+  transform: rotate(120deg);
+  animation: spin 20s linear infinite reverse;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .meditation-mockup-container {
+    padding: 1rem;
+    max-width: 280px;
+  }
+  
+  .mockup-phone {
+    border-radius: 2rem;
+  }
+  
+  .mockup-screen {
+    border-radius: 1.5rem;
+  }
+  
+  .mockup-header {
+    padding: 0.75rem;
+  }
+  
+  .app-name {
+    font-size: 0.875rem;
+  }
+  
+      .back-button {
+        width: 90px;
+        height: 30px;
+    }
+  
+  .meditation-image {
+    height: 150px;
+  }
+  
+  .image-content {
+    padding: 1rem;
+  }
+  
+  .meditation-title {
+    font-size: 1.125rem;
+  }
+  
+  .meditation-subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .audio-container {
+    padding: 0.5rem;
+  }
+  
+  .audio-visualizer {
+    height: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .meditation-text {
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .progress-container {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .player-controls {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .control-button.play,
+  .control-button.pause {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .control-button.play svg,
+  .control-button.pause svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .meditation-info-cards {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .info-card {
+    padding: 0.5rem;
+  }
+  
+  .info-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+  }
+}
