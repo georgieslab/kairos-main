@@ -1,0 +1,147 @@
+/* src/styles/theme.css */
+
+:root {
+  /* Dark Theme Colors */
+  --dark-bg-primary: #0f1419;
+  --dark-bg-secondary: #111827;
+  --dark-bg-tertiary: #374151;
+  --dark-bg-hover: #2d3748;
+  --dark-bg-active: #4b5563;
+  --dark-border-primary: #374151;
+  --dark-border-secondary: #4b5563;
+  --dark-border-hover: #6b7280;
+  --dark-text-primary: #f9fafb;
+  --dark-text-secondary: #d1d5db;
+  --dark-text-muted: #9ca3af;
+  --dark-text-disabled: #6b7280;
+  
+  /* Light Theme Colors */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #f3f4f6;
+  --light-bg-tertiary: #e5e7eb;
+  --light-bg-hover: #f9fafb;
+  --light-bg-active: #e5e7eb;
+  --light-border-primary: #d1d5db;
+  --light-border-secondary: #9ca3af;
+  --light-border-hover: #6b7280;
+  --light-text-primary: #111827;
+  --light-text-secondary: #374151;
+  --light-text-muted: #6b7280;
+  --light-text-disabled: #9ca3af;
+  
+  /* Path Colors */
+  --color-self-discovery: 85, 139, 110; /* Green */
+  --color-emotional-intelligence: 216, 76, 147; /* Pink */
+  --color-mindfulness-awareness: 142, 68, 173; /* Purple */
+  --color-transformation-journey: 26, 155, 155; /* Teal */
+  --color-creative-expression: 217, 70, 239; /* Fuchsia/pink */
+  --color-habit-formation: 245, 158, 11; /* Amber */
+  
+  /* Spacing and Sizing */
+  --border-radius-sm: 0.375rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-xl: 1rem;
+  --border-radius-full: 9999px;
+  
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Animations */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  /* Glow Effects */
+  --glow-sm: 0 0 8px rgba(255, 255, 255, 0.1);
+  --glow-md: 0 0 15px rgba(255, 255, 255, 0.15);
+  --glow-lg: 0 0 25px rgba(255, 255, 255, 0.2);
+  
+  --light-glow-sm: 0 0 8px rgba(0, 0, 0, 0.05);
+  --light-glow-md: 0 0 15px rgba(0, 0, 0, 0.08);
+  --light-glow-lg: 0 0 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme is the default */
+body {
+  background-color: var(--dark-bg-primary);
+  color: var(--dark-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Apply light theme when .light-theme class is present on html element */
+html.light-theme body {
+  background-color: var(--light-bg-primary);
+  color: var(--light-text-primary);
+}
+
+/* General container theming */
+.dark-theme {
+  --bg-primary: var(--dark-bg-primary);
+  --bg-secondary: var(--dark-bg-secondary);
+  --bg-tertiary: var(--dark-bg-tertiary);
+  --bg-hover: var(--dark-bg-hover);
+  --bg-active: var(--dark-bg-active);
+  --border-primary: var(--dark-border-primary);
+  --border-secondary: var(--dark-border-secondary);
+  --border-hover: var(--dark-border-hover);
+  --text-primary: var(--dark-text-primary);
+  --text-secondary: var(--dark-text-secondary);
+  --text-muted: var(--dark-text-muted);
+  --text-disabled: var(--dark-text-disabled);
+  --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  --modal-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
+  --card-glow: var(--glow-sm);
+}
+
+.light-theme {
+  --bg-primary: var(--light-bg-primary);
+  --bg-secondary: var(--light-bg-secondary);
+  --bg-tertiary: var(--light-bg-tertiary);
+  --bg-hover: var(--light-bg-hover);
+  --bg-active: var(--light-bg-active);
+  --border-primary: var(--light-border-primary);
+  --border-secondary: var(--light-border-secondary);
+  --border-hover: var(--light-border-hover);
+  --text-primary: var(--light-text-primary);
+  --text-secondary: var(--light-text-secondary);
+  --text-muted: var(--light-text-muted);
+  --text-disabled: var(--light-text-disabled);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  --modal-shadow: 0 20px 25px rgba(0, 0, 0, 0.12);
+  --card-glow: var(--light-glow-sm);
+}
+
+/* Theme toggle button styling */
+.theme-toggle-button {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--border-radius-md);
+  color: var(--text-secondary);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--card-glow);
+}
+
+.theme-toggle-button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-md);
+}

@@ -1,0 +1,445 @@
+/* src/styles/designSystem.css - Unified Kairos Design System */
+
+/* ============================================================================
+   KAIROS UNIFIED DESIGN SYSTEM
+   Import this file first in all components for consistency
+   ============================================================================ */
+
+:root {
+  /* ========================================
+     UNIFIED COLOR SYSTEM
+     ======================================== */
+  
+  /* Brand Colors */
+  --kairos-primary: 85, 139, 110;          /* Main brand green */
+  --kairos-secondary: 59, 130, 246;        /* Accent blue */
+  --kairos-accent: 168, 85, 247;           /* Purple accent */
+  
+  /* Semantic Colors */
+  --kairos-success: 34, 197, 94;
+  --kairos-warning: 251, 191, 36;
+  --kairos-error: 239, 68, 68;
+  --kairos-info: 59, 130, 246;
+  
+  /* ========================================
+     UNIFIED THEME SYSTEM
+     ======================================== */
+  
+  /* Light Theme (Default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-active: #e2e8f0;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+  --text-disabled: #cbd5e1;
+  --text-inverse: #ffffff;
+  
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --border-hover: #94a3b8;
+  --border-focus: rgba(var(--kairos-primary), 0.6);
+  
+  --surface-primary: #ffffff;
+  --surface-secondary: #f8fafc;
+  --surface-elevated: #ffffff;
+  
+  /* ========================================
+     UNIFIED TYPOGRAPHY SYSTEM
+     ======================================== */
+  
+  /* Font Families */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  /* Font Sizes - Mobile First */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  
+  /* ========================================
+     UNIFIED SPACING SYSTEM
+     ======================================== */
+  
+  --space-1: 0.25rem;      /* 4px */
+  --space-2: 0.5rem;       /* 8px */
+  --space-3: 0.75rem;      /* 12px */
+  --space-4: 1rem;         /* 16px */
+  --space-5: 1.25rem;      /* 20px */
+  --space-6: 1.5rem;       /* 24px */
+  --space-8: 2rem;         /* 32px */
+  --space-10: 2.5rem;      /* 40px */
+  --space-12: 3rem;        /* 48px */
+  --space-16: 4rem;        /* 64px */
+  --space-20: 5rem;        /* 80px */
+  --space-24: 6rem;        /* 96px */
+  
+  /* ========================================
+     UNIFIED BORDER RADIUS SYSTEM
+     ======================================== */
+  
+  --radius-none: 0;
+  --radius-sm: 0.375rem;   /* 6px */
+  --radius-base: 0.5rem;   /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.5rem;     /* 24px */
+  --radius-2xl: 2rem;      /* 32px */
+  --radius-full: 9999px;
+  
+  /* ========================================
+     UNIFIED SHADOW SYSTEM
+     ======================================== */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Colored Shadows */
+  --shadow-primary: 0 4px 14px 0 rgba(var(--kairos-primary), 0.3);
+  --shadow-secondary: 0 4px 14px 0 rgba(var(--kairos-secondary), 0.3);
+  
+  /* ========================================
+     UNIFIED ANIMATION SYSTEM
+     ======================================== */
+  
+  /* Timing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+  
+  /* Combined Transitions */
+  --transition-fast: all var(--duration-fast) var(--ease-out);
+  --transition-normal: all var(--duration-normal) var(--ease-out);
+  --transition-slow: all var(--duration-slow) var(--ease-out);
+  --transition-bounce: all var(--duration-normal) var(--ease-bounce);
+  
+  /* ========================================
+     UNIFIED LAYOUT SYSTEM
+     ======================================== */
+  
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+  
+  /* Container Sizes */
+  --container-xs: 20rem;    /* 320px */
+  --container-sm: 24rem;    /* 384px */
+  --container-md: 28rem;    /* 448px */
+  --container-lg: 32rem;    /* 512px */
+  --container-xl: 36rem;    /* 576px */
+  --container-2xl: 42rem;   /* 672px */
+  --container-3xl: 48rem;   /* 768px */
+  --container-4xl: 56rem;   /* 896px */
+  --container-5xl: 64rem;   /* 1024px */
+  --container-6xl: 72rem;   /* 1152px */
+  --container-7xl: 80rem;   /* 1280px */
+  
+  /* Touch Targets */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+}
+
+/* ========================================
+   DARK THEME OVERRIDES
+   ======================================== */
+
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: #1e293b;
+  --bg-hover: #334155;
+  --bg-active: #475569;
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-muted: #64748b;
+  --text-disabled: #475569;
+  --text-inverse: #0f172a;
+  
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  --border-hover: #64748b;
+  
+  --surface-primary: #1e293b;
+  --surface-secondary: #334155;
+  --surface-elevated: #334155;
+  
+  /* Dark Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* ========================================
+   PATH COLORS (for consistency across all files)
+   ======================================== */
+
+:root {
+  /* All 34+ journey path colors in RGB format */
+  --path-self-discovery: 85, 139, 110;
+  --path-emotional-intelligence: 226, 86, 157;
+  --path-mindfulness-awareness: 142, 78, 183;
+  --path-transformation-journey: 26, 155, 155;
+  --path-creative-expression: 245, 158, 11;
+  --path-habit-formation: 79, 70, 229;
+  --path-life-vision: 147, 51, 234;
+  --path-relationship-mastery: 220, 38, 38;
+  --path-financial-mindfulness: 234, 179, 8;
+  --path-holistic-transformation: 124, 58, 237;
+  --path-life-values: 16, 185, 129;
+  --path-gratitude-practice: 234, 88, 12;
+  --path-shadow-work: 91, 33, 182;
+  --path-nature-connection: 22, 163, 74;
+  --path-artistic-soul-expression: 192, 38, 211;
+  --path-mindful-visualization: 244, 114, 182;
+  --path-career-compass: 59, 130, 246;
+  --path-inner-child: 236, 72, 153;
+  --path-anxiety-alchemy: 16, 185, 129;
+  --path-dream-decoder: 124, 58, 237;
+  --path-seasonal-rhythms: 245, 158, 11;
+  --path-forgiveness-freedom: 220, 38, 38;
+  --path-transitions-navigator: 99, 102, 241;
+  --path-digital-detox: 225, 225, 155;
+  --path-grief-growth: 0, 102, 102;
+  --path-courage-cultivation: 239, 68, 68;
+  --path-color-psychology: 244, 114, 182;
+  --path-sacred-geometry: 147, 51, 234;
+  --path-nature-sketching: 22, 163, 74;
+  --path-abstract-emotions: 239, 68, 68;
+  --path-visual-storytelling: 59, 130, 246;
+  --path-ink-essence: 0, 0, 0;
+  --path-manifestation-reality: 147, 51, 234;
+  --path-decision-compass: 34, 197, 94;
+  --path-portrait-emotions: 236, 72, 153;
+  --path-visual-meditation: 59, 130, 246;
+  --path-symbolic-art: 245, 158, 11;
+  --path-letter-to-myself: 168, 85, 247;
+  --path-freestyle-discovery: 255, 159, 67;
+}
+
+/* ========================================
+   UTILITY CLASSES FOR CONSISTENCY
+   ======================================== */
+
+/* Text Utilities */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+
+/* Background Utilities */
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-card { background-color: var(--bg-card); }
+
+/* Border Utilities */
+.border-primary { border-color: var(--border-primary); }
+.border-secondary { border-color: var(--border-secondary); }
+
+/* Transition Utilities */
+.transition-fast { transition: var(--transition-fast); }
+.transition-normal { transition: var(--transition-normal); }
+.transition-slow { transition: var(--transition-slow); }
+
+/* ========================================
+   COMPONENT BASE STYLES
+   ======================================== */
+
+/* Base button styles */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-base);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  min-height: var(--touch-target-min);
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, rgb(var(--kairos-primary)), rgba(var(--kairos-primary), 0.8));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-primary);
+}
+
+.btn-secondary {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+}
+
+/* Base card styles */
+.card-base {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+  overflow: hidden;
+}
+
+.card-base:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN HELPERS
+   ======================================== */
+
+/* Mobile-first responsive classes */
+@media (min-width: 640px) {
+  :root {
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --text-3xl: 2rem;
+    --text-4xl: 2.5rem;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-normal: 1ms;
+    --duration-slow: 1ms;
+    --duration-slower: 1ms;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border-primary: var(--text-tertiary);
+    --border-secondary: var(--text-secondary);
+  }
+  
+  [data-theme="dark"] {
+    --border-primary: var(--text-tertiary);
+    --border-secondary: var(--text-secondary);
+  }
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid rgb(var(--kairos-primary));
+  outline-offset: 2px;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --border-primary: #cccccc;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}

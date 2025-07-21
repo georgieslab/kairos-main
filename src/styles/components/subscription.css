@@ -1,0 +1,1194 @@
+/* src/styles/components/subscription.css */
+
+/* Subscription Status Component */
+.subscription-status {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.subscription-status.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.subscription-status.free {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.subscription-status.loading {
+  padding: 32px;
+}
+
+.status-skeleton {
+  height: 60px;
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.artisan .status-icon {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.free .status-icon {
+  background: var(--bg-tertiary);
+}
+
+.crown-icon {
+  width: 24px;
+  height: 24px;
+  color: #8B4513;
+}
+
+.card-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--text-secondary);
+}
+
+.status-info {
+  flex: 1;
+}
+
+.status-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.status-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.renewal-info,
+.trial-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.calendar-icon,
+.alert-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.status-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.upgrade-button,
+.manage-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.upgrade-button {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+  flex: 1;
+}
+
+.upgrade-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.manage-button {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+.manage-button:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.manage-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Upgrade Prompt Component */
+.upgrade-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.upgrade-prompt {
+  background: var(--bg-primary);
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--border-color);
+}
+
+.prompt-header {
+  text-align: center;
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.crown-icon-large {
+  width: 48px;
+  height: 48px;
+  color: #FFD700;
+  margin-bottom: 16px;
+}
+
+.prompt-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.prompt-content {
+  padding: 24px 32px;
+}
+
+.prompt-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.artisan-benefits {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.artisan-benefits h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.artisan-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.artisan-benefits li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.pricing-info {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.period {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.price-note {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.prompt-actions {
+  padding: 24px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upgrade-button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 52px;
+}
+
+.upgrade-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+}
+
+.cancel-button {
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Subscription Plans Component */
+.subscription-plans {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.plans-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.plans-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.plans-header p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.plan-card {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 32px 24px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.artisan-plan {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+}
+
+.artisan-plan.current-plan {
+  border-color: #FFD700;
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.plan-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.plan-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.plan-price .amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.plan-price .period {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+}
+
+.plan-features li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+.plan-button {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+}
+
+.free-button {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.artisan-button.upgrade {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+}
+
+.artisan-button.upgrade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.artisan-button.manage {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+.artisan-button.manage:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.plans-footer {
+  text-align: center;
+  padding: 24px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.plans-footer p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.plans-footer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .subscription-status {
+    padding: 20px;
+  }
+  
+  .status-header {
+    gap: 12px;
+  }
+  
+  .status-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .upgrade-prompt {
+    margin: 20px;
+    border-radius: 16px;
+  }
+  
+  .prompt-header,
+  .prompt-content,
+  .prompt-actions {
+    padding: 20px 24px;
+  }
+  
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .plan-card {
+    padding: 24px 20px;
+  }
+  
+  .subscription-plans {
+    padding: 16px;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .subscription-status.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+}
+
+[data-theme="dark"] .artisan-plan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+}
+
+[data-theme="dark"] .pricing-info {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+}
+
+/* src/styles/components/subscriptionDisplay.css */
+
+/* =====================
+   Variables
+===================== */
+:root {
+  /* Subscription Colors */
+  --subscription-artisan-bg: linear-gradient(135deg, #FFD700, #FFA500);
+  --subscription-artisan-color: #8B4513;
+  --subscription-artisan-border: rgba(255, 215, 0, 0.4);
+  --subscription-artisan-glow: rgba(255, 215, 0, 0.3);
+  
+  --subscription-free-bg: var(--bg-secondary);
+  --subscription-free-color: var(--text-secondary);
+  --subscription-free-border: var(--border-secondary);
+  
+  /* Transitions */
+  --subscription-transition: all 0.3s ease;
+  --subscription-transition-fast: all 0.2s ease;
+}
+
+/* =====================
+   Loading States
+===================== */
+.subscription-display.loading {
+  opacity: 0.7;
+}
+
+.subscription-loading-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--border-primary);
+}
+
+.loading-skeleton-header {
+  height: 24px;
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-hover) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: var(--space-sm);
+}
+
+.loading-skeleton-content {
+  height: 60px;
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-hover) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-primary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =====================
+   Error States
+===================== */
+.subscription-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--border-radius-md);
+  color: #ef4444;
+  font-size: var(--font-size-sm);
+}
+
+.retry-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: var(--subscription-transition-fast);
+}
+
+.retry-button:hover {
+  background: #dc2626;
+}
+
+/* =====================
+   Badge Mode
+===================== */
+.subscription-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: var(--subscription-transition);
+  white-space: nowrap;
+}
+
+.subscription-badge.artisan {
+  background: var(--subscription-artisan-bg);
+  color: var(--subscription-artisan-color);
+  box-shadow: 0 2px 8px var(--subscription-artisan-glow);
+}
+
+.subscription-badge.free {
+  background: var(--subscription-free-bg);
+  color: var(--subscription-free-color);
+  border: 1px solid var(--subscription-free-border);
+}
+
+.subscription-badge.loading {
+  opacity: 0.7;
+}
+
+.subscription-badge svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* Badge sizes */
+.subscription-badge.small {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+}
+
+.subscription-badge.small svg {
+  width: 10px;
+  height: 10px;
+}
+
+.subscription-badge.large {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.subscription-badge.large svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================
+   Header Mode
+===================== */
+.subscription-header {
+  display: flex;
+  align-items: center;
+}
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: var(--subscription-transition);
+}
+
+.subscription-header.artisan .header-badge {
+  background: var(--subscription-artisan-bg);
+  color: var(--subscription-artisan-color);
+}
+
+.subscription-header.free .header-badge {
+  background: var(--subscription-free-bg);
+  color: var(--subscription-free-color);
+  border: 1px solid var(--subscription-free-border);
+}
+
+/* =====================
+   Compact Mode
+===================== */
+.subscription-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 2px solid var(--border-primary);
+  transition: var(--subscription-transition);
+}
+
+.subscription-compact.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-color: var(--subscription-artisan-border);
+}
+
+.subscription-compact:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.compact-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+}
+
+.compact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  flex-shrink: 0;
+}
+
+.subscription-compact.artisan .compact-icon {
+  background: rgba(255, 215, 0, 0.2);
+  color: #B8860B;
+}
+
+.subscription-compact.free .compact-icon {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.compact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.compact-status {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.compact-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.compact-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.compact-upgrade-btn,
+.compact-manage-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--subscription-transition);
+  min-height: 36px;
+}
+
+.compact-upgrade-btn {
+  background: var(--subscription-artisan-bg);
+  color: var(--subscription-artisan-color);
+}
+
+.compact-upgrade-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--subscription-artisan-glow);
+}
+
+.compact-manage-btn {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+}
+
+.compact-manage-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+}
+
+.compact-upgrade-btn:disabled,
+.compact-manage-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =====================
+   Card Mode (Default)
+===================== */
+.subscription-display-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 2px solid var(--border-primary);
+  overflow: hidden;
+  transition: var(--subscription-transition);
+  box-shadow: var(--shadow-md);
+}
+
+.subscription-display-card.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-color: var(--subscription-artisan-border);
+  box-shadow: 0 8px 25px var(--subscription-artisan-glow);
+}
+
+.subscription-display-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.subscription-display-card.artisan:hover {
+  box-shadow: 0 12px 30px var(--subscription-artisan-glow);
+}
+
+/* Card Header */
+.subscription-display-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.subscription-display-card.artisan .card-header {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+}
+
+.card-header .header-icon {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.card-header .header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.upgrade-button-small {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--subscription-artisan-bg);
+  color: var(--subscription-artisan-color);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--subscription-transition);
+}
+
+.upgrade-button-small:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--subscription-artisan-glow);
+}
+
+.upgrade-button-small:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.upgrade-button-small svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Card Content */
+.card-content {
+  padding: var(--space-lg);
+}
+
+.subscription-description {
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-md) 0;
+  line-height: 1.5;
+}
+
+/* Benefits List */
+.subscription-benefits {
+  margin: var(--space-md) 0;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-sm);
+}
+
+.benefit-item svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.benefit-item svg.text-green-500 {
+  color: #22C55E;
+}
+
+.benefit-item svg.text-gray-400 {
+  color: #9CA3AF;
+}
+
+.benefit-item span {
+  color: var(--text-secondary);
+}
+
+.benefit-item span.text-gray-500 {
+  color: #6B7280;
+  opacity: 0.7;
+}
+
+/* Renewal Information */
+.renewal-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+  margin: var(--space-md) 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.renewal-info svg {
+  color: var(--text-disabled);
+  flex-shrink: 0;
+}
+
+/* Action Buttons */
+.manage-subscription-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--subscription-transition);
+  margin-top: var(--space-md);
+}
+
+.manage-subscription-button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.manage-subscription-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.manage-subscription-button svg {
+  flex-shrink: 0;
+}
+
+/* =====================
+   Utility Classes
+===================== */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.text-green-500 {
+  color: #22C55E !important;
+}
+
+.text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+.text-gray-500 {
+  color: #6B7280 !important;
+}
+
+/* =====================
+   Responsive Design
+===================== */
+@media (max-width: 768px) {
+  .subscription-compact {
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: stretch;
+  }
+  
+  .compact-info {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .compact-actions {
+    justify-content: center;
+  }
+  
+  .subscription-display-card .card-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: stretch;
+  }
+  
+  .card-header .header-content {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-content {
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .subscription-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+  }
+  
+  .subscription-badge svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .compact-upgrade-btn,
+  .compact-manage-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .upgrade-button-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.625rem;
+  }
+  
+  .benefit-item {
+    font-size: 0.75rem;
+  }
+  
+  .renewal-info {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* =====================
+   Dark Theme Specific
+===================== */
+[data-theme="dark"] .subscription-display-card.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+[data-theme="dark"] .subscription-display-card.artisan .card-header {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+}
+
+[data-theme="dark"] .subscription-compact.artisan {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+}
+
+/* =====================
+   Accessibility
+===================== */
+.subscription-badge:focus-visible,
+.upgrade-button-small:focus-visible,
+.compact-upgrade-btn:focus-visible,
+.compact-manage-btn:focus-visible,
+.manage-subscription-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .subscription-badge.artisan,
+  .subscription-display-card.artisan {
+    border-width: 3px;
+    border-color: #FFD700;
+  }
+  
+  .subscription-badge.free,
+  .subscription-display-card.free {
+    border-width: 2px;
+    border-color: var(--text-primary);
+  }
+}

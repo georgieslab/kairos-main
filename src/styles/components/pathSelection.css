@@ -1,0 +1,4651 @@
+/* ============================================================================
+   ΚΑΙΡΌΣ SMART JOURNAL - PATH SELECTION CSS - PART 1
+   Complete rewrite ensuring all 32 paths have proper border styling
+   ============================================================================ */
+
+/* ============================================================================
+   CSS VARIABLES & BASE SETUP
+   ============================================================================ */
+
+:root {
+  /* Modern Color Palette */
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* ALL 32 PATH COLORS - EXACT MATCHES FROM JOURNEYDATA.JS */
+  --color-self-discovery: 85, 149, 110;
+  --color-emotional-intelligence: 226, 86, 157;
+  --color-mindfulness-awareness: 142, 78, 183;
+  --color-transformation-journey: 26, 155, 155;
+  --color-creative-expression: 245, 158, 11;
+  --color-habit-formation: 79, 70, 229;
+  --color-life-vision: 147, 51, 234;
+  --color-relationship-mastery: 220, 38, 38;
+  --color-financial-mindfulness: 234, 179, 8;
+  --color-holistic-transformation: 124, 58, 237;
+  --color-life-values: 16, 185, 129;
+  --color-gratitude-practice: 234, 88, 12;
+  --color-shadow-work: 91, 33, 182;
+  --color-nature-connection: 22, 163, 74;
+  --color-artistic-soul-expression: 192, 38, 211;
+  --color-mindful-visualization: 244, 114, 182;
+  --color-career-compass: 59, 130, 246;
+  --color-inner-child: 236, 72, 153;
+  --color-anxiety-alchemy: 16, 185, 129;
+  --color-dream-decoder: 124, 58, 237;
+  --color-seasonal-rhythms: 245, 158, 11;
+  --color-forgiveness-freedom: 220, 38, 38;
+  --color-transitions-navigator: 99, 102, 241;
+  --color-digital-detox: 225,225,155;
+  --color-grief-growth: 0,102,102;
+  --color-courage-cultivation: 239, 68, 68;
+  --color-color-psychology: 244, 114, 182;
+  --color-sacred-geometry: 147, 51, 234;
+  --color-nature-sketching: 22, 163, 74;
+  --color-abstract-emotions: 239, 68, 68;
+  --color-visual-storytelling: 59, 130, 246;
+  --color-ink-essence: 0,0,0; /* Enhanced visibility for dark theme */
+  
+  /* Modern Spacing System */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Modern Typography */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  
+  /* Modern Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Modern Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   THEME VARIABLES
+   ============================================================================ */
+
+.path-selection-container {
+  /* Dark theme by default */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-quaternary: #475569;
+  --surface-primary: #1e293b;
+  --surface-secondary: #334155;
+  --surface-tertiary: #475569;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-quaternary: #64748b;
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #06b6d4;
+}
+
+.path-selection-container.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-quaternary: #e2e8f0;
+  --surface-primary: #ffffff;
+  --surface-secondary: #f8fafc;
+  --surface-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --text-quaternary: #94a3b8;
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #06b6d4;
+}
+
+/* ============================================================================
+   BASE LAYOUT & COMPONENTS
+   ============================================================================ */
+
+/* Main Container */
+.path-selection-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: var(--space-4);
+  padding-bottom: var(--space-20);
+  position: relative;
+}
+
+/* Header Section */
+.header-container {
+  margin-bottom: var(--space-8);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.header-text h1 {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top:0.75rem;
+}
+
+.page-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.view-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.view-toggle-button:hover {
+  background: var(--surface-tertiary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Search Container */
+.search-container {
+  position: relative;
+  margin-bottom: var(--space-6);
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  padding-left: var(--space-10);
+  background: var(--surface-secondary);
+  border: 2px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: var(--surface-primary);
+}
+
+.search-input::placeholder {
+  color: var(--text-quaternary);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--surface-tertiary);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.search-clear:hover {
+  background: var(--surface-quaternary);
+  color: var(--text-primary);
+}
+
+/* ============================================================================
+   PATH CARDS - BASE STYLING
+   ============================================================================ */
+
+/* Path Grid/List - Mobile First */
+.paths-grid,
+.paths-list {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.paths-grid {
+  grid-template-columns: 1fr;
+}
+
+.paths-list {
+  grid-template-columns: 1fr;
+}
+
+/* Path Cards - Base Styling */
+.path-card {
+  position: relative;
+  background: var(--surface-primary);
+  border: 1px solid var(--border-primary);
+  border-left: 4px solid var(--border-primary);
+  border-right: 4px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+.path-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-left-width: 6px;
+  border-right-width: 6px;
+}
+
+.path-card:active {
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   PATH-SPECIFIC BORDER COLORS - FIRST 16 PATHS
+   ============================================================================ */
+
+/* 1. SELF-DISCOVERY JOURNEY */
+.path-card.self-discovery {
+  border-left-color: rgba(var(--color-self-discovery), 0.8);
+  border-right-color: rgba(var(--color-self-discovery), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-self-discovery), 0.05));
+}
+
+.path-card.self-discovery:hover {
+  border-left-color: rgb(var(--color-self-discovery));
+  border-right-color: rgb(var(--color-self-discovery));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-self-discovery), 0.4);
+}
+
+.path-icon-wrapper.self-discovery {
+  background: rgba(var(--color-self-discovery), 0.2);
+  color: rgb(var(--color-self-discovery));
+  box-shadow: 0 0 20px rgba(var(--color-self-discovery), 0.3);
+}
+
+.self-discovery .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-self-discovery), 0.8), rgb(var(--color-self-discovery)));
+  box-shadow: 0 0 12px rgba(var(--color-self-discovery), 0.5);
+}
+
+.path-icon-wrapper-large.self-discovery {
+  background: rgba(var(--color-self-discovery), 0.2);
+  color: rgb(var(--color-self-discovery));
+  box-shadow: 0 0 25px rgba(var(--color-self-discovery), 0.5);
+  border: 2px solid rgba(var(--color-self-discovery), 0.6);
+}
+
+.primary-button.self-discovery {
+  background: linear-gradient(135deg, rgba(var(--color-self-discovery), 0.9), rgb(var(--color-self-discovery)));
+}
+
+.path-details-modal.self-discovery .modal-header {
+  border-bottom: 3px solid rgba(var(--color-self-discovery), 0.8);
+}
+
+/* 2. EMOTIONAL INTELLIGENCE */
+.path-card.emotional-intelligence {
+  border-left-color: rgba(var(--color-emotional-intelligence), 0.8);
+  border-right-color: rgba(var(--color-emotional-intelligence), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-emotional-intelligence), 0.05));
+}
+
+.path-card.emotional-intelligence:hover {
+  border-left-color: rgb(var(--color-emotional-intelligence));
+  border-right-color: rgb(var(--color-emotional-intelligence));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-emotional-intelligence), 0.4);
+}
+
+.path-icon-wrapper.emotional-intelligence {
+  background: rgba(var(--color-emotional-intelligence), 0.2);
+  color: rgb(var(--color-emotional-intelligence));
+  box-shadow: 0 0 20px rgba(var(--color-emotional-intelligence), 0.3);
+}
+
+.emotional-intelligence .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-emotional-intelligence), 0.8), rgb(var(--color-emotional-intelligence)));
+  box-shadow: 0 0 12px rgba(var(--color-emotional-intelligence), 0.5);
+}
+
+.path-icon-wrapper-large.emotional-intelligence {
+  background: rgba(var(--color-emotional-intelligence), 0.2);
+  color: rgb(var(--color-emotional-intelligence));
+  box-shadow: 0 0 25px rgba(var(--color-emotional-intelligence), 0.5);
+  border: 2px solid rgba(var(--color-emotional-intelligence), 0.6);
+}
+
+.primary-button.emotional-intelligence {
+  background: linear-gradient(135deg, rgba(var(--color-emotional-intelligence), 0.9), rgb(var(--color-emotional-intelligence)));
+}
+
+.path-details-modal.emotional-intelligence .modal-header {
+  border-bottom: 3px solid rgba(var(--color-emotional-intelligence), 0.8);
+}
+
+/* 3. MINDFULNESS AWARENESS */
+.path-card.mindfulness-awareness {
+  border-left-color: rgba(var(--color-mindfulness-awareness), 0.8);
+  border-right-color: rgba(var(--color-mindfulness-awareness), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-mindfulness-awareness), 0.05));
+}
+
+.path-card.mindfulness-awareness:hover {
+  border-left-color: rgb(var(--color-mindfulness-awareness));
+  border-right-color: rgb(var(--color-mindfulness-awareness));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-mindfulness-awareness), 0.4);
+}
+
+.path-icon-wrapper.mindfulness-awareness {
+  background: rgba(var(--color-mindfulness-awareness), 0.2);
+  color: rgb(var(--color-mindfulness-awareness));
+  box-shadow: 0 0 20px rgba(var(--color-mindfulness-awareness), 0.3);
+}
+
+.mindfulness-awareness .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-mindfulness-awareness), 0.8), rgb(var(--color-mindfulness-awareness)));
+  box-shadow: 0 0 12px rgba(var(--color-mindfulness-awareness), 0.5);
+}
+
+.path-icon-wrapper-large.mindfulness-awareness {
+  background: rgba(var(--color-mindfulness-awareness), 0.2);
+  color: rgb(var(--color-mindfulness-awareness));
+  box-shadow: 0 0 25px rgba(var(--color-mindfulness-awareness), 0.5);
+  border: 2px solid rgba(var(--color-mindfulness-awareness), 0.6);
+}
+
+.primary-button.mindfulness-awareness {
+  background: linear-gradient(135deg, rgba(var(--color-mindfulness-awareness), 0.9), rgb(var(--color-mindfulness-awareness)));
+}
+
+.path-details-modal.mindfulness-awareness .modal-header {
+  border-bottom: 3px solid rgba(var(--color-mindfulness-awareness), 0.8);
+}
+
+/* 4. TRANSFORMATION JOURNEY */
+.path-card.transformation-journey {
+  border-left-color: rgba(var(--color-transformation-journey), 0.8);
+  border-right-color: rgba(var(--color-transformation-journey), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-transformation-journey), 0.05));
+}
+
+.path-card.transformation-journey:hover {
+  border-left-color: rgb(var(--color-transformation-journey));
+  border-right-color: rgb(var(--color-transformation-journey));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-transformation-journey), 0.4);
+}
+
+.path-icon-wrapper.transformation-journey {
+  background: rgba(var(--color-transformation-journey), 0.2);
+  color: rgb(var(--color-transformation-journey));
+  box-shadow: 0 0 20px rgba(var(--color-transformation-journey), 0.3);
+}
+
+.transformation-journey .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-transformation-journey), 0.8), rgb(var(--color-transformation-journey)));
+  box-shadow: 0 0 12px rgba(var(--color-transformation-journey), 0.5);
+}
+
+.path-icon-wrapper-large.transformation-journey {
+  background: rgba(var(--color-transformation-journey), 0.2);
+  color: rgb(var(--color-transformation-journey));
+  box-shadow: 0 0 25px rgba(var(--color-transformation-journey), 0.5);
+  border: 2px solid rgba(var(--color-transformation-journey), 0.6);
+}
+
+.primary-button.transformation-journey {
+  background: linear-gradient(135deg, rgba(var(--color-transformation-journey), 0.9), rgb(var(--color-transformation-journey)));
+}
+
+.path-details-modal.transformation-journey .modal-header {
+  border-bottom: 3px solid rgba(var(--color-transformation-journey), 0.8);
+}
+
+/* 5. CREATIVE EXPRESSION */
+.path-card.creative-expression {
+  border-left-color: rgba(var(--color-creative-expression), 0.8);
+  border-right-color: rgba(var(--color-creative-expression), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-creative-expression), 0.05));
+}
+
+.path-card.creative-expression:hover {
+  border-left-color: rgb(var(--color-creative-expression));
+  border-right-color: rgb(var(--color-creative-expression));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-creative-expression), 0.4);
+}
+
+.path-icon-wrapper.creative-expression {
+  background: rgba(var(--color-creative-expression), 0.2);
+  color: rgb(var(--color-creative-expression));
+  box-shadow: 0 0 20px rgba(var(--color-creative-expression), 0.3);
+}
+
+.creative-expression .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-creative-expression), 0.8), rgb(var(--color-creative-expression)));
+  box-shadow: 0 0 12px rgba(var(--color-creative-expression), 0.5);
+}
+
+.path-icon-wrapper-large.creative-expression {
+  background: rgba(var(--color-creative-expression), 0.2);
+  color: rgb(var(--color-creative-expression));
+  box-shadow: 0 0 25px rgba(var(--color-creative-expression), 0.5);
+  border: 2px solid rgba(var(--color-creative-expression), 0.6);
+}
+
+.primary-button.creative-expression {
+  background: linear-gradient(135deg, rgba(var(--color-creative-expression), 0.9), rgb(var(--color-creative-expression)));
+}
+
+.path-details-modal.creative-expression .modal-header {
+  border-bottom: 3px solid rgba(var(--color-creative-expression), 0.8);
+}
+
+/* 6. HABIT FORMATION */
+.path-card.habit-formation {
+  border-left-color: rgba(var(--color-habit-formation), 0.8);
+  border-right-color: rgba(var(--color-habit-formation), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-habit-formation), 0.05));
+}
+
+.path-card.habit-formation:hover {
+  border-left-color: rgb(var(--color-habit-formation));
+  border-right-color: rgb(var(--color-habit-formation));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-habit-formation), 0.4);
+}
+
+.path-icon-wrapper.habit-formation {
+  background: rgba(var(--color-habit-formation), 0.2);
+  color: rgb(var(--color-habit-formation));
+  box-shadow: 0 0 20px rgba(var(--color-habit-formation), 0.3);
+}
+
+.habit-formation .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-habit-formation), 0.8), rgb(var(--color-habit-formation)));
+  box-shadow: 0 0 12px rgba(var(--color-habit-formation), 0.5);
+}
+
+.path-icon-wrapper-large.habit-formation {
+  background: rgba(var(--color-habit-formation), 0.2);
+  color: rgb(var(--color-habit-formation));
+  box-shadow: 0 0 25px rgba(var(--color-habit-formation), 0.5);
+  border: 2px solid rgba(var(--color-habit-formation), 0.6);
+}
+
+.primary-button.habit-formation {
+  background: linear-gradient(135deg, rgba(var(--color-habit-formation), 0.9), rgb(var(--color-habit-formation)));
+}
+
+.path-details-modal.habit-formation .modal-header {
+  border-bottom: 3px solid rgba(var(--color-habit-formation), 0.8);
+}
+
+/* 7. LIFE VISION */
+.path-card.life-vision {
+  border-left-color: rgba(var(--color-life-vision), 0.8);
+  border-right-color: rgba(var(--color-life-vision), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-life-vision), 0.05));
+}
+
+.path-card.life-vision:hover {
+  border-left-color: rgb(var(--color-life-vision));
+  border-right-color: rgb(var(--color-life-vision));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-life-vision), 0.4);
+}
+
+.path-icon-wrapper.life-vision {
+  background: rgba(var(--color-life-vision), 0.2);
+  color: rgb(var(--color-life-vision));
+  box-shadow: 0 0 20px rgba(var(--color-life-vision), 0.3);
+}
+
+.life-vision .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-life-vision), 0.8), rgb(var(--color-life-vision)));
+  box-shadow: 0 0 12px rgba(var(--color-life-vision), 0.5);
+}
+
+.path-icon-wrapper-large.life-vision {
+  background: rgba(var(--color-life-vision), 0.2);
+  color: rgb(var(--color-life-vision));
+  box-shadow: 0 0 25px rgba(var(--color-life-vision), 0.5);
+  border: 2px solid rgba(var(--color-life-vision), 0.6);
+}
+
+.primary-button.life-vision {
+  background: linear-gradient(135deg, rgba(var(--color-life-vision), 0.9), rgb(var(--color-life-vision)));
+}
+
+.path-details-modal.life-vision .modal-header {
+  border-bottom: 3px solid rgba(var(--color-life-vision), 0.8);
+}
+
+/* 8. RELATIONSHIP MASTERY */
+.path-card.relationship-mastery {
+  border-left-color: rgba(var(--color-relationship-mastery), 0.8);
+  border-right-color: rgba(var(--color-relationship-mastery), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-relationship-mastery), 0.05));
+}
+
+.path-card.relationship-mastery:hover {
+  border-left-color: rgb(var(--color-relationship-mastery));
+  border-right-color: rgb(var(--color-relationship-mastery));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-relationship-mastery), 0.4);
+}
+
+.path-icon-wrapper.relationship-mastery {
+  background: rgba(var(--color-relationship-mastery), 0.2);
+  color: rgb(var(--color-relationship-mastery));
+  box-shadow: 0 0 20px rgba(var(--color-relationship-mastery), 0.3);
+}
+
+.relationship-mastery .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-relationship-mastery), 0.8), rgb(var(--color-relationship-mastery)));
+  box-shadow: 0 0 12px rgba(var(--color-relationship-mastery), 0.5);
+}
+
+.path-icon-wrapper-large.relationship-mastery {
+  background: rgba(var(--color-relationship-mastery), 0.2);
+  color: rgb(var(--color-relationship-mastery));
+  box-shadow: 0 0 25px rgba(var(--color-relationship-mastery), 0.5);
+  border: 2px solid rgba(var(--color-relationship-mastery), 0.6);
+}
+
+.primary-button.relationship-mastery {
+  background: linear-gradient(135deg, rgba(var(--color-relationship-mastery), 0.9), rgb(var(--color-relationship-mastery)));
+}
+
+.path-details-modal.relationship-mastery .modal-header {
+  border-bottom: 3px solid rgba(var(--color-relationship-mastery), 0.8);
+}
+
+/* ============================================================================
+   CONTINUE WITH REMAINING 8 PATHS IN PART 1...
+   ============================================================================ */
+
+/* 9. FINANCIAL MINDFULNESS */
+.path-card.financial-mindfulness {
+  border-left-color: rgba(var(--color-financial-mindfulness), 0.8);
+  border-right-color: rgba(var(--color-financial-mindfulness), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-financial-mindfulness), 0.05));
+}
+
+.path-card.financial-mindfulness:hover {
+  border-left-color: rgb(var(--color-financial-mindfulness));
+  border-right-color: rgb(var(--color-financial-mindfulness));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-financial-mindfulness), 0.4);
+}
+
+.path-icon-wrapper.financial-mindfulness {
+  background: rgba(var(--color-financial-mindfulness), 0.2);
+  color: rgb(var(--color-financial-mindfulness));
+  box-shadow: 0 0 20px rgba(var(--color-financial-mindfulness), 0.3);
+}
+
+.financial-mindfulness .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-financial-mindfulness), 0.8), rgb(var(--color-financial-mindfulness)));
+  box-shadow: 0 0 12px rgba(var(--color-financial-mindfulness), 0.5);
+}
+
+.path-icon-wrapper-large.financial-mindfulness {
+  background: rgba(var(--color-financial-mindfulness), 0.2);
+  color: rgb(var(--color-financial-mindfulness));
+  box-shadow: 0 0 25px rgba(var(--color-financial-mindfulness), 0.5);
+  border: 2px solid rgba(var(--color-financial-mindfulness), 0.6);
+}
+
+.primary-button.financial-mindfulness {
+  background: linear-gradient(135deg, rgba(var(--color-financial-mindfulness), 0.9), rgb(var(--color-financial-mindfulness)));
+}
+
+.path-details-modal.financial-mindfulness .modal-header {
+  border-bottom: 3px solid rgba(var(--color-financial-mindfulness), 0.8);
+}
+
+/* 10. HOLISTIC TRANSFORMATION */
+.path-card.holistic-transformation {
+  border-left-color: rgba(var(--color-holistic-transformation), 0.8);
+  border-right-color: rgba(var(--color-holistic-transformation), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-holistic-transformation), 0.05));
+}
+
+.path-card.holistic-transformation:hover {
+  border-left-color: rgb(var(--color-holistic-transformation));
+  border-right-color: rgb(var(--color-holistic-transformation));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-holistic-transformation), 0.4);
+}
+
+.path-icon-wrapper.holistic-transformation {
+  background: rgba(var(--color-holistic-transformation), 0.2);
+  color: rgb(var(--color-holistic-transformation));
+  box-shadow: 0 0 20px rgba(var(--color-holistic-transformation), 0.3);
+}
+
+.holistic-transformation .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-holistic-transformation), 0.8), rgb(var(--color-holistic-transformation)));
+  box-shadow: 0 0 12px rgba(var(--color-holistic-transformation), 0.5);
+}
+
+.path-icon-wrapper-large.holistic-transformation {
+  background: rgba(var(--color-holistic-transformation), 0.2);
+  color: rgb(var(--color-holistic-transformation));
+  box-shadow: 0 0 25px rgba(var(--color-holistic-transformation), 0.5);
+  border: 2px solid rgba(var(--color-holistic-transformation), 0.6);
+}
+
+.primary-button.holistic-transformation {
+  background: linear-gradient(135deg, rgba(var(--color-holistic-transformation), 0.9), rgb(var(--color-holistic-transformation)));
+}
+
+.path-details-modal.holistic-transformation .modal-header {
+  border-bottom: 3px solid rgba(var(--color-holistic-transformation), 0.8);
+}
+
+/* 11. LIFE VALUES */
+.path-card.life-values {
+  border-left-color: rgba(var(--color-life-values), 0.8);
+  border-right-color: rgba(var(--color-life-values), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-life-values), 0.05));
+}
+
+.path-card.life-values:hover {
+  border-left-color: rgb(var(--color-life-values));
+  border-right-color: rgb(var(--color-life-values));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-life-values), 0.4);
+}
+
+.path-icon-wrapper.life-values {
+  background: rgba(var(--color-life-values), 0.2);
+  color: rgb(var(--color-life-values));
+  box-shadow: 0 0 20px rgba(var(--color-life-values), 0.3);
+}
+
+.life-values .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-life-values), 0.8), rgb(var(--color-life-values)));
+  box-shadow: 0 0 12px rgba(var(--color-life-values), 0.5);
+}
+
+.path-icon-wrapper-large.life-values {
+  background: rgba(var(--color-life-values), 0.2);
+  color: rgb(var(--color-life-values));
+  box-shadow: 0 0 25px rgba(var(--color-life-values), 0.5);
+  border: 2px solid rgba(var(--color-life-values), 0.6);
+}
+
+.primary-button.life-values {
+  background: linear-gradient(135deg, rgba(var(--color-life-values), 0.9), rgb(var(--color-life-values)));
+}
+
+.path-details-modal.life-values .modal-header {
+  border-bottom: 3px solid rgba(var(--color-life-values), 0.8);
+}
+
+/* 12. GRATITUDE PRACTICE */
+.path-card.gratitude-practice {
+  border-left-color: rgba(var(--color-gratitude-practice), 0.8);
+  border-right-color: rgba(var(--color-gratitude-practice), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-gratitude-practice), 0.05));
+}
+
+.path-card.gratitude-practice:hover {
+  border-left-color: rgb(var(--color-gratitude-practice));
+  border-right-color: rgb(var(--color-gratitude-practice));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-gratitude-practice), 0.4);
+}
+
+.path-icon-wrapper.gratitude-practice {
+  background: rgba(var(--color-gratitude-practice), 0.2);
+  color: rgb(var(--color-gratitude-practice));
+  box-shadow: 0 0 20px rgba(var(--color-gratitude-practice), 0.3);
+}
+
+.gratitude-practice .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-gratitude-practice), 0.8), rgb(var(--color-gratitude-practice)));
+  box-shadow: 0 0 12px rgba(var(--color-gratitude-practice), 0.5);
+}
+
+.path-icon-wrapper-large.gratitude-practice {
+  background: rgba(var(--color-gratitude-practice), 0.2);
+  color: rgb(var(--color-gratitude-practice));
+  box-shadow: 0 0 25px rgba(var(--color-gratitude-practice), 0.5);
+  border: 2px solid rgba(var(--color-gratitude-practice), 0.6);
+}
+
+.primary-button.gratitude-practice {
+  background: linear-gradient(135deg, rgba(var(--color-gratitude-practice), 0.9), rgb(var(--color-gratitude-practice)));
+}
+
+.path-details-modal.gratitude-practice .modal-header {
+  border-bottom: 3px solid rgba(var(--color-gratitude-practice), 0.8);
+}
+
+/* 13. SHADOW WORK */
+.path-card.shadow-work {
+  border-left-color: rgba(var(--color-shadow-work), 0.8);
+  border-right-color: rgba(var(--color-shadow-work), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-shadow-work), 0.05));
+}
+
+.path-card.shadow-work:hover {
+  border-left-color: rgb(var(--color-shadow-work));
+  border-right-color: rgb(var(--color-shadow-work));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-shadow-work), 0.4);
+}
+
+.path-icon-wrapper.shadow-work {
+  background: rgba(var(--color-shadow-work), 0.2);
+  color: rgb(var(--color-shadow-work));
+  box-shadow: 0 0 20px rgba(var(--color-shadow-work), 0.3);
+}
+
+.shadow-work .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-shadow-work), 0.8), rgb(var(--color-shadow-work)));
+  box-shadow: 0 0 12px rgba(var(--color-shadow-work), 0.5);
+}
+
+.path-icon-wrapper-large.shadow-work {
+  background: rgba(var(--color-shadow-work), 0.2);
+  color: rgb(var(--color-shadow-work));
+  box-shadow: 0 0 25px rgba(var(--color-shadow-work), 0.5);
+  border: 2px solid rgba(var(--color-shadow-work), 0.6);
+}
+
+.primary-button.shadow-work {
+  background: linear-gradient(135deg, rgba(var(--color-shadow-work), 0.9), rgb(var(--color-shadow-work)));
+}
+
+.path-details-modal.shadow-work .modal-header {
+  border-bottom: 3px solid rgba(var(--color-shadow-work), 0.8);
+}
+
+/* 14. NATURE CONNECTION */
+.path-card.nature-connection {
+  border-left-color: rgba(var(--color-nature-connection), 0.8);
+  border-right-color: rgba(var(--color-nature-connection), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-nature-connection), 0.05));
+}
+
+.path-card.nature-connection:hover {
+  border-left-color: rgb(var(--color-nature-connection));
+  border-right-color: rgb(var(--color-nature-connection));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-nature-connection), 0.4);
+}
+
+.path-icon-wrapper.nature-connection {
+  background: rgba(var(--color-nature-connection), 0.2);
+  color: rgb(var(--color-nature-connection));
+  box-shadow: 0 0 20px rgba(var(--color-nature-connection), 0.3);
+}
+
+.nature-connection .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-nature-connection), 0.8), rgb(var(--color-nature-connection)));
+  box-shadow: 0 0 12px rgba(var(--color-nature-connection), 0.5);
+}
+
+.path-icon-wrapper-large.nature-connection {
+  background: rgba(var(--color-nature-connection), 0.2);
+  color: rgb(var(--color-nature-connection));
+  box-shadow: 0 0 25px rgba(var(--color-nature-connection), 0.5);
+  border: 2px solid rgba(var(--color-nature-connection), 0.6);
+}
+
+.primary-button.nature-connection {
+  background: linear-gradient(135deg, rgba(var(--color-nature-connection), 0.9), rgb(var(--color-nature-connection)));
+}
+
+.path-details-modal.nature-connection .modal-header {
+  border-bottom: 3px solid rgba(var(--color-nature-connection), 0.8);
+}
+
+/* 15. ARTISTIC SOUL EXPRESSION */
+.path-card.artistic-soul-expression {
+  border-left-color: rgba(var(--color-artistic-soul-expression), 0.8);
+  border-right-color: rgba(var(--color-artistic-soul-expression), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-artistic-soul-expression), 0.05));
+}
+
+.path-card.artistic-soul-expression:hover {
+  border-left-color: rgb(var(--color-artistic-soul-expression));
+  border-right-color: rgb(var(--color-artistic-soul-expression));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-artistic-soul-expression), 0.4);
+}
+
+.path-icon-wrapper.artistic-soul-expression {
+  background: rgba(var(--color-artistic-soul-expression), 0.2);
+  color: rgb(var(--color-artistic-soul-expression));
+  box-shadow: 0 0 20px rgba(var(--color-artistic-soul-expression), 0.3);
+}
+
+.artistic-soul-expression .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-artistic-soul-expression), 0.8), rgb(var(--color-artistic-soul-expression)));
+  box-shadow: 0 0 12px rgba(var(--color-artistic-soul-expression), 0.5);
+}
+
+.path-icon-wrapper-large.artistic-soul-expression {
+  background: rgba(var(--color-artistic-soul-expression), 0.2);
+  color: rgb(var(--color-artistic-soul-expression));
+  box-shadow: 0 0 25px rgba(var(--color-artistic-soul-expression), 0.5);
+  border: 2px solid rgba(var(--color-artistic-soul-expression), 0.6);
+}
+
+.primary-button.artistic-soul-expression {
+  background: linear-gradient(135deg, rgba(var(--color-artistic-soul-expression), 0.9), rgb(var(--color-artistic-soul-expression)));
+}
+
+.path-details-modal.artistic-soul-expression .modal-header {
+  border-bottom: 3px solid rgba(var(--color-artistic-soul-expression), 0.8);
+}
+
+/* 16. MINDFUL VISUALIZATION */
+.path-card.mindful-visualization {
+  border-left-color: rgba(var(--color-mindful-visualization), 0.8);
+  border-right-color: rgba(var(--color-mindful-visualization), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-mindful-visualization), 0.05));
+}
+
+.path-card.mindful-visualization:hover {
+  border-left-color: rgb(var(--color-mindful-visualization));
+  border-right-color: rgb(var(--color-mindful-visualization));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-mindful-visualization), 0.4);
+}
+
+.path-icon-wrapper.mindful-visualization {
+  background: rgba(var(--color-mindful-visualization), 0.2);
+  color: rgb(var(--color-mindful-visualization));
+  box-shadow: 0 0 20px rgba(var(--color-mindful-visualization), 0.3);
+}
+
+.mindful-visualization .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-mindful-visualization), 0.8), rgb(var(--color-mindful-visualization)));
+  box-shadow: 0 0 12px rgba(var(--color-mindful-visualization), 0.5);
+}
+
+.path-icon-wrapper-large.mindful-visualization {
+  background: rgba(var(--color-mindful-visualization), 0.2);
+  color: rgb(var(--color-mindful-visualization));
+  box-shadow: 0 0 25px rgba(var(--color-mindful-visualization), 0.5);
+  border: 2px solid rgba(var(--color-mindful-visualization), 0.6);
+}
+
+.primary-button.mindful-visualization {
+  background: linear-gradient(135deg, rgba(var(--color-mindful-visualization), 0.9), rgb(var(--color-mindful-visualization)));
+}
+
+.path-details-modal.mindful-visualization .modal-header {
+  border-bottom: 3px solid rgba(var(--color-mindful-visualization), 0.8);
+}
+
+/* ============================================================================
+   ΚΑΙΡΌΣ SMART JOURNAL - PATH SELECTION CSS - PART 2
+   Mobile-First Design with remaining 16 paths + all UI components
+   ============================================================================ */
+
+/* ============================================================================
+   REMAINING 16 PATH-SPECIFIC BORDER COLORS (17-32)
+   ============================================================================ */
+
+/* 17. CAREER COMPASS */
+.path-card.career-compass {
+  border-left-color: rgba(var(--color-career-compass), 0.8);
+  border-right-color: rgba(var(--color-career-compass), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-career-compass), 0.05));
+}
+
+.path-card.career-compass:hover {
+  border-left-color: rgb(var(--color-career-compass));
+  border-right-color: rgb(var(--color-career-compass));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-career-compass), 0.4);
+}
+
+.path-icon-wrapper.career-compass {
+  background: rgba(var(--color-career-compass), 0.2);
+  color: rgb(var(--color-career-compass));
+  box-shadow: 0 0 20px rgba(var(--color-career-compass), 0.3);
+}
+
+.career-compass .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-career-compass), 0.8), rgb(var(--color-career-compass)));
+  box-shadow: 0 0 12px rgba(var(--color-career-compass), 0.5);
+}
+
+.path-icon-wrapper-large.career-compass {
+  background: rgba(var(--color-career-compass), 0.2);
+  color: rgb(var(--color-career-compass));
+  box-shadow: 0 0 25px rgba(var(--color-career-compass), 0.5);
+  border: 2px solid rgba(var(--color-career-compass), 0.6);
+}
+
+.primary-button.career-compass {
+  background: linear-gradient(135deg, rgba(var(--color-career-compass), 0.9), rgb(var(--color-career-compass)));
+}
+
+.path-details-modal.career-compass .modal-header {
+  border-bottom: 3px solid rgba(var(--color-career-compass), 0.8);
+}
+
+/* 18. INNER CHILD */
+.path-card.inner-child {
+  border-left-color: rgba(var(--color-inner-child), 0.8);
+  border-right-color: rgba(var(--color-inner-child), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-inner-child), 0.05));
+}
+
+.path-card.inner-child:hover {
+  border-left-color: rgb(var(--color-inner-child));
+  border-right-color: rgb(var(--color-inner-child));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-inner-child), 0.4);
+}
+
+.path-icon-wrapper.inner-child {
+  background: rgba(var(--color-inner-child), 0.2);
+  color: rgb(var(--color-inner-child));
+  box-shadow: 0 0 20px rgba(var(--color-inner-child), 0.3);
+}
+
+.inner-child .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-inner-child), 0.8), rgb(var(--color-inner-child)));
+  box-shadow: 0 0 12px rgba(var(--color-inner-child), 0.5);
+}
+
+.path-icon-wrapper-large.inner-child {
+  background: rgba(var(--color-inner-child), 0.2);
+  color: rgb(var(--color-inner-child));
+  box-shadow: 0 0 25px rgba(var(--color-inner-child), 0.5);
+  border: 2px solid rgba(var(--color-inner-child), 0.6);
+}
+
+.primary-button.inner-child {
+  background: linear-gradient(135deg, rgba(var(--color-inner-child), 0.9), rgb(var(--color-inner-child)));
+}
+
+.path-details-modal.inner-child .modal-header {
+  border-bottom: 3px solid rgba(var(--color-inner-child), 0.8);
+}
+
+/* 19. ANXIETY ALCHEMY */
+.path-card.anxiety-alchemy {
+  border-left-color: rgba(var(--color-anxiety-alchemy), 0.8);
+  border-right-color: rgba(var(--color-anxiety-alchemy), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-anxiety-alchemy), 0.05));
+}
+
+.path-card.anxiety-alchemy:hover {
+  border-left-color: rgb(var(--color-anxiety-alchemy));
+  border-right-color: rgb(var(--color-anxiety-alchemy));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-anxiety-alchemy), 0.4);
+}
+
+.path-icon-wrapper.anxiety-alchemy {
+  background: rgba(var(--color-anxiety-alchemy), 0.2);
+  color: rgb(var(--color-anxiety-alchemy));
+  box-shadow: 0 0 20px rgba(var(--color-anxiety-alchemy), 0.3);
+}
+
+.anxiety-alchemy .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-anxiety-alchemy), 0.8), rgb(var(--color-anxiety-alchemy)));
+  box-shadow: 0 0 12px rgba(var(--color-anxiety-alchemy), 0.5);
+}
+
+.path-icon-wrapper-large.anxiety-alchemy {
+  background: rgba(var(--color-anxiety-alchemy), 0.2);
+  color: rgb(var(--color-anxiety-alchemy));
+  box-shadow: 0 0 25px rgba(var(--color-anxiety-alchemy), 0.5);
+  border: 2px solid rgba(var(--color-anxiety-alchemy), 0.6);
+}
+
+.primary-button.anxiety-alchemy {
+  background: linear-gradient(135deg, rgba(var(--color-anxiety-alchemy), 0.9), rgb(var(--color-anxiety-alchemy)));
+}
+
+.path-details-modal.anxiety-alchemy .modal-header {
+  border-bottom: 3px solid rgba(var(--color-anxiety-alchemy), 0.8);
+}
+
+/* 20. DREAM DECODER */
+.path-card.dream-decoder {
+  border-left-color: rgba(var(--color-dream-decoder), 0.8);
+  border-right-color: rgba(var(--color-dream-decoder), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-dream-decoder), 0.05));
+}
+
+.path-card.dream-decoder:hover {
+  border-left-color: rgb(var(--color-dream-decoder));
+  border-right-color: rgb(var(--color-dream-decoder));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-dream-decoder), 0.4);
+}
+
+.path-icon-wrapper.dream-decoder {
+  background: rgba(var(--color-dream-decoder), 0.2);
+  color: rgb(var(--color-dream-decoder));
+  box-shadow: 0 0 20px rgba(var(--color-dream-decoder), 0.3);
+}
+
+.dream-decoder .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-dream-decoder), 0.8), rgb(var(--color-dream-decoder)));
+  box-shadow: 0 0 12px rgba(var(--color-dream-decoder), 0.5);
+}
+
+.path-icon-wrapper-large.dream-decoder {
+  background: rgba(var(--color-dream-decoder), 0.2);
+  color: rgb(var(--color-dream-decoder));
+  box-shadow: 0 0 25px rgba(var(--color-dream-decoder), 0.5);
+  border: 2px solid rgba(var(--color-dream-decoder), 0.6);
+}
+
+.primary-button.dream-decoder {
+  background: linear-gradient(135deg, rgba(var(--color-dream-decoder), 0.9), rgb(var(--color-dream-decoder)));
+}
+
+.path-details-modal.dream-decoder .modal-header {
+  border-bottom: 3px solid rgba(var(--color-dream-decoder), 0.8);
+}
+
+/* 21. SEASONAL RHYTHMS */
+.path-card.seasonal-rhythms {
+  border-left-color: rgba(var(--color-seasonal-rhythms), 0.8);
+  border-right-color: rgba(var(--color-seasonal-rhythms), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-seasonal-rhythms), 0.05));
+}
+
+.path-card.seasonal-rhythms:hover {
+  border-left-color: rgb(var(--color-seasonal-rhythms));
+  border-right-color: rgb(var(--color-seasonal-rhythms));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-seasonal-rhythms), 0.4);
+}
+
+.path-icon-wrapper.seasonal-rhythms {
+  background: rgba(var(--color-seasonal-rhythms), 0.2);
+  color: rgb(var(--color-seasonal-rhythms));
+  box-shadow: 0 0 20px rgba(var(--color-seasonal-rhythms), 0.3);
+}
+
+.seasonal-rhythms .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-seasonal-rhythms), 0.8), rgb(var(--color-seasonal-rhythms)));
+  box-shadow: 0 0 12px rgba(var(--color-seasonal-rhythms), 0.5);
+}
+
+.path-icon-wrapper-large.seasonal-rhythms {
+  background: rgba(var(--color-seasonal-rhythms), 0.2);
+  color: rgb(var(--color-seasonal-rhythms));
+  box-shadow: 0 0 25px rgba(var(--color-seasonal-rhythms), 0.5);
+  border: 2px solid rgba(var(--color-seasonal-rhythms), 0.6);
+}
+
+.primary-button.seasonal-rhythms {
+  background: linear-gradient(135deg, rgba(var(--color-seasonal-rhythms), 0.9), rgb(var(--color-seasonal-rhythms)));
+}
+
+.path-details-modal.seasonal-rhythms .modal-header {
+  border-bottom: 3px solid rgba(var(--color-seasonal-rhythms), 0.8);
+}
+
+/* 22. FORGIVENESS FREEDOM */
+.path-card.forgiveness-freedom {
+  border-left-color: rgba(var(--color-forgiveness-freedom), 0.8);
+  border-right-color: rgba(var(--color-forgiveness-freedom), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-forgiveness-freedom), 0.05));
+}
+
+.path-card.forgiveness-freedom:hover {
+  border-left-color: rgb(var(--color-forgiveness-freedom));
+  border-right-color: rgb(var(--color-forgiveness-freedom));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-forgiveness-freedom), 0.4);
+}
+
+.path-icon-wrapper.forgiveness-freedom {
+  background: rgba(var(--color-forgiveness-freedom), 0.2);
+  color: rgb(var(--color-forgiveness-freedom));
+  box-shadow: 0 0 20px rgba(var(--color-forgiveness-freedom), 0.3);
+}
+
+.forgiveness-freedom .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-forgiveness-freedom), 0.8), rgb(var(--color-forgiveness-freedom)));
+  box-shadow: 0 0 12px rgba(var(--color-forgiveness-freedom), 0.5);
+}
+
+.path-icon-wrapper-large.forgiveness-freedom {
+  background: rgba(var(--color-forgiveness-freedom), 0.2);
+  color: rgb(var(--color-forgiveness-freedom));
+  box-shadow: 0 0 25px rgba(var(--color-forgiveness-freedom), 0.5);
+  border: 2px solid rgba(var(--color-forgiveness-freedom), 0.6);
+}
+
+.primary-button.forgiveness-freedom {
+  background: linear-gradient(135deg, rgba(var(--color-forgiveness-freedom), 0.9), rgb(var(--color-forgiveness-freedom)));
+}
+
+.path-details-modal.forgiveness-freedom .modal-header {
+  border-bottom: 3px solid rgba(var(--color-forgiveness-freedom), 0.8);
+}
+
+/* 23. TRANSITIONS NAVIGATOR */
+.path-card.transitions-navigator {
+  border-left-color: rgba(var(--color-transitions-navigator), 0.8);
+  border-right-color: rgba(var(--color-transitions-navigator), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-transitions-navigator), 0.05));
+}
+
+.path-card.transitions-navigator:hover {
+  border-left-color: rgb(var(--color-transitions-navigator));
+  border-right-color: rgb(var(--color-transitions-navigator));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-transitions-navigator), 0.4);
+}
+
+.path-icon-wrapper.transitions-navigator {
+  background: rgba(var(--color-transitions-navigator), 0.2);
+  color: rgb(var(--color-transitions-navigator));
+  box-shadow: 0 0 20px rgba(var(--color-transitions-navigator), 0.3);
+}
+
+.transitions-navigator .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-transitions-navigator), 0.8), rgb(var(--color-transitions-navigator)));
+  box-shadow: 0 0 12px rgba(var(--color-transitions-navigator), 0.5);
+}
+
+.path-icon-wrapper-large.transitions-navigator {
+  background: rgba(var(--color-transitions-navigator), 0.2);
+  color: rgb(var(--color-transitions-navigator));
+  box-shadow: 0 0 25px rgba(var(--color-transitions-navigator), 0.5);
+  border: 2px solid rgba(var(--color-transitions-navigator), 0.6);
+}
+
+.primary-button.transitions-navigator {
+  background: linear-gradient(135deg, rgba(var(--color-transitions-navigator), 0.9), rgb(var(--color-transitions-navigator)));
+}
+
+.path-details-modal.transitions-navigator .modal-header {
+  border-bottom: 3px solid rgba(var(--color-transitions-navigator), 0.8);
+}
+
+/* 24. DIGITAL DETOX - ENHANCED VISIBILITY */
+.path-card.digital-detox {
+  border-left-color: rgba(var(--color-digital-detox), 0.9); /* Enhanced opacity for gray */
+  border-right-color: rgba(var(--color-digital-detox), 0.9);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-digital-detox), 0.08));
+  border-left-width: 5px; /* Thicker for gray visibility */
+  border-right-width: 5px;
+}
+
+.path-card.digital-detox:hover {
+  border-left-color: rgb(var(--color-digital-detox));
+  border-right-color: rgb(var(--color-digital-detox));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-digital-detox), 0.6);
+  border-left-width: 7px;
+  border-right-width: 7px;
+}
+
+.path-icon-wrapper.digital-detox {
+  background: rgba(var(--color-digital-detox), 0.25);
+  color: rgb(var(--color-digital-detox));
+  box-shadow: 0 0 20px rgba(var(--color-digital-detox), 0.4);
+}
+
+.digital-detox .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-digital-detox), 0.8), rgb(var(--color-digital-detox)));
+  box-shadow: 0 0 12px rgba(var(--color-digital-detox), 0.6);
+}
+
+.path-icon-wrapper-large.digital-detox {
+  background: rgba(var(--color-digital-detox), 0.25);
+  color: rgb(var(--color-digital-detox));
+  box-shadow: 0 0 25px rgba(var(--color-digital-detox), 0.6);
+  border: 2px solid rgba(var(--color-digital-detox), 0.7);
+}
+
+.primary-button.digital-detox {
+  background: linear-gradient(135deg, rgba(var(--color-digital-detox), 0.9), rgb(var(--color-digital-detox)));
+}
+
+.path-details-modal.digital-detox .modal-header {
+  border-bottom: 3px solid rgba(var(--color-digital-detox), 0.8);
+}
+
+/* 25. GRIEF & GROWTH - ENHANCED VISIBILITY */
+.path-card.grief-growth {
+  border-left-color: rgba(var(--color-grief-growth), 0.9); /* Enhanced opacity for gray */
+  border-right-color: rgba(var(--color-grief-growth), 0.9);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-grief-growth), 0.08));
+  border-left-width: 5px; /* Thicker for gray visibility */
+  border-right-width: 5px;
+}
+
+.path-card.grief-growth:hover {
+  border-left-color: rgb(var(--color-grief-growth));
+  border-right-color: rgb(var(--color-grief-growth));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-grief-growth), 0.6);
+  border-left-width: 7px;
+  border-right-width: 7px;
+}
+
+.path-icon-wrapper.grief-growth {
+  background: rgba(var(--color-grief-growth), 0.25);
+  color: rgb(var(--color-grief-growth));
+  box-shadow: 0 0 20px rgba(var(--color-grief-growth), 0.4);
+}
+
+.grief-growth .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-grief-growth), 0.8), rgb(var(--color-grief-growth)));
+  box-shadow: 0 0 12px rgba(var(--color-grief-growth), 0.6);
+}
+
+.path-icon-wrapper-large.grief-growth {
+  background: rgba(var(--color-grief-growth), 0.25);
+  color: rgb(var(--color-grief-growth));
+  box-shadow: 0 0 25px rgba(var(--color-grief-growth), 0.6);
+  border: 2px solid rgba(var(--color-grief-growth), 0.7);
+}
+
+.primary-button.grief-growth {
+  background: linear-gradient(135deg, rgba(var(--color-grief-growth), 0.9), rgb(var(--color-grief-growth)));
+}
+
+.path-details-modal.grief-growth .modal-header {
+  border-bottom: 3px solid rgba(var(--color-grief-growth), 0.8);
+}
+
+/* 26. COURAGE CULTIVATION */
+.path-card.courage-cultivation {
+  border-left-color: rgba(var(--color-courage-cultivation), 0.8);
+  border-right-color: rgba(var(--color-courage-cultivation), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-courage-cultivation), 0.05));
+}
+
+.path-card.courage-cultivation:hover {
+  border-left-color: rgb(var(--color-courage-cultivation));
+  border-right-color: rgb(var(--color-courage-cultivation));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-courage-cultivation), 0.4);
+}
+
+.path-icon-wrapper.courage-cultivation {
+  background: rgba(var(--color-courage-cultivation), 0.2);
+  color: rgb(var(--color-courage-cultivation));
+  box-shadow: 0 0 20px rgba(var(--color-courage-cultivation), 0.3);
+}
+
+.courage-cultivation .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-courage-cultivation), 0.8), rgb(var(--color-courage-cultivation)));
+  box-shadow: 0 0 12px rgba(var(--color-courage-cultivation), 0.5);
+}
+
+.path-icon-wrapper-large.courage-cultivation {
+  background: rgba(var(--color-courage-cultivation), 0.2);
+  color: rgb(var(--color-courage-cultivation));
+  box-shadow: 0 0 25px rgba(var(--color-courage-cultivation), 0.5);
+  border: 2px solid rgba(var(--color-courage-cultivation), 0.6);
+}
+
+.primary-button.courage-cultivation {
+  background: linear-gradient(135deg, rgba(var(--color-courage-cultivation), 0.9), rgb(var(--color-courage-cultivation)));
+}
+
+.path-details-modal.courage-cultivation .modal-header {
+  border-bottom: 3px solid rgba(var(--color-courage-cultivation), 0.8);
+}
+
+/* 27. COLOR PSYCHOLOGY */
+.path-card.color-psychology {
+  border-left-color: rgba(var(--color-color-psychology), 0.8);
+  border-right-color: rgba(var(--color-color-psychology), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-color-psychology), 0.05));
+}
+
+.path-card.color-psychology:hover {
+  border-left-color: rgb(var(--color-color-psychology));
+  border-right-color: rgb(var(--color-color-psychology));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-color-psychology), 0.4);
+}
+
+.path-icon-wrapper.color-psychology {
+  background: rgba(var(--color-color-psychology), 0.2);
+  color: rgb(var(--color-color-psychology));
+  box-shadow: 0 0 20px rgba(var(--color-color-psychology), 0.3);
+}
+
+.color-psychology .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-color-psychology), 0.8), rgb(var(--color-color-psychology)));
+  box-shadow: 0 0 12px rgba(var(--color-color-psychology), 0.5);
+}
+
+.path-icon-wrapper-large.color-psychology {
+  background: rgba(var(--color-color-psychology), 0.2);
+  color: rgb(var(--color-color-psychology));
+  box-shadow: 0 0 25px rgba(var(--color-color-psychology), 0.5);
+  border: 2px solid rgba(var(--color-color-psychology), 0.6);
+}
+
+.primary-button.color-psychology {
+  background: linear-gradient(135deg, rgba(var(--color-color-psychology), 0.9), rgb(var(--color-color-psychology)));
+}
+
+.path-details-modal.color-psychology .modal-header {
+  border-bottom: 3px solid rgba(var(--color-color-psychology), 0.8);
+}
+
+/* 28. SACRED GEOMETRY */
+.path-card.sacred-geometry {
+  border-left-color: rgba(var(--color-sacred-geometry), 0.8);
+  border-right-color: rgba(var(--color-sacred-geometry), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-sacred-geometry), 0.05));
+}
+
+.path-card.sacred-geometry:hover {
+  border-left-color: rgb(var(--color-sacred-geometry));
+  border-right-color: rgb(var(--color-sacred-geometry));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-sacred-geometry), 0.4);
+}
+
+.path-icon-wrapper.sacred-geometry {
+  background: rgba(var(--color-sacred-geometry), 0.2);
+  color: rgb(var(--color-sacred-geometry));
+  box-shadow: 0 0 20px rgba(var(--color-sacred-geometry), 0.3);
+}
+
+.sacred-geometry .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-sacred-geometry), 0.8), rgb(var(--color-sacred-geometry)));
+  box-shadow: 0 0 12px rgba(var(--color-sacred-geometry), 0.5);
+}
+
+.path-icon-wrapper-large.sacred-geometry {
+  background: rgba(var(--color-sacred-geometry), 0.2);
+  color: rgb(var(--color-sacred-geometry));
+  box-shadow: 0 0 25px rgba(var(--color-sacred-geometry), 0.5);
+  border: 2px solid rgba(var(--color-sacred-geometry), 0.6);
+}
+
+.primary-button.sacred-geometry {
+  background: linear-gradient(135deg, rgba(var(--color-sacred-geometry), 0.9), rgb(var(--color-sacred-geometry)));
+}
+
+.path-details-modal.sacred-geometry .modal-header {
+  border-bottom: 3px solid rgba(var(--color-sacred-geometry), 0.8);
+}
+
+/* 29. NATURE SKETCHING */
+.path-card.nature-sketching {
+  border-left-color: rgba(var(--color-nature-sketching), 0.8);
+  border-right-color: rgba(var(--color-nature-sketching), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-nature-sketching), 0.05));
+}
+
+.path-card.nature-sketching:hover {
+  border-left-color: rgb(var(--color-nature-sketching));
+  border-right-color: rgb(var(--color-nature-sketching));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-nature-sketching), 0.4);
+}
+
+.path-icon-wrapper.nature-sketching {
+  background: rgba(var(--color-nature-sketching), 0.2);
+  color: rgb(var(--color-nature-sketching));
+  box-shadow: 0 0 20px rgba(var(--color-nature-sketching), 0.3);
+}
+
+.nature-sketching .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-nature-sketching), 0.8), rgb(var(--color-nature-sketching)));
+  box-shadow: 0 0 12px rgba(var(--color-nature-sketching), 0.5);
+}
+
+.path-icon-wrapper-large.nature-sketching {
+  background: rgba(var(--color-nature-sketching), 0.2);
+  color: rgb(var(--color-nature-sketching));
+  box-shadow: 0 0 25px rgba(var(--color-nature-sketching), 0.5);
+  border: 2px solid rgba(var(--color-nature-sketching), 0.6);
+}
+
+.primary-button.nature-sketching {
+  background: linear-gradient(135deg, rgba(var(--color-nature-sketching), 0.9), rgb(var(--color-nature-sketching)));
+}
+
+.path-details-modal.nature-sketching .modal-header {
+  border-bottom: 3px solid rgba(var(--color-nature-sketching), 0.8);
+}
+
+/* 30. ABSTRACT EMOTIONS */
+.path-card.abstract-emotions {
+  border-left-color: rgba(var(--color-abstract-emotions), 0.8);
+  border-right-color: rgba(var(--color-abstract-emotions), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-abstract-emotions), 0.05));
+}
+
+.path-card.abstract-emotions:hover {
+  border-left-color: rgb(var(--color-abstract-emotions));
+  border-right-color: rgb(var(--color-abstract-emotions));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-abstract-emotions), 0.4);
+}
+
+.path-icon-wrapper.abstract-emotions {
+  background: rgba(var(--color-abstract-emotions), 0.2);
+  color: rgb(var(--color-abstract-emotions));
+  box-shadow: 0 0 20px rgba(var(--color-abstract-emotions), 0.3);
+}
+
+.abstract-emotions .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-abstract-emotions), 0.8), rgb(var(--color-abstract-emotions)));
+  box-shadow: 0 0 12px rgba(var(--color-abstract-emotions), 0.5);
+}
+
+.path-icon-wrapper-large.abstract-emotions {
+  background: rgba(var(--color-abstract-emotions), 0.2);
+  color: rgb(var(--color-abstract-emotions));
+  box-shadow: 0 0 25px rgba(var(--color-abstract-emotions), 0.5);
+  border: 2px solid rgba(var(--color-abstract-emotions), 0.6);
+}
+
+.primary-button.abstract-emotions {
+  background: linear-gradient(135deg, rgba(var(--color-abstract-emotions), 0.9), rgb(var(--color-abstract-emotions)));
+}
+
+.path-details-modal.abstract-emotions .modal-header {
+  border-bottom: 3px solid rgba(var(--color-abstract-emotions), 0.8);
+}
+
+/* 31. VISUAL STORYTELLING */
+.path-card.visual-storytelling {
+  border-left-color: rgba(var(--color-visual-storytelling), 0.8);
+  border-right-color: rgba(var(--color-visual-storytelling), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-visual-storytelling), 0.05));
+}
+
+.path-card.visual-storytelling:hover {
+  border-left-color: rgb(var(--color-visual-storytelling));
+  border-right-color: rgb(var(--color-visual-storytelling));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-visual-storytelling), 0.4);
+}
+
+.path-icon-wrapper.visual-storytelling {
+  background: rgba(var(--color-visual-storytelling), 0.2);
+  color: rgb(var(--color-visual-storytelling));
+  box-shadow: 0 0 20px rgba(var(--color-visual-storytelling), 0.3);
+}
+
+.visual-storytelling .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-visual-storytelling), 0.8), rgb(var(--color-visual-storytelling)));
+  box-shadow: 0 0 12px rgba(var(--color-visual-storytelling), 0.5);
+}
+
+.path-icon-wrapper-large.visual-storytelling {
+  background: rgba(var(--color-visual-storytelling), 0.2);
+  color: rgb(var(--color-visual-storytelling));
+  box-shadow: 0 0 25px rgba(var(--color-visual-storytelling), 0.5);
+  border: 2px solid rgba(var(--color-visual-storytelling), 0.6);
+}
+
+.primary-button.visual-storytelling {
+  background: linear-gradient(135deg, rgba(var(--color-visual-storytelling), 0.9), rgb(var(--color-visual-storytelling)));
+}
+
+.path-details-modal.visual-storytelling .modal-header {
+  border-bottom: 3px solid rgba(var(--color-visual-storytelling), 0.8);
+}
+
+/* 32. INK & ESSENCE - SPECIAL DARK THEME WITH ENHANCED VISIBILITY */
+.path-card.ink-essence {
+  border-left-color: rgba(var(--color-ink-essence), 0.9); /* Enhanced slate visibility */
+  border-right-color: rgba(var(--color-ink-essence), 0.9);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(15, 23, 42, 0.15));
+  border-left-width: 5px; /* Thicker for special path */
+  border-right-width: 5px;
+}
+
+.path-card.ink-essence:hover {
+  border-left-color: rgb(var(--color-ink-essence));
+  border-right-color: rgb(var(--color-ink-essence));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(15, 23, 42, 0.6), 0 0 50px rgba(var(--color-ink-essence), 0.4);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(15, 23, 42, 0.25));
+  border-left-width: 8px; /* Extra thick on hover */
+  border-right-width: 8px;
+}
+
+.path-icon-wrapper.ink-essence {
+  background: rgba(15, 23, 42, 0.4);
+  color: rgb(148, 163, 184); /* Light slate for visibility */
+  box-shadow: 0 0 20px rgba(15, 23, 42, 0.5), inset 0 0 20px rgba(var(--color-ink-essence), 0.2);
+  border: 1px solid rgba(var(--color-ink-essence), 0.4);
+}
+
+.ink-essence .progress-fill {
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.8), rgb(var(--color-ink-essence)));
+  box-shadow: 0 0 12px rgba(15, 23, 42, 0.7);
+}
+
+.path-icon-wrapper-large.ink-essence {
+  background: rgba(15, 23, 42, 0.4);
+  color: rgb(148, 163, 184);
+  box-shadow: 0 0 25px rgba(15, 23, 42, 0.7), inset 0 0 30px rgba(var(--color-ink-essence), 0.3);
+  border: 2px solid rgba(var(--color-ink-essence), 0.6);
+}
+
+.primary-button.ink-essence {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgb(var(--color-ink-essence)));
+  color: white;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.primary-button.ink-essence:hover {
+  background: linear-gradient(135deg, rgb(15, 23, 42), rgb(51, 65, 85));
+  box-shadow: 0 0 20px rgba(15, 23, 42, 0.6);
+}
+
+.path-details-modal.ink-essence .modal-header {
+  border-bottom: 3px solid rgba(var(--color-ink-essence), 0.8);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.1), transparent);
+}
+
+/* ============================================================================
+   MOBILE-FIRST UI COMPONENTS
+   ============================================================================ */
+
+/* Badge System - Mobile Optimized */
+.path-badges {
+  position: absolute;
+  top: calc(var(--space-3) + 40px);
+  right: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  z-index: 7;
+}
+
+.path-completion-badge,
+.path-active-badge,
+.path-recommended-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 28px; /* Touch-friendly minimum */
+}
+
+.path-completion-badge {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.path-active-badge {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+}
+
+.path-recommended-badge {
+  background: rgba(245, 158, 11, 0.9);
+  color: white;
+}
+
+/* Premium Indicator - Mobile Positioned */
+.premium-indicator {
+  position: absolute;
+  top: var(--space-2);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(234, 179, 8, 0.9));
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 9;
+  min-height: 24px; /* Touch-friendly */
+}
+
+/* Favorite Button - Mobile Touch Target */
+.favorite-button {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 44px; /* iOS minimum touch target */
+  height: 44px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: var(--text-quaternary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  z-index: 8;
+  -webkit-tap-highlight-color: transparent; /* Remove iOS tap highlight */
+}
+
+.favorite-button:hover,
+.favorite-button:active {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.favorite-button.active {
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.2);
+  border-color: rgba(236, 72, 153, 0.5);
+}
+
+.favorite-button.active svg {
+  fill: currentColor;
+}
+
+/* Path Card Header - Mobile Optimized */
+.path-card-header {
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.path-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.path-card:hover .path-icon-wrapper {
+  transform: scale(1.05);
+}
+
+.path-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.active-indicator {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--surface-primary);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+}
+
+/* Path Card Content - Mobile Layout */
+.path-card-content {
+  padding: 0 var(--space-4) var(--space-4);
+  flex: 1;
+}
+
+.path-card-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+  line-height: 1.3;
+}
+
+.path-card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-3);
+  line-height: 1.4;
+}
+
+/* Path Tags - Mobile Friendly */
+.path-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.path-tag {
+  background: var(--surface-tertiary);
+  color: var(--text-secondary);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  min-height: 24px; /* Touch-friendly */
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  height: 8px; /* Slightly thicker for mobile */
+  background: var(--surface-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-2);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.progress-fraction {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.progress-percentage {
+  background: var(--surface-tertiary);
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  min-width: 40px; /* Consistent width */
+  text-align: center;
+}
+
+/* Path Metadata - Mobile Layout */
+.path-metadata {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.path-difficulty,
+.path-duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.difficulty-icon.beginner {
+  color: #06b6d4;
+}
+
+.difficulty-icon.intermediate {
+  color: #8b5cf6;
+}
+
+.difficulty-icon.advanced {
+  color: #ef4444;
+}
+
+/* Action Button - Mobile Touch Target */
+.path-action {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.continue-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 48px; /* iOS minimum touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.continue-button:hover,
+.continue-button:active {
+  background: var(--surface-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.continue-button.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+/* Tabs Navigation - Mobile First */
+.tabs-container {
+  margin-bottom: var(--space-6);
+  position: relative;
+}
+
+.tabs-scroll-container {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: var(--space-1);
+  -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+}
+
+.tabs-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.2rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+  position: relative;
+  min-height: 44px; /* Touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab:hover,
+.tab:active {
+  color: var(--text-secondary);
+  background: var(--surface-secondary);
+}
+
+.tab.active {
+  color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.tab-badge {
+  background: var(--accent-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+  min-height: 20px; /* Touch-friendly */
+}
+
+.tab-badge.completed {
+  background: #10b981;
+}
+
+.tab-badge.favorite {
+  background: #ec4899;
+}
+
+/* Filters - Mobile Optimized */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 40px; /* Touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-chip:hover,
+.filter-chip:active {
+  background: var(--surface-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-chip.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================================
+   MOBILE-FIRST RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+/* Small Mobile (up to 480px) - Base styles above */
+
+/* Large Mobile (481px - 640px) */
+@media (min-width: 481px) {
+  .path-selection-container {
+    padding: var(--space-5);
+  }
+  
+  .paths-grid {
+    gap: var(--space-5);
+  }
+  
+  .path-card-header {
+    padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+  
+  .path-card-content {
+    padding: 0 var(--space-5) var(--space-5);
+  }
+  
+  .path-action {
+    padding: 0 var(--space-5) var(--space-5);
+  }
+}
+
+/* Tablet Portrait (641px - 768px) */
+@media (min-width: 641px) {
+  .path-selection-container {
+    padding: var(--space-6);
+  }
+  
+  .header-text h1 {
+    font-size: var(--text-3xl);
+  }
+  
+  .page-subtitle {
+    font-size: var(--text-base);
+    max-width: 500px;
+  }
+  
+  .paths-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+  
+  .path-card-header {
+    padding: var(--space-6);
+  }
+  
+  .path-card-content {
+    padding: 0 var(--space-6) var(--space-6);
+  }
+  
+  .path-action {
+    padding: 0 var(--space-6) var(--space-6);
+  }
+  
+  /* Enhanced borders for tablet */
+  .path-card {
+    border-left-width: 5px;
+    border-right-width: 5px;
+  }
+  
+  .path-card:hover {
+    border-left-width: 7px;
+    border-right-width: 7px;
+  }
+  
+  /* Adjust badge positioning for larger cards */
+  .path-badges {
+    top: calc(var(--space-4) + 45px);
+    right: var(--space-4);
+  }
+  
+  .premium-indicator {
+    top: var(--space-4);
+  }
+  
+  .favorite-button {
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Tablet Landscape / Small Desktop (769px - 1024px) */
+@media (min-width: 769px) {
+  .path-selection-container {
+    padding: var(--space-8);
+    padding-bottom: var(--space-20);
+  }
+  
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .header-actions {
+    margin-top: 0;
+  }
+  
+  .paths-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .paths-list {
+    grid-template-columns: 1fr;
+  }
+  
+  /* List view optimization for larger screens */
+  .path-card.list {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--space-6);
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top: 2px solid transparent;
+  }
+  
+  .path-card.list .path-card-header {
+    padding: 0;
+    margin-right: var(--space-6);
+  }
+  
+  .path-card.list .path-card-content {
+    padding: 0;
+    flex: 1;
+  }
+  
+  .path-card.list .path-action {
+    padding: 0;
+    margin-left: var(--space-6);
+  }
+  
+  .path-card.list .continue-button {
+    width: auto;
+    min-width: 120px;
+  }
+  
+  .path-card.list .favorite-button {
+    position: static;
+    margin-left: var(--space-3);
+    top: auto;
+    right: auto;
+  }
+  
+  .path-card.list .path-badges {
+    position: static;
+    top: auto;
+    right: auto;
+    flex-direction: row;
+    margin-left: var(--space-3);
+  }
+  
+  .path-card.list .premium-indicator {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-left: var(--space-3);
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .paths-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .path-selection-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  /* Even more pronounced borders for desktop */
+  .path-card {
+    border-left-width: 6px;
+    border-right-width: 6px;
+  }
+  
+  .path-card:hover {
+    border-left-width: 8px;
+    border-right-width: 8px;
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* ============================================================================
+   MODALS - MOBILE FIRST
+   ============================================================================ */
+
+/* Modal Overlay - Mobile Optimized */
+.path-details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: fadeIn 0.2s ease;
+  -webkit-overflow-scrolling: touch;
+}
+
+.path-details-modal {
+  background: var(--surface-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  max-width: 95vw;
+  max-height: 90vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-2xl);
+  animation: modalSlideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border-primary);
+  gap: var(--space-4);
+}
+
+.path-icon-wrapper-large {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.header-content h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+  line-height: 1.3;
+}
+
+.path-subtitle {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.favorite-button-large {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-full);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.favorite-button-large:hover,
+.favorite-button-large:active {
+  background: rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.favorite-button-large.active {
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.2);
+  border-color: rgba(236, 72, 153, 0.5);
+}
+
+.favorite-button-large.active svg {
+  fill: currentColor;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.close-button:hover,
+.close-button:active {
+  color: var(--text-primary);
+  background: var(--surface-secondary);
+}
+
+/* Modal Content - Mobile Scrollable */
+.modal-content {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Modal Footer - Mobile Buttons */
+.modal-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-primary);
+  background: var(--surface-secondary);
+}
+
+.secondary-button,
+.primary-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border: none;
+  flex: 1;
+  justify-content: center;
+  min-height: 48px; /* Touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.secondary-button {
+  background: var(--surface-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-primary);
+}
+
+.secondary-button:hover,
+.secondary-button:active {
+  background: var(--surface-quaternary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.primary-button {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.primary-button:hover,
+.primary-button:active {
+  background: var(--primary-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Larger screens - horizontal modal footer */
+@media (min-width: 641px) {
+  .modal-footer {
+    flex-direction: row;
+  }
+  
+  .secondary-button,
+  .primary-button {
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+  
+  .path-details-modal {
+    max-width: 700px;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ============================================================================ */
+
+/* Touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  .path-card:hover {
+    transform: none;
+  }
+  
+  .continue-button:hover {
+    transform: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .path-card:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .path-card {
+    border-width: 3px;
+  }
+  
+  .progress-fill {
+    border: 1px solid currentColor;
+  }
+  
+  .premium-indicator,
+  .path-completion-badge,
+  .path-active-badge,
+  .path-recommended-badge {
+    font-weight: 800;
+    border-width: 2px;
+  }
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: light) {
+  .path-selection-container:not(.dark-theme) {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-quaternary: #e2e8f0;
+    --surface-primary: #ffffff;
+    --surface-secondary: #f8fafc;
+    --surface-tertiary: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --text-quaternary: #94a3b8;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #06b6d4;
+  }
+}
+
+/* Custom scrollbar - Mobile friendly */
+.path-selection-container::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.tabs-scroll-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.path-selection-container::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.tabs-scroll-container::-webkit-scrollbar-track {
+  background: var(--surface-secondary);
+  border-radius: var(--radius-full);
+}
+
+.path-selection-container::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.tabs-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--surface-tertiary);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--surface-secondary);
+}
+
+.path-selection-container::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover,
+.tabs-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-quaternary);
+}
+
+/* Loading skeleton - Mobile optimized */
+.path-card.skeleton {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.skeleton-shimmer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--surface-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.skeleton-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 25%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    transparent 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus states for accessibility */
+.path-card:focus-visible,
+.tab:focus-visible,
+.filter-chip:focus-visible,
+.continue-button:focus-visible,
+.favorite-button:focus-visible,
+.search-input:focus-visible,
+.view-toggle-button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: var(--space-4);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: 1200;
+  border: 1px solid var(--border-primary);
+}
+
+.skip-to-content:focus {
+  top: var(--space-4);
+}
+
+/* Premium Ind/* Main Container */
+.path-selection-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: var(--space-4);
+  padding-bottom: var(--space-20);
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* 🔧 CRITICAL CSS FIX: Add these styles to your pathSelection.css file */
+/* These styles ensure the path switch modal is properly visible */
+
+/* ============================================================================
+   PATH SWITCH MODAL - CRITICAL FIX FOR VISIBILITY
+   ============================================================================ */
+
+/* Ensure path switch modal overlay has highest z-index */
+.active-path-switch-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  z-index: 9999 !important; /* Highest priority */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: var(--space-4) !important;
+  animation: fadeIn 0.2s ease !important;
+}
+
+/* Confirmation modal styling */
+.confirmation-modal {
+  background: var(--surface-primary) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: var(--radius-2xl) !important;
+  max-width: 400px !important;
+  width: 90% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: var(--shadow-2xl) !important;
+  animation: modalSlideUp 0.3s ease !important;
+  overflow: hidden !important;
+  z-index: 10000 !important;
+}
+
+/* Modal header with warning icon */
+.confirmation-modal .modal-header {
+  display: flex !important;
+  align-items: center !important;
+  padding: var(--space-6) !important;
+  border-bottom: 1px solid var(--border-primary) !important;
+  gap: var(--space-3) !important;
+  background: var(--surface-secondary) !important;
+}
+
+.modal-warning-icon {
+  color: #f59e0b !important; /* Warning amber color */
+  flex-shrink: 0 !important;
+}
+
+.confirmation-modal .modal-title {
+  font-size: var(--text-lg) !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  margin: 0 !important;
+  flex: 1 !important;
+}
+
+/* Modal content styling */
+.confirmation-modal .modal-content {
+  padding: var(--space-6) !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.6 !important;
+}
+
+.modal-message {
+  margin-bottom: var(--space-4) !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-note {
+  font-size: var(--text-sm) !important;
+  color: var(--text-tertiary) !important;
+  margin: 0 !important;
+}
+
+/* Modal footer with buttons */
+.confirmation-modal .modal-footer {
+  display: flex !important;
+  gap: var(--space-3) !important;
+  padding: var(--space-6) !important;
+  border-top: 1px solid var(--border-primary) !important;
+  background: var(--surface-secondary) !important;
+}
+
+/* Button styling for modal */
+.confirmation-modal .secondary-button,
+.confirmation-modal .primary-button {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-2) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  border-radius: var(--radius-lg) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all var(--transition-normal) !important;
+  border: none !important;
+  flex: 1 !important;
+  justify-content: center !important;
+  min-height: 44px !important; /* Touch target */
+  font-size: var(--text-sm) !important;
+}
+
+.confirmation-modal .secondary-button {
+  background: var(--surface-tertiary) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-primary) !important;
+}
+
+.confirmation-modal .secondary-button:hover {
+  background: var(--surface-quaternary) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.confirmation-modal .primary-button {
+  background: var(--accent-primary) !important;
+  color: white !important;
+}
+
+.confirmation-modal .primary-button:hover {
+  background: var(--primary-600) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .active-path-switch-modal {
+    padding: var(--space-2) !important;
+  }
+  
+  .confirmation-modal {
+    max-width: 95% !important;
+    width: 95% !important;
+  }
+  
+  .confirmation-modal .modal-header,
+  .confirmation-modal .modal-content,
+  .confirmation-modal .modal-footer {
+    padding: var(--space-4) !important;
+  }
+  
+  .confirmation-modal .modal-footer {
+    flex-direction: column !important;
+  }
+}
+
+/* ============================================================================
+   DEBUG HELPER - REMOVE IN PRODUCTION
+   ============================================================================ */
+
+/* Temporary debug indicator to verify modal is rendering */
+.active-path-switch-modal::before {
+  content: "Path Switch Modal Active" !important;
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  background: #10b98100 !important;
+  color: rgba(255, 255, 255, 0) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  z-index: 10001 !important;
+  pointer-events: none !important;
+}
+
+/* Additional debugging - make modal highly visible during development */
+.confirmation-modal {
+  border: 3px solid #06c8bb !important; /* Temporary yellow border for visibility */
+  box-shadow: 0 0 0 5px rgba(60, 245, 255, 0.332), var(--shadow-2xl) !important;
+}
+
+/* ============================================================================
+   EXISTING MODAL STYLES - ENSURE COMPATIBILITY
+   ============================================================================ */
+
+/* Make sure existing modal overlay doesn't conflict */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: fadeIn 0.2s ease;
+}
+
+/* Ensure our specific modal gets higher priority */
+.modal-overlay.active-path-switch-modal {
+  z-index: 9999 !important;
+}
+
+/* Animation keyframes if not already defined */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.path-recommended-badge {
+    background: rgba(241, 178, 69, 0.925);
+    color: white;
+    height: 1rem;
+    margin-top: 1rem;
+}
+
+.tabs-scroll-container {
+    display: flex
+;
+    gap: var(--space-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: var(--space-1);
+    -webkit-overflow-scrolling: touch;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.favorite-button {
+    position: absolute;
+    top: 1rem;
+    right: 10rem;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    color: var(--text-quaternary);
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    z-index: 8;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.continue-button {
+    background: #61c7b2!important;
+}
+
+/* Add to src/styles/pathSelection.css */
+
+/* ========================================
+   SECTION 1: Color Variables (add to :root section around line 50)
+   ======================================== */
+:root {
+  /* ... existing color variables ... */
+  --color-manifestation-reality: 147, 51, 234;  /* Purple */
+  --color-decision-compass: 34, 197, 94;        /* Green */
+  --color-portrait-emotions: 236, 72, 153;      /* Pink */
+  /* ... rest of variables ... */
+}
+
+/* ========================================
+   SECTION 2: Path Card Border Colors (around line 400)
+   ======================================== */
+.path-card.manifestation-reality {
+  border-left-color: rgba(var(--color-manifestation-reality), 0.8);
+  border-right-color: rgba(var(--color-manifestation-reality), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-manifestation-reality), 0.05));
+}
+
+.path-card.decision-compass {
+  border-left-color: rgba(var(--color-decision-compass), 0.8);
+  border-right-color: rgba(var(--color-decision-compass), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-decision-compass), 0.05));
+}
+
+.path-card.portrait-emotions {
+  border-left-color: rgba(var(--color-portrait-emotions), 0.8);
+  border-right-color: rgba(var(--color-portrait-emotions), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-portrait-emotions), 0.05));
+}
+
+/* ========================================
+   SECTION 3: Path Card Hover Effects (around line 500)
+   ======================================== */
+.path-card.manifestation-reality:hover {
+  border-left-color: rgb(var(--color-manifestation-reality));
+  border-right-color: rgb(var(--color-manifestation-reality));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-manifestation-reality), 0.4);
+}
+
+.path-card.decision-compass:hover {
+  border-left-color: rgb(var(--color-decision-compass));
+  border-right-color: rgb(var(--color-decision-compass));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-decision-compass), 0.4);
+}
+
+.path-card.portrait-emotions:hover {
+  border-left-color: rgb(var(--color-portrait-emotions));
+  border-right-color: rgb(var(--color-portrait-emotions));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-portrait-emotions), 0.4);
+}
+
+/* ========================================
+   SECTION 4: Path Icon Wrapper Colors (around line 700)
+   ======================================== */
+.path-icon-wrapper.manifestation-reality {
+  background: rgba(var(--color-manifestation-reality), 0.2);
+  color: rgb(var(--color-manifestation-reality));
+  box-shadow: 0 0 20px rgba(var(--color-manifestation-reality), 0.3);
+}
+
+.path-icon-wrapper.decision-compass {
+  background: rgba(var(--color-decision-compass), 0.2);
+  color: rgb(var(--color-decision-compass));
+  box-shadow: 0 0 20px rgba(var(--color-decision-compass), 0.3);
+}
+
+.path-icon-wrapper.portrait-emotions {
+  background: rgba(var(--color-portrait-emotions), 0.2);
+  color: rgb(var(--color-portrait-emotions));
+  box-shadow: 0 0 20px rgba(var(--color-portrait-emotions), 0.3);
+}
+
+/* ========================================
+   SECTION 5: Progress Fill Colors (around line 900)
+   ======================================== */
+.manifestation-reality .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-manifestation-reality), 0.8), rgb(var(--color-manifestation-reality)));
+  box-shadow: 0 0 12px rgba(var(--color-manifestation-reality), 0.5);
+}
+
+.decision-compass .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-decision-compass), 0.8), rgb(var(--color-decision-compass)));
+  box-shadow: 0 0 12px rgba(var(--color-decision-compass), 0.5);
+}
+
+.portrait-emotions .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-portrait-emotions), 0.8), rgb(var(--color-portrait-emotions)));
+  box-shadow: 0 0 12px rgba(var(--color-portrait-emotions), 0.5);
+}
+
+/* ========================================
+   SECTION 6: Large Icon Wrapper for Modal (around line 1200)
+   ======================================== */
+.path-icon-wrapper-large.manifestation-reality {
+  background: rgba(var(--color-manifestation-reality), 0.2);
+  color: rgb(var(--color-manifestation-reality));
+  box-shadow: 0 0 25px rgba(var(--color-manifestation-reality), 0.5);
+  border: 2px solid rgba(var(--color-manifestation-reality), 0.6);
+}
+
+.path-icon-wrapper-large.decision-compass {
+  background: rgba(var(--color-decision-compass), 0.2);
+  color: rgb(var(--color-decision-compass));
+  box-shadow: 0 0 25px rgba(var(--color-decision-compass), 0.5);
+  border: 2px solid rgba(var(--color-decision-compass), 0.6);
+}
+
+.path-icon-wrapper-large.portrait-emotions {
+  background: rgba(var(--color-portrait-emotions), 0.2);
+  color: rgb(var(--color-portrait-emotions));
+  box-shadow: 0 0 25px rgba(var(--color-portrait-emotions), 0.5);
+  border: 2px solid rgba(var(--color-portrait-emotions), 0.6);
+}
+
+/* ========================================
+   SECTION 7: Primary Button Styling (around line 1500)
+   ======================================== */
+.primary-button.manifestation-reality {
+  background: linear-gradient(135deg, rgba(var(--color-manifestation-reality), 0.9), rgb(var(--color-manifestation-reality)));
+}
+
+.primary-button.decision-compass {
+  background: linear-gradient(135deg, rgba(var(--color-decision-compass), 0.9), rgb(var(--color-decision-compass)));
+}
+
+.primary-button.portrait-emotions {
+  background: linear-gradient(135deg, rgba(var(--color-portrait-emotions), 0.9), rgb(var(--color-portrait-emotions)));
+}
+
+/* ========================================
+   SECTION 8: Modal Header Accents (around line 1700)
+   ======================================== */
+.path-details-modal.manifestation-reality .modal-header {
+  border-bottom: 3px solid rgba(var(--color-manifestation-reality), 0.8);
+}
+
+.path-details-modal.decision-compass .modal-header {
+  border-bottom: 3px solid rgba(var(--color-decision-compass), 0.8);
+}
+
+.path-details-modal.portrait-emotions .modal-header {
+  border-bottom: 3px solid rgba(var(--color-portrait-emotions), 0.8);
+}
+
+.tabs-scroll-container {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+  padding-bottom: var(--space-2);
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}   
+
+/* Add to src/styles/pathSelection.css */
+
+/* ========================================
+   SECTION 1: Color Variables (add to :root section around line 50)
+   ======================================== */
+:root {
+  /* ... existing color variables ... */
+  --color-visual-meditation: 59, 130, 246;   /* Blue */
+  --color-symbolic-art: 245, 158, 11;        /* Amber/Orange */
+  /* ... rest of variables ... */
+}
+
+/* ========================================
+   SECTION 2: Path Card Border Colors (around line 400)
+   ======================================== */
+.path-card.visual-meditation {
+  border-left-color: rgba(var(--color-visual-meditation), 0.8);
+  border-right-color: rgba(var(--color-visual-meditation), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-visual-meditation), 0.05));
+}
+
+.path-card.symbolic-art {
+  border-left-color: rgba(var(--color-symbolic-art), 0.8);
+  border-right-color: rgba(var(--color-symbolic-art), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-symbolic-art), 0.05));
+}
+
+/* ========================================
+   SECTION 3: Path Card Hover Effects (around line 500)
+   ======================================== */
+.path-card.visual-meditation:hover {
+  border-left-color: rgb(var(--color-visual-meditation));
+  border-right-color: rgb(var(--color-visual-meditation));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-visual-meditation), 0.4);
+}
+
+.path-card.symbolic-art:hover {
+  border-left-color: rgb(var(--color-symbolic-art));
+  border-right-color: rgb(var(--color-symbolic-art));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-symbolic-art), 0.4);
+}
+
+/* ========================================
+   SECTION 4: Path Icon Wrapper Colors (around line 700)
+   ======================================== */
+.path-icon-wrapper.visual-meditation {
+  background: rgba(var(--color-visual-meditation), 0.2);
+  color: rgb(var(--color-visual-meditation));
+  box-shadow: 0 0 20px rgba(var(--color-visual-meditation), 0.3);
+}
+
+.path-icon-wrapper.symbolic-art {
+  background: rgba(var(--color-symbolic-art), 0.2);
+  color: rgb(var(--color-symbolic-art));
+  box-shadow: 0 0 20px rgba(var(--color-symbolic-art), 0.3);
+}
+
+/* ========================================
+   SECTION 5: Progress Fill Colors (around line 900)
+   ======================================== */
+.visual-meditation .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-visual-meditation), 0.8), rgb(var(--color-visual-meditation)));
+  box-shadow: 0 0 12px rgba(var(--color-visual-meditation), 0.5);
+}
+
+.symbolic-art .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-symbolic-art), 0.8), rgb(var(--color-symbolic-art)));
+  box-shadow: 0 0 12px rgba(var(--color-symbolic-art), 0.5);
+}
+
+/* ========================================
+   SECTION 6: Large Icon Wrapper for Modal (around line 1200)
+   ======================================== */
+.path-icon-wrapper-large.visual-meditation {
+  background: rgba(var(--color-visual-meditation), 0.2);
+  color: rgb(var(--color-visual-meditation));
+  box-shadow: 0 0 25px rgba(var(--color-visual-meditation), 0.5);
+  border: 2px solid rgba(var(--color-visual-meditation), 0.6);
+}
+
+.path-icon-wrapper-large.symbolic-art {
+  background: rgba(var(--color-symbolic-art), 0.2);
+  color: rgb(var(--color-symbolic-art));
+  box-shadow: 0 0 25px rgba(var(--color-symbolic-art), 0.5);
+  border: 2px solid rgba(var(--color-symbolic-art), 0.6);
+}
+
+/* ========================================
+   SECTION 7: Primary Button Styling (around line 1500)
+   ======================================== */
+.primary-button.visual-meditation {
+  background: linear-gradient(135deg, rgba(var(--color-visual-meditation), 0.9), rgb(var(--color-visual-meditation)));
+}
+
+.primary-button.symbolic-art {
+  background: linear-gradient(135deg, rgba(var(--color-symbolic-art), 0.9), rgb(var(--color-symbolic-art)));
+}
+
+/* ========================================
+   SECTION 8: Modal Header Accents (around line 1700)
+   ======================================== */
+.path-details-modal.visual-meditation .modal-header {
+  border-bottom: 3px solid rgba(var(--color-visual-meditation), 0.8);
+}
+
+.path-details-modal.symbolic-art .modal-header {
+  border-bottom: 3px solid rgba(var(--color-symbolic-art), 0.8);
+}
+
+/* Add to src/styles/pathSelection.css */
+
+/* ========================================
+   SECTION 1: Color Variable (add to :root section around line 50)
+   ======================================== */
+:root {
+  /* ... existing color variables ... */
+  --color-letter-to-myself: 168, 85, 247;   /* Purple/Violet */
+  /* ... rest of variables ... */
+}
+
+/* ========================================
+   SECTION 2: Path Card Border Colors (around line 400)
+   ======================================== */
+.path-card.letter-to-myself {
+  border-left-color: rgba(var(--color-letter-to-myself), 0.8);
+  border-right-color: rgba(var(--color-letter-to-myself), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-letter-to-myself), 0.05));
+}
+
+/* ========================================
+   SECTION 3: Path Card Hover Effects (around line 500)
+   ======================================== */
+.path-card.letter-to-myself:hover {
+  border-left-color: rgb(var(--color-letter-to-myself));
+  border-right-color: rgb(var(--color-letter-to-myself));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-letter-to-myself), 0.4);
+}
+
+/* ========================================
+   SECTION 4: Path Icon Wrapper Colors (around line 700)
+   ======================================== */
+.path-icon-wrapper.letter-to-myself {
+  background: rgba(var(--color-letter-to-myself), 0.2);
+  color: rgb(var(--color-letter-to-myself));
+  box-shadow: 0 0 20px rgba(var(--color-letter-to-myself), 0.3);
+}
+
+/* ========================================
+   SECTION 5: Progress Fill Colors (around line 900)
+   ======================================== */
+.letter-to-myself .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-letter-to-myself), 0.8), rgb(var(--color-letter-to-myself)));
+  box-shadow: 0 0 12px rgba(var(--color-letter-to-myself), 0.5);
+}
+
+/* ========================================
+   SECTION 6: Large Icon Wrapper for Modal (around line 1200)
+   ======================================== */
+.path-icon-wrapper-large.letter-to-myself {
+  background: rgba(var(--color-letter-to-myself), 0.2);
+  color: rgb(var(--color-letter-to-myself));
+  box-shadow: 0 0 25px rgba(var(--color-letter-to-myself), 0.5);
+  border: 2px solid rgba(var(--color-letter-to-myself), 0.6);
+}
+
+/* ========================================
+   SECTION 7: Primary Button Styling (around line 1500)
+   ======================================== */
+.primary-button.letter-to-myself {
+  background: linear-gradient(135deg, rgba(var(--color-letter-to-myself), 0.9), rgb(var(--color-letter-to-myself)));
+}
+
+/* ========================================
+   SECTION 8: Modal Header Accents (around line 1700)
+   ======================================== */
+.path-details-modal.letter-to-myself .modal-header {
+  border-bottom: 3px solid rgba(var(--color-letter-to-myself), 0.8);
+}
+
+/* src/styles/components/pathSelection.css */
+
+:root {
+  /* Path Colors - RGB format for dynamic theming */
+  --color-self-discovery: 43, 70, 60;
+  --color-emotional-intelligence: 168, 85, 247;
+  --color-mindfulness-awareness: 34, 197, 94;
+  --color-transformation-journey: 239, 68, 68;
+  --color-creative-expression: 236, 72, 153;
+  --color-habit-formation: 59, 130, 246;
+  --color-life-vision: 251, 146, 60;
+  --color-gratitude-practice: 34, 197, 94;
+  --color-shadow-work: 168, 85, 247;
+  --color-nature-connection: 34, 197, 94;
+  --color-anxiety-alchemy: 168, 85, 247;
+  --color-courage-cultivation: 239, 68, 68;
+  --color-inner-child: 236, 72, 153;
+  --color-dream-decoder: 168, 85, 247;
+  --color-forgiveness-freedom: 34, 197, 94;
+  --color-career-compass: 59, 130, 246;
+  --color-transitions-navigator: 251, 146, 60;
+  --color-financial-mindfulness: 34, 197, 94;
+  --color-life-values: 59, 130, 246;
+  --color-seasonal-rhythms: 34, 197, 94;
+  --color-relationship-mastery: 236, 72, 153;
+  --color-grief-growth: 168, 85, 247;
+  --color-digital-detox: 59, 130, 246;
+  --color-holistic-transformation: 251, 146, 60;
+  
+  /* Visual Paths */
+  --color-mindful-visualization: 168, 85, 247;
+  --color-artistic-soul-expression: 236, 72, 153;
+  --color-color-psychology: 251, 146, 60;
+  --color-sacred-geometry: 168, 85, 247;
+  --color-nature-sketching: 34, 197, 94;
+  --color-abstract-emotions: 239, 68, 68;
+  --color-visual-storytelling: 59, 130, 246;
+  --color-ink-essence: 107, 114, 128;
+}
+
+/* Main Container */
+.path-selection-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.path-selection-container.dark-theme {
+  --bg-primary: #0f1419;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --bg-hover: #475569;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --border-color: #475569;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.path-selection-container.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+}
+
+/* Skip to content for accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-to-content:focus {
+  top: 6px;
+}
+
+/* Header Section */
+.header-container {
+  padding: 2rem 1rem 1rem;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header-text h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-toggle-button {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-toggle-button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
+}
+
+/* Search Container */
+.search-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+}
+
+.search-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1rem 1rem 3rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: rgb(59, 130, 246);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-clear {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* Navigation Tabs */
+.tabs-container {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs-scroll-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  min-width: max-content;
+}
+
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.tab.active {
+  color: rgb(59, 130, 246);
+  border-bottom-color: rgb(59, 130, 246);
+  background: var(--bg-primary);
+}
+
+.tab-badge {
+  background: var(--text-tertiary);
+  color: var(--bg-primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.tab.active .tab-badge {
+  background: rgb(59, 130, 246);
+  color: white;
+}
+
+.tab-badge.completed {
+  background: rgb(34, 197, 94);
+  color: white;
+}
+
+.tab-badge.favorite {
+  background: rgb(251, 146, 60);
+  color: white;
+}
+
+/* Filters */
+.filters-container {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.filter-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.filter-chip:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
+}
+
+.filter-chip.active {
+  background: rgb(59, 130, 246);
+  color: white;
+  border-color: rgb(59, 130, 246);
+}
+
+/* Main Content */
+#main-content {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Section Headers */
+.section-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.section-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+/* Paths Grid/List */
+.paths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.paths-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Path Cards */
+.path-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--border-color);
+  border-right: 4px solid var(--border-color);
+  border-radius: 16px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.path-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.path-card.list {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+}
+
+/* Path Card Colors */
+.path-card.self-discovery {
+  border-left-color: rgba(var(--color-self-discovery), 0.8);
+  border-right-color: rgba(var(--color-self-discovery), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-self-discovery), 0.05));
+}
+
+.path-card.self-discovery:hover {
+  border-left-color: rgb(var(--color-self-discovery));
+  border-right-color: rgb(var(--color-self-discovery));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-self-discovery), 0.4);
+}
+
+.path-card.emotional-intelligence {
+  border-left-color: rgba(var(--color-emotional-intelligence), 0.8);
+  border-right-color: rgba(var(--color-emotional-intelligence), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-emotional-intelligence), 0.05));
+}
+
+.path-card.emotional-intelligence:hover {
+  border-left-color: rgb(var(--color-emotional-intelligence));
+  border-right-color: rgb(var(--color-emotional-intelligence));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-emotional-intelligence), 0.4);
+}
+
+.path-card.mindfulness-awareness {
+  border-left-color: rgba(var(--color-mindfulness-awareness), 0.8);
+  border-right-color: rgba(var(--color-mindfulness-awareness), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-mindfulness-awareness), 0.05));
+}
+
+.path-card.mindfulness-awareness:hover {
+  border-left-color: rgb(var(--color-mindfulness-awareness));
+  border-right-color: rgb(var(--color-mindfulness-awareness));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-mindfulness-awareness), 0.4);
+}
+
+.path-card.transformation-journey {
+  border-left-color: rgba(var(--color-transformation-journey), 0.8);
+  border-right-color: rgba(var(--color-transformation-journey), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-transformation-journey), 0.05));
+}
+
+.path-card.transformation-journey:hover {
+  border-left-color: rgb(var(--color-transformation-journey));
+  border-right-color: rgb(var(--color-transformation-journey));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-transformation-journey), 0.4);
+}
+
+.path-card.creative-expression {
+  border-left-color: rgba(var(--color-creative-expression), 0.8);
+  border-right-color: rgba(var(--color-creative-expression), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-creative-expression), 0.05));
+}
+
+.path-card.creative-expression:hover {
+  border-left-color: rgb(var(--color-creative-expression));
+  border-right-color: rgb(var(--color-creative-expression));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-creative-expression), 0.4);
+}
+
+.path-card.habit-formation {
+  border-left-color: rgba(var(--color-habit-formation), 0.8);
+  border-right-color: rgba(var(--color-habit-formation), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-habit-formation), 0.05));
+}
+
+.path-card.habit-formation:hover {
+  border-left-color: rgb(var(--color-habit-formation));
+  border-right-color: rgb(var(--color-habit-formation));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-habit-formation), 0.4);
+}
+
+.path-card.life-vision {
+  border-left-color: rgba(var(--color-life-vision), 0.8);
+  border-right-color: rgba(var(--color-life-vision), 0.8);
+  background: linear-gradient(135deg, var(--bg-card), rgba(var(--color-life-vision), 0.05));
+}
+
+.path-card.life-vision:hover {
+  border-left-color: rgb(var(--color-life-vision));
+  border-right-color: rgb(var(--color-life-vision));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-life-vision), 0.4);
+}
+
+/* Add similar patterns for other paths... */
+
+/* Premium Indicator */
+.premium-indicator {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #92400e;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Badges */
+.path-badges {
+  position: absolute;
+  top: 3rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.path-completion-badge,
+.path-active-badge {
+  background: rgb(34, 197, 94);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.path-active-badge {
+  background: rgb(59, 130, 246);
+}
+
+/* Favorite Button */
+.favorite-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-tertiary);
+  z-index: 2;
+}
+
+.favorite-button:hover {
+  background: var(--bg-hover);
+  border-color: rgb(251, 146, 60);
+  color: rgb(251, 146, 60);
+  transform: scale(1.1);
+}
+
+.favorite-button.active {
+  background: rgb(251, 146, 60);
+  border-color: rgb(251, 146, 60);
+  color: white;
+}
+
+/* Path Card Header */
+.path-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.path-card.list .path-card-header {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.path-icon-wrapper {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Path Icon Colors */
+.path-icon-wrapper.self-discovery {
+  background: rgba(var(--color-self-discovery), 0.2);
+  color: rgb(var(--color-self-discovery));
+  box-shadow: 0 0 20px rgba(var(--color-self-discovery), 0.3);
+}
+
+.path-icon-wrapper.emotional-intelligence {
+  background: rgba(var(--color-emotional-intelligence), 0.2);
+  color: rgb(var(--color-emotional-intelligence));
+  box-shadow: 0 0 20px rgba(var(--color-emotional-intelligence), 0.3);
+}
+
+.path-icon-wrapper.mindfulness-awareness {
+  background: rgba(var(--color-mindfulness-awareness), 0.2);
+  color: rgb(var(--color-mindfulness-awareness));
+  box-shadow: 0 0 20px rgba(var(--color-mindfulness-awareness), 0.3);
+}
+
+.path-icon-wrapper.transformation-journey {
+  background: rgba(var(--color-transformation-journey), 0.2);
+  color: rgb(var(--color-transformation-journey));
+  box-shadow: 0 0 20px rgba(var(--color-transformation-journey), 0.3);
+}
+
+.path-icon-wrapper.creative-expression {
+  background: rgba(var(--color-creative-expression), 0.2);
+  color: rgb(var(--color-creative-expression));
+  box-shadow: 0 0 20px rgba(var(--color-creative-expression), 0.3);
+}
+
+.path-icon-wrapper.habit-formation {
+  background: rgba(var(--color-habit-formation), 0.2);
+  color: rgb(var(--color-habit-formation));
+  box-shadow: 0 0 20px rgba(var(--color-habit-formation), 0.3);
+}
+
+.path-icon-wrapper.life-vision {
+  background: rgba(var(--color-life-vision), 0.2);
+  color: rgb(var(--color-life-vision));
+  box-shadow: 0 0 20px rgba(var(--color-life-vision), 0.3);
+}
+
+.path-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.active-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: rgb(34, 197, 94);
+  border: 2px solid var(--bg-card);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Path Metadata */
+.path-metadata {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.path-card.list .path-metadata {
+  flex: none;
+}
+
+.path-difficulty,
+.path-duration {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.difficulty-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.difficulty-icon.beginner {
+  color: rgb(34, 197, 94);
+}
+
+.difficulty-icon.intermediate {
+  color: rgb(251, 146, 60);
+}
+
+.difficulty-icon.advanced {
+  color: rgb(239, 68, 68);
+}
+
+/* Path Card Content */
+.path-card-content {
+  flex: 1;
+}
+
+.path-card.list .path-card-content {
+  margin-bottom: 0;
+}
+
+.path-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.path-card.list .path-card-title {
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.path-card-subtitle {
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+/* Tags */
+.path-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.path-tag {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Progress Fill Colors */
+.self-discovery .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-self-discovery), 0.8), rgb(var(--color-self-discovery)));
+  box-shadow: 0 0 12px rgba(var(--color-self-discovery), 0.5);
+}
+
+.emotional-intelligence .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-emotional-intelligence), 0.8), rgb(var(--color-emotional-intelligence)));
+  box-shadow: 0 0 12px rgba(var(--color-emotional-intelligence), 0.5);
+}
+
+.mindfulness-awareness .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-mindfulness-awareness), 0.8), rgb(var(--color-mindfulness-awareness)));
+  box-shadow: 0 0 12px rgba(var(--color-mindfulness-awareness), 0.5);
+}
+
+.transformation-journey .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-transformation-journey), 0.8), rgb(var(--color-transformation-journey)));
+  box-shadow: 0 0 12px rgba(var(--color-transformation-journey), 0.5);
+}
+
+.creative-expression .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-creative-expression), 0.8), rgb(var(--color-creative-expression)));
+  box-shadow: 0 0 12px rgba(var(--color-creative-expression), 0.5);
+}
+
+.habit-formation .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-habit-formation), 0.8), rgb(var(--color-habit-formation)));
+  box-shadow: 0 0 12px rgba(var(--color-habit-formation), 0.5);
+}
+
+.life-vision .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-life-vision), 0.8), rgb(var(--color-life-vision)));
+  box-shadow: 0 0 12px rgba(var(--color-life-vision), 0.5);
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.progress-fraction {
+  font-weight: 600;
+}
+
+.progress-percentage {
+  font-weight: 500;
+}
+
+.path-card.list .path-action {
+  margin-top: 0;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.continue-button {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.path-card.list .continue-button {
+  width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.continue-button:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-tertiary);
+  transform: translateY(-1px);
+}
+
+.continue-button.active {
+  background: rgb(59, 130, 246);
+  border-color: rgb(59, 130, 246);
+  color: white;
+}
+
+.continue-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.skeleton-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  color: var(--text-tertiary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+}
+
+.empty-state p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reset-button {
+  background: rgb(59, 130, 246);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.reset-button:hover {
+  background: rgb(37, 99, 235);
+  transform: translateY(-2px);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.disclaimer-modal,
+.confirmation-modal {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-warning-icon {
+  color: rgb(251, 146, 60);
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.modal-content {
+  margin-bottom: 2rem;
+}
+
+.modal-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.modal-content p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.primary-button {
+  background: rgb(59, 130, 246);
+  color: white;
+}
+
+.primary-button:hover {
+  background: rgb(37, 99, 235);
+}
+
+.secondary-button {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.secondary-button:hover {
+  background: var(--bg-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header-text h1 {
+    font-size: 2rem;
+  }
+
+  .paths-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .path-card.list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .path-card.list .path-card-header {
+    width: 100%;
+  }
+
+  .path-card.list .path-action {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .path-card.list .continue-button {
+    width: 100%;
+  }
+
+  .tabs-scroll-container {
+    gap: 0.25rem;
+  }
+
+  .tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .filters-container {
+    padding: 0.75rem;
+  }
+
+  .filter-chip {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  #main-content {
+    padding: 1rem 0.5rem;
+  }
+
+  .path-metadata {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .path-card {
+    padding: 0.5rem;
+  }
+
+  .path-card-title {
+    font-size: 1.125rem;
+  }
+
+  .premium-indicator {
+    position: static;
+    transform: none;
+    align-self: flex-start;
+    max-width: 100px;
+  }
+
+  .path-badges {
+    position: static;
+    flex-direction: row;
+  }
+
+  .favorite-button {
+    position: static;
+    margin-left: auto;
+  }
+
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .disclaimer-modal,
+  .confirmation-modal {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 1. Add color variable to :root (around line 50) */
+:root {
+  --color-freestyle-discovery: 255, 159, 67;
+}
+
+/* 2. Path Card Border Colors (around line 400) */
+.path-card.freestyle-discovery {
+  border-left-color: rgba(var(--color-freestyle-discovery), 0.8);
+  border-right-color: rgba(var(--color-freestyle-discovery), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-freestyle-discovery), 0.05));
+}
+
+/* 3. Path Card Hover Effects (around line 500) */
+.path-card.freestyle-discovery:hover {
+  border-left-color: rgb(var(--color-freestyle-discovery));
+  border-right-color: rgb(var(--color-freestyle-discovery));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-freestyle-discovery), 0.4);
+}
+
+/* 4. Path Icon Wrapper Colors (around line 700) */
+.path-icon-wrapper.freestyle-discovery {
+  background: rgba(var(--color-freestyle-discovery), 0.2);
+  color: rgb(var(--color-freestyle-discovery));
+  box-shadow: 0 0 20px rgba(var(--color-freestyle-discovery), 0.3);
+}
+
+/* 5. Progress Fill Colors (around line 900) */
+.freestyle-discovery .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-freestyle-discovery), 0.8), rgb(var(--color-freestyle-discovery)));
+  box-shadow: 0 0 12px rgba(var(--color-freestyle-discovery), 0.5);
+}
+
+/* 6. Large Icon Wrapper for Modal (around line 1200) */
+.path-icon-wrapper-large.freestyle-discovery {
+  background: rgba(var(--color-freestyle-discovery), 0.2);
+  color: rgb(var(--color-freestyle-discovery));
+  box-shadow: 0 0 25px rgba(var(--color-freestyle-discovery), 0.5);
+  border: 2px solid rgba(var(--color-freestyle-discovery), 0.6);
+}
+
+/* 7. Primary Button Styling (around line 1500) */
+.primary-button.freestyle-discovery {
+  background: linear-gradient(135deg, rgba(var(--color-freestyle-discovery), 0.9), rgb(var(--color-freestyle-discovery)));
+}
+
+/* 8. Modal Header Accents (around line 1700) */
+.path-details-modal.freestyle-discovery .modal-header {
+  border-bottom: 3px solid rgba(var(--color-freestyle-discovery), 0.8);
+}
+
+/* ============================================
+   CSS FOR NEW VOICE PATHS - Add to pathSelection.css
+   ============================================ */
+
+/* 1. ADD COLOR VARIABLES TO :root SECTION (around line 50) */
+:root {
+  /* ... existing color variables ... */
+  --color-vocal-confidence: 79, 70, 229;      /* Indigo */
+  --color-storytelling-voice: 245, 101, 101;  /* Red/Orange */
+  --color-meditation-speaking: 16, 185, 129;  /* Emerald */
+  /* ... rest of variables ... */
+}
+
+/* 2. PATH CARD BORDER COLORS (around line 400) */
+.path-card.vocal-confidence {
+  border-left-color: rgba(var(--color-vocal-confidence), 0.8);
+  border-right-color: rgba(var(--color-vocal-confidence), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-vocal-confidence), 0.05));
+}
+
+.path-card.storytelling-voice {
+  border-left-color: rgba(var(--color-storytelling-voice), 0.8);
+  border-right-color: rgba(var(--color-storytelling-voice), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-storytelling-voice), 0.05));
+}
+
+.path-card.meditation-speaking {
+  border-left-color: rgba(var(--color-meditation-speaking), 0.8);
+  border-right-color: rgba(var(--color-meditation-speaking), 0.8);
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--color-meditation-speaking), 0.05));
+}
+
+/* 3. PATH CARD HOVER EFFECTS (around line 500) */
+.path-card.vocal-confidence:hover {
+  border-left-color: rgb(var(--color-vocal-confidence));
+  border-right-color: rgb(var(--color-vocal-confidence));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-vocal-confidence), 0.4);
+}
+
+.path-card.storytelling-voice:hover {
+  border-left-color: rgb(var(--color-storytelling-voice));
+  border-right-color: rgb(var(--color-storytelling-voice));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-storytelling-voice), 0.4);
+}
+
+.path-card.meditation-speaking:hover {
+  border-left-color: rgb(var(--color-meditation-speaking));
+  border-right-color: rgb(var(--color-meditation-speaking));
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(var(--color-meditation-speaking), 0.4);
+}
+
+/* 4. PATH ICON WRAPPER COLORS (around line 700) */
+.path-icon-wrapper.vocal-confidence {
+  background: rgba(var(--color-vocal-confidence), 0.2);
+  color: rgb(var(--color-vocal-confidence));
+  box-shadow: 0 0 20px rgba(var(--color-vocal-confidence), 0.3);
+}
+
+.path-icon-wrapper.storytelling-voice {
+  background: rgba(var(--color-storytelling-voice), 0.2);
+  color: rgb(var(--color-storytelling-voice));
+  box-shadow: 0 0 20px rgba(var(--color-storytelling-voice), 0.3);
+}
+
+.path-icon-wrapper.meditation-speaking {
+  background: rgba(var(--color-meditation-speaking), 0.2);
+  color: rgb(var(--color-meditation-speaking));
+  box-shadow: 0 0 20px rgba(var(--color-meditation-speaking), 0.3);
+}
+
+/* 5. PROGRESS FILL COLORS (around line 900) */
+.vocal-confidence .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-vocal-confidence), 0.8), rgb(var(--color-vocal-confidence)));
+  box-shadow: 0 0 12px rgba(var(--color-vocal-confidence), 0.5);
+}
+
+.storytelling-voice .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-storytelling-voice), 0.8), rgb(var(--color-storytelling-voice)));
+  box-shadow: 0 0 12px rgba(var(--color-storytelling-voice), 0.5);
+}
+
+.meditation-speaking .progress-fill {
+  background: linear-gradient(90deg, rgba(var(--color-meditation-speaking), 0.8), rgb(var(--color-meditation-speaking)));
+  box-shadow: 0 0 12px rgba(var(--color-meditation-speaking), 0.5);
+}
+
+/* 6. LARGE ICON WRAPPER FOR MODAL (around line 1200) */
+.path-icon-wrapper-large.vocal-confidence {
+  background: rgba(var(--color-vocal-confidence), 0.2);
+  color: rgb(var(--color-vocal-confidence));
+  box-shadow: 0 0 25px rgba(var(--color-vocal-confidence), 0.5);
+  border: 2px solid rgba(var(--color-vocal-confidence), 0.6);
+}
+
+.path-icon-wrapper-large.storytelling-voice {
+  background: rgba(var(--color-storytelling-voice), 0.2);
+  color: rgb(var(--color-storytelling-voice));
+  box-shadow: 0 0 25px rgba(var(--color-storytelling-voice), 0.5);
+  border: 2px solid rgba(var(--color-storytelling-voice), 0.6);
+}
+
+.path-icon-wrapper-large.meditation-speaking {
+  background: rgba(var(--color-meditation-speaking), 0.2);
+  color: rgb(var(--color-meditation-speaking));
+  box-shadow: 0 0 25px rgba(var(--color-meditation-speaking), 0.5);
+  border: 2px solid rgba(var(--color-meditation-speaking), 0.6);
+}
+
+/* 7. PRIMARY BUTTON STYLING (around line 1500) */
+.primary-button.vocal-confidence {
+  background: linear-gradient(135deg, rgba(var(--color-vocal-confidence), 0.9), rgb(var(--color-vocal-confidence)));
+}
+
+.primary-button.storytelling-voice {
+  background: linear-gradient(135deg, rgba(var(--color-storytelling-voice), 0.9), rgb(var(--color-storytelling-voice)));
+}
+
+.primary-button.meditation-speaking {
+  background: linear-gradient(135deg, rgba(var(--color-meditation-speaking), 0.9), rgb(var(--color-meditation-speaking)));
+}
+
+/* 8. MODAL HEADER ACCENTS (around line 1700) */
+.path-details-modal.vocal-confidence .modal-header {
+  border-bottom: 3px solid rgba(var(--color-vocal-confidence), 0.8);
+}
+
+.path-details-modal.storytelling-voice .modal-header {
+  border-bottom: 3px solid rgba(var(--color-storytelling-voice), 0.8);
+}
+
+.path-details-modal.meditation-speaking .modal-header {
+  border-bottom: 3px solid rgba(var(--color-meditation-speaking), 0.8);
+}
+
+/* ============================================
+   HomeScreen-specific styling for voice paths
+   ============================================ */
+
+/* Journey card styling for HomeScreen */
+.hs-journey-card.hs-journey-vocal-confidence {
+  --path-color-rgb: 79, 70, 229;
+}
+
+.hs-journey-card.hs-journey-storytelling-voice {
+  --path-color-rgb: 245, 101, 101;
+}
+
+.hs-journey-card.hs-journey-meditation-speaking {
+  --path-color-rgb: 16, 185, 129;
+}
+
+/* Action button styling for voice paths in HomeScreen */
+.hs-action-btn.hs-action-vocal-confidence {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgb(79, 70, 229));
+}
+
+.hs-action-btn.hs-action-storytelling-voice {
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.9), rgb(245, 101, 101));
+}
+
+.hs-action-btn.hs-action-meditation-speaking {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgb(16, 185, 129));
+}
+
+/* Prompt card styling for voice paths */
+.hs-prompt-card.hs-prompt-vocal-confidence {
+  --path-color-rgb: 79, 70, 229;
+}
+
+.hs-prompt-card.hs-prompt-storytelling-voice {
+  --path-color-rgb: 245, 101, 101;
+}
+
+.hs-prompt-card.hs-prompt-meditation-speaking {
+  --path-color-rgb: 16, 185, 129;
+}
+
+/* Add elemental gradient colors */
+:root {
+  --color-inner-elements: 139, 69, 19; /* Earthy brown base */
+  --color-earth: 101, 67, 33; /* Deep earth brown */
+  --color-water: 59, 130, 246; /* Ocean blue */
+  --color-fire: 234, 88, 12; /* Vibrant orange-red */
+}
+
+.path-card.inner-elements {
+  /* Base styles... */
+  border: 3px solid transparent;
+  background: 
+    linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box,
+    linear-gradient(45deg, 
+      rgb(var(--color-earth)), 
+      rgb(var(--color-water)), 
+      rgb(var(--color-fire)),
+      rgb(var(--color-earth))
+    ) border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: borderFlow 8s linear infinite;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 0%, 0% 50%; }
+  50% { background-position: 0% 0%, 100% 50%; }
+  100% { background-position: 0% 0%, 0% 50%; }
+}
+
+/* Add elemental icons that rotate with the border */
+.path-card.inner-elements .path-icon-wrapper {
+  position: relative;
+}
+
+.path-card.inner-elements .path-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgb(var(--color-earth));
+  animation: elementalDot 6s ease-in-out infinite;
+}
+
+@keyframes elementalDot {
+  0% { background: rgb(var(--color-earth)); }
+  33% { background: rgb(var(--color-water)); }
+  66% { background: rgb(var(--color-fire)); }
+  100% { background: rgb(var(--color-earth)); }
+}
+
+.path-icon-wrapper.inner-elements {
+  background: rgba(var(--color-inner-elements), 0.2);
+  color: rgb(var(--color-inner-elements));
+  box-shadow: 0 0 20px rgba(var(--color-inner-elements), 0.3);
+}
+
+.inner-elements .progress-fill {
+  background: linear-gradient(90deg, 
+    rgba(var(--color-earth), 0.8), 
+    rgba(var(--color-water), 0.8),
+    rgba(var(--color-fire), 0.8)
+  );
+  box-shadow: 0 0 12px rgba(var(--color-inner-elements), 0.5);
+}

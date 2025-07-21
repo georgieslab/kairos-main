@@ -1,0 +1,70 @@
+/* src/styles/theme.css */
+:root {
+  /* Dark Theme Colors */
+  --dark-bg-primary: #1a1e2a;
+  --dark-bg-secondary: #111827;
+  --dark-bg-tertiary: #374151;
+  --dark-bg-hover: #2d3748;
+  --dark-bg-active: #4b5563;
+  --dark-border-primary: #374151;
+  --dark-border-secondary: #4b5563;
+  --dark-border-hover: #6b7280;
+  --dark-text-primary: #f9fafb;
+  --dark-text-secondary: #d1d5db;
+  --dark-text-muted: #9ca3af;
+  --dark-text-disabled: #6b7280;
+  
+  /* Light Theme Colors */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #f3f4f6;
+  --light-bg-tertiary: #e5e7eb;
+  --light-bg-hover: #f9fafb;
+  --light-bg-active: #e5e7eb;
+  --light-border-primary: #d1d5db;
+  --light-border-secondary: #9ca3af;
+  --light-border-hover: #6b7280;
+  --light-text-primary: #111827;
+  --light-text-secondary: #374151;
+  --light-text-muted: #6b7280;
+  --light-text-disabled: #9ca3af;
+}
+
+/* Global theme classes */
+html.dark-theme {
+  background-color: var(--dark-bg-primary);
+  color: var(--dark-text-primary);
+}
+
+html.light-theme {
+  background-color: var(--light-bg-secondary);
+  color: var(--light-text-primary);
+}
+
+/* Theme toggle button styling */
+.theme-toggle-button {
+  background: var(--bg-secondary, var(--dark-bg-secondary));
+  border: 1px solid var(--border-primary, var(--dark-border-primary));
+  border-radius: 0.5rem;
+  color: var(--text-secondary, var(--dark-text-secondary));
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 250ms ease;
+}
+
+.theme-toggle-button:hover {
+  background: var(--bg-hover, var(--dark-bg-hover));
+  color: var(--text-primary, var(--dark-text-primary));
+  border-color: var(--border-hover, var(--dark-border-hover));
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .theme-toggle-button {
+    width: 36px;
+    height: 36px;
+  }
+}

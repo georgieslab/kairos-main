@@ -1,0 +1,214 @@
+/* src/styles/components/weatherDialog.css */
+
+.weather-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.weather-dialog {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-xl);
+  width: 90%;
+  max-width: 400px;
+  padding: 1.5rem;
+  position: relative;
+  animation: scaleIn 0.3s ease;
+      margin-top: 7rem;
+}
+
+.weather-dialog-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-dialog-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.weather-dialog-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.weather-dialog-location {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.weather-dialog-date {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.weather-dialog-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  gap: 1.5rem;
+}
+
+.weather-dialog-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-dialog-temp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.weather-dialog-temp-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.weather-dialog-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.weather-dialog-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+}
+
+.weather-dialog-detail {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.weather-dialog-detail-label {
+  color: var(--text-muted);
+}
+
+.weather-dialog-detail-value {
+  font-weight: 500;
+  text-align: right;
+}
+
+.weather-dialog-sun-times {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.weather-dialog-sun-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+  flex: 1;
+}
+
+.weather-dialog-sun-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.weather-dialog-sun-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Icon styling - reuses animations from weather.css */
+.weather-dialog-icon.sun {
+  color: #FBBF24;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.6));
+  animation: pulseSun 3s infinite alternate;
+}
+
+.weather-dialog-icon.moon {
+  color: #FCD34D;
+  filter: drop-shadow(0 0 10px rgba(252, 211, 77, 0.6));
+  animation: pulseMoon 3s infinite alternate;
+}
+
+.weather-dialog-icon.rain {
+  color: #60A5FA;
+  animation: pulseRain 1.5s infinite alternate;
+}
+
+.weather-dialog-icon.snow {
+  color: var(--text-primary);
+  animation: rotateSnow 8s linear infinite;
+}
+
+.weather-dialog-icon.storm {
+  color: #FBBF24;
+  animation: flash 3s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.weather-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex
+;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+    flex-direction: column;
+}

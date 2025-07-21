@@ -1,0 +1,268 @@
+/* src/styles/components/versionDisplay.css */
+
+/* Version Display Component Styles */
+
+.version-display {
+    position: relative;
+    font-family: inherit;
+    display:flex;
+        flex-direction: row-reverse;
+  }
+  
+  .version-number {
+    font-size: 0.70rem;
+    font-weight: 900;
+    color: rgb(13, 255, 142);
+    margin-top:1.25rem;
+
+
+  }
+  
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(17, 24, 39, 0.6);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .version-badge.interactive {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .version-badge.interactive:hover {
+    background-color: rgba(17, 24, 39, 0.8);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .version-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-right: 0.25rem;
+    opacity: 0.6;
+  }
+  
+  .version-chevron {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-left: 0.25rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .version-chevron.rotate-180 {
+    transform: rotate(180deg);
+  }
+  
+  /* Changelog Modal */
+  .changelog-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease forwards;
+  }
+  
+  .changelog-content {
+    background-color: #1F2937;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.3s ease forwards;
+  }
+  
+  .changelog-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .changelog-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+  }
+  
+  .changelog-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+  }
+  
+  .changelog-close:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  .close-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .changelog-body {
+    padding: 1rem;
+    overflow-y: auto;
+    max-height: calc(80vh - 120px);
+  }
+  
+  .version-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .version-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .version-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .version-tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(16, 185, 129, 0.2); /* emerald-500 */
+    color: #10B981;
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+  
+  .version-tag.current {
+    background-color: rgba(16, 185, 129, 0.3);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+  }
+  
+  .version-date {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+  }
+  
+  .version-section {
+    margin-bottom: 1rem;
+  }
+  
+  .section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-list, .bugfix-list {
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin: 0;
+    display: flex;
+    align-items: flex-start!important;
+    
+  }
+  
+  .feature-item, .bugfix-item {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+  }
+  
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #10B981; /* emerald-500 */
+    border-radius: 50%;
+  }
+  
+  .bugfix-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #F59E0B; /* amber-500 */
+    border-radius: 50%;
+  }
+  
+  .changelog-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+  }
+  
+  .copyright {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Media Queries */
+  @media (max-width: 640px) {
+    .changelog-content {
+      width: 95%;
+      max-height: 85vh;
+    }
+  }
+
+  .feature-list, .bugfix-list {
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin: 0;
+    display: flex
+;
+    flex-direction: column;
+    align-items: flex-start;
+}

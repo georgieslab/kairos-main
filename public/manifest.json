@@ -1,0 +1,105 @@
+{
+  "name": "Καιρός Journal",
+  "short_name": "Καιρός",
+  "description": "AI-powered journaling for personal growth and self-discovery",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#10B981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "../icons/icon-48.webp",
+      "type": "image/png",
+      "sizes": "48x48",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-72.webp",
+      "type": "image/png",
+      "sizes": "72x72",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-96.webp",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-128.webp",
+      "type": "image/png",
+      "sizes": "128x128",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-192.webp",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-256.webp",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-512.webp",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/journal-screen.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/insights-screen.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "lifestyle",
+    "productivity",
+    "health"
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Journal",
+      "short_name": "Journal",
+      "description": "Start writing today's journal entry",
+      "url": "/daily",
+      "icons": [
+        {
+          "src": "/icons/journal-shortcut.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "View Insights",
+      "short_name": "Insights",
+      "description": "See your personalized insights",
+      "url": "/insights",
+      "icons": [
+        {
+          "src": "/icons/insights-shortcut.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "features": [
+    "AI-powered journaling insights",
+    "10-day guided journaling journey",
+    "Offline support",
+    "Daily reminders"
+  ]
+}

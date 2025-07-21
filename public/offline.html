@@ -1,0 +1,189 @@
+<!-- public/offline.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Καιρός Journal - Offline Mode</title>
+  <style>
+    :root {
+      --color-brand: #10B981;
+      --color-brand-light: #34D399;
+      --color-brand-dark: #059669;
+      --color-background: #0F172A;
+      --color-surface: rgba(15, 23, 42, 0.8);
+      --color-text-primary: #F9FAFB;
+      --color-text-secondary: #9CA3AF;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .card {
+      background-color: var(--color-surface);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      text-align: center;
+    }
+    
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--color-brand), var(--color-brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .message {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .button {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--color-brand), var(--color-brand-dark));
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .status {
+      margin-top: 2rem;
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+    
+    .hint {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      opacity: 0.8;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--color-text-secondary);
+      font-size: 0.75rem;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    
+    .checking {
+      animation: pulse 1.5s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">Καιρός</div>
+      <h1 class="title">You're Offline</h1>
+      <p class="message">
+        You appear to be offline. Some features of Καιρός Journal require an internet connection.
+      </p>
+      <button id="retry-button" class="button">
+        Try Again
+      </button>
+      <p id="status" class="status">
+        Checking connection...
+      </p>
+      <p class="hint">
+        You can still access previously loaded content while offline.
+      </p>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    © 2025 ΚΑΙΡΌΣ. Empowering personal growth through mindful journaling and AI insights.
+  </footer>
+
+  <script>
+    // Check connection status
+    const statusElement = document.getElementById('status');
+    const retryButton = document.getElementById('retry-button');
+    
+    function updateStatus() {
+      if (navigator.onLine) {
+        statusElement.textContent = 'You are back online!';
+        statusElement.classList.remove('checking');
+        
+        // Redirect to the home page after a short delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      } else {
+        statusElement.textContent = 'Still offline. Waiting for connection...';
+        statusElement.classList.add('checking');
+      }
+    }
+    
+    // Update status immediately
+    updateStatus();
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    
+    // Handle retry button click
+    retryButton.addEventListener('click', () => {
+      statusElement.textContent = 'Checking connection...';
+      statusElement.classList.add('checking');
+      
+      // Force a reload to check connection
+      window.location.reload();
+    });
+    
+    // Periodically check connection
+    setInterval(updateStatus, 5000);
+  </script>
+</body>
+</html>
