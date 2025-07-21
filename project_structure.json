@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "kairos-main": {
     "type": "directory",
     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main",
@@ -11,22 +12,45 @@
       ".firebase": {
         "type": "directory",
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebase",
+=======
+  "kairos": {
+    "type": "directory",
+    "path": "C:\\Users\\georg\\georgiescoding\\kairos",
+    "contents": {
+      ".env": {
+        "type": "file",
+        "size": 789,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.env"
+      },
+      ".firebase": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.firebase",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         "contents": {
           "hosting.cHVibGlj.cache": {
             "type": "file",
             "size": 448,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebase\\hosting.cHVibGlj.cache"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.firebase\\hosting.cHVibGlj.cache"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "hosting.ZGlzdA.cache": {
             "type": "file",
             "size": 1605,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebase\\hosting.ZGlzdA.cache"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.firebase\\hosting.ZGlzdA.cache"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           }
         }
       },
       ".firebaserc": {
         "type": "file",
         "size": 59,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebaserc"
       },
       ".github": {
@@ -36,16 +60,35 @@
           "workflows": {
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.github\\workflows",
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.firebaserc"
+      },
+      ".github": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.github",
+        "contents": {
+          "workflows": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.github\\workflows",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "firebase-hosting-merge.yml": {
                 "type": "file",
                 "size": 589,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.github\\workflows\\firebase-hosting-merge.yml"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.github\\workflows\\firebase-hosting-merge.yml"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "firebase-hosting-pull-request.yml": {
                 "type": "file",
                 "size": 690,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.github\\workflows\\firebase-hosting-pull-request.yml"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.github\\workflows\\firebase-hosting-pull-request.yml"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           }
@@ -54,6 +97,7 @@
       ".gitignore": {
         "type": "file",
         "size": 275,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.gitignore"
       },
       "android": {
@@ -7084,22 +7128,44 @@
             "type": "file",
             "size": 497,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\variables.gradle"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.gitignore"
+      },
+      ".vscode": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.vscode",
+        "contents": {
+          "tasks.json": {
+            "type": "file",
+            "size": 154,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\.vscode\\tasks.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           }
         }
       },
       "app.py": {
         "type": "file",
+<<<<<<< HEAD
         "size": 234,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\app.py"
+=======
+        "size": 245,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\app.py"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       },
       "apphosting.yaml": {
         "type": "file",
         "size": 672,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\apphosting.yaml"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\apphosting.yaml"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       },
       "capacitor.config.json": {
         "type": "file",
         "size": 79,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\capacitor.config.json"
       },
       "capacitor.config.ts": {
@@ -7119,37 +7185,82 @@
           "connector": {
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\connector",
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\capacitor.config.json"
+      },
+      "capacitor.config.ts": {
+        "type": "file",
+        "size": 505,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\capacitor.config.ts"
+      },
+      "cors.json": {
+        "type": "file",
+        "size": 300,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\cors.json"
+      },
+      "dataconnect": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect",
+        "contents": {
+          "connector": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\connector",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "connector.yaml": {
                 "type": "file",
                 "size": 200,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\connector\\connector.yaml"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\connector\\connector.yaml"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "mutations.gql": {
                 "type": "file",
                 "size": 1233,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\connector\\mutations.gql"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\connector\\mutations.gql"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "queries.gql": {
                 "type": "file",
                 "size": 1802,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\connector\\queries.gql"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\connector\\queries.gql"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "dataconnect.yaml": {
             "type": "file",
             "size": 268,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\dataconnect.yaml"
           },
           "schema": {
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\schema",
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\dataconnect.yaml"
+          },
+          "schema": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\schema",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "schema.gql": {
                 "type": "file",
                 "size": 2088,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect\\schema\\schema.gql"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect\\schema\\schema.gql"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           }
@@ -7157,6 +7268,7 @@
       },
       "dataconnect-generated": {
         "type": "directory",
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated",
         "contents": {
           "js": {
@@ -7170,32 +7282,64 @@
                   "esm": {
                     "type": "directory",
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\esm",
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated",
+        "contents": {
+          "js": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js",
+            "contents": {
+              "default-connector": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector",
+                "contents": {
+                  "esm": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\esm",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                     "contents": {
                       "index.esm.js": {
                         "type": "file",
                         "size": 165,
+<<<<<<< HEAD
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\esm\\index.esm.js"
+=======
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\esm\\index.esm.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       },
                       "package.json": {
                         "type": "file",
                         "size": 17,
+<<<<<<< HEAD
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\esm\\package.json"
+=======
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\esm\\package.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       }
                     }
                   },
                   "index.cjs.js": {
                     "type": "file",
                     "size": 206,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\index.cjs.js"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\index.cjs.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "index.d.ts": {
                     "type": "file",
                     "size": 259,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\index.d.ts"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\index.d.ts"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "package.json": {
                     "type": "file",
                     "size": 819,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\package.json"
                   },
                   "react": {
@@ -7205,40 +7349,75 @@
                       "esm": {
                         "type": "directory",
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\esm",
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\package.json"
+                  },
+                  "react": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react",
+                    "contents": {
+                      "esm": {
+                        "type": "directory",
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\esm",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                         "contents": {
                           "index.esm.js": {
                             "type": "file",
                             "size": 181,
+<<<<<<< HEAD
                             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\esm\\index.esm.js"
+=======
+                            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\esm\\index.esm.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                           },
                           "package.json": {
                             "type": "file",
                             "size": 17,
+<<<<<<< HEAD
                             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\esm\\package.json"
+=======
+                            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\esm\\package.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                           }
                         }
                       },
                       "index.cjs.js": {
                         "type": "file",
                         "size": 194,
+<<<<<<< HEAD
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\index.cjs.js"
+=======
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\index.cjs.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       },
                       "index.d.ts": {
                         "type": "file",
                         "size": 227,
+<<<<<<< HEAD
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\index.d.ts"
+=======
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\index.d.ts"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       },
                       "package.json": {
                         "type": "file",
                         "size": 468,
+<<<<<<< HEAD
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\react\\package.json"
+=======
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\react\\package.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       }
                     }
                   },
                   "README.md": {
                     "type": "file",
                     "size": 2740,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dataconnect-generated\\js\\default-connector\\README.md"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dataconnect-generated\\js\\default-connector\\README.md"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               }
@@ -7248,35 +7427,60 @@
       },
       "dist": {
         "type": "directory",
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist",
         "contents": {
           "assets": {
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets",
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist",
+        "contents": {
+          "assets": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "claude-8e-zvY-0.png": {
                 "type": "file",
                 "size": 7424,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\claude-8e-zvY-0.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\claude-8e-zvY-0.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "favicon-DygWasRq.ico": {
                 "type": "file",
                 "size": 5325,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\favicon-DygWasRq.ico"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\favicon-DygWasRq.ico"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "founder-Ddy2kvXt.jpg": {
                 "type": "file",
                 "size": 642177,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\founder-Ddy2kvXt.jpg"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\founder-Ddy2kvXt.jpg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "html2canvas.esm-CBrSDip1.js": {
                 "type": "file",
                 "size": 202301,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\html2canvas.esm-CBrSDip1.js"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\html2canvas.esm-CBrSDip1.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-192x192-DugLAGZW.png": {
                 "type": "file",
                 "size": 3677,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\icon-192x192-DugLAGZW.png"
               },
               "index-BqG-fYcs.css": {
@@ -7298,22 +7502,54 @@
                 "type": "file",
                 "size": 21819,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\purify.es-CQJ0hv7W.js"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\icon-192x192-DugLAGZW.png"
+              },
+              "index-Bx1EHnC4.js": {
+                "type": "file",
+                "size": 3103458,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\index-Bx1EHnC4.js"
+              },
+              "index-Dm7nQhT1.css": {
+                "type": "file",
+                "size": 413700,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\index-Dm7nQhT1.css"
+              },
+              "index.es-DbNMYbWN.js": {
+                "type": "file",
+                "size": 158609,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\index.es-DbNMYbWN.js"
+              },
+              "purify.es-Ci5xwkH_.js": {
+                "type": "file",
+                "size": 21714,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\assets\\purify.es-Ci5xwkH_.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "favicon.ico": {
             "type": "file",
             "size": 5325,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\favicon.ico"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\favicon.ico"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "icon-192x192.png": {
             "type": "file",
             "size": 3677,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\icon-192x192.png"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\icon-192x192.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "index.html": {
             "type": "file",
             "size": 732,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\index.html"
           },
           "manifest.json": {
@@ -7330,32 +7566,68 @@
             "type": "file",
             "size": 7220,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\sw.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\index.html"
+          },
+          "manifest.json": {
+            "type": "file",
+            "size": 2715,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\manifest.json"
+          },
+          "offline.html": {
+            "type": "file",
+            "size": 5104,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\offline.html"
+          },
+          "sw.js": {
+            "type": "file",
+            "size": 7486,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\sw.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "vite.svg": {
             "type": "file",
             "size": 1497,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\vite.svg"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\dist\\vite.svg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           }
         }
       },
       "eslint.config.js": {
         "type": "file",
         "size": 1003,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\eslint.config.js"
       },
       "firebase.json": {
         "type": "file",
         "size": 508,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\firebase.json"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\eslint.config.js"
+      },
+      "firebase.json": {
+        "type": "file",
+        "size": 795,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\firebase.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       },
       "firestore.indexes.json": {
         "type": "file",
         "size": 44,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\firestore.indexes.json"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\firestore.indexes.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       },
       "firestore.rules": {
         "type": "file",
         "size": 177,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\firestore.rules"
       },
       "functions": {
@@ -7366,15 +7638,32 @@
             "type": "file",
             "size": 777,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\.eslintrc.js"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\firestore.rules"
+      },
+      "functions": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions",
+        "contents": {
+          ".eslintrc.js": {
+            "type": "file",
+            "size": 198,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\.eslintrc.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           ".gitignore": {
             "type": "file",
             "size": 21,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\.gitignore"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\.gitignore"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           ".runtimeconfig.json": {
             "type": "file",
             "size": 632,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\.runtimeconfig.json"
           },
           "index.js": {
@@ -7562,12 +7851,31 @@
             "type": "file",
             "size": 3860,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\icons\\icon-96.webp"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\.runtimeconfig.json"
+          },
+          "index.js": {
+            "type": "file",
+            "size": 16414,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\index.js"
+          },
+          "package-lock.json": {
+            "type": "file",
+            "size": 258204,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\package-lock.json"
+          },
+          "package.json": {
+            "type": "file",
+            "size": 795,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\functions\\package.json"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           }
         }
       },
       "index.html": {
         "type": "file",
         "size": 607,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\index.html"
       },
       "map.py": {
@@ -7593,15 +7901,47 @@
       "public": {
         "type": "directory",
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\public",
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\index.html"
+      },
+      "map.py": {
+        "type": "file",
+        "size": 2625,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\map.py"
+      },
+      "package-lock.json": {
+        "type": "file",
+        "size": 332064,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\package-lock.json"
+      },
+      "package.json": {
+        "type": "file",
+        "size": 1904,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\package.json"
+      },
+      "project_structure.json": {
+        "type": "file",
+        "size": 204399,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\project_structure.json"
+      },
+      "public": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         "contents": {
           "favicon.ico": {
             "type": "file",
             "size": 5325,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\public\\favicon.ico"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\favicon.ico"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "icon-192x192.png": {
             "type": "file",
             "size": 3677,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\public\\icon-192x192.png"
           },
           "index.html": {
@@ -7623,16 +7963,44 @@
             "type": "file",
             "size": 7220,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\public\\sw.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\icon-192x192.png"
+          },
+          "index.html": {
+            "type": "file",
+            "size": 4606,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\index.html"
+          },
+          "manifest.json": {
+            "type": "file",
+            "size": 2715,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\manifest.json"
+          },
+          "offline.html": {
+            "type": "file",
+            "size": 5104,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\offline.html"
+          },
+          "sw.js": {
+            "type": "file",
+            "size": 7486,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\sw.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "vite.svg": {
             "type": "file",
             "size": 1497,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\public\\vite.svg"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\public\\vite.svg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           }
         }
       },
       "README.md": {
         "type": "file",
+<<<<<<< HEAD
         "size": 471,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\README.md"
       },
@@ -7655,10 +8023,24 @@
       "src": {
         "type": "directory",
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src",
+=======
+        "size": 451,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\README.md"
+      },
+      "requirements.txt": {
+        "type": "file",
+        "size": 50,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\requirements.txt"
+      },
+      "src": {
+        "type": "directory",
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         "contents": {
           "App.css": {
             "type": "file",
             "size": 1026,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\App.css"
           },
           "App.jsx": {
@@ -7669,21 +8051,42 @@
           "assets": {
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\assets",
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\App.css"
+          },
+          "App.jsx": {
+            "type": "file",
+            "size": 27515,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\App.jsx"
+          },
+          "assets": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\assets",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "founder.jpg": {
                 "type": "file",
                 "size": 642177,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\assets\\founder.jpg"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\assets\\founder.jpg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "react.svg": {
                 "type": "file",
                 "size": 4126,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\assets\\react.svg"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\assets\\react.svg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "components": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components",
             "contents": {
               "analytics": {
@@ -7709,21 +8112,58 @@
                     "type": "file",
                     "size": 12552,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\analytics\\ThemeCloud.jsx"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components",
+            "contents": {
+              "analytics": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\analytics",
+                "contents": {
+                  "EmotionTrends.jsx": {
+                    "type": "file",
+                    "size": 13307,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\analytics\\EmotionTrends.jsx"
+                  },
+                  "InsightSummary.jsx": {
+                    "type": "file",
+                    "size": 7006,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\analytics\\InsightSummary.jsx"
+                  },
+                  "JournalCalendar.jsx": {
+                    "type": "file",
+                    "size": 12202,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\analytics\\JournalCalendar.jsx"
+                  },
+                  "ThemeCloud.jsx": {
+                    "type": "file",
+                    "size": 12911,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\analytics\\ThemeCloud.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "auth": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\auth",
                 "contents": {
                   "AuthButton.jsx": {
                     "type": "file",
                     "size": 2450,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\auth\\AuthButton.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\auth",
+                "contents": {
+                  "AuthButton.jsx": {
+                    "type": "file",
+                    "size": 2527,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\auth\\AuthButton.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "AuthLayout.jsx": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\auth\\AuthLayout.jsx"
                   },
                   "SignUpScreen.jsx": {
@@ -7735,11 +8175,25 @@
                     "type": "file",
                     "size": 941,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\auth\\UserProfile.jsx"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\auth\\AuthLayout.jsx"
+                  },
+                  "SignUpScreen.jsx": {
+                    "type": "file",
+                    "size": 15260,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\auth\\SignUpScreen.jsx"
+                  },
+                  "UserProfile.jsx": {
+                    "type": "file",
+                    "size": 37071,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\auth\\UserProfile.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "common": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\common",
                 "contents": {
                   "AvatarComponents.jsx": {
@@ -7786,44 +8240,115 @@
                     "type": "file",
                     "size": 4476,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\common\\VersionDisplay.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common",
+                "contents": {
+                  "DynamicIcon.jsx": {
+                    "type": "file",
+                    "size": 1294,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\DynamicIcon.jsx"
+                  },
+                  "ErrorBoundary.jsx": {
+                    "type": "file",
+                    "size": 1423,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\ErrorBoundary.jsx"
+                  },
+                  "FloatingActionButton.jsx": {
+                    "type": "file",
+                    "size": 2004,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\FloatingActionButton.jsx"
+                  },
+                  "InstallPrompt.jsx": {
+                    "type": "file",
+                    "size": 5625,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\InstallPrompt.jsx"
+                  },
+                  "KairosLoader.jsx": {
+                    "type": "file",
+                    "size": 2870,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\KairosLoader.jsx"
+                  },
+                  "PathContextIndicator.jsx": {
+                    "type": "file",
+                    "size": 2301,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\PathContextIndicator.jsx"
+                  },
+                  "ThemeSwitcher.jsx": {
+                    "type": "file",
+                    "size": 1291,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\ThemeSwitcher.jsx"
+                  },
+                  "VersionDisplay.jsx": {
+                    "type": "file",
+                    "size": 4589,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\common\\VersionDisplay.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "dashboard": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\dashboard",
                 "contents": {
                   "UserDashboard.jsx": {
                     "type": "file",
                     "size": 19289,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\dashboard\\UserDashboard.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\dashboard",
+                "contents": {
+                  "UserDashboard.jsx": {
+                    "type": "file",
+                    "size": 19784,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\dashboard\\UserDashboard.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "feedback": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\feedback",
                 "contents": {
                   "feedbackForm.jsx": {
                     "type": "file",
                     "size": 13817,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\feedback\\feedbackForm.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\feedback",
+                "contents": {
+                  "feedbackForm.jsx": {
+                    "type": "file",
+                    "size": 14247,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\feedback\\feedbackForm.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "journal": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\journal",
                 "contents": {
                   "JournalArchive.jsx": {
                     "type": "file",
                     "size": 17397,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\journal\\JournalArchive.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journal",
+                "contents": {
+                  "JournalArchive.jsx": {
+                    "type": "file",
+                    "size": 26356,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journal\\JournalArchive.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "journey": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\journey",
                 "contents": {
                   "AnalysisLoading.jsx": {
@@ -7865,11 +8390,55 @@
                     "type": "file",
                     "size": 13188,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\journey\\WriteTab.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey",
+                "contents": {
+                  "AnalysisLoading.jsx": {
+                    "type": "file",
+                    "size": 7463,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\AnalysisLoading.jsx"
+                  },
+                  "AnalysisResults.jsx": {
+                    "type": "file",
+                    "size": 32548,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\AnalysisResults.jsx"
+                  },
+                  "DailyJourneyView.jsx": {
+                    "type": "file",
+                    "size": 26569,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\DailyJourneyView.jsx"
+                  },
+                  "JournalUpload.jsx": {
+                    "type": "file",
+                    "size": 21098,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\JournalUpload.jsx"
+                  },
+                  "JourneyCompletion.jsx": {
+                    "type": "file",
+                    "size": 38989,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\JourneyCompletion.jsx"
+                  },
+                  "JourneyPreview.jsx": {
+                    "type": "file",
+                    "size": 13972,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\JourneyPreview.jsx"
+                  },
+                  "MultiImageJournalUpload.jsx": {
+                    "type": "file",
+                    "size": 15461,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\MultiImageJournalUpload.jsx"
+                  },
+                  "WriteTab.jsx": {
+                    "type": "file",
+                    "size": 16082,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\journey\\WriteTab.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "layout": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\layout",
                 "contents": {
                   "BottomNavigation.jsx": {
@@ -7886,11 +8455,30 @@
                     "type": "file",
                     "size": 784,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\layout\\PageLayout.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\layout",
+                "contents": {
+                  "BottomNavigation.jsx": {
+                    "type": "file",
+                    "size": 6523,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\layout\\BottomNavigation.jsx"
+                  },
+                  "Header.jsx": {
+                    "type": "file",
+                    "size": 3461,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\layout\\Header.jsx"
+                  },
+                  "PageLayout.jsx": {
+                    "type": "file",
+                    "size": 816,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\layout\\PageLayout.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "mockups": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\mockups",
                 "contents": {
                   "AICoachingMockup.jsx": {
@@ -7902,22 +8490,45 @@
                     "type": "file",
                     "size": 8801,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\mockups\\MeditationMockup.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\mockups",
+                "contents": {
+                  "AICoachingMockup.jsx": {
+                    "type": "file",
+                    "size": 7990,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\mockups\\AICoachingMockup.jsx"
+                  },
+                  "MeditationMockup.jsx": {
+                    "type": "file",
+                    "size": 9007,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\mockups\\MeditationMockup.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "onboarding": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\onboarding",
                 "contents": {
                   "UserOnboarding.jsx": {
                     "type": "file",
                     "size": 10150,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\onboarding\\UserOnboarding.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\onboarding",
+                "contents": {
+                  "UserOnboarding.jsx": {
+                    "type": "file",
+                    "size": 10437,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\onboarding\\UserOnboarding.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "paths": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\paths",
                 "contents": {
                   "components": {
@@ -7958,29 +8569,86 @@
                         "type": "file",
                         "size": 6582,
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\paths\\components\\PremiumPathsSection.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths",
+                "contents": {
+                  "components": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components",
+                    "contents": {
+                      "JourneyDisclaimerModal.jsx": {
+                        "type": "file",
+                        "size": 4036,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\JourneyDisclaimerModal.jsx"
+                      },
+                      "PathCard.jsx": {
+                        "type": "file",
+                        "size": 4558,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PathCard.jsx"
+                      },
+                      "PathDaysList.jsx": {
+                        "type": "file",
+                        "size": 1099,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PathDaysList.jsx"
+                      },
+                      "PathInfoModal.jsx": {
+                        "type": "file",
+                        "size": 3074,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PathInfoModal.jsx"
+                      },
+                      "PathProgressBar.jsx": {
+                        "type": "file",
+                        "size": 559,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PathProgressBar.jsx"
+                      },
+                      "PathRecommendation.jsx": {
+                        "type": "file",
+                        "size": 953,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PathRecommendation.jsx"
+                      },
+                      "PremiumPathsSection.jsx": {
+                        "type": "file",
+                        "size": 6786,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\components\\PremiumPathsSection.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       }
                     }
                   },
                   "PathSelection.jsx": {
                     "type": "file",
+<<<<<<< HEAD
                     "size": 40484,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\paths\\PathSelection.jsx"
+=======
+                    "size": 42410,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\paths\\PathSelection.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "settings": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\settings",
                 "contents": {
                   "UserSettings.jsx": {
                     "type": "file",
                     "size": 29795,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\settings\\UserSettings.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\settings",
+                "contents": {
+                  "UserSettings.jsx": {
+                    "type": "file",
+                    "size": 34383,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\settings\\UserSettings.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "subscription": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\subscription",
                 "contents": {
                   "SubscriptionDisplay.jsx": {
@@ -7992,11 +8660,20 @@
                     "type": "file",
                     "size": 14121,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\subscription\\SubscriptionStatus.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\subscription",
+                "contents": {
+                  "PremiumPathCheck.jsx": {
+                    "type": "file",
+                    "size": 2805,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\subscription\\PremiumPathCheck.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "weather": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\weather",
                 "contents": {
                   "WeatherDialog.jsx": {
@@ -8008,6 +8685,19 @@
                     "type": "file",
                     "size": 3217,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\weather\\WeatherWidget.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\weather",
+                "contents": {
+                  "WeatherDialog.jsx": {
+                    "type": "file",
+                    "size": 5060,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\weather\\WeatherDialog.jsx"
+                  },
+                  "WeatherWidget.jsx": {
+                    "type": "file",
+                    "size": 3326,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\components\\weather\\WeatherWidget.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               }
@@ -8015,6 +8705,7 @@
           },
           "config": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\config",
             "contents": {
               "firebase.js": {
@@ -8042,22 +8733,66 @@
                 "type": "file",
                 "size": 4564,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\contexts\\ThemeContext.jsx"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\config",
+            "contents": {
+              "firebase.js": {
+                "type": "file",
+                "size": 2383,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\config\\firebase.js"
+              }
+            }
+          },
+          "context": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\context",
+            "contents": {}
+          },
+          "contexts": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\contexts",
+            "contents": {
+              "AuthContext.jsx": {
+                "type": "file",
+                "size": 7287,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\contexts\\AuthContext.jsx"
+              },
+              "NavigationContext.jsx": {
+                "type": "file",
+                "size": 2624,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\contexts\\NavigationContext.jsx"
+              },
+              "ThemeContext.jsx": {
+                "type": "file",
+                "size": 4056,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\contexts\\ThemeContext.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "data": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\data",
             "contents": {
               "JourneyData.js": {
                 "type": "file",
                 "size": 222875,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\data\\JourneyData.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\data",
+            "contents": {
+              "JourneyData.js": {
+                "type": "file",
+                "size": 227895,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\data\\JourneyData.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "hooks": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\hooks",
             "contents": {
               "useErrorHandler.js": {
@@ -8094,58 +8829,129 @@
                 "type": "file",
                 "size": 9667,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\hooks\\useUserProgress.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks",
+            "contents": {
+              "useErrorHandler.js": {
+                "type": "file",
+                "size": 5610,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\useErrorHandler.js"
+              },
+              "useJourneyCompletion.js": {
+                "type": "file",
+                "size": 9758,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\useJourneyCompletion.js"
+              },
+              "useLoader.js": {
+                "type": "file",
+                "size": 2040,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\useLoader.js"
+              },
+              "useNavigation.js": {
+                "type": "file",
+                "size": 13696,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\useNavigation.js"
+              },
+              "useNavigationState.js": {
+                "type": "file",
+                "size": 26699,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\useNavigationState.js"
+              },
+              "usePathProtection.js": {
+                "type": "file",
+                "size": 1702,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\hooks\\usePathProtection.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "icons": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons",
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             "contents": {
               "claude.png": {
                 "type": "file",
                 "size": 7424,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\claude.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\claude.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-128x128.png": {
                 "type": "file",
                 "size": 1783,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\icon-128x128.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\icon-128x128.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-144x144.png": {
                 "type": "file",
                 "size": 1783,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\icon-144x144.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\icon-144x144.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-152x152.png": {
                 "type": "file",
                 "size": 2888,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\icon-152x152.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\icon-152x152.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-72x72.png": {
                 "type": "file",
                 "size": 1783,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\icon-72x72.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\icon-72x72.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "icon-96x96.png": {
                 "type": "file",
                 "size": 1783,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\icon-96x96.png"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\icon-96x96.png"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               },
               "kairos-logo.svg": {
                 "type": "file",
                 "size": 4814,
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\kairos-logo.svg"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\icons\\kairos-logo.svg"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "index.css": {
             "type": "file",
+<<<<<<< HEAD
             "size": 16041,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\index.css"
+=======
+            "size": 17012,
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\index.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           },
           "main.jsx": {
             "type": "file",
             "size": 908,
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\main.jsx"
           },
           "models": {
@@ -8156,11 +8962,24 @@
                 "type": "file",
                 "size": 3791,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\models\\JournalEntry.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\main.jsx"
+          },
+          "models": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\models",
+            "contents": {
+              "JournalEntry.js": {
+                "type": "file",
+                "size": 3917,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\models\\JournalEntry.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "pages": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\pages",
             "contents": {
               "About.jsx": {
@@ -8207,11 +9026,75 @@
                 "type": "file",
                 "size": 20103,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\pages\\WelcomeScreen.jsx"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages",
+            "contents": {
+              "About.jsx": {
+                "type": "file",
+                "size": 10086,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\About.jsx"
+              },
+              "Contact.jsx": {
+                "type": "file",
+                "size": 7234,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\Contact.jsx"
+              },
+              "dashboard": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\dashboard",
+                "contents": {}
+              },
+              "Help.jsx": {
+                "type": "file",
+                "size": 8177,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\Help.jsx"
+              },
+              "HomeScreen.jsx": {
+                "type": "file",
+                "size": 35212,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\HomeScreen.jsx"
+              },
+              "JournalAnalyticsDashboard.jsx": {
+                "type": "file",
+                "size": 88719,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\JournalAnalyticsDashboard.jsx"
+              },
+              "Privacy.jsx": {
+                "type": "file",
+                "size": 11327,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\Privacy.jsx"
+              },
+              "ProfileScreen.jsx": {
+                "type": "file",
+                "size": 15912,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\ProfileScreen.jsx"
+              },
+              "SubscriptionSuccess.jsx": {
+                "type": "file",
+                "size": 5087,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\SubscriptionSuccess.jsx"
+              },
+              "SubscriptionSuccessPage.jsx": {
+                "type": "file",
+                "size": 0,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\SubscriptionSuccessPage.jsx"
+              },
+              "Terms.jsx": {
+                "type": "file",
+                "size": 12364,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\Terms.jsx"
+              },
+              "WelcomeScreen.jsx": {
+                "type": "file",
+                "size": 29142,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\pages\\WelcomeScreen.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "services": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\services",
             "contents": {
               "apiCacheService.js": {
@@ -8248,36 +9131,91 @@
                 "type": "file",
                 "size": 2372,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\services\\weatherService.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services",
+            "contents": {
+              "apiCacheService.js": {
+                "type": "file",
+                "size": 11575,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\apiCacheService.js"
+              },
+              "claudeCacheService.js": {
+                "type": "file",
+                "size": 25702,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\claudeCacheService.js"
+              },
+              "claudeService.js": {
+                "type": "file",
+                "size": 60691,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\claudeService.js"
+              },
+              "exportService.js": {
+                "type": "file",
+                "size": 57765,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\exportService.js"
+              },
+              "feedbackService.js": {
+                "type": "file",
+                "size": 4731,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\feedbackService.js"
+              },
+              "weatherService.js": {
+                "type": "file",
+                "size": 2445,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\services\\weatherService.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "styles": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles",
             "contents": {
               "base": {
                 "type": "directory",
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\base",
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles",
+            "contents": {
+              "base": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\base",
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 "contents": {
                   "_reset.css": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\base\\_reset.css"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\base\\_reset.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "_typography.css": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\base\\_typography.css"
                   },
                   "_variables.css": {
                     "type": "file",
                     "size": 11300,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\base\\_variables.css"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\base\\_typography.css"
+                  },
+                  "_variables.css": {
+                    "type": "file",
+                    "size": 5790,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\base\\_variables.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "components": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components",
                 "contents": {
                   "about-help.css": {
@@ -8389,11 +9327,114 @@
                         "type": "file",
                         "size": 9424,
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\mockups\\MeditationMockup.css"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components",
+                "contents": {
+                  "about-help.css": {
+                    "type": "file",
+                    "size": 5897,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\about-help.css"
+                  },
+                  "analysis.css": {
+                    "type": "file",
+                    "size": 83487,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\analysis.css"
+                  },
+                  "analysisLoading.css": {
+                    "type": "file",
+                    "size": 5505,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\analysisLoading.css"
+                  },
+                  "analyticsComponents.css": {
+                    "type": "file",
+                    "size": 19679,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\analyticsComponents.css"
+                  },
+                  "ar.css": {
+                    "type": "file",
+                    "size": 49312,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\ar.css"
+                  },
+                  "bottomNavigation.css": {
+                    "type": "file",
+                    "size": 7532,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\bottomNavigation.css"
+                  },
+                  "Catalogue.html": {
+                    "type": "file",
+                    "size": 58867,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\Catalogue.html"
+                  },
+                  "completion.css": {
+                    "type": "file",
+                    "size": 17559,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\completion.css"
+                  },
+                  "feedback.css": {
+                    "type": "file",
+                    "size": 7550,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\feedback.css"
+                  },
+                  "floatingActionButton.css": {
+                    "type": "file",
+                    "size": 2323,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\floatingActionButton.css"
+                  },
+                  "homeScreen.css": {
+                    "type": "file",
+                    "size": 41828,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\homeScreen.css"
+                  },
+                  "InstallPrompt.css": {
+                    "type": "file",
+                    "size": 3763,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\InstallPrompt.css"
+                  },
+                  "journal-archive.css": {
+                    "type": "file",
+                    "size": 14539,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\journal-archive.css"
+                  },
+                  "JournalUpload.css": {
+                    "type": "file",
+                    "size": 31524,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\JournalUpload.css"
+                  },
+                  "journey.css": {
+                    "type": "file",
+                    "size": 17199,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\journey.css"
+                  },
+                  "journeyPreview.css": {
+                    "type": "file",
+                    "size": 11064,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\journeyPreview.css"
+                  },
+                  "loader.css": {
+                    "type": "file",
+                    "size": 13242,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\loader.css"
+                  },
+                  "mockups": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\mockups",
+                    "contents": {
+                      "AICoachingMockup.css": {
+                        "type": "file",
+                        "size": 7695,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\mockups\\AICoachingMockup.css"
+                      },
+                      "MeditationMockup.css": {
+                        "type": "file",
+                        "size": 9910,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\mockups\\MeditationMockup.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                       }
                     }
                   },
                   "PageLayout.css": {
                     "type": "file",
+<<<<<<< HEAD
                     "size": 18406,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\PageLayout.css"
                   },
@@ -8471,37 +9512,138 @@
                     "type": "file",
                     "size": 3350,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\_buttons.css"
+=======
+                    "size": 5045,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\PageLayout.css"
+                  },
+                  "pageTransitions.css": {
+                    "type": "file",
+                    "size": 3686,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\pageTransitions.css"
+                  },
+                  "pathIndicator.css": {
+                    "type": "file",
+                    "size": 1793,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\pathIndicator.css"
+                  },
+                  "pathSelection.css": {
+                    "type": "file",
+                    "size": 90711,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\pathSelection.css"
+                  },
+                  "profile.css": {
+                    "type": "file",
+                    "size": 80207,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\profile.css"
+                  },
+                  "settings.css": {
+                    "type": "file",
+                    "size": 19962,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\settings.css"
+                  },
+                  "signup.css": {
+                    "type": "file",
+                    "size": 12119,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\signup.css"
+                  },
+                  "subscription.css": {
+                    "type": "file",
+                    "size": 14419,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\subscription.css"
+                  },
+                  "theme.css": {
+                    "type": "file",
+                    "size": 4731,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\theme.css"
+                  },
+                  "themeSwitcher.css": {
+                    "type": "file",
+                    "size": 2743,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\themeSwitcher.css"
+                  },
+                  "versionDisplay.css": {
+                    "type": "file",
+                    "size": 5370,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\versionDisplay.css"
+                  },
+                  "weather.css": {
+                    "type": "file",
+                    "size": 4685,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\weather.css"
+                  },
+                  "weatherDialog.css": {
+                    "type": "file",
+                    "size": 4370,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\weatherDialog.css"
+                  },
+                  "welcome.css": {
+                    "type": "file",
+                    "size": 24195,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\welcome.css"
+                  },
+                  "WriteTab.css": {
+                    "type": "file",
+                    "size": 25021,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\WriteTab.css"
+                  },
+                  "_buttons.css": {
+                    "type": "file",
+                    "size": 3493,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\_buttons.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "_cards.css": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\_cards.css"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\_cards.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "_forms.css": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\_forms.css"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\components\\_forms.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "layouts": {
                 "type": "directory",
+<<<<<<< HEAD
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\layouts",
                 "contents": {
                   "WaterClock.jsx": {
                     "type": "file",
                     "size": 4247,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\layouts\\WaterClock.jsx"
+=======
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\layouts",
+                "contents": {
+                  "WaterClock.jsx": {
+                    "type": "file",
+                    "size": 4326,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\layouts\\WaterClock.jsx"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   },
                   "_containers.css": {
                     "type": "file",
                     "size": 0,
+<<<<<<< HEAD
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\layouts\\_containers.css"
+=======
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\layouts\\_containers.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "main.css": {
                 "type": "file",
+<<<<<<< HEAD
                 "size": 2469,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\main.css"
               },
@@ -8513,29 +9655,57 @@
                     "type": "file",
                     "size": 33682,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\pages\\analyticsDashboard.css"
+=======
+                "size": 2561,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\main.css"
+              },
+              "pages": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\pages",
+                "contents": {
+                  "analyticsDashboard.css": {
+                    "type": "file",
+                    "size": 51023,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\pages\\analyticsDashboard.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   }
                 }
               },
               "theme.css": {
                 "type": "file",
+<<<<<<< HEAD
                 "size": 1852,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\theme.css"
+=======
+                "size": 1921,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\styles\\theme.css"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "tests": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\tests",
             "contents": {
               "claude-test.js": {
                 "type": "file",
                 "size": 1291,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\tests\\claude-test.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\tests",
+            "contents": {
+              "claude-test.js": {
+                "type": "file",
+                "size": 1333,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\tests\\claude-test.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           },
           "utils": {
             "type": "directory",
+<<<<<<< HEAD
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils",
             "contents": {
               "apiUtils.js": {
@@ -8592,6 +9762,59 @@
                 "type": "file",
                 "size": 61618,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils\\versionControl.js"
+=======
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils",
+            "contents": {
+              "apiUtils.js": {
+                "type": "file",
+                "size": 13768,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\apiUtils.js"
+              },
+              "googleMapsLoader.js": {
+                "type": "file",
+                "size": 5091,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\googleMapsLoader.js"
+              },
+              "offlineManager.js": {
+                "type": "file",
+                "size": 7965,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\offlineManager.js"
+              },
+              "pathTypeUtils.js": {
+                "type": "file",
+                "size": 6478,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\pathTypeUtils.js"
+              },
+              "pathUtils.js": {
+                "type": "file",
+                "size": 4723,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\pathUtils.js"
+              },
+              "realDataProcessing.js": {
+                "type": "file",
+                "size": 20164,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\realDataProcessing.js"
+              },
+              "textProcessing.js": {
+                "type": "file",
+                "size": 19757,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\textProcessing.js"
+              },
+              "userProfile.js": {
+                "type": "file",
+                "size": 24422,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\userProfile.js"
+              },
+              "userProgress.js": {
+                "type": "file",
+                "size": 5541,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\userProgress.js"
+              },
+              "versionControl.js": {
+                "type": "file",
+                "size": 43919,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\src\\utils\\versionControl.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           }
@@ -8599,6 +9822,7 @@
       },
       "static": {
         "type": "directory",
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\static",
         "contents": {
           "js": {
@@ -8609,6 +9833,23 @@
                 "type": "file",
                 "size": 11126,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\static\\js\\main.js"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\static",
+        "contents": {
+          "css": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\static\\css",
+            "contents": {}
+          },
+          "js": {
+            "type": "directory",
+            "path": "C:\\Users\\georg\\georgiescoding\\kairos\\static\\js",
+            "contents": {
+              "main.js": {
+                "type": "file",
+                "size": 11353,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos\\static\\js\\main.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             }
           }
@@ -8617,7 +9858,11 @@
       "vite.config.js": {
         "type": "file",
         "size": 499,
+<<<<<<< HEAD
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\vite.config.js"
+=======
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos\\vite.config.js"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       }
     }
   }

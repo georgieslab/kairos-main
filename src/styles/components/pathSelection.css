@@ -177,7 +177,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+<<<<<<< HEAD
   margin-top:0.75rem;
+=======
+  margin-top:0.25rem;
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .page-subtitle {
@@ -1747,7 +1751,11 @@
 .active-indicator {
   position: absolute;
   top: -2px;
+<<<<<<< HEAD
   left: -2px;
+=======
+  right: -2px;
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   width: 16px;
   height: 16px;
   background: var(--accent-primary);
@@ -1808,6 +1816,14 @@
   align-items: center;
 }
 
+<<<<<<< HEAD
+=======
+/* Progress Indicator - Mobile Optimized */
+.path-progress-indicator {
+  margin-bottom: var(--space-4);
+}
+
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 .progress-bar {
   height: 8px; /* Slightly thicker for mobile */
   background: var(--surface-tertiary);
@@ -1850,6 +1866,10 @@
 .path-metadata {
   display: flex;
   gap: var(--space-4);
+<<<<<<< HEAD
+=======
+  margin-bottom: var(--space-4);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .path-difficulty,
@@ -1933,8 +1953,13 @@
 .tab {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 0.1rem;
   padding: 0.2rem;
+=======
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   background: transparent;
   border: none;
   border-radius: var(--radius-lg);
@@ -2862,6 +2887,7 @@
     margin-top: 1rem;
 }
 
+<<<<<<< HEAD
 .tabs-scroll-container {
     display: flex
 ;
@@ -4649,3 +4675,5 @@
   );
   box-shadow: 0 0 12px rgba(var(--color-inner-elements), 0.5);
 }
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188

@@ -1,6 +1,10 @@
 // src/utils/versionControl.js
 
+<<<<<<< HEAD
 export const APP_VERSION = '5.1_alpha';
+=======
+export const APP_VERSION = '0.9.0';
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 export const VERSION_HISTORY = [
   {
@@ -458,6 +462,7 @@ export const VERSION_HISTORY = [
     ]
   },
   {
+<<<<<<< HEAD
     version: '0.7.1',
     releaseDate: '2025-06-05',
     features: [
@@ -1275,6 +1280,395 @@ export const VERSION_HISTORY = [
 
 
 
+=======
+  version: '0.7.1',
+  releaseDate: '2025-06-05',
+  features: [
+    'Six new journey paths with diverse themes and durations',
+    'New 22-day "Life Values & Core Principles" journey for value exploration',
+    'New 30-day "Relationship Mastery" journey for deeper connections',
+    'New 21-day "Financial Mindfulness" journey for healthy money relationship',
+    'New 10-day "Gratitude Practice" journey for cultivating daily appreciation',
+    'New 10-day "Shadow Work Exploration" journey for psychological integration',
+    'New 10-day "Nature Connection" journey for deepening environmental awareness',
+    'Enhanced path selection screen with color-themed journey cards',
+    'Extended support for varied journey durations (10, 21, 22, 30, 33, and 100 days)'
+  ],
+  bugFixes: [
+    'Fixed inconsistent path theming between selection and daily views',
+    'Resolved progress tracking issues for journeys longer than 30 days',
+    'Corrected icon display for newly added journey paths'
+  ],
+  improvements: [
+    'Unified CSS theme system for all journey paths with consistent styling',
+    'Enhanced journey path information in PDF exports',
+    'Optimized path registration system for easier future expansions',
+    'Improved journey classification with difficulty levels and tags',
+    'Better consistency between path selection and journey completion screens'
+  ],
+  notes: [
+    'This update significantly expands the app\'s content offering with diverse growth-focused journeys',
+    'The new paths explore complementary themes that build upon each other for continued growth',
+    'Life Values & Core Principles helps identify personal values that guide all other journeys',
+    'Gratitude Practice, Shadow Work, and Nature Connection provide essential 10-day experiences for beginners',
+    'Relationship Mastery and Financial Mindfulness address key life domains for holistic development',
+    'All new journeys feature rich, research-based content with progressive day structures'
+  ]
+},
+{
+  version: '0.7.2',
+  releaseDate: '2025-06-05',
+  features: [
+    'Update user registration flow: Now it includes the location'
+  ],
+},
+{
+  version: '0.7.3',
+  releaseDate: '2025-06-12',
+  features: [
+    'New personalized weather widget on the home screen',
+    'Location-based weather updates with detailed conditions',
+    'Interactive weather dialog with temperature, humidity, wind speed, and forecast',
+    'Streamlined location setup process with Google Places integration',
+    'Enhanced city selection with intelligent address suggestions',
+    'Improved location management in user settings'
+  ],
+  bugFixes: [
+    'Fixed Google Places API integration issues in location prompts',
+    'Resolved location data persistence problems for existing users',
+    'Fixed weather API error handling for invalid locations',
+    'Corrected CSS inconsistencies in home screen components',
+    'Addressed navigation issues between home screen and settings'
+  ],
+  improvements: [
+    'Enhanced home screen with subtle hover animations and visual polish',
+    'Improved card designs with gradient effects and smoother transitions',
+    'Optimized weather data caching for reduced API usage',
+    'More intuitive location prompt for users without city information',
+    'Better theme integration for weather components in both light and dark modes',
+    'Enhanced accessibility for all weather and location UI elements',
+    'Improved responsive design for weather components on different screen sizes'
+  ],
+  notes: [
+    'This update enhances your journaling experience with personalized weather information',
+    'The weather widget helps provide environmental context to your daily reflections',
+    'Location data is stored securely and used only for weather information',
+    'Weather updates refresh automatically to provide current conditions',
+    'Users can manage their location information in the Profile section of Settings',
+    'All new features respect your theme preferences with consistent styling'
+  ]
+},
+{
+  version: '0.7.4',
+  releaseDate: '2025-06-18',
+  features: [
+    'Complete redesign of journal analysis interface with modern mobile-first UI',
+    'Enhanced analytics dashboard with real-time data processing and intelligent caching',
+    'New ThemeCloud visualization with smart word positioning and collision detection',
+    'Improved EmotionTrends component with meaningful emotion abbreviations and better readability',
+    'Touch-optimized mobile navigation with swipe gestures for multi-page journal entries',
+    'Advanced text processing utilities for sophisticated theme and emotion extraction',
+    'Real-time consistency analysis with streak tracking and personalized insights',
+    'Enhanced multi-page image carousel with thumbnail navigation and touch controls',
+    'Smart data caching system for improved performance and reduced API usage',
+    'Progressive data loading with skeleton screens and smooth animations'
+  ],
+  bugFixes: [
+    'Fixed emotion labels showing only first 3 characters (Anx, Lov, Hop) in analytics overview',
+    'Resolved ThemeCloud word overlapping and positioning issues',
+    'Fixed confusing legend labels in theme visualizations',
+    'Corrected duplicate explanation text in analytics components',
+    'Resolved theme cloud words being cut off at container edges',
+    'Fixed mobile responsiveness issues in analysis results tabs',
+    'Addressed import errors with missing analyzeConsistency function',
+    'Fixed inconsistent data processing between mock and real journal data',
+    'Resolved touch navigation issues on mobile devices',
+    'Fixed loading states and error handling in analytics components'
+  ],
+  improvements: [
+    'Completely redesigned analysis results interface with 6 distinct tabs for better organization',
+    'Enhanced emotion analysis with 12+ emotion categories and smart abbreviation system',
+    'Improved theme extraction using weighted keyword analysis and 14 theme categories',
+    'Better visual hierarchy with consistent spacing, typography, and color usage',
+    'Optimized data processing algorithms for faster analytics generation',
+    'Enhanced mobile experience with 44px minimum touch targets and gesture support',
+    'Improved accessibility with proper focus states, ARIA labels, and reduced motion support',
+    'Better error boundaries and fallback states throughout the analytics system',
+    'Performance optimizations with useMemo, useCallback, and intelligent re-rendering',
+    'Consistent theme integration across all analytics components',
+    'Enhanced loading animations and progress indicators for better user feedback',
+    'Improved data validation and error handling for robust analytics processing'
+  ],
+  notes: [
+    'This major update focuses on transforming the analytics experience with real data integration',
+    'The new analysis interface processes actual journal content instead of generating mock data',
+    'Mobile users will notice significantly improved touch navigation and responsive design',
+    'ThemeCloud now intelligently positions words to prevent overlapping and provides meaningful insights',
+    'Emotion trends display full emotion names with percentages for better understanding',
+    'The enhanced caching system reduces load times and improves offline functionality',
+    'All analytics components now work with real user data for accurate personal insights',
+    'The new text processing utilities provide more sophisticated analysis of journaling patterns',
+    'Performance improvements make analytics loading up to 3x faster on average',
+    'This update lays the foundation for future advanced analytics and machine learning features'
+  ]
+},
+{
+  version: '0.7.5',
+  releaseDate: '2025-05-25',
+  features: [
+    'Visual Journaling Support - Draw, paint, or doodle your journal entries',
+    'New mindful-visualization path for artistic expression and visual meditation',
+    'Intelligent path type detection (text-based vs visual journaling)',
+    'Customized upload flow for visual entries - no text extraction required',
+    'AI-powered visual analysis examining colors, composition, and emotional expression',
+    'Support for optional notes/reflections on visual creations',
+    'Different UI instructions based on journey type (Write vs Create)',
+    'Multi-page visual journal support (up to 5 artwork pages per entry)',
+    'Visual-specific analysis prompts focusing on artistic elements'
+  ],
+  bugFixes: [
+    'Fixed CORS error when analyzing images from Firebase Storage',
+    'Resolved "Visual journeys require image file objects" error',
+    'Fixed image analysis flow by passing File objects through navigation',
+    'Corrected visual path detection in upload and analysis components'
+  ],
+  improvements: [
+    'Added centralized path type management system (pathTypeUtils.js)',
+    'Enhanced JournalUpload component with visual journey-specific UI',
+    'Improved WriteTab to show appropriate instructions for visual paths',
+    'Better separation of concerns between text and visual analysis',
+    'More intuitive user experience for artistic journaling',
+    'Optimized image handling to avoid unnecessary network requests',
+    'Added visual journey indicators throughout the app',
+    'Enhanced Claude prompts for better visual content analysis'
+  ],
+  notes: [
+    'Visual journaling opens up new possibilities for creative self-expression',
+    'The mindful-visualization path focuses on artistic response to daily prompts',
+    'Users can create drawings, paintings, collages, or any visual art form',
+    'Claude AI analyzes visual elements like color, composition, and emotional expression',
+    'This update lays the foundation for additional visual journaling paths',
+    'Visual entries can include optional text notes about the creative process',
+    'The new path type system makes it easy to add more visual paths in the future',
+    'All visual journal entries are stored securely with the same privacy standards'
+  ]
+},
+{
+  version: '0.8.0',
+  releaseDate: '2025-05-27',
+  features: [
+    'Massive content expansion with 16 brand new journey paths',
+    'New writing-focused journeys: Career Compass (21 days), Inner Child Healing (14 days), Anxiety Alchemy (10 days)',
+    'New transformational paths: Dream Journal Decoder (14 days), Seasonal Soul Rhythms (28 days), Forgiveness Freedom (17 days)',
+    'New life navigation journeys: Life Transitions Navigator (21 days), Digital Detox Reflection (7 days), Grief & Growth (30 days), Courage Cultivation (12 days)',
+    'New creative expression paths: Color Psychology Journey (21 days), Sacred Geometry Soul (14 days), Nature Sketching Sanctuary (10 days)',
+    'New artistic journeys: Abstract Emotions (12 days), Visual Storytelling (15 days)',
+    'Special bonus: Ink & Essence Black Ink Mastery (33 days) - intensive drawing journey with Eastern and Western techniques',
+    'Complete visual theming system with 16 unique color schemes and custom animations',
+    'Enhanced path selection interface with difficulty levels, tags, and detailed descriptions',
+    'Extended journey duration support from 7 to 33 days',
+    'Advanced CSS styling system with hover effects, progress indicators, and themed components'
+  ],
+  bugFixes: [
+    'Fixed path registration consistency across all app components',
+    'Resolved HomeScreen progress tracking for varied journey lengths',
+    'Corrected export service integration for all new paths',
+    'Fixed CSS theming conflicts between different journey paths'
+  ],
+  improvements: [
+    'Unified path architecture supporting any journey length (7-100+ days)',
+    'Enhanced createJourneyPath utility for consistent path creation',
+    'Comprehensive CSS theming with 128 style sections for visual consistency',
+    'Improved path metadata system with tags, difficulty levels, and recommendations',
+    'Optimized path selection UI with filtering and categorization',
+    'Better progress visualization for longer journeys',
+    'Enhanced PDF export with path-specific information and styling',
+    'Streamlined development process for adding future journey paths'
+  ],
+  notes: [
+    'This is the largest content expansion in Καιρός history with 293 new journey days',
+    'The 16 new paths cover writing, healing, creativity, and artistic expression',
+    'Ink & Essence offers the most intensive artistic journey with 33 days of progressive skill building',
+    'Each journey features unique visual theming and professionally crafted daily prompts',
+    'Journey difficulty ranges from beginner (7-day Digital Detox) to advanced (33-day Ink Mastery)',
+    'New paths include specialized content for career development, emotional healing, creative expression, and life transitions',
+    'The enhanced theming system provides visual distinction between different journey types',
+    'All paths are immediately available and fully integrated with existing features',
+    'Future path additions now require minimal code changes thanks to the unified architecture',
+    'This update establishes Καιρός as the most comprehensive guided journaling platform available'
+  ]
+},
+{
+  version: '0.8.1',
+  releaseDate: '2025-05-27',
+  features: [
+    'Progressive Web App (PWA) "Add to Home Screen" functionality',
+    'New Install App button in Settings → Help & Support section',
+    'Smart install prompt that appears after user engagement',
+    'iOS-specific installation instructions with step-by-step guide',
+    'Android/Desktop native install prompt integration',
+    'App installation status detection and management',
+    'Install benefits display showing offline access and full-screen experience',
+    'Persistent install prompt dismissal with 7-day cooldown',
+    'Enhanced manifest.json with app shortcuts for quick journal access',
+    'Automatic detection of standalone mode when launched from home screen'
+  ],
+  bugFixes: [
+    'Fixed manifest.json icon paths to correctly reference app icons',
+    'Resolved PWA installation detection on various devices',
+    'Fixed iOS Safari detection for proper instruction display',
+    'Corrected install prompt timing and user engagement tracking',
+    'Fixed message alert styling for info-type notifications'
+  ],
+  improvements: [
+    'Enhanced Settings UI with new install app section and benefits display',
+    'Improved PWA manifest with proper theme colors and orientation settings',
+    'Better handling of deferred install prompt across sessions',
+    'Optimized install flow for different platforms (iOS, Android, Desktop)',
+    'Added visual feedback for installation success and app status',
+    'Improved accessibility for install instructions and dialogs',
+    'Better integration with device home screen and app drawer'
+  ],
+  notes: [
+    'Καιρός can now be installed as a native-like app on any device',
+    'Once installed, the app works offline and launches in full-screen mode',
+    'iOS users receive custom instructions for adding to home screen via Safari',
+    'Android and desktop users get the native browser install experience',
+    'The app remembers if users dismiss the install prompt and waits 7 days before showing again',
+    'Installed app includes shortcuts for quick access to daily journaling and analytics',
+    'This update makes Καιρός more accessible and convenient for daily journaling practice',
+    'All PWA features respect user preferences and can be managed in Settings'
+  ]
+},
+{
+  version: '0.8.2',
+  releaseDate: '2025-05-29',
+  features: [
+    'Enhanced path type classification system for visual vs traditional journaling paths',
+    'Dynamic upload interface that adapts based on journey type (artwork vs journal uploads)',
+    'Improved visual journaling experience with artwork-focused UI and instructions',
+    'Path-specific upload instructions and guidance throughout the app',
+    'Enhanced WriteTab interface with creative vs writing-focused messaging',
+    'Smart text extraction - optional for visual paths, mandatory for traditional journaling',
+    'Updated Complete Guide documentation with visual path integration instructions'
+  ],
+  bugFixes: [
+    'Fixed visual journaling paths incorrectly showing "Upload Journal" instead of "Upload Artwork"',
+    'Resolved text extraction requirement for artistic paths that should focus on visual analysis',
+    'Corrected upload interface not adapting to path type (Color Psychology, Sacred Geometry, etc.)',
+    'Fixed WriteTab showing writing-focused tips for creative/artistic journey paths',
+    'Resolved inconsistent user instructions between visual and text-based journaling paths',
+    'Fixed pathTypeUtils.js not properly categorizing all visual paths',
+    'Corrected analysis approach mismatch for artistic vs written journal entries'
+  ],
+  improvements: [
+    'Centralized path type management in pathTypeUtils.js for consistent behavior',
+    'Enhanced JournalUpload component with dynamic UI based on journey classification',
+    'Improved user experience with appropriate prompts for creative vs reflective journaling',
+    'Better separation of visual analysis (colors, composition) vs text analysis workflows',
+    'More intuitive interface for artistic journaling paths with creative-focused guidance',
+    'Streamlined upload flow that respects the nature of different journaling approaches',
+    'Enhanced developer documentation for adding new visual or traditional journaling paths',
+    'Optimized path categorization system for easier future expansion'
+  ],
+  notes: [
+    'This critical update ensures all 8 visual journaling paths display the correct interface',
+    'Visual paths (Artistic Soul Expression, Color Psychology, Sacred Geometry, Nature Sketching, Abstract Emotions, Visual Storytelling, Ink & Essence, Mindful Visualization) now show "Upload Artwork" appropriately',
+    'Text extraction is now optional for visual paths, allowing focus on artistic expression',
+    'Traditional journaling paths maintain the existing text-focused workflow and analysis',
+    'The enhanced path type system makes it easier to add new visual or artistic journeys',
+    'Users will now see appropriate tips and guidance based on their chosen journey type',
+    'This fix resolves confusion where creative paths were treated as traditional writing journeys',
+    'All existing user data and progress remains unaffected by these interface improvements'
+  ]
+},
+{
+  version: '0.8.3',
+  releaseDate: '2025-06-01',
+  features: [
+    'Removed text entry functionality to preserve physical-digital journal connection',
+    'Streamlined journaling workflow focused exclusively on handwritten journal uploads',
+    'Enhanced physical journal emphasis throughout the app interface'
+  ],
+  bugFixes: [
+    'Fixed critical "isVisualJourneyPath is not defined" error in visual journaling analysis',
+    'Resolved function name mismatch in pathTypeUtils.js getVisualAnalysisInstructions',
+    'Corrected visual path analysis workflow that was preventing artwork uploads',
+    'Fixed variable naming conflict in visual analysis instructions function',
+    'Resolved mindful-visualization path analysis errors during artwork processing'
+  ],
+  improvements: [
+    'Strengthened physical journal integration by removing digital text entry bypass',
+    'Enhanced user experience with clear focus on handwritten journaling benefits',
+    'Improved visual journaling path stability and error handling',
+    'Simplified WriteTab interface with single "Upload Journal Pages" action',
+    'Updated journaling tips to emphasize physical writing and handwriting benefits',
+    'Removed confusing dual-mode interface that could bypass physical journal usage',
+    'Better alignment with Καιρός core mission of bridging physical and digital journaling'
+  ],
+  notes: [
+    'This update reinforces Καιρός core value proposition of physical-digital integration',
+    'Users can no longer bypass the physical journal by typing directly into the app',
+    'The streamlined interface emphasizes the neurological benefits of handwriting',
+    'Visual journaling paths (artwork uploads) now work reliably without analysis errors',
+    'All journaling must now go through the intended physical → digital workflow',
+    'Text editing remains available for correcting OCR extraction errors from handwritten pages',
+    'This change strengthens the unique value of Καιρός Smart Journal\'s NFC-enabled physical journals',
+    'The update ensures users experience the full benefits of analog writing with digital insights'
+  ]
+},
+{
+  version: '0.9.0',
+  releaseDate: '2025-06-03',
+  features: [
+    'Native Android app support with full Capacitor integration',
+    'Offline-first mobile experience with automatic sync when reconnected',
+    'Native camera integration for seamless journal photo capture on mobile devices',
+    'Mobile-optimized UI with enhanced touch interactions and gestures',
+    'App icon and branding updates featuring the Καιρός green theme',
+    'Push notification support for daily journaling reminders (Android)',
+    'Improved image compression for faster uploads on mobile networks',
+    'Device-specific optimizations for better battery life during journal analysis',
+    'Local storage management with automatic cleanup of old cached data',
+    'Mobile-specific onboarding flow for first-time app users'
+  ],
+  bugFixes: [
+    'Fixed white screen issues when launching app without internet connection',
+    'Resolved memory leaks in image processing on mobile devices',
+    'Fixed navigation stack issues causing back button inconsistencies',
+    'Corrected touch target sizes for better mobile accessibility',
+    'Fixed offline mode not properly queuing journal uploads',
+    'Resolved camera permission request timing on Android devices',
+    'Fixed theme persistence issues when switching between web and mobile',
+    'Corrected image orientation problems when capturing photos on certain devices'
+  ],
+  improvements: [
+    'Optimized build size from 12MB to 7MB for faster app downloads',
+    'Enhanced offline capabilities with intelligent data caching strategies',
+    'Improved image capture quality with automatic lighting adjustment',
+    'Better error messages and recovery options for mobile-specific issues',
+    'Streamlined sync process reducing data usage by 40%',
+    'Enhanced performance on lower-end Android devices',
+    'Improved splash screen with smooth transition to app content',
+    'Better handling of app lifecycle events (background/foreground)',
+    'Optimized WebView performance for smoother scrolling and animations',
+    'Enhanced security with certificate pinning for API communications'
+  ],
+  notes: [
+    'This major release marks Καιρός transition from web-only to a true cross-platform experience',
+    'The Android app is available as an APK for beta testing before Play Store release',
+    'Mobile users can now journal anywhere without worrying about internet connectivity',
+    'All features from the web version are fully available in the mobile app',
+    'The offline-first approach ensures your journaling practice is never interrupted',
+    'Camera integration makes capturing journal pages faster and more convenient',
+    'Push notifications help maintain consistent journaling habits (can be disabled in settings)',
+    'Future updates will add iOS support and additional mobile-specific features',
+    'Existing users can seamlessly switch between web and mobile with automatic sync',
+    'This release lays the foundation for NFC journal integration in future updates'
+  ]
+}
+
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 ];
 
 /**

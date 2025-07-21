@@ -32,13 +32,19 @@ export function AuthProvider({ children }) {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   // Enhanced sign up with additional user data
   async function signup(email, password, name, age, gender, city, additionalData = {}) {
+=======
+  // Sign up with email and password
+  async function signup(email, password, name, birthday, city) {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     try {
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
+<<<<<<< HEAD
       // Create comprehensive user profile in Firestore
       const userProfileData = {
         uid: user.uid,
@@ -99,12 +105,32 @@ export function AuthProvider({ children }) {
       return user;
     } catch (error) {
       console.error('❌ Error during enhanced signup:', error);
+=======
+      // Create user profile in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: name,
+        birthday: birthday,
+        city: city, // Store the city information
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        journeyProgress: {
+          currentPath: 'self-discovery', // Default first journey
+        }
+      });
+      
+      return user;
+    } catch (error) {
+      console.error('Error during signup:', error);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       throw error;
     }
   }
 
   // Sign in with email and password
   async function login(email, password) {
+<<<<<<< HEAD
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       
@@ -123,6 +149,12 @@ export function AuthProvider({ children }) {
   }
 
   // Enhanced sign in with Google
+=======
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  // Sign in with Google
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   async function signInWithGoogle() {
     try {
       const provider = new GoogleAuthProvider();
@@ -133,12 +165,18 @@ export function AuthProvider({ children }) {
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       
       if (!userDoc.exists()) {
+<<<<<<< HEAD
         // Create new user profile with enhanced structure for Google users
         const userProfileData = {
+=======
+        // Create new user profile if it doesn't exist
+        await setDoc(doc(db, 'users', user.uid), {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           uid: user.uid,
           email: user.email,
           displayName: user.displayName || '',
           profileImage: user.photoURL || '',
+<<<<<<< HEAD
           
           // For Google users, we'll need to collect additional info later
           hasCompletedOnboarding: false,
@@ -193,11 +231,23 @@ export function AuthProvider({ children }) {
           lastActive: serverTimestamp()
         });
         console.log('✅ Existing Google user signed in');
+=======
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          journeyProgress: {
+            currentPath: 'self-discovery', // Default first journey
+          }
+        });
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       }
       
       return user;
     } catch (error) {
+<<<<<<< HEAD
       console.error('❌ Error during Google sign-in:', error);
+=======
+      console.error('Error during Google sign-in:', error);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       throw error;
     }
   }
@@ -248,13 +298,18 @@ export function AuthProvider({ children }) {
     }
   }, [currentUser]);
 
+<<<<<<< HEAD
   // Enhanced update user profile
+=======
+  // Update user profile in Firestore
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   async function updateUserProfile(profileData) {
     if (!currentUser) throw new Error('No user signed in');
     
     try {
       const userRef = doc(db, 'users', currentUser.uid);
       
+<<<<<<< HEAD
       // Prepare update data with proper structure
       const updateData = {
         ...profileData,
@@ -280,10 +335,18 @@ export function AuthProvider({ children }) {
       
       // Update the document
       await updateDoc(userRef, updateData);
+=======
+      // Update the document
+      await updateDoc(userRef, {
+        ...profileData,
+        updatedAt: serverTimestamp()
+      });
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       
       // Update local state
       setUserProfile(prevProfile => ({
         ...prevProfile,
+<<<<<<< HEAD
         ...updateData
       }));
       
@@ -321,6 +384,14 @@ export function AuthProvider({ children }) {
       return true;
     } catch (error) {
       console.error('❌ Error completing user profile:', error);
+=======
+        ...profileData
+      }));
+      
+      return true;
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       throw error;
     }
   }
@@ -352,6 +423,7 @@ export function AuthProvider({ children }) {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           
           if (userDoc.exists()) {
+<<<<<<< HEAD
             const userData = userDoc.data();
             setUserProfile(userData);
             
@@ -363,12 +435,19 @@ export function AuthProvider({ children }) {
           } else {
             // Create basic profile if it doesn't exist (should not happen normally)
             console.warn('⚠️ User auth exists but no profile found. Creating basic profile.');
+=======
+            setUserProfile(userDoc.data());
+          } else {
+            // Create basic profile if it doesn't exist (should not happen normally)
+            console.warn('User auth exists but no profile found. Creating basic profile.');
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             
             const basicProfile = {
               uid: user.uid,
               email: user.email,
               displayName: user.displayName || '',
               profileImage: user.photoURL || '',
+<<<<<<< HEAD
               hasCompletedOnboarding: false,
               profileCompletionStep: 'personal-info',
               
@@ -406,6 +485,12 @@ export function AuthProvider({ children }) {
                 performanceAnalytics: true,
                 marketingAnalytics: false,
                 consentDate: serverTimestamp()
+=======
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+              journeyProgress: {
+                currentPath: 'self-discovery',
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               }
             };
             
@@ -413,7 +498,11 @@ export function AuthProvider({ children }) {
             setUserProfile(basicProfile);
           }
         } catch (error) {
+<<<<<<< HEAD
           console.error('❌ Error fetching user profile:', error);
+=======
+          console.error('Error fetching user profile:', error);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         }
       } else {
         setUserProfile(null);
@@ -433,7 +522,10 @@ export function AuthProvider({ children }) {
     logout,
     signInWithGoogle,
     updateUserProfile,
+<<<<<<< HEAD
     completeUserProfile, // 🆕 NEW: For completing profiles
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     refreshUserProfile, // 🆕 NEW: Add refresh function to context
     loading
   };

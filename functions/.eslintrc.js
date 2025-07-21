@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // functions/.eslintrc.js - Fixed for Node.js environment
 
 module.exports = {
@@ -34,4 +35,19 @@ module.exports = {
     },
   ],
   globals: {},
+=======
+exports.extends = [
+  "eslint:recommended",
+  "google",
+];
+
+exports.env = {
+  es6: true,
+  node: true,
+};
+
+exports.rules = {
+  quotes: ["error", "double"],
+  "max-len": ["error", { "code": 120 }]
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // src/components/layout/BottomNavigation.jsx - Enhanced with modern UX
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Home, BookOpen, PenTool, BarChart2, User, Plus } from 'lucide-react';
@@ -25,6 +26,22 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
   const animationRef = useRef(null);
   
   // Enhanced navigation items with more sophisticated configuration
+=======
+// src/components/layout/BottomNavigation.jsx
+import React, { useState, useRef, useEffect } from 'react';
+import { Home, BookOpen, PenTool, BarChart2, User } from 'lucide-react';
+// Import the CSS file
+import '../../styles/components/bottomNavigation.css';
+
+const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
+  // Store the previous active tab to create animation direction
+  const [previousTab, setPreviousTab] = useState(null);
+  const [rippleEffect, setRippleEffect] = useState({ show: false, x: 0, y: 0, id: null });
+  
+  // References to measure position for indicator animation
+  const tabRefs = useRef({});
+  
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const navItems = [
     { 
       id: 'home', 
@@ -32,9 +49,13 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
       icon: Home, 
       action: () => navigateToTabScreen('home'),
       matches: ['home', 'dashboard'],
+<<<<<<< HEAD
       color: '#558B6E',
       gradient: ['#558B6E', '#2D5A3D'],
       description: 'Your journey dashboard'
+=======
+      color: '#558B6E' // Green
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     },
     { 
       id: 'paths', 
@@ -42,6 +63,7 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
       icon: BookOpen, 
       action: () => navigateToTabScreen('path-selection', {}),
       matches: ['path-selection', 'journey-preview', 'daily'],
+<<<<<<< HEAD
       color: '#E6B89C',
       gradient: ['#E6B89C', '#D4956F'],
       description: 'Explore journaling paths'
@@ -49,24 +71,40 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
     { 
       id: 'write', 
       label: 'Journal', 
+=======
+      color: '#E6B89C' // Orange/amber
+    },
+    { 
+      id: 'write', 
+      label: 'Write', 
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       icon: PenTool, 
       action: () => navigateToTabScreen('write', {}),
       isPrimary: true,
       matches: ['upload', 'write'],
+<<<<<<< HEAD
       color: '#FFF',
       gradient: ['#558B6E', '#2D5A3D'],
       description: 'Start writing',
       pulseOnInactive: true
+=======
+      color: '#FFF' // White for primary action
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     },
     { 
       id: 'analytics', 
       label: 'Analytics', 
       icon: BarChart2, 
       action: () => navigateToTabScreen('analytics-dashboard'),
+<<<<<<< HEAD
       matches: ['analytics-dashboard', 'journal-archive'],
       color: '#d8b23f',
       gradient: ['#d8b23f', '#B8941F'],
       description: 'View your insights'
+=======
+      matches: ['analytics-dashboard'],
+      color: '#d8b23f' // yellowish
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     },
     { 
       id: 'profile', 
@@ -74,6 +112,7 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
       icon: User, 
       action: () => navigateToTabScreen('profile'),
       matches: ['profile', 'settings'],
+<<<<<<< HEAD
       color: '#9370DB',
       gradient: ['#9370DB', '#7B68EE'],
       description: 'Manage your account'
@@ -136,10 +175,32 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
     const currentItem = navItems.find(item => isActive(item));
     const currentId = currentItem ? currentItem.id : null;
     
+=======
+      color: '#9370DB' // Purple
+    }
+  ];
+
+  // When component mounts, find the active tab
+  useEffect(() => {
+    const activeItem = navItems.find(item => isActive(item));
+    if (activeItem) {
+      setPreviousTab(activeItem.id);
+    }
+  }, []);
+
+  // Custom navigation function that skips loader for tab navigation
+  const navigateToTabScreen = (screen, params = {}) => {
+    // Find the active tab before changing
+    const currentItem = navItems.find(item => isActive(item));
+    const currentId = currentItem ? currentItem.id : null;
+    
+    // Store current active tab before changing
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     if (currentId) {
       setPreviousTab(currentId);
     }
     
+<<<<<<< HEAD
     // Trigger haptic feedback simulation
     triggerHapticFeedback(screen);
     
@@ -173,10 +234,33 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
     e.preventDefault();
     
     if (!isActive(item)) {
+=======
+    // Special handling for tab navigation to avoid loader
+    navigateToScreen(screen, {
+      ...params,
+      isTabNavigation: true // This flag will be used in NavigationContext to skip loader
+    });
+  };
+  
+  // Helper function to check if a nav item is active
+  const isActive = (item) => {
+    return item.matches.includes(currentScreen);
+  };
+  
+  // Handle ripple effect on click
+  const handleTabClick = (item, e) => {
+    // Only show ripple effect if not already active
+    if (!isActive(item)) {
+      // Get click position relative to the button
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
+<<<<<<< HEAD
+=======
+      // Show ripple with unique ID to force re-render
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       setRippleEffect({
         show: true,
         x,
@@ -184,6 +268,7 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
         id: item.id + Date.now()
       });
       
+<<<<<<< HEAD
       setTimeout(() => {
         setRippleEffect({ show: false, x: 0, y: 0, id: null });
       }, 800);
@@ -203,11 +288,23 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
     if (prevIndex > activeIndex) return 'slide-left';
     return '';
   }, [previousTab]);
+=======
+      // Hide ripple after animation
+      setTimeout(() => {
+        setRippleEffect({ show: false, x: 0, y: 0, id: null });
+      }, 700);
+    }
+    
+    // Navigate to the tab
+    item.action();
+  };
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   
   // Find current active item
   const activeItem = navItems.find(item => isActive(item));
   const activeTab = activeItem ? activeItem.id : null;
   
+<<<<<<< HEAD
   // Enhanced gesture detection for mobile
   const handleTouchStart = useCallback((e) => {
     const touch = e.touches[0];
@@ -259,12 +356,33 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
             const isActiveTab = isActive(item);
             const hasBadge = badges[item.id] > 0;
             const isHapticActive = hapticFeedback.show && hapticFeedback.tabId === item.id;
+=======
+  // Determine animation direction
+  const getSlideDirection = () => {
+    if (!previousTab || !activeTab) return '';
+    
+    const prevIndex = navItems.findIndex(item => item.id === previousTab);
+    const activeIndex = navItems.findIndex(item => item.id === activeTab);
+    
+    if (prevIndex < activeIndex) return 'slide-left';
+    if (prevIndex > activeIndex) return 'slide-right';
+    return '';
+  };
+  
+  return (
+    <div className="bottom-navigation">
+      <div className="bottom-navigation-container">
+        <div className="bottom-navigation-items">
+          {navItems.map((item) => {
+            const isActiveTab = isActive(item);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             
             return (
               <button
                 key={item.id}
                 ref={el => tabRefs.current[item.id] = el}
                 onClick={(e) => handleTabClick(item, e)}
+<<<<<<< HEAD
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
@@ -293,10 +411,27 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
                       left: rippleEffect.x + 'px',
                       top: rippleEffect.y + 'px',
                       '--ripple-color': item.color
+=======
+                className={`nav-item ${isActiveTab ? 'nav-item-active' : ''} ${
+                  item.isPrimary ? 'primary-action' : ''
+                }`}
+                style={isActiveTab && !item.isPrimary ? { 
+                  '--active-color': item.color
+                } : {}}
+              >
+                {/* Ripple effect container */}
+                {rippleEffect.show && rippleEffect.id && rippleEffect.id.startsWith(item.id) && (
+                  <span 
+                    className="ripple-effect"
+                    style={{
+                      left: rippleEffect.x + 'px',
+                      top: rippleEffect.y + 'px'
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                     }}
                   ></span>
                 )}
                 
+<<<<<<< HEAD
                 {/* Primary action (Write) with enhanced styling */}
                 {item.isPrimary ? (
                   <div className="primary-action-container">
@@ -316,10 +451,17 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
                     </div>
                     {/* Primary action glow */}
                     <div className="primary-action-glow"></div>
+=======
+                {/* Primary action (Write) gets a special treatment */}
+                {item.isPrimary ? (
+                  <div className="primary-action-button">
+                    <item.icon className="primary-action-icon" />
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   </div>
                 ) : (
                   <div className="nav-icon-container">
                     <item.icon className={`nav-item-icon ${isActiveTab ? 'nav-icon-active' : ''}`} />
+<<<<<<< HEAD
                     
                     {/* Badge notification */}
                     {hasBadge && (
@@ -335,6 +477,8 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
                         style={{ backgroundColor: item.color }}
                       ></div>
                     )}
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   </div>
                 )}
                 
@@ -342,6 +486,7 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
                   {item.label}
                 </span>
                 
+<<<<<<< HEAD
                 {/* Enhanced active indicator */}
                 {isActiveTab && !item.isPrimary && (
                   <div 
@@ -350,12 +495,20 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
                       background: `linear-gradient(90deg, ${item.gradient[0]}, ${item.gradient[1]})`,
                       boxShadow: `0 0 8px ${item.color}40`
                     }}
+=======
+                {/* Active indicator with animated sliding based on direction */}
+                {isActiveTab && !item.isPrimary && (
+                  <div 
+                    className={`nav-item-indicator ${getSlideDirection()}`}
+                    style={{ background: item.color }}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   ></div>
                 )}
               </button>
             );
           })}
         </div>
+<<<<<<< HEAD
         
         {/* Background blur effect */}
         <div className="nav-background-blur"></div>
@@ -371,6 +524,10 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
         ></div>
       </div>
     </nav>
+=======
+      </div>
+    </div>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   );
 };
 

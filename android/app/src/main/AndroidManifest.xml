@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+=======
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -8,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
             android:name=".MainActivity"
@@ -16,11 +24,15 @@
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask"
             android:exported="true">
+<<<<<<< HEAD
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<<<<<<< HEAD
 
             <!-- NFC Intent Filters for launching app when NFC tag is scanned -->
             <intent-filter>
@@ -35,6 +47,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </activity>
 
         <provider
@@ -42,13 +56,18 @@
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
+<<<<<<< HEAD
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
+=======
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </provider>
     </application>
 
     <!-- Permissions -->
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
     
     <!-- NFC Permissions -->
@@ -58,3 +77,8 @@
         android:required="false" />
 
 </manifest>
+=======
+
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188

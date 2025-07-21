@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Add to pathTypeUtils.js
 const MULTI_MODAL_PATHS = [
   'inner-elements'
@@ -18,6 +19,14 @@ export const getDayType = (pathId, day) => {
   return getPathType(pathId);
 };
 
+=======
+// src/utils/pathTypeUtils.js - Utility functions for determining path types
+
+/**
+ * Visual paths that focus on artistic creation and visual expression
+ * These paths should have different upload UI and analysis approach
+ */
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 const VISUAL_PATHS = [
   'mindful-visualization',
   'artistic-soul-expression', 
@@ -29,7 +38,14 @@ const VISUAL_PATHS = [
   'ink-essence'
 ];
 
+<<<<<<< HEAD
 // Traditional Text-Based Journaling Paths - handwritten reflection
+=======
+/**
+ * Paths that primarily require text extraction from handwritten journals
+ * These are traditional journaling paths
+ */
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 const TEXT_EXTRACTION_PATHS = [
   'self-discovery',
   'emotional-intelligence',
@@ -38,6 +54,7 @@ const TEXT_EXTRACTION_PATHS = [
   'creative-expression',
   'habit-formation',
   'life-vision',
+<<<<<<< HEAD
   'life-values',
   'relationship-mastery',
   'financial-mindfulness',
@@ -68,6 +85,32 @@ const VOICE_PATHS = [
 
 /**
  * Check if a path is visual/artistic
+=======
+  'gratitude-practice',
+  'shadow-work',
+  'nature-connection',
+  'relationship-mastery',
+  'financial-mindfulness',
+  'career-compass',
+  'inner-child',
+  'anxiety-alchemy',
+  'dream-decoder',
+  'seasonal-rhythms',
+  'forgiveness-freedom',
+  'transitions-navigator',
+  'digital-detox',
+  'grief-growth',
+  'courage-cultivation',
+  'holistic-transformation',
+  'life-values',
+  
+];
+
+/**
+ * Check if a path is primarily visual/artistic in nature
+ * @param {string} pathId - The journey path ID
+ * @returns {boolean} - True if this is a visual path
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
  */
 export const isVisualPath = (pathId) => {
   if (!pathId) return false;
@@ -75,6 +118,7 @@ export const isVisualPath = (pathId) => {
 };
 
 /**
+<<<<<<< HEAD
  * Check if a path requires text extraction from handwritten pages
  */
 export const isTextExtractionPath = (pathId) => {
@@ -99,12 +143,22 @@ export const isVoicePath = (pathId) => {
 
 /**
  * Check if a path requires text extraction from handwritten content
+=======
+ * Check if a path requires text extraction from handwritten content
+ * @param {string} pathId - The journey path ID
+ * @returns {boolean} - True if text extraction is needed
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
  */
 export const requiresTextExtraction = (pathId) => {
   if (!pathId) return true; // Default to requiring text extraction
   
+<<<<<<< HEAD
   // Visual and voice paths don't require text extraction (though they can have optional notes)
   if (isVisualPath(pathId) || isVoicePath(pathId)) {
+=======
+  // Visual paths don't require text extraction (though they can have optional notes)
+  if (isVisualPath(pathId)) {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     return false;
   }
   
@@ -113,6 +167,7 @@ export const requiresTextExtraction = (pathId) => {
 };
 
 /**
+<<<<<<< HEAD
  * Get the path type category
  */
 export const getPathType = (pathId) => {
@@ -180,6 +235,14 @@ export const getUploadInstructions = (pathId) => {
       cameraButtonText: 'Start Voice Recording'
     };
   } else if (isVisualPath(pathId)) {
+=======
+ * Get the appropriate upload instructions for a path
+ * @param {string} pathId - The journey path ID
+ * @returns {object} - Upload instructions object
+ */
+export const getUploadInstructions = (pathId) => {
+  if (isVisualPath(pathId)) {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     return {
       title: 'Upload Your Artwork',
       dropText: 'Drag and drop your artwork here, or click to select files',
@@ -189,8 +252,12 @@ export const getUploadInstructions = (pathId) => {
       analysisDescription: 'Claude will examine the artistic elements, colors, composition, and emotional expression in your',
       submitButtonText: 'Analyze Visual Entry',
       notesPlaceholder: 'Add any notes or reflections about your creative process, choices, or any reflections...',
+<<<<<<< HEAD
       notesTitle: 'Optional: Add notes about your creation',
       cameraButtonText: 'Take Photos of Artwork'
+=======
+      notesTitle: 'Optional: Add notes about your creation'
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     };
   } else {
     return {
@@ -202,13 +269,18 @@ export const getUploadInstructions = (pathId) => {
       analysisDescription: 'Click the button below to extract text from your journal pages.',
       submitButtonText: 'Submit Journal Entry',
       notesPlaceholder: 'You can edit the extracted text here or add your own notes...',
+<<<<<<< HEAD
       notesTitle: 'Extracted Text',
       cameraButtonText: 'Take Photos of Journal Pages'
+=======
+      notesTitle: 'Extracted Text'
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     };
   }
 };
 
 /**
+<<<<<<< HEAD
  * Get visual analysis instructions for a path
  */
 export const getVisualAnalysisInstructions = (pathId) => {
@@ -221,6 +293,16 @@ export const getVisualAnalysisInstructions = (pathId) => {
       analysisType: 'vocal'
     };
   } else if (pathType === 'visual') {
+=======
+ * Get visual analysis instructions for a path - FIXED VERSION
+ * @param {string} pathId - The journey path ID
+ * @returns {object} - Analysis instructions object
+ */
+export const getVisualAnalysisInstructions = (pathId) => {
+  const pathIsVisual = isVisualPath(pathId); // Fixed: renamed variable to avoid naming conflict
+  
+  if (pathIsVisual) {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     return {
       type: 'visual',
       instructions: 'Focus on analyzing the visual elements, colors, composition, and artistic expression in the uploaded artwork.',
@@ -236,6 +318,7 @@ export const getVisualAnalysisInstructions = (pathId) => {
 };
 
 /**
+<<<<<<< HEAD
  * Get appropriate file types for different path types
  */
 export const getAcceptedFileTypes = (pathId) => {
@@ -266,10 +349,22 @@ export const getAnalysisApproach = (pathId) => {
     case 'writing':
     default:
       return 'text'; // Focus on extracted text content
+=======
+ * Get the appropriate analysis approach for a path
+ * @param {string} pathId - The journey path ID
+ * @returns {string} - Analysis approach ('visual', 'text', or 'mixed')
+ */
+export const getAnalysisApproach = (pathId) => {
+  if (isVisualPath(pathId)) {
+    return 'visual'; // Focus on visual elements, colors, composition
+  } else {
+    return 'text'; // Focus on extracted text content
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
 };
 
 /**
+<<<<<<< HEAD
  * Check if a path supports multiple file uploads
  */
 export const supportsMultiPage = (pathId) => {
@@ -294,10 +389,43 @@ export const getMaxPages = (pathId) => {
     case 'writing':
     default:
       return 5; // Multiple journal pages
+=======
+ * Check if a path supports multi-page uploads
+ * @param {string} pathId - The journey path ID  
+ * @returns {boolean} - True if multi-page uploads are supported
+ */
+export const supportsMultiPage = (pathId) => {
+  // Most paths support multi-page, but some visual paths might be single-image focused
+  if (pathId === 'abstract-emotions') {
+    return false; // Single abstract piece per entry
+  }
+  return true;
+};
+
+/**
+ * Get the maximum number of pages/images allowed for a path
+ * @param {string} pathId - The journey path ID
+ * @returns {number} - Maximum pages allowed
+ */
+export const getMaxPages = (pathId) => {
+  if (isVisualPath(pathId)) {
+    // Visual paths might have different limits
+    switch (pathId) {
+      case 'visual-storytelling':
+        return 10; // Stories might need more images
+      case 'abstract-emotions':
+        return 1; // Single emotional expression
+      default:
+        return 5; // Default for visual paths
+    }
+  } else {
+    return 5; // Default for text-based journal paths
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
 };
 
 /**
+<<<<<<< HEAD
  * Get user-friendly description for path type
  */
 export const getPathTypeDescription = (pathId) => {
@@ -388,12 +516,32 @@ export default {
   getAllTextExtractionPaths,
   getAllVoicePaths,
   getPathTypeCounts,
+=======
+ * Get appropriate file type restrictions for a path
+ * @param {string} pathId - The journey path ID
+ * @returns {string} - File accept string for input element
+ */
+export const getAcceptedFileTypes = (pathId) => {
+  if (isVisualPath(pathId)) {
+    // Visual paths might accept more image types
+    return 'image/*';
+  } else {
+    // Text-based paths focus on photographed journal pages
+    return 'image/jpeg,image/png,image/webp';
+  }
+};
+
+export default {
+  isVisualPath,
+  requiresTextExtraction,
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   getUploadInstructions,
   getVisualAnalysisInstructions,
   getAnalysisApproach,
   supportsMultiPage,
   getMaxPages,
   getAcceptedFileTypes,
+<<<<<<< HEAD
   getPathTypeDescription,
   getPathTypeLabels,
   isSamePathType,
@@ -402,4 +550,8 @@ export default {
   VOICE_PATHS,
   ALL_PATHS,
   PATH_TYPES
+=======
+  VISUAL_PATHS,
+  TEXT_EXTRACTION_PATHS
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 };

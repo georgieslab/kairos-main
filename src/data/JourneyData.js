@@ -3,6 +3,7 @@
 // Central registry for all journey paths
 export const JOURNEY_PATHS = {};
 
+<<<<<<< HEAD
 export const letterToMyselfDays = [
   {
     day: 1,
@@ -48,6 +49,9 @@ export const letterToMyselfDays = [
   }
 ];
 
+=======
+// Original 10-day Self-Discovery journey
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 export const journeyDays = [
   {
     day: 1,
@@ -2729,6 +2733,7 @@ export const holisticTransformationDays = [
   }
 ];
 
+<<<<<<< HEAD
 // Add these three new journey arrays to your JourneyData.js file
 
 // 1. MANIFESTATION & REALITY CREATION (33 days, Text, Intermediate)
@@ -3177,6 +3182,8 @@ export const portraitEmotionsDays = [
 
 
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 // 1. CAREER COMPASS - 21-day professional direction journey
 export const careerCompassDays = [
   {
@@ -4259,6 +4266,7 @@ export const courageCultivationDays = [
   }
 ];
 
+<<<<<<< HEAD
 export const visualMeditationDays = [
   {
     day: 1,
@@ -4500,6 +4508,8 @@ export const symbolicArtDays = [
   }
 ];
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 export const artisticSoulExpressionDays = [
   {
@@ -5251,6 +5261,7 @@ export const inkAndEssenceDays = [
   }
 ];
 
+<<<<<<< HEAD
 export const freestyleDiscoveryDays = [
   {
     day: 1,
@@ -5830,6 +5841,11 @@ export const innerElementsDays = [
 ];
 
 
+=======
+
+
+
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 /**
  * Helper function to create a journey path with minimal boilerplate
  * @param {Object} options - Path configuration options
@@ -5854,6 +5870,7 @@ export const createJourneyPath = (options) => {
     // Any other metadata you might want to store
   };
 };
+<<<<<<< HEAD
 JOURNEY_PATHS['inner-elements'] = createJourneyPath({
   id: 'inner-elements',
   title: "Inner Elements Journey",
@@ -6014,6 +6031,8 @@ JOURNEY_PATHS['portrait-emotions'] = createJourneyPath({
   difficulty: 'intermediate',
   recommendedFor: ['artists', 'those interested in human psychology', 'visual learners', 'anyone wanting to understand emotions better']
 });
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 JOURNEY_PATHS['color-psychology'] = createJourneyPath({
   id: 'color-psychology',
@@ -6152,6 +6171,7 @@ JOURNEY_PATHS['anxiety-alchemy'] = createJourneyPath({
   recommendedFor: ['anxiety sufferers', 'stress managers', 'mindfulness practitioners']
 });
 
+<<<<<<< HEAD
 JOURNEY_PATHS['visual-meditation'] = createJourneyPath({
   id: 'visual-meditation',
   title: "Visual Meditation",
@@ -6180,6 +6200,9 @@ JOURNEY_PATHS['symbolic-art'] = createJourneyPath({
   recommendedFor: ['visual artists', 'symbol enthusiasts', 'those interested in personal mythology', 'spiritual seekers']
 });
 
+=======
+// Register Dream Journal Decoder path
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 JOURNEY_PATHS['dream-decoder'] = createJourneyPath({
   id: 'dream-decoder',
   title: "Dream Journal Decoder",

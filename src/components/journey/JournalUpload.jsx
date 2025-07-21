@@ -12,6 +12,7 @@ import {
   Trash, 
   FileText,
   Palette,
+<<<<<<< HEAD
   Info,
   Image as ImageIcon,
   GripVertical,
@@ -20,6 +21,10 @@ import {
 } from 'lucide-react';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
+=======
+  Info
+} from 'lucide-react';
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import { uploadJournalImage, extractTextFromImage, uploadMultipleJournalImages } from '../../services/claudeService';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -54,20 +59,28 @@ const JournalUpload = ({
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+<<<<<<< HEAD
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const [isCapturing, setIsCapturing] = useState(false);
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   
   // Get path-specific configurations
   const isVisualJourney = isVisualPath(pathId);
   const needsTextExtraction = requiresTextExtraction(pathId);
   const uploadInstructions = getUploadInstructions(pathId);
+<<<<<<< HEAD
   const maxPages = Math.min(getMaxPages(pathId), 5); // Cap at 5 images
+=======
+  const maxPages = getMaxPages(pathId);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const acceptedFileTypes = getAcceptedFileTypes(pathId);
   const analysisApproach = getAnalysisApproach(pathId);
   
   const fileInputRef = useRef(null);
   const dropAreaRef = useRef(null);
 
+<<<<<<< HEAD
   // Check if we're running on a mobile device
   const isMobile = Capacitor.isNativePlatform();
 
@@ -84,6 +97,8 @@ const JournalUpload = ({
     return new File([u8arr], fileName, { type: mime });
   };
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Helper function to resize an image by 50%
   const resizeImage = (file, callback) => {
     const img = new Image();
@@ -131,6 +146,7 @@ const JournalUpload = ({
     setIsUploading(false);
     setIsButtonClicked(false);
     setCurrentPage(0);
+<<<<<<< HEAD
     setIsCapturing(false);
   };
 
@@ -192,6 +208,11 @@ const JournalUpload = ({
   };
 
   // Process newly added files with preserved order
+=======
+  };
+
+  // Process newly added files
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const addNewFiles = (newFiles) => {
     // Check if adding these files would exceed the limit
     if (files.length + newFiles.length > maxPages) {
@@ -199,14 +220,20 @@ const JournalUpload = ({
       return;
     }
 
+<<<<<<< HEAD
     // Filter for image files and maintain order
     const imageFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'));
+=======
+    // Filter for image files
+    const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     
     if (imageFiles.length === 0) {
       setError('Please select image files (JPG, PNG, etc.)');
       return;
     }
 
+<<<<<<< HEAD
     // Process each image file to resize it while preserving order
     const processFilesSequentially = async () => {
       const newResizedFiles = [];
@@ -249,6 +276,42 @@ const JournalUpload = ({
   };
 
   // Enhanced drag and drop for file upload
+=======
+    // Process each image file to resize it
+    const resizedImages = [];
+    const resizedFiles = [];
+    let processedCount = 0;
+
+    imageFiles.forEach((file) => {
+      resizeImage(file, (resizedFile, imageUrl) => {
+        resizedFiles.push(resizedFile);
+        resizedImages.push(imageUrl);
+        processedCount++;
+
+        // When all files are processed, update state
+        if (processedCount === imageFiles.length) {
+          setFiles(prevFiles => [...prevFiles, ...resizedFiles]);
+          setImages(prevImages => [...prevImages, ...resizedImages]);
+          
+          // Set current page to the first new image if this is the first upload
+          if (images.length === 0) {
+            setCurrentPage(0);
+          }
+
+          setError('');
+        }
+      });
+    });
+  };
+
+  // Handle file selection
+  const handleFileSelect = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    addNewFiles(selectedFiles);
+  };
+
+  // Handle drag events
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -279,6 +342,7 @@ const JournalUpload = ({
     }
   };
 
+<<<<<<< HEAD
   // Drag and drop reordering functions
   const handleImageDragStart = (e, index) => {
     e.dataTransfer.setData('text/plain', index);
@@ -326,6 +390,8 @@ const JournalUpload = ({
     setDragOverIndex(null);
   };
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Navigation between pages
   const goToNextPage = () => {
     if (currentPage < images.length - 1) {
@@ -339,11 +405,14 @@ const JournalUpload = ({
     }
   };
 
+<<<<<<< HEAD
   // Navigate to specific page
   const goToPage = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Remove a specific image
   const removeImage = (index) => {
     URL.revokeObjectURL(images[index]);
@@ -515,6 +584,7 @@ const JournalUpload = ({
             </div>
             
             {images.length === 0 ? (
+<<<<<<< HEAD
               <div className="upload-options">
                 {/* Enhanced Camera/Gallery button for mobile */}
                 {isMobile && (
@@ -638,20 +708,85 @@ const JournalUpload = ({
                           </div>
                         ))}
                       </div>
+=======
+              <div 
+                ref={dropAreaRef}
+                className={`drop-area ${isDragging ? 'dragging' : ''}`}
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <Upload className="drop-icon" />
+                <p className="drop-text">
+                  {uploadInstructions.dropText}
+                </p>
+                <button 
+                  className="action-button secondary"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  {uploadInstructions.selectButtonText}
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileSelect} 
+                  style={{ display: 'none' }} 
+                  accept={acceptedFileTypes}
+                  multiple={maxPages > 1}
+                />
+              </div>
+            ) : (
+              <>
+                <div className="image-carousel">
+                  <img 
+                    src={images[currentPage]} 
+                    alt={`${isVisualJourney ? 'Artwork' : 'Journal'} page ${currentPage + 1}`} 
+                    className="image-preview" 
+                  />
+                  
+                  <div className="page-indicator">
+                    {isVisualJourney ? 'Image' : 'Page'} {currentPage + 1} of {images.length}
+                  </div>
+                  
+                  {images.length > 1 && (
+                    <div className="carousel-controls">
+                      <button 
+                        className="carousel-button"
+                        onClick={goToPrevPage}
+                        disabled={currentPage === 0}
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <button 
+                        className="carousel-button"
+                        onClick={goToNextPage}
+                        disabled={currentPage === images.length - 1}
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                     </div>
                   )}
                 </div>
                 
+<<<<<<< HEAD
                 {/* Enhanced Action Buttons */}
                 <div className="image-preview-actions">
                   <button 
                     className="image-action-button remove"
+=======
+                <div className="image-preview-actions">
+                  <button 
+                    className="image-action-button"
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                     onClick={() => removeImage(currentPage)}
                   >
                     <Trash className="image-action-icon" />
                     Remove {isVisualJourney ? 'Image' : 'Page'}
                   </button>
                   
+<<<<<<< HEAD
                   {files.length < maxPages && (
                     <>
                       {isMobile && (
@@ -681,6 +816,16 @@ const JournalUpload = ({
                         {isMobile ? 'Select Files' : `Add More ${isVisualJourney ? 'Images' : 'Pages'}`}
                       </button>
                     </>
+=======
+                  {files.length < maxPages && maxPages > 1 && (
+                    <button 
+                      className="action-button secondary"
+                      onClick={() => fileInputRef.current.click()}
+                    >
+                      <Plus size={16} style={{ marginRight: '4px' }} />
+                      Add More {isVisualJourney ? 'Images' : 'Pages'} ({files.length}/{maxPages})
+                    </button>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   )}
                 </div>
               </>
@@ -818,6 +963,7 @@ const JournalUpload = ({
             </button>
           )}
           
+<<<<<<< HEAD
           {/* Enhanced Upload Information */}
           {images.length > 0 && (
             <div className="upload-info animate-fade-up">
@@ -850,6 +996,13 @@ const JournalUpload = ({
                   <Check size={16} />
                   Maximum {isVisualJourney ? 'images' : 'pages'} uploaded - Ready to analyze!
                 </p>
+=======
+          {images.length > 0 && (
+            <div className="upload-info animate-fade-up">
+              <p>You've uploaded {files.length} of {maxPages} possible {isVisualJourney ? 'images' : 'pages'}</p>
+              {files.length === maxPages && (
+                <p className="page-limit-warning">Maximum number of {isVisualJourney ? 'images' : 'pages'} reached</p>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               )}
             </div>
           )}

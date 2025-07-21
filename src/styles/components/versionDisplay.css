@@ -5,6 +5,7 @@
 .version-display {
     position: relative;
     font-family: inherit;
+<<<<<<< HEAD
     display:flex;
         flex-direction: row-reverse;
   }
@@ -16,6 +17,13 @@
     margin-top:1.25rem;
 
 
+=======
+  }
+  
+  .version-number {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
   
   .version-badge {

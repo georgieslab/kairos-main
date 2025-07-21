@@ -79,8 +79,26 @@
   
   /* Typography styles for content */
   .page-content h2 {
+<<<<<<< HEAD
     font-weight: 600;
     color: #F5F5F0;
+=======
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #F5F5F0;
+    margin: 2rem 0 1rem;
+  }
+  
+  .page-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #D8D8D0;
+    margin: 1.5rem 0 0.75rem;
+  }
+  
+  .page-content p {
+    margin-bottom: 1rem;
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
   
   .page-content ul, 
@@ -238,6 +256,7 @@
     color: #D8D8D0;
     margin: 0.75rem
 12px
+<<<<<<< HEAD
  0.5rem 0.75rem;
 }
 
@@ -1343,4 +1362,7 @@
   .modal-button.primary:hover {
     transform: none;
   }
+=======
+ 0 0.75rem;
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }

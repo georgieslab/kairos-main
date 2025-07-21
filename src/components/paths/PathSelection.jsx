@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 // src/components/paths/PathSelection.jsx - Complete Implementation with Unlimited Active Journeys
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
+=======
+// Clean PathSelection.jsx - Production Ready (Debug messages removed)
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { 
+  ChevronDown, 
+  ChevronUp, 
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   Check, 
   Calendar, 
   Archive, 
@@ -16,11 +25,24 @@ import {
   ArrowUpRight,
   Clock,
   Zap,
+<<<<<<< HEAD
   AlertCircle,
   Star,
   Moon,
   Sun,
   X,
+=======
+  Filter,
+  AlertCircle,
+  ChevronRight,
+  Star,
+  Moon,
+  Sun,
+  PlusCircle,
+  X,
+  Info,
+  Bookmark,
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   LayoutGrid,
   List,
   Search,
@@ -28,13 +50,21 @@ import {
   Sparkles,
   Award,
   Target,
+<<<<<<< HEAD
+=======
+  Lock,
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   Play,
   BookOpen,
   Lightbulb,
   Leaf,
   Coins,
+<<<<<<< HEAD
   Brush,
   Feather
+=======
+  Brush
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 } from 'lucide-react';
 
 import { useAuth } from '../../contexts/AuthContext';
@@ -44,7 +74,11 @@ import {
   getJourneyPath
 } from '../../data/JourneyData';
 
+<<<<<<< HEAD
 // ✅ CRITICAL: Import the CSS file
+=======
+// Direct import of the CSS file
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import '../../styles/components/pathSelection.css';
 
 // Import utilities
@@ -53,7 +87,13 @@ import {
 } from '../../utils/userProgress';
 
 // Import components
+<<<<<<< HEAD
 import { 
+=======
+import JourneyDisclaimerModal from './components/JourneyDisclaimerModal';
+import { 
+  getProgressFieldForPath, 
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   getUserPathProgress, 
   updateCurrentPath 
 } from '../../utils/pathUtils';
@@ -75,6 +115,10 @@ const ICON_MAP = {
   'Zap': Zap,
   'Clock': Clock,
   'Archive': Archive,
+<<<<<<< HEAD
+=======
+  'Bookmark': Bookmark,
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   'Target': Target,
   'Lightbulb': Lightbulb,
   'Leaf': Leaf,
@@ -90,6 +134,7 @@ const DIFFICULTY_CONFIG = {
   'advanced': { icon: Award, label: 'Advanced', color: 'advanced' }
 };
 
+<<<<<<< HEAD
 // Journey Disclaimer Modal Component (only for Transformation Journey)
 const JourneyDisclaimerModal = ({ onAccept, onCancel }) => (
   <div className="modal-overlay" onClick={onCancel}>
@@ -121,6 +166,8 @@ const JourneyDisclaimerModal = ({ onAccept, onCancel }) => (
   </div>
 );
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 // Main PathSelection component
 const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', currentDay = 1 }) => {
   // Theme and auth hooks
@@ -142,6 +189,10 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     selectedPath: null,
     showDisclaimerModal: false,
     selectedTransformationPath: null,
+<<<<<<< HEAD
+=======
+    activePathSwitch: { show: false, newPathId: null },
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     
     // Data state
     pathsProgress: {},
@@ -150,15 +201,25 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     
     // Interaction state
     isNavigating: false,
+<<<<<<< HEAD
     hoveredPath: null
+=======
+    hoveredPath: null,
+    expandedPath: null
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   });
 
   // Destructure state for cleaner access
   const {
     viewMode, activeTab, searchQuery, filterOption, isLoading, isMobile,
     showPathDetails, selectedPath, showDisclaimerModal, selectedTransformationPath,
+<<<<<<< HEAD
     pathsProgress, favoritePaths, disclaimerBypass,
     isNavigating, hoveredPath
+=======
+    activePathSwitch, pathsProgress, favoritePaths, disclaimerBypass,
+    isNavigating, hoveredPath, expandedPath
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   } = state;
 
   // State updater helper
@@ -242,7 +303,42 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     return completedDays.length > 0 && completedDays.length < path.duration;
   }, [currentPath, pathsProgress]);
 
+<<<<<<< HEAD
   // ✅ REMOVED: hasActiveJourney function completely - no more journey switching restrictions
+=======
+  // Check for active journey - FIXED VERSION
+  const hasActiveJourney = useCallback((excludePathId = null) => {
+    if (!userProfile?.journeyProgress) return false;
+    
+    // Check ALL paths for active progress, not just currentPath
+    const activeJourneys = [];
+    
+    // Loop through all paths to find any with active progress
+    allPaths.forEach(path => {
+      if (path.id === excludePathId) return; // Skip the path we're trying to start
+      
+      const progress = pathsProgress[path.id];
+      if (progress && progress.completedDays && progress.completedDays.length > 0) {
+        const completedDays = progress.completedDays.length;
+        const isCompleted = completedDays >= path.duration;
+        
+        if (!isCompleted) {
+          activeJourneys.push({
+            pathId: path.id,
+            completedDays,
+            totalDays: path.duration
+          });
+        }
+      }
+    });
+    
+    // Only return true if there are genuinely active journeys
+    // AND the user has made significant progress (more than 1 day)
+    const significantActiveJourneys = activeJourneys.filter(journey => journey.completedDays > 1);
+    
+    return significantActiveJourneys.length > 0;
+  }, [userProfile, allPaths, pathsProgress]);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   // Toggle favorite path
   const toggleFavorite = useCallback((pathId, e) => {
@@ -261,6 +357,29 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     updateState({ viewMode: viewMode === 'grid' ? 'list' : 'grid' });
   }, [viewMode, updateState]);
 
+<<<<<<< HEAD
+=======
+  // Get recommended paths
+  const recommendedPaths = useMemo(() => {
+    if (!allPaths?.length) return [];
+    
+    const notStarted = allPaths.filter(path => {
+      const progress = pathsProgress[path.id];
+      return !progress || !progress.completedDays || progress.completedDays.length === 0;
+    });
+    
+    const completedCount = Object.values(pathsProgress).filter(p => 
+      p?.completedDays?.length >= getJourneyPath(p.pathId)?.duration
+    ).length;
+    
+    if (completedCount === 0) {
+      return notStarted.filter(p => p.difficulty === 'beginner').slice(0, 3);
+    }
+    
+    return notStarted.slice(0, 3);
+  }, [allPaths, pathsProgress]);
+
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Filter paths based on current filters
   const filteredPaths = useMemo(() => {
     if (!allPaths?.length) return [];
@@ -341,7 +460,11 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     };
   }, [allPaths, pathsProgress, favoritePaths]);
 
+<<<<<<< HEAD
   // Handle special path disclaimer (only for transformation-journey)
+=======
+  // Handle special path disclaimer
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const handleSpecialPathStart = useCallback((pathId) => {
     if (pathId === 'transformation-journey' && !hasStartedPath(pathId) && !disclaimerBypass[pathId]) {
       updateState({ 
@@ -374,12 +497,27 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     }, 300);
   }, [selectedTransformationPath, disclaimerBypass, userProfile, navigateToScreen, updateState]);
 
+<<<<<<< HEAD
   // ✅ SIMPLIFIED: Handle journey continuation - removed all switching logic
   const handleContinueJourney = useCallback(async (pathId) => {
     if (isNavigating) return;
     updateState({ isNavigating: true });
     
     // Handle special disclaimer for transformation journey
+=======
+  // Handle journey continuation with improved logic
+  const handleContinueJourney = useCallback(async (pathId) => {
+    if (isNavigating) return;
+    
+    // Defensive checks
+    if (!pathId || !userProfile || !navigateToScreen) {
+      return;
+    }
+    
+    updateState({ isNavigating: true });
+    
+    // Handle special disclaimer paths first
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     if (handleSpecialPathStart(pathId)) {
       updateState({ isNavigating: false });
       return;
@@ -387,6 +525,7 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     
     const progress = pathsProgress[pathId] || { completedDays: [] };
     const pathData = getJourneyPath(pathId);
+<<<<<<< HEAD
     const isCompleted = progress.completedDays?.length >= pathData.duration;
     
     const nextDay = getNextDayForPath(userProfile, pathId);
@@ -407,6 +546,53 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
       updateState({ isNavigating: false });
     }, 100);
   }, [isNavigating, handleSpecialPathStart, pathsProgress, userProfile, currentPath, hasStartedPath, navigateToScreen, updateState]);
+=======
+    
+    if (!pathData) {
+      updateState({ isNavigating: false });
+      return;
+    }
+    
+    const isCompleted = progress.completedDays?.length >= pathData.duration;
+    const hasStarted = hasStartedPath(pathId);
+    
+    // Only check for active journey conflicts for NEW journeys
+    // and only if there are significant active journeys
+    if (!isCompleted && !hasStarted) {
+      const hasConflictingJourney = hasActiveJourney(pathId);
+      
+      if (hasConflictingJourney) {
+        updateState({
+          activePathSwitch: { show: true, newPathId: pathId },
+          isNavigating: false
+        });
+        return;
+      }
+    }
+    
+    const nextDay = getNextDayForPath(userProfile, pathId);
+    
+    // Update current path if starting new or switching
+    if (!hasStarted || currentPath !== pathId) {
+      try {
+        await updateCurrentPath(userProfile.uid, pathId);
+      } catch (error) {
+        updateState({ isNavigating: false });
+        return;
+      }
+    }
+    
+    // Navigate to WriteTab
+    setTimeout(() => {
+      try {
+        navigateToScreen('write', { pathId, day: nextDay });
+        updateState({ isNavigating: false });
+      } catch (error) {
+        updateState({ isNavigating: false });
+      }
+    }, 100);
+  }, [isNavigating, handleSpecialPathStart, pathsProgress, hasStartedPath, hasActiveJourney, userProfile, currentPath, navigateToScreen, updateState]);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   // Modal handlers
   const openPathDetails = useCallback((path) => {
@@ -454,7 +640,11 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
   );
 
   // Render path card
+<<<<<<< HEAD
   const renderPathCard = useCallback((pathData) => {
+=======
+  const renderPathCard = useCallback((pathData, isRecommended = false) => {
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     const { id, title, subtitle, iconName, duration, difficulty = 'beginner', tags = [] } = pathData;
     
     const progress = pathsProgress[id] || { completedDays: [] };
@@ -474,6 +664,10 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
       isCompleted ? 'completed' : '',
       isActive ? 'active-journey' : '',
       isHovered ? 'hovered' : '',
+<<<<<<< HEAD
+=======
+      isRecommended ? 'recommended' : '',
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       isPremium ? 'premium' : '',
       viewMode
     ].filter(Boolean).join(' ');
@@ -491,7 +685,11 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
         role="button"
         aria-label={`${title} journey, ${completedDays.length} of ${duration} days completed`}
       >
+<<<<<<< HEAD
         {/* Premium indicator */}
+=======
+        {/* Premium indicator - positioned on left */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         {isPremium && !isCompleted && (
           <div className="premium-indicator">
             <Star size={12} />
@@ -499,7 +697,11 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
           </div>
         )}
 
+<<<<<<< HEAD
         {/* Status badges */}
+=======
+        {/* Status badges - positioned on right */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         <div className="path-badges">
           {isCompleted && (
             <div className="path-completion-badge">
@@ -513,9 +715,21 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
               <span>Active</span>
             </div>
           )}
+<<<<<<< HEAD
         </div>
 
         {/* Favorite button */}
+=======
+          {isRecommended && (
+            <div className="path-recommended-badge">
+              <Lightbulb size={14} />
+                <span>Recommended</span>
+            </div>
+          )}
+        </div>
+
+        {/* Favorite button - positioned bottom right */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         <button 
           className={`favorite-button ${isFavorite ? 'active' : ''}`}
           onClick={(e) => toggleFavorite(id, e)}
@@ -845,7 +1059,74 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     );
   };
 
+<<<<<<< HEAD
   // ✅ REMOVED: renderPathSwitchModal function completely - no more switching modal
+=======
+  // Render path switching confirmation modal with better visibility
+  const renderPathSwitchModal = () => {
+    if (!activePathSwitch.show) return null;
+    
+    const newPathData = getJourneyPath(activePathSwitch.newPathId);
+    const newPathTitle = newPathData?.title || activePathSwitch.newPathId;
+    
+    return (
+      <div 
+        className="modal-overlay active-path-switch-modal" 
+        onClick={() => updateState({ activePathSwitch: { show: false, newPathId: null } })}
+        style={{ zIndex: 9999 }}
+      >
+        <div className="confirmation-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <AlertCircle className="modal-warning-icon" size={20} />
+            <h3 className="modal-title">Switch Active Journey?</h3>
+          </div>
+          
+          <div className="modal-content">
+            <p className="modal-message">
+              You currently have an active journey in progress. Starting "{newPathTitle}" will pause your current journey.
+            </p>
+            <p className="modal-note">
+              Don't worry - your progress will be saved and you can return to it anytime.
+            </p>
+          </div>
+          
+          <div className="modal-footer">
+            <button 
+              className="secondary-button"
+              onClick={() => updateState({ activePathSwitch: { show: false, newPathId: null } })}
+            >
+              Keep Current Journey
+            </button>
+            
+            <button 
+              className="primary-button"
+              onClick={async () => {
+                const pathId = activePathSwitch.newPathId;
+                
+                updateState({ activePathSwitch: { show: false, newPathId: null } });
+                
+                const nextDay = getNextDayForPath(userProfile, pathId);
+                
+                try {
+                  await updateCurrentPath(userProfile.uid, pathId);
+                } catch (error) {
+                  // Handle error silently
+                }
+                
+                setTimeout(() => {
+                  navigateToScreen('write', { pathId, day: nextDay });
+                }, 100);
+              }}
+            >
+              <RotateCcw size={14} />
+              <span>Switch Journey</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   // Render empty state
   const renderEmptyState = () => {
@@ -1025,6 +1306,25 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
       
       {/* Main content */}
       <main id="main-content">
+<<<<<<< HEAD
+=======
+        {/* Recommendations section */}
+        {activeTab === 'all' && recommendedPaths.length > 0 && !searchQuery && (
+          <section className="recommendations-section">
+            <div className="section-header">
+              <h2>
+                <Lightbulb size={18} />
+                Recommended for You
+              </h2>
+              <p>Based on your progress and interests</p>
+            </div>
+            <div className={`paths-${viewMode} recommendations`}>
+              {recommendedPaths.map(pathData => renderPathCard(pathData, true))}
+            </div>
+          </section>
+        )}
+        
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         {/* Path grid/list */}
         <section className="paths-section" aria-labelledby="paths-heading">
           {isLoading ? (
@@ -1060,10 +1360,16 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
       
       {/* Modals */}
       {showPathDetails && renderPathDetailsModal()}
+<<<<<<< HEAD
       
       {/* ✅ REMOVED: Path switch modal completely - no more journey switching restrictions */}
       
       {/* Transformation Journey Disclaimer Modal (only for transformation journey) */}
+=======
+      {renderPathSwitchModal()}
+      
+      {/* Transformation Journey Disclaimer Modal */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       {showDisclaimerModal && (
         <JourneyDisclaimerModal 
           onAccept={handleAcceptDisclaimer}

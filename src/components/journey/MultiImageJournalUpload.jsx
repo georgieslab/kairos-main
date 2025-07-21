@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+<<<<<<< HEAD
 import { ArrowLeft, Camera, Upload, X, AlertCircle, Check, ChevronLeft, ChevronRight, Plus, Trash, Image as ImageIcon } from 'lucide-react';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
+=======
+import { ArrowLeft, Camera, Upload, X, AlertCircle, Check, ChevronLeft, ChevronRight, Plus, Trash } from 'lucide-react';
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import { extractTextFromImages } from '../../services/claudeService';
 
 const MultiImageJournalUpload = ({ 
@@ -31,6 +35,7 @@ const MultiImageJournalUpload = ({
   const [isDragging, setIsDragging] = useState(false);
   const dropAreaRef = useRef(null);
 
+<<<<<<< HEAD
   // Check if we're running on a mobile device
   const isMobile = Capacitor.isNativePlatform();
 
@@ -47,6 +52,8 @@ const MultiImageJournalUpload = ({
     return new File([u8arr], fileName, { type: mime });
   };
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Clear any errors when images change
   useEffect(() => {
     if (images.length > 0) {
@@ -54,6 +61,7 @@ const MultiImageJournalUpload = ({
     }
   }, [images]);
 
+<<<<<<< HEAD
   // Handle camera capture using Capacitor Camera plugin
   const handleCameraCapture = async () => {
     try {
@@ -99,6 +107,8 @@ const MultiImageJournalUpload = ({
     setError('');
   };
 
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Handle file selection
   const handleFileSelect = (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -132,8 +142,11 @@ const MultiImageJournalUpload = ({
     if (images.length === 0) {
       setCurrentPage(0);
     }
+<<<<<<< HEAD
 
     setError('');
+=======
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
 
   // Handle drag events
@@ -306,6 +319,7 @@ const MultiImageJournalUpload = ({
             </div>
             
             {images.length === 0 ? (
+<<<<<<< HEAD
               <div className="upload-options">
                 {/* Camera/Gallery button for mobile */}
                 {isMobile && (
@@ -347,6 +361,32 @@ const MultiImageJournalUpload = ({
                     multiple
                   />
                 </div>
+=======
+              <div 
+                ref={dropAreaRef}
+                className={`drop-area ${isDragging ? 'dragging' : ''}`}
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <Upload className="drop-icon" />
+                <p className="drop-text">Drag and drop your journal pages here, or click to select files</p>
+                <button 
+                  className="action-button secondary"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  Select Files
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileSelect} 
+                  style={{ display: 'none' }} 
+                  accept="image/*"
+                  multiple
+                />
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               </div>
             ) : (
               <>
@@ -395,6 +435,7 @@ const MultiImageJournalUpload = ({
                   </button>
                   
                   {files.length < maxPages && (
+<<<<<<< HEAD
                     <>
                       {isMobile && (
                         <button 
@@ -413,6 +454,15 @@ const MultiImageJournalUpload = ({
                         {isMobile ? 'Select Files' : 'Add More Pages'} ({files.length}/{maxPages})
                       </button>
                     </>
+=======
+                    <button 
+                      className="action-button secondary"
+                      onClick={() => fileInputRef.current.click()}
+                    >
+                      <Plus size={16} style={{ marginRight: '4px' }} />
+                      Add More Pages ({files.length}/{maxPages})
+                    </button>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   )}
                 </div>
               </>

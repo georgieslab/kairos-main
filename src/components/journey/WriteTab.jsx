@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 // src/components/journey/WriteTab.jsx - Fixed Loading Issues with Voice Support
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+=======
+// src/components/journey/WriteTab.jsx
+import React, { useState, useEffect, useRef } from 'react';
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import { 
   Camera, 
   BookOpen, 
@@ -9,6 +14,7 @@ import {
   Award, 
   Lightbulb,
   Info,
+<<<<<<< HEAD
   CheckCircle,
   AlertCircle,
   Trophy,
@@ -29,10 +35,27 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
   
   const [activeDay, setActiveDay] = useState(currentDay || 1);
   const [activePath, setActivePath] = useState(currentPath || 'self-discovery');
+=======
+  CheckCircle
+} from 'lucide-react';
+import { getJourneyDay, getAllJourneyPaths } from '../../data/JourneyData';
+import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { getProgressFieldForPath, getNextDayForPath } from '../../utils/pathUtils';
+import DynamicIcon from '../common/DynamicIcon';
+
+const WriteTab = ({ navigateToScreen, currentPath = 'self-discovery', currentDay = 1 }) => {
+  const { userProfile } = useAuth();
+  const { isDarkMode } = useTheme(); // Use the centralized theme context
+  
+  const [activeDay, setActiveDay] = useState(currentDay);
+  const [activePath, setActivePath] = useState(currentPath);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const [journeyData, setJourneyData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+<<<<<<< HEAD
   const [completionStatus, setCompletionStatus] = useState('active');
   const [debugInfo, setDebugInfo] = useState({});
   
@@ -169,6 +192,84 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           console.log('📝 Journey data loaded:', dayData?.title);
         } catch (error) {
           console.error('Error getting journey data:', error);
+=======
+  
+  // Flag to prevent navigation loops
+  const isNavigating = useRef(false);
+  
+  // Track if component is mounted
+  const isMounted = useRef(true);
+  
+  // Debug counter to track effect runs
+  const effectRuns = useRef(0);
+  
+  // Single consolidated effect to handle initialization and data loading
+  useEffect(() => {
+    // Set up initialization
+    const initializeTab = async () => {
+      if (!isMounted.current) return;
+      
+      effectRuns.current += 1;
+      console.log(`WriteTab useEffect run #${effectRuns.current}`);
+      
+      setIsLoading(true);
+      setLoadError(null);
+      
+      try {
+        // Log the initial context for debugging
+        console.log(`WriteTab initializing with props - path: ${currentPath}, day: ${currentDay}`);
+        
+        // SAFETY CHECK: Make sure we have valid inputs
+        const safePath = currentPath || 'self-discovery';
+        const safeDay = currentDay || 1;
+        
+        let finalDay = safeDay;
+        let finalPath = safePath;
+        
+        // Calculate correct day from user profile if available
+        if (userProfile && userProfile.journeyProgress) {
+          try {
+            // Get the correct day using our utility function
+            const correctDay = getNextDayForPath(userProfile, safePath);
+            console.log(`WriteTab - Calculated day ${correctDay} for path ${safePath} from user progress`);
+            
+            finalDay = correctDay || safeDay;
+            finalPath = safePath;
+          } catch (progressError) {
+            console.error('Error calculating day from progress:', progressError);
+            finalDay = safeDay;
+            finalPath = safePath;
+          }
+        }
+        
+        // Only update state if different to avoid unnecessary rerenders
+        if (finalDay !== activeDay) {
+          setActiveDay(finalDay);
+        }
+                
+        if (finalPath !== activePath) {
+          setActivePath(finalPath);
+        }
+        
+        // Get journey data for this path/day with error handling
+        let dayData;
+        try {
+          dayData = getJourneyDay(finalDay, finalPath);
+          
+          if (!dayData) {
+            console.warn(`No journey data found for day ${finalDay}, path ${finalPath}. Using default data.`);
+            // Provide default journey data
+            dayData = {
+              day: finalDay,
+              title: `Day ${finalDay}`,
+              theme: "Reflection",
+              prompt: "What's on your mind today?"
+            };
+          }
+        } catch (journeyError) {
+          console.error('Error getting journey data:', journeyError);
+          // Provide default journey data
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           dayData = {
             day: finalDay,
             title: `Day ${finalDay}`,
@@ -177,6 +278,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           };
         }
         
+<<<<<<< HEAD
         // Update state if component is still mounted
         if (mounted) {
           setActivePath(finalPath);
@@ -249,6 +351,79 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
   // Get path details for display
   const getPathDetails = useCallback(() => {
     const pathData = getJourneyPath(activePath);
+=======
+        if (isMounted.current) {
+          setJourneyData(dayData);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error initializing WriteTab:', error);
+        
+        if (isMounted.current) {
+          setLoadError('Failed to load journal data. Please try again.');
+          
+          // Emergency fallback - try to get some basic data
+          try {
+            const fallbackData = {
+              day: currentDay || 1,
+              title: `Day ${currentDay || 1}`,
+              theme: "Reflection",
+              prompt: "What's on your mind today?"
+            };
+            setJourneyData(fallbackData);
+          } catch (fallbackError) {
+            console.error('Even fallback failed:', fallbackError);
+          }
+          
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    // Start initialization
+    initializeTab();
+    
+    // Cleanup function to prevent updates on unmounted component
+    return () => {
+      console.log('WriteTab unmounting, cleaning up');
+      isMounted.current = false;
+      isNavigating.current = false;
+    };
+  }, [userProfile, currentPath, currentDay]);
+  
+  // Handle navigation to journal upload screen
+  const handleStartWriting = () => {
+    if (isNavigating.current) return;
+    isNavigating.current = true;
+    
+    console.log(`Navigating to journal upload with day: ${activeDay}, path: ${activePath}`);
+    navigateToScreen('upload', { 
+      pathId: activePath, 
+      day: activeDay,
+      prompt: journeyData?.prompt,
+      theme: journeyData?.theme
+    });
+  };
+  
+  // Handle navigation to daily view for more info
+  const handleViewDetails = () => {
+    // Prevent navigation if already navigating
+    if (isNavigating.current) return;
+    isNavigating.current = true;
+    
+    console.log(`Navigating to daily with day: ${activeDay}, path: ${activePath}`);
+    navigateToScreen('daily', { 
+      pathId: activePath, 
+      day: activeDay 
+    });
+  };
+  
+  // Get path details for display
+  const getPathDetails = () => {
+    // Use all paths data to get comprehensive path details
+    const allPaths = getAllJourneyPaths();
+    const pathData = allPaths.find(path => path.id === activePath);
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     
     if (pathData) {
       return {
@@ -259,6 +434,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
       };
     }
     
+<<<<<<< HEAD
     return {
       title: 'Self-Discovery',
       iconName: 'Compass',
@@ -388,11 +564,55 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           >
             Force Load (Debug)
           </button>
+=======
+    // Fallback for legacy paths
+    let title, iconName, color, duration;
+    
+    switch(activePath) {
+      case 'emotional-intelligence':
+        title = 'Emotional Intelligence';
+        iconName = 'Heart';
+        color = '216, 76, 147'; // Pink
+        duration = 10;
+        break;
+      case 'mindfulness-awareness':
+        title = 'Mindfulness';
+        iconName = 'Brain';
+        color = '142, 68, 173'; // Purple
+        duration = 10;
+        break;
+      case 'transformation-journey':
+        title = 'Transformation Journey';
+        iconName = 'RotateCcw';
+        color = '26, 155, 155'; // Teal
+        duration = 21;
+        break;
+      case 'self-discovery':
+      default:
+        title = 'Self-Discovery';
+        iconName = 'Compass';
+        color = '85, 139, 110'; // Green
+        duration = 10;
+        break;
+    }
+    
+    return { title, iconName, color, duration };
+  };
+  
+  // Show loading indicator while calculating correct day
+  if (isLoading) {
+    return (
+      <div className={`write-tab-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
+        <div className="loading-indicator">
+          <div className="loading-spinner"></div>
+          <p>Loading your journal...</p>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </div>
       </div>
     );
   }
   
+<<<<<<< HEAD
   // Show error with debug info
   if (loadError) {
     return (
@@ -431,12 +651,26 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             }}
           >
             Reload Page
+=======
+  // Show error message if loading failed
+  if (loadError) {
+    return (
+      <div className={`write-tab-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
+        <div className="error-indicator">
+          <p className="error-message">{loadError}</p>
+          <button 
+            className="retry-button"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           </button>
         </div>
       </div>
     );
   }
   
+<<<<<<< HEAD
   const pathDetails = getPathDetails();
   
   // Show completion message if journey is completed
@@ -485,6 +719,35 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             <span>Day Completed</span>
           </div>
         )}
+=======
+  // Safety check - if we somehow don't have journey data, show a fallback
+  if (!journeyData) {
+    const fallbackData = {
+      day: activeDay,
+      title: `Day ${activeDay}`,
+      theme: "Reflection",
+      prompt: "What's on your mind today?"
+    };
+    
+    console.warn("Using fallback journey data - no data available");
+    
+    // Update state for future renders
+    setJourneyData(fallbackData);
+  }
+  
+  // Get path details for consistent styling
+  const pathDetails = getPathDetails();
+  const progressPercentage = Math.round((activeDay / pathDetails.duration) * 100);
+  
+  return (
+    <div className={`write-tab-container ${isDarkMode ? 'dark-theme' : 'light-theme'} ${activePath}`}>
+      {/* Header with path context */}
+      <div className="write-tab-header">
+        <h1 className="write-tab-title">Today's Journal Entry</h1>
+        <div className="header-right">
+          {/* Theme toggle button removed */}
+        </div>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       </div>
       
       {/* Path context indicator */}
@@ -497,6 +760,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
         </div>
       </div>
       
+<<<<<<< HEAD
       {/* Day completed notification */}
       {completionStatus === 'day-completed' && (
         <div className="day-completed-notification animate-fade-up">
@@ -511,6 +775,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
       )}
       
       {/* Prompt card */}
+=======
+      {/* Prompt card with enhanced visuals */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       <div className="prompt-card animate-fade-up">
         <div className="prompt-day-container">
           <h2 className="prompt-day">Day {activeDay}: {journeyData?.title || `Day ${activeDay}`}</h2>
@@ -520,7 +787,11 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           <div className="prompt-label-container">
             <h3 className="prompt-label">
               <MessageSquare className="prompt-label-icon" />
+<<<<<<< HEAD
               {isVoicePath(activePath) ? "Today's Voice Prompt:" : "Today's Prompt:"}
+=======
+              Today's Prompt:
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </h3>
             <button
               className="info-button"
@@ -533,17 +804,25 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           
           {isInfoVisible && (
             <div className="prompt-info">
+<<<<<<< HEAD
               <p>
                 {isVoicePath(activePath) 
                   ? "This prompt is designed to guide your vocal reflection for today. Speak your response naturally and authentically - your voice carries wisdom." 
                   : "This prompt is designed to guide your reflection for today. Write in your physical journal in response to this prompt, then upload it for analysis."
                 }
               </p>
+=======
+              <p>This prompt is designed to guide your reflection for today. Write in your physical journal in response to this prompt, then upload it for analysis.</p>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </div>
           )}
           
           <p className="prompt-text">
+<<<<<<< HEAD
             {journeyData?.prompt || "What's on your mind today? Take a moment to reflect on your thoughts and feelings."}
+=======
+            {journeyData?.prompt || "What's on your mind today?"}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           </p>
           <div className="prompt-theme">
             <Tag className="prompt-theme-icon" />
@@ -551,6 +830,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
           </div>
         </div>
         
+<<<<<<< HEAD
         {/* Action buttons */}
         <div className="prompt-actions-container">
           <h3 className="actions-title">
@@ -561,10 +841,16 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
                 : "Ready to upload your journal entry?"
             }
           </h3>
+=======
+        {/* Simplified action - only journal upload */}
+        <div className="prompt-actions-container">
+          <h3 className="actions-title">Ready to upload your journal entry?</h3>
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           
           <div className="prompt-actions">
             <button 
               onClick={handleStartWriting}
+<<<<<<< HEAD
               className={`action-button ${completionStatus === 'day-completed' ? 'secondary' : 'primary'}`}
             >
               {isVoicePath(activePath) ? <Mic className="action-icon" /> : <Camera className="action-icon" />}
@@ -572,20 +858,37 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
                 ? (completionStatus === 'day-completed' ? 'Record New Entry' : 'Record Voice Entry')
                 : (completionStatus === 'day-completed' ? 'Upload New Entry' : 'Upload Journal Pages')
               }
+=======
+              className="action-button primary"
+            >
+              <Camera className="action-icon" />
+              Upload Journal Pages
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </button>
             
             <button 
               onClick={handleViewDetails}
+<<<<<<< HEAD
               className={`action-button ${completionStatus === 'day-completed' ? 'primary' : 'secondary'}`}
             >
               <BookOpen className="action-icon" />
               {completionStatus === 'day-completed' ? 'View Previous Entry' : 'View Details'}
+=======
+              className="action-button secondary"
+            >
+              <BookOpen className="action-icon" />
+              View Details
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </button>
           </div>
         </div>
       </div>
       
+<<<<<<< HEAD
       {/* Simple progress display */}
+=======
+      {/* Journey progress with enhanced visuals */}
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       <div className="journey-progress animate-fade-up" style={{ animationDelay: "0.1s" }}>
         <h3 className="progress-title">
           <Award className="progress-title-icon" />
@@ -597,12 +900,17 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             <div 
               className="progress-fill"
               style={{ 
+<<<<<<< HEAD
                 width: `${(activeDay / pathDetails.duration) * 100}%`,
+=======
+                width: `${progressPercentage}%`,
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 backgroundColor: `rgb(${pathDetails.color})`
               }}
             ></div>
           </div>
           <div className="progress-text">
+<<<<<<< HEAD
             <span className="progress-percentage">{Math.round((activeDay / pathDetails.duration) * 100)}%</span>
             <span className="progress-days">Day {activeDay} of {pathDetails.duration}</span>
           </div>
@@ -614,34 +922,97 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
         <h3 className="tips-title">
           <Lightbulb className="tips-title-icon" />
           {isVoicePath(activePath) ? "Voice Journaling Tips" : "Physical Journal Tips"}
+=======
+            <span className="progress-percentage">{progressPercentage}%</span>
+            <span className="progress-days">Day {activeDay} of {pathDetails.duration}</span>
+          </div>
+        </div>
+        
+        <div className="days-grid">
+          {Array.from({ length: Math.min(pathDetails.duration, 10) }, (_, i) => i + 1).map(day => {
+            const completed = day < activeDay;
+            const isCurrent = day === activeDay;
+            
+            return (
+              <div 
+                key={day}
+                className={`day-pill ${completed ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-label={`Day ${day}, ${completed ? 'completed' : isCurrent ? 'current day' : 'upcoming'}`}
+              >
+                {completed ? <CheckCircle size={12} /> : day}
+              </div>
+            );
+          })}
+          {pathDetails.duration > 10 && (
+            <div className="day-pill more">
+              +{pathDetails.duration - 10}
+            </div>
+          )}
+        </div>
+        
+        <div className="progress-prompt">
+          {activeDay < pathDetails.duration ? (
+            <p>Continue your physical journaling journey to gain deeper insights.</p>
+          ) : (
+            <p>You're on the final day of your journey!</p>
+          )}
+        </div>
+      </div>
+      
+      {/* Tips for better journaling focused on physical writing */}
+      <div className="journaling-tips animate-fade-up" style={{ animationDelay: "0.2s" }}>
+        <h3 className="tips-title">
+          <Lightbulb className="tips-title-icon" />
+          Physical Journal Tips
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </h3>
         
         <ul className="tips-list">
           <li className="tip-item">
             <div className="tip-icon">✓</div>
             <div className="tip-content">
+<<<<<<< HEAD
               {isVoicePath(activePath) 
                 ? "Find a quiet space for recording your voice" 
                 : "Find a quiet space with your physical Καιρός journal"
               }
+=======
+              Find a quiet space with your physical Καιρός journal
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </div>
           </li>
           <li className="tip-item">
             <div className="tip-icon">✓</div>
             <div className="tip-content">
+<<<<<<< HEAD
               {isVoicePath(activePath) 
                 ? "Speak naturally and let emotions come through your voice" 
                 : "Write by hand to activate deeper reflection and memory"
               }
+=======
+              Write by hand to activate deeper reflection and memory
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </div>
           </li>
           <li className="tip-item">
             <div className="tip-icon">✓</div>
             <div className="tip-content">
+<<<<<<< HEAD
               {isVoicePath(activePath) 
                 ? "Take pauses when you need time to think - silence is okay" 
                 : "Take your time - aim for at least 10 minutes of writing"
               }
+=======
+              Take your time - aim for at least 10 minutes of writing
+            </div>
+          </li>
+          <li className="tip-item">
+            <div className="tip-icon">✓</div>
+            <div className="tip-content">
+              Scan multiple pages if your response spans several pages
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </div>
           </li>
         </ul>
@@ -657,8 +1028,13 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             boxShadow: `0 4px 12px rgba(${pathDetails.color}, 0.3)`
           }}
         >
+<<<<<<< HEAD
           {isVoicePath(activePath) ? 'Record Voice Entry' : 'Upload Journal'}
           {isVoicePath(activePath) ? <Mic className="continue-icon" /> : <ArrowRight className="continue-icon" />}
+=======
+          Upload Journal
+          <ArrowRight className="continue-icon" />
+>>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </button>
       </div>
     </div>
