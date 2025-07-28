@@ -12,11 +12,7 @@
     "android": "npx cap open android",
     "android:run": "npx cap run android",
     "generate-icons": "npx capacitor-assets generate --iconBackgroundColor '#2B6F3C'",
-<<<<<<< HEAD
     "update-android": "npm run build && npx cap sync android"
-=======
-  "update-android": "npm run build && npx cap sync android"
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
@@ -25,10 +21,7 @@
     "@capacitor/camera": "^7.0.1",
     "@capacitor/core": "^7.2.0",
     "@capacitor/filesystem": "^7.0.1",
-<<<<<<< HEAD
     "@capacitor/haptics": "^7.0.1",
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     "@capacitor/network": "^7.0.1",
     "@capacitor/splash-screen": "^7.0.1",
     "@capacitor/status-bar": "^7.0.1",
@@ -37,10 +30,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@headlessui/react": "^2.2.0",
-<<<<<<< HEAD
     "@rollup/rollup-win32-x64-msvc": "^4.42.0",
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     "@tailwindcss/postcss": "^4.0.8",
     "canvas-confetti": "^1.9.3",
     "classnames": "^2.5.1",
@@ -50,20 +40,13 @@
     "idb": "^8.0.2",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
-<<<<<<< HEAD
     "lottie-react": "^2.4.1",
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",
     "recharts": "^2.15.1",
-<<<<<<< HEAD
     "stripe": "^18.2.1"
-=======
-    "stripe": "^18.1.0"
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
