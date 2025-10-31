@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* src/styles/components/homeScreen.css - Enhanced Visual Design */
-=======
-/* src/styles/components/homeScreen.css - Modern Mobile-First Design */
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 /* ==========================================================================
    CSS CUSTOM PROPERTIES
@@ -35,11 +31,8 @@
   --hs-info: #3b82f6;
   --hs-warning: #f59e0b;
   --hs-error: #ef4444;
-<<<<<<< HEAD
   --hs-flame: #ff6b35;
   --hs-flame-rgb: 255, 107, 53;
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   
   /* Spacing Scale */
   --hs-space-xs: 0.25rem;
@@ -146,11 +139,7 @@
 }
 
 /* ==========================================================================
-<<<<<<< HEAD
    ENHANCED HEADER
-=======
-   MODERN HEADER
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
    ========================================================================== */
 
 .hs-header {
@@ -174,10 +163,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--hs-space-lg);
-<<<<<<< HEAD
   margin-bottom: var(--hs-space-xl);
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .hs-header-main {
@@ -186,7 +172,6 @@
 }
 
 .hs-date-wrapper {
-<<<<<<< HEAD
   margin-bottom: var(--hs-space-md);
 }
 
@@ -206,9 +191,6 @@
   background: var(--hs-bg-hover);
   transform: translateY(-2px);
   box-shadow: var(--hs-shadow-md);
-=======
-  margin-bottom: var(--hs-space-sm);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .hs-date {
@@ -225,13 +207,10 @@
   color: var(--hs-text-primary);
   margin: 0;
   line-height: 1.2;
-<<<<<<< HEAD
   display: flex;
   align-items: center;
   gap: var(--hs-space-sm);
   flex-wrap: wrap;
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .hs-username {
@@ -254,7 +233,6 @@
   opacity: 0.6;
 }
 
-<<<<<<< HEAD
 .hs-greeting-emoji {
   font-size: var(--hs-font-xl);
   animation: gentle-bounce 2s ease-in-out infinite;
@@ -265,8 +243,6 @@
   50% { transform: translateY(-4px); }
 }
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 .hs-header-actions {
   display: flex;
   align-items: center;
@@ -279,7 +255,6 @@
 }
 
 /* ==========================================================================
-<<<<<<< HEAD
    ENHANCED STATS OVERVIEW
    ========================================================================== */
 
@@ -427,19 +402,13 @@
 }
 
 /* ==========================================================================
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
    MODERN THEME TOGGLE
    ========================================================================== */
 
 .hs-theme-toggle {
   position: relative;
   width: 56px;
-<<<<<<< HEAD
   height: 17px;
-=======
-  height: 32px;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   background: none;
   border: none;
   cursor: pointer;
@@ -449,11 +418,7 @@
 
 .hs-theme-toggle-track {
   width: 100%;
-<<<<<<< HEAD
   height: 70%;
-=======
-  height: 100%;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   background: var(--hs-bg-tertiary);
   border: 2px solid var(--hs-border-primary);
   border-radius: var(--hs-radius-full);
@@ -469,11 +434,7 @@
 
 .hs-theme-toggle-thumb {
   position: absolute;
-<<<<<<< HEAD
   top: -2px;
-=======
-  top: 2px;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   width: 24px;
   height: 24px;
   background: var(--hs-bg-card);
@@ -1254,7 +1215,6 @@
 }
 
 /* ==========================================================================
-<<<<<<< HEAD
    ANALYTICS PREVIEW
    ========================================================================== */
 
@@ -1349,9 +1309,6 @@
 
 /* ==========================================================================
    ENHANCED QUOTE SECTION
-=======
-   QUOTE SECTION
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
    ========================================================================== */
 
 .hs-quote-card {
@@ -1388,7 +1345,6 @@
   opacity: 1;
 }
 
-<<<<<<< HEAD
 .hs-quote-theme-badge {
   position: absolute;
   top: var(--hs-space-lg);
@@ -1413,8 +1369,6 @@
   transform: translateY(-2px);
 }
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 .hs-quote-icon {
   position: absolute;
   top: var(--hs-space-xl);
@@ -1433,10 +1387,7 @@
 
 .hs-quote-content {
   padding-left: var(--hs-space-3xl);
-<<<<<<< HEAD
   padding-right: var(--hs-space-2xl);
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   transition: all var(--hs-transition-normal);
 }
 
@@ -1474,12 +1425,9 @@
   position: absolute;
   bottom: var(--hs-space-lg);
   right: var(--hs-space-xl);
-<<<<<<< HEAD
   display: flex;
   align-items: center;
   gap: var(--hs-space-xs);
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   font-size: var(--hs-font-xs);
   color: var(--hs-text-tertiary);
   opacity: 0;
@@ -1735,7 +1683,6 @@
 }
 
 /* ==========================================================================
-<<<<<<< HEAD
    LOADING STATES
    ========================================================================== */
 
@@ -1759,8 +1706,6 @@
 }
 
 /* ==========================================================================
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
    GOOGLE PLACES AUTOCOMPLETE
    ========================================================================== */
 
@@ -1831,17 +1776,11 @@
     justify-content: space-between;
     align-self: stretch;
   }
-<<<<<<< HEAD
 
   
   .hs-stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--hs-space-md);
-=======
-  
-  .hs-greeting {
-    font-size: var(--hs-font-xl);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
   
   .hs-journeys-grid {
@@ -1854,14 +1793,11 @@
     gap: var(--hs-space-md);
   }
   
-<<<<<<< HEAD
   .hs-analytics-preview-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--hs-space-md);
   }
   
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   .hs-prompt-actions {
     flex-direction: column;
     gap: var(--hs-space-md);
@@ -1896,10 +1832,7 @@
   
   .hs-quote-content {
     padding-left: var(--hs-space-2xl);
-<<<<<<< HEAD
     padding-right: var(--hs-space-lg);
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
   
   .hs-quote-text {
@@ -1916,7 +1849,6 @@
     padding: var(--hs-space-sm);
   }
   
-<<<<<<< HEAD
   .hs-stats-grid {
     grid-template-columns: 1fr;
     gap: var(--hs-space-sm);
@@ -1941,8 +1873,6 @@
     font-size: var(--hs-font-lg);
   }
   
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   .hs-prompt-card,
   .hs-quote-card,
   .hs-journey-card,
@@ -1965,13 +1895,10 @@
   .hs-journey-title {
     font-size: var(--hs-font-base);
   }
-<<<<<<< HEAD
   
   .hs-analytics-preview-grid {
     grid-template-columns: 1fr;
   }
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 /* ==========================================================================
@@ -2050,28 +1977,19 @@
 @media (hover: none) and (pointer: coarse) {
   .hs-journey-card,
   .hs-action-card,
-<<<<<<< HEAD
   .hs-quote-card,
   .hs-stat-card {
-=======
-  .hs-quote-card {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     transform: none;
   }
   
   .hs-journey-card:active,
   .hs-action-card:active,
-<<<<<<< HEAD
   .hs-quote-card:active,
   .hs-stat-card:active {
-=======
-  .hs-quote-card:active {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     transform: scale(0.98);
   }
 }
 
-<<<<<<< HEAD
 /* Clickable stat card styles */
 .hs-stat-clickable {
   cursor: pointer;
@@ -2672,9 +2590,4 @@
 
 .hs-dark .hs-scroll-indicator:active {
   background: rgba(59, 130, 246, 0.9) !important;
-=======
-.page-content p {
-    margin-bottom: 1rem;
-    margin-top: 1.25rem;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }

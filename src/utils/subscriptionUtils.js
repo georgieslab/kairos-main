@@ -237,7 +237,7 @@ export const getUpgradePromptInfo = (pathData, subscription) => {
       'Priority support'
     ],
     pricing: {
-      amount: '€11.99',
+      amount: '€0.99',
       period: 'month',
       note: 'Cancel anytime'
     }
@@ -353,7 +353,7 @@ export const calculateSubscriptionMetrics = (subscription, signupDate) => {
   
   // Estimate lifetime value (simple calculation)
   if (metrics.subscriptionAge > 0) {
-    const monthlyValue = 11.99;
+    const monthlyValue = 0.99;
     const months = metrics.subscriptionAge / 30;
     metrics.lifetimeValue = Math.round(months * monthlyValue * 100) / 100;
   }

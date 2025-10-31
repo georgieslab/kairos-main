@@ -627,7 +627,7 @@ export const formatSubscriptionInfo = (subscription) => {
 export const getPricingInfo = () => {
   return {
     monthly: {
-      price: 11.99,
+      price: 0.99,
       currency: 'EUR',
       period: 'month',
       description: 'Artisan Monthly',

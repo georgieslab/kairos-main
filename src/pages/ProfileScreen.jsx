@@ -1,75 +1,34 @@
-<<<<<<< HEAD
-// src/pages/ProfileScreen.jsx - Modern iOS Design with KairosLoader
+// src/pages/ProfileScreen.jsx - Redesigned to Match HomeScreen Aesthetic
 
-import React, { useState, useEffect, useRef } from 'react';
-=======
-// src/pages/ProfileScreen.jsx - Unified and Enhanced Version
 import React, { useState, useEffect } from 'react';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import { 
   Settings, 
   HelpCircle, 
   LogOut, 
   BookOpen, 
   ChevronRight, 
-<<<<<<< HEAD
-=======
-  Edit2,
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   Bell,
   Lock,
   Info,
-  Moon,
-  Sun,
-  TrendingUp,
   Calendar,
-  Star,
-  Award,
-  Camera,
-  User,
-<<<<<<< HEAD
-=======
-  Download,
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
-  Archive,
-  Sparkles,
-  Clock,
-  Target,
-  Heart,
-<<<<<<< HEAD
-  Zap,
-  BarChart3,
-  Flame,
   Trophy,
-  CheckCircle2,
-  ArrowUpRight,
-  Play,
-  Plus,
-  Eye,
+  Target,
+  Flame,
+  Archive,
+  BarChart3,
   Crown,
   CreditCard,
   Shield,
   CheckCircle,
   Compass,
-  X,
   MapPin,
   Mail,
+  User,
   Edit3,
-  Palette,
-  PenTool,
-  Coffee,
-  Sunrise,
-  Feather,
-  Mountain,
-  Lightbulb,
-  Gem,
-  Medal,
-  Flag,
-  Gift,
-  Rocket,
-  Brain,
-  Smile,
-  Activity
+  Award,
+  Sparkles,
+  Heart,
+  Zap
 } from 'lucide-react';
 
 import { useAuth } from '../contexts/AuthContext';
@@ -83,7 +42,6 @@ import { useUserProgress } from '../hooks/useUserProgress';
 // Import subscription services
 import { 
   getSubscriptionStatus, 
-  formatSubscriptionInfo,
   startUpgradeProcess,
   openCustomerPortal,
   hasArtisanAccess
@@ -92,98 +50,13 @@ import {
 // Import avatar system
 import { SmartAvatar, AvatarSelector } from '../components/common/AvatarComponents';
 
-// ✅ Import the KairosLoader component
+// Import the KairosLoader component
 import KairosLoader from '../components/common/KairosLoader';
-
-=======
-  Zap
-} from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { useNavigation } from '../contexts/NavigationContext';
-import { getAllJourneyPaths, getJourneyPath } from '../data/JourneyData';
-import { 
-  getProgressFieldForPath, 
-  getAllActiveJourneys, 
-  calculateUserStats 
-} from '../utils/pathUtils';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import VersionDisplay from '../components/common/VersionDisplay';
 import DynamicIcon from '../components/common/DynamicIcon';
 import '../styles/components/profile.css';
 
-<<<<<<< HEAD
-// iOS-style Components
-const IOSSubscriptionBadge = ({ isArtisan = false, size = 'default' }) => {
-  return (
-    <div className={`ios-subscription-badge ${isArtisan ? 'ios-subscription-badge--artisan' : 'ios-subscription-badge--free'} ${size === 'small' ? 'ios-subscription-badge--small' : ''}`}>
-      {isArtisan ? <Crown size={size === 'small' ? 12 : 14} /> : <User size={size === 'small' ? 12 : 14} />}
-      <span>{isArtisan ? 'Artisan' : 'Free'}</span>
-    </div>
-  );
-};
-
-const IOSSubscriptionCard = ({ isArtisan = false, onUpgrade, onManage, loading = false }) => {
-  return (
-    <div className="ios-card ios-subscription-card">
-      <div className="ios-subscription-card__content">
-        <div className="ios-subscription-card__header">
-          <div className="ios-subscription-card__icon">
-            {isArtisan ? <Crown size={28} /> : <Shield size={28} />}
-          </div>
-          <div className="ios-subscription-card__info">
-            <h3 className="ios-subscription-card__title">
-              {isArtisan ? 'Artisan Plan' : 'Free Plan'}
-            </h3>
-            <p className="ios-subscription-card__subtitle">
-              {isArtisan ? 'All journeys unlocked' : '9 free journeys available'}
-            </p>
-          </div>
-          <IOSSubscriptionBadge isArtisan={isArtisan} />
-        </div>
-        
-        <div className="ios-subscription-card__features">
-          <div className={`ios-feature-item ${isArtisan ? 'ios-feature-item--active' : ''}`}>
-            <CheckCircle size={16} />
-            <span>{isArtisan ? 'All 34 Journey Paths' : '9 Free Paths'}</span>
-          </div>
-          <div className={`ios-feature-item ${isArtisan ? 'ios-feature-item--active' : ''}`}>
-            <CheckCircle size={16} />
-            <span>{isArtisan ? 'Advanced AI Analysis' : 'Basic AI Analysis'}</span>
-          </div>
-          <div className={`ios-feature-item ${isArtisan ? 'ios-feature-item--active' : ''}`}>
-            <CheckCircle size={16} />
-            <span>{isArtisan ? 'Unlimited Exports' : 'Limited Exports'}</span>
-          </div>
-        </div>
-        
-        <div className="ios-subscription-card__action">
-          {isArtisan ? (
-            <button 
-              onClick={onManage}
-              disabled={loading}
-              className="ios-button ios-button--secondary"
-            >
-              <CreditCard size={18} />
-              <span>{loading ? 'Opening...' : 'Manage Subscription'}</span>
-            </button>
-          ) : (
-            <button 
-              onClick={onUpgrade}
-              disabled={loading}
-              className="ios-button ios-button--primary"
-            >
-              <Crown size={18} />
-              <span>{loading ? 'Processing...' : 'Upgrade to Artisan'}</span>
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Achievement definitions remain the same...
+// Achievement definitions
 const ACHIEVEMENT_DEFINITIONS = {
   // Streak Achievements
   firstWeek: {
@@ -213,384 +86,151 @@ const ACHIEVEMENT_DEFINITIONS = {
     color: 'achievement-gold',
     points: 500
   },
-  streakLegend: {
-    id: 'streak-legend',
-    icon: 'Crown',
-    title: 'Streak Legend',
-    description: '100 day streak',
-    requirement: (statistics) => statistics.longestStreak >= 100,
-    color: 'achievement-purple',
-    points: 1000
-  },
   
   // Entry Achievements
   firstEntry: {
     id: 'first-entry',
-    icon: 'Feather',
-    title: 'First Words',
-    description: 'Your first entry',
+    icon: 'BookOpen',
+    title: 'First Steps',
+    description: 'First journal entry',
     requirement: (statistics) => statistics.totalEntries >= 1,
-    color: 'achievement-green',
+    color: 'achievement-blue',
     points: 50
   },
   tenEntries: {
     id: 'ten-entries',
-    icon: 'BookOpen',
+    icon: 'Heart',
     title: 'Getting Started',
     description: '10 entries',
     requirement: (statistics) => statistics.totalEntries >= 10,
     color: 'achievement-blue',
     points: 100
   },
-  twentyFive: {
-    id: 'twenty-five',
-    icon: 'PenTool',
-    title: 'Consistent Writer',
-    description: '25 entries',
-    requirement: (statistics) => statistics.totalEntries >= 25,
-    color: 'achievement-teal',
-    points: 250
-  },
-  fiftyEntries: {
-    id: 'fifty-entries',
-    icon: 'Heart',
-    title: 'Dedicated Journalist',
-    description: '50 entries',
-    requirement: (statistics) => statistics.totalEntries >= 50,
-    color: 'achievement-pink',
-    points: 500
-  },
-  hundredEntries: {
-    id: 'hundred-entries',
-    icon: 'Star',
-    title: 'Century Club',
-    description: '100 entries',
-    requirement: (statistics) => statistics.totalEntries >= 100,
-    color: 'achievement-purple',
-    points: 1000
-  },
   
-  // Path Achievements
+  // Path Completion
   firstPath: {
     id: 'first-path',
     icon: 'Award',
-    title: 'Path Finder',
+    title: 'Journey Complete',
     description: 'First path completed',
     requirement: (statistics) => statistics.completedPathsCount >= 1,
-    color: 'achievement-green',
+    color: 'achievement-purple',
     points: 200
   },
   threePaths: {
     id: 'three-paths',
-    icon: 'Medal',
-    title: 'Journey Expert',
+    icon: 'Trophy',
+    title: 'Path Explorer',
     description: '3 paths completed',
     requirement: (statistics) => statistics.completedPathsCount >= 3,
-    color: 'achievement-blue',
-    points: 600
-  },
-  fivePaths: {
-    id: 'five-paths',
-    icon: 'Gem',
-    title: 'Path Master',
-    description: '5 paths completed',
-    requirement: (statistics) => statistics.completedPathsCount >= 5,
-    color: 'achievement-purple',
-    points: 1000
-  },
-  tenPaths: {
-    id: 'ten-paths',
-    icon: 'Rocket',
-    title: 'Journey Legend',
-    description: '10 paths completed',
-    requirement: (statistics) => statistics.completedPathsCount >= 10,
     color: 'achievement-gold',
-    points: 2000
-  },
-  
-  // Special Achievements
-  earlyBird: {
-    id: 'early-bird',
-    icon: 'Sunrise',
-    title: 'Early Bird',
-    description: 'Morning journaler',
-    requirement: (statistics, profile) => profile?.preferences?.journalTime === 'morning',
-    color: 'achievement-orange',
-    points: 150
-  },
-  nightOwl: {
-    id: 'night-owl',
-    icon: 'Moon',
-    title: 'Night Owl',
-    description: 'Evening journaler',
-    requirement: (statistics, profile) => profile?.preferences?.journalTime === 'evening',
-    color: 'achievement-indigo',
-    points: 150
-  },
-  explorer: {
-    id: 'explorer',
-    icon: 'Compass',
-    title: 'Path Explorer',
-    description: 'Tried 5+ different paths',
-    requirement: (statistics) => statistics.totalPathsStarted >= 5,
-    color: 'achievement-teal',
-    points: 300
-  },
-  deepThinker: {
-    id: 'deep-thinker',
-    icon: 'Brain',
-    title: 'Deep Thinker',
-    description: 'Long reflections',
-    requirement: (statistics) => statistics.averageLength > 500,
-    color: 'achievement-purple',
-    points: 400
-  },
-  speedWriter: {
-    id: 'speed-writer',
-    icon: 'Zap',
-    title: 'Speed Writer',
-    description: 'Quick daily entries',
-    requirement: (statistics) => statistics.totalEntries >= 30 && statistics.averageLength < 200,
-    color: 'achievement-yellow',
-    points: 300
-  },
-  emotionalExplorer: {
-    id: 'emotional-explorer',
-    icon: 'Heart',
-    title: 'Emotional Explorer',
-    description: 'Completed emotional paths',
-    requirement: (statistics, profile, progress) => {
-      const emotionalPaths = ['emotional-intelligence', 'inner-child', 'anxiety-alchemy'];
-      const completed = progress?.completedPaths || [];
-      return completed.some(p => emotionalPaths.includes(p.id));
-    },
-    color: 'achievement-pink',
-    points: 400
-  },
-  creativeSpirit: {
-    id: 'creative-spirit',
-    icon: 'Palette',
-    title: 'Creative Spirit',
-    description: 'Completed visual paths',
-    requirement: (statistics, profile, progress) => {
-      const visualPaths = ['mindful-visualization', 'artistic-soul-expression', 'visual-storytelling'];
-      const completed = progress?.completedPaths || [];
-      return completed.some(p => visualPaths.includes(p.id));
-    },
-    color: 'achievement-purple',
-    points: 400
-  },
-  transformationSeeker: {
-    id: 'transformation-seeker',
-    icon: 'Activity',
-    title: 'Transformation Seeker',
-    description: '21-day journey completed',
-    requirement: (statistics, profile, progress) => {
-      const completed = progress?.completedPaths || [];
-      return completed.some(p => p.id === 'transformation-journey');
-    },
-    color: 'achievement-green',
-    points: 600
-  },
-  consistent: {
-    id: 'consistent',
-    icon: 'CheckCircle',
-    title: 'Consistency Master',
-    description: 'Regular journaling habit',
-    requirement: (statistics) => statistics.isConsistent && statistics.entriesThisMonth >= 10,
-    color: 'achievement-blue',
-    points: 300
-  },
-  wordsmith: {
-    id: 'wordsmith',
-    icon: 'Edit3',
-    title: 'Wordsmith',
-    description: '10,000+ words written',
-    requirement: (statistics) => statistics.totalWords >= 10000,
-    color: 'achievement-purple',
-    points: 800
+    points: 500
   }
 };
 
-// Calculate achievements function remains the same...
-const calculateAllAchievements = (statistics, userProfile, progressData) => {
-  const earnedAchievements = [];
-  
-  for (const [key, achievement] of Object.entries(ACHIEVEMENT_DEFINITIONS)) {
-    if (achievement.requirement(statistics, userProfile, progressData)) {
-      earnedAchievements.push(achievement);
-    }
-  }
-  
-  earnedAchievements.sort((a, b) => b.points - a.points);
-  return earnedAchievements;
-};
-
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 const ProfileScreen = ({ handleSignOut }) => {
   const { currentUser, userProfile, updateUserProfile } = useAuth();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
   const navigation = useNavigation();
-  
-<<<<<<< HEAD
-  // Use centralized statistics hook
-  const { statistics, isLoading: statsLoading, error: statsError } = useUserStatistics();
-  
-  // Centralized progress data for path-specific information
+
+  // Statistics and progress hooks
+  const { statistics, isLoading: statsLoading } = useUserStatistics();
   const {
     inProgressPaths,
-    completedPaths,
-    allPaths,
-    stats: progressStats,
-    isLoading: progressLoading,
-    hasActiveJourneys,
-    hasCompletedJourneys,
-    hasAnyProgress
+    hasActiveJourneys
   } = useUserProgress();
-  
-  // State
+
+  // Component state
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
-  const [updatingAvatar, setUpdatingAvatar] = useState(false);
   const [showSignOutDialog, setShowSignOutDialog] = useState(false);
+  const [showAllAchievements, setShowAllAchievements] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Subscription state
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [processingUpgrade, setProcessingUpgrade] = useState(false);
   const [processingPortal, setProcessingPortal] = useState(false);
-  const [achievements, setAchievements] = useState([]);
-  const [totalPoints, setTotalPoints] = useState(0);
-  const [showAllAchievements, setShowAllAchievements] = useState(false);
 
-  // ✅ NEW: Loading state management for different operations
-  const [loadingState, setLoadingState] = useState('');
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  // User info
+  const displayName = userProfile?.displayName || 'Journaler';
+  const email = currentUser?.email || '';
+  const city = userProfile?.city || null;
+  const memberSince = currentUser?.metadata?.creationTime 
+    ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US', { 
+        month: 'short', 
+        year: 'numeric' 
+      })
+    : 'Recently';
 
-  // Load subscription status
+  // Load subscription status from Firestore
   useEffect(() => {
+    const loadSubscription = async () => {
+      try {
+        setLoadingSubscription(true);
+        // Force refresh from Firestore to get latest status
+        const status = await getSubscriptionStatus(currentUser.uid, true);
+        setSubscription(status);
+      } catch (error) {
+        console.error('Error loading subscription:', error);
+        setSubscription({ status: 'free' });
+      } finally {
+        setLoadingSubscription(false);
+      }
+    };
+
     if (currentUser) {
-      loadSubscriptionStatus();
+      loadSubscription();
     }
   }, [currentUser]);
 
-  // Calculate achievements using centralized statistics
+  // Determine if user has Artisan access
+  const isArtisan = hasArtisanAccess(subscription);
+
+  // Load animation
   useEffect(() => {
-    if (statistics && userProfile && !statistics.isEmpty) {
-      const progressData = {
-        inProgressPaths,
-        completedPaths,
-        allPaths
-      };
-      
-      const userAchievements = calculateAllAchievements(statistics, userProfile, progressData);
-      setAchievements(userAchievements);
-      
-      const points = userAchievements.reduce((total, achievement) => total + achievement.points, 0);
-      setTotalPoints(points);
-    }
-  }, [statistics, userProfile, inProgressPaths, completedPaths, allPaths]);
+    setTimeout(() => setIsLoaded(true), 150);
+  }, []);
 
-  const loadSubscriptionStatus = async () => {
-    try {
-      setLoadingSubscription(true);
-      setLoadingState('Loading subscription status...');
-      setLoadingProgress(30);
-      
-      const status = await getSubscriptionStatus(currentUser.uid, true);
-      setSubscription(status);
-      setLoadingProgress(100);
-      
-      // Clear loading state after a brief moment
-      setTimeout(() => {
-        setLoadingState('');
-        setLoadingProgress(0);
-      }, 500);
-    } catch (error) {
-      console.error('Error loading subscription:', error);
-      setSubscription({ status: 'free' });
-      setLoadingState('');
-      setLoadingProgress(0);
-    } finally {
-      setLoadingSubscription(false);
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showSignOutDialog) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
     }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showSignOutDialog]);
+
+  // Calculate achievements
+  const achievements = Object.values(ACHIEVEMENT_DEFINITIONS)
+    .filter(achievement => achievement.requirement(statistics))
+    .sort((a, b) => b.points - a.points);
+
+  const totalPoints = achievements.reduce((sum, a) => sum + a.points, 0);
+
+  // Calculate user level
+  const getUserLevel = (points) => {
+    if (points >= 3000) return { level: 'Master', progress: 100, nextLevel: null };
+    if (points >= 1500) return { level: 'Expert', progress: ((points - 1500) / 1500) * 100, nextLevel: 3000 };
+    if (points >= 500) return { level: 'Advanced', progress: ((points - 500) / 1000) * 100, nextLevel: 1500 };
+    if (points >= 100) return { level: 'Intermediate', progress: ((points - 100) / 400) * 100, nextLevel: 500 };
+    return { level: 'Beginner', progress: (points / 100) * 100, nextLevel: 100 };
   };
 
-  const handleUpgrade = async () => {
-    try {
-      setProcessingUpgrade(true);
-      setLoadingState('Redirecting to upgrade...');
-      setLoadingProgress(50);
-      
-      await startUpgradeProcess(currentUser.uid);
-      setLoadingProgress(100);
-    } catch (error) {
-      console.error('Error during upgrade:', error);
-      if (error.message.includes('Popup blocked')) {
-        alert('Please allow popups for this site to complete the upgrade process.');
-      }
-      setLoadingState('');
-      setLoadingProgress(0);
-    } finally {
-      setProcessingUpgrade(false);
-      // Clear loading state
-      setTimeout(() => {
-        setLoadingState('');
-        setLoadingProgress(0);
-      }, 1000);
-    }
-  };
+  const userLevel = getUserLevel(totalPoints);
 
-  const handleManageSubscription = async () => {
+  // Handlers
+  const handleAvatarChange = async (newAvatar) => {
     try {
-      setProcessingPortal(true);
-      setLoadingState('Opening customer portal...');
-      setLoadingProgress(50);
-      
-      await openCustomerPortal(currentUser.uid);
-      setLoadingProgress(100);
-    } catch (error) {
-      console.error('Error opening portal:', error);
-      if (error.message.includes('Popup blocked')) {
-        alert('Please allow popups for this site to manage your subscription.');
-      }
-      setLoadingState('');
-      setLoadingProgress(0);
-    } finally {
-      setProcessingPortal(false);
-      // Clear loading state
-      setTimeout(() => {
-        setLoadingState('');
-        setLoadingProgress(0);
-      }, 1000);
-    }
-  };
-
-  const handleAvatarChange = async (avatarId) => {
-    try {
-      setUpdatingAvatar(true);
-      setLoadingState('Updating your avatar...');
-      setLoadingProgress(25);
-      
-      await updateUserProfile({ avatar: avatarId });
-      setLoadingProgress(100);
-      
+      await updateUserProfile({ avatar: newAvatar });
       setShowAvatarSelector(false);
-      
-      if ('vibrate' in navigator) {
-        navigator.vibrate(50);
-      }
-      
-      // Clear loading state
-      setTimeout(() => {
-        setLoadingState('');
-        setLoadingProgress(0);
-      }, 800);
     } catch (error) {
       console.error('Error updating avatar:', error);
-      alert('Failed to update avatar. Please try again.');
-      setLoadingState('');
-      setLoadingProgress(0);
-    } finally {
-      setUpdatingAvatar(false);
     }
   };
 
@@ -600,575 +240,469 @@ const ProfileScreen = ({ handleSignOut }) => {
 
   const handleConfirmSignOut = async () => {
     try {
-      setLoadingState('Signing you out...');
-      setLoadingProgress(50);
-      
       await handleSignOut();
       navigation.navigateToScreen('welcome');
-      setLoadingProgress(100);
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Sign out error:', error);
       alert('Error signing out. Please try again.');
-      setLoadingState('');
-      setLoadingProgress(0);
     } finally {
       setShowSignOutDialog(false);
-      // Clear loading state
-      setTimeout(() => {
-        setLoadingState('');
-        setLoadingProgress(0);
-      }, 500);
     }
-=======
-  const [isLoading, setIsLoading] = useState(true);
-  const [userStats, setUserStats] = useState({
-    totalEntries: 0,
-    currentStreak: 0,
-    completedPaths: 0,
-    totalDaysActive: 0,
-    averageEntriesPerWeek: 0,
-    longestStreak: 0
-  });
-  const [achievements, setAchievements] = useState([]);
-  const [activeJourney, setActiveJourney] = useState(null);
+  };
 
-  // Load user data and stats
+  // Lock body scroll when modal is open
   useEffect(() => {
-    const loadUserData = async () => {
-      setIsLoading(true);
-      
-      try {
-        if (currentUser && userProfile) {
-          // Calculate comprehensive user stats
-          const stats = calculateUserStats(userProfile);
-          setUserStats(stats);
-          
-          // Get active journey
-          const activeJourneys = getAllActiveJourneys(userProfile);
-          if (activeJourneys && activeJourneys.length > 0) {
-            const journey = activeJourneys[0];
-            const pathData = getJourneyPath(journey.pathId);
-            
-            setActiveJourney({
-              ...journey,
-              pathData,
-              progressPercent: Math.round((journey.progress?.completedDays?.length || 0) / pathData.duration * 100)
-            });
-          }
-          
-          // Calculate achievements
-          const userAchievements = calculateAchievements(stats, userProfile);
-          setAchievements(userAchievements);
-        }
-      } catch (error) {
-        console.error('Error loading user data:', error);
-      } finally {
-        setIsLoading(false);
-      }
+    if (showSignOutDialog) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
     };
+  }, [showSignOutDialog]);
 
-    loadUserData();
-  }, [currentUser, userProfile]);
-
-  // Calculate user achievements
-  const calculateAchievements = (stats, profile) => {
-    const achievements = [];
-    
-    // Streak achievements
-    if (stats.longestStreak >= 7) {
-      achievements.push({
-        id: 'week-streak',
-        icon: 'Zap',
-        title: 'Week Warrior',
-        description: 'Journaled for 7 days straight',
-        color: 'text-yellow-500'
-      });
+  const handleUpgrade = async () => {
+    try {
+      setProcessingUpgrade(true);
+      await startUpgradeProcess(currentUser.uid, currentUser.email);
+    } catch (error) {
+      console.error('Error during upgrade:', error);
+      if (error.message && error.message.includes('Popup blocked')) {
+        alert('Please allow popups for this site to complete the upgrade process.');
+      } else {
+        alert('Unable to start upgrade process. Please try again.');
+      }
+    } finally {
+      setProcessingUpgrade(false);
     }
-    
-    if (stats.longestStreak >= 30) {
-      achievements.push({
-        id: 'month-streak',
-        icon: 'Target',
-        title: 'Month Master',
-        description: 'Journaled for 30 days straight',
-        color: 'text-orange-500'
-      });
-    }
-    
-    // Entry achievements
-    if (stats.totalEntries >= 10) {
-      achievements.push({
-        id: 'ten-entries',
-        icon: 'BookOpen',
-        title: 'Getting Started',
-        description: 'Completed 10 journal entries',
-        color: 'text-blue-500'
-      });
-    }
-    
-    if (stats.totalEntries >= 50) {
-      achievements.push({
-        id: 'fifty-entries',
-        title: 'Dedicated Writer',
-        icon: 'Heart',
-        description: 'Completed 50 journal entries',
-        color: 'text-pink-500'
-      });
-    }
-    
-    // Path completion achievements
-    if (stats.completedPaths >= 1) {
-      achievements.push({
-        id: 'first-path',
-        icon: 'Award',
-        title: 'Path Finder',
-        description: 'Completed your first journey',
-        color: 'text-green-500'
-      });
-    }
-    
-    return achievements;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
 
-  const getUserInfo = () => {
-    const name = userProfile?.displayName || userProfile?.name || 'User';
-    const email = currentUser?.email || '';
-<<<<<<< HEAD
-    const city = userProfile?.city || '';
-    const memberSince = userProfile?.createdAt ? 
-      new Date(userProfile.createdAt.toDate()).toLocaleDateString('en-US', { 
-        month: 'long', 
-        year: 'numeric' 
-      }) : 'recently';
-    
-    return { name, email, city, memberSince };
-  };
-
-  const { name, email, city, memberSince } = getUserInfo();
-  const isArtisan = hasArtisanAccess(subscription);
-
-  // Calculate user level based on points
-  const getUserLevel = (points) => {
-    if (points >= 5000) return { level: 'Master', nextLevel: null, progress: 100 };
-    if (points >= 3000) return { level: 'Expert', nextLevel: 5000, progress: ((points - 3000) / 2000) * 100 };
-    if (points >= 1500) return { level: 'Advanced', nextLevel: 3000, progress: ((points - 1500) / 1500) * 100 };
-    if (points >= 500) return { level: 'Intermediate', nextLevel: 1500, progress: ((points - 500) / 1000) * 100 };
-    return { level: 'Beginner', nextLevel: 500, progress: (points / 500) * 100 };
-  };
-
-  const userLevel = getUserLevel(totalPoints);
-
-  // ✅ NEW: Determine when to show the KairosLoader
-  const shouldShowLoader = (
-    progressLoading || 
-    statsLoading || 
-    loadingState || 
-    updatingAvatar || 
-    processingUpgrade || 
-    processingPortal
-  );
-
-  // ✅ NEW: Show KairosLoader instead of simple loading state
-  if (shouldShowLoader) {
-    let message = 'Loading your profile...';
-    let subMessage = 'Gathering your journey data';
-    
-    if (loadingState) {
-      message = loadingState;
-      subMessage = 'This may take a moment';
-    } else if (statsLoading) {
-      message = 'Loading your statistics...';
-      subMessage = 'Analyzing your progress';
-    } else if (progressLoading) {
-      message = 'Loading your journeys...';
-      subMessage = 'Tracking your paths';
+  const handleManageSubscription = async () => {
+    try {
+      setProcessingPortal(true);
+      await openCustomerPortal(currentUser.uid);
+    } catch (error) {
+      console.error('Error opening portal:', error);
+      if (error.message && error.message.includes('Popup blocked')) {
+        alert('Please allow popups for this site to manage your subscription.');
+      } else {
+        alert('Unable to open customer portal. Please try again.');
+      }
+    } finally {
+      setProcessingPortal(false);
     }
-    
-    return (
-      <div className={`ios-profile ${isDarkMode ? 'ios-profile--dark' : 'ios-profile--light'}`}>
-        <KairosLoader
-          size="large"
-          fullScreen={true}
-          message={message}
-          subMessage={subMessage}
-          showProgress={loadingProgress > 0}
-          progress={loadingProgress}
-        />
-=======
-    const initials = name.split(' ').map(n => n.charAt(0)).join('').toUpperCase().slice(0, 2);
-    
-    return { name, email, initials };
   };
 
-  const { name, email, initials } = getUserInfo();
-
-  if (isLoading) {
-    return (
-      <div className="profile-container">
-        <div className="profile-loading">
-          <div className="loading-spinner-large"></div>
-          <p>Loading your profile...</p>
-        </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
-      </div>
-    );
-  }
-
-<<<<<<< HEAD
-  if (statsError) {
-    console.warn('Statistics loading error:', statsError);
+  if (statsLoading || loadingSubscription) {
+    return <KairosLoader />;
   }
 
   return (
-    <div className={`ios-profile ${isDarkMode ? 'ios-profile--dark' : 'ios-profile--light'}`}>
-      {/* Header */}
-      <div className="ios-header">
-        <h1 className="ios-header__title">Profile</h1>
-      </div>
-
-      <div className="ios-content">
-        {/* User Info Card */}
-        <div className="ios-card ios-user-card">
-          <div className="ios-user-card__content">
-            <div className="ios-user-card__avatar-section">
-              <div className="ios-user-card__avatar-wrapper">
-                <SmartAvatar 
-                  userProfile={userProfile}
-                  size="large"
-                  onClick={() => setShowAvatarSelector(true)}
-                  className="ios-user-card__avatar"
-                />
-                <button 
-                  className="ios-user-card__avatar-edit"
-                  onClick={() => setShowAvatarSelector(true)}
-                  disabled={updatingAvatar}
-                >
-                  <Camera size={18} />
-                </button>
-              </div>
+    <>
+    <div className={`profile-container ${isDarkMode ? 'profile-dark' : 'profile-light'} ${isLoaded ? 'profile-loaded' : ''}`}>
+      
+      {/* Profile Header */}
+      <section className="profile-header">
+        <div className="profile-header-card">
+          <div className="profile-avatar-section">
+            <div className="profile-avatar-wrapper" onClick={() => setShowAvatarSelector(true)}>
+              <SmartAvatar 
+                avatar={userProfile?.avatar || 'geometric-1'} 
+                size={100}
+              />
+              <button className="profile-avatar-edit">
+                <Edit3 size={16} />
+              </button>
+            </div>
+            
+            <div className="profile-info">
+              <h1 className="profile-name">{displayName}</h1>
               
-              <div className="ios-user-card__info">
-                <div className="ios-user-card__name-row">
-                  <h2 className="ios-user-card__name">{name}</h2>
-                  {!loadingSubscription && (
-                    <IOSSubscriptionBadge isArtisan={isArtisan} size="small" />
-                  )}
+              <div className="profile-details">
+                <div className="profile-detail-item">
+                  <Mail size={14} />
+                  <span>{email}</span>
                 </div>
-                
-                <div className="ios-user-card__details">
-                  <div className="ios-user-card__detail">
-                    <Mail size={16} />
-                    <span>{email}</span>
+                {city && (
+                  <div className="profile-detail-item">
+                    <MapPin size={14} />
+                    <span>{city}</span>
                   </div>
-                  {city && (
-                    <div className="ios-user-card__detail">
-                      <MapPin size={16} />
-                      <span>{city}</span>
-                    </div>
-                  )}
-                  <div className="ios-user-card__detail">
-                    <Calendar size={16} />
-                    <span>Since {memberSince}</span>
-                  </div>
+                )}
+                <div className="profile-detail-item">
+                  <Calendar size={14} />
+                  <span>Since {memberSince}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Stats Overview */}
-        <div className="ios-card ios-stats-card">
-          <div className="ios-stats-card__header">
-            <h3 className="ios-stats-card__title">Your Journey</h3>
-            <button 
-              className="ios-text-button"
-              onClick={() => navigation.navigateToScreen('analytics-dashboard')}
-            >
-              View Details
-              <ChevronRight size={16} />
-            </button>
+      {/* Stats Grid */}
+      <section className="profile-section">
+        <div className="profile-section-header">
+          <h2 className="profile-section-title">
+            <BarChart3 className="profile-section-icon" />
+            Your Journey
+          </h2>
+          <button 
+            className="profile-view-all-btn"
+            onClick={() => navigation.navigateToScreen('analytics-dashboard')}
+          >
+            <span>View Details</span>
+            <ChevronRight size={16} />
+          </button>
+        </div>
+        
+        <div className="profile-stats-grid">
+          <div className="profile-stat-card">
+            <div className="profile-stat-icon-wrapper profile-stat-blue">
+              <BookOpen className="profile-stat-icon" />
+            </div>
+            <div className="profile-stat-content">
+              <div className="profile-stat-number">{statistics.totalEntries}</div>
+              <div className="profile-stat-label">Entries</div>
+            </div>
           </div>
           
-          <div className="ios-stats-grid">
-            <div className="ios-stat-item">
-              <div className="ios-stat-item__icon ios-stat-item__icon--blue">
-                <BookOpen size={24} />
-              </div>
-              <div className="ios-stat-item__content">
-                <div className="ios-stat-item__value">{statistics.totalEntries}</div>
-                <div className="ios-stat-item__label">Entries</div>
-              </div>
+          <div className="profile-stat-card profile-stat-highlight">
+            <div className="profile-stat-icon-wrapper profile-stat-orange">
+              <Flame className="profile-stat-icon" />
             </div>
-            
-            <div className="ios-stat-item">
-              <div className="ios-stat-item__icon ios-stat-item__icon--orange">
-                <Flame size={24} />
-              </div>
-              <div className="ios-stat-item__content">
-                <div className="ios-stat-item__value">{statistics.longestStreak}</div>
-                <div className="ios-stat-item__label">Best Streak</div>
-              </div>
+            <div className="profile-stat-content">
+              <div className="profile-stat-number">{statistics.longestStreak}</div>
+              <div className="profile-stat-label">Best Streak</div>
             </div>
-            
-            <div className="ios-stat-item">
-              <div className="ios-stat-item__icon ios-stat-item__icon--gold">
-                <Trophy size={24} />
-              </div>
-              <div className="ios-stat-item__content">
-                <div className="ios-stat-item__value">{statistics.completedPathsCount}</div>
-                <div className="ios-stat-item__label">Completed</div>
-              </div>
+          </div>
+          
+          <div className="profile-stat-card">
+            <div className="profile-stat-icon-wrapper profile-stat-gold">
+              <Trophy className="profile-stat-icon" />
             </div>
-            
-            <div className="ios-stat-item">
-              <div className="ios-stat-item__icon ios-stat-item__icon--green">
-                <Target size={24} />
-              </div>
-              <div className="ios-stat-item__content">
-                <div className="ios-stat-item__value">{statistics.activeDays}</div>
-                <div className="ios-stat-item__label">Active Days</div>
-              </div>
+            <div className="profile-stat-content">
+              <div className="profile-stat-number">{statistics.completedPathsCount}</div>
+              <div className="profile-stat-label">Completed</div>
+            </div>
+          </div>
+          
+          <div className="profile-stat-card">
+            <div className="profile-stat-icon-wrapper profile-stat-green">
+              <Target className="profile-stat-icon" />
+            </div>
+            <div className="profile-stat-content">
+              <div className="profile-stat-number">{statistics.activeDays}</div>
+              <div className="profile-stat-label">Active Days</div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Level & Achievement Card */}
-        <div className="ios-card ios-level-card">
-          <div className="ios-level-card__header">
-            <div className="ios-level-card__icon">
+      {/* Level Card */}
+      <section className="profile-section">
+        <div className="profile-level-card">
+          <div className="profile-level-header">
+            <div className="profile-level-icon">
               <Trophy size={24} />
             </div>
-            <div className="ios-level-card__info">
-              <h3 className="ios-level-card__title">{userLevel.level} Journalist</h3>
-              <p className="ios-level-card__points">{totalPoints} points earned</p>
+            <div className="profile-level-info">
+              <h3 className="profile-level-title">{userLevel.level} Journalist</h3>
+              <p className="profile-level-points">{totalPoints} points earned</p>
             </div>
           </div>
           
           {userLevel.nextLevel && (
-            <div className="ios-level-card__progress">
-              <div className="ios-progress-bar">
+            <div className="profile-level-progress">
+              <div className="profile-progress-bar">
                 <div 
-                  className="ios-progress-bar__fill"
+                  className="profile-progress-fill"
                   style={{ width: `${userLevel.progress}%` }}
                 />
               </div>
-              <span className="ios-level-card__next">
-                {Math.round(userLevel.nextLevel - totalPoints)} points to {userLevel.nextLevel > 3000 ? 'Master' : userLevel.nextLevel > 1500 ? 'Expert' : userLevel.nextLevel > 500 ? 'Advanced' : 'Intermediate'}
+              <span className="profile-level-next">
+                {Math.round(userLevel.nextLevel - totalPoints)} points to next level
               </span>
             </div>
           )}
         </div>
+      </section>
 
-        {/* Subscription Card */}
-        {!loadingSubscription && (
-          <IOSSubscriptionCard 
-            isArtisan={isArtisan}
-            onUpgrade={handleUpgrade}
-            onManage={handleManageSubscription}
-            loading={processingUpgrade || processingPortal}
-          />
-        )}
-
-        {/* Active Journeys */}
-        {hasActiveJourneys && (
-          <div className="ios-card ios-journeys-card">
-            <div className="ios-card__header">
-              <h3 className="ios-card__title">Active Journeys</h3>
-              <button 
-                className="ios-text-button"
-                onClick={() => navigation.navigateToScreen('path-selection')}
-              >
-                View All
-                <ChevronRight size={16} />
-              </button>
+      {/* Subscription Card - Keep original styling */}
+      {!loadingSubscription && (
+        <section className="profile-section">
+          <div className="profile-subscription-card">
+            <div className="profile-subscription-header">
+              <div className="profile-subscription-icon">
+                {isArtisan ? <Crown size={28} /> : <Shield size={28} />}
+              </div>
+              <div className="profile-subscription-info">
+                <h3 className="profile-subscription-title">
+                  {isArtisan ? 'Artisan Plan' : 'Free Plan'}
+                </h3>
+                <p className="profile-subscription-subtitle">
+                  {isArtisan ? 'All journeys unlocked' : '9 free journeys available'}
+                </p>
+              </div>
+              <div className={`profile-subscription-badge ${isArtisan ? 'profile-subscription-badge-artisan' : ''}`}>
+                {isArtisan ? <Crown size={12} /> : <User size={12} />}
+                <span>{isArtisan ? 'Artisan' : 'Free'}</span>
+              </div>
             </div>
             
-            <div className="ios-journey-list">
-              {inProgressPaths.slice(0, 3).map((path, index) => (
-                <div key={path.id}>
-                  <div 
-                    className="ios-journey-item"
-                    onClick={() => navigation.navigateToScreen('daily', { 
-                      pathId: path.id, 
-                      day: path.nextDay 
-                    })}
-                  >
-                    <div className="ios-journey-item__left">
-                      <div 
-                        className="ios-journey-item__icon"
-                        style={{ 
-                          backgroundColor: `rgba(${path.color}, 0.15)`,
-                          color: `rgb(${path.color})`
-                        }}
-                      >
-                        <DynamicIcon name={path.iconName} size={20} />
-                      </div>
-                      <div className="ios-journey-item__info">
-                        <h4 className="ios-journey-item__title">{path.title}</h4>
-                        <p className="ios-journey-item__progress">
-                          Day {path.nextDay} of {path.totalDays} • {path.percentage}% complete
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <ChevronRight size={20} className="ios-journey-item__chevron" />
-                  </div>
-                  {index < inProgressPaths.slice(0, 3).length - 1 && <div className="ios-separator" />}
-                </div>
-              ))}
+            <div className="profile-subscription-features">
+              <div className={`profile-feature-item ${isArtisan ? 'profile-feature-active' : ''}`}>
+                <CheckCircle size={16} />
+                <span>{isArtisan ? 'All 34 Journey Paths' : '9 Free Paths'}</span>
+              </div>
+              <div className={`profile-feature-item ${isArtisan ? 'profile-feature-active' : ''}`}>
+                <CheckCircle size={16} />
+                <span>{isArtisan ? 'Advanced AI Analysis' : 'Basic AI Analysis'}</span>
+              </div>
+              <div className={`profile-feature-item ${isArtisan ? 'profile-feature-active' : ''}`}>
+                <CheckCircle size={16} />
+                <span>{isArtisan ? 'Unlimited Exports' : 'Limited Exports'}</span>
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Achievements */}
-        {achievements.length > 0 && (
-          <div className="ios-card ios-achievements-card">
-            <div className="ios-card__header">
-              <h3 className="ios-card__title">Achievements ({achievements.length})</h3>
-              {achievements.length > 3 && (
+            
+            <div className="profile-subscription-action">
+              {isArtisan ? (
                 <button 
-                  className="ios-text-button"
-                  onClick={() => setShowAllAchievements(!showAllAchievements)}
+                  onClick={handleManageSubscription}
+                  disabled={processingPortal}
+                  className="profile-button profile-button-secondary"
                 >
-                  {showAllAchievements ? 'Show Less' : `View All`}
-                  <ChevronRight size={16} />
+                  <CreditCard size={18} />
+                  <span>{processingPortal ? 'Opening...' : 'Manage Subscription'}</span>
+                </button>
+              ) : (
+                <button 
+                  onClick={handleUpgrade}
+                  disabled={processingUpgrade}
+                  className="profile-button profile-button-primary"
+                >
+                  <Crown size={18} />
+                  <span>{processingUpgrade ? 'Processing...' : 'Upgrade to Artisan'}</span>
                 </button>
               )}
             </div>
-            
-            <div className="ios-achievements-grid">
-              {(showAllAchievements ? achievements : achievements.slice(0, 3)).map(achievement => (
-                <div key={achievement.id} className={`ios-achievement ${achievement.color}`}>
-                  <div className="ios-achievement__icon">
-                    <DynamicIcon name={achievement.icon} size={20} />
-                  </div>
-                  <div className="ios-achievement__content">
-                    <h4 className="ios-achievement__title">{achievement.title}</h4>
-                    <p className="ios-achievement__description">{achievement.description}</p>
-                    <span className="ios-achievement__points">+{achievement.points} pts</span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {/* Quick Actions */}
-        <div className="ios-card ios-quick-actions">
-          <div className="ios-quick-actions__grid">
+      {/* Active Journeys */}
+      {hasActiveJourneys && (
+        <section className="profile-section">
+          <div className="profile-section-header">
+            <h2 className="profile-section-title">
+              <Compass className="profile-section-icon" />
+              Active Journeys
+            </h2>
             <button 
-              className="ios-quick-action"
+              className="profile-view-all-btn"
               onClick={() => navigation.navigateToScreen('path-selection')}
             >
-              <div className="ios-quick-action__icon ios-quick-action__icon--purple">
-                <Compass size={20} />
-              </div>
-              <span>Explore</span>
-            </button>
-            
-            <button 
-              className="ios-quick-action"
-              onClick={() => navigation.navigateToScreen('journal-archive')}
-            >
-              <div className="ios-quick-action__icon ios-quick-action__icon--blue">
-                <Archive size={20} />
-              </div>
-              <span>Archive</span>
-            </button>
-            
-            <button 
-              className="ios-quick-action"
-              onClick={() => navigation.navigateToScreen('analytics-dashboard')}
-            >
-              <div className="ios-quick-action__icon ios-quick-action__icon--green">
-                <BarChart3 size={20} />
-              </div>
-              <span>Analytics</span>
-            </button>
-            
-            <button 
-              className="ios-quick-action"
-              onClick={() => navigation.navigateToScreen('settings')}
-            >
-              <div className="ios-quick-action__icon ios-quick-action__icon--gray">
-                <Settings size={20} />
-              </div>
-              <span>Settings</span>
+              <span>View All</span>
+              <ChevronRight size={16} />
             </button>
           </div>
-        </div>
-
-        {/* Settings Menu */}
-        <div className="ios-card ios-settings-menu">
-          <div className="ios-list">
-            <button 
-              className="ios-list-item"
-              onClick={() => navigation.navigateToScreen('settings', { activeSection: 'notifications' })}
-            >
-              <div className="ios-list-item__icon ios-list-item__icon--red">
-                <Bell size={20} />
+          
+          <div className="profile-journeys-card">
+            {inProgressPaths.slice(0, 3).map((path, index) => (
+              <div key={path.id}>
+                <button 
+                  className="profile-journey-item"
+                  onClick={() => navigation.navigateToScreen('daily', { 
+                    pathId: path.id, 
+                    day: path.nextDay 
+                  })}
+                >
+                  <div className="profile-journey-left">
+                    <div 
+                      className="profile-journey-icon"
+                      style={{ 
+                        backgroundColor: `rgba(${path.color}, 0.15)`,
+                        color: `rgb(${path.color})`
+                      }}
+                    >
+                      <DynamicIcon name={path.iconName} size={20} />
+                    </div>
+                    <div className="profile-journey-info">
+                      <h4 className="profile-journey-title">{path.title}</h4>
+                      <p className="profile-journey-progress">
+                        Day {path.nextDay} of {path.totalDays} • {path.percentage}% complete
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <ChevronRight size={20} className="profile-journey-chevron" />
+                </button>
+                {index < inProgressPaths.slice(0, 3).length - 1 && (
+                  <div className="profile-separator" />
+                )}
               </div>
-              <span className="ios-list-item__title">Notifications</span>
-              <ChevronRight size={20} className="ios-list-item__chevron" />
-            </button>
-            
-            <div className="ios-separator" />
-            
-            <button 
-              className="ios-list-item"
-              onClick={() => navigation.navigateToScreen('settings', { activeSection: 'privacy' })}
-            >
-              <div className="ios-list-item__icon ios-list-item__icon--blue">
-                <Lock size={20} />
-              </div>
-              <span className="ios-list-item__title">Privacy & Security</span>
-              <ChevronRight size={20} className="ios-list-item__chevron" />
-            </button>
-            
-            <div className="ios-separator" />
-            
-            <button 
-              className="ios-list-item"
-              onClick={() => navigation.navigateToScreen('settings', { activeSection: 'help' })}
-            >
-              <div className="ios-list-item__icon ios-list-item__icon--orange">
-                <HelpCircle size={20} />
-              </div>
-              <span className="ios-list-item__title">Help & Support</span>
-              <ChevronRight size={20} className="ios-list-item__chevron" />
-            </button>
-            
-            <div className="ios-separator" />
-            
-            <button 
-              className="ios-list-item"
-              onClick={() => navigation.navigateToScreen('about')}
-            >
-              <div className="ios-list-item__icon ios-list-item__icon--gray">
-                <Info size={20} />
-              </div>
-              <span className="ios-list-item__title">About</span>
-              <ChevronRight size={20} className="ios-list-item__chevron" />
-            </button>
+            ))}
           </div>
-        </div>
+        </section>
+      )}
 
-        {/* Sign Out */}
-        <div className="ios-card ios-sign-out-card">
+      {/* Achievements */}
+      {achievements.length > 0 && (
+        <section className="profile-section">
+          <div className="profile-section-header">
+            <h2 className="profile-section-title">
+              <Award className="profile-section-icon" />
+              Achievements ({achievements.length})
+            </h2>
+            {achievements.length > 3 && (
+              <button 
+                className="profile-view-all-btn"
+                onClick={() => setShowAllAchievements(!showAllAchievements)}
+              >
+                <span>{showAllAchievements ? 'Show Less' : 'View All'}</span>
+                <ChevronRight size={16} />
+              </button>
+            )}
+          </div>
+          
+          <div className="profile-achievements-grid">
+            {(showAllAchievements ? achievements : achievements.slice(0, 3)).map(achievement => (
+              <div key={achievement.id} className={`profile-achievement ${achievement.color}`}>
+                <div className="profile-achievement-icon">
+                  <DynamicIcon name={achievement.icon} size={20} />
+                </div>
+                <div className="profile-achievement-content">
+                  <h4 className="profile-achievement-title">{achievement.title}</h4>
+                  <p className="profile-achievement-description">{achievement.description}</p>
+                  <span className="profile-achievement-points">+{achievement.points} pts</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Quick Actions */}
+      <section className="profile-section">
+        <div className="profile-actions-grid">
           <button 
-            className="ios-sign-out-button"
+            className="profile-action-card"
+            onClick={() => navigation.navigateToScreen('path-selection')}
+          >
+            <div className="profile-action-icon-wrapper">
+              <Compass className="profile-action-icon" />
+            </div>
+            <span className="profile-action-label">Explore</span>
+            <ChevronRight className="profile-action-chevron" />
+          </button>
+          
+          <button 
+            className="profile-action-card"
+            onClick={() => navigation.navigateToScreen('journal-archive')}
+          >
+            <div className="profile-action-icon-wrapper">
+              <Archive className="profile-action-icon" />
+            </div>
+            <span className="profile-action-label">Archive</span>
+            <ChevronRight className="profile-action-chevron" />
+          </button>
+          
+          <button 
+            className="profile-action-card"
+            onClick={() => navigation.navigateToScreen('analytics-dashboard')}
+          >
+            <div className="profile-action-icon-wrapper">
+              <BarChart3 className="profile-action-icon" />
+            </div>
+            <span className="profile-action-label">Analytics</span>
+            <ChevronRight className="profile-action-chevron" />
+          </button>
+          
+          <button 
+            className="profile-action-card"
+            onClick={() => navigation.navigateToScreen('settings')}
+          >
+            <div className="profile-action-icon-wrapper">
+              <Settings className="profile-action-icon" />
+            </div>
+            <span className="profile-action-label">Settings</span>
+            <ChevronRight className="profile-action-chevron" />
+          </button>
+        </div>
+      </section>
+
+      {/* Settings Menu */}
+      <section className="profile-section">
+        <div className="profile-settings-card">
+          <button 
+            className="profile-list-item"
+            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'notifications' })}
+          >
+            <div className="profile-list-icon profile-list-icon-red">
+              <Bell size={20} />
+            </div>
+            <span className="profile-list-title">Notifications</span>
+            <ChevronRight size={20} className="profile-list-chevron" />
+          </button>
+          
+          <div className="profile-separator" />
+          
+          <button 
+            className="profile-list-item"
+            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'privacy' })}
+          >
+            <div className="profile-list-icon profile-list-icon-blue">
+              <Lock size={20} />
+            </div>
+            <span className="profile-list-title">Privacy & Security</span>
+            <ChevronRight size={20} className="profile-list-chevron" />
+          </button>
+          
+          <div className="profile-separator" />
+          
+          <button 
+            className="profile-list-item"
+            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'help' })}
+          >
+            <div className="profile-list-icon profile-list-icon-orange">
+              <HelpCircle size={20} />
+            </div>
+            <span className="profile-list-title">Help & Support</span>
+            <ChevronRight size={20} className="profile-list-chevron" />
+          </button>
+          
+          <div className="profile-separator" />
+          
+          <button 
+            className="profile-list-item"
+            onClick={() => navigation.navigateToScreen('about')}
+          >
+            <div className="profile-list-icon profile-list-icon-gray">
+              <Info size={20} />
+            </div>
+            <span className="profile-list-title">About</span>
+            <ChevronRight size={20} className="profile-list-chevron" />
+          </button>
+        </div>
+      </section>
+
+      {/* Sign Out */}
+      <section className="profile-section">
+        <div className="profile-signout-card">
+          <button 
+            className="profile-signout-button"
             onClick={handleSignOutClick}
           >
             <LogOut size={20} />
             <span>Sign Out</span>
           </button>
         </div>
+      </section>
 
-        {/* App Version */}
-        <div className="ios-app-version">
-          <VersionDisplay minimal={true} />
-        </div>
+      {/* App Version */}
+      <div className="profile-version">
+        <VersionDisplay minimal={true} />
       </div>
 
       {/* Avatar Selector Modal */}
@@ -1181,344 +715,40 @@ const ProfileScreen = ({ handleSignOut }) => {
         />
       )}
 
-      {/* Sign Out Dialog */}
-      {showSignOutDialog && (
-        <div className="ios-modal-overlay" onClick={() => setShowSignOutDialog(false)}>
-          <div className="ios-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="ios-modal__header">
-              <h2 className="ios-modal__title">Sign Out</h2>
-            </div>
-            
-            <div className="ios-modal__content">
-              <p className="ios-modal__message">
-                Are you sure you want to sign out of your account?
-              </p>
-            </div>
-            
-            <div className="ios-modal__actions">
-              <button 
-                className="ios-modal__button ios-modal__button--cancel"
-                onClick={() => setShowSignOutDialog(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="ios-modal__button ios-modal__button--destructive"
-                onClick={handleConfirmSignOut}
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-=======
-  return (
-    <div className={`profile-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
-      {/* Header */}
-      <div className="profile-header">
-        <h1 className="profile-title">Profile</h1>
-        <div className="profile-header-actions">
-          <button 
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} theme`}
-          >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          <button 
-            className="edit-profile-btn"
-            onClick={() => navigation.navigateToScreen('edit-profile')}
-            aria-label="Edit profile"
-          >
-            <Edit2 size={20} />
-          </button>
-        </div>
-      </div>
+    </div>
 
-      {/* User Card */}
-      <div className="profile-card user-card">
-        <div className="user-avatar-section">
-          <div className="user-avatar">
-            {userProfile?.photoURL ? (
-              <img src={userProfile.photoURL} alt="Profile" className="avatar-image" />
-            ) : (
-              <span className="avatar-initials">{initials}</span>
-            )}
+    {/* Sign Out Dialog - Outside container to avoid stacking context issues */}
+    {showSignOutDialog && (
+      <div className="profile-modal-overlay" onClick={() => setShowSignOutDialog(false)}>
+        <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="profile-modal-header">
+            <h2 className="profile-modal-title">Sign Out</h2>
           </div>
           
-          <div className="user-info">
-            <h2 className="user-name">{name}</h2>
-            <p className="user-email">{email}</p>
-            <p className="user-member-since">
-              Member since {userProfile?.createdAt ? 
-                new Date(userProfile.createdAt.toDate()).toLocaleDateString('en-US', { 
-                  month: 'long', 
-                  year: 'numeric' 
-                }) : 'recently'}
+          <div className="profile-modal-content">
+            <p className="profile-modal-message">
+              Are you sure you want to sign out of your account?
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* Enhanced Stats Grid */}
-      <div className="stats-grid enhanced-stats">
-        <div className="stat-card primary">
-          <div className="stat-icon-wrapper">
-            <BookOpen size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-number">{userStats.totalEntries}</div>
-            <div className="stat-label">Journal Entries</div>
-          </div>
-        </div>
-        
-        <div className="stat-card secondary">
-          <div className="stat-icon-wrapper">
-            <Zap size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-number">{userStats.longestStreak}</div>
-            <div className="stat-label">Best Streak</div>
-          </div>
-        </div>
-        
-        <div className="stat-card tertiary">
-          <div className="stat-icon-wrapper">
-            <Award size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-number">{userStats.completedPaths}</div>
-            <div className="stat-label">Completed Paths</div>
-          </div>
-        </div>
-        
-        <div className="stat-card quaternary">
-          <div className="stat-icon-wrapper">
-            <Target size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-number">{userStats.totalDaysActive}</div>
-            <div className="stat-label">Days Active</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Current Journey Card */}
-      {activeJourney && (
-        <div className="profile-card current-journey-card">
-          <div className="card-header">
-            <div className="header-icon">
-              <TrendingUp size={20} />
-            </div>
-            <h3 className="card-title">Current Journey</h3>
-            <span className="journey-progress-badge">{activeJourney.progressPercent}%</span>
-          </div>
           
-          <div className="journey-content">
-            <div className="journey-info">
-              <div className="journey-icon-wrapper">
-                <DynamicIcon name={activeJourney.pathData.iconName} size={24} />
-              </div>
-              <div className="journey-details">
-                <h4 className="journey-name">{activeJourney.pathData.title}</h4>
-                <p className="journey-progress-text">
-                  Day {activeJourney.nextDay} of {activeJourney.pathData.duration}
-                </p>
-                <div className="journey-tags">
-                  {activeJourney.pathData.tags?.slice(0, 2).map(tag => (
-                    <span key={tag} className="journey-tag">{tag}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            <div className="progress-section">
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill"
-                  style={{ 
-                    width: `${activeJourney.progressPercent}%`,
-                    backgroundColor: `rgb(${activeJourney.pathData.color})`
-                  }}
-                ></div>
-              </div>
-              
-              {activeJourney.progress?.currentStreak > 0 && (
-                <div className="streak-indicator">
-                  <Star size={16} />
-                  <span>{activeJourney.progress.currentStreak} day streak!</span>
-                </div>
-              )}
-            </div>
-            
+          <div className="profile-modal-actions">
             <button 
-              className="continue-journey-btn"
-              onClick={() => navigation.navigateToScreen('daily', { 
-                pathId: activeJourney.pathId, 
-                day: activeJourney.nextDay 
-              })}
-              style={{ backgroundColor: `rgb(${activeJourney.pathData.color})` }}
+              className="profile-modal-button profile-modal-button-cancel"
+              onClick={() => setShowSignOutDialog(false)}
             >
-              Continue Journey
+              Cancel
+            </button>
+            <button 
+              className="profile-modal-button profile-modal-button-destructive"
+              onClick={handleConfirmSignOut}
+            >
+              Sign Out
             </button>
           </div>
         </div>
-      )}
-
-      {/* Achievements Section */}
-      {achievements.length > 0 && (
-        <div className="profile-card achievements-card">
-          <div className="card-header">
-            <div className="header-icon">
-              <Award size={20} />
-            </div>
-            <h3 className="card-title">Recent Achievements</h3>
-          </div>
-          
-          <div className="achievements-grid">
-            {achievements.slice(0, 4).map(achievement => (
-              <div key={achievement.id} className="achievement-item">
-                <div className={`achievement-icon ${achievement.color}`}>
-                  <DynamicIcon name={achievement.icon} size={20} />
-                </div>
-                <div className="achievement-content">
-                  <h4 className="achievement-title">{achievement.title}</h4>
-                  <p className="achievement-description">{achievement.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Quick Actions */}
-      <div className="profile-card quick-actions-card">
-        <div className="card-header">
-          <div className="header-icon">
-            <Sparkles size={20} />
-          </div>
-          <h3 className="card-title">Quick Actions</h3>
-        </div>
-        
-        <div className="quick-actions-grid">
-          <button 
-            className="quick-action-btn"
-            onClick={() => navigation.navigateToScreen('path-selection')}
-          >
-            <div className="action-icon">
-              <BookOpen size={20} />
-            </div>
-            <span>Explore Paths</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => navigation.navigateToScreen('journal-archive')}
-          >
-            <div className="action-icon">
-              <Archive size={20} />
-            </div>
-            <span>View Archive</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => navigation.navigateToScreen('analytics-dashboard')}
-          >
-            <div className="action-icon">
-              <TrendingUp size={20} />
-            </div>
-            <span>Analytics</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => navigation.navigateToScreen('settings')}
-          >
-            <div className="action-icon">
-              <Settings size={20} />
-            </div>
-            <span>Settings</span>
-          </button>
-        </div>
       </div>
-
-      {/* Settings Menu */}
-      <div className="profile-card settings-menu-card">
-        <div className="card-header">
-          <div className="header-icon">
-            <Settings size={20} />
-          </div>
-          <h3 className="card-title">Settings & Support</h3>
-        </div>
-        
-        <div className="settings-menu">
-          <button 
-            className="menu-item"
-            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'notifications' })}
-          >
-            <div className="menu-item-content">
-              <Bell size={18} />
-              <span>Notifications</span>
-            </div>
-            <ChevronRight size={18} />
-          </button>
-          
-          <button 
-            className="menu-item"
-            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'privacy' })}
-          >
-            <div className="menu-item-content">
-              <Lock size={18} />
-              <span>Privacy & Security</span>
-            </div>
-            <ChevronRight size={18} />
-          </button>
-          
-          <button 
-            className="menu-item"
-            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'help' })}
-          >
-            <div className="menu-item-content">
-              <HelpCircle size={18} />
-              <span>Help & Support</span>
-            </div>
-            <ChevronRight size={18} />
-          </button>
-          
-          <button 
-            className="menu-item"
-            onClick={() => navigation.navigateToScreen('about')}
-          >
-            <div className="menu-item-content">
-              <Info size={18} />
-              <span>About Καιρός</span>
-            </div>
-            <ChevronRight size={18} />
-          </button>
-          
-          <div className="menu-divider"></div>
-          
-          <button 
-            className="menu-item danger"
-            onClick={handleSignOut}
-          >
-            <div className="menu-item-content">
-              <LogOut size={18} />
-              <span>Sign Out</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* App Version */}
-      <div className="app-info">
-        <p className="app-name">Καιρός Journal</p>
-        <VersionDisplay minimal={true} />
-      </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
-    </div>
+    )}
+    </>
   );
 };
 

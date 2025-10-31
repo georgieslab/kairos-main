@@ -7,6 +7,8 @@ def scan_directory(directory_path, exclude_dirs=None):
     if exclude_dirs is None:
         exclude_dirs = ['node_modules']
     
+
+    
     structure = {}
     
     # Get all entries in the directory

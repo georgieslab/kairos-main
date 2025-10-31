@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 // src/components/journey/AnalysisResults.jsx - Fixed voice integration
-=======
-// src/components/journey/AnalysisResults.jsx
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   ArrowLeft, 
@@ -31,12 +27,8 @@ import {
   Activity,
   ChevronLeft,
   ChevronRight,
-<<<<<<< HEAD
   MoreHorizontal,
   Volume2
-=======
-  MoreHorizontal
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 } from 'lucide-react';
 import { 
   analyzeJournalEntry, 
@@ -60,11 +52,6 @@ import EmotionTrends from '../analytics/EmotionTrends';
 // Real data processing utilities
 import { extractThemesFromEntries, extractEmotionData, analyzeConsistency } from '../../utils/textProcessing';
 
-<<<<<<< HEAD
-=======
-// Import export functionality
-import { downloadFile } from '../../services/exportService';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 // Import the new CSS
 import '../../styles/components/ar.css';
@@ -321,12 +308,8 @@ const getJourneyTotalDays = (pathId) => {
     'life-vision': 100,
     'emotional-intelligence': 10,
     'mindfulness-awareness': 10,
-<<<<<<< HEAD
     'self-discovery': 10,
     'voice-discovery': 10
-=======
-    'self-discovery': 10
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
   return pathDays[pathId] || 10;
 };
@@ -363,12 +346,8 @@ const generateRecommendation = (entries, pathId) => {
     'emotional-intelligence': "Focus on identifying emotional triggers and developing regulation strategies in your future entries.",
     'mindfulness-awareness': "Try incorporating more present-moment observations and sensory details in your writing.",
     'self-discovery': "Consider exploring how your values and beliefs influence your daily experiences.",
-<<<<<<< HEAD
     'transformation-journey': "Reflect on the changes you're noticing and the patterns you want to continue breaking.",
     'voice-discovery': "Continue exploring the power of vocal expression and the authenticity it brings to your reflections."
-=======
-    'transformation-journey': "Reflect on the changes you're noticing and the patterns you want to continue breaking."
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
   
   return pathRecommendations[pathId] || "Continue exploring the themes that resonate most deeply with you.";
@@ -382,22 +361,14 @@ const getPathName = (pathId) => {
     'creative-expression': 'Creative Expression',
     'habit-formation': 'Habit Formation',
     'life-vision': 'Life Vision & Purpose',
-<<<<<<< HEAD
     'self-discovery': 'Self-Discovery Journey',
     'voice-discovery': 'Voice Discovery Journey'
-=======
-    'self-discovery': 'Self-Discovery Journey'
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
   return pathNames[pathId] || 'Self-Discovery Journey';
 };
 
 // Export single entry as text
-<<<<<<< HEAD
 const exportSingleEntryAsText = (dayNumber, pathId, prompt, theme, extractedText, analysisResult, isVoiceEntry = false, voiceData = null) => {
-=======
-const exportSingleEntryAsText = (dayNumber, pathId, prompt, theme, extractedText, analysisResult) => {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const pathName = getPathName(pathId);
   const date = new Date().toLocaleDateString();
   
@@ -409,16 +380,12 @@ const exportSingleEntryAsText = (dayNumber, pathId, prompt, theme, extractedText
     content += `**Prompt:** ${prompt}\n\n`;
   }
   
-<<<<<<< HEAD
   if (isVoiceEntry && voiceData) {
     content += `**Voice Journal Entry:**\n`;
     content += `Duration: ${formatTime(voiceData.duration || 0)}\n`;
     content += `Word Count: ${voiceData.wordCount || 0}\n\n`;
     content += `**Transcription:**\n${voiceData.transcription || extractedText}\n\n`;
   } else if (extractedText) {
-=======
-  if (extractedText) {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     content += `**Journal Entry:**\n${extractedText}\n\n`;
   }
   
@@ -455,7 +422,6 @@ const exportSingleEntryAsText = (dayNumber, pathId, prompt, theme, extractedText
   return content;
 };
 
-<<<<<<< HEAD
 // Helper function for formatting time
 const formatTime = (seconds) => {
   const mins = Math.floor(seconds / 60);
@@ -463,8 +429,6 @@ const formatTime = (seconds) => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 // Main Enhanced AnalysisResults Component
 const AnalysisResults = ({ 
   dayNumber, 
@@ -478,7 +442,6 @@ const AnalysisResults = ({
   additionalImages = [],
   imageFiles = null,
   onBack,
-<<<<<<< HEAD
   onNext,
   analysisResult: passedAnalysisResult = null,
   isVoiceEntry = false,
@@ -487,13 +450,6 @@ const AnalysisResults = ({
   const { currentUser, userProfile } = useAuth();
   const [analysisResult, setAnalysisResult] = useState(passedAnalysisResult);
   const [isLoading, setIsLoading] = useState(!passedAnalysisResult);
-=======
-  onNext
-}) => {
-  const { currentUser, userProfile } = useAuth();
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const [analyzingProgress, setAnalyzingProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('insights');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -520,7 +476,6 @@ const AnalysisResults = ({
     return new JournalEntry({
       day: dayNumber,
       pathId,
-<<<<<<< HEAD
       imageUrl: isVoiceEntry ? null : imageUrl,
       extractedText: isVoiceEntry ? voiceData?.transcription || extractedText : extractedText,
       prompt,
@@ -530,15 +485,6 @@ const AnalysisResults = ({
       voiceData
     });
   }, [dayNumber, pathId, imageUrl, extractedText, prompt, theme, textOnly, isVoiceEntry, voiceData]);
-=======
-      imageUrl,
-      extractedText,
-      prompt,
-      theme,
-      isTextOnly: textOnly || (!imageUrl && !!extractedText)
-    });
-  }, [dayNumber, pathId, imageUrl, extractedText, prompt, theme, textOnly]);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   const tabs = [
     { id: 'insights', label: 'Insights', icon: Lightbulb },
@@ -546,7 +492,6 @@ const AnalysisResults = ({
     { id: 'action', label: 'Action', icon: Play },
     { id: 'visualize', label: 'Charts', icon: BarChart },
     { id: 'analytics', label: 'Analytics', icon: Activity },
-<<<<<<< HEAD
     { id: 'journal', label: 'Entry', icon: isVoiceEntry ? Volume2 : BookOpen }
   ];
 
@@ -692,96 +637,6 @@ useEffect(() => {
 
   fetchAnalysis();
 }, [currentUser?.uid, journalEntry.day, journalEntry.pathId, imageFiles, isVoiceEntry, voiceData, passedAnalysisResult]);
-=======
-    { id: 'journal', label: 'Entry', icon: BookOpen }
-  ];
-
-  // Analysis effect with improved caching
-  useEffect(() => {
-    const fetchAnalysis = async () => {
-      if (!currentUser || !journalEntry.hasContent()) {
-        setError('No journal entry provided. Please go back and upload your journal entry or enter text manually.');
-        setIsLoading(false);
-        return;
-      }
-
-      setIsLoading(true);
-      clearError();
-      
-      const progressInterval = setInterval(() => {
-        setAnalyzingProgress(prev => Math.min(prev + (Math.random() * 5), 90));
-      }, 300);
-
-      try {
-        const cacheKey = `analysis_${currentUser.uid}_${pathId}_${dayNumber}`;
-        const cachedAnalysis = apiCacheService.getFromCache(cacheKey);
-        
-        if (cachedAnalysis) {
-          setAnalysisResult(cachedAnalysis);
-          setAnalyzingProgress(100);
-          setTimeout(() => setIsLoading(false), 500);
-          clearInterval(progressInterval);
-          return;
-        }
-
-        const existingEntry = await getJournalEntry(currentUser.uid, dayNumber, pathId);
-        if (existingEntry?.analysis) {
-          apiCacheService.storeInCache(cacheKey, existingEntry.analysis);
-          setAnalysisResult(existingEntry.analysis);
-          setAnalyzingProgress(100);
-          setTimeout(() => setIsLoading(false), 500);
-          clearInterval(progressInterval);
-          return;
-        }
-
-        const result = await analyzeJournalEntry(
-          journalEntry.imageUrl,
-          journalEntry.prompt,
-          journalEntry.theme,
-          userProfile,
-          journalEntry.day,
-          journalEntry.extractedText,
-          journalEntry.pathId,
-          isMultiPage,
-          imageFiles
-        );
-
-        apiCacheService.storeInCache(cacheKey, result);
-        setAnalysisResult(result);
-
-        if (navigator.onLine) {
-          await saveAnalysisResult(
-            currentUser.uid, 
-            journalEntry.day, 
-            result, 
-            journalEntry.imageUrl, 
-            journalEntry.pathId
-          );
-        } else {
-          queueOfflineOperation(OFFLINE_OPERATIONS.SAVE_ANALYSIS, {
-            userId: currentUser.uid,
-            day: journalEntry.day,
-            analysisResult: result,
-            imageUrl: journalEntry.imageUrl,
-            pathId: journalEntry.pathId
-          });
-        }
-
-        setAnalyzingProgress(100);
-      } catch (error) {
-        handleError(error, 'analysis', { 
-          day: journalEntry.day, 
-          pathId: journalEntry.pathId
-        });
-      } finally {
-        clearInterval(progressInterval);
-        setTimeout(() => setIsLoading(false), 500);
-      }
-    };
-
-    fetchAnalysis();
-  }, [currentUser?.uid, journalEntry.day, journalEntry.pathId, imageFiles]);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   // Export functionality
   const handleExport = async () => {
@@ -793,7 +648,6 @@ useEffect(() => {
         pathId, 
         prompt, 
         theme, 
-<<<<<<< HEAD
         isVoiceEntry ? voiceData?.transcription : extractedText, 
         analysisResult,
         isVoiceEntry,
@@ -803,14 +657,6 @@ useEffect(() => {
       const pathName = getPathName(pathId);
       const entryType = isVoiceEntry ? 'Voice' : 'Journal';
       const filename = `${pathName}_${entryType}_Day_${dayNumber}_${new Date().toISOString().split('T')[0]}.txt`;
-=======
-        extractedText, 
-        analysisResult
-      );
-      
-      const pathName = getPathName(pathId);
-      const filename = `${pathName}_Day_${dayNumber}_${new Date().toISOString().split('T')[0]}.txt`;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       
       await downloadFile(content, filename, 'text/plain');
       
@@ -826,19 +672,12 @@ useEffect(() => {
 
   // Share functionality
   const handleShare = () => {
-<<<<<<< HEAD
     const entryType = isVoiceEntry ? 'voice journal' : 'journal';
     
     if (navigator.share) {
       const shareData = {
         title: `Day ${dayNumber}: ${theme}`,
         text: `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with a ${entryType} entry using Καιρός Smart Journal! 🎤✨`,
-=======
-    if (navigator.share) {
-      const shareData = {
-        title: `Day ${dayNumber}: ${theme}`,
-        text: `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with Καιρός Smart Journal!`,
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         url: window.location.href
       };
       
@@ -852,12 +691,8 @@ useEffect(() => {
   };
 
   const handleFallbackShare = () => {
-<<<<<<< HEAD
     const entryType = isVoiceEntry ? 'voice journal' : 'journal';
     const shareText = `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with a ${entryType} entry using Καιρός Smart Journal! 🎤✨`;
-=======
-    const shareText = `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with Καιρός Smart Journal! 🌟`;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     
     if (navigator.clipboard) {
       navigator.clipboard.writeText(shareText).then(() => {
@@ -974,15 +809,12 @@ useEffect(() => {
                     <Zap size={16} /> 
                     <span>Quiet meditation or mindfulness</span>
                   </li>
-<<<<<<< HEAD
                   {isVoiceEntry && (
                     <li className="ar-reflection__suggestion">
                       <Volume2 size={16} /> 
                       <span>Recording another voice reflection</span>
                     </li>
                   )}
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 </ul>
               </div>
             </div>
@@ -1082,20 +914,15 @@ useEffect(() => {
           <div className="ar-content ar-content--journal">
             <div className="ar-card ar-card--journal">
               <div className="ar-journal__header">
-<<<<<<< HEAD
                 <h3 className="ar-journal__title">
                   Your {isVoiceEntry ? 'Voice' : ''} Journal Entry
                 </h3>
-=======
-                <h3 className="ar-journal__title">Your Journal Entry</h3>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 <div className="ar-journal__prompt">
                   <span className="ar-journal__prompt-label">Today's Prompt</span>
                   <span className="ar-journal__prompt-text">"{prompt}"</span>
                 </div>
               </div>
               
-<<<<<<< HEAD
               {isVoiceEntry && voiceData?.audioUrl ? (
                 <div className="ar-journal__voice">
                   <div className="ar-journal__voice-player">
@@ -1109,9 +936,6 @@ useEffect(() => {
                   </div>
                 </div>
               ) : journalEntry.imageUrl ? (
-=======
-              {journalEntry.imageUrl ? (
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 <EnhancedImageCarousel 
                   images={allImages}
                   activeIndex={activeImageIndex}
@@ -1124,7 +948,6 @@ useEffect(() => {
                 </div>
               )}
               
-<<<<<<< HEAD
               {(journalEntry.extractedText || (isVoiceEntry && voiceData?.transcription)) && (
                 <div className="ar-journal__extracted">
                   <h4 className="ar-journal__extracted-title">
@@ -1134,15 +957,6 @@ useEffect(() => {
                   <div className="ar-journal__extracted-text">
                     {isVoiceEntry ? voiceData?.transcription : journalEntry.extractedText}
                   </div>
-=======
-              {journalEntry.extractedText && (
-                <div className="ar-journal__extracted">
-                  <h4 className="ar-journal__extracted-title">
-                    <FileText size={18} />
-                    {journalEntry.isTextOnly ? "Your Journal Text" : "Extracted Text"}
-                  </h4>
-                  <div className="ar-journal__extracted-text">{journalEntry.extractedText}</div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 </div>
               )}
               
@@ -1150,15 +964,12 @@ useEffect(() => {
                 <div className="ar-journal__info">
                   <span className="ar-journal__path">{getPathName(pathId)}</span>
                   <span className="ar-journal__theme">{journalEntry.theme}</span>
-<<<<<<< HEAD
                   {isVoiceEntry && (
                     <span className="ar-journal__voice-indicator">
                       <Volume2 size={14} />
                       Voice Entry
                     </span>
                   )}
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 </div>
                 <div className="ar-journal__day">Day {journalEntry.day}</div>
               </div>
@@ -1181,7 +992,6 @@ useEffect(() => {
         </button>
         
         <div className="ar-header__info">
-<<<<<<< HEAD
           <h2 className="ar-header__title">
             Day {dayNumber} Analysis
             {isVoiceEntry && (
@@ -1190,9 +1000,6 @@ useEffect(() => {
               </span>
             )}
           </h2>
-=======
-          <h2 className="ar-header__title">Day {dayNumber} Analysis</h2>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           <div className="ar-header__meta">
             <span className="ar-header__path">{getPathName(pathId)}</span>
             <span className="ar-header__separator">•</span>

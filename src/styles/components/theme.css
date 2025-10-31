@@ -2,11 +2,7 @@
 
 :root {
   /* Dark Theme Colors */
-<<<<<<< HEAD
   --dark-bg-primary: #0f1419;
-=======
-  --dark-bg-primary: #1a1e2a;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   --dark-bg-secondary: #111827;
   --dark-bg-tertiary: #374151;
   --dark-bg-hover: #2d3748;

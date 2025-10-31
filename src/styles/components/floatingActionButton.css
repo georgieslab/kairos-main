@@ -2,11 +2,7 @@
 
 .floating-action-container {
     position: fixed;
-<<<<<<< HEAD
     bottom: 100px;
-=======
-    bottom: 90px; /* Above the bottom navigation */
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     right: 20px;
     z-index: 100;
     display: flex;
@@ -91,11 +87,7 @@
   /* Adjust for mobile */
   @media (max-width: 768px) {
     .floating-action-container {
-<<<<<<< HEAD
       bottom: 100px;
-=======
-      bottom: 75px;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       right: 15px;
     }
     

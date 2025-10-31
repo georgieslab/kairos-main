@@ -655,3 +655,36 @@ audio {
 .light-theme .voice-transcription-textarea:focus {
   border-color: #3b82f6;
 }
+
+/* Add path-specific colors for voice journeys */
+.voice-recording-card.voice-discovery {
+  border-color: rgba(168, 85, 247, 0.3); /* Purple for Voice Discovery */
+}
+
+.voice-recording-card.spoken-emotions {
+  border-color: rgba(236, 72, 153, 0.3); /* Pink for Spoken Emotions */
+}
+
+/* etc. for other voice paths */.voice-record-button.recording {
+  animation: recordPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes recordPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.voice-waveform-container {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.voice-waveform-bar {
+  width: 3px;
+  background: linear-gradient(180deg, #8b5cf6, #3b82f6);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}

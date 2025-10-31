@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 // src/utils/pathUtils.js
 import { getAllJourneyPaths, getJourneyPath } from '../data/JourneyData';
 import { doc, updateDoc } from 'firebase/firestore';

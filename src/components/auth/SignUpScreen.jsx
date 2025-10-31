@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // src/components/auth/SignUpScreen.jsx - FIXED VERSION
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -32,17 +31,6 @@ import '../../styles/components/signup.css';
 
 // Google Maps API Key - Replace with your actual key
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyBrXIv6K7Uto7fwe8MuzgRM_79W5WXsRM8';
-=======
-// src/components/auth/SignUpScreen.jsx
-
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Mail, Lock, User, Calendar, X, MapPin, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import '../../styles/components/signup.css';
-
-// Google Maps API Key (replace with your actual API key)
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBrXIv6K7Uto7fwe8MuzgRM_79W5WXsRM8';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 // Function to load Google Maps API script
 const loadGoogleMapsScript = (callback) => {
@@ -71,7 +59,6 @@ const GoogleIcon = () => (
 
 const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
   const { signup, login, signInWithGoogle } = useAuth();
-<<<<<<< HEAD
   const { isDarkMode, toggleTheme } = useTheme();
   
   // Step management - FIXED: Only for sign-up mode
@@ -248,63 +235,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     setFieldErrors({});
     setTouchedFields({});
   }, [isSignIn]);
-=======
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [city, setCity] = useState('');
-  const [isSignIn, setIsSignIn] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isNavigatingFrom, setIsNavigatingFrom] = useState(false);
-  const [autocompleteInitialized, setAutocompleteInitialized] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState({});
-  const [touchedFields, setTouchedFields] = useState({});
-  const cityInputRef = React.createRef();
-
-  useEffect(() => {
-    console.log('SignUpScreen mounted');
-    
-    if (!isSignIn) {
-      loadGoogleMapsScript(() => {
-        console.log('Google Maps API loaded');
-        setAutocompleteInitialized(false);
-      });
-    }
-    
-    return () => console.log('SignUpScreen unmounted');
-  }, [isSignIn]);
-  
-  useEffect(() => {
-    if (!autocompleteInitialized && !isSignIn && cityInputRef.current) {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        const autocomplete = new window.google.maps.places.Autocomplete(cityInputRef.current, {
-          types: ['(cities)'],
-          fields: ['address_components', 'formatted_address', 'geometry', 'name']
-        });
-        
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete.getPlace();
-          if (place.address_components) {
-            const cityComponent = place.address_components.find(
-              component => component.types.includes('locality')
-            );
-            
-            if (cityComponent) {
-              setCity(cityComponent.long_name);
-            } else {
-              setCity(place.formatted_address || place.name);
-            }
-          }
-        });
-        
-        setAutocompleteInitialized(true);
-      }
-    }
-  }, [cityInputRef, autocompleteInitialized, isSignIn]);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
   // Field validation
   const validateField = (fieldName, value) => {
@@ -330,7 +260,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
           error = 'Name is required';
         }
         break;
-<<<<<<< HEAD
       case 'age':
         if (!isSignIn && (!value || value < 13 || value > 120)) {
           error = 'Please select a valid age (13-120)';
@@ -339,11 +268,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
       case 'gender':
         if (!isSignIn && !value) {
           error = 'Please select your gender';
-=======
-      case 'birthday':
-        if (!isSignIn && !value) {
-          error = 'Birthday is required';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         }
         break;
       case 'city':
@@ -362,31 +286,10 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
   };
 
   const handleFieldChange = (fieldName, value) => {
-<<<<<<< HEAD
     setFormData(prev => ({
       ...prev,
       [fieldName]: value
     }));
-=======
-    // Update field value
-    switch (fieldName) {
-      case 'email':
-        setEmail(value);
-        break;
-      case 'password':
-        setPassword(value);
-        break;
-      case 'name':
-        setName(value);
-        break;
-      case 'birthday':
-        setBirthday(value);
-        break;
-      case 'city':
-        setCity(value);
-        break;
-    }
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
     // Clear general error when user starts typing
     if (error) {
@@ -407,7 +310,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     validateField(fieldName, value);
   };
 
-<<<<<<< HEAD
   // Handle array field changes (interests, goals)
   const handleArrayFieldToggle = (fieldName, value) => {
     const currentArray = formData[fieldName] || [];
@@ -435,53 +337,10 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
       return;
     }
 
-=======
-  const handleEmailAuth = async (e) => {
-    e.preventDefault();
-    setError('');
-    
-    if (isNavigatingFrom) {
-      console.log('Already navigating, preventing duplicate');
-      return;
-    }
-
-    // Validate all fields
-    const fields = isSignIn 
-      ? [{ name: 'email', value: email }, { name: 'password', value: password }]
-      : [
-          { name: 'email', value: email },
-          { name: 'password', value: password },
-          { name: 'name', value: name },
-          { name: 'birthday', value: birthday },
-          { name: 'city', value: city }
-        ];
-
-    let hasErrors = false;
-    const newFieldErrors = {};
-
-    fields.forEach(field => {
-      if (!validateField(field.name, field.value)) {
-        hasErrors = true;
-      }
-    });
-
-    // Mark all fields as touched
-    const allTouched = {};
-    fields.forEach(field => {
-      allTouched[field.name] = true;
-    });
-    setTouchedFields(allTouched);
-
-    if (hasErrors) {
-      return;
-    }
-    
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     try {
       setIsLoading(true);
       setIsNavigatingFrom(true);
       
-<<<<<<< HEAD
       await login(formData.email, formData.password);
       onNext();
     } catch (error) {
@@ -607,18 +466,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
       onNext();
     } catch (error) {
       console.error('Sign-up error:', error);
-=======
-      if (isSignIn) {
-        await login(email, password);
-      } else {
-        await signup(email, password, name, birthday, city);
-      }
-      
-      console.log('Auth operation completed successfully, navigating next');
-      onNext();
-    } catch (error) {
-      console.error('Authentication error:', error);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       setIsNavigatingFrom(false);
       
       switch (error.code) {
@@ -632,20 +479,8 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
         case 'auth/weak-password':
           setError('Password should be at least 6 characters.');
           break;
-<<<<<<< HEAD
         default:
           setError(`Registration failed: ${error.message}`);
-=======
-        case 'auth/wrong-password':
-          setError('Incorrect password. Please try again.');
-          break;
-        case 'auth/user-not-found':
-          setError('No account found with this email. Please sign up instead.');
-          setIsSignIn(false);
-          break;
-        default:
-          setError(`Authentication failed: ${error.message}`);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       }
     } finally {
       setIsLoading(false);
@@ -654,26 +489,12 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
 
   const handleGoogleAuth = async () => {
     try {
-<<<<<<< HEAD
       if (isNavigatingFrom) return;
-=======
-      console.log('handleGoogleAuth called');
-      
-      if (isNavigatingFrom) {
-        console.log('Already navigating, preventing duplicate');
-        return;
-      }
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       
       setIsLoading(true);
       setIsNavigatingFrom(true);
       
       await signInWithGoogle();
-<<<<<<< HEAD
-=======
-      
-      console.log('Google auth completed successfully, navigating next');
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       onNext();
     } catch (error) {
       console.error('Google auth error:', error);
@@ -683,11 +504,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
       setIsLoading(false);
     }
   };
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   const navigateToTerms = (e) => {
     e.preventDefault();
     if (navigateToScreen) {
@@ -702,7 +518,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     }
   };
 
-<<<<<<< HEAD
   // FIXED: Render step content with proper sign-in handling
   const renderStepContent = () => {
     const stepConfig = steps[currentStep];
@@ -806,37 +621,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
       case 'account':
         return (
           <div className="step-content">
-=======
-  return (
-    <div className="su-container">
-      <div className="su-card-container">
-        {/* Back Button */}
-        {onBack && (
-          <button 
-            onClick={onBack} 
-            className="su-back-button"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="su-back-icon" />
-            <span>Back</span>
-          </button>
-        )}
-        
-        <div className="su-card">
-          <div className="su-card-content">
-            <div className="su-header">
-              <h1 className="su-title">
-                {isSignIn ? 'Welcome Back' : 'Create Your Account'}
-              </h1>
-              
-              <p className="su-subtitle">
-                {isSignIn 
-                  ? 'Sign in to continue your journaling journey' 
-                  : 'Begin your self-discovery journey with Καιρός'}
-              </p>
-            </div>
-            
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             {/* Social Sign-In Button */}
             <div className="su-social-section">
               <button 
@@ -862,7 +646,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
                 <span className="su-divider-text-inner">or continue with email</span>
               </div>
             </div>
-<<<<<<< HEAD
 
             <div className="su-floating-label-group">
               <input
@@ -926,169 +709,18 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
               )}
             </div>
 
-=======
-            
-            <form onSubmit={handleEmailAuth} className="su-form-container" noValidate>
-              {!isSignIn && (
-                <>
-                  {/* Name Field */}
-                  <div className="su-floating-label-group">
-                    <input
-                      id="name"
-                      type="text"
-                      value={name}
-                      onChange={(e) => handleFieldChange('name', e.target.value)}
-                      onBlur={(e) => handleFieldBlur('name', e.target.value)}
-                      className={`su-floating-input ${fieldErrors.name && touchedFields.name ? 'su-input-error' : ''}`}
-                      placeholder=" "
-                      autoComplete="given-name"
-                    />
-                    <label htmlFor="name" className="su-floating-label">Full Name</label>
-                    <User className="su-input-icon" />
-                    {fieldErrors.name && touchedFields.name && (
-                      <span className="su-field-error">{fieldErrors.name}</span>
-                    )}
-                  </div>
-                  
-                  {/* Birthday Field */}
-                  <div className="su-floating-label-group">
-                    <input
-                      id="birthday"
-                      type="date"
-                      value={birthday}
-                      onChange={(e) => handleFieldChange('birthday', e.target.value)}
-                      onBlur={(e) => handleFieldBlur('birthday', e.target.value)}
-                      className={`su-floating-input su-date-input ${fieldErrors.birthday && touchedFields.birthday ? 'su-input-error' : ''}`}
-                      max={new Date().toISOString().split('T')[0]}
-                      autoComplete="bday"
-                    />
-                    <label htmlFor="birthday" className="su-floating-label">Birthday</label>
-                    <Calendar className="su-input-icon" />
-                    <span className="su-form-hint">
-                      Helps us provide age-appropriate insights
-                    </span>
-                    {fieldErrors.birthday && touchedFields.birthday && (
-                      <span className="su-field-error">{fieldErrors.birthday}</span>
-                    )}
-                  </div>
-                  
-                  {/* City Field */}
-                  <div className="su-floating-label-group">
-                    <input
-                      id="city"
-                      type="text"
-                      ref={cityInputRef}
-                      value={city}
-                      onChange={(e) => handleFieldChange('city', e.target.value)}
-                      onBlur={(e) => handleFieldBlur('city', e.target.value)}
-                      className={`su-floating-input ${fieldErrors.city && touchedFields.city ? 'su-input-error' : ''}`}
-                      placeholder=" "
-                      autoComplete="address-level2"
-                    />
-                    <label htmlFor="city" className="su-floating-label">City</label>
-                    <MapPin className="su-input-icon" />
-                    <span className="su-form-hint">
-                      For local weather and insights
-                    </span>
-                    {fieldErrors.city && touchedFields.city && (
-                      <span className="su-field-error">{fieldErrors.city}</span>
-                    )}
-                  </div>
-                </>
-              )}
-              
-              {/* Email Field */}
-              <div className="su-floating-label-group">
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => handleFieldChange('email', e.target.value)}
-                  onBlur={(e) => handleFieldBlur('email', e.target.value)}
-                  className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
-                  placeholder=" "
-                  autoComplete="email"
-                />
-                <label htmlFor="email" className="su-floating-label">Email Address</label>
-                <Mail className="su-input-icon" />
-                {fieldErrors.email && touchedFields.email && (
-                  <span className="su-field-error">{fieldErrors.email}</span>
-                )}
-              </div>
-              
-              {/* Password Field */}
-              <div className="su-floating-label-group">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => handleFieldChange('password', e.target.value)}
-                  onBlur={(e) => handleFieldBlur('password', e.target.value)}
-                  className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
-                  placeholder=" "
-                  autoComplete={isSignIn ? "current-password" : "new-password"}
-                />
-                <label htmlFor="password" className="su-floating-label">
-                  {isSignIn ? "Password" : "Create Password"}
-                </label>
-                <Lock className="su-input-icon" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="su-password-toggle"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-                {fieldErrors.password && touchedFields.password && (
-                  <span className="su-field-error">{fieldErrors.password}</span>
-                )}
-              </div>
-              
-              {/* General Error Message */}
-              {error && (
-                <div className="su-error-message" role="alert">
-                  <X className="su-error-icon" />
-                  <span>{error}</span>
-                </div>
-              )}
-              
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="su-submit-button"
-                disabled={isLoading}
-                aria-describedby={error ? "error-message" : undefined}
-              >
-                {isLoading ? (
-                  <div className="su-loading-indicator">
-                    <div className="su-spinner-ring"></div>
-                    <span>Processing...</span>
-                  </div>
-                ) : (
-                  <span>{isSignIn ? 'Sign In' : 'Create Account'}</span>
-                )}
-              </button>
-            </form>
-            
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             {/* Toggle Sign In/Sign Up */}
             <div className="su-toggle-section">
               <button
                 type="button"
                 onClick={() => {
-<<<<<<< HEAD
                   setIsSignIn(true);
-=======
-                  setIsSignIn(!isSignIn);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   setError('');
                   setFieldErrors({});
                   setTouchedFields({});
                 }}
                 className="su-toggle-button"
               >
-<<<<<<< HEAD
                 Already have an account? {' '}
                 <span className="su-toggle-action">Sign in</span>
               </button>
@@ -1456,15 +1088,6 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
               </div>
             )}
           </div>
-=======
-                {isSignIn ? "Don't have an account? " : "Already have an account? "}
-                <span className="su-toggle-action">
-                  {isSignIn ? "Sign up" : "Sign in"}
-                </span>
-              </button>
-            </div>
-          </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </div>
         
         {/* Terms Text */}

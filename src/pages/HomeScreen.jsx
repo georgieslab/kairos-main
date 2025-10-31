@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // src/pages/HomeScreen.jsx - v5.1.0-alpha Production Release
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -6,17 +5,6 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useUserProgress } from '../hooks/useUserProgress';
 import { useUserStatistics } from '../hooks/useUserStatistics';
 import { getJourneyDay } from '../data/JourneyData';
-=======
-// src/pages/HomeScreen.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { getJourneyDay, getAllJourneyPaths, getJourneyPath } from '../data/JourneyData';
-import { 
-  getNextDayForPath, 
-  getUserPathProgress
-} from '../utils/userProgress';
-import { useTheme } from '../contexts/ThemeContext';
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
 // Import weather components
 import WeatherWidget from '../components/weather/WeatherWidget';
@@ -24,12 +12,9 @@ import WeatherDialog from '../components/weather/WeatherDialog';
 import '../styles/components/weather.css';
 import '../styles/components/weatherDialog.css';
 
-<<<<<<< HEAD
 // Import VersionDisplay component
 import VersionDisplay from '../components/common/VersionDisplay';
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 import { 
   ChevronRight, 
   BookOpen, 
@@ -56,7 +41,6 @@ import {
   TrendingUp,
   Target,
   Compass,
-<<<<<<< HEAD
   Zap,
   FileText,
   Flame,
@@ -64,9 +48,6 @@ import {
   Heart,
   Clock,
   Trophy
-=======
-  Zap
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 } from 'lucide-react';
 
 import '../styles/components/homeScreen.css';
@@ -85,7 +66,6 @@ const loadGoogleMapsScript = (callback) => {
   script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
   script.async = true;
   script.defer = true;
-<<<<<<< HEAD
   script.onload = callback;
   script.onerror = () => console.error('Error loading Google Maps API');
   document.head.appendChild(script);
@@ -150,57 +130,6 @@ const inspirationalQuotes = [
     text: "Be yourself; everyone else is already taken.",
     author: "Oscar Wilde",
     theme: "individuality"
-=======
-  script.onload = () => {
-    console.log('Google Maps API loaded for HomeScreen');
-    callback();
-  };
-  script.onerror = () => console.error('Error loading Google Maps API');
-  document.head.appendChild(script);
-};
-
-// Curated quotes for inspiration
-const inspirationalQuotes = [
-  {
-    text: "The unexamined life is not worth living.",
-    author: "Socrates"
-  },
-  {
-    text: "Know thyself.",
-    author: "Ancient Greek Aphorism"
-  },
-  {
-    text: "Life is a journey, not a destination.",
-    author: "Ralph Waldo Emerson"
-  },
-  {
-    text: "Between stimulus and response there is a space. In that space is our power to choose our response.",
-    author: "Viktor Frankl"
-  },
-  {
-    text: "The cave you fear to enter holds the treasure you seek.",
-    author: "Joseph Campbell"
-  },
-  {
-    text: "Your vision will become clear only when you can look into your own heart.",
-    author: "Carl Jung"
-  },
-  {
-    text: "To know yourself, you must sacrifice the illusion that you already do.",
-    author: "Vironika Tugaleva"
-  },
-  {
-    text: "Don't compromise yourself. You're all you've got.",
-    author: "Janis Joplin"
-  },
-  {
-    text: "He who has a why to live can bear almost any how.",
-    author: "Friedrich Nietzsche"
-  },
-  {
-    text: "Be yourself; everyone else is already taken.",
-    author: "Oscar Wilde"
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   }
 ];
 
@@ -227,7 +156,6 @@ const ModernThemeToggle = () => {
 };
 
 const HomeScreen = ({ navigateToScreen, currentDay = 1, currentPath = 'self-discovery' }) => {
-<<<<<<< HEAD
   const { currentUser, userProfile, updateUserProfile } = useAuth();
   const { isDarkMode } = useTheme();
   
@@ -255,15 +183,6 @@ console.log('Debug - completedPaths:', completedPaths);
   const [currentDate] = useState(new Date());
   const [quote, setQuote] = useState(inspirationalQuotes[0]);
   const [isLoaded, setIsLoaded] = useState(false);
-=======
-  const { userProfile, updateUserProfile } = useAuth();
-  const { isDarkMode } = useTheme();
-  const [currentDate] = useState(new Date());
-  const [quote, setQuote] = useState(inspirationalQuotes[0]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [completedPaths, setCompletedPaths] = useState([]);
-  const [inProgressPaths, setInProgressPaths] = useState([]);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   
   // Weather state
   const [weatherData, setWeatherData] = useState(null);
@@ -322,53 +241,7 @@ console.log('Debug - completedPaths:', completedPaths);
         }
       });
     }
-<<<<<<< HEAD
   }, [showLocationPrompt]);
-=======
-  }, [showLocationPrompt, locationInputRef.current]);
-
-  // Load user's path progress
-  useEffect(() => {
-    if (userProfile) {
-      const allPaths = getAllJourneyPaths();
-      const completed = [];
-      const inProgress = [];
-      
-      Object.values(allPaths).forEach(path => {
-        const pathProgress = getUserPathProgress(userProfile, path.id);
-        const completedDays = pathProgress?.completedDays || [];
-        
-        if (completedDays.length > 0) {
-          const percentage = Math.round((completedDays.length / path.duration) * 100);
-          const nextDay = getNextDayForPath(userProfile, path.id);
-          
-          const pathData = {
-            id: path.id,
-            title: path.title,
-            iconName: path.iconName,
-            color: path.color,
-            completedDays: completedDays.length,
-            totalDays: path.duration,
-            percentage,
-            nextDay
-          };
-          
-          if (completedDays.length >= path.duration) {
-            completed.push(pathData);
-          } else {
-            inProgress.push(pathData);
-          }
-        }
-      });
-      
-      inProgress.sort((a, b) => b.percentage - a.percentage);
-      completed.sort((a, b) => b.completedDays - a.completedDays);
-      
-      setCompletedPaths(completed);
-      setInProgressPaths(inProgress);
-    }
-  }, [userProfile]);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   
   // Format date
   const formatDate = () => {
@@ -408,7 +281,6 @@ console.log('Debug - completedPaths:', completedPaths);
   const handleSkipLocation = () => {
     setShowLocationPrompt(false);
   };
-<<<<<<< HEAD
 
   // Get current path info using centralized progress
   const getCurrentPathInfo = () => {
@@ -454,87 +326,10 @@ console.log('Debug - completedPaths:', completedPaths);
   
   // Navigation functions
   const goToDailyView = (day, pathId = currentPathInfo.pathId) => {
-=======
-  
-  // Get path progress
-  const getPathProgress = () => {
-    try {
-      const pathData = getJourneyPath(currentPath);
-      
-      if (!pathData) {
-        return {
-          completedDays: [],
-          progressPercentage: 0,
-          pathName: 'Unknown Journey',
-          pathMaxDays: 10
-        };
-      }
-      
-      const pathProgress = getUserPathProgress(userProfile, currentPath);
-      
-      if (!pathProgress) {
-        return {
-          completedDays: [],
-          progressPercentage: 0,
-          pathName: pathData.title,
-          pathMaxDays: pathData.duration
-        };
-      }
-      
-      const completedDays = pathProgress.completedDays || [];
-      const progressPercentage = Math.round((completedDays.length / pathData.duration) * 100);
-      
-      return {
-        completedDays,
-        progressPercentage,
-        pathName: pathData.title,
-        pathMaxDays: pathData.duration
-      };
-    } catch (error) {
-      console.error('Error getting path progress:', error);
-      return {
-        completedDays: [],
-        progressPercentage: 0,
-        pathName: 'Journey',
-        pathMaxDays: 10
-      };
-    }
-  };
-
-  const { completedDays, progressPercentage, pathName, pathMaxDays } = getPathProgress();
-  
-  // Determine next day
-  const getNextDay = () => {
-    if (userProfile && userProfile.journeyProgress) {
-      return getNextDayForPath(userProfile, currentPath);
-    }
-    
-    if (!completedDays || completedDays.length === 0) return 1;
-    if (completedDays.length >= pathMaxDays) return pathMaxDays;
-    
-    const sortedCompletedDays = [...completedDays].sort((a, b) => a - b);
-    
-    for (let day = 1; day <= pathMaxDays; day++) {
-      if (!sortedCompletedDays.includes(day)) {
-        return day;
-      }
-    }
-    
-    return Math.min(sortedCompletedDays[sortedCompletedDays.length - 1] + 1, pathMaxDays);
-  };
-  
-  const nextDay = getNextDay();
-  const currentPrompt = getJourneyDay(nextDay, currentPath);
-  const isJourneyComplete = completedDays.length >= pathMaxDays;
-  
-  // Navigation functions
-  const goToDailyView = (day, pathId = currentPath) => {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     navigateToScreen('daily', { day, pathId });
   };
   
   const goToUpload = () => {
-<<<<<<< HEAD
     navigateToScreen('upload', { day: currentPathInfo.nextDay, pathId: currentPathInfo.pathId });
   };
 
@@ -543,14 +338,6 @@ console.log('Debug - completedPaths:', completedPaths);
     if (pathData) {
       navigateToScreen('write', { day: pathData.nextDay, pathId });
     }
-=======
-    navigateToScreen('upload', { day: nextDay, pathId: currentPath });
-  };
-
-  const continueJourney = (pathId) => {
-    const nextDay = getNextDayForPath(userProfile, pathId);
-    navigateToScreen('write', { day: nextDay, pathId });
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
 
   const goToSettings = () => {
@@ -567,7 +354,6 @@ console.log('Debug - completedPaths:', completedPaths);
     }, 300);
   };
   
-<<<<<<< HEAD
   // Enhanced stats component using centralized statistics
   // src/pages/HomeScreen.jsx - Updated StatsOverview Component
 // Find the StatsOverview component and update the completed paths stat card
@@ -673,8 +459,6 @@ const StatsOverview = () => {
       });
     };
   
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   // Render location prompt modal
   const renderLocationPrompt = () => (
     <div className="hs-location-overlay" onClick={handleSkipLocation}>
@@ -745,7 +529,6 @@ const StatsOverview = () => {
     </div>
   );
   
-<<<<<<< HEAD
   // Loading check
   if (progressLoading || statsLoading) {
     return (
@@ -771,16 +554,10 @@ const StatsOverview = () => {
       </div>
 
       {/* Enhanced Header */}
-=======
-  return (
-    <div className={`hs-container ${isLoaded ? 'hs-loaded' : ''} ${isDarkMode ? 'hs-dark' : 'hs-light'}`}>
-      {/* Modern Header */}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       <header className="hs-header">
         <div className="hs-header-content">
           <div className="hs-header-main">
             <div className="hs-date-wrapper">
-<<<<<<< HEAD
               <div className="hs-date-badge">
                 <Clock size={14} />
                 <p className="hs-date">{formatDate()}</p>
@@ -792,12 +569,6 @@ const StatsOverview = () => {
                 {getGreeting() === 'Good morning' ? '🌅' : 
                  getGreeting() === 'Good afternoon' ? '☀️' : '🌙'}
               </div>
-=======
-              <p className="hs-date">{formatDate()}</p>
-            </div>
-            <h1 className="hs-greeting">
-              {getGreeting()}, <span className="hs-username">{userProfile?.displayName?.split(' ')[0] || 'there'}</span>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             </h1>
           </div>
           
@@ -812,12 +583,9 @@ const StatsOverview = () => {
             <ModernThemeToggle />
           </div>
         </div>
-<<<<<<< HEAD
         
         {/* Enhanced Stats Overview */}
         <StatsOverview />
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
       </header>
       
       {/* Journey Progress Section */}
@@ -838,7 +606,6 @@ const StatsOverview = () => {
         </div>
 
         {/* In-Progress Journeys */}
-<<<<<<< HEAD
         {hasActiveJourneys && (
           <div className="hs-journey-category">
             <h3 className="hs-category-title">
@@ -855,20 +622,6 @@ const StatsOverview = () => {
                     '--path-color': path.color,
                     '--path-color-rgb': path.color
                   }}
-=======
-        {inProgressPaths.length > 0 && (
-          <div className="hs-journey-category">
-            <h3 className="hs-category-title">
-              <Target className="hs-category-icon" />
-              In Progress
-            </h3>
-            <div className="hs-journeys-grid">
-              {inProgressPaths.map(path => (
-                <div 
-                  className={`hs-journey-card hs-journey-${path.id}`} 
-                  key={path.id}
-                  onClick={() => continueJourney(path.id)}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 >
                   <div className="hs-journey-header">
                     <div 
@@ -881,36 +634,22 @@ const StatsOverview = () => {
                       <DynamicIcon name={path.iconName} className="hs-journey-icon" />
                     </div>
                     <div className="hs-journey-meta">
-<<<<<<< HEAD
                       <span className="hs-journey-day">Day {path.nextDay} of {path.totalDays}</span>
                     </div>
                   </div>
                   <h4 className="hs-journey-title">{path.title}</h4>
                   
-=======
-                      <span className="hs-journey-day">Day {getNextDayForPath(userProfile, path.id)} of {path.totalDays}</span>
-                    </div>
-                  </div>
-                  <h4 className="hs-journey-title">{path.title}</h4>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   <div className="hs-progress-bar">
                     <div 
                       className="hs-progress-fill" 
                       style={{ 
                         width: `${path.percentage}%`,
-<<<<<<< HEAD
                         backgroundColor: `rgb(${path.color})`,
                         boxShadow: `0 0 8px rgba(${path.color}, 0.4)`
                       }}
                     />
                   </div>
                   
-=======
-                        backgroundColor: `rgb(${path.color})`
-                      }}
-                    />
-                  </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   <div className="hs-journey-footer">
                     <span className="hs-progress-text">{path.percentage}% complete</span>
                     <button className="hs-continue-btn">
@@ -925,7 +664,6 @@ const StatsOverview = () => {
         )}
 
         {/* Completed Journeys */}
-<<<<<<< HEAD
         {hasCompletedJourneys && (
           <div className="hs-journey-category">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
@@ -952,20 +690,6 @@ const StatsOverview = () => {
                     '--path-color': path.color,
                     '--path-color-rgb': path.color
                   }}
-=======
-        {completedPaths.length > 0 && (
-          <div className="hs-journey-category">
-            <h3 className="hs-category-title">
-              <CheckSquare className="hs-category-icon" />
-              Completed
-            </h3>
-            <div className="hs-journeys-grid">
-              {completedPaths.map(path => (
-                <div 
-                  className={`hs-journey-card hs-journey-completed hs-journey-${path.id}`} 
-                  key={path.id}
-                  onClick={() => navigateToScreen('journey-complete', { pathId: path.id })}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 >
                   <div className="hs-journey-header">
                     <div 
@@ -983,28 +707,18 @@ const StatsOverview = () => {
                     </div>
                   </div>
                   <h4 className="hs-journey-title">{path.title}</h4>
-<<<<<<< HEAD
                   
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   <div className="hs-progress-bar">
                     <div 
                       className="hs-progress-fill" 
                       style={{ 
                         width: '100%',
-<<<<<<< HEAD
                         backgroundColor: `rgb(${path.color})`,
                         boxShadow: `0 0 8px rgba(${path.color}, 0.4)`
                       }}
                     />
                   </div>
                   
-=======
-                        backgroundColor: `rgb(${path.color})`
-                      }}
-                    />
-                  </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   <div className="hs-journey-footer">
                     <span className="hs-progress-text">{path.totalDays} days completed</span>
                     <button className="hs-view-btn">
@@ -1019,11 +733,7 @@ const StatsOverview = () => {
         )}
 
         {/* No Journeys Started */}
-<<<<<<< HEAD
         {!hasAnyProgress && (
-=======
-        {inProgressPaths.length === 0 && completedPaths.length === 0 && (
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           <div className="hs-no-journeys">
             <div className="hs-no-journeys-icon">
               <Compass size={64} />
@@ -1043,19 +753,11 @@ const StatsOverview = () => {
       </section>
       
       {/* Today's Prompt Section */}
-<<<<<<< HEAD
       {hasAnyProgress && (
         <section className="hs-section hs-prompt-section">
           <div className="hs-section-header">
             <h2 className="hs-section-title">
               {currentPathInfo.isCompleted ? (
-=======
-      {currentPath && (
-        <section className="hs-section hs-prompt-section">
-          <div className="hs-section-header">
-            <h2 className="hs-section-title">
-              {isJourneyComplete ? (
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 <>
                   <Award className="hs-section-icon" />
                   Journey Complete!
@@ -1068,30 +770,18 @@ const StatsOverview = () => {
               )}
             </h2>
             <div className="hs-prompt-day-badge">
-<<<<<<< HEAD
               {currentPathInfo.isCompleted ? (
-=======
-              {isJourneyComplete ? (
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 <div className="hs-completed-badge">
                   <CheckCircle size={16} />
                   <span>Complete</span>
                 </div>
               ) : (
-<<<<<<< HEAD
                 <span>Day {currentPathInfo.nextDay}</span>
-=======
-                <span>Day {nextDay}</span>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               )}
             </div>
           </div>
           
-<<<<<<< HEAD
           {currentPathInfo.isCompleted ? (
-=======
-          {isJourneyComplete ? (
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             <div className="hs-prompt-card hs-journey-complete-card">
               <div className="hs-complete-celebration">
                 <div className="hs-complete-icon">
@@ -1100,11 +790,7 @@ const StatsOverview = () => {
                 </div>
                 <h3 className="hs-complete-title">Congratulations!</h3>
                 <p className="hs-complete-text">
-<<<<<<< HEAD
                   You've completed all {currentPathInfo.pathMaxDays} days of the {currentPathInfo.pathName}. 
-=======
-                  You've completed all {pathMaxDays} days of the {pathName}. 
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   View your journey summary or explore another path.
                 </p>
               </div>
@@ -1112,11 +798,7 @@ const StatsOverview = () => {
               <div className="hs-prompt-actions">
                 <button 
                   className="hs-action-btn hs-action-primary"
-<<<<<<< HEAD
                   onClick={() => navigateToScreen('journey-complete', { pathId: currentPathInfo.pathId })}
-=======
-                  onClick={() => navigateToScreen('journey-complete', { pathId: currentPath })}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 >
                   <Star size={18} />
                   <span>View Summary</span>
@@ -1132,30 +814,18 @@ const StatsOverview = () => {
               </div>
             </div>
           ) : (
-<<<<<<< HEAD
             <div className={`hs-prompt-card hs-prompt-${currentPathInfo.pathId}`}>
-=======
-            <div className={`hs-prompt-card hs-prompt-${currentPath}`}>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               <div className="hs-prompt-theme">
                 <Bookmark className="hs-theme-icon" />
                 <span className="hs-theme-text">{currentPrompt?.theme || 'Reflection'}</span>
               </div>
               
-<<<<<<< HEAD
               <h3 className="hs-prompt-title">{currentPrompt?.title || `Day ${currentPathInfo.nextDay}`}</h3>
-=======
-              <h3 className="hs-prompt-title">{currentPrompt?.title || `Day ${nextDay}`}</h3>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               <p className="hs-prompt-text">{currentPrompt?.prompt || 'Take a moment to reflect on your journey so far.'}</p>
               
               <div className="hs-prompt-actions">
                 <button 
-<<<<<<< HEAD
                   className={`hs-action-btn hs-action-primary hs-pulse-btn hs-action-${currentPathInfo.pathId}`}
-=======
-                  className={`hs-action-btn hs-action-primary hs-pulse-btn hs-action-${currentPath}`}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   onClick={() => goToUpload()}
                 >
                   <Zap size={18} />
@@ -1164,11 +834,7 @@ const StatsOverview = () => {
                 
                 <button 
                   className="hs-action-btn hs-action-secondary"
-<<<<<<< HEAD
                   onClick={() => goToDailyView(currentPathInfo.nextDay)}
-=======
-                  onClick={() => goToDailyView(nextDay)}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                 >
                   <BookOpen size={18} />
                   <span>View Details</span>
@@ -1222,7 +888,6 @@ const StatsOverview = () => {
             <ChevronRight className="hs-action-chevron" />
           </button>
 
-<<<<<<< HEAD
           {hasCompletedJourneys && (
             <button 
               className="hs-action-card"
@@ -1236,8 +901,6 @@ const StatsOverview = () => {
             </button>
           )}
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           <button 
             className="hs-action-card"
             onClick={goToSettings}
@@ -1249,26 +912,15 @@ const StatsOverview = () => {
             <ChevronRight className="hs-action-chevron" />
           </button>
           
-<<<<<<< HEAD
           {hasCompletedJourneys && (
             <button 
               className="hs-action-card hs-action-highlight"
               onClick={() => navigateToScreen('completed-paths')}
-=======
-          {completedPaths.length > 0 && (
-            <button 
-              className="hs-action-card hs-action-highlight"
-              onClick={() => navigateToScreen('journey-complete', { pathId: completedPaths[0].id })}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             >
               <div className="hs-action-icon-wrapper hs-action-icon-highlight">
                 <Award className="hs-action-icon" />
               </div>
-<<<<<<< HEAD
               <span className="hs-action-label">Achievements</span>
-=======
-              <span className="hs-action-label">Achievement</span>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               <ChevronRight className="hs-action-chevron" />
             </button>
           )}
@@ -1288,7 +940,6 @@ const StatsOverview = () => {
         </div>
       </section>
       
-<<<<<<< HEAD
       {/* Enhanced Analytics Preview Section */}
       {hasAnyProgress && statistics.totalEntries >= 3 && (
         <section className="hs-section hs-analytics-preview-section">
@@ -1368,28 +1019,19 @@ const StatsOverview = () => {
             <Heart size={14} />
             <span>{quote.theme}</span>
           </div>
-=======
-      {/* Inspirational Quote Section */}
-      <section className="hs-section hs-quote-section">
-        <div className="hs-quote-card" onClick={changeQuote}>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
           <Quote className="hs-quote-icon" />
           <div className={`hs-quote-content ${isQuoteChanging ? 'hs-quote-changing' : ''}`}>
             <p className="hs-quote-text">"{quote.text}"</p>
             <p className="hs-quote-author">— {quote.author}</p>
           </div>
           <div className="hs-quote-tap-hint">
-<<<<<<< HEAD
             <Sparkles size={14} />
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
             <span>Tap for new quote</span>
           </div>
         </div>
       </section>
       
       {/* Scroll Indicator for Longer Content */}
-<<<<<<< HEAD
       <button 
   className="hs-scroll-indicator"
   onClick={() => {
@@ -1413,11 +1055,6 @@ const StatsOverview = () => {
 >
   <ChevronDown className="hs-scroll-icon" />
 </button>
-=======
-      <div className="hs-scroll-indicator">
-        <ChevronDown className="hs-scroll-icon" />
-      </div>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 
       {/* Weather Dialog */}
       {showWeatherDialog && weatherData && (

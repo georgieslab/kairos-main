@@ -159,10 +159,6 @@
   align-items: flex-start;
   justify-content: space-between;
   position: relative;
-<<<<<<< HEAD
-=======
-  margin-bottom: var(--spacing-sm);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   margin-top:1.25rem;
 
 }
@@ -172,10 +168,7 @@
 }
 
 .back-button {
-<<<<<<< HEAD
   margin-top: 2rem;
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   display: flex;
   align-items: center;
   color: var(--text-muted);
@@ -330,11 +323,6 @@
 .prompt-day-container {
   display: flex;
   justify-content: flex-start;
-<<<<<<< HEAD
-
-=======
-  margin-bottom: var(--spacing-lg);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .prompt-day {
@@ -343,11 +331,7 @@
   color: var(--text-primary);
   padding: var(--spacing-sm) var(--spacing-lg);
   background-color: var(--bg-tertiary);
-<<<<<<< HEAD
   border-radius:  15px;
-=======
-  border-radius: var(--border-radius-full);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   display: inline-block;
   max-width: 100%;
   text-align: left;
@@ -451,11 +435,7 @@
 }
 
 .prompt-text::before {
-<<<<<<< HEAD
   content: """;   
-=======
-  content: """;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   color: var(--text-muted);
   font-size: 1.5rem;
   line-height: 0;
@@ -1071,7 +1051,6 @@
     color: #ffffff;
     box-shadow: 9px 7px 14px #558b6e3d;
     transition: all var(--transition-normal);
-<<<<<<< HEAD
 }
 
 /* Add these styles to your existing WriteTab.css */
@@ -2529,6 +2508,3 @@
   }
 }
 
-=======
-}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188

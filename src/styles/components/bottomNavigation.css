@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* src/styles/components/bottomNavigation.css - Enhanced Modern Design */
 
 /* ========================================
@@ -26,35 +25,10 @@
   /* Enhanced Path Colors with Gradients */
   --color-self-discovery: #558B6E;
   --color-self-discovery-light: #6BA07C;
-=======
-/* src/styles/components/bottomNavigation.css - Enhanced with theme support */
-
-/* Define theme variables similar to pathSelection.css */
-:root {
-  /* Dark Theme Colors */
-  --dark-nav-bg: rgba(17, 24, 39, 0.85);
-  --dark-nav-border: rgba(55, 76, 81, 0.45);
-  --dark-nav-icon: #9CA3AF;
-  --dark-nav-text: #9CA3AF;
-  --dark-nav-hover-icon: #F9FAFB;
-  --dark-nav-hover-text: #F9FAFB;
-  
-  /* Light Theme Colors */
-  --light-nav-bg: rgba(249, 250, 251, 0.85);
-  --light-nav-border: rgba(209, 213, 219, 0.45);
-  --light-nav-icon: #6B7280;
-  --light-nav-text: #6B7280;
-  --light-nav-hover-icon: #111827;
-  --light-nav-hover-text: #111827;
-  
-  /* Path Colors (same as in pathSelection.css) */
-  --color-self-discovery: #558B6E;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   --color-emotional-intelligence: #D84C93;
   --color-mindfulness-awareness: #8E44AD;
   --color-transformation-journey: #1A9B9B;
   --color-creative-expression: #D946EF;
-<<<<<<< HEAD
   
   /* Animation Variables */
   --nav-transition: cubic-bezier(0.4, 0, 0.2, 1);
@@ -71,17 +45,11 @@
 /* ========================================
    BASE NAVIGATION STYLES
 ======================================== */
-=======
-}
-
-/* ===== Base Styles ===== */
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 .bottom-navigation {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-<<<<<<< HEAD
   z-index: 1000;
   background: var(--dark-nav-bg);
   backdrop-filter: blur(20px) saturate(180%);
@@ -118,34 +86,12 @@
   margin: 0 auto;
   padding: 0.25rem 0.5rem 0.5rem;
   overflow: hidden;
-=======
-  z-index: 50;
-  background-color: var(--dark-nav-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* For Safari */
-  border-top: 1px solid var(--dark-nav-border);
-  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Light Theme Styles */
-.bottom-navigation.light-theme {
-  background-color: var(--light-nav-bg);
-  border-top: 1px solid var(--light-nav-border);
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
-}
-
-.bottom-navigation-container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 0rem 0.5rem;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .bottom-navigation-items {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
   position: relative;
   z-index: 2;
 }
@@ -179,11 +125,6 @@
 /* ========================================
    ENHANCED NAV ITEM STYLES
 ======================================== */
-=======
-}
-
-/* ===== Nav Item Styles ===== */
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 .nav-item {
   position: relative;
   display: flex;
@@ -191,7 +132,6 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-<<<<<<< HEAD
   padding: 0.75rem 0.25rem 1rem;
   background: transparent;
   border: none;
@@ -203,23 +143,12 @@
   --active-color: var(--color-self-discovery);
   --active-gradient-start: var(--color-self-discovery);
   --active-gradient-end: var(--color-self-discovery-light);
-=======
-  padding: 0.5rem 0;
-  background-color: transparent;
-  border: none;
-  color: var(--dark-nav-text);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  overflow: hidden;
-  --active-color: var(--color-self-discovery);
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .bottom-navigation.light-theme .nav-item {
   color: var(--light-nav-text);
 }
 
-<<<<<<< HEAD
 /* Hover Effects */
 .nav-item:hover:not(.nav-item-active):not(.primary-action) {
   color: var(--dark-nav-hover-text);
@@ -397,192 +326,12 @@
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
   z-index: 3;
   position: relative;
-=======
-.nav-item:hover {
-  color: var(--dark-nav-hover-text);
-}
-
-.bottom-navigation.light-theme .nav-item:hover {
-  color: var(--light-nav-hover-text);
-}
-
-/* Icon container for standard tabs */
-.nav-icon-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 32px;
-  height: 32px;
-  margin-bottom: 0.25rem;
-  border-radius: 50%;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/* Animation for active icon */
-.nav-item-active .nav-icon-container {
-  transform: translateY(-2px);
-}
-
-/* Icon styling */
-.nav-item-icon {
-  width: 22px !important;
-  height: 22px !important;
-  color: var(--dark-nav-icon);
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.bottom-navigation.light-theme .nav-item-icon {
-  color: var(--light-nav-icon);
-}
-
-/* Active icon styling */
-.nav-icon-active {
-  color: var(--active-color) !important;
-  transform: scale(1.1);
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
-}
-
-.bottom-navigation.light-theme .nav-icon-active {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-}
-
-/* Label styling */
-.nav-item-label {
-  font-size: 0.7rem;
-  font-weight: 400;
-  margin-top: 0.125rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  white-space: nowrap;
-}
-
-/* Active label styling */
-.nav-label-active {
-  color: var(--active-color) !important;
-  font-weight: 500;
-}
-
-/* Active indicator dot */
-.nav-item-indicator {
-  position: absolute;
-  bottom: 0.25rem;
-  width: 4px;
-  height: 4px;
-  background: var(--active-color);
-  border-radius: 50%;
-  animation: indicatorAppear 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-}
-
-.bottom-navigation.light-theme .nav-item-indicator {
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Indicator animation based on direction */
-@keyframes indicatorAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Slide left animation */
-.nav-item-indicator.slide-left {
-  animation: slideLeft 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-}
-
-@keyframes slideLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px) scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-/* Slide right animation */
-.nav-item-indicator.slide-right {
-  animation: slideRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-}
-
-@keyframes slideRight {
-  0% {
-    opacity: 0;
-    transform: translateX(20px) scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-/* Primary action styling */
-.primary-action {
-  margin-top: -1.5rem;
-}
-
-.primary-action-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #558B6E, #2B463C);
-  border-radius: 50%;
-  margin-bottom: 0.25rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.bottom-navigation.light-theme .primary-action-button {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.primary-action-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: 0.5s;
-}
-
-.primary-action:hover .primary-action-button::after {
-  left: 100%;
-}
-
-.primary-action:hover .primary-action-button {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-}
-
-.bottom-navigation.light-theme .primary-action:hover .primary-action-button {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-
-.primary-action-icon {
-  width: 24px !important;
-  height: 24px !important;
-  color: #ffffff !important;
-  transition: all 0.3s ease;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
 }
 
 .primary-action:hover .primary-action-icon {
   transform: scale(1.1);
 }
 
-<<<<<<< HEAD
 /* Primary Action Glow Effect */
 .primary-action-glow {
   position: absolute;
@@ -694,28 +443,10 @@
 }
 
 @keyframes enhancedRipple {
-=======
-/* Ripple effect for tab clicks */
-.ripple-effect {
-  position: absolute;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: scale(0);
-  animation: ripple 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
-  pointer-events: none;
-}
-
-.bottom-navigation.light-theme .ripple-effect {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-@keyframes ripple {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   0% {
     transform: scale(0);
     width: 0;
     height: 0;
-<<<<<<< HEAD
     opacity: 0.6;
   }
   50% {
@@ -725,19 +456,10 @@
     transform: scale(4);
     width: 120px;
     height: 120px;
-=======
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(4);
-    width: 100px;
-    height: 100px;
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     opacity: 0;
   }
 }
 
-<<<<<<< HEAD
 /* ========================================
    HAPTIC FEEDBACK SIMULATION
 ======================================== */
@@ -939,33 +661,11 @@
 }
 
 @media (max-width: 360px) {
-=======
-/* Tab-specific colors */
-.nav-item[data-tab="home"].nav-item-active {
-  --active-color: var(--color-self-discovery);
-}
-
-.nav-item[data-tab="paths"].nav-item-active {
-  --active-color: #E6B89C;
-}
-
-.nav-item[data-tab="analytics"].nav-item-active {
-  --active-color: #5F9EA0;
-}
-
-.nav-item[data-tab="profile"].nav-item-active {
-  --active-color: #9370DB;
-}
-
-/* Media queries */
-@media (max-width: 380px) {
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   .nav-item-label {
     font-size: 0.65rem;
   }
   
   .primary-action-button {
-<<<<<<< HEAD
     width: 48px;
     height: 48px;
   }
@@ -1349,32 +1049,3 @@
     height: 52px !important;
   }
 }
-=======
-    width: 42px;
-    height: 42px;
-  }
-  
-  .primary-action-icon {
-    width: 20px !important;
-    height: 20px !important;
-  }
-}
-
-.nav-item {
-    position: relative;
-    display: flex
-;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 0.5rem 0 1.5rem 0;
-    background-color: transparent;
-    border: none;
-    color: var(--dark-nav-text);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    overflow: hidden;
-    --active-color: var(--color-self-discovery);
-}
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
