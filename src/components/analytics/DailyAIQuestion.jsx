@@ -410,9 +410,9 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
             <div className="context-info">
               <MessageCircle size={14} />
               <span>
-                AI will analyze your {totalEntries} journal entries 
+                AI will analyze your {totalEntries} journal entries  
                 {progressStats?.currentStreak > 0 && ` (${progressStats.currentStreak}-day streak!)`} 
-                to provide personalized insights
+                 , in order provide personalized insights
               </span>
             </div>
           </div>

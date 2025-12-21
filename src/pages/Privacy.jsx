@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Mail, Shield, Eye, Lock, MapPin, Brain, Download, Trash2, Settings, ExternalLink, Users, AlertCircle, Clock, Globe, FileText, Database, Smartphone } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
+import '../styles/components/terms.css';
 
 const PrivacyPolicy = ({ onBack }) => {
   const [expandedSections, setExpandedSections] = useState({
@@ -56,7 +57,7 @@ const PrivacyPolicy = ({ onBack }) => {
     <PageLayout title="Privacy Policy" onBack={onBack}>
       <div className="legal-document">
         <div className="document-header">
-          <p className="document-date">Last Updated: March 15, 2025</p>
+          <p className="document-date">Last Updated: November 8, 2025</p>
           
           <div className="info-card info-card-welcome">
             <div className="info-card-icon">
@@ -65,8 +66,9 @@ const PrivacyPolicy = ({ onBack }) => {
             <div className="info-card-content">
               <h3 className="info-card-title">Your Privacy Is Our Priority</h3>
               <p className="info-card-text">
-                Καιρός is committed to protecting your privacy and giving you complete control over your personal information. 
-                This policy explains exactly how we collect, use, and protect your data when you use our journaling app.
+                Καιρός is committed to protecting your privacy across all forms of expression—text, voice, 
+                and visual. This policy explains exactly how we collect, use, and protect your data when you 
+                use our multi-modal journaling platform.
               </p>
             </div>
           </div>
@@ -161,22 +163,23 @@ const PrivacyPolicy = ({ onBack }) => {
           <div className="data-category">
             <h4 className="data-category-title">
               <Brain className="data-category-icon" />
-              Journal Content & Analysis
+              Multi-Modal Journal Content
             </h4>
             <div className="data-items">
-              <div className="data-item">✍️ <strong>Written entries</strong> - Text you type directly into the app</div>
-              <div className="data-item">📷 <strong>Uploaded photos</strong> - Images of handwritten journal pages you choose to upload</div>
-              <div className="data-item">🔤 <strong>Extracted text</strong> - Text recognized from your uploaded photos using OCR technology</div>
-              <div className="data-item">💡 <strong>AI insights</strong> - Analysis and patterns generated from your journal content (optional)</div>
-              <div className="data-item">📊 <strong>Progress data</strong> - Your journaling streaks, completion rates, and journey progress</div>
-              <div className="data-item">🏷️ <strong>Tags and categories</strong> - Labels and organization you apply to your entries</div>
+              <div className="data-item">✍️ <strong>Text entries</strong> - Written journal entries you create in the app</div>
+              <div className="data-item">🎤 <strong>Voice recordings</strong> - Audio recordings and AI-generated transcriptions</div>
+              <div className="data-item">🎨 <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
+              <div className="data-item">�️ <strong>Image descriptions</strong> - AI-generated descriptions of your visual content</div>
+              <div className="data-item">💡 <strong>AI insights</strong> - Cross-modal analysis and patterns from all entry types</div>
+              <div className="data-item">📊 <strong>Progress tracking</strong> - Streaks, completion rates, and journey milestones</div>
+              <div className="data-item">🏷️ <strong>Organization data</strong> - Tags, categories, and labels you apply</div>
             </div>
             
             <div className="warning-box">
               <AlertCircle className="warning-icon" />
               <div>
-                <strong>Your Journal Content Belongs to You:</strong> We never claim ownership of your personal journal entries. 
-                You retain all rights to your content and can export or delete it at any time.
+                <strong>Your Content, Your Ownership:</strong> Whether you write, speak, or create art, you retain 
+                full ownership of all your multi-modal journal content. Export or delete it anytime.
               </div>
             </div>
           </div>
@@ -217,10 +220,11 @@ const PrivacyPolicy = ({ onBack }) => {
             <div className="usage-item">
               <Brain className="usage-icon" />
               <div className="usage-content">
-                <h4>Journal Analysis & Insights</h4>
-                <p>AI analyzes your entries to identify patterns, themes, and provide personalized insights to support your personal growth</p>
+                <h4>Multi-Modal AI Analysis</h4>
+                <p>Claude AI analyzes your text, voice transcriptions, and visual descriptions to identify patterns, 
+                themes, and provide holistic insights across all forms of expression</p>
                 <div className="usage-note">
-                  <small><strong>Control:</strong> Can be disabled in privacy settings</small>
+                  <small><strong>Control:</strong> Adjust or disable AI processing in privacy settings</small>
                 </div>
               </div>
             </div>
@@ -277,16 +281,17 @@ const PrivacyPolicy = ({ onBack }) => {
           </div>
 
           <div className="ai-processing-details">
-            <h4 className="subsection-title">AI Processing Details</h4>
+            <h4 className="subsection-title">Multi-Modal AI Processing</h4>
             <div className="info-box">
-              <h5 className="info-box-title">How AI Analysis Works</h5>
+              <h5 className="info-box-title">How AI Analyzes Your Expression</h5>
               <ul className="styled-list">
-                <li><strong>Local Processing:</strong> Basic analysis happens on your device when possible</li>
-                <li><strong>Secure Cloud Processing:</strong> Advanced analysis uses encrypted data in secure servers</li>
-                <li><strong>No Human Review:</strong> Your journal content is never read by our team members</li>
-                <li><strong>Pattern Recognition:</strong> AI identifies emotional patterns, themes, and growth opportunities</li>
-                <li><strong>Personalized Insights:</strong> Recommendations are tailored specifically to your writing patterns</li>
-                <li><strong>Continuous Learning:</strong> AI improves its suggestions based on your feedback (anonymously)</li>
+                <li><strong>Text Analysis:</strong> Identifies themes, emotions, and writing patterns in written entries</li>
+                <li><strong>Voice Processing:</strong> Transcribes audio using OpenAI Whisper and Web Speech API</li>
+                <li><strong>Visual Understanding:</strong> Analyzes artwork for emotional content and creative themes</li>
+                <li><strong>Cross-Modal Insights:</strong> Finds patterns across all your expression modalities</li>
+                <li><strong>Secure Processing:</strong> All data encrypted during analysis in secure cloud servers</li>
+                <li><strong>No Human Review:</strong> Your content is never read, listened to, or viewed by our team</li>
+                <li><strong>Continuous Learning:</strong> AI improves based on anonymized feedback across all users</li>
               </ul>
             </div>
           </div>
@@ -501,19 +506,25 @@ const PrivacyPolicy = ({ onBack }) => {
                 <div className="control-option">
                   <div className="control-option-icon">🤖</div>
                   <div>
-                    <strong>Enable/Disable AI:</strong> Turn AI analysis on or off completely in privacy settings
+                    <strong>Enable/Disable AI:</strong> Turn AI analysis on or off for all modalities in privacy settings
                   </div>
                 </div>
                 <div className="control-option">
                   <div className="control-option-icon">🎚️</div>
                   <div>
-                    <strong>Processing Levels:</strong> Choose local-only, basic cloud, or advanced AI processing
+                    <strong>Modality Selection:</strong> Choose which types (text, voice, visual) AI can analyze
                   </div>
                 </div>
                 <div className="control-option">
                   <div className="control-option-icon">💡</div>
                   <div>
-                    <strong>Insight Control:</strong> Delete previous insights or prevent future analysis of specific entries
+                    <strong>Insight Control:</strong> Delete previous insights or exclude specific entries from analysis
+                  </div>
+                </div>
+                <div className="control-option">
+                  <div className="control-option-icon">🔒</div>
+                  <div>
+                    <strong>Processing Level:</strong> Choose basic, standard, or advanced AI analysis depth
                   </div>
                 </div>
               </div>
@@ -629,6 +640,8 @@ const PrivacyPolicy = ({ onBack }) => {
                 <h5 className="info-box-title">Current Service Providers</h5>
                 <ul className="styled-list">
                   <li><strong>Cloud Infrastructure:</strong> AWS (encrypted data storage and processing)</li>
+                  <li><strong>AI Processing:</strong> Claude Sonnet 4 (for multi-modal analysis and insights)</li>
+                  <li><strong>Voice Transcription:</strong> OpenAI Whisper (mobile) and Web Speech API (desktop)</li>
                   <li><strong>Analytics:</strong> Privacy-focused analytics (no personal data shared)</li>
                   <li><strong>Email Service:</strong> Transactional email providers for account notifications</li>
                   <li><strong>Payment Processing:</strong> Stripe (for subscription payments, governed by their privacy policy)</li>
@@ -693,12 +706,14 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">What We Never Share</h4>
             <div className="highlight-box">
               <ul className="styled-list">
-                <li>Your actual journal content or personal entries</li>
-                <li>Your personal insights or AI analysis results</li>
-                <li>Your email address or contact information (except with your explicit consent)</li>
+                <li>Your journal content across all modalities (text, voice, visual)</li>
+                <li>Voice recordings or transcriptions</li>
+                <li>Artwork or visual journal entries</li>
+                <li>Personal insights or AI analysis results</li>
+                <li>Email address or contact information (except with explicit consent)</li>
                 <li>Individual usage patterns or behavior data</li>
                 <li>Any information for advertising or marketing purposes</li>
-                <li>Data with companies for profiling or targeting</li>
+                <li>Data with third parties for profiling or targeting</li>
               </ul>
             </div>
           </div>
@@ -706,9 +721,67 @@ const PrivacyPolicy = ({ onBack }) => {
 
         <ExpandableSection id="third-party" title="Third-Party Services & Integrations" icon={ExternalLink}>
           <p className="section-intro">
-            Καιρός integrates with carefully selected third-party services to enhance your experience. 
+            Καιρός integrates with carefully selected third-party services to power our multi-modal platform. 
             Here's what you need to know about each integration:
           </p>
+
+          <div className="third-party-service">
+            <h4 className="service-title">
+              <Brain className="service-icon" />
+              AI Analysis (Claude Sonnet 4)
+            </h4>
+            <div className="service-details">
+              <p>
+                <strong>Purpose:</strong> Provides advanced AI analysis of your multi-modal journal content to generate insights and patterns.
+              </p>
+              <div className="info-box">
+                <h5 className="info-box-title">Data Sharing Details</h5>
+                <ul className="styled-list">
+                  <li><strong>What's Shared:</strong> Encrypted journal content (text, voice transcriptions, image descriptions)</li>
+                  <li><strong>When:</strong> Only when you enable AI analysis features</li>
+                  <li><strong>Protection:</strong> End-to-end encryption, no data retention by Claude</li>
+                  <li><strong>Control:</strong> Disable AI analysis anytime in privacy settings</li>
+                </ul>
+              </div>
+              <a 
+                href="https://www.anthropic.com/privacy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="external-link"
+              >
+                View Anthropic Privacy Policy <ExternalLink size={14} />
+              </a>
+            </div>
+          </div>
+
+          <div className="third-party-service">
+            <h4 className="service-title">
+              <Smartphone className="service-icon" />
+              Voice Transcription Services
+            </h4>
+            <div className="service-details">
+              <p>
+                <strong>Purpose:</strong> Converts your voice recordings into text for journaling and AI analysis.
+              </p>
+              <div className="info-box">
+                <h5 className="info-box-title">Platform-Specific Services</h5>
+                <ul className="styled-list">
+                  <li><strong>Mobile (OpenAI Whisper):</strong> Voice recordings sent to OpenAI for transcription</li>
+                  <li><strong>Desktop (Web Speech API):</strong> Browser-based transcription, no external sharing</li>
+                  <li><strong>Data Handling:</strong> Audio deleted after transcription, text stored in your account</li>
+                  <li><strong>Optional:</strong> Use text journaling exclusively if you prefer</li>
+                </ul>
+              </div>
+              <a 
+                href="https://openai.com/privacy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="external-link"
+              >
+                View OpenAI Privacy Policy <ExternalLink size={14} />
+              </a>
+            </div>
+          </div>
 
           <div className="third-party-service">
             <h4 className="service-title">
@@ -817,20 +890,20 @@ const PrivacyPolicy = ({ onBack }) => {
             <div className="retention-category">
               <h4 className="retention-title">
                 <FileText className="retention-icon" />
-                Journal Content
+                Multi-Modal Journal Content
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
                   <div className="retention-period">📅 <strong>Default:</strong> Indefinite</div>
                   <div className="retention-description">
-                    Your journal entries are kept until you delete them or close your account. 
-                    This allows you to build a long-term personal archive.
+                    All journal entries (text, voice, visual) are kept until you delete them or close your account, 
+                    allowing you to build a comprehensive multi-modal archive.
                   </div>
                 </div>
                 <div className="retention-option">
                   <div className="retention-period">⚙️ <strong>Customizable:</strong> 1 month to 10 years</div>
                   <div className="retention-description">
-                    Set automatic deletion of entries older than your chosen time period in privacy settings.
+                    Set automatic deletion rules separately for each modality or apply globally to all content types.
                   </div>
                 </div>
               </div>
@@ -864,15 +937,15 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
-                  <div className="retention-period">🤖 <strong>Linked to Entries:</strong> Same as journal content</div>
+                  <div className="retention-period">🤖 <strong>Linked to Entries:</strong> Same as source content</div>
                   <div className="retention-description">
-                    AI insights are deleted when the corresponding journal entries are deleted.
+                    AI insights are deleted when the corresponding journal entries (text, voice, or visual) are deleted.
                   </div>
                 </div>
                 <div className="retention-option">
                   <div className="retention-period">📊 <strong>Aggregated Patterns:</strong> Anonymized indefinitely</div>
                   <div className="retention-description">
-                    Anonymous, aggregated insights help improve AI for all users (no personal data retained).
+                    Anonymous, aggregated multi-modal insights help improve AI for all users (no personal data retained).
                   </div>
                 </div>
               </div>

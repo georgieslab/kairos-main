@@ -264,6 +264,8 @@ const useNavigationState = (initialScreen = 'loading') => {
           const now = new Date();
           const hoursSinceActive = (now - lastActive) / (1000 * 60 * 60);
           
+          // IMPORTANT: Only restore context if it's recent AND we're checking during an authenticated session
+          // We'll rely on App.jsx to clear this if no user is present
           if (hoursSinceActive < 48) {
             console.log('Using persisted context (less than 48 hours old)');
             
@@ -280,6 +282,8 @@ const useNavigationState = (initialScreen = 'loading') => {
             // Don't set screen from storage - always start at loading
           } else {
             console.log('Persisted context too old, using defaults');
+            // Clear old context
+            localStorage.removeItem('kairosContext');
           }
         } else {
           console.log('No persisted context found, using defaults');
@@ -506,8 +510,10 @@ const useNavigationState = (initialScreen = 'loading') => {
     logScreenView(screen, data);
     
     // Update screen and data
+    console.log(`🔄 Navigation in progress: ${currentScreen} -> ${screen}`);
     setCurrentScreen(screen);
     setScreenData(data || {});
+    console.log('📦 Screen data:', data);
     
     // Handle path/day context preservation
     

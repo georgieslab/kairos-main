@@ -3,6 +3,125 @@
 // Central registry for all journey paths
 export const JOURNEY_PATHS = {};
 
+export const decidingToDoingDays = [
+  {
+    day: 1,
+    title: "Closing Doors",
+    theme: "Decision aftermath and emotional reality",
+    prompt: `You've made a decision. Other paths are closed. How does this actually feel in your body right now?
+
+Explore these aspects:
+• What physical sensations do you notice when you think about this choice? (Tightness? Relief? Heaviness?)
+• Which closed door are you still looking back at? Be honest.
+• What does 'relief' feel like for you? Is it peaceful or just the absence of anxiety?
+• What does 'terror' feel like? Where do you feel it?
+• Write this sentence and complete it: 'Now that I've chosen, I can no longer pretend that I...'
+• What are you grieving by closing the other options?
+
+Don't rationalize. Just describe what's true.`
+  },
+  {
+    day: 2,
+    title: "What Are You Waiting For?",
+    theme: "Identifying the invisible barriers",
+    prompt: `You know what to do next. But you're not doing it. What are you actually waiting for?
+
+Answer each honestly:
+• Permission from whom? (Name them. Even if it sounds silly.)
+• What 'energy' are you waiting to feel? (Describe it specifically - motivated? fearless? certain?)
+• What would 'the right moment' look like? (Paint the picture - what needs to be true?)
+• How will you know when you're 'ready'? (What's the signal you're listening for?)
+• If you had to start today, what would be your excuse? (Write it exactly as you'd say it to someone else.)
+• Is that excuse protecting you from something? What?
+
+Complete this: 'I'll start when...' - then challenge that statement.`
+  },
+  {
+    day: 3,
+    title: "What Does 'Launched' Actually Mean?",
+    theme: "Separating perfect from complete",
+    prompt: `Forget 'perfect.' What does 'done and out there' actually look like for your project?
+
+Be brutally specific:
+• If you launched today, what would exist? (List the actual things - page, post, product, whatever)
+• What's the minimum that counts as 'real'? (Not your ideal - the floor, not the ceiling)
+• What are you adding because it's necessary vs. because you're stalling?
+• Which features are you hiding behind? (The ones you 'need' before launch - list them)
+• For each feature above: What if you launched without it? Really, what would happen?
+• What does 'good enough to be useful' look like?
+• Write this: 'My project is launched when someone who isn't me can...' (finish that sentence)
+
+Now imagine someone using your 'good enough' version. What do they experience?`
+  },
+  {
+    day: 4,
+    title: "Not Planning - Doing",
+    theme: "Execution vs. preparation",
+    prompt: `Not another plan. Not more research. What's the smallest ACTUAL action you could take today?
+
+Work through this:
+• What would take 15 minutes and move the project forward? (Not thinking about moving it - actually moving it)
+• List 3 tiny actions. Which one are you avoiding most? (That's probably the one to do)
+• What's the difference between 'preparing to start' and 'starting'? (For YOUR project specifically)
+• How much of today did you spend 'getting ready' vs 'doing'? (Rough percentage)
+• What did you do today that felt productive but wasn't execution? (Be specific)
+• What's the next physical action that would make the project more real? (Something someone could witness)
+
+Before bed tonight: Did you do the tiny action? Yes or no. If no, why not? (No judgment - just data.)`
+  },
+  {
+    day: 5,
+    title: "The Failure Fantasy",
+    theme: "Confronting worst-case scenarios",
+    prompt: `Your project fails completely. It's done and out there, and nobody cares. Sit with this. Really feel it.
+
+Explore what that means:
+• What actually happens if it fails? (Not dramatic - literal. What changes in your life?)
+• Who would know? (Honestly - who's even watching?)
+• What would you tell yourself in that moment? (Your self-talk when it doesn't work)
+• Would you regret trying, or regret the time spent? (There's a difference)
+• What would 'failure' take away from you? (Identity? Hope? Security? Name it)
+• Has something you've done 'failed' before? (What did you survive from that?)
+• Write this sentence: 'If this fails, it means...' - then challenge whether that's actually true
+
+Here's the real question: Is the fear of failure bigger than the cost of never trying?`
+  },
+  {
+    day: 6,
+    title: "The Success Fear",
+    theme: "Why success might be scarier than failure",
+    prompt: `Your project succeeds. People want it. It's real and growing. This might be more frightening than failure.
+
+Explore what success would demand:
+• What would you have to become if this worked? (What version of you would be required?)
+• What comfort would you lose? (The safety of 'potential,' the excuse of 'someday')
+• What would people expect from you then? (Ongoing delivery? Consistency? Visibility?)
+• What if success meant you couldn't go back to how things were? (Would you want to?)
+• What responsibility would success create? (For others? For yourself?)
+• Complete this: 'I'm afraid that if this works, I'll have to...'
+• Which is scarier: failing publicly or succeeding publicly? (Be honest about why)
+
+Success means being seen. Are you ready to be visible?`
+  },
+  {
+    day: 7,
+    title: "From Potential to Actual",
+    theme: "Identity transformation",
+    prompt: `This project has been 'potential' - something you might do, could do, will do someday. What if it becomes real today?
+
+Identity questions:
+• Who are you if you're someone who 'did it' instead of 'might do it'? (Not hypothetically - who is that person?)
+• What do you gain by keeping it potential? (The comfort of infinite possibilities?)
+• What do you lose by keeping it potential? (The reality of having done something?)
+• How long have you been 'about to start' this? (Count the days, weeks, months, years)
+• Write this sentence 10 times, filling it differently each time: 'I am someone who...'
+• Which of those 10 sentences is true today? Which is true if you launch?
+• What's the story you'll tell about this moment? (When you look back - what will you say about now?)
+
+Final question: What if you stopped deciding and just did it? What if today is the day the gap closes?`
+  }
+];
+
 export const letterToMyselfDays = [
   {
     day: 1,
@@ -5829,6 +5948,626 @@ export const innerElementsDays = [
   }
 ];
 
+// SHADOW & LIGHT INTEGRATION - 12-day duality exploration
+export const shadowLightIntegrationDays = [
+  { 
+    day: 1, 
+    title: "Acknowledging Shadow", 
+    theme: "Shadow Recognition",
+    type: "text",
+    modality: "writing",
+    prompt: "Write about the parts of yourself you tend to hide or deny. What aspects of your personality, history, or emotions do you keep in darkness? Approach with curiosity, not judgment."
+  },
+  { 
+    day: 2, 
+    title: "Visualizing Shadow", 
+    theme: "Shadow Expression",
+    type: "visual",
+    modality: "art",
+    prompt: "Create art representing your shadow self. Use dark colors, hidden shapes, or abstract forms. What does your shadow look like when given visual form?"
+  },
+  { 
+    day: 3, 
+    title: "Speaking Shadow", 
+    theme: "Shadow Voice",
+    type: "voice",
+    modality: "speaking",
+    prompt: "Speak about what you usually keep silent. Let your shadow aspects have a voice. What do these hidden parts want to say?"
+  },
+  { 
+    day: 4, 
+    title: "Shadow Wisdom", 
+    theme: "Shadow Learning",
+    type: "text",
+    modality: "writing",
+    prompt: "Write about what your shadow has taught you. What strengths or insights have emerged from your darker experiences? How has struggle shaped wisdom?"
+  },
+  { 
+    day: 5, 
+    title: "Embracing Light", 
+    theme: "Light Recognition",
+    type: "voice",
+    modality: "speaking",
+    prompt: "Speak about your brightest qualities - the parts of you that shine. What gifts, talents, and beautiful aspects do you sometimes downplay or hide?"
+  },
+  { 
+    day: 6, 
+    title: "Painting Light", 
+    theme: "Light Expression",
+    type: "visual",
+    modality: "art",
+    prompt: "Create art celebrating your light. Use bright colors, radiant forms, expansive shapes. What does your most authentic, brilliant self look like?"
+  },
+  { 
+    day: 7, 
+    title: "Light Sharing", 
+    theme: "Light Offering",
+    type: "text",
+    modality: "writing",
+    prompt: "Write about how you share your light with the world. What gifts do you offer? How does your brightness help others?"
+  },
+  { 
+    day: 8, 
+    title: "Integration Dialogue", 
+    theme: "Shadow-Light Connection",
+    type: "voice",
+    modality: "speaking",
+    prompt: "Speak a conversation between your shadow and light selves. What do they want to say to each other? How might they work together?"
+  },
+  { 
+    day: 9, 
+    title: "Visual Integration", 
+    theme: "Wholeness Art",
+    type: "visual",
+    modality: "art",
+    prompt: "Create art that holds both shadow and light together. Show the balance, the dance, the necessary coexistence of both. What does wholeness look like?"
+  },
+  { 
+    day: 10, 
+    title: "Integration Reflection", 
+    theme: "Wholeness Writing",
+    type: "text",
+    modality: "writing",
+    prompt: "Write about your whole self - shadow and light integrated. How do both aspects make you complete? What's possible when you embrace all of who you are?"
+  },
+  { 
+    day: 11, 
+    title: "Integrated Expression", 
+    theme: "Authentic Voice",
+    type: "voice",
+    modality: "speaking",
+    prompt: "Speak from your integrated self - acknowledging both shadow and light without shame or arrogance. What does authentic wholeness sound like?"
+  },
+  { 
+    day: 12, 
+    title: "Living Integration", 
+    theme: "Daily Wholeness",
+    type: "text",
+    modality: "writing",
+    prompt: "Write about how you'll carry this integration forward. How will you honor both shadow and light in your daily life? What practices support your wholeness?"
+  }
+];
+
+// LIFE CHAPTERS TRILOGY - 15-day narrative exploration
+export const lifeChaptersTrilogy = [
+  { 
+    day: 1, 
+    title: "Past Chapter: Beginning", 
+    theme: "Origins",
+    type: "text",
+    modality: "writing",
+    chapter: "past",
+    prompt: "Write about where you began. What were the foundational experiences, relationships, and moments that shaped your early life?"
+  },
+  { 
+    day: 2, 
+    title: "Past Chapter: Visual Memory", 
+    theme: "Remembrance",
+    type: "visual",
+    modality: "art",
+    chapter: "past",
+    prompt: "Create art representing significant moments from your past. What images, colors, or symbols capture where you've been?"
+  },
+  { 
+    day: 3, 
+    title: "Past Chapter: Spoken Stories", 
+    theme: "Storytelling",
+    type: "voice",
+    modality: "speaking",
+    chapter: "past",
+    prompt: "Tell the story of your past out loud. Narrate the journey from then to now. What stories need to be told?"
+  },
+  { 
+    day: 4, 
+    title: "Past Chapter: Lessons Learned", 
+    theme: "Wisdom",
+    type: "text",
+    modality: "writing",
+    chapter: "past",
+    prompt: "Write about what your past has taught you. What wisdom have you gained? What would you tell your younger self?"
+  },
+  { 
+    day: 5, 
+    title: "Past Chapter: Gratitude & Release", 
+    theme: "Completion",
+    type: "voice",
+    modality: "speaking",
+    chapter: "past",
+    prompt: "Speak words of gratitude for your past, then speak words of release. What are you thankful for? What are you ready to let go?"
+  },
+  { 
+    day: 6, 
+    title: "Present Chapter: Current Reality", 
+    theme: "Now",
+    type: "text",
+    modality: "writing",
+    chapter: "present",
+    prompt: "Write about where you are right now. What defines this current chapter? What are you experiencing, feeling, becoming?"
+  },
+  { 
+    day: 7, 
+    title: "Present Chapter: Visual Snapshot", 
+    theme: "Current Expression",
+    type: "visual",
+    modality: "art",
+    chapter: "present",
+    prompt: "Create art representing your life right now. What colors, shapes, or images capture this present moment?"
+  },
+  { 
+    day: 8, 
+    title: "Present Chapter: Speaking Now", 
+    theme: "Current Voice",
+    type: "voice",
+    modality: "speaking",
+    chapter: "present",
+    prompt: "Speak about who you are today. What's true for you now? How have you changed? What's emerging?"
+  },
+  { 
+    day: 9, 
+    title: "Present Chapter: Current Challenges", 
+    theme: "Growth Edge",
+    type: "text",
+    modality: "writing",
+    chapter: "present",
+    prompt: "Write about what's challenging you now. What are you working through? What growth is happening in this present chapter?"
+  },
+  { 
+    day: 10, 
+    title: "Present Chapter: Gifts of Now", 
+    theme: "Present Gratitude",
+    type: "voice",
+    modality: "speaking",
+    chapter: "present",
+    prompt: "Speak about what this current chapter is giving you. What gifts exist in this moment? What's beautiful about now?"
+  },
+  { 
+    day: 11, 
+    title: "Future Chapter: Vision", 
+    theme: "Possibility",
+    type: "text",
+    modality: "writing",
+    chapter: "future",
+    prompt: "Write about the future chapter you're creating. What do you envision? What are you moving toward? What's calling you forward?"
+  },
+  { 
+    day: 12, 
+    title: "Future Chapter: Visual Dreams", 
+    theme: "Imagination",
+    type: "visual",
+    modality: "art",
+    chapter: "future",
+    prompt: "Create art representing your future vision. What does the next chapter look like? Use imagery that inspires and excites you."
+  },
+  { 
+    day: 13, 
+    title: "Future Chapter: Speaking Dreams", 
+    theme: "Declaration",
+    type: "voice",
+    modality: "speaking",
+    chapter: "future",
+    prompt: "Speak your future into existence. Declare what you're creating. Let your voice carry your vision forward with confidence."
+  },
+  { 
+    day: 14, 
+    title: "Future Chapter: Bridge Building", 
+    theme: "Action",
+    type: "text",
+    modality: "writing",
+    chapter: "future",
+    prompt: "Write about how you'll bridge from present to future. What actions will you take? What will help you move forward?"
+  },
+  { 
+    day: 15, 
+    title: "Trilogy Integration", 
+    theme: "Complete Story",
+    type: "voice",
+    modality: "speaking",
+    chapter: "integration",
+    prompt: "Speak your complete story - past, present, and future. How do all three chapters connect? What's the through-line of your life story?"
+  }
+];
+
+// SENSORY SPECTRUM JOURNEY - 21-day five senses exploration
+export const sensorySpectrumDays = [
+  // SIGHT CYCLE (Days 1-5)
+  { 
+    day: 1, 
+    title: "Seeing: Visual Beauty", 
+    theme: "Sight Appreciation",
+    type: "text",
+    modality: "writing",
+    sense: "sight",
+    prompt: "Write about what you see around you. What visual beauty captures your attention? Describe colors, shapes, light, and shadow in detail."
+  },
+  { 
+    day: 2, 
+    title: "Seeing: Visual Expression", 
+    theme: "Sight Creation",
+    type: "visual",
+    modality: "art",
+    sense: "sight",
+    prompt: "Create art celebrating the sense of sight itself. Paint what you love to look at. Express the joy of seeing."
+  },
+  { 
+    day: 3, 
+    title: "Seeing: Describing Vision", 
+    theme: "Sight Voice",
+    type: "voice",
+    modality: "speaking",
+    sense: "sight",
+    prompt: "Describe aloud what you see right now in vivid detail. Practice being present to visual experience through verbal description."
+  },
+  { 
+    day: 4, 
+    title: "Seeing: Visual Memories", 
+    theme: "Sight Reflection",
+    type: "text",
+    modality: "writing",
+    sense: "sight",
+    prompt: "Write about the most beautiful things you've ever seen. What visual memories stay with you? What has your sense of sight given you?"
+  },
+  
+  // SOUND CYCLE (Days 5-8)
+  { 
+    day: 5, 
+    title: "Hearing: Sound Landscape", 
+    theme: "Sound Awareness",
+    type: "voice",
+    modality: "speaking",
+    sense: "sound",
+    prompt: "Speak about what you hear around you. Describe sounds, rhythms, music, voices, and silence. What does your auditory world sound like?"
+  },
+  { 
+    day: 6, 
+    title: "Hearing: Visual Sound", 
+    theme: "Sound Expression",
+    type: "visual",
+    modality: "art",
+    sense: "sound",
+    prompt: "Create art representing sound. What do rhythms, music, or voices look like visually? Express the experience of hearing through imagery."
+  },
+  { 
+    day: 7, 
+    title: "Hearing: Written Sounds", 
+    theme: "Sound Reflection",
+    type: "text",
+    modality: "writing",
+    sense: "sound",
+    prompt: "Write about your relationship with sound. What sounds bring you peace? What sounds disturb you? What has listening taught you?"
+  },
+  { 
+    day: 8, 
+    title: "Hearing: Sonic Memories", 
+    theme: "Sound Memory",
+    type: "voice",
+    modality: "speaking",
+    sense: "sound",
+    prompt: "Speak about sounds you remember from your life. What voices, songs, or sounds are imprinted in your memory?"
+  },
+  
+  // TOUCH CYCLE (Days 9-12)
+  { 
+    day: 9, 
+    title: "Touching: Tactile World", 
+    theme: "Touch Awareness",
+    type: "text",
+    modality: "writing",
+    sense: "touch",
+    prompt: "Write about what you can feel physically right now. Describe textures, temperatures, pressure. What does your sense of touch tell you?"
+  },
+  { 
+    day: 10, 
+    title: "Touching: Texture Art", 
+    theme: "Touch Expression",
+    type: "visual",
+    modality: "art",
+    sense: "touch",
+    prompt: "Create art with interesting textures. Use materials that feel good. Express the sense of touch through tactile creation."
+  },
+  { 
+    day: 11, 
+    title: "Touching: Describing Sensation", 
+    theme: "Touch Voice",
+    type: "voice",
+    modality: "speaking",
+    sense: "touch",
+    prompt: "Speak about physical sensations and touch. Describe what things feel like. What does your body sense through contact?"
+  },
+  { 
+    day: 12, 
+    title: "Touching: Touch Memories", 
+    theme: "Touch Reflection",
+    type: "text",
+    modality: "writing",
+    sense: "touch",
+    prompt: "Write about meaningful touch experiences. What physical sensations stay with you? What has touch taught you about connection?"
+  },
+  
+  // SMELL CYCLE (Days 13-16)
+  { 
+    day: 13, 
+    title: "Smelling: Scent Awareness", 
+    theme: "Smell Recognition",
+    type: "voice",
+    modality: "speaking",
+    sense: "smell",
+    prompt: "Speak about scents in your environment. What do you smell? How do scents affect your mood and memory?"
+  },
+  { 
+    day: 14, 
+    title: "Smelling: Visual Scent", 
+    theme: "Smell Expression",
+    type: "visual",
+    modality: "art",
+    sense: "smell",
+    prompt: "Create art representing your favorite scents. What would lavender, coffee, or rain look like as visual art?"
+  },
+  { 
+    day: 15, 
+    title: "Smelling: Scent Stories", 
+    theme: "Smell Reflection",
+    type: "text",
+    modality: "writing",
+    sense: "smell",
+    prompt: "Write about scents that trigger memories. What smells transport you? What has your sense of smell revealed to you?"
+  },
+  { 
+    day: 16, 
+    title: "Smelling: Aromatic Memories", 
+    theme: "Smell Memory",
+    type: "voice",
+    modality: "speaking",
+    sense: "smell",
+    prompt: "Speak about the scents of your life - childhood smells, favorite aromas, scents you associate with people or places."
+  },
+  
+  // TASTE CYCLE (Days 17-20)
+  { 
+    day: 17, 
+    title: "Tasting: Flavor Awareness", 
+    theme: "Taste Appreciation",
+    type: "text",
+    modality: "writing",
+    sense: "taste",
+    prompt: "Write about flavors you love. Describe taste experiences in detail. What does your sense of taste bring to your life?"
+  },
+  { 
+    day: 18, 
+    title: "Tasting: Visual Flavor", 
+    theme: "Taste Expression",
+    type: "visual",
+    modality: "art",
+    sense: "taste",
+    prompt: "Create art representing flavors. What would sweet, sour, bitter, or savory look like as colors and shapes?"
+  },
+  { 
+    day: 19, 
+    title: "Tasting: Speaking Flavor", 
+    theme: "Taste Voice",
+    type: "voice",
+    modality: "speaking",
+    sense: "taste",
+    prompt: "Describe your favorite foods and flavors aloud. Speak about taste experiences that bring you joy."
+  },
+  { 
+    day: 20, 
+    title: "Tasting: Flavor Memories", 
+    theme: "Taste Reflection",
+    type: "text",
+    modality: "writing",
+    sense: "taste",
+    prompt: "Write about tastes that connect to memories. What flavors are woven into your life story?"
+  },
+  
+  // INTEGRATION
+  { 
+    day: 21, 
+    title: "Sensory Integration", 
+    theme: "Complete Spectrum",
+    type: "voice",
+    modality: "speaking",
+    sense: "all",
+    prompt: "Speak about your complete sensory experience. How do all five senses work together to create your experience of being alive? What has this sensory journey taught you?"
+  }
+];
+
+// EMOTION-COLOR-SOUND TRINITY - 18-day synesthetic exploration
+export const emotionColorSoundDays = [
+  // JOY TRINITY (Days 1-3)
+  { 
+    day: 1, 
+    title: "Joy in Words", 
+    theme: "Joy Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "joy",
+    prompt: "Write about joy. What brings you happiness? Describe joyful experiences, moments of delight, what makes your heart sing."
+  },
+  { 
+    day: 2, 
+    title: "Joy in Color", 
+    theme: "Joy Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "joy",
+    prompt: "Paint joy. What colors represent happiness to you? Create art that expresses the visual quality of joy and delight."
+  },
+  { 
+    day: 3, 
+    title: "Joy in Voice", 
+    theme: "Joy Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "joy",
+    prompt: "Speak about joy with a joyful voice. Let happiness come through your tone. What does joy sound like when you give it voice?"
+  },
+  
+  // SADNESS TRINITY (Days 4-6)
+  { 
+    day: 4, 
+    title: "Sadness in Words", 
+    theme: "Sadness Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "sadness",
+    prompt: "Write about sadness. What sorrows do you carry? Describe the texture and depth of sad feelings without judgment."
+  },
+  { 
+    day: 5, 
+    title: "Sadness in Color", 
+    theme: "Sadness Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "sadness",
+    prompt: "Paint sadness. What colors and shapes represent sorrow? Create art that honors the beauty and depth of sadness."
+  },
+  { 
+    day: 6, 
+    title: "Sadness in Voice", 
+    theme: "Sadness Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "sadness",
+    prompt: "Speak about sadness, letting your voice carry the weight of sorrow. What does sadness sound like when spoken aloud?"
+  },
+  
+  // ANGER TRINITY (Days 7-9)
+  { 
+    day: 7, 
+    title: "Anger in Words", 
+    theme: "Anger Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "anger",
+    prompt: "Write about anger. What makes you angry? What injustices or frustrations burn within you? Express it freely on the page."
+  },
+  { 
+    day: 8, 
+    title: "Anger in Color", 
+    theme: "Anger Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "anger",
+    prompt: "Paint anger. What colors and movements express rage, frustration, or righteous indignation? Let anger flow through art."
+  },
+  { 
+    day: 9, 
+    title: "Anger in Voice", 
+    theme: "Anger Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "anger",
+    prompt: "Speak your anger aloud. Let your voice carry fire and intensity. What does anger sound like when given honest expression?"
+  },
+  
+  // FEAR TRINITY (Days 10-12)
+  { 
+    day: 10, 
+    title: "Fear in Words", 
+    theme: "Fear Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "fear",
+    prompt: "Write about fear. What are you afraid of? Describe your fears, anxieties, and worries with honesty and detail."
+  },
+  { 
+    day: 11, 
+    title: "Fear in Color", 
+    theme: "Fear Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "fear",
+    prompt: "Paint fear. What colors and forms represent anxiety and fear? Create art that expresses the visual quality of being afraid."
+  },
+  { 
+    day: 12, 
+    title: "Fear in Voice", 
+    theme: "Fear Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "fear",
+    prompt: "Speak about fear, noticing how your voice changes. What does fear sound like? Can you speak your fears to diminish their power?"
+  },
+  
+  // LOVE TRINITY (Days 13-15)
+  { 
+    day: 13, 
+    title: "Love in Words", 
+    theme: "Love Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "love",
+    prompt: "Write about love. Who and what do you love? Describe the feeling of love in all its forms - romantic, familial, friendly, universal."
+  },
+  { 
+    day: 14, 
+    title: "Love in Color", 
+    theme: "Love Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "love",
+    prompt: "Paint love. What colors represent love to you? Create art that expresses the warmth, connection, and beauty of love."
+  },
+  { 
+    day: 15, 
+    title: "Love in Voice", 
+    theme: "Love Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "love",
+    prompt: "Speak about love with a loving voice. Let tenderness and warmth flow through your words. What does love sound like?"
+  },
+  
+  // PEACE TRINITY (Days 16-18)
+  { 
+    day: 16, 
+    title: "Peace in Words", 
+    theme: "Peace Expression",
+    type: "text",
+    modality: "writing",
+    emotion: "peace",
+    prompt: "Write about peace. What brings you calm and serenity? Describe moments of inner and outer peace."
+  },
+  { 
+    day: 17, 
+    title: "Peace in Color", 
+    theme: "Peace Visualization",
+    type: "visual",
+    modality: "art",
+    emotion: "peace",
+    prompt: "Paint peace. What colors and forms represent tranquility? Create art that expresses stillness, calm, and serenity."
+  },
+  { 
+    day: 18, 
+    title: "Peace in Voice", 
+    theme: "Peace Speaking",
+    type: "voice",
+    modality: "speaking",
+    emotion: "peace",
+    prompt: "Speak about peace with a peaceful voice. Let calm flow through your words. What does peace sound like? How has exploring emotions through all modalities deepened your understanding?"
+  }
+];
+
 
 /**
  * Helper function to create a journey path with minimal boilerplate
@@ -5854,6 +6593,87 @@ export const createJourneyPath = (options) => {
     // Any other metadata you might want to store
   };
 };
+
+// Register NEW Multi-Modal Paths
+JOURNEY_PATHS['shadow-light-integration'] = createJourneyPath({
+  id: 'shadow-light-integration',
+  title: "Shadow & Light Integration",
+  subtitle: "12-day duality exploration",
+  description: "Explore and integrate both your shadow self and your light through multi-modal expression. Alternating between exploring hidden aspects and celebrating brilliance creates wholeness.",
+  iconName: "Moon",
+  days: shadowLightIntegrationDays,
+  color: "147, 51, 234", // Purple for duality
+  tags: ['multi-modal', 'shadow-work', 'integration', 'self-discovery'],
+  duration: 12,
+  difficulty: 'intermediate',
+  recommendedFor: ['shadow workers', 'integration seekers', 'multi-modal explorers'],
+  isMultiModal: true
+});
+
+JOURNEY_PATHS['life-chapters-trilogy'] = createJourneyPath({
+  id: 'life-chapters-trilogy',
+  title: "Life Chapters Trilogy",
+  subtitle: "15-day narrative journey",
+  description: "Explore your life story through past, present, and future chapters using text, voice, and visual expression. Create a comprehensive narrative of your journey.",
+  iconName: "BookOpen",
+  days: lifeChaptersTrilogy,
+  color: "71, 85, 105", // Slate for storytelling
+  tags: ['multi-modal', 'life-story', 'narrative', 'reflection'],
+  duration: 15,
+  difficulty: 'intermediate',
+  recommendedFor: ['storytellers', 'life reviewers', 'multi-modal explorers'],
+  isMultiModal: true
+});
+
+JOURNEY_PATHS['sensory-spectrum'] = createJourneyPath({
+  id: 'sensory-spectrum',
+  title: "Sensory Spectrum Journey",
+  subtitle: "21-day five senses exploration",
+  description: "Deepen your embodied awareness through systematic exploration of all five senses using text, voice, and visual modalities. Celebrate the richness of sensory experience.",
+  iconName: "Eye",
+  days: sensorySpectrumDays,
+  color: "34, 197, 94", // Green for nature/senses
+  tags: ['multi-modal', 'mindfulness', 'embodiment', 'sensory-awareness'],
+  duration: 21,
+  difficulty: 'beginner',
+  recommendedFor: ['mindfulness practitioners', 'embodiment seekers', 'sensory explorers'],
+  isMultiModal: true
+});
+
+JOURNEY_PATHS['emotion-color-sound'] = createJourneyPath({
+  id: 'emotion-color-sound',
+  title: "Emotion-Color-Sound Trinity",
+  subtitle: "18-day synesthetic exploration",
+  description: "Explore six core emotions (joy, sadness, anger, fear, love, peace) through feeling, color, and sound. Express each emotion across all three modalities for deep emotional literacy.",
+  iconName: "Heart",
+  days: emotionColorSoundDays,
+  color: "236, 72, 153", // Pink for emotions
+  tags: ['multi-modal', 'emotions', 'expression', 'emotional-intelligence'],
+  duration: 18,
+  difficulty: 'intermediate',
+  recommendedFor: ['emotional explorers', 'creative souls', 'multi-modal learners'],
+  isMultiModal: true
+});
+
+JOURNEY_PATHS['deciding-to-doing'] = createJourneyPath({
+  id: 'deciding-to-doing',
+  title: "The Gap Between Deciding and Doing",
+  subtitle: "7-day confrontational path for when you've decided but haven't started",
+  description: "This path is for when the planning is done but the doing hasn't begun. When you know what's next but you're sitting in the space before action. A confrontational journey that tracks how many days you spend preparing to start vs. actually starting. This path will make you uncomfortable. That's the point.",
+  iconName: "Zap", // Lightning bolt - represents the spark of action, urgency
+  days: decidingToDoingDays,
+  color: "234, 88, 12", // Bold orange-red (urgency + courage)
+  tags: ['transformation', 'action', 'courage', 'decision-making', 'procrastination', 'execution'],
+  duration: 7,
+  difficulty: 'intermediate',
+  recommendedFor: [
+    'anyone stuck between deciding and doing',
+    'people who endlessly plan but never start',
+    'entrepreneurs ready to launch',
+    'anyone tired of "potential" and ready for "actual"'
+  ]
+});
+
 JOURNEY_PATHS['inner-elements'] = createJourneyPath({
   id: 'inner-elements',
   title: "Inner Elements Journey",

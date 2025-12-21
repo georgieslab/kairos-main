@@ -1,6 +1,10 @@
 // Add to pathTypeUtils.js
 const MULTI_MODAL_PATHS = [
-  'inner-elements'
+  'inner-elements',
+  'shadow-light-integration',
+  'life-chapters-trilogy',
+  'sensory-spectrum',
+  'emotion-color-sound'
 ];
 
 export const isMultiModalPath = (pathId) => {
@@ -35,26 +39,31 @@ const TEXT_EXTRACTION_PATHS = [
   'emotional-intelligence',
   'mindfulness-awareness',
   'transformation-journey',
-  'creative-expression',
-  'habit-formation',
-  'life-vision',
-  'life-values',
-  'relationship-mastery',
-  'financial-mindfulness',
   'gratitude-practice',
   'shadow-work',
-  'nature-connection',
   'anxiety-alchemy',
-  'courage-cultivation',
-  'inner-child',
+  'nature-connection',
+  'creative-expression',
+  'life-values',
+  'decision-compass',
   'dream-decoder',
+  'inner-child',
+  'courage-cultivation',
   'forgiveness-freedom',
   'career-compass',
+  'financial-mindfulness',
   'transitions-navigator',
-  'seasonal-rhythms',
+  'relationship-mastery',
   'grief-growth',
+  'seasonal-rhythms',
+  'manifestation-reality',
+  'holistic-transformation',
+  'life-vision',
+  'habit-formation',
   'digital-detox',
-  'holistic-transformation'
+  'freestyle-discovery',
+  'letter-to-myself',
+  'deciding-to-doing',
 ];
 
 // Voice-Based Journaling Paths - spoken reflection

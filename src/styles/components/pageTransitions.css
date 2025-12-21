@@ -135,7 +135,6 @@
     animation-duration: 0.2s; /* Shorter duration */
     animation-fill-mode: both;
     animation-timing-function: ease-out;
-    display: flex;
   }
   
   /* Animation for new page - subtle fade */

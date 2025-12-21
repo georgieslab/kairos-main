@@ -1,84 +1,167 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-=======
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- android/app/src/main/AndroidManifest.xml -->
+<!-- UPDATED with NFC Support for Καιρός Smart Journal -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
+    <!-- ========================= -->
+    <!-- PERMISSIONS -->
+    <!-- ========================= -->
+
+    <!-- Internet and Network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- Storage (Android 12 and below) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+                     android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+                     android:maxSdkVersion="32" />
+    
+    <!-- Media Access (Android 13+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    
+    <!-- Audio Recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- NFC -->
+    <uses-permission android:name="android.permission.NFC" />
+
+    <!-- ========================= -->
+    <!-- HARDWARE FEATURES -->
+    <!-- ========================= -->
+
+    <!-- NFC Hardware (optional - app works without NFC) -->
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+
+    <!-- Camera (required for journal uploads) -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <!-- Microphone (required for voice journaling) -->
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-<<<<<<< HEAD
-
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true">
         <activity
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask"
-            android:exported="true">
-<<<<<<< HEAD
-
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- DEFAULT LAUNCHER INTENT -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<<<<<<< HEAD
 
-            <!-- NFC Intent Filters for launching app when NFC tag is scanned -->
+            <!-- ========================= -->
+            <!-- NFC INTENT FILTERS - NEW -->
+            <!-- ========================= -->
+
+            <!-- NDEF Discovered - When scanning NDEF-formatted tags -->
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="https" 
-                      android:host="kairos-journal.com" />
+
+                <!-- Handle text/plain NDEF records -->
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- NDEF Discovered - Handle custom MIME type for Καιρός journals -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- Custom MIME type for Καιρός journals -->
+                <data android:mimeType="application/kairos.journal" />
+            </intent-filter>
+
+            <!-- NDEF Discovered - Handle Καιρός URLs -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- Handle reflection-writer.web.app URLs -->
+                <data android:scheme="https" />
+                <data android:host="reflection-writer.web.app" />
             </intent-filter>
             
+            <!-- NDEF Discovered - Also handle without path for broader matching -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <!-- Handle reflection-writer.web.app deep links -->
+                <data android:scheme="https" />
+                <data android:host="reflection-writer.web.app" />
+                <data android:pathPrefix="/nfc" />
+            </intent-filter>
+
+            <!-- Tech Discovered - Handle specific NFC technologies -->
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Tag Discovered - Fallback for any NFC tag -->
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
+            <!-- NFC Tech List Reference -->
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" />
+
+            <!-- ========================= -->
+            <!-- CAPACITOR METADATA -->
+            <!-- ========================= -->
+
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"
+            />
         </activity>
+
+        <!-- ========================= -->
+        <!-- FILE PROVIDER -->
+        <!-- ========================= -->
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-<<<<<<< HEAD
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-=======
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
         </provider>
     </application>
 
-    <!-- Permissions -->
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.INTERNET" />
-    
-    <!-- NFC Permissions -->
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-feature 
-        android:name="android.hardware.nfc" 
-        android:required="false" />
+    <!-- ========================= -->
+    <!-- QUERIES (Android 11+) -->
+    <!-- ========================= -->
 
-</manifest>
-=======
+    <queries>
+        <!-- Allow querying for other apps that can handle intents -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+        <!-- NFC settings intent -->
+        <intent>
+            <action android:name="android.settings.NFC_SETTINGS" />
+        </intent>
+    </queries>
 </manifest>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188

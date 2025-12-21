@@ -14,12 +14,12 @@
         "contents": {
           "hosting.cHVibGlj.cache": {
             "type": "file",
-            "size": 1168,
+            "size": 642,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebase\\hosting.cHVibGlj.cache"
           },
           "hosting.ZGlzdA.cache": {
             "type": "file",
-            "size": 3221,
+            "size": 3110,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\.firebase\\hosting.ZGlzdA.cache"
           }
         }
@@ -159,6 +159,65 @@
                   }
                 }
               },
+              "8.7": {
+                "type": "directory",
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7",
+                "contents": {
+                  "checksums": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\checksums",
+                    "contents": {
+                      "checksums.lock": {
+                        "type": "file",
+                        "size": 17,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\checksums\\checksums.lock"
+                      }
+                    }
+                  },
+                  "expanded": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\expanded",
+                    "contents": {}
+                  },
+                  "fileChanges": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\fileChanges",
+                    "contents": {
+                      "last-build.bin": {
+                        "type": "file",
+                        "size": 1,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\fileChanges\\last-build.bin"
+                      }
+                    }
+                  },
+                  "fileHashes": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\fileHashes",
+                    "contents": {
+                      "fileHashes.bin": {
+                        "type": "file",
+                        "size": 18597,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\fileHashes\\fileHashes.bin"
+                      },
+                      "fileHashes.lock": {
+                        "type": "file",
+                        "size": 17,
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\fileHashes\\fileHashes.lock"
+                      }
+                    }
+                  },
+                  "gc.properties": {
+                    "type": "file",
+                    "size": 0,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\gc.properties"
+                  },
+                  "vcsMetadata": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\8.7\\vcsMetadata",
+                    "contents": {}
+                  }
+                }
+              },
               "buildOutputCleanup": {
                 "type": "directory",
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\buildOutputCleanup",
@@ -189,101 +248,20 @@
                 "type": "directory",
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache",
                 "contents": {
+                  "62kac2p5kjjd84fqmnw4mlrg": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\62kac2p5kjjd84fqmnw4mlrg",
+                    "contents": {}
+                  },
+                  "8n2e9l8a1fbfh6c8cafzwq88j": {
+                    "type": "directory",
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\8n2e9l8a1fbfh6c8cafzwq88j",
+                    "contents": {}
+                  },
                   "configuration-cache.lock": {
                     "type": "file",
                     "size": 17,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\configuration-cache.lock"
-                  },
-                  "duxihi9cepciv2hrxbgfosvxt": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt",
-                    "contents": {
-                      ".globals.work.bin": {
-                        "type": "file",
-                        "size": 5541,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\.globals.work.bin"
-                      },
-                      ".strings.work.bin": {
-                        "type": "file",
-                        "size": 249493,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\.strings.work.bin"
-                      },
-                      "buildfingerprint.bin": {
-                        "type": "file",
-                        "size": 86903,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\buildfingerprint.bin"
-                      },
-                      "entry.bin": {
-                        "type": "file",
-                        "size": 54,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\entry.bin"
-                      },
-                      "projectfingerprint.bin": {
-                        "type": "file",
-                        "size": 2519,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\projectfingerprint.bin"
-                      },
-                      "work.bin": {
-                        "type": "file",
-                        "size": 16054,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\work.bin"
-                      },
-                      "_app.work.bin": {
-                        "type": "file",
-                        "size": 154575,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_app.work.bin"
-                      },
-                      "_capacitor-android.work.bin": {
-                        "type": "file",
-                        "size": 19727,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-android.work.bin"
-                      },
-                      "_capacitor-app.work.bin": {
-                        "type": "file",
-                        "size": 19091,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-app.work.bin"
-                      },
-                      "_capacitor-browser.work.bin": {
-                        "type": "file",
-                        "size": 19341,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-browser.work.bin"
-                      },
-                      "_capacitor-camera.work.bin": {
-                        "type": "file",
-                        "size": 22009,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-camera.work.bin"
-                      },
-                      "_capacitor-cordova-android-plugins.work.bin": {
-                        "type": "file",
-                        "size": 19285,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-cordova-android-plugins.work.bin"
-                      },
-                      "_capacitor-filesystem.work.bin": {
-                        "type": "file",
-                        "size": 24203,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-filesystem.work.bin"
-                      },
-                      "_capacitor-haptics.work.bin": {
-                        "type": "file",
-                        "size": 19091,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-haptics.work.bin"
-                      },
-                      "_capacitor-network.work.bin": {
-                        "type": "file",
-                        "size": 19095,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-network.work.bin"
-                      },
-                      "_capacitor-splash-screen.work.bin": {
-                        "type": "file",
-                        "size": 19264,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-splash-screen.work.bin"
-                      },
-                      "_capacitor-status-bar.work.bin": {
-                        "type": "file",
-                        "size": 19097,
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.gradle\\configuration-cache\\duxihi9cepciv2hrxbgfosvxt\\_capacitor-status-bar.work.bin"
-                      }
-                    }
                   },
                   "gc.properties": {
                     "type": "file",
@@ -351,7 +329,7 @@
                 "contents": {
                   "deviceStreaming.xml": {
                     "type": "file",
-                    "size": 41020,
+                    "size": 47639,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\caches\\deviceStreaming.xml"
                   }
                 }
@@ -363,7 +341,7 @@
               },
               "deploymentTargetSelector.xml": {
                 "type": "file",
-                "size": 665,
+                "size": 630,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\deploymentTargetSelector.xml"
               },
               "gradle.xml": {
@@ -378,7 +356,7 @@
               },
               "misc.xml": {
                 "type": "file",
-                "size": 569,
+                "size": 530,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\misc.xml"
               },
               "runConfigurations.xml": {
@@ -386,9 +364,14 @@
                 "size": 980,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\runConfigurations.xml"
               },
+              "vcs.xml": {
+                "type": "file",
+                "size": 188,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\vcs.xml"
+              },
               "workspace.xml": {
                 "type": "file",
-                "size": 8177,
+                "size": 12605,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\.idea\\workspace.xml"
               }
             }
@@ -6099,7 +6082,7 @@
               },
               "capacitor.build.gradle": {
                 "type": "file",
-                "size": 867,
+                "size": 768,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\capacitor.build.gradle"
               },
               "proguard-rules.pro": {
@@ -6152,7 +6135,7 @@
                     "contents": {
                       "AndroidManifest.xml": {
                         "type": "file",
-                        "size": 3151,
+                        "size": 2401,
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\AndroidManifest.xml"
                       },
                       "assets": {
@@ -6182,20 +6165,20 @@
                                     "size": 37817,
                                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\AnalysisResults-BsF-uA5b.css"
                                   },
-                                  "AnalysisResults-CR8uQRLI.js": {
+                                  "AnalysisResults-XASSYyOP.js": {
                                     "type": "file",
                                     "size": 26277,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\AnalysisResults-CR8uQRLI.js"
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\AnalysisResults-XASSYyOP.js"
                                   },
                                   "claude-8e-zvY-0.png": {
                                     "type": "file",
                                     "size": 7424,
                                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\claude-8e-zvY-0.png"
                                   },
-                                  "CompletedPathsScreen-BSmipJZQ.js": {
+                                  "CompletedPathsScreen-Bxo9lt8v.js": {
                                     "type": "file",
                                     "size": 9426,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\CompletedPathsScreen-BSmipJZQ.js"
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\CompletedPathsScreen-Bxo9lt8v.js"
                                   },
                                   "CompletedPathsScreen-FmHdzYNH.css": {
                                     "type": "file",
@@ -6222,70 +6205,70 @@
                                     "size": 3677,
                                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\icon-192x192-DugLAGZW.png"
                                   },
-                                  "index-Co-W5w8U.js": {
+                                  "index-BcBCh2EF.css": {
                                     "type": "file",
-                                    "size": 2632247,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index-Co-W5w8U.js"
+                                    "size": 298503,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index-BcBCh2EF.css"
                                   },
-                                  "index-oaTjPNJe.css": {
+                                  "index-h-6mAlsv.js": {
                                     "type": "file",
-                                    "size": 283618,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index-oaTjPNJe.css"
+                                    "size": 2628807,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index-h-6mAlsv.js"
                                   },
-                                  "index.es-uvDlOT9p.js": {
+                                  "index.es-DxjeLNlm.js": {
                                     "type": "file",
                                     "size": 158617,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index.es-uvDlOT9p.js"
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\index.es-DxjeLNlm.js"
                                   },
-                                  "JournalAnalyticsDashboard-Ccdqkcqp.css": {
+                                  "JournalAnalyticsDashboard-B0WubclT.css": {
                                     "type": "file",
-                                    "size": 95840,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalAnalyticsDashboard-Ccdqkcqp.css"
+                                    "size": 111260,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalAnalyticsDashboard-B0WubclT.css"
                                   },
-                                  "JournalAnalyticsDashboard-UXWMgwhT.js": {
+                                  "JournalAnalyticsDashboard-D5SfTMJc.js": {
                                     "type": "file",
-                                    "size": 43129,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalAnalyticsDashboard-UXWMgwhT.js"
-                                  },
-                                  "JournalArchive-BJjIAbSj.js": {
-                                    "type": "file",
-                                    "size": 9448,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalArchive-BJjIAbSj.js"
+                                    "size": 43746,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalAnalyticsDashboard-D5SfTMJc.js"
                                   },
                                   "JournalArchive-D8-IN62W.css": {
                                     "type": "file",
                                     "size": 15397,
                                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalArchive-D8-IN62W.css"
                                   },
-                                  "PathSelection-BuFvrz7B.css": {
+                                  "JournalArchive-HUTFw_vY.js": {
                                     "type": "file",
-                                    "size": 102653,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\PathSelection-BuFvrz7B.css"
+                                    "size": 9448,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\JournalArchive-HUTFw_vY.js"
                                   },
-                                  "PathSelection-CjCWvPcD.js": {
+                                  "PathSelection-D6lLdWJ1.css": {
                                     "type": "file",
-                                    "size": 19506,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\PathSelection-CjCWvPcD.js"
+                                    "size": 108394,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\PathSelection-D6lLdWJ1.css"
+                                  },
+                                  "PathSelection-D6nbTcjL.js": {
+                                    "type": "file",
+                                    "size": 20539,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\PathSelection-D6nbTcjL.js"
                                   },
                                   "purify.es-CQJ0hv7W.js": {
                                     "type": "file",
                                     "size": 21819,
                                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\purify.es-CQJ0hv7W.js"
                                   },
-                                  "textProcessing-LVe_7zKc.js": {
+                                  "textProcessing-FJLOouzv.js": {
                                     "type": "file",
                                     "size": 397578,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\textProcessing-LVe_7zKc.js"
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\textProcessing-FJLOouzv.js"
                                   },
-                                  "UserSettings-DSVEvnTl.js": {
+                                  "UserSettings-B0JZztlu.css": {
                                     "type": "file",
-                                    "size": 16931,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\UserSettings-DSVEvnTl.js"
+                                    "size": 11463,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\UserSettings-B0JZztlu.css"
                                   },
-                                  "UserSettings-NWgu1JKX.css": {
+                                  "UserSettings-BqHmb6gc.js": {
                                     "type": "file",
-                                    "size": 22042,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\UserSettings-NWgu1JKX.css"
+                                    "size": 11160,
+                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\assets\\UserSettings-BqHmb6gc.js"
                                   }
                                 }
                               },
@@ -6311,7 +6294,7 @@
                               },
                               "index.html": {
                                 "type": "file",
-                                "size": 732,
+                                "size": 748,
                                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\assets\\public\\index.html"
                               },
                               "manifest.json": {
@@ -6382,7 +6365,7 @@
                             "contents": {
                               "ic_launcher_background.xml": {
                                 "type": "file",
-                                "size": 10739,
+                                "size": 4941,
                                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
                               },
                               "ic_launcher_foreground.xml": {
@@ -6700,12 +6683,12 @@
                             "contents": {
                               "ic_launcher.xml": {
                                 "type": "file",
-                                "size": 603,
+                                "size": 274,
                                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
                               },
                               "ic_launcher_round.xml": {
                                 "type": "file",
-                                "size": 603,
+                                "size": 274,
                                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
                               }
                             }
@@ -6927,7 +6910,7 @@
                               },
                               "strings.xml": {
                                 "type": "file",
-                                "size": 485,
+                                "size": 311,
                                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\app\\src\\main\\res\\values\\strings.xml"
                               },
                               "styles.xml": {
@@ -7008,6 +6991,23 @@
                     "type": "directory",
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\build\\reports\\configuration-cache",
                     "contents": {
+                      "8n2e9l8a1fbfh6c8cafzwq88j": {
+                        "type": "directory",
+                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\build\\reports\\configuration-cache\\8n2e9l8a1fbfh6c8cafzwq88j",
+                        "contents": {
+                          "alqbojcrf6y380wefp5b2tg6q": {
+                            "type": "directory",
+                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\build\\reports\\configuration-cache\\8n2e9l8a1fbfh6c8cafzwq88j\\alqbojcrf6y380wefp5b2tg6q",
+                            "contents": {
+                              "configuration-cache-report.html": {
+                                "type": "file",
+                                "size": 145027,
+                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\build\\reports\\configuration-cache\\8n2e9l8a1fbfh6c8cafzwq88j\\alqbojcrf6y380wefp5b2tg6q\\configuration-cache-report.html"
+                              }
+                            }
+                          }
+                        }
+                      },
                       "9xo2chenr7z28pexa7xvgvmyo": {
                         "type": "directory",
                         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\build\\reports\\configuration-cache\\9xo2chenr7z28pexa7xvgvmyo",
@@ -7123,910 +7123,6 @@
             "type": "directory",
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins",
             "contents": {
-              "build": {
-                "type": "directory",
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build",
-                "contents": {
-                  ".transforms": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms",
-                    "contents": {
-                      "001ce275fa7bf8ef40e2873242a02c5c": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c",
-                        "contents": {
-                          "results.bin": {
-                            "type": "file",
-                            "size": 30,
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\results.bin"
-                          },
-                          "transformed": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed",
-                            "contents": {
-                              "bundleLibRuntimeToDirDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug",
-                                "contents": {
-                                  "bundleLibRuntimeToDirDebug_dex": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex",
-                                    "contents": {
-                                      "capacitor": {
-                                        "type": "directory",
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex\\capacitor",
-                                        "contents": {
-                                          "cordova": {
-                                            "type": "directory",
-                                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex\\capacitor\\cordova",
-                                            "contents": {
-                                              "android": {
-                                                "type": "directory",
-                                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex\\capacitor\\cordova\\android",
-                                                "contents": {
-                                                  "plugins": {
-                                                    "type": "directory",
-                                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex\\capacitor\\cordova\\android\\plugins",
-                                                    "contents": {
-                                                      "BuildConfig.dex": {
-                                                        "type": "file",
-                                                        "size": 1028,
-                                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_dex\\capacitor\\cordova\\android\\plugins\\BuildConfig.dex"
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "bundleLibRuntimeToDirDebug_global-synthetics": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\bundleLibRuntimeToDirDebug_global-synthetics",
-                                    "contents": {}
-                                  },
-                                  "desugar_graph.bin": {
-                                    "type": "file",
-                                    "size": 235,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\001ce275fa7bf8ef40e2873242a02c5c\\transformed\\bundleLibRuntimeToDirDebug\\desugar_graph.bin"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "c54d5c2f60f5d5ebbfa8321acf739f1f": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f",
-                        "contents": {
-                          "results.bin": {
-                            "type": "file",
-                            "size": 11,
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\results.bin"
-                          },
-                          "transformed": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\transformed",
-                            "contents": {
-                              "classes": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\transformed\\classes",
-                                "contents": {
-                                  "classes_dex": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\transformed\\classes\\classes_dex",
-                                    "contents": {
-                                      "classes.dex": {
-                                        "type": "file",
-                                        "size": 1028,
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\transformed\\classes\\classes_dex\\classes.dex"
-                                      }
-                                    }
-                                  },
-                                  "classes_global-synthetics": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\.transforms\\c54d5c2f60f5d5ebbfa8321acf739f1f\\transformed\\classes\\classes_global-synthetics",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "generated": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated",
-                    "contents": {
-                      "ap_generated_sources": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\ap_generated_sources",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\ap_generated_sources\\debug",
-                            "contents": {
-                              "out": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\ap_generated_sources\\debug\\out",
-                                "contents": {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "res": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\res",
-                        "contents": {
-                          "pngs": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\res\\pngs",
-                            "contents": {
-                              "debug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\res\\pngs\\debug",
-                                "contents": {}
-                              }
-                            }
-                          },
-                          "resValues": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\res\\resValues",
-                            "contents": {
-                              "debug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\res\\resValues\\debug",
-                                "contents": {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "source": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source",
-                        "contents": {
-                          "buildConfig": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig",
-                            "contents": {
-                              "debug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug",
-                                "contents": {
-                                  "capacitor": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug\\capacitor",
-                                    "contents": {
-                                      "cordova": {
-                                        "type": "directory",
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug\\capacitor\\cordova",
-                                        "contents": {
-                                          "android": {
-                                            "type": "directory",
-                                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug\\capacitor\\cordova\\android",
-                                            "contents": {
-                                              "plugins": {
-                                                "type": "directory",
-                                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug\\capacitor\\cordova\\android\\plugins",
-                                                "contents": {
-                                                  "BuildConfig.java": {
-                                                    "type": "file",
-                                                    "size": 342,
-                                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\generated\\source\\buildConfig\\debug\\capacitor\\cordova\\android\\plugins\\BuildConfig.java"
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "intermediates": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates",
-                    "contents": {
-                      "aapt_friendly_merged_manifests": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests\\debug",
-                            "contents": {
-                              "processDebugManifest": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests\\debug\\processDebugManifest",
-                                "contents": {
-                                  "aapt": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests\\debug\\processDebugManifest\\aapt",
-                                    "contents": {
-                                      "AndroidManifest.xml": {
-                                        "type": "file",
-                                        "size": 360,
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests\\debug\\processDebugManifest\\aapt\\AndroidManifest.xml"
-                                      },
-                                      "output-metadata.json": {
-                                        "type": "file",
-                                        "size": 364,
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aapt_friendly_merged_manifests\\debug\\processDebugManifest\\aapt\\output-metadata.json"
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "aar_metadata": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aar_metadata",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aar_metadata\\debug",
-                            "contents": {
-                              "writeDebugAarMetadata": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aar_metadata\\debug\\writeDebugAarMetadata",
-                                "contents": {
-                                  "aar-metadata.properties": {
-                                    "type": "file",
-                                    "size": 156,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\aar_metadata\\debug\\writeDebugAarMetadata\\aar-metadata.properties"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "annotation_processor_list": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\annotation_processor_list",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\annotation_processor_list\\debug",
-                            "contents": {
-                              "javaPreCompileDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\annotation_processor_list\\debug\\javaPreCompileDebug",
-                                "contents": {
-                                  "annotationProcessors.json": {
-                                    "type": "file",
-                                    "size": 2,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\annotation_processor_list\\debug\\javaPreCompileDebug\\annotationProcessors.json"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "assets": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\assets",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\assets\\debug",
-                            "contents": {
-                              "mergeDebugAssets": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\assets\\debug\\mergeDebugAssets",
-                                "contents": {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "compiled_local_resources": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compiled_local_resources",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compiled_local_resources\\debug",
-                            "contents": {
-                              "compileDebugLibraryResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compiled_local_resources\\debug\\compileDebugLibraryResources",
-                                "contents": {
-                                  "out": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compiled_local_resources\\debug\\compileDebugLibraryResources\\out",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "compile_library_classes_jar": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_library_classes_jar",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_library_classes_jar\\debug",
-                            "contents": {
-                              "bundleLibCompileToJarDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_library_classes_jar\\debug\\bundleLibCompileToJarDebug",
-                                "contents": {
-                                  "classes.jar": {
-                                    "type": "file",
-                                    "size": 94161,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_library_classes_jar\\debug\\bundleLibCompileToJarDebug\\classes.jar"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "compile_r_class_jar": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_r_class_jar",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_r_class_jar\\debug",
-                            "contents": {
-                              "generateDebugRFile": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_r_class_jar\\debug\\generateDebugRFile",
-                                "contents": {
-                                  "R.jar": {
-                                    "type": "file",
-                                    "size": 92852,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_r_class_jar\\debug\\generateDebugRFile\\R.jar"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "compile_symbol_list": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_symbol_list",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_symbol_list\\debug",
-                            "contents": {
-                              "generateDebugRFile": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_symbol_list\\debug\\generateDebugRFile",
-                                "contents": {
-                                  "R.txt": {
-                                    "type": "file",
-                                    "size": 78722,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\compile_symbol_list\\debug\\generateDebugRFile\\R.txt"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "data_binding_layout_info_type_package": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\data_binding_layout_info_type_package",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\data_binding_layout_info_type_package\\debug",
-                            "contents": {
-                              "packageDebugResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\data_binding_layout_info_type_package\\debug\\packageDebugResources",
-                                "contents": {
-                                  "out": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\data_binding_layout_info_type_package\\debug\\packageDebugResources\\out",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "incremental": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug",
-                            "contents": {
-                              "packageDebugResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug\\packageDebugResources",
-                                "contents": {
-                                  "compile-file-map.properties": {
-                                    "type": "file",
-                                    "size": 32,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug\\packageDebugResources\\compile-file-map.properties"
-                                  },
-                                  "merged.dir": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug\\packageDebugResources\\merged.dir",
-                                    "contents": {}
-                                  },
-                                  "merger.xml": {
-                                    "type": "file",
-                                    "size": 2098,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug\\packageDebugResources\\merger.xml"
-                                  },
-                                  "stripped.dir": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\debug\\packageDebugResources\\stripped.dir",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "mergeDebugAssets": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugAssets",
-                            "contents": {
-                              "merger.xml": {
-                                "type": "file",
-                                "size": 849,
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugAssets\\merger.xml"
-                              }
-                            }
-                          },
-                          "mergeDebugJniLibFolders": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugJniLibFolders",
-                            "contents": {
-                              "merger.xml": {
-                                "type": "file",
-                                "size": 556,
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugJniLibFolders\\merger.xml"
-                              }
-                            }
-                          },
-                          "mergeDebugShaders": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugShaders",
-                            "contents": {
-                              "merger.xml": {
-                                "type": "file",
-                                "size": 556,
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\incremental\\mergeDebugShaders\\merger.xml"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "javac": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug",
-                            "contents": {
-                              "compileDebugJavaWithJavac": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac",
-                                "contents": {
-                                  "classes": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes",
-                                    "contents": {
-                                      "capacitor": {
-                                        "type": "directory",
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes\\capacitor",
-                                        "contents": {
-                                          "cordova": {
-                                            "type": "directory",
-                                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes\\capacitor\\cordova",
-                                            "contents": {
-                                              "android": {
-                                                "type": "directory",
-                                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes\\capacitor\\cordova\\android",
-                                                "contents": {
-                                                  "plugins": {
-                                                    "type": "directory",
-                                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes\\capacitor\\cordova\\android\\plugins",
-                                                    "contents": {
-                                                      "BuildConfig.class": {
-                                                        "type": "file",
-                                                        "size": 651,
-                                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\javac\\debug\\compileDebugJavaWithJavac\\classes\\capacitor\\cordova\\android\\plugins\\BuildConfig.class"
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "library_jni": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\library_jni",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\library_jni\\debug",
-                            "contents": {
-                              "copyDebugJniLibsProjectOnly": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\library_jni\\debug\\copyDebugJniLibsProjectOnly",
-                                "contents": {
-                                  "jni": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\library_jni\\debug\\copyDebugJniLibsProjectOnly\\jni",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "local_only_symbol_list": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\local_only_symbol_list",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\local_only_symbol_list\\debug",
-                            "contents": {
-                              "parseDebugLocalResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\local_only_symbol_list\\debug\\parseDebugLocalResources",
-                                "contents": {
-                                  "R-def.txt": {
-                                    "type": "file",
-                                    "size": 55,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\local_only_symbol_list\\debug\\parseDebugLocalResources\\R-def.txt"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "manifest_merge_blame_file": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\manifest_merge_blame_file",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\manifest_merge_blame_file\\debug",
-                            "contents": {
-                              "processDebugManifest": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\manifest_merge_blame_file\\debug\\processDebugManifest",
-                                "contents": {
-                                  "manifest-merger-blame-debug-report.txt": {
-                                    "type": "file",
-                                    "size": 616,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\manifest_merge_blame_file\\debug\\processDebugManifest\\manifest-merger-blame-debug-report.txt"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "merged_jni_libs": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_jni_libs",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_jni_libs\\debug",
-                            "contents": {
-                              "mergeDebugJniLibFolders": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_jni_libs\\debug\\mergeDebugJniLibFolders",
-                                "contents": {
-                                  "out": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_jni_libs\\debug\\mergeDebugJniLibFolders\\out",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "merged_manifest": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_manifest",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_manifest\\debug",
-                            "contents": {
-                              "processDebugManifest": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_manifest\\debug\\processDebugManifest",
-                                "contents": {
-                                  "AndroidManifest.xml": {
-                                    "type": "file",
-                                    "size": 360,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_manifest\\debug\\processDebugManifest\\AndroidManifest.xml"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "merged_shaders": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_shaders",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_shaders\\debug",
-                            "contents": {
-                              "mergeDebugShaders": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_shaders\\debug\\mergeDebugShaders",
-                                "contents": {
-                                  "out": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\merged_shaders\\debug\\mergeDebugShaders\\out",
-                                    "contents": {}
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "navigation_json": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\navigation_json",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\navigation_json\\debug",
-                            "contents": {
-                              "extractDeepLinksDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\navigation_json\\debug\\extractDeepLinksDebug",
-                                "contents": {
-                                  "navigation.json": {
-                                    "type": "file",
-                                    "size": 2,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\navigation_json\\debug\\extractDeepLinksDebug\\navigation.json"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "nested_resources_validation_report": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\nested_resources_validation_report",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\nested_resources_validation_report\\debug",
-                            "contents": {
-                              "generateDebugResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\nested_resources_validation_report\\debug\\generateDebugResources",
-                                "contents": {
-                                  "nestedResourcesValidationReport.txt": {
-                                    "type": "file",
-                                    "size": 15,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\nested_resources_validation_report\\debug\\generateDebugResources\\nestedResourcesValidationReport.txt"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "packaged_res": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\packaged_res",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\packaged_res\\debug",
-                            "contents": {
-                              "packageDebugResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\packaged_res\\debug\\packageDebugResources",
-                                "contents": {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "public_res": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\public_res",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\public_res\\debug",
-                            "contents": {
-                              "packageDebugResources": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\public_res\\debug\\packageDebugResources",
-                                "contents": {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "runtime_library_classes_dir": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug",
-                            "contents": {
-                              "bundleLibRuntimeToDirDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug",
-                                "contents": {
-                                  "capacitor": {
-                                    "type": "directory",
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug\\capacitor",
-                                    "contents": {
-                                      "cordova": {
-                                        "type": "directory",
-                                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug\\capacitor\\cordova",
-                                        "contents": {
-                                          "android": {
-                                            "type": "directory",
-                                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug\\capacitor\\cordova\\android",
-                                            "contents": {
-                                              "plugins": {
-                                                "type": "directory",
-                                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug\\capacitor\\cordova\\android\\plugins",
-                                                "contents": {
-                                                  "BuildConfig.class": {
-                                                    "type": "file",
-                                                    "size": 651,
-                                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_dir\\debug\\bundleLibRuntimeToDirDebug\\capacitor\\cordova\\android\\plugins\\BuildConfig.class"
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "runtime_library_classes_jar": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_jar",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_jar\\debug",
-                            "contents": {
-                              "bundleLibRuntimeToJarDebug": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_jar\\debug\\bundleLibRuntimeToJarDebug",
-                                "contents": {
-                                  "classes.jar": {
-                                    "type": "file",
-                                    "size": 1331,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\runtime_library_classes_jar\\debug\\bundleLibRuntimeToJarDebug\\classes.jar"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "symbol_list_with_package_name": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\symbol_list_with_package_name",
-                        "contents": {
-                          "debug": {
-                            "type": "directory",
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\symbol_list_with_package_name\\debug",
-                            "contents": {
-                              "generateDebugRFile": {
-                                "type": "directory",
-                                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\symbol_list_with_package_name\\debug\\generateDebugRFile",
-                                "contents": {
-                                  "package-aware-r.txt": {
-                                    "type": "file",
-                                    "size": 51821,
-                                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\symbol_list_with_package_name\\debug\\generateDebugRFile\\package-aware-r.txt"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "outputs": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\outputs",
-                    "contents": {
-                      "logs": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\outputs\\logs",
-                        "contents": {
-                          "manifest-merger-debug-report.txt": {
-                            "type": "file",
-                            "size": 1787,
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\outputs\\logs\\manifest-merger-debug-report.txt"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "tmp": {
-                    "type": "directory",
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\tmp",
-                    "contents": {
-                      "compileDebugJavaWithJavac": {
-                        "type": "directory",
-                        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\tmp\\compileDebugJavaWithJavac",
-                        "contents": {
-                          "previous-compilation-data.bin": {
-                            "type": "file",
-                            "size": 11980,
-                            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor-cordova-android-plugins\\build\\tmp\\compileDebugJavaWithJavac\\previous-compilation-data.bin"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
               "build.gradle": {
                 "type": "file",
                 "size": 1661,
@@ -8080,49 +7176,17 @@
           },
           "capacitor.settings.gradle": {
             "type": "file",
-            "size": 1352,
+            "size": 1252,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\capacitor.settings.gradle"
-          },
-          "gradle": {
-            "type": "directory",
-            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradle",
-            "contents": {
-              "wrapper": {
-                "type": "directory",
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradle\\wrapper",
-                "contents": {
-                  "gradle-wrapper.jar": {
-                    "type": "file",
-                    "size": 43583,
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradle\\wrapper\\gradle-wrapper.jar"
-                  },
-                  "gradle-wrapper.properties": {
-                    "type": "file",
-                    "size": 253,
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradle\\wrapper\\gradle-wrapper.properties"
-                  }
-                }
-              }
-            }
           },
           "gradle.properties": {
             "type": "file",
-            "size": 1601,
+            "size": 519,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradle.properties"
-          },
-          "gradlew": {
-            "type": "file",
-            "size": 8762,
-            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradlew"
-          },
-          "gradlew.bat": {
-            "type": "file",
-            "size": 2966,
-            "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\gradlew.bat"
           },
           "local.properties": {
             "type": "file",
-            "size": 369,
+            "size": 188,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\android\\local.properties"
           },
           "map.py": {
@@ -8319,25 +7383,25 @@
                 "size": 37817,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\AnalysisResults-BsF-uA5b.css"
               },
-              "AnalysisResults-kAeQFckM.js": {
+              "AnalysisResults-XASSYyOP.js": {
                 "type": "file",
                 "size": 26277,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\AnalysisResults-kAeQFckM.js"
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\AnalysisResults-XASSYyOP.js"
               },
               "claude-8e-zvY-0.png": {
                 "type": "file",
                 "size": 7424,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\claude-8e-zvY-0.png"
               },
+              "CompletedPathsScreen-Bxo9lt8v.js": {
+                "type": "file",
+                "size": 9426,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\CompletedPathsScreen-Bxo9lt8v.js"
+              },
               "CompletedPathsScreen-FmHdzYNH.css": {
                 "type": "file",
                 "size": 10654,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\CompletedPathsScreen-FmHdzYNH.css"
-              },
-              "CompletedPathsScreen-wZ_BjXsi.js": {
-                "type": "file",
-                "size": 9426,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\CompletedPathsScreen-wZ_BjXsi.js"
               },
               "favicon-DygWasRq.ico": {
                 "type": "file",
@@ -8359,75 +7423,70 @@
                 "size": 3677,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\icon-192x192-DugLAGZW.png"
               },
-              "index-C3cp3vRY.js": {
+              "index-BcBCh2EF.css": {
                 "type": "file",
-                "size": 2624824,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index-C3cp3vRY.js"
+                "size": 298503,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index-BcBCh2EF.css"
               },
-              "index-CnnTxypP.css": {
+              "index-h-6mAlsv.js": {
                 "type": "file",
-                "size": 299909,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index-CnnTxypP.css"
+                "size": 2628807,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index-h-6mAlsv.js"
               },
-              "index.es-dXz69Nv0.js": {
+              "index.es-DxjeLNlm.js": {
                 "type": "file",
                 "size": 158617,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index.es-dXz69Nv0.js"
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\index.es-DxjeLNlm.js"
               },
-              "JournalAnalyticsDashboard-C6cexPz6.js": {
+              "JournalAnalyticsDashboard-B0WubclT.css": {
                 "type": "file",
-                "size": 43129,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalAnalyticsDashboard-C6cexPz6.js"
+                "size": 111260,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalAnalyticsDashboard-B0WubclT.css"
               },
-              "JournalAnalyticsDashboard-Co9JrKy4.css": {
+              "JournalAnalyticsDashboard-D5SfTMJc.js": {
                 "type": "file",
-                "size": 100551,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalAnalyticsDashboard-Co9JrKy4.css"
-              },
-              "JournalArchive-BedhEuDb.js": {
-                "type": "file",
-                "size": 9448,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalArchive-BedhEuDb.js"
+                "size": 43746,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalAnalyticsDashboard-D5SfTMJc.js"
               },
               "JournalArchive-D8-IN62W.css": {
                 "type": "file",
                 "size": 15397,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalArchive-D8-IN62W.css"
               },
-              "kairos-logo-2zjUdaRb.svg": {
+              "JournalArchive-HUTFw_vY.js": {
                 "type": "file",
-                "size": 6028,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\kairos-logo-2zjUdaRb.svg"
+                "size": 9448,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\JournalArchive-HUTFw_vY.js"
               },
-              "PathSelection-B6FhfDfF.js": {
+              "PathSelection-D6lLdWJ1.css": {
                 "type": "file",
-                "size": 19506,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\PathSelection-B6FhfDfF.js"
+                "size": 108394,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\PathSelection-D6lLdWJ1.css"
               },
-              "PathSelection-BuFvrz7B.css": {
+              "PathSelection-D6nbTcjL.js": {
                 "type": "file",
-                "size": 102653,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\PathSelection-BuFvrz7B.css"
+                "size": 20539,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\PathSelection-D6nbTcjL.js"
               },
               "purify.es-CQJ0hv7W.js": {
                 "type": "file",
                 "size": 21819,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\purify.es-CQJ0hv7W.js"
               },
-              "textProcessing-BtoO2VCP.js": {
+              "textProcessing-FJLOouzv.js": {
                 "type": "file",
                 "size": 397578,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\textProcessing-BtoO2VCP.js"
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\textProcessing-FJLOouzv.js"
               },
-              "UserSettings-BLQaYRW-.js": {
+              "UserSettings-B0JZztlu.css": {
                 "type": "file",
-                "size": 16931,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\UserSettings-BLQaYRW-.js"
+                "size": 11463,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\UserSettings-B0JZztlu.css"
               },
-              "UserSettings-NWgu1JKX.css": {
+              "UserSettings-BqHmb6gc.js": {
                 "type": "file",
-                "size": 22042,
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\UserSettings-NWgu1JKX.css"
+                "size": 11160,
+                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\assets\\UserSettings-BqHmb6gc.js"
               }
             }
           },
@@ -8443,7 +7502,7 @@
           },
           "index.html": {
             "type": "file",
-            "size": 732,
+            "size": 748,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\dist\\index.html"
           },
           "manifest.json": {
@@ -8473,11 +7532,6 @@
         "size": 1003,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\eslint.config.js"
       },
-      "firebase-debug.log": {
-        "type": "file",
-        "size": 320343,
-        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\firebase-debug.log"
-      },
       "firebase.json": {
         "type": "file",
         "size": 537,
@@ -8499,7 +7553,7 @@
         "contents": {
           ".eslintrc.js": {
             "type": "file",
-            "size": 1095,
+            "size": 813,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\.eslintrc.js"
           },
           ".gitignore": {
@@ -8514,12 +7568,12 @@
           },
           "index.js": {
             "type": "file",
-            "size": 26888,
+            "size": 23957,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\index.js"
           },
           "package-lock.json": {
             "type": "file",
-            "size": 274383,
+            "size": 143160,
             "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\functions\\package-lock.json"
           },
           "package.json": {
@@ -8702,17 +7756,17 @@
       },
       "index.html": {
         "type": "file",
-        "size": 607,
+        "size": 623,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\index.html"
       },
       "map.py": {
         "type": "file",
-        "size": 2547,
+        "size": 2553,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\map.py"
       },
       "package-lock.json": {
         "type": "file",
-        "size": 497939,
+        "size": 497944,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\package-lock.json"
       },
       "package.json": {
@@ -8722,7 +7776,7 @@
       },
       "project_structure.json": {
         "type": "file",
-        "size": 679656,
+        "size": 679829,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\project_structure.json"
       },
       "public": {
@@ -8768,7 +7822,7 @@
       },
       "README.md": {
         "type": "file",
-        "size": 471,
+        "size": 3863,
         "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\README.md"
       },
       "requirements.txt": {
@@ -8832,7 +7886,7 @@
                   },
                   "DailyAIQuestion.jsx": {
                     "type": "file",
-                    "size": 17988,
+                    "size": 17998,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\analytics\\DailyAIQuestion.jsx"
                   },
                   "EmotionTrends.jsx": {
@@ -8919,12 +7973,12 @@
                   },
                   "KairosLoader.jsx": {
                     "type": "file",
-                    "size": 2768,
+                    "size": 3698,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\common\\KairosLoader.jsx"
                   },
                   "PathContextIndicator.jsx": {
                     "type": "file",
-                    "size": 2225,
+                    "size": 2425,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\common\\PathContextIndicator.jsx"
                   },
                   "ThemeSwitcher.jsx": {
@@ -8945,7 +7999,7 @@
                 "contents": {
                   "UserDashboard.jsx": {
                     "type": "file",
-                    "size": 19289,
+                    "size": 19290,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\dashboard\\UserDashboard.jsx"
                   }
                 }
@@ -9013,7 +8067,7 @@
                   },
                   "MultiImageJournalUpload.jsx": {
                     "type": "file",
-                    "size": 20473,
+                    "size": 18923,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\journey\\MultiImageJournalUpload.jsx"
                   },
                   "WriteTab.jsx": {
@@ -9118,7 +8172,7 @@
                   },
                   "PathSelection.jsx": {
                     "type": "file",
-                    "size": 37530,
+                    "size": 39530,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\paths\\PathSelection.jsx"
                   },
                   "VirtualPathGrid.jsx": {
@@ -9134,7 +8188,7 @@
                 "contents": {
                   "UserSettings.jsx": {
                     "type": "file",
-                    "size": 32517,
+                    "size": 16635,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\settings\\UserSettings.jsx"
                   }
                 }
@@ -9166,7 +8220,7 @@
                 "contents": {
                   "VoiceJournalUpload.jsx": {
                     "type": "file",
-                    "size": 23525,
+                    "size": 43405,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\voice\\VoiceJournalUpload.jsx"
                   }
                 }
@@ -9184,17 +8238,6 @@
                     "type": "file",
                     "size": 3217,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\weather\\WeatherWidget.jsx"
-                  }
-                }
-              },
-              "welcome": {
-                "type": "directory",
-                "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\welcome",
-                "contents": {
-                  "DesktopWelcomeScreen.jsx": {
-                    "type": "file",
-                    "size": 29441,
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\components\\welcome\\DesktopWelcomeScreen.jsx"
                   }
                 }
               }
@@ -9238,7 +8281,7 @@
             "contents": {
               "JourneyData.js": {
                 "type": "file",
-                "size": 295714,
+                "size": 303179,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\data\\JourneyData.js"
               }
             }
@@ -9325,7 +8368,7 @@
               },
               "kairos-logo.svg": {
                 "type": "file",
-                "size": 6028,
+                "size": 2547,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\icons\\kairos-logo.svg"
               }
             }
@@ -9387,7 +8430,7 @@
               },
               "JournalAnalyticsDashboard.jsx": {
                 "type": "file",
-                "size": 38532,
+                "size": 39646,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\pages\\JournalAnalyticsDashboard.jsx"
               },
               "Privacy.jsx": {
@@ -9397,7 +8440,7 @@
               },
               "ProfileScreen.jsx": {
                 "type": "file",
-                "size": 36155,
+                "size": 19525,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\pages\\ProfileScreen.jsx"
               },
               "SubscriptionSuccess.jsx": {
@@ -9412,7 +8455,7 @@
               },
               "WelcomeScreen.jsx": {
                 "type": "file",
-                "size": 20993,
+                "size": 25128,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\pages\\WelcomeScreen.jsx"
               }
             }
@@ -9438,12 +8481,12 @@
               },
               "claudeService.js": {
                 "type": "file",
-                "size": 88210,
+                "size": 89146,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\services\\claudeService.js"
               },
               "exportService.js": {
                 "type": "file",
-                "size": 46358,
+                "size": 47305,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\services\\exportService.js"
               },
               "feedbackService.js": {
@@ -9458,7 +8501,7 @@
               },
               "SubscriptionService.js": {
                 "type": "file",
-                "size": 20703,
+                "size": 20702,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\services\\SubscriptionService.js"
               },
               "weatherService.js": {
@@ -9488,7 +8531,7 @@
                   },
                   "_variables.css": {
                     "type": "file",
-                    "size": 17514,
+                    "size": 11652,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\base\\_variables.css"
                   }
                 }
@@ -9519,7 +8562,7 @@
                   },
                   "analyticsComponents.css": {
                     "type": "file",
-                    "size": 86636,
+                    "size": 170830,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\analyticsComponents.css"
                   },
                   "ar.css": {
@@ -9585,7 +8628,7 @@
                   },
                   "JournalUpload.css": {
                     "type": "file",
-                    "size": 47738,
+                    "size": 33067,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\JournalUpload.css"
                   },
                   "journey.css": {
@@ -9610,7 +8653,7 @@
                   },
                   "loader.css": {
                     "type": "file",
-                    "size": 12806,
+                    "size": 9503,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\loader.css"
                   },
                   "lottieAnimations.css": {
@@ -9651,17 +8694,17 @@
                   },
                   "pathSelection.css": {
                     "type": "file",
-                    "size": 141529,
+                    "size": 146955,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\pathSelection.css"
                   },
                   "profile.css": {
                     "type": "file",
-                    "size": 31189,
+                    "size": 19424,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\profile.css"
                   },
                   "settings.css": {
                     "type": "file",
-                    "size": 28595,
+                    "size": 14267,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\settings.css"
                   },
                   "shareButtons.css": {
@@ -9671,7 +8714,7 @@
                   },
                   "signup.css": {
                     "type": "file",
-                    "size": 33653,
+                    "size": 33519,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\signup.css"
                   },
                   "subscription.css": {
@@ -9704,10 +8747,10 @@
                     "size": 4157,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\weatherDialog.css"
                   },
-                  "welcome.css": {
+                  "welcomeScreen.css": {
                     "type": "file",
-                    "size": 36921,
-                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\welcome.css"
+                    "size": 61170,
+                    "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\components\\welcomeScreen.css"
                   },
                   "WriteTab.css": {
                     "type": "file",
@@ -9758,7 +8801,7 @@
                 "contents": {
                   "analyticsDashboard.css": {
                     "type": "file",
-                    "size": 38793,
+                    "size": 36695,
                     "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\pages\\analyticsDashboard.css"
                   },
                   "completedPaths.css": {
@@ -9775,7 +8818,7 @@
               },
               "VoiceJournalUpload.css": {
                 "type": "file",
-                "size": 12033,
+                "size": 12841,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\styles\\VoiceJournalUpload.css"
               }
             }
@@ -9812,7 +8855,7 @@
               },
               "pathTypeUtils.js": {
                 "type": "file",
-                "size": 11275,
+                "size": 11400,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils\\pathTypeUtils.js"
               },
               "pathUtils.js": {
@@ -9827,7 +8870,7 @@
               },
               "subscriptionUtils.js": {
                 "type": "file",
-                "size": 10292,
+                "size": 10290,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils\\subscriptionUtils.js"
               },
               "textProcessing.js": {
@@ -9842,12 +8885,12 @@
               },
               "userProgress.js": {
                 "type": "file",
-                "size": 5383,
+                "size": 5511,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils\\userProgress.js"
               },
               "versionControl.js": {
                 "type": "file",
-                "size": 78498,
+                "size": 78500,
                 "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\src\\utils\\versionControl.js"
               }
             }
@@ -9870,6 +8913,11 @@
             }
           }
         }
+      },
+      "studying.py": {
+        "type": "file",
+        "size": 241,
+        "path": "C:\\Users\\georg\\georgiescoding\\kairos-main\\studying.py"
       },
       "vite.config.js": {
         "type": "file",

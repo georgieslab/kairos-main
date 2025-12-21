@@ -15,12 +15,15 @@ export const useNavigation = () => {
   return context;
 };
 
-// Provider component
+  // Provider component
 export const NavigationProvider = ({ children }) => {
   // Use the navigation hook for state management
   const navigationState = useNavigationState();
   
-  // Sync with window.appState for legacy components - with improved safety
+  // Log screen changes for debugging
+  useEffect(() => {
+    console.log('🎯 Screen changed:', navigationState.currentScreen);
+  }, [navigationState.currentScreen]);  // Sync with window.appState for legacy components - with improved safety
   useEffect(() => {
     // Safe assignment to window - wrapped in try/catch
     try {

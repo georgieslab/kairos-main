@@ -3,12 +3,12 @@ import {
   Sparkles, Brain, MessageCircle, Shield, ChevronRight, BookOpen, PenTool, 
   TrendingUp, User, Zap, ArrowRight, Palette, Camera, FileText, BarChart3, 
   Download, Heart, Compass, Target, Clock, Award, Infinity, Check, Star,
-  Lightbulb, Smile, Gem, Trophy, CheckCircle, Menu, X
+  Lightbulb, Smile, Gem, Trophy, CheckCircle, Mic, Layers
 } from 'lucide-react';
 import claudeLogo from '../icons/claude.png';
 import kairosLogo from '../icons/kairos-logo.svg';
 import { APP_VERSION } from '../utils/versionControl';
-import '../styles/components/welcomeScreen.css'; // Import the CSS file
+import '../styles/components/welcomeScreen.css';
 
 const WelcomeScreen = ({ onStart, onNavigate }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -19,7 +19,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
   const touchEndX = useRef(0);
   const containerRef = useRef(null);
 
-  const totalPages = 10;
+  const totalPages = 12;
 
   // Check for mobile viewport
   useEffect(() => {
@@ -124,28 +124,35 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-hero-text">
             <h1 className="kairos-hero-title">Καιρός</h1>
             <p className="kairos-hero-subtitle">Your AI-Powered Journey to Self-Discovery</p>
+            <p className="kairos-hero-tagline">
+              Transform your thoughts into profound insights through the power of journaling
+            </p>
           </div>
           
           <div className="kairos-hero-features">
-            <div className="kairos-feature-chip">
-              <Brain className="kairos-chip-icon" />
-              <span>Personality Insights</span>
-            </div>
-            <div className="kairos-feature-chip">
-              <MessageCircle className="kairos-chip-icon" />
-              <span>AI Questions</span>
+            <div className="kairos-feature-chip kairos-chip-highlight">
+              <Infinity className="kairos-chip-icon" />
+              <span>World's First Multi-Modal</span>
             </div>
             <div className="kairos-feature-chip">
               <BookOpen className="kairos-chip-icon" />
-              <span>40 Journey Paths</span>
+              <span>50+ Journey Paths</span>
             </div>
           </div>
-          
-          <div className="kairos-swipe-hint">
-            <div className="kairos-swipe-icon">
-              <ChevronRight />
+
+          <div className="kairos-hero-highlights">
+            <div className="kairos-highlight-item">
+              <PenTool className="kairos-chip-icon" />
+              <span>Write, Speak, or Create</span>
             </div>
-            <span>Swipe to explore features</span>
+            <div className="kairos-highlight-item">
+              <Lightbulb className="kairos-chip-icon" />
+              <span>AI-Powered Deep Insights</span>
+            </div>
+            <div className="kairos-highlight-item">
+              <TrendingUp className="kairos-chip-icon" />
+              <span>Track Your Growth Journey</span>
+            </div>
           </div>
         </div>
       )
@@ -175,7 +182,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-feature-text">
             <h2 className="kairos-feature-title">Discover Your True Self</h2>
             <p className="kairos-feature-description">
-              Unlock deep insights about your personality through AI analysis of your journal entries
+              Unlock deep insights about your personality through Claude AI analysis of your journal entries
             </p>
           </div>
           
@@ -219,27 +226,162 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           </div>
           
           <div className="kairos-feature-text">
-            <h2 className="kairos-feature-title">Your Personal AI Coach</h2>
+            <h2 className="kairos-feature-title">Ask Your Journal Anything</h2>
             <p className="kairos-feature-description">
-              Ask meaningful questions and receive insights based on your entire journaling journey
+              Chat with your journal entries to uncover patterns, insights, and wisdom from your own words
             </p>
           </div>
           
           <div className="kairos-example-questions">
-            <div className="kairos-question-card">
-              <Smile className="kairos-question-icon" />
-              <p>"What patterns do you see in my happiness?"</p>
+            <div className="kairos-question-chip">"What makes me happiest?"</div>
+            <div className="kairos-question-chip">"How have I grown this month?"</div>
+            <div className="kairos-question-chip">"What patterns do I repeat?"</div>
+          </div>
+        </div>
+      )
+    },
+    
+    // Page 4: Multi-Modal
+    {
+      id: 'multimodal',
+      component: (
+        <div className="kairos-welcome-page-content">
+          <div className="kairos-feature-badge kairos-badge-revolutionary">
+            <Layers className="kairos-badge-icon" />
+            <span>REVOLUTIONARY</span>
+          </div>
+          
+          <div className="kairos-feature-icon-container">
+            <div className="kairos-feature-icon kairos-multimodal">
+              <Layers />
+              <div className="kairos-modality-icons">
+                <div className="kairos-modality-icon kairos-mod-write"><PenTool /></div>
+                <div className="kairos-modality-icon kairos-mod-speak"><Mic /></div>
+                <div className="kairos-modality-icon kairos-mod-create"><Palette /></div>
+              </div>
             </div>
-            <div className="kairos-question-card">
-              <TrendingUp className="kairos-question-icon" />
-              <p>"How have I grown this month?"</p>
+          </div>
+          
+          <div className="kairos-feature-text">
+            <h2 className="kairos-feature-title">Express Your Way</h2>
+            <p className="kairos-feature-description">
+              World's first multi-modal journaling: Write, speak, or create art - your choice, your expression
+            </p>
+          </div>
+          
+          <div className="kairos-modality-cards">
+            <div className="kairos-modality-card">
+              <PenTool className="kairos-card-icon" />
+              <span>Write</span>
+            </div>
+            <div className="kairos-modality-card kairos-card-voice">
+              <Mic className="kairos-card-icon" />
+              <span>Speak</span>
+              <div className="kairos-sound-waves">
+                <div className="kairos-sound-wave"></div>
+                <div className="kairos-sound-wave"></div>
+                <div className="kairos-sound-wave"></div>
+                <div className="kairos-sound-wave"></div>
+                <div className="kairos-sound-wave"></div>
+              </div>
+            </div>
+            <div className="kairos-modality-card">
+              <Palette className="kairos-card-icon" />
+              <span>Create</span>
             </div>
           </div>
         </div>
       )
     },
     
-    // Page 4: Journey Paths
+    // Page 5: Handwriting
+    {
+      id: 'handwriting',
+      component: (
+        <div className="kairos-welcome-page-content">
+          <div className="kairos-feature-icon-container">
+            <div className="kairos-feature-icon kairos-handwriting">
+              <PenTool />
+              <div className="kairos-writing-lines">
+                <div className="kairos-writing-line"></div>
+                <div className="kairos-writing-line"></div>
+                <div className="kairos-writing-line"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="kairos-feature-text">
+            <h2 className="kairos-feature-title">Handwriting Magic</h2>
+            <p className="kairos-feature-description">
+              Snap a photo of your handwritten journal and watch AI extract your thoughts with 92%+ accuracy
+            </p>
+          </div>
+          
+          <div className="kairos-feature-benefits">
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>92%+ accuracy rate</span>
+            </div>
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>Works with any handwriting</span>
+            </div>
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>Instant text extraction</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    
+    // Page 6: Voice Journaling
+    {
+      id: 'voice',
+      component: (
+        <div className="kairos-welcome-page-content">
+          <div className="kairos-feature-badge kairos-badge-new">
+            <Mic className="kairos-badge-icon" />
+            <span>NEW</span>
+          </div>
+          
+          <div className="kairos-feature-icon-container">
+            <div className="kairos-feature-icon kairos-voice">
+              <Mic />
+              <div className="kairos-voice-waves">
+                <div className="kairos-voice-wave"></div>
+                <div className="kairos-voice-wave"></div>
+                <div className="kairos-voice-wave"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="kairos-feature-text">
+            <h2 className="kairos-feature-title">Speak Your Truth</h2>
+            <p className="kairos-feature-description">
+              Record your thoughts with live transcription and emotional tone analysis
+            </p>
+          </div>
+          
+          <div className="kairos-feature-benefits">
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>Live transcription</span>
+            </div>
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>Vocal tone analysis</span>
+            </div>
+            <div className="kairos-benefit-item">
+              <Check className="kairos-benefit-check" />
+              <span>5 dedicated voice paths</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    
+    // Page 7: Journey Paths
     {
       id: 'paths',
       component: (
@@ -247,9 +389,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-feature-icon-container">
             <div className="kairos-feature-icon kairos-paths">
               <Compass />
-              <div className="kairos-path-lines">
-                <div className="kairos-path-line"></div>
-                <div className="kairos-path-line"></div>
+              <div className="kairos-path-dots">
                 <div className="kairos-path-dot"></div>
                 <div className="kairos-path-dot"></div>
                 <div className="kairos-path-dot"></div>
@@ -258,91 +398,60 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           </div>
           
           <div className="kairos-feature-text">
-            <h2 className="kairos-feature-title">40 Unique Journey Paths</h2>
+            <h2 className="kairos-feature-title">50+ Journey Paths</h2>
             <p className="kairos-feature-description">
-              Choose from carefully crafted experiences tailored to your growth needs
+              From 4-day challenges to 100-day transformations, find your perfect path
             </p>
           </div>
           
-          <div className="kairos-path-preview">
-            <div className="kairos-path-mini-card">
-              <Heart className="kairos-path-mini-icon" />
-              <span>Emotional Growth</span>
+          <div className="kairos-path-cards">
+            <div className="kairos-path-card">
+              <Target className="kairos-path-icon" />
+              <span>Self-Discovery</span>
             </div>
-            <div className="kairos-path-mini-card">
-              <Target className="kairos-path-mini-icon" />
-              <span>Life Purpose</span>
+            <div className="kairos-path-card">
+              <Heart className="kairos-path-icon" />
+              <span>Inner Child</span>
             </div>
-            <div className="kairos-path-mini-card">
-              <Palette className="kairos-path-mini-icon" />
-              <span>Creative Expression</span>
+            <div className="kairos-path-card">
+              <Brain className="kairos-path-icon" />
+              <span>Shadow Work</span>
             </div>
           </div>
         </div>
       )
     },
     
-    // Page 5: Visual Journaling
+    // Page 8: AI Insights
     {
-      id: 'visual',
+      id: 'insights',
       component: (
         <div className="kairos-welcome-page-content">
           <div className="kairos-feature-icon-container">
-            <div className="kairos-feature-icon kairos-visual">
-              <PenTool />
-              <div className="kairos-paint-drops">
-                <div className="kairos-paint-drop"></div>
-                <div className="kairos-paint-drop"></div>
-                <div className="kairos-paint-drop"></div>
-              </div>
+            <div className="kairos-feature-icon kairos-insights">
+              <Brain />
+              <div className="kairos-brain-glow"></div>
             </div>
           </div>
           
           <div className="kairos-feature-text">
-            <h2 className="kairos-feature-title">Express Beyond Words</h2>
+            <h2 className="kairos-feature-title">Deep AI Insights</h2>
             <p className="kairos-feature-description">
-              Create visual art and let colors speak your emotions
+              Get personalized psychological insights powered by Claude AI with therapeutic frameworks
             </p>
           </div>
           
-          <div className="kairos-visual-tools">
-            <div className="kairos-tool-emoji">🎨</div>
-            <div className="kairos-tool-emoji">✏️</div>
-            <div className="kairos-tool-emoji">🖌️</div>
-            <div className="kairos-tool-emoji">🖊️</div>
-          </div>
-        </div>
-      )
-    },
-    
-    // Page 6: Text Extraction
-    {
-      id: 'extraction',
-      component: (
-        <div className="kairos-welcome-page-content">
-          <div className="kairos-feature-icon-container">
-            <div className="kairos-feature-icon kairos-extraction">
-              <FileText />
-              <div className="kairos-scan-line"></div>
+          <div className="kairos-insight-preview">
+            <div className="kairos-insight-card">
+              <Lightbulb className="kairos-insight-icon" />
+              <p>"Your pattern of seeking approval reveals a deep desire for connection..."</p>
             </div>
           </div>
-          
-          <div className="kairos-feature-text">
-            <h2 className="kairos-feature-title">Smart Text Recognition</h2>
-            <p className="kairos-feature-description">
-              Transform handwritten pages into digital insights with 92%+ accuracy
-            </p>
-          </div>
-          
-          <div className="kairos-accuracy-badge">
-            <Award className="kairos-accuracy-icon" />
-            <span>92%+ Accuracy</span>
-          </div>
         </div>
       )
     },
     
-    // Page 7: Analytics
+    // Page 9: Analytics
     {
       id: 'analytics',
       component: (
@@ -354,7 +463,6 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
                 <div className="kairos-chart-bar"></div>
                 <div className="kairos-chart-bar"></div>
                 <div className="kairos-chart-bar"></div>
-                <div className="kairos-chart-bar"></div>
               </div>
             </div>
           </div>
@@ -362,14 +470,18 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-feature-text">
             <h2 className="kairos-feature-title">Track Your Growth</h2>
             <p className="kairos-feature-description">
-              Visualize patterns and celebrate your personal development milestones
+              Visualize your emotional patterns, track streaks, and celebrate milestones
             </p>
           </div>
           
-          <div className="kairos-stats-preview">
+          <div className="kairos-stat-chips">
             <div className="kairos-stat-chip">
               <TrendingUp className="kairos-stat-icon" />
-              <span>Progress Tracking</span>
+              <span>Growth Trends</span>
+            </div>
+            <div className="kairos-stat-chip">
+              <Award className="kairos-stat-icon" />
+              <span>Streak Tracking</span>
             </div>
             <div className="kairos-stat-chip">
               <Heart className="kairos-stat-icon" />
@@ -380,7 +492,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
       )
     },
     
-    // Page 8: Privacy
+    // Page 10: Privacy
     {
       id: 'privacy',
       component: (
@@ -395,20 +507,20 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-feature-text">
             <h2 className="kairos-feature-title">Your Privacy Matters</h2>
             <p className="kairos-feature-description">
-              Complete control over your data with industry-leading security
+              Complete control over your data with 4-tier privacy architecture and industry-leading security
             </p>
           </div>
           
           <div className="kairos-privacy-badges">
-            <div className="kairos-privacy-badge">🔒 Encrypted</div>
-            <div className="kairos-privacy-badge">💾 Local First</div>
+            <div className="kairos-privacy-badge">🔒 End-to-End Encrypted</div>
+            <div className="kairos-privacy-badge">💾 Local-First Processing</div>
             <div className="kairos-privacy-badge">🛡️ GDPR Compliant</div>
           </div>
         </div>
       )
     },
     
-    // Page 9: Claude AI
+    // Page 11: Claude AI
     {
       id: 'claude',
       component: (
@@ -419,9 +531,9 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           </div>
           
           <div className="kairos-feature-text">
-            <h2 className="kairos-feature-title">Powered by Claude AI</h2>
+            <h2 className="kairos-feature-title">Built With Claude, Powered by Claude</h2>
             <p className="kairos-feature-description">
-              Experience the most advanced AI for personal growth and self-reflection
+              The entire app was created using Claude AI as the development partner - a testament to the power of AI collaboration
             </p>
           </div>
           
@@ -443,11 +555,11 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
       )
     },
     
-    // Page 10: Get Started
+    // Page 12: Get Started
     {
       id: 'start',
       component: (
-        <div className="kairos-welcome-page-content">
+        <div className="kairos-welcome-page-content kairos-start-page-content">
           <div className="kairos-success-container">
             <div className="kairos-success-icon">
               <img src={kairosLogo} alt="Καιρός" className="kairos-success-logo" />
@@ -462,13 +574,14 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <div className="kairos-feature-text">
             <h2 className="kairos-feature-title">Begin Your Journey</h2>
             <p className="kairos-feature-description">
-              Join thousands discovering deeper self-awareness through AI-powered journaling
+              Join thousands discovering deeper self-awareness through the world's first AI-powered multi-modal journaling platform
             </p>
           </div>
           
-          <button onClick={handleBeginJourney} className="kairos-start-button">
+          <button onClick={handleBeginJourney} className="kairos-start-button kairos-pulse-button">
             <span>Start Your Journey</span>
             <ArrowRight className="kairos-button-icon" />
+            <div className="kairos-button-shimmer"></div>
           </button>
           
           <div className="kairos-trust-indicators">
@@ -477,12 +590,12 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
               <span>Privacy First</span>
             </div>
             <div className="kairos-trust-item">
-              <Brain className="kairos-trust-icon" />
-              <span>AI-Powered</span>
+              <Infinity className="kairos-trust-icon" />
+              <span>Multi-Modal</span>
             </div>
             <div className="kairos-trust-item">
               <Star className="kairos-trust-icon" />
-              <span>40 Paths</span>
+              <span>50+ Paths</span>
             </div>
           </div>
           
@@ -493,7 +606,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
   ];
 
   return (
-    <div className={`kairos-welcome-container ${isLoaded ? 'kairos-loaded' : ''}`}>
+    <div className={`kairos-welcome-container ${isLoaded ? 'kairos-loaded' : ''} ${isMobile ? 'kairos-mobile' : 'kairos-desktop'}`}>
       {/* Animated Background */}
       <div className="kairos-welcome-background">
         <div className="kairos-bg-gradient"></div>
@@ -557,6 +670,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        ref={containerRef}
       >
         <div 
           className="kairos-pages-wrapper"
@@ -570,7 +684,9 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
               key={page.id}
               className={`kairos-welcome-page kairos-${page.id} ${index === currentPage ? 'kairos-active' : ''}`}
             >
-              {page.component}
+              <div className="kairos-page-scroll-container">
+                {page.component}
+              </div>
             </div>
           ))}
         </div>

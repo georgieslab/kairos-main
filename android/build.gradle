@@ -1,7 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
     repositories {
         google()
         mavenCentral()
@@ -21,6 +20,37 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://packages.adoptium.net/artifactory/adoptium"
+            mavenContent {
+                includeGroup "net.adoptium"
+            }
+        }
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+    }
+    // Ensure Kotlin compiler JVM target aligns with Java compileOptions
+    afterEvaluate { proj ->
+        try {
+            proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = "17"
+                }
+            }
+        } catch(Exception e) {
+            // If Kotlin plugin isn't applied yet for a subproject, ignore
+        }
     }
 }
 

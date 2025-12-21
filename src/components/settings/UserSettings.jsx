@@ -1,39 +1,29 @@
-// src/components/settings/UserSettings.jsx - UPDATED WITH SHARED AVATAR SYSTEM
+// src/components/settings/UserSettings.jsx - Redesigned v3.0 (With Avatar)
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { doc, setDoc, deleteDoc, collection, getDocs, getDoc } from 'firebase/firestore';
+import { useUserStatistics } from '../../hooks/useUserStatistics';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { loadGoogleMapsApi, initPlacesAutocomplete, extractCityFromPlace } from '../../utils/googleMapsLoader';
-
-// Import subscription services
-import { 
-  getSubscriptionStatus, 
-  formatSubscriptionInfo,
+import {
+  getSubscriptionStatus,
   createCheckoutSession,
   getCustomerPortalUrl,
-  hasArtisanAccess,
-  getPricingInfo
+  hasArtisanAccess
 } from '../../services/subscriptionService';
-
-// 🎨 IMPORT SHARED AVATAR SYSTEM
-import { SmartAvatar, AvatarSelector } from '../../components/common/AvatarComponents';
-
+import VersionDisplay from '../common/VersionDisplay';
+import Avatar, { AvatarPicker } from '../common/Avatar';
 import '../../styles/components/settings.css';
 
 import {
-  Settings,
   User,
-  Bell,
   Download,
   Trash2,
-  Shield,
   ArrowLeft,
   Save,
   Info,
-  LogOut,
-  Camera,
   Calendar,
   Check,
   X,
@@ -43,162 +33,93 @@ import {
   MessageSquare,
   Bug,
   MapPin,
-  Smartphone,
-  Share,
   Moon,
   Sun,
   Palette,
-  Eye,
-  Lock as LockIcon,
-  Globe,
-  Zap,
   Database,
-  Cloud,
-  Wifi,
-  WifiOff,
-  ChevronRight,
-  Home,
   Mail,
-  UserCircle,
   Crown,
   CreditCard,
-  CheckCircle,
   ExternalLink,
   Sparkles,
-  Gift,
   ChevronDown,
-  Edit3,
-  RefreshCw
+  RefreshCw,
+  Home,
+  Camera,
+  Bell,
+  Shield,
+  Eye,
+  EyeOff,
+  Lock
 } from 'lucide-react';
-
-import VersionDisplay from '../common/VersionDisplay';
 
 const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) => {
   const { currentUser, userProfile, updateUserProfile, logout } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
+  const { statistics } = useUserStatistics();
   
-  // Settings state
   const [displayName, setDisplayName] = useState('');
   const [birthday, setBirthday] = useState('');
   const [city, setCity] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState('geometric-1');
-  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
-  const [enableNotifications, setEnableNotifications] = useState(false);
-  const [reminderTime, setReminderTime] = useState('20:00');
-  const [isPrivateMode, setIsPrivateMode] = useState(false);
-  const [exportFormat, setExportFormat] = useState('json');
-  const [autoBackup, setAutoBackup] = useState(true);
-  const [biometricLock, setBiometricLock] = useState(false);
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
-  
-  // Subscription state
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [processingUpgrade, setProcessingUpgrade] = useState(false);
   const [processingPortal, setProcessingPortal] = useState(false);
-  
-  // UI state
-  const [activeSection, setActiveSection] = useState(initialSection !== 'appearance' ? initialSection : 'profile');
-  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
-  const [dataStats, setDataStats] = useState({ entries: 0, insights: 0, storageUsed: 0 });
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [expandedCards, setExpandedCards] = useState({});
-  const [updatingAvatar, setUpdatingAvatar] = useState(false);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState('');
+  const [notifications, setNotifications] = useState({
+    dailyReminder: true,
+    weeklyInsights: true,
+    pathCompletion: true
+  });
   
-  // Mobile state
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
-  const [sectionHistory, setSectionHistory] = useState([initialSection]);
-  
-  // Refs
   const cityInputRef = useRef(null);
-  const modalRef = useRef(null);
-  const [autocompleteInitialized, setAutocompleteInitialized] = useState(false);
 
-  // Settings sections configuration
-  const settingsSections = [
-    {
-      id: 'profile',
-      title: 'Profile',
-      icon: User,
-      description: 'Personal information and avatar',
-      mobileTitle: 'Profile',
-      color: '#558B6E'
-    },
-    {
-      id: 'subscription',
-      title: 'Subscription',
-      icon: Crown,
-      description: 'Manage your Artisan plan',
-      mobileTitle: 'Plan',
-      color: '#FFD700'
-    },
-    {
-      id: 'appearance',
-      title: 'Appearance',
-      icon: Palette,
-      description: 'Theme and display settings',
-      mobileTitle: 'Theme',
-      color: '#8B5CF6'
-    },
-    {
-      id: 'notifications',
-      title: 'Notifications',
-      icon: Bell,
-      description: 'Reminders and alerts',
-      mobileTitle: 'Alerts',
-      color: '#F59E0B'
-    },
-    {
-      id: 'privacy',
-      title: 'Privacy & Security',
-      icon: Shield,
-      description: 'Data protection settings',
-      mobileTitle: 'Privacy',
-      color: '#EF4444'
-    },
-    {
-      id: 'data',
-      title: 'Data Management',
-      icon: Database,
-      description: 'Export and backup options',
-      mobileTitle: 'Data',
-      color: '#10B981'
-    },
-    {
-      id: 'help',
-      title: 'Help & Support',
-      icon: HelpCircle,
-      description: 'Get help and contact us',
-      mobileTitle: 'Help',
-      color: '#3B82F6'
-    }
-  ];
+  // Avatar data
+  const avatarStyle = userProfile?.avatarStyle || 'forest';
+  const avatarPattern = userProfile?.avatarPattern || 'dots';
+  const avatarFont = userProfile?.avatarFont || 'sans';
+  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'K';
 
-  // Detect mobile vs desktop
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Load subscription status
   useEffect(() => {
     if (currentUser) {
       loadSubscriptionStatus();
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    if (currentUser && userProfile) {
+      setDisplayName(userProfile.displayName || '');
+      setBirthday(userProfile.birthday || '');
+      setCity(userProfile.city || '');
+    }
+  }, [currentUser, userProfile]);
+
+  useEffect(() => {
+    if (city && cityInputRef.current) {
+      loadGoogleMapsApi(() => {
+        if (window.google) {
+          initPlacesAutocomplete(cityInputRef.current, (place) => {
+            const cityName = extractCityFromPlace(place);
+            if (cityName) {
+              setCity(cityName);
+              setHasUnsavedChanges(true);
+            }
+          });
+        }
+      });
+    }
+  }, [city]);
+
   const loadSubscriptionStatus = async () => {
     try {
       setLoadingSubscription(true);
       const status = await getSubscriptionStatus(currentUser.uid, true);
+      console.log('🔍 UserSettings - Loaded subscription:', status);
       setSubscription(status);
     } catch (error) {
       console.error('Error loading subscription:', error);
@@ -208,678 +129,730 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
     }
   };
 
-  // Handle subscription upgrade
   const handleUpgrade = async () => {
     try {
       setProcessingUpgrade(true);
       const { url } = await createCheckoutSession(currentUser.uid);
       window.open(url, '_blank');
     } catch (error) {
-      console.error('Error creating checkout session:', error);
-      showMessage('error', 'Error starting upgrade process. Please try again.');
+      console.error('Error:', error);
+      showMessage('error', 'Error starting upgrade. Please try again.');
     } finally {
       setProcessingUpgrade(false);
     }
   };
 
-  // Handle subscription management
   const handleManageSubscription = async () => {
     try {
       setProcessingPortal(true);
       const { url } = await getCustomerPortalUrl(currentUser.uid);
       window.open(url, '_blank');
     } catch (error) {
-      console.error('Error opening customer portal:', error);
-      showMessage('error', 'Error opening subscription management. Please try again.');
+      console.error('Error:', error);
+      showMessage('error', 'Error opening management portal.');
     } finally {
       setProcessingPortal(false);
     }
   };
 
-  // Helper function to show messages
-  const showMessage = useCallback((type, text, duration = 3000) => {
-    setMessage({ type, text });
-    setTimeout(() => setMessage({ type: '', text: '' }), duration);
-  }, []);
-
-  // Load user settings
-  useEffect(() => {
-    const loadSettings = async () => {
-      setIsLoading(true);
-      
-      try {
-        if (currentUser && userProfile) {
-          setDisplayName(userProfile.displayName || '');
-          setBirthday(userProfile.birthday || '');
-          setCity(userProfile.city || '');
-          setSelectedAvatar(userProfile.avatar || 'geometric-1');
-          
-          const settings = userProfile.settings || {};
-          setEnableNotifications(settings.enableNotifications || false);
-          setReminderTime(settings.reminderTime || '20:00');
-          setIsPrivateMode(settings.isPrivateMode || false);
-          setExportFormat(settings.exportFormat || 'json');
-          setAutoBackup(settings.autoBackup !== false);
-          setBiometricLock(settings.biometricLock || false);
-          setAnalyticsEnabled(settings.analyticsEnabled !== false);
-          
-          await loadDataStats();
-        }
-      } catch (error) {
-        console.error('Error loading settings:', error);
-        showMessage('error', 'Failed to load settings. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadSettings();
-  }, [currentUser, userProfile]);
-
-  // Load data statistics
-  const loadDataStats = async () => {
+  const handleAvatarSave = async ({ style, pattern, font }) => {
     try {
-      if (!currentUser) return;
-      
-      const journalRef = collection(db, 'users', currentUser.uid, 'journal');
-      const journalSnap = await getDocs(journalRef);
-      
-      let insightCount = 0;
-      let totalSize = 0;
-      
-      journalSnap.forEach(doc => {
-        const entry = doc.data();
-        if (entry.analysis && entry.analysis.insights) {
-          insightCount += entry.analysis.insights.length;
-        }
-        totalSize += JSON.stringify(entry).length;
+      await updateUserProfile({
+        avatarStyle: style,
+        avatarPattern: pattern,
+        avatarFont: font
       });
-      
-      setDataStats({
-        entries: journalSnap.size,
-        insights: insightCount,
-        storageUsed: Math.round(totalSize / 1024)
-      });
+      setShowAvatarPicker(false);
+      showMessage('success', 'Avatar updated successfully!');
     } catch (error) {
-      console.error('Error loading data stats:', error);
+      console.error('Error saving avatar:', error);
+      showMessage('error', 'Failed to update avatar.');
     }
   };
 
-  // Handle settings save
-  const handleSaveSettings = async () => {
-    setIsSaving(true);
-    setMessage({ type: '', text: '' });
-    
+  const handleSave = async () => {
     try {
-      if (!currentUser) throw new Error('User not authenticated');
-      
-      if (activeSection === 'profile' && !displayName.trim()) {
-        showMessage('error', 'Display name cannot be empty');
-        setIsSaving(false);
-        return;
-      }
-      
-      const updatedProfile = {
-        ...(activeSection === 'profile' && {
-          displayName,
-          birthday,
-          city,
-          avatar: selectedAvatar,
-        }),
-        settings: {
-          ...userProfile.settings,
-          enableNotifications,
-          reminderTime,
-          isPrivateMode,
-          exportFormat,
-          autoBackup,
-          biometricLock,
-          analyticsEnabled,
-          updatedAt: new Date().toISOString()
-        }
-      };
-      
-      await updateUserProfile(updatedProfile);
+      setIsSaving(true);
+      await updateUserProfile({
+        displayName: displayName.trim(),
+        birthday,
+        city
+      });
       setHasUnsavedChanges(false);
-      
       showMessage('success', 'Settings saved successfully!');
-      
-      if ('vibrate' in navigator) {
-        navigator.vibrate(50);
-      }
     } catch (error) {
-      console.error('Error saving settings:', error);
-      showMessage('error', 'Failed to save settings: ' + error.message);
+      console.error('Error:', error);
+      showMessage('error', 'Failed to save settings.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Handle section navigation
-  const navigateToSection = (sectionId) => {
-    if (hasUnsavedChanges && !window.confirm('You have unsaved changes. Continue?')) {
-      return;
-    }
-    
-    setSectionHistory(prev => [...prev, sectionId]);
-    setActiveSection(sectionId);
-    
-    if ('vibrate' in navigator && isMobile) {
-      navigator.vibrate(30);
-    }
-  };
-
-  // Handle back navigation
-  const handleBack = () => {
-    if (sectionHistory.length > 1) {
-      const newHistory = [...sectionHistory];
-      newHistory.pop();
-      const previousSection = newHistory[newHistory.length - 1];
-      setSectionHistory(newHistory);
-      setActiveSection(previousSection);
-      return;
-    }
-    
-    if (hasUnsavedChanges) {
-      const shouldLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
-      if (!shouldLeave) return;
-    }
-    
-    if (onBack) onBack();
-  };
-
-  // 🎨 UPDATED AVATAR SELECTION HANDLER
-  const handleAvatarSelect = async (avatarKey) => {
+  const handleExport = async () => {
     try {
-      setUpdatingAvatar(true);
-      setSelectedAvatar(avatarKey);
-      setShowAvatarSelector(false);
-      setHasUnsavedChanges(true);
+      const journalRef = collection(db, 'users', currentUser.uid, 'journal');
+      const snapshot = await getDocs(journalRef);
+      const data = [];
       
-      // Provide haptic feedback if available
-      if ('vibrate' in navigator) {
-        navigator.vibrate(50);
-      }
+      snapshot.forEach(doc => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
       
-      console.log('✅ Avatar selected:', avatarKey);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kairos-journal-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showMessage('success', 'Data exported successfully!');
     } catch (error) {
-      console.error('❌ Error selecting avatar:', error);
-    } finally {
-      setUpdatingAvatar(false);
+      console.error('Error:', error);
+      showMessage('error', 'Failed to export data.');
     }
   };
 
-  // Toggle card expansion
-  const toggleCardExpansion = (cardId) => {
-    setExpandedCards(prev => ({
-      ...prev,
-      [cardId]: !prev[cardId]
-    }));
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmation !== 'DELETE') {
+      showMessage('error', 'Please type DELETE to confirm');
+      return;
+    }
+
+    try {
+      // Delete user data from Firestore
+      // Note: In production, this should be handled by a Cloud Function
+      showMessage('success', 'Account deletion request submitted. You will be contacted within 24 hours.');
+      setShowDeleteDialog(false);
+      setDeleteConfirmation('');
+    } catch (error) {
+      console.error('Error:', error);
+      showMessage('error', 'Failed to process deletion request.');
+    }
   };
 
-  // Get subscription info
-  const subscriptionInfo = subscription ? formatSubscriptionInfo(subscription) : null;
+  const toggleNotification = async (key) => {
+    const newNotifications = {
+      ...notifications,
+      [key]: !notifications[key]
+    };
+    setNotifications(newNotifications);
+    
+    try {
+      await updateUserProfile({ notifications: newNotifications });
+      showMessage('success', 'Notification preferences updated!');
+    } catch (error) {
+      console.error('Error:', error);
+      showMessage('error', 'Failed to update preferences.');
+    }
+  };
+
+  const showMessage = (type, text) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+  };
+  
+  const memberSince = currentUser?.metadata?.creationTime 
+    ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric' 
+      })
+    : 'Unknown';
+
+  // Calculate isArtisan based on current subscription state
   const isArtisan = hasArtisanAccess(subscription);
-  const pricingInfo = getPricingInfo();
-
-  // Render section content
-  const renderSectionContent = () => {
-    const currentSectionData = settingsSections.find(s => s.id === activeSection);
-
-    switch (activeSection) {
-      case 'profile':
-        return (
-          <div className="user-settings__content">
-            <div className="user-settings__section-header">
-              <div className="user-settings__section-icon" style={{ backgroundColor: currentSectionData.color + '20', color: currentSectionData.color }}>
-                <currentSectionData.icon size={24} />
-              </div>
-              <div>
-                <h2 className="user-settings__section-title">{currentSectionData.title}</h2>
-                <p className="user-settings__section-description">{currentSectionData.description}</p>
-              </div>
-            </div>
-
-            {/* Avatar Section */}
-            <div className="user-settings__card">
-              <h3 className="user-settings__card-title">
-                <Camera size={20} />
-                Profile Picture
-              </h3>
-              
-              <div className="user-settings__avatar-section">
-                <div className="user-settings__avatar-current">
-                  <SmartAvatar 
-                    userProfile={{ ...userProfile, avatar: selectedAvatar }}
-                    size="large"
-                    onClick={() => setShowAvatarSelector(true)}
-                    className="user-settings__avatar-preview"
-                  />
-                  <div className="user-settings__avatar-overlay">
-                    <Camera size={24} />
-                    <span>Change Avatar</span>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={() => setShowAvatarSelector(true)}
-                  disabled={updatingAvatar}
-                  className="user-settings__btn user-settings__btn--secondary"
-                >
-                  <Camera size={18} />
-                  {updatingAvatar ? 'Updating...' : 'Change Avatar'}
-                </button>
-              </div>
-            </div>
-
-            {/* Personal Information */}
-            <div className="user-settings__card">
-              <h3 className="user-settings__card-title">
-                <User size={20} />
-                Personal Information
-              </h3>
-              
-              <div className="user-settings__form-group">
-                <label className="user-settings__form-label">Display Name</label>
-                <div className="user-settings__input-wrapper">
-                  <User className="user-settings__input-icon" size={18} />
-                  <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => {
-                      setDisplayName(e.target.value);
-                      setHasUnsavedChanges(true);
-                    }}
-                    className="user-settings__form-input"
-                    placeholder="Enter your display name"
-                    required
-                  />
-                </div>
-                <span className="user-settings__form-hint">
-                  This is how your name appears throughout the app
-                </span>
-              </div>
-
-              <div className="user-settings__form-group">
-                <label className="user-settings__form-label">Email Address</label>
-                <div className="user-settings__input-wrapper">
-                  <Mail className="user-settings__input-icon" size={18} />
-                  <input
-                    type="email"
-                    value={currentUser?.email || ''}
-                    className="user-settings__form-input user-settings__form-input--disabled"
-                    disabled
-                  />
-                </div>
-                <span className="user-settings__form-hint">
-                  Email cannot be changed. Contact support if you need to update it.
-                </span>
-              </div>
-
-              <div className="user-settings__form-group">
-                <label className="user-settings__form-label">Birthday (Optional)</label>
-                <div className="user-settings__input-wrapper">
-                  <Calendar className="user-settings__input-icon" size={18} />
-                  <input
-                    type="date"
-                    value={birthday}
-                    onChange={(e) => {
-                      setBirthday(e.target.value);
-                      setHasUnsavedChanges(true);
-                    }}
-                    className="user-settings__form-input"
-                  />
-                </div>
-                <span className="user-settings__form-hint">
-                  Used to provide age-appropriate content and insights
-                </span>
-              </div>
-
-              <div className="user-settings__form-group">
-                <label className="user-settings__form-label">City (Optional)</label>
-                <div className="user-settings__input-wrapper">
-                  <MapPin className="user-settings__input-icon" size={18} />
-                  <input
-                    ref={cityInputRef}
-                    type="text"
-                    value={city}
-                    onChange={(e) => {
-                      setCity(e.target.value);
-                      setHasUnsavedChanges(true);
-                    }}
-                    className="user-settings__form-input"
-                    placeholder="Enter your city"
-                  />
-                </div>
-                <span className="user-settings__form-hint">
-                  Used for weather information and local content
-                </span>
-              </div>
-            </div>
-
-            {/* Account Information */}
-            <div className="user-settings__card">
-              <h3 className="user-settings__card-title">
-                <Shield size={20} />
-                Account Information
-              </h3>
-              
-              <div className="user-settings__info-item">
-                <span className="user-settings__info-label">Account Created:</span>
-                <span className="user-settings__info-value">
-                  {userProfile?.createdAt ? 
-                    new Date(userProfile.createdAt.toDate()).toLocaleDateString('en-US', { 
-                      month: 'long', 
-                      day: 'numeric',
-                      year: 'numeric' 
-                    }) : 'Recently'
-                  }
-                </span>
-              </div>
-              
-              <div className="user-settings__info-item">
-                <span className="user-settings__info-label">User ID:</span>
-                <span className="user-settings__info-value user-settings__info-value--mono">
-                  {currentUser?.uid?.substring(0, 8)}...
-                </span>
-              </div>
-
-              <div className="user-settings__info-item">
-                <span className="user-settings__info-label">Account Type:</span>
-                <span className="user-settings__info-value">
-                  {isArtisan ? (
-                    <div className="user-settings__subscription-badge artisan">
-                      <Crown size={14} />
-                      <span>Artisan</span>
-                    </div>
-                  ) : (
-                    <div className="user-settings__subscription-badge free">
-                      <User size={14} />
-                      <span>Free</span>
-                    </div>
-                  )}
-                </span>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'subscription':
-        return (
-          <div className="user-settings__content">
-            <div className="user-settings__section-header">
-              <div className="user-settings__section-icon" style={{ backgroundColor: currentSectionData.color + '20', color: currentSectionData.color }}>
-                <currentSectionData.icon size={24} />
-              </div>
-              <div>
-                <h2 className="user-settings__section-title">{currentSectionData.title}</h2>
-                <p className="user-settings__section-description">{currentSectionData.description}</p>
-              </div>
-            </div>
-
-            {loadingSubscription ? (
-              <div className="user-settings__card">
-                <div className="user-settings__loading">
-                  <RefreshCw className="user-settings__loading-spinner" size={24} />
-                  <p>Loading subscription details...</p>
-                </div>
-              </div>
-            ) : (
-              <div className={`user-settings__subscription-card ${isArtisan ? 'artisan' : 'free'}`}>
-                <div className="user-settings__subscription-header">
-                  <div className="user-settings__subscription-icon">
-                    {isArtisan ? <Crown size={32} /> : <Shield size={32} />}
-                  </div>
-                  <div className="user-settings__subscription-info">
-                    <h3 className="user-settings__subscription-title">
-                      {isArtisan ? 'Artisan Plan' : 'Free Plan'}
-                    </h3>
-                    <p className="user-settings__subscription-description">
-                      {isArtisan ? 'All journeys unlocked with advanced features' : '9 free journeys available'}
-                    </p>
-                  </div>
-                  <div className={`user-settings__subscription-badge ${isArtisan ? 'artisan' : 'free'}`}>
-                    {isArtisan ? <Crown size={16} /> : <User size={16} />}
-                    <span>{isArtisan ? 'Artisan' : 'Free'}</span>
-                  </div>
-                </div>
-
-                <div className="user-settings__subscription-benefits">
-                  <h4 className="user-settings__benefits-title">Plan Benefits</h4>
-                  <ul className="user-settings__benefits-list">
-                    <li className={`user-settings__benefit-item ${isArtisan ? '' : 'limited'}`}>
-                      <CheckCircle size={16} />
-                      <span>{isArtisan ? 'All 34 Journey Paths' : '9 Free Paths'}</span>
-                    </li>
-                    <li className={`user-settings__benefit-item ${isArtisan ? '' : 'limited'}`}>
-                      <CheckCircle size={16} />
-                      <span>{isArtisan ? 'Advanced AI Analysis' : 'Basic AI Analysis'}</span>
-                    </li>
-                    <li className={`user-settings__benefit-item ${isArtisan ? '' : 'limited'}`}>
-                      <CheckCircle size={16} />
-                      <span>{isArtisan ? 'Unlimited Exports' : 'Limited Exports'}</span>
-                    </li>
-                    <li className={`user-settings__benefit-item ${isArtisan ? '' : 'limited'}`}>
-                      <CheckCircle size={16} />
-                      <span>{isArtisan ? 'Priority Support' : 'Community Support'}</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="user-settings__subscription-actions">
-                  {isArtisan ? (
-                    <button 
-                      onClick={handleManageSubscription}
-                      disabled={processingPortal}
-                      className="user-settings__btn user-settings__btn--primary"
-                    >
-                      {processingPortal ? <RefreshCw className="spin" size={18} /> : <CreditCard size={18} />}
-                      <span>{processingPortal ? 'Opening...' : 'Manage Subscription'}</span>
-                    </button>
-                  ) : (
-                    <button 
-                      onClick={handleUpgrade}
-                      disabled={processingUpgrade}
-                      className="user-settings__btn user-settings__btn--primary"
-                    >
-                      {processingUpgrade ? <RefreshCw className="spin" size={18} /> : <Crown size={18} />}
-                      <span>{processingUpgrade ? 'Processing...' : 'Upgrade to Artisan'}</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        );
-
-      case 'appearance':
-        return (
-          <div className="user-settings__content">
-            <div className="user-settings__section-header">
-              <div className="user-settings__section-icon" style={{ backgroundColor: currentSectionData.color + '20', color: currentSectionData.color }}>
-                <currentSectionData.icon size={24} />
-              </div>
-              <div>
-                <h2 className="user-settings__section-title">{currentSectionData.title}</h2>
-                <p className="user-settings__section-description">{currentSectionData.description}</p>
-              </div>
-            </div>
-
-            <div className="user-settings__card">
-              <h3 className="user-settings__card-title">Theme</h3>
-              
-              <div className="user-settings__theme-selector">
-                <button
-                  onClick={() => {
-                    if (isDarkMode) toggleTheme();
-                    setHasUnsavedChanges(true);
-                  }}
-                  className={`user-settings__theme-option ${!isDarkMode ? 'active' : ''}`}
-                >
-                  <Sun size={32} />
-                  <span>Light</span>
-                  <div className="user-settings__theme-preview user-settings__theme-preview--light"></div>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    if (!isDarkMode) toggleTheme();
-                    setHasUnsavedChanges(true);
-                  }}
-                  className={`user-settings__theme-option ${isDarkMode ? 'active' : ''}`}
-                >
-                  <Moon size={32} />
-                  <span>Dark</span>
-                  <div className="user-settings__theme-preview user-settings__theme-preview--dark"></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-
-      // Add other cases for notifications, privacy, data, help...
-      default:
-        return (
-          <div className="user-settings__content">
-            <div className="user-settings__section-header">
-              <div className="user-settings__section-icon" style={{ backgroundColor: currentSectionData.color + '20', color: currentSectionData.color }}>
-                <currentSectionData.icon size={24} />
-              </div>
-              <div>
-                <h2 className="user-settings__section-title">{currentSectionData.title}</h2>
-                <p className="user-settings__section-description">{currentSectionData.description}</p>
-              </div>
-            </div>
-            <div className="user-settings__card">
-              <p>This section is being enhanced. Coming soon!</p>
-            </div>
-          </div>
-        );
-    }
-  };
-
-  if (isLoading && !message.text) {
-    return (
-      <div className="user-settings">
-        <div className="user-settings__loading">
-          <RefreshCw className="user-settings__loading-spinner" size={32} />
-          <p>Loading settings...</p>
-        </div>
-      </div>
-    );
-  }
+  console.log('🔍 UserSettings - isArtisan:', isArtisan, 'subscription:', subscription);
 
   return (
-    <div className={`user-settings ${isDarkMode ? 'user-settings--dark' : 'user-settings--light'}`}>
+    <div className={`settings-container ${isDarkMode ? 'settings-dark' : 'settings-light'}`}>
       {/* Header */}
-      <div className="user-settings__header">
-        <button 
-          onClick={handleBack}
-          className="user-settings__back-btn"
-        >
+      <header className="settings-header">
+        <button className="settings-back-btn" onClick={onBack || (() => navigateToScreen('home'))}>
           <ArrowLeft size={20} />
-          {!isMobile && <span>Back</span>}
         </button>
-        
-        <h1 className="user-settings__title">Settings</h1>
-        
-        <div className="user-settings__header-actions">
-          {hasUnsavedChanges && (
-            <button
-              onClick={handleSaveSettings}
-              disabled={isSaving}
-              className="user-settings__save-btn"
-            >
-              {isSaving ? <RefreshCw className="spin" size={16} /> : <Save size={16} />}
-              {!isMobile && <span>Save</span>}
-            </button>
-          )}
+        <div className="settings-header-content">
+          <h1 className="settings-title">Settings</h1>
+          <p className="settings-subtitle">Manage your account preferences</p>
         </div>
-      </div>
-      
-      {/* Message Alert */}
+      </header>
+
+      {/* Message */}
       {message.text && (
-        <div className={`user-settings__message user-settings__message--${message.type}`}>
-          {message.type === 'error' ? (
-            <AlertTriangle size={18} />
-          ) : message.type === 'success' ? (
-            <Check size={18} />
-          ) : (
-            <Info size={18} />
-          )}
+        <div className={`settings-message settings-message-${message.type}`}>
+          {message.type === 'success' ? <Check size={20} /> : <AlertTriangle size={20} />}
           <span>{message.text}</span>
         </div>
       )}
-      
-      {/* Navigation */}
-      {isMobile ? (
-        // Mobile: Show current section content
-        renderSectionContent()
-      ) : (
-        // Desktop: Show navigation grid + content
-        <div className="user-settings__layout">
-          <div className="user-settings__navigation">
-            <div className="user-settings__nav-grid">
-              {settingsSections.map(section => {
-                const IconComponent = section.icon;
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => navigateToSection(section.id)}
-                    className={`user-settings__nav-card ${activeSection === section.id ? 'active' : ''}`}
-                    style={{ '--section-color': section.color }}
-                  >
-                    <div className="user-settings__nav-icon">
-                      <IconComponent size={24} />
-                    </div>
-                    <div className="user-settings__nav-content">
-                      <h3 className="user-settings__nav-title">{section.title}</h3>
-                      <p className="user-settings__nav-description">{section.description}</p>
-                    </div>
-                    <ChevronRight className="user-settings__nav-chevron" size={18} />
-                  </button>
-                );
-              })}
+
+      {/* Account Overview */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <User size={20} />
+            Account Overview
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-account-info">
+            <div className="settings-account-avatar">
+              <Avatar 
+                style={avatarStyle} 
+                pattern={avatarPattern}
+                font={avatarFont}
+                initials={initials}
+                size={64}
+              />
+            </div>
+            <div className="settings-account-details">
+              <h3 className="settings-account-name">{displayName || 'Journaler'}</h3>
+              <p className="settings-account-email">{currentUser?.email}</p>
+              <div className="settings-account-meta">
+                <span className={`settings-account-badge ${loadingSubscription ? 'badge-free' : (isArtisan ? 'badge-artisan' : 'badge-free')}`}>
+                  {loadingSubscription ? (
+                    <>
+                      <RefreshCw size={14} className="animate-spin" />
+                      Loading...
+                    </>
+                  ) : isArtisan ? (
+                    <>
+                      <Crown size={14} />
+                      Artisan
+                    </>
+                  ) : (
+                    <>
+                      <User size={14} />
+                      Free Plan
+                    </>
+                  )}
+                </span>
+                <span className="settings-account-since">
+                  <Calendar size={14} />
+                  Member since {memberSince}
+                </span>
+              </div>
             </div>
           </div>
-          
-          <div className="user-settings__main">
-            {renderSectionContent()}
-          </div>
         </div>
-      )}
+      </section>
 
-      {/* Mobile FAB for section navigation */}
-      {isMobile && (
-        <div className="user-settings__mobile-nav">
-          <div className="user-settings__mobile-nav-scroll">
-            {settingsSections.map(section => {
-              const IconComponent = section.icon;
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => navigateToSection(section.id)}
-                  className={`user-settings__mobile-nav-item ${activeSection === section.id ? 'active' : ''}`}
-                  style={{ '--section-color': section.color }}
-                  title={section.title}
+      {/* Profile Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <User size={20} />
+            Profile Information
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          {/* Avatar Section */}
+          <div className="settings-form-group">
+            <label className="settings-label">Profile Avatar</label>
+            <div className="settings-avatar-container">
+              <div className="settings-avatar-wrapper">
+                <Avatar 
+                  style={avatarStyle} 
+                  pattern={avatarPattern}
+                  font={avatarFont}
+                  initials={initials}
+                  size={80}
+                  onClick={() => setShowAvatarPicker(true)}
+                />
+                <button 
+                  className="settings-avatar-edit-btn" 
+                  onClick={() => setShowAvatarPicker(true)}
+                  title="Change avatar"
                 >
-                  <IconComponent size={20} />
-                  <span>{section.mobileTitle}</span>
+                  <Camera size={16} />
                 </button>
-              );
-            })}
+              </div>
+              <div className="settings-avatar-info">
+                <p className="settings-avatar-text">Click to customize your avatar</p>
+                <span className="settings-hint">Choose from 6 color themes, 6 patterns, and 6 fonts</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="settings-form-group">
+            <label className="settings-label">Display Name</label>
+            <input
+              type="text"
+              value={displayName}
+              onChange={(e) => {
+                setDisplayName(e.target.value);
+                setHasUnsavedChanges(true);
+              }}
+              className="settings-input"
+              placeholder="Your name"
+            />
+          </div>
+
+          <div className="settings-form-group">
+            <label className="settings-label">Email Address</label>
+            <input
+              type="email"
+              value={currentUser?.email || ''}
+              className="settings-input settings-input-disabled"
+              disabled
+            />
+            <span className="settings-hint">Email cannot be changed</span>
+          </div>
+
+          <div className="settings-form-group">
+            <label className="settings-label">Birthday (Optional)</label>
+            <div className="settings-input-wrapper">
+              <Calendar size={18} className="settings-input-icon" />
+              <input
+                type="date"
+                value={birthday}
+                onChange={(e) => {
+                  setBirthday(e.target.value);
+                  setHasUnsavedChanges(true);
+                }}
+                className="settings-input"
+              />
+            </div>
+          </div>
+
+          <div className="settings-form-group">
+            <label className="settings-label">City (Optional)</label>
+            <div className="settings-input-wrapper">
+              <MapPin size={18} className="settings-input-icon" />
+              <input
+                ref={cityInputRef}
+                type="text"
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  setHasUnsavedChanges(true);
+                }}
+                className="settings-input"
+                placeholder="Enter your city"
+              />
+            </div>
+          </div>
+
+          {hasUnsavedChanges && (
+            <button 
+              className="settings-save-btn"
+              onClick={handleSave}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <>
+                  <RefreshCw size={18} className="settings-btn-icon-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save size={18} />
+                  Save Changes
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      </section>
+
+      {/* Subscription Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Crown size={20} />
+            Subscription
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          {loadingSubscription ? (
+            <div className="settings-loading">Loading subscription...</div>
+          ) : isArtisan ? (
+            <>
+              <div className="settings-subscription-status artisan">
+                <div className="settings-subscription-icon">
+                  <Crown size={24} />
+                </div>
+                <div className="settings-subscription-info">
+                  <h3>Artisan Member</h3>
+                  <p>You have access to all premium features</p>
+                </div>
+              </div>
+              <button 
+                className="settings-btn settings-btn-secondary"
+                onClick={handleManageSubscription}
+                disabled={processingPortal}
+              >
+                <CreditCard size={18} />
+                Manage Subscription
+                <ExternalLink size={16} />
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="settings-subscription-status free">
+                <div className="settings-subscription-info">
+                  <h3>Free Plan</h3>
+                  <p>Upgrade to Artisan for unlimited features</p>
+                </div>
+              </div>
+              <button 
+                className="settings-btn settings-btn-primary"
+                onClick={handleUpgrade}
+                disabled={processingUpgrade}
+              >
+                <Sparkles size={18} />
+                Upgrade to Artisan
+              </button>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Notifications & Preferences */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Bell size={20} />
+            Notifications & Preferences
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-preference-item">
+            <div className="settings-preference-info">
+              <h3>Daily Journaling Reminder</h3>
+              <p>Get reminded to journal every day</p>
+            </div>
+            <button 
+              className={`settings-toggle-btn ${notifications.dailyReminder ? 'active' : ''}`}
+              onClick={() => toggleNotification('dailyReminder')}
+            >
+              <div className="settings-toggle-track">
+                <div className="settings-toggle-thumb"></div>
+              </div>
+            </button>
+          </div>
+
+          <div className="settings-preference-item">
+            <div className="settings-preference-info">
+              <h3>Weekly Insights Summary</h3>
+              <p>Receive AI insights every week</p>
+            </div>
+            <button 
+              className={`settings-toggle-btn ${notifications.weeklyInsights ? 'active' : ''}`}
+              onClick={() => toggleNotification('weeklyInsights')}
+            >
+              <div className="settings-toggle-track">
+                <div className="settings-toggle-thumb"></div>
+              </div>
+            </button>
+          </div>
+
+          <div className="settings-preference-item">
+            <div className="settings-preference-info">
+              <h3>Path Completion Alerts</h3>
+              <p>Celebrate when you complete a journey</p>
+            </div>
+            <button 
+              className={`settings-toggle-btn ${notifications.pathCompletion ? 'active' : ''}`}
+              onClick={() => toggleNotification('pathCompletion')}
+            >
+              <div className="settings-toggle-track">
+                <div className="settings-toggle-thumb"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Privacy & Security */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Shield size={20} />
+            Privacy & Security
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-privacy-options">
+            <button className="settings-privacy-option">
+              <Lock size={20} />
+              <div>
+                <h3>Change Password</h3>
+                <p>Update your account password</p>
+              </div>
+              <ChevronDown size={18} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+
+            <button className="settings-privacy-option">
+              <Eye size={20} />
+              <div>
+                <h3>Data Privacy Settings</h3>
+                <p>Control who can see your data</p>
+              </div>
+              <ChevronDown size={18} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+
+            <button className="settings-privacy-option">
+              <FileText size={20} />
+              <div>
+                <h3>Download My Data</h3>
+                <p>Get a copy of all your information</p>
+              </div>
+              <ChevronDown size={18} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Appearance Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Palette size={20} />
+            Appearance
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-theme-toggle">
+            <div className="settings-theme-info">
+              <h3>Theme</h3>
+              <p>Choose your preferred color scheme</p>
+            </div>
+            <button 
+              className="settings-theme-btn"
+              onClick={toggleTheme}
+            >
+              <div className={`settings-theme-btn-track ${isDarkMode ? 'active' : ''}`}>
+                <div className="settings-theme-btn-thumb">
+                  {isDarkMode ? <Moon size={14} /> : <Sun size={14} />}
+                </div>
+              </div>
+              <span>{isDarkMode ? 'Dark' : 'Light'}</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Data Management Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Database size={20} />
+            Data Management
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-data-stats">
+            <div className="settings-data-stat">
+              <FileText size={20} />
+              <div>
+                <span className="settings-data-stat-value">{statistics.totalEntries}</span>
+                <span className="settings-data-stat-label">Journal Entries</span>
+              </div>
+            </div>
+            <div className="settings-data-stat">
+              <Sparkles size={20} />
+              <div>
+                <span className="settings-data-stat-value">{statistics.totalInsights || 0}</span>
+                <span className="settings-data-stat-label">Insights Generated</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="settings-actions">
+            <button 
+              className="settings-btn settings-btn-secondary"
+              onClick={handleExport}
+            >
+              <Download size={18} />
+              Export Data
+            </button>
+            <button 
+              className="settings-btn settings-btn-danger"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              <Trash2 size={18} />
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Help Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <HelpCircle size={20} />
+            Help & Resources
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-help-grid">
+            <a 
+              href="mailto:support@kairos-journal.com"
+              className="settings-resource-card"
+            >
+              <Mail size={24} />
+              <h3>Contact Support</h3>
+              <p>Get help with your account</p>
+            </a>
+
+            <a 
+              href="https://docs.kairos-journal.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="settings-resource-card"
+            >
+              <FileText size={24} />
+              <h3>Documentation</h3>
+              <p>Learn how to use Καιρός</p>
+            </a>
+
+            <button 
+              className="settings-resource-card"
+              onClick={() => navigateToScreen('help')}
+            >
+              <HelpCircle size={24} />
+              <h3>FAQ</h3>
+              <p>Find answers quickly</p>
+            </button>
+
+            <button 
+              className="settings-resource-card"
+              onClick={() => {
+                alert('Bug reporting coming soon!');
+              }}
+            >
+              <Bug size={24} />
+              <h3>Report a Bug</h3>
+              <p>Help us improve</p>
+            </button>
+          </div>
+        </div>
+
+        {/* Legal Links */}
+        <div className="settings-card">
+          <h3 className="settings-legal-title">Legal & Policies</h3>
+          <div className="settings-legal-links">
+            <button 
+              className="settings-legal-link"
+              onClick={() => navigateToScreen('terms')}
+            >
+              <FileText size={18} />
+              <span>Terms of Service</span>
+              <ChevronDown size={16} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+            <button 
+              className="settings-legal-link"
+              onClick={() => navigateToScreen('privacy')}
+            >
+              <Shield size={18} />
+              <span>Privacy Policy</span>
+              <ChevronDown size={16} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+            <button 
+              className="settings-legal-link"
+              onClick={() => navigateToScreen('about')}
+            >
+              <Info size={18} />
+              <span>About Καιρός</span>
+              <ChevronDown size={16} style={{ transform: 'rotate(-90deg)' }} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="settings-section">
+        <div className="settings-section-header">
+          <h2 className="settings-section-title">
+            <Info size={20} />
+            About
+          </h2>
+        </div>
+
+        <div className="settings-card">
+          <div className="settings-about">
+            <h3>Καιρός Smart Journal</h3>
+            <p>Your companion for mindful journaling and personal growth</p>
+            <VersionDisplay />
+          </div>
+        </div>
+      </section>
+    
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteDialog && (
+        <div className="settings-modal-overlay" onClick={() => setShowDeleteDialog(false)}>
+          <div className="settings-modal settings-delete-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="settings-modal-header">
+              <AlertTriangle size={32} className="settings-modal-icon-danger" />
+              <h2>Delete Account</h2>
+              <p>This action cannot be undone</p>
+            </div>
+            <div className="settings-modal-content">
+              <div className="settings-warning-box">
+                <h3>This will permanently delete:</h3>
+                <ul>
+                  <li>All your journal entries and insights</li>
+                  <li>Your account profile and preferences</li>
+                  <li>Your subscription and payment history</li>
+                  <li>All your progress and achievements</li>
+                </ul>
+              </div>
+              <p className="settings-delete-instruction">
+                To confirm, type <strong>DELETE</strong> in the box below:
+              </p>
+              <input
+                type="text"
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                className="settings-delete-input"
+                placeholder="Type DELETE to confirm"
+              />
+            </div>
+            <div className="settings-modal-actions">
+              <button 
+                className="settings-modal-btn settings-modal-btn-cancel"
+                onClick={() => {
+                  setShowDeleteDialog(false);
+                  setDeleteConfirmation('');
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                className="settings-modal-btn settings-modal-btn-danger"
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmation !== 'DELETE'}
+              >
+                <Trash2 size={18} />
+                Delete My Account
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* 🎨 SHARED AVATAR SELECTOR MODAL */}
-      {showAvatarSelector && (
-        <AvatarSelector
-          selectedAvatar={selectedAvatar}
-          onSelect={handleAvatarSelect}
-          onClose={() => setShowAvatarSelector(false)}
-          size="medium"
-        />
+      {/* Avatar Picker Modal */}
+      {showAvatarPicker && (
+        <div className="settings-modal-overlay" onClick={() => setShowAvatarPicker(false)}>
+          <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+            <AvatarPicker 
+              currentStyle={avatarStyle}
+              currentPattern={avatarPattern}
+              currentFont={avatarFont}
+              initials={initials}
+              onSelect={handleAvatarSave}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

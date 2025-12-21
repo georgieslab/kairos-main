@@ -1,0 +1,29 @@
+{
+  "version": "0.3.0",
+  "releaseDate": "2025-11-13",
+  "features": [
+    "Unified premium top bar with rounded corners and responsive design across all main screens",
+    "Top bar color now matches the active tab color from the bottom navigation for Home, Paths, Analytics, and Profile screens",
+    "Removed icons from top bar on Home, Profile, Paths, and Analytics for a cleaner look",
+    "Improved theme toggle visibility and styling in the top bar",
+    "Enhanced path selection with unlimited active journeys and better progress visualization",
+    "Modernized analytics dashboard with matching top bar color and improved layout"
+  ],
+  "bugFixes": [
+    "Fixed duplicate icon rendering in top bar on Home and Profile screens",
+    "Resolved top bar width and centering issues to match stats overview",
+    "Improved color contrast and accessibility for top bar in both light and dark modes",
+    "Fixed theme toggle color for better visibility in top bar context"
+  ],
+  "improvements": [
+    "Faster and more consistent UI transitions for top bar and navigation",
+    "Cleaner, more minimal top bar design for all main screens",
+    "Better alignment between navigation and top bar color scheme",
+    "Improved code structure for easier future theming and customization"
+  ],
+  "notes": [
+    "This update brings a visually unified and brand-consistent experience across all main screens.",
+    "Top bar color now always matches the active tab for instant context feedback.",
+    "All changes are fully backward compatible with previous user data and navigation."
+  ]
+}

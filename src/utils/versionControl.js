@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '6.0_alpha';
+export const APP_VERSION = '6.1.0_alpha';
 
 export const VERSION_HISTORY = [
   {
@@ -1270,6 +1270,883 @@ export const VERSION_HISTORY = [
     'Voice path content and prompts may be refined based on user engagement and feedback',
     'Speech recognition accuracy may vary by user accent, speaking style, and environmental conditions',
     'Audio storage and transcription features are being optimized for performance and user experience'
+  ]
+},
+
+{
+  version: '5.0.0_alpha',
+  releaseDate: '2025-11-05',
+  codename: 'Voice Evolution & Mobile Perfection',
+  features: [
+    'Advanced mobile voice transcription with OpenAI Whisper API integration for post-recording processing',
+    'Enhanced voice journaling with automatic AI-powered transcription after recording completes',
+    'Native Android speech recognition support via cordova-plugin-speechrecognition',
+    'Hybrid transcription system: Web Speech API for desktop, Whisper API for Android mobile',
+    'Real-time speech-to-text with continuous recognition and auto-restart for desktop browsers',
+    'Mobile-optimized voice recording interface with progress indicators and processing feedback',
+    'Streamlined voice upload experience with automatic transcription workflow on Android',
+    'Firebase Storage integration for voice recordings with secure user-specific paths',
+    'Enhanced VoiceJournalUpload component with device-specific transcription methods',
+    'Removed voice journaling tips and recommendations section for cleaner, focused interface'
+  ],
+  technicalUpdates: [
+    'OpenAI Whisper API integration via Firebase Cloud Functions for reliable mobile transcription',
+    'Enhanced uploadVoiceJournal service with automatic Whisper transcription for Android devices',
+    'Native Android speech plugin detection with fallback to post-recording transcription',
+    'Improved Web Speech API implementation with robust error handling and auto-restart logic',
+    'Enhanced speech recognition state management with ref-based tracking for reliability',
+    'Advanced recognition restart scheduling with delay-based recovery mechanisms',
+    'Improved audio blob handling and Firebase Storage upload workflow',
+    'Enhanced error recovery with detailed logging for speech recognition debugging',
+    'Firebase Storage security rules updated for voices/{userId}/** path structure',
+    'Mobile-optimized transcription progress tracking with percentage-based UI updates'
+  ],
+  bugFixes: [
+    'CRITICAL: Fixed voice transcription failing on Android mobile devices due to Web Speech API limitations',
+    'CRITICAL: Fixed Firebase Storage permission errors preventing voice journal uploads',
+    'CRITICAL: Fixed speech recognition auto-restart causing duplicate transcriptions',
+    'Fixed speech recognition state not persisting across component lifecycle events',
+    'Fixed interim transcript not being preserved during speech recognition restarts',
+    'Fixed final transcript loss when recognition unexpectedly ended',
+    'Fixed Web Speech API compatibility issues on mobile WebView environments',
+    'Fixed voice recording not capturing audio properly on certain Android devices',
+    'Fixed transcription progress not updating correctly during Whisper API processing',
+    'Fixed audio blob size validation and error handling in upload flow'
+  ],
+  improvements: [
+    'Enhanced Android full-screen immersive mode with WindowInsetsController implementation',
+    'Improved edge-to-edge display with transparent status bar and navigation bar on Android',
+    'Better speech recognition reliability with instance ID tracking and stale detection',
+    'Enhanced mobile UI with device-specific transcription method indicators',
+    'Improved voice recording state management with proper cleanup on unmount',
+    'Better error messages and user feedback throughout voice journaling workflow',
+    'Enhanced Firebase Storage upload with progress tracking and error recovery',
+    'Improved audio level monitoring with visual feedback for desktop recordings',
+    'Better handling of microphone permissions across different mobile platforms',
+    'Enhanced voice data structure with metadata for transcription method and device type'
+  ],
+  androidEnhancements: [
+    'Full-screen immersive mode with both status bar and navigation bar hidden',
+    'Edge-to-edge content display using WindowCompat.setDecorFitsSystemWindows(false)',
+    'FLAG_LAYOUT_NO_LIMITS for unrestricted window layout on Android',
+    'Transparent system bars with proper theme configuration in styles.xml',
+    'Immersive sticky behavior with BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE',
+    'Combined modern WindowInsetsController API with legacy SYSTEM_UI_FLAGS for compatibility',
+    'Black background theme to eliminate grey areas from system UI',
+    'Enhanced MainActivity.java with comprehensive enableFullScreenMode() method',
+    'Proper lifecycle management with full-screen reapplication in onCreate, onResume, onWindowFocusChanged',
+    'Removed safe area insets from CSS for true edge-to-edge mobile experience'
+  ],
+  userExperience: [
+    'Seamless voice journaling on Android with automatic transcription after recording',
+    'Real-time transcription feedback on desktop browsers with continuous speech recognition',
+    'Clear progress indicators during Whisper AI transcription processing',
+    'Simplified voice interface without distracting tips and recommendations',
+    'Professional voice recording controls with pause, resume, and stop functionality',
+    'Smooth full-screen experience on Android with no visible system UI distractions',
+    'Better visual feedback during voice recording with audio level indicators (desktop)',
+    'Enhanced error recovery with helpful messages guiding users through permission issues'
+  ],
+  notes: [
+    'This major update revolutionizes voice journaling with reliable mobile transcription via OpenAI Whisper',
+    'Android users now get automatic AI-powered transcription after recording completes',
+    'Desktop users maintain real-time speech-to-text with improved stability and auto-restart',
+    'The hybrid approach ensures optimal transcription quality across all devices and platforms',
+    'OpenAI Whisper provides superior transcription accuracy compared to native mobile speech recognition',
+    'Full-screen immersive mode on Android creates distraction-free journaling environment',
+    'Voice recordings are securely stored in Firebase Storage with user-specific access controls',
+    'The streamlined interface removes unnecessary UI elements for focused voice journaling',
+    'Enhanced error handling ensures users always understand what\'s happening during transcription',
+    'This update establishes Καιρός as a leader in multi-modal journaling with professional voice capabilities'
+  ],
+  compatibility: [
+    'Android: OpenAI Whisper API transcription via Firebase Cloud Functions',
+    'Desktop: Web Speech API with Chrome 60+, Firefox 88+, Safari 14+',
+    'Mobile browsers: Enhanced error handling and fallback to manual transcription',
+    'Firebase Storage: Updated security rules for voices/{userId}/{pathId}/{dayNumber}/ structure',
+    'Capacitor Android: Full immersive mode requires AndroidX Core library',
+    'OpenAI API: Whisper-1 model integration for audio-to-text transcription',
+    'All voice features gracefully degrade on unsupported browsers with clear user guidance'
+  ]
+},
+
+{
+  version: '5.0.3_alpha',
+  releaseDate: '2025-11-08',
+  codename: 'Customizable SVG avatars & UI enhancements',
+  features: [
+    'Fully customizable SVG-based avatar system with 216 unique combinations (6 themes × 6 patterns × 6 fonts)',
+    'Avatar picker modal with live preview and easy customization in both Profile and Settings',
+    'Enhanced WelcomeScreen first slide with tagline and 3 new highlight items (Write/Speak/Create, AI Insights, Track Growth)',
+    'Comprehensive Terms of Service page redesign with multi-modal platform messaging and premium expandable sections',
+    'Privacy Policy page updated with multi-modal content (text, voice, visual) and enhanced AI transparency',
+    'Premium legal document styling with animated info cards, color-coded boxes, and responsive design'
+  ],
+  technicalUpdates: [
+    'Created Avatar.jsx component with 6 color gradient themes (Forest, Sunset, Ocean, Lavender, Amber, Sage)',
+    'Implemented 6 SVG pattern overlays (Dots, Waves, Circles, Geometric, Sparkles, None) with 50-90% opacity',
+    'Added 6 font style options (Sans Serif, Serif, Monospace, Rounded, Display, Elegant)',
+    'Built AvatarPicker modal component with style/pattern/font selection grids',
+    'Integrated avatar system into ProfileScreen and UserSettings with Firebase persistence',
+    'Created avatar.css with responsive design and modal scrolling optimization',
+    'Created terms.css (800+ lines) with expandable sections, gradient animations, and responsive layouts',
+    'Updated AuthContext updateUserProfile to save avatarStyle, avatarPattern, and avatarFont',
+    'Enhanced WelcomeScreen CSS with new highlight items matching chip design'
+  ],
+  bugFixes: [
+    'Fixed avatar picker modal scrolling background page instead of modal content',
+    'Fixed missing semicolon in profile.css causing CSS parsing errors',
+    'Removed duplicate "AI Insights" chip from WelcomeScreen features',
+    'Removed swipe hint arrows and text from WelcomeScreen first slide',
+    'Fixed UserSettings modal structure with proper div closing tags'
+  ],
+  improvements: [
+    'Avatar patterns now use dedicated patternColor with 50-90% opacity for better visibility',
+    'Vibrant 3-color gradients for all avatar themes (e.g., Forest: #2d5016 → #558B6E → #7BA888)',
+    'Larger, more prominent patterns (dots 3-4.5px, waves 3px stroke width, etc.)',
+    'WelcomeScreen spacing optimized: feature chips 1rem margin, highlights 3rem margin',
+    'Terms and Privacy pages now use expandable sections with smooth animations',
+    'Avatar save button has proper top and bottom margins (1rem each)',
+    'Modal overlays have overflow-y: auto to prevent background scrolling',
+    'Enhanced multi-modal platform messaging across legal documents'
+  ],
+  avatarSystem: [
+    '6 vibrant gradient themes with dedicated pattern colors for optimal contrast',
+    '6 bold SVG patterns with increased size and opacity (50-90%)',
+    '6 professional font styles with proper weights (600-700)',
+    'Live preview in picker modal showing real-time customization',
+    'Automatic initials generation from user display name (max 2 characters)',
+    'Camera icon edit button for quick avatar customization',
+    'Firebase persistence of avatarStyle, avatarPattern, and avatarFont',
+    'Responsive grid layouts (3 columns on mobile, auto-fit on desktop)',
+    'Hover effects and selected states for all picker options'
+  ],
+  uiEnhancements: [
+    'WelcomeScreen tagline: "Transform your thoughts into profound insights"',
+    'Three new highlight items with circular icons and single-line text',
+    'Terms of Service with Quick Overview grid and expandable sections',
+    'Privacy Policy with multi-modal content organization',
+    'Color-coded info boxes (info: blue, warning: orange, disclaimer: gray, highlight: green)',
+    'Animated glow effects on info cards with termsGlow keyframe',
+    'Styled lists with checkmark bullets (✓) and prohibition X bullets (✗)',
+    'Contact cards with Mail icon and external links with proper styling'
+  ],
+  userExperience: [
+    'Personalized avatars with 216 unique combinations reflecting user style',
+    'Easy avatar customization in both Profile and Settings screens',
+    'Cleaner WelcomeScreen first slide with focused messaging',
+    'Comprehensive legal transparency with multi-modal platform details',
+    'Professional, readable Terms and Privacy pages with expandable sections',
+    'Improved onboarding with clear feature highlights',
+    'Consistent avatar display across Profile and Settings',
+    'Smooth modal interactions with proper scrolling behavior'
+  ],
+  notes: [
+    'This update introduces a powerful SVG-based avatar system allowing users to create 216 unique avatar combinations without file uploads',
+    'The avatar system uses vibrant 3-color gradients and prominent patterns for visually striking profile pictures',
+    'WelcomeScreen enhancements focus users on the core multi-modal journaling value proposition',
+    'Terms and Privacy pages now clearly communicate the multi-modal platform (text, voice, visual) and AI transparency',
+    'All avatar preferences are stored in Firebase userProfile document for seamless persistence',
+    'The expandable legal document design improves readability while maintaining comprehensive information',
+    'Avatar initials are automatically generated from user display name for immediate personalization',
+    'Premium styling throughout legal pages matches the overall app aesthetic and brand identity'
+  ],
+  compatibility: [
+    'SVG avatars: All modern browsers with SVG support (Chrome 4+, Firefox 3+, Safari 3.1+, Edge 12+)',
+    'Avatar persistence: Firebase Firestore with userProfile.avatarStyle, avatarPattern, avatarFont fields',
+    'Responsive design: Optimized for mobile (320px+) and desktop (1920px+)',
+    'Modal scrolling: Fixed overlays with overflow-y: auto for proper UX',
+    'Legal pages: Expandable sections with CSS max-height transitions',
+    'Font support: System fonts with fallbacks for all 6 font styles'
+  ]
+},
+
+{
+  version: '5.0.2_alpha',
+  releaseDate: '2025-11-06',
+  codename: '4 new multi-modal journey paths & Android full-screen mode',
+  features: [
+    'Added 4 new multi-modal journaling paths combining voice, visual, and text reflection: Expressive Voice (14 days), Visual Storytelling (15 days), Mindful Speaking (21 days), Creative Narration (12 days)',
+    'Full-screen immersive mode on Android devices hiding both status bar and navigation bar for distraction-free journaling',
+    'Edge-to-edge content display on Android with transparent system bars and proper theme configuration',
+    'New message added for Firefox mobile users indicating limited Web Speech API support and recommending desktop usage for voice journaling',
+    'Enhanced voice journaling experience on Android with automatic OpenAI Whisper transcription after recording completes',
+    'Improved voice recording controls with pause, resume, and stop functionality for professional journaling experience',
+  ],
+  technicalUpdates: [
+    'Added 4 new multi-modal journaling paths with appropriate pathType classification and UI handling',
+    'Implemented full-screen immersive mode on Android using WindowInsetsController and legacy SYSTEM_UI_FLAGS for compatibility',
+    'Configured transparent status bar and navigation bar in styles.xml for edge-to-edge content display',
+  ],
+  bugFixes: [
+    'CRITICAL: Fixed Android full-screen mode only hiding status bar but not navigation bar',
+    'CRITICAL: Fixed voice journaling transcription not triggering on Android devices after recording completion',
+    'Fixed Web Speech API limitations on Firefox mobile causing inconsistent voice journaling experience',
+  ],
+  improvements: [
+    'Added 4 new multi-modal journaling paths expanding self-expression options',
+    'Improved Android full-screen mode with proper hiding of both status and navigation bars',
+    'Enhanced voice journaling transcription reliability on Android with OpenAI Whisper integration',
+    'Better user guidance for Firefox mobile users regarding voice journaling limitations',
+    'Improved voice recording controls for a more professional and flexible journaling experience'
+  ],
+  androidEnhancements: [
+      'Full immersive mode hiding both status bar and navigation bar',
+      'Edge-to-edge content display with transparent system bars',
+      'Proper theme configuration in styles.xml for system bar transparency',
+      'Compatibility with both WindowInsetsController (Android R+) and legacy SYSTEM_UI_FLAGS',
+      'Improved user experience with distraction-free journaling environment'
+  ],
+  userExperience: [
+    'Seamless multi-modal journaling experience with 4 new paths',
+    'Distraction-free journaling on Android with full-screen immersive mode',
+    'Reliable voice transcription on Android with OpenAI Whisper after recording',
+    'Clear messaging for Firefox mobile users about voice journaling limitations',
+    'Professional voice recording controls enhancing journaling flexibility'
+  ],
+  notes: [
+    'This update expands the journaling experience with 4 new multi-modal paths, allowing users to combine voice, visual, and text reflection for deeper self-expression.',
+    'The full-screen immersive mode on Android provides a distraction-free environment, enhancing focus during journaling sessions.',
+    'Voice journaling on Android is significantly improved with automatic transcription via OpenAI Whisper, ensuring users receive accurate text representations of their spoken reflections.',
+    'Firefox mobile users are informed about the limitations of Web Speech API support, guiding them to use desktop browsers for optimal voice journaling experience.',
+    'Voice recording controls have been enhanced to include pause, resume, and stop functionality, offering users a more professional and flexible journaling experience.'
+  ],
+  compatibility: [
+    'Android: Full-screen immersive mode with WindowInsetsController and legacy SYSTEM_UI_FLAGS',
+    'Voice journaling: OpenAI Whisper API transcription via Firebase Cloud Functions on Android',
+    'Desktop: Web Speech API with Chrome 60+, Firefox 88+, Safari 14+',
+    'Firefox mobile: Limited Web Speech API support; voice journaling recommended on desktop browsers'
+  ]
+},
+
+{
+  version: '5.0.2_alpha',
+  releaseDate: '2025-11-06',
+  codename: '4 new multi-modal journey paths & Android full-screen mode',
+  features: [
+    'Added 4 new multi-modal journaling paths combining voice, visual, and text reflection: Expressive Voice (14 days), Visual Storytelling (15 days), Mindful Speaking (21 days), Creative Narration (12 days)',
+    'Full-screen immersive mode on Android devices hiding both status bar and navigation bar for distraction-free journaling',
+    'Edge-to-edge content display on Android with transparent system bars and proper theme configuration',
+    'New message added for Firefox mobile users indicating limited Web Speech API support and recommending desktop usage for voice journaling',
+    'Enhanced voice journaling experience on Android with automatic OpenAI Whisper transcription after recording completes',
+    'Improved voice recording controls with pause, resume, and stop functionality for professional journaling experience',
+  ],
+  technicalUpdates: [
+    'Added 4 new multi-modal journaling paths with appropriate pathType classification and UI handling',
+    'Implemented full-screen immersive mode on Android using WindowInsetsController and legacy SYSTEM_UI_FLAGS for compatibility',
+    'Configured transparent status bar and navigation bar in styles.xml for edge-to-edge content display',
+  ],
+  bugFixes: [
+    'CRITICAL: Fixed Android full-screen mode only hiding status bar but not navigation bar',
+    'CRITICAL: Fixed voice journaling transcription not triggering on Android devices after recording completion',
+    'Fixed Web Speech API limitations on Firefox mobile causing inconsistent voice journaling experience',
+  ],
+  improvements: [
+    'Added 4 new multi-modal journaling paths expanding self-expression options',
+    'Improved Android full-screen mode with proper hiding of both status and navigation bars',
+    'Enhanced voice journaling transcription reliability on Android with OpenAI Whisper integration',
+    'Better user guidance for Firefox mobile users regarding voice journaling limitations',
+    'Improved voice recording controls for a more professional and flexible journaling experience'
+  ],
+  androidEnhancements: [
+      'Full immersive mode hiding both status bar and navigation bar',
+      'Edge-to-edge content display with transparent system bars',
+      'Proper theme configuration in styles.xml for system bar transparency',
+      'Compatibility with both WindowInsetsController (Android R+) and legacy SYSTEM_UI_FLAGS',
+      'Improved user experience with distraction-free journaling environment'
+  ],
+  userExperience: [
+    'Seamless multi-modal journaling experience with 4 new paths',
+    'Distraction-free journaling on Android with full-screen immersive mode',
+    'Reliable voice transcription on Android with OpenAI Whisper after recording',
+    'Clear messaging for Firefox mobile users about voice journaling limitations',
+    'Professional voice recording controls enhancing journaling flexibility'
+  ],
+  notes: [
+    'This update expands the journaling experience with 4 new multi-modal paths, allowing users to combine voice, visual, and text reflection for deeper self-expression.',
+    'The full-screen immersive mode on Android provides a distraction-free environment, enhancing focus during journaling sessions.',
+    'Voice journaling on Android is significantly improved with automatic transcription via OpenAI Whisper, ensuring users receive accurate text representations of their spoken reflections.',
+    'Firefox mobile users are informed about the limitations of Web Speech API support, guiding them to use desktop browsers for optimal voice journaling experience.',
+    'Voice recording controls have been enhanced to include pause, resume, and stop functionality, offering users a more professional and flexible journaling experience.'
+  ],
+  compatibility: [
+    'Android: Full-screen immersive mode with WindowInsetsController and legacy SYSTEM_UI_FLAGS',
+    'Voice journaling: OpenAI Whisper API transcription via Firebase Cloud Functions on Android',
+    'Desktop: Web Speech API with Chrome 60+, Firefox 88+, Safari 14+',
+    'Firefox mobile: Limited Web Speech API support; voice journaling recommended on desktop browsers'
+  ]
+},
+
+
+{
+  version: '5.0.3_alpha',
+  releaseDate: '2025-11-08',
+  codename: 'Customizable SVG avatars & UI enhancements',
+  features: [
+    'Fully customizable SVG-based avatar system with 216 unique combinations (6 themes × 6 patterns × 6 fonts)',
+    'Avatar picker modal with live preview and easy customization in both Profile and Settings',
+    'Enhanced WelcomeScreen first slide with tagline and 3 new highlight items (Write/Speak/Create, AI Insights, Track Growth)',
+    'Comprehensive Terms of Service page redesign with multi-modal platform messaging and premium expandable sections',
+    'Privacy Policy page updated with multi-modal content (text, voice, visual) and enhanced AI transparency',
+    'Premium legal document styling with animated info cards, color-coded boxes, and responsive design'
+  ],
+  technicalUpdates: [
+    'Created Avatar.jsx component with 6 color gradient themes (Forest, Sunset, Ocean, Lavender, Amber, Sage)',
+    'Implemented 6 SVG pattern overlays (Dots, Waves, Circles, Geometric, Sparkles, None) with 50-90% opacity',
+    'Added 6 font style options (Sans Serif, Serif, Monospace, Rounded, Display, Elegant)',
+    'Built AvatarPicker modal component with style/pattern/font selection grids',
+    'Integrated avatar system into ProfileScreen and UserSettings with Firebase persistence',
+    'Created avatar.css with responsive design and modal scrolling optimization',
+    'Created terms.css (800+ lines) with expandable sections, gradient animations, and responsive layouts',
+    'Updated AuthContext updateUserProfile to save avatarStyle, avatarPattern, and avatarFont',
+    'Enhanced WelcomeScreen CSS with new highlight items matching chip design'
+  ],
+  bugFixes: [
+    'Fixed avatar picker modal scrolling background page instead of modal content',
+    'Fixed missing semicolon in profile.css causing CSS parsing errors',
+    'Removed duplicate "AI Insights" chip from WelcomeScreen features',
+    'Removed swipe hint arrows and text from WelcomeScreen first slide',
+    'Fixed UserSettings modal structure with proper div closing tags'
+  ],
+  improvements: [
+    'Avatar patterns now use dedicated patternColor with 50-90% opacity for better visibility',
+    'Vibrant 3-color gradients for all avatar themes (e.g., Forest: #2d5016 → #558B6E → #7BA888)',
+    'Larger, more prominent patterns (dots 3-4.5px, waves 3px stroke width, etc.)',
+    'WelcomeScreen spacing optimized: feature chips 1rem margin, highlights 3rem margin',
+    'Terms and Privacy pages now use expandable sections with smooth animations',
+    'Avatar save button has proper top and bottom margins (1rem each)',
+    'Modal overlays have overflow-y: auto to prevent background scrolling',
+    'Enhanced multi-modal platform messaging across legal documents'
+  ],
+  avatarSystem: [
+    '6 vibrant gradient themes with dedicated pattern colors for optimal contrast',
+    '6 bold SVG patterns with increased size and opacity (50-90%)',
+    '6 professional font styles with proper weights (600-700)',
+    'Live preview in picker modal showing real-time customization',
+    'Automatic initials generation from user display name (max 2 characters)',
+    'Camera icon edit button for quick avatar customization',
+    'Firebase persistence of avatarStyle, avatarPattern, and avatarFont',
+    'Responsive grid layouts (3 columns on mobile, auto-fit on desktop)',
+    'Hover effects and selected states for all picker options'
+  ],
+  uiEnhancements: [
+    'WelcomeScreen tagline: "Transform your thoughts into profound insights"',
+    'Three new highlight items with circular icons and single-line text',
+    'Terms of Service with Quick Overview grid and expandable sections',
+    'Privacy Policy with multi-modal content organization',
+    'Color-coded info boxes (info: blue, warning: orange, disclaimer: gray, highlight: green)',
+    'Animated glow effects on info cards with termsGlow keyframe',
+    'Styled lists with checkmark bullets (✓) and prohibition X bullets (✗)',
+    'Contact cards with Mail icon and external links with proper styling'
+  ],
+  userExperience: [
+    'Personalized avatars with 216 unique combinations reflecting user style',
+    'Easy avatar customization in both Profile and Settings screens',
+    'Cleaner WelcomeScreen first slide with focused messaging',
+    'Comprehensive legal transparency with multi-modal platform details',
+    'Professional, readable Terms and Privacy pages with expandable sections',
+    'Improved onboarding with clear feature highlights',
+    'Consistent avatar display across Profile and Settings',
+    'Smooth modal interactions with proper scrolling behavior'
+  ],
+  notes: [
+    'This update introduces a powerful SVG-based avatar system allowing users to create 216 unique avatar combinations without file uploads',
+    'The avatar system uses vibrant 3-color gradients and prominent patterns for visually striking profile pictures',
+    'WelcomeScreen enhancements focus users on the core multi-modal journaling value proposition',
+    'Terms and Privacy pages now clearly communicate the multi-modal platform (text, voice, visual) and AI transparency',
+    'All avatar preferences are stored in Firebase userProfile document for seamless persistence',
+    'The expandable legal document design improves readability while maintaining comprehensive information',
+    'Avatar initials are automatically generated from user display name for immediate personalization',
+    'Premium styling throughout legal pages matches the overall app aesthetic and brand identity'
+  ],
+  compatibility: [
+    'SVG avatars: All modern browsers with SVG support (Chrome 4+, Firefox 3+, Safari 3.1+, Edge 12+)',
+    'Avatar persistence: Firebase Firestore with userProfile.avatarStyle, avatarPattern, avatarFont fields',
+    'Responsive design: Optimized for mobile (320px+) and desktop (1920px+)',
+    'Modal scrolling: Fixed overlays with overflow-y: auto for proper UX',
+    'Legal pages: Expandable sections with CSS max-height transitions',
+    'Font support: System fonts with fallbacks for all 6 font styles'
+  ]
+},
+
+{
+  version: '5.2.0_alpha',
+  releaseDate: '2025-11-09',
+  codename: 'AI-Powered Path Recommender',
+  features: [
+    'AI-Powered Path Recommendation Engine using Claude Sonnet 4',
+    'Personalized journey recommendations based on user interests, goals, and journaling behavior',
+    'Smart recommendation caching system (7-day cache for improved performance)',
+    'Beautiful recommendation cards on HomeScreen with gradient designs and animations',
+    'Three recommendation categories: Growth (builds on progress), Exploration (new territory), Challenge (stretch goals)',
+    'Real-time analysis of recent journal entries for contextual recommendations',
+    'Match scoring system (0-100) showing how well each path fits the user',
+    'AI-generated explanations for WHY each path is recommended',
+    'Expandable recommendation cards revealing benefits and perfect timing insights',
+    'Quick starter recommendations for new users based on onboarding preferences'
+  ],
+  technicalUpdates: [
+    'Created pathRecommender.js service with comprehensive recommendation engine',
+    'Built getAiRecommendations() function using Claude API for personalized suggestions',
+    'Implemented algorithmic fallback recommendations for when AI is unavailable',
+    'Created buildUserContext() analyzing interests, goals, completed paths, and journaling patterns',
+    'Built scorePathRelevance() algorithm with multi-factor scoring (interests: 30pts, goals: 30pts, difficulty: 20pts, novelty: 10pts, length: 10pts)',
+    'Implemented determineExperienceLevel() classifying users as beginner/intermediate/advanced',
+    'Created extractEmotionTrends() and extractRecentThemes() for behavioral analysis',
+    'Built cacheRecommendations() and getCachedRecommendations() for Firestore caching',
+    'Integrated getStarterRecommendations() for onboarding-based path matching',
+    'Created PathRecommendationCard.jsx component with category badges and match scores',
+    'Built PathRecommendations.jsx container component with loading/error states',
+    'Enhanced HomeScreen.jsx with AI recommendations section above journeys',
+    'Created pathRecommendation.css with beautiful gradient cards and animations'
+  ],
+  aiPromptEngineering: [
+    'Comprehensive Claude prompts analyzing user profile, completed paths, and journaling stats',
+    'Request format includes interests, goals, experience level, entry patterns, and emotion trends',
+    'AI provides structured JSON responses with pathId, matchScore, reason, benefit, timing, and category',
+    'Prompt guidelines ensure beginner-friendly 10-day paths for new users',
+    'Advanced users receive longer, more challenging path recommendations',
+    'AI considers emotional themes and recent topics for contextual relevance',
+    'Recommendations balance familiarity with novelty for optimal engagement',
+    'Temperature set to 0.7 for creative yet consistent suggestions'
+  ],
+  recommendationAlgorithms: [
+    'Interest matching: Tags aligned with user interests (0-30 points)',
+    'Goal alignment: Path benefits matching journaling goals (0-30 points)',
+    'Difficulty progression: Experience-appropriate challenge level (0-20 points)',
+    'Novelty bonus: Unexplored paths receive priority (0-10 points)',
+    'Length preference: Matches user streak patterns for optimal commitment (0-10 points)',
+    'Difficulty fit scoring: Perfect match (20pts), slight stretch (10pts), mismatch (5pts)',
+    'Average entry length analysis for writer profiling',
+    'Most active journaling time detection (morning/afternoon/evening/night)',
+    'Recent emotion trends from last 10 entries',
+    'Theme extraction from analysis data'
+  ],
+  userExperience: [
+    'Prominent "Recommended For You" section on HomeScreen with AI sparkle icon',
+    'Three beautifully designed gradient cards with unique colors per recommendation',
+    'Match score badges showing percentage fit with star icon',
+    'Category badges (Growth/Exploration/Challenge) with distinct colors and icons',
+    'Tap-to-expand cards revealing detailed AI explanations',
+    '"Why This Path?" section with personalized reasoning',
+    '"What You\'ll Gain" section highlighting specific benefits',
+    '"Why Now?" section explaining perfect timing',
+    'Refresh button to generate new recommendations on demand',
+    'Smooth loading state with animated sparkles and encouraging messages',
+    'Graceful error handling with helpful fallback messages',
+    'One-tap journey start from recommendation cards'
+  ],
+  visualDesign: [
+    'Gradient card backgrounds: Purple (#667eea to #764ba2), Pink (#f093fb to #f5576c), Cyan (#4facfe to #00f2fe)',
+    'Match score badges with white background and purple text',
+    'Category-specific colors: Growth (green #10b981), Exploration (purple #6366f1), Challenge (orange #f59e0b)',
+    'Difficulty badges with color coding: Beginner (green), Intermediate (blue), Advanced (purple)',
+    'Frosted glass effect on explanation sections with backdrop-filter blur',
+    'Shimmer animation on card hover and tap interactions',
+    'Sparkle icon rotation animation (2s infinite)',
+    'Staggered entrance animations: Card 1 (0s), Card 2 (0.1s), Card 3 (0.2s)',
+    'Responsive design from 320px mobile to 2560px+ desktop',
+    'Dark theme support with adjusted colors and contrast'
+  ],
+  performance: [
+    '7-day caching system reduces API calls and improves load times',
+    'Fallback to algorithmic recommendations if AI unavailable',
+    'Recent entries limited to 20 for efficient context building',
+    'useMemo optimization for expensive calculations',
+    'Lazy loading of recommendation component',
+    'Cached recommendations retrieved from Firestore subcollection',
+    'Minimal re-renders with proper React component structure',
+    'Efficient scoring algorithms with O(n) complexity'
+  ],
+  integration: [
+    'Seamless integration with existing JOURNEY_PATHS registry',
+    'Compatible with all 50 journey paths (10-100 days)',
+    'Works with onboarding data (interests and goals from SignUpScreen)',
+    'Analyzes userProfile.pathProgress for completion tracking',
+    'Integrates with journal_entries collection for behavioral analysis',
+    'Connects to path selection screen with highlight support',
+    'Compatible with subscription system (can prioritize premium paths)',
+    'Works with all path types: writing, visual, voice, multi-modal'
+  ],
+  notes: [
+    'This revolutionary feature makes Καιρός the first AI-powered journaling app with truly personalized path recommendations',
+    'Claude AI analyzes your unique journaling journey to suggest perfect next steps',
+    'Recommendations evolve as you complete more paths and develop journaling patterns',
+    'The system learns from 20+ data points including interests, goals, emotions, themes, and behavior',
+    'New users get instant starter recommendations based on onboarding preferences',
+    'Experienced users receive sophisticated AI suggestions considering growth trajectory',
+    'The 7-day cache ensures consistent recommendations while allowing for periodic refresh',
+    'Algorithmic fallback guarantees recommendations even without AI API access',
+    'Beautiful visual design makes discovering new paths exciting and engaging',
+    'This feature increases user engagement by surfacing relevant paths at the perfect time'
+  ],
+  futureEnhancements: [
+    'Seasonal and time-based recommendations (e.g., "Spring is perfect for Nature Connection")',
+    'Mood-based suggestions (detected stressed → recommend Anxiety Alchemy)',
+    'Achievement-unlocked paths (complete 3 paths → unlock Life Vision 100-day journey)',
+    'Social recommendations (users like you also enjoyed...)',
+    'Weekly discovery notifications for fresh path suggestions',
+    'Premium user exclusive AI recommendations with deeper analysis',
+    'Voice-based recommendation explanations',
+    'Path recommendation sharing with friends'
+  ],
+  compatibility: [
+    'Claude Sonnet 4 API integration for AI-powered recommendations',
+    'Firestore subcollection for recommendation caching',
+    'React 18+ with hooks (useState, useEffect, useMemo)',
+    'Lucide React icons for UI elements',
+    'CSS animations and transitions (Chrome 43+, Firefox 16+, Safari 9+)',
+    'Mobile-first responsive design (320px+)',
+    'Touch-optimized for mobile devices',
+    'Keyboard navigation support',
+    'Screen reader accessible with ARIA labels'
+  ]
+},
+
+{
+  version: '5.1.0_alpha',
+  releaseDate: '2025-11-09',
+  codename: 'Gamified Achievements & Secret Unlocks',
+  features: [
+    'Comprehensive achievement system with 12 total achievements (7 regular + 5 secret)',
+    'Secret achievement system with hidden unlockables and mystery rewards',
+    'Five brand-new secret achievements: Night & Day, Mood Master, Power User, Random Explorer, Fortune Teller',
+    'Achievement rarity system with badges: UNCOMMON (green), RARE (blue), EPIC (purple)',
+    'Points-based achievement scoring (50-500 points per achievement)',
+    'Total achievement score display with trophy icon in profile header',
+    'Visual effects system: shimmer animations, glow effects, sparkle icons for secret achievements',
+    'Achievement category system: streak, volume, paths, and secret achievements',
+    'Real-time achievement tracking via enhanced useUserStatistics hook',
+    'Separate UI sections for regular vs secret achievements in profile'
+  ],
+  technicalUpdates: [
+    'Enhanced ACHIEVEMENT_DEFINITIONS in ProfileScreen.jsx with 5 new secret achievements',
+    'Added secret achievement CSS with unique color schemes (achievement-secret, achievement-rainbow, achievement-electric, achievement-mystery, achievement-mystic)',
+    'Implemented @keyframes profileSecretShimmer animation (3s infinite diagonal shimmer)',
+    'Created @keyframes profileAchievementGlow animation (2s pulsing glow 10px-30px)',
+    'Built rarity badge system with gradient colors for all tiers',
+    'Enhanced useUserStatistics.js with 5 new tracking algorithms',
+    'Night & Day tracking: Time-based analysis grouping entries by date, detecting morning (5-9 AM) AND night (10 PM-5 AM) entries',
+    'Mood Master tracking: Emotion detection using 58 keywords across 8 categories (joy, sadness, anger, fear, surprise, disgust, trust, anticipation)',
+    'Random Explorer tracking: Path completion filtering excluding defaults and voice paths',
+    'Fortune Teller tracking: Goal achievement detection with keyword matching (\'achieved\', \'accomplished\', \'completed\', etc.)',
+    'Added totalInsights calculation (sum of all entry.analysis.insights.length)',
+    'Created achievementTracking.js utility with helper functions for tracking progress',
+    'Built trackRandomPathCompletion, trackGoalAchievement, unlockAchievement functions',
+    'Enhanced ProfileScreen with achievement score calculation and display'
+  ],
+  secretAchievements: [
+    '🎭 Night & Day (RARE, 150 pts): Journal both early morning (5-9 AM) and late night (10 PM-5 AM) on the same day',
+    '🌈 Mood Master (EPIC, 300 pts): Experience and journal about all 8 emotion categories',
+    '⚡ Power User (RARE, 250 pts): Maintain a 7-day journaling streak without missing a day',
+    '✨ Random Explorer (UNCOMMON, 200 pts): Complete a random/recommended journey path',
+    '🎯 Fortune Teller (EPIC, 350 pts): Set and achieve 3 personal goals tracked through journaling'
+  ],
+  trackingAlgorithms: [
+    'Night & Day: Groups entries by toDateString(), tracks morning/night flags per day, counts days with BOTH flags true',
+    'Mood Master: 8 emotion categories with keyword arrays, searches extractedText/transcription/summary/insights, returns Set.size of detected emotions (0-8)',
+    'Random Explorer: Filters completedPaths for non-default/non-voice paths, falls back to userProfile.randomPathsCompleted',
+    'Fortune Teller: Checks userProfile.achievedGoals array, searches for goal keywords in entry text, divides mentions by 2 to avoid over-counting',
+    'Total Insights: Reduces entry.analysis.insights.length across all entries'
+  ],
+  visualEffects: [
+    'achievement-secret: Purple gradient (#8b5cf6 to #6d28d9) with profileSecretShimmer overlay',
+    'achievement-rainbow: 7-color gradient border (red, orange, yellow, green, blue, indigo, violet)',
+    'achievement-electric: Purple glow with profileAchievementGlow animation',
+    'achievement-mystery: Pink-purple gradient (#ec4899 to #8b5cf6)',
+    'achievement-mystic: Deep purple with enhanced glow',
+    'profileSecretShimmer: 3s infinite diagonal shimmer from left (-200px) to right (200px)',
+    'profileAchievementGlow: 2s ease-in-out pulsing glow (10px to 30px box-shadow)',
+    'profileSparkleRotate: 2s infinite 360° rotation for sparkle emoji',
+    'Rarity badges with gradient backgrounds and 0.8rem font size'
+  ],
+  userExperience: [
+    'Discover hidden achievements through natural journaling behavior',
+    'Visual distinction between regular and secret achievements with shimmer/glow effects',
+    'Progress tracking shows how close users are to unlocking achievements',
+    'Achievement scoring adds gamification layer to journaling practice',
+    'Rarity badges create collection/completion incentives',
+    'Secret achievements encourage diverse journaling patterns (time, emotion, path exploration)',
+    'Achievement unlocks provide positive reinforcement for consistent practice',
+    'Mystery element adds excitement and discovery to the journaling journey'
+  ],
+  improvements: [
+    'Enhanced ProfileScreen with achievement categorization and scoring',
+    'Improved statistics hook with comprehensive tracking for secret achievements',
+    'Added achievement helper utilities for easy progress tracking',
+    'Better visual feedback for achievement unlocks with animations',
+    'Streamlined achievement display with "View All" option for many achievements',
+    'Enhanced profile header with achievement score and trophy icon',
+    'Improved CSS architecture with unique prefixes preventing conflicts',
+    'Better mobile responsiveness for achievement cards and rarity badges'
+  ],
+  notes: [
+    'This major update introduces a comprehensive gamification system to encourage consistent and diverse journaling',
+    'Secret achievements are designed to be discovered naturally through varied journaling behavior',
+    'The emotion detection system uses sophisticated keyword matching across 8 psychological categories',
+    'Time-based tracking enables discovery of journaling patterns across different times of day',
+    'Achievement tracking is fully integrated with existing statistics system for real-time updates',
+    'All achievements include point values creating a scoring system for long-term engagement',
+    'Rarity system (UNCOMMON, RARE, EPIC) adds collection incentives',
+    'Visual effects (shimmer, glow, sparkle) make secret achievements feel special and rewarding',
+    'The achievement system lays foundation for future features like leaderboards and sharing',
+    'Helper functions enable easy expansion with additional achievements in future updates'
+  ],
+  compatibility: [
+    'Achievement tracking: Real-time calculation via useUserStatistics hook with useMemo optimization',
+    'Firebase integration: Achievement data stored in userProfile document',
+    'Browser support: CSS animations work on all modern browsers (Chrome 43+, Firefox 16+, Safari 9+)',
+    'Mobile optimization: Touch-friendly achievement cards with 44px minimum targets',
+    'Performance: Memoized calculations prevent unnecessary re-renders',
+    'Accessibility: Proper ARIA labels and reduced motion support for animations'
+  ]
+},
+
+{
+  version: '5.2.0_alpha',
+  releaseDate: '2025-11-10',
+  codename: 'Enhanced AI Analysis Experience',
+  features: [
+    'Completely rewritten AI analysis prompts with psychological depth and personalization',
+    'Enhanced system prompts referencing Carl Rogers (empathy), James Clear (habits), and Brené Brown (compassion)',
+    'Voice journal analysis with vocal authenticity focus and specific listening techniques',
+    'Redesigned AnalysisResults.jsx with enhanced visual presentation and user engagement',
+    'New featured card designs with subtitles, icons, and pulse animations',
+    'Voice observations card for voice entries with special styling',
+    'Enhanced affirmation display with decorative quote marks and highlighted styling',
+    'Improved reflection tab with question exploration suggestions and expandable options',
+    'Enhanced action tab with "Why this matters" insight boxes and dual-button layout',
+    'Comprehensive CSS updates with new card variants and animations'
+  ],
+  technicalUpdates: [
+    'Rewrote claudeService.js regular journal analysis system prompt (120+ lines)',
+    'Rewrote claudeService.js voice journal analysis system prompt (100+ lines)',
+    'Enhanced AnalysisResults.jsx insights tab with featured summary card',
+    'Added voice observations conditional card for voice entries',
+    'Redesigned reflection tab with icon circle, question wrapper, and suggestion list',
+    'Redesigned action tab with text wrapper, insight box, and button group',
+    'Created ar.css enhancements: --featured, --voice-obs, --enhanced card variants',
+    'Added animation keyframes: iconPulse, fadeInUp, shimmer for enhanced visual feedback',
+    'Implemented connector lines between enhanced insights for visual flow',
+    'Added subtitle support for card headers with proper typography'
+  ],
+  aiPromptEnhancements: [
+    'Regular journal analysis: Quote user\'s specific words, avoid clichés, balance validation with challenge',
+    'Enhanced response standards: Personalized insights based on actual content, actionable next steps',
+    'Voice analysis: Acknowledge vocal courage, analyze tone/pacing/pauses, quote authentic phrases',
+    'Visual analysis sections for image-based entries when applicable',
+    'Psychological frameworks: Rogers\' unconditional positive regard, Clear\'s habit formation, Brown\'s vulnerability work',
+    'Depth over surface: Move beyond obvious to uncover patterns and deeper meaning',
+    'Strengths-based approach highlighting user\'s wisdom and resilience in entries'
+  ],
+  uiEnhancements: [
+    'Featured "What We Discovered Together" summary card with Brain icon and pulse animation',
+    'Enhanced insights with connector lines showing progression between numbered items',
+    'Voice observations card with microphone icon for voice-specific reflections',
+    'Highlighted affirmation with large decorative quote marks and enhanced border',
+    'Reflection question wrapper with gradient background and proper spacing',
+    '"Ways to explore this further" section with 4 actionable suggestions',
+    'Action tab "Why this matters" insight box with blue gradient background',
+    'Set Reminder (primary) and I\'ll Remember This (secondary) action buttons',
+    'Subtitles on card headers for additional context ("Your reflection reveals deep insight")',
+    'Icon animations and glow effects for featured elements'
+  ],
+  cssImprovements: [
+    '.ar-card--featured: Enhanced featured card with stronger borders and shadows',
+    '.ar-card__subtitle: New subtitle styling for card headers',
+    '.ar-card__icon--pulse: Pulsing icon animation (scale 1.0 to 1.1)',
+    '.ar-card__icon--glow: Glowing icon effect with drop-shadow',
+    '.ar-insights__item--enhanced: Enhanced insight layout with left padding',
+    '.ar-insights__connector: Visual connector lines between insights',
+    '.ar-card--voice-obs: Voice observations card with purple gradient',
+    '.ar-affirmation--enhanced: Enhanced affirmation with quote marks',
+    '.ar-reflection--enhanced: Enhanced reflection layout with animations',
+    '.ar-action--enhanced: Enhanced action layout with insight boxes',
+    '.ar-action__buttons: Flex button group for action tab',
+    '.ar-reflection__suggestion: Enhanced suggestion items with icons and descriptions'
+  ],
+  visualDesign: [
+    'Pulse animation: Smooth icon scaling creating breathing effect',
+    'Connector lines: 2px gradient lines showing insight progression',
+    'Quote marks: 4rem serif font positioned absolutely for affirmations',
+    'Gradient backgrounds: Blue/purple gradients for insight and note boxes',
+    'Featured cards: 2px borders with enhanced shadows and glow effects',
+    'Voice observations: Purple theme matching voice journaling brand',
+    'Icon circles: 100px diameter with 3px borders and pulse animations',
+    'Frosted glass effects: Backdrop blur on explanation sections',
+    'Staggered animations: 0.1s delays for sequential card reveals'
+  ],
+  userExperience: [
+    'More personal AI responses that quote user\'s actual words and phrases',
+    'Deeper psychological insights moving beyond surface-level observations',
+    'Voice entries acknowledged with vocal courage and authenticity recognition',
+    'Visual hierarchy guiding users through insights, reflection, and action',
+    'Featured summary feels impactful with enhanced design treatment',
+    'Reflection questions feel exploratory with actionable next steps',
+    'Action suggestions feel meaningful with "why this matters" explanations',
+    'Affirmations feel powerful with decorative quote presentation',
+    'Smooth animations and transitions create polished experience',
+    'Enhanced visual feedback makes analysis results engaging to read'
+  ],
+  improvements: [
+    'AI prompts now reference psychological best practices and frameworks',
+    'Analysis results display matches quality of enhanced AI responses',
+    'Voice entries receive appropriate recognition for vocal expression',
+    'Visual consistency across all analysis tabs with enhanced styling',
+    'Better mobile responsiveness for all enhanced card components',
+    'Improved accessibility with proper focus states and ARIA labels',
+    'Enhanced performance with CSS-only animations (no JavaScript)',
+    'Better theme integration with consistent colors and gradients'
+  ],
+  notes: [
+    'This update significantly improves the AI analysis experience with both content quality and visual presentation',
+    'Enhanced prompts produce more personalized, psychologically-grounded insights for users',
+    'Voice journaling now receives appropriate acknowledgment for the courage of vocal self-expression',
+    'New UI design makes analysis results feel premium and engaging to read',
+    'Carl Rogers\' empathy principles ensure validating yet challenging AI responses',
+    'James Clear\'s habit formation concepts inform actionable next steps',
+    'Brené Brown\'s compassion framework guides supportive yet honest feedback',
+    'Featured card design highlights key insights and summaries',
+    'Connector lines create visual flow between numbered insights',
+    'Quote marks add gravitas to affirmations and reflection questions',
+    'The enhanced experience encourages users to deeply engage with their AI analysis',
+    'All enhancements maintain performance with CSS-only animations and optimized rendering'
+  ],
+  compatibility: [
+    'Claude Sonnet 3.5 API with enhanced system prompts',
+    'React 18+ with hooks and component updates',
+    'CSS animations: Chrome 43+, Firefox 16+, Safari 9+',
+    'Backdrop-filter: Chrome 76+, Safari 9+, Firefox 103+',
+    'Mobile-optimized: Tested on iOS Safari 14+ and Android Chrome 90+',
+    'Touch interactions: 44px minimum touch targets maintained',
+    'Accessibility: Enhanced ARIA labels and reduced motion support',
+    'Theme support: Works seamlessly in both light and dark modes'
+  ]
+},
+
+{
+  version: '6.0.0_alpha',
+  releaseDate: '2025-11-12',
+  codename: 'NFC Smart Journal Integration & Subscription Activation',
+  features: [
+    'NFC Smart Journal integration - tap your phone to physical journal for instant upload',
+    'Multi-step journal registration wizard with tier selection (Essential, Insight, Legacy)',
+    'Automatic tier detection from NFC chips - skips manual selection when chip contains tier data',
+    'Quick access workflow - tap registered journal to launch camera or view archive',
+    'Android App Links deep linking for seamless NFC-to-app experience',
+    'NFC Test Panel in Debug Page for comprehensive testing and troubleshooting',
+    'Automatic journal ownership validation via Firestore',
+    'Smart navigation based on journal access patterns',
+    'My Journals list with tier badges, icons, and serial numbers',
+    'Multi-journal support - register and manage multiple physical journals',
+    'Hybrid subscription model: Journal bundle (3/6/12 months free) + Artisan subscription (€0.99/month)',
+    'Automatic subscription activation on journal registration via Cloud Function',
+    'Premium success screen with subscription activation details and expiration date',
+    'Subscription source tracking for journal_bundle vs regular subscriptions'
+  ],
+  bugFixes: [
+    'Fixed Firebase hosting configuration to serve assetlinks.json correctly',
+    'Resolved Android intent filter configuration for NFC deep links',
+    'Fixed NFC service initialization on web/iOS platforms (graceful degradation)',
+    'Corrected domain URLs from kairos-journal.com to reflection-writer.web.app',
+    'Fixed .well-known directory deployment blocking in firebase.json',
+    'Fixed step numbering in registration flow (1→2→3→4 when tier auto-detected, 1→2→3→4→5 manual)',
+    'Resolved NDEF message reading issues by migrating from @capgo to @exxili/capacitor-nfc',
+    'Fixed NFC plugin initialization errors with proper cleanup patterns',
+    'Corrected parseNFCTag to use new plugin\'s data.string() API instead of manual byte parsing'
+  ],
+  improvements: [
+    'Migrated to @exxili/capacitor-nfc (v0.0.12) for superior NDEF reading capability',
+    'Complete NFC service rewrite with modern cleanup function patterns',
+    'Enhanced registration UI with gradient effects, smooth animations, and shimmer progress bar',
+    'Optimized NFC data parsing - automatic Text record decoding with language code stripping',
+    'Added comprehensive error handling for all NFC operations',
+    'Platform-aware NFC availability checking (Android-only graceful degradation)',
+    'Created production-ready workflows for NFC chip programming',
+    'Enhanced modal designs with 28px border radius, layered shadows, and cubic-bezier animations',
+    'Tier-specific colored badges and icons throughout the app',
+    'Removed unnecessary journal URL field from success screen',
+    'Loading states and spinners for async journal data fetching',
+    'Better visual hierarchy with 800-weight fonts and gradient text fills',
+    'Premium success screen CSS: hover effects, green subscription highlight card, accent bars',
+    'Subscription activation flow integrated into registration with detailed feedback',
+    'Cloud Function activateJournalSubscription deployed and tested successfully'
+  ],
+  subscriptionSystem: [
+    'Essential tier: 3 months free Artisan subscription (€0.99/month after)',
+    'Insight tier: 6 months free Artisan subscription (€0.99/month after)',
+    'Legacy tier: 12 months free Artisan subscription (€0.99/month after)',
+    'Multiple journals stack free months (Essential + Legacy = 15 months total)',
+    'Cloud Function calculates subscription end date based on tier months',
+    'Extends existing subscriptions if present rather than overwriting',
+    'Updates user document with subscription object: {status: "active", tier: "artisan", source: "journal_bundle", currentPeriodEnd, autoRenew: false}',
+    'Subscription cache cleared after activation for real-time UI updates',
+    'Success screen shows: tier badge, journal ID, serial number, subscription months, expiration date',
+    'Premium journeys become accessible during free period',
+    'After expiration, upgrade prompt displays with Stripe checkout option'
+  ],
+  technicalUpdates: [
+    'functions/index.js: Added activateJournalSubscription Cloud Function (lines 850-970)',
+    'SubscriptionService.js: Added activateJournalSubscription wrapper calling Cloud Function',
+    'JournalRegistration.jsx: Integrated subscription activation into handleRegister',
+    'JournalRegistration.css: Premium success screen design with hover effects and gradients',
+    'MyJournalsList.jsx: Tier display with Crown, Star, BookOpen icons and serial numbers',
+    'journalService.js: Added getJournalDetails function fetching full journal data',
+    'Firebase Functions deployed to us-central1 region successfully',
+    'Build output: 2948.58 kB bundle, 748.73 kB gzipped, 382.99 kB CSS',
+    'Capacitor sync: Found 9 plugins including @exxili/capacitor-nfc@0.0.12',
+    'Deployed to Android device (realme RMX3701) with full subscription activation'
+  ],
+  notes: [
+    'NFC functionality requires Android 4.4+ device with NFC hardware',
+    'iOS and web versions gracefully degrade - NFC features hidden on unsupported platforms',
+    'Physical journals require NTAG215 chips with NDEF Text records containing JSON payload',
+    'Chip format: {"journalId":"KAIROS_YYYYMMDD_XXXXX","tier":"legacy|insight|essential","serialNumber":"KJ2025-XXXXXX",...}',
+    'SHA-256 certificate fingerprint configured for debug builds - update for production release',
+    'Comprehensive documentation added: NFC_CHIP_PROGRAMMING_GUIDE.md, NFC_WORKFLOW_GUIDE.md, NFC_TECHNICAL_DEEP_DIVE.md',
+    'assetlinks.json deployed to /.well-known/ for Android App Links verification',
+    'Test NFC functionality using Debug Page → NFC Test Panel before programming physical chips',
+    '@exxili/capacitor-nfc provides automatic NDEF decoding via data.string(), data.uint8Array(), data.base64()',
+    'Registration flow simplified to 5 steps (removed WRITE_NFC step, users write chips separately)',
+    'My Journals modal fetches full journal details from Firestore including tier, serial number, and metadata',
+    'Hybrid business model: Physical journal purchase includes bundled digital subscription',
+    'Journal bundle subscriptions tracked separately from regular Stripe subscriptions via source field',
+    'Cloud Function ensures secure subscription activation with proper authentication checks',
+    'Success screen provides clear value communication: tier badge, free months, expiration date',
+    'All premium journeys accessible during free period - seamless user experience',
+    'Subscription system ready for Kickstarter campaign with proven activation flow',
+    'Build successful with premium CSS enhancements and subscription integration',
+    'Deployed to Android with beautiful subscription activation display'
+  ]
+},
+
+{
+  version: "6.1.0_alpha",
+  releaseDate: "2025-11-13",
+  features: [
+    "Unified premium top bar with rounded corners and responsive design across all main screens",
+    "Top bar color now matches the active tab color from the bottom navigation for Home, Paths, Analytics, and Profile screens",
+    "Removed icons from top bar on Home, Profile, Paths, and Analytics for a cleaner look",
+    "Improved theme toggle visibility and styling in the top bar",
+    "Enhanced path selection with unlimited active journeys and better progress visualization",
+    "Modernized analytics dashboard with matching top bar color and improved layout"
+  ],
+  bugFixes: [
+    "Fixed duplicate icon rendering in top bar on Home and Profile screens",
+    "Resolved top bar width and centering issues to match stats overview",
+    "Improved color contrast and accessibility for top bar in both light and dark modes",
+    "Fixed theme toggle color for better visibility in top bar context"
+  ],
+  improvements: [
+    "Faster and more consistent UI transitions for top bar and navigation",
+    "Cleaner, more minimal top bar design for all main screens",
+    "Better alignment between navigation and top bar color scheme",
+    "Improved code structure for easier future theming and customization"
+  ],
+  notes: [
+    "This update brings a visually unified and brand-consistent experience across all main screens.",
+    "Top bar color now always matches the active tab for instant context feedback.",
+    "All changes are fully backward compatible with previous user data and navigation."
   ]
 }
 

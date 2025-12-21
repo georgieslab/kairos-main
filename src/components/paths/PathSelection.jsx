@@ -46,6 +46,11 @@ import {
 
 // ✅ CRITICAL: Import the CSS file
 import '../../styles/components/pathSelection.css';
+import KairosLoader from '../common/KairosLoader';
+import PathSuggestionCard from './PathSuggestionCard';
+import PathQuestionnaire from './PathQuestionnaire';
+import PathQuestionnaireResults from './PathQuestionnaireResults';
+import TopBar from '../common/TopBar';
 
 // Import utilities
 import { 
@@ -137,11 +142,20 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     isLoading: true,
     isMobile: false,
     
+    // ✨ NEW: Enhanced loading state
+    loadingProgress: 0,
+    loadingStage: 'initial',
+    
     // Modal state
     showPathDetails: false,
     selectedPath: null,
     showDisclaimerModal: false,
     selectedTransformationPath: null,
+    
+    // ✨ Questionnaire state
+    showQuestionnaire: false,
+    showQuestionnaireResults: false,
+    questionnaireRecommendation: null,
     
     // Data state
     pathsProgress: {},
@@ -156,7 +170,9 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
   // Destructure state for cleaner access
   const {
     viewMode, activeTab, searchQuery, filterOption, isLoading, isMobile,
+    loadingProgress, loadingStage,
     showPathDetails, selectedPath, showDisclaimerModal, selectedTransformationPath,
+    showQuestionnaire, showQuestionnaireResults, questionnaireRecommendation,
     pathsProgress, favoritePaths, disclaimerBypass,
     isNavigating, hoveredPath
   } = state;
@@ -165,6 +181,33 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
   const updateState = useCallback((updates) => {
     setState(prev => ({ ...prev, ...updates }));
   }, []);
+
+
+  // ✨ Helper function for loading messages
+  const getLoadingMessage = () => {
+    switch (loadingStage) {
+      case 'loading':
+        return {
+          message: "Loading Journeys",
+          subMessage: "Discovering available paths..."
+        };
+      case 'processing':
+        return {
+          message: "Processing Progress",
+          subMessage: "Analyzing your journey history..."
+        };
+      case 'complete':
+        return {
+          message: "Almost Ready",
+          subMessage: "Preparing your personalized view..."
+        };
+      default:
+        return {
+          message: "Welcome",
+          subMessage: "Loading your journey paths..."
+        };
+    }
+  };
 
   // Get all available paths
   const allPaths = useMemo(() => getAllJourneyPaths(), []);
@@ -188,10 +231,25 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     }
   }, [updateState]);
 
-  // Simulate loading state
+  // ✨ ENHANCED: Loading sequence with progress
   useEffect(() => {
-    const timer = setTimeout(() => updateState({ isLoading: false }), 800);
-    return () => clearTimeout(timer);
+    const loadPathsWithProgress = async () => {
+      updateState({ isLoading: true, loadingProgress: 0, loadingStage: 'initial' });
+      await new Promise(resolve => setTimeout(resolve, 300));
+      updateState({ loadingProgress: 25 });
+      
+      updateState({ loadingProgress: 40, loadingStage: 'loading' });
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      updateState({ loadingProgress: 70, loadingStage: 'processing' });
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      updateState({ loadingProgress: 100, loadingStage: 'complete' });
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      updateState({ isLoading: false, loadingProgress: 0, loadingStage: 'initial' });
+    };
+    loadPathsWithProgress();
   }, [updateState]);
 
   // Calculate paths progress
@@ -442,6 +500,65 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
     });
   }, [updateState]);
 
+  // ✨ Questionnaire handlers
+  const handleStartQuestionnaire = useCallback(() => {
+    console.log('🎯 Starting questionnaire...');
+    updateState({ showQuestionnaire: true });
+  }, [updateState]);
+
+  const handleQuestionnaireComplete = useCallback((recommendation, error) => {
+    if (error) {
+      console.error('Questionnaire error:', error);
+      updateState({ 
+        showQuestionnaire: false,
+        showQuestionnaireResults: false 
+      });
+      return;
+    }
+
+    updateState({
+      showQuestionnaire: false,
+      showQuestionnaireResults: true,
+      questionnaireRecommendation: recommendation
+    });
+  }, [updateState]);
+
+  const handleStartRecommendedPath = useCallback((path) => {
+    updateState({
+      showQuestionnaireResults: false,
+      questionnaireRecommendation: null
+    });
+    
+    // Check if it's a special path that needs disclaimer
+    if (!handleSpecialPathStart(path.id)) {
+      // For regular paths, navigate to the journey start
+      setTimeout(() => {
+        const nextDay = getNextDayForPath(userProfile, path.id);
+        navigateToScreen('write', { pathId: path.id, day: nextDay });
+      }, 300);
+    }
+  }, [updateState, handleSpecialPathStart, userProfile, navigateToScreen]);
+
+  const handleRetakeQuestionnaire = useCallback(() => {
+    updateState({
+      showQuestionnaireResults: false,
+      showQuestionnaire: true,
+      questionnaireRecommendation: null
+    });
+  }, [updateState]);
+
+  const handleBrowseAllPaths = useCallback(() => {
+    updateState({
+      showQuestionnaire: false,
+      showQuestionnaireResults: false,
+      questionnaireRecommendation: null
+    });
+  }, [updateState]);
+
+  const handleQuestionnaireCancel = useCallback(() => {
+    updateState({ showQuestionnaire: false });
+  }, [updateState]);
+
   // Render loading skeleton
   const renderLoadingSkeleton = () => (
     <div className={`paths-${viewMode}`}>
@@ -596,7 +713,13 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
             className={`continue-button ${isActive ? 'active' : ''}`}
             onClick={(e) => {
               e.stopPropagation();
-              handleContinueJourney(id);
+              // If journey hasn't started, show details modal first
+              if (!hasStarted) {
+                openPathDetails(pathData);
+              } else {
+                // If already started, continue directly
+                handleContinueJourney(id);
+              }
             }}
             disabled={isNavigating}
             aria-label={!hasStarted ? 'Start Journey' : isCompleted ? 'Review Journey' : 'Continue Journey'}
@@ -875,35 +998,47 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
   };
 
   return (
-    <div className={`path-selection-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
+    <>
+      {/* ✨ Loading Screen */}
+      {isLoading && (
+        <KairosLoader
+          size="large"
+          fullScreen={true}
+          message={getLoadingMessage().message}
+          subMessage={getLoadingMessage().subMessage}
+          showProgress={true}
+          progress={loadingProgress}
+          variant="detailed"
+        />
+      )}
+
+      <div className={`path-selection-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
       {/* Skip to content for accessibility */}
       <a className="skip-to-content sr-only" href="#main-content">
         Skip to main content
       </a>
 
+      {/* Top Bar */}
+      <TopBar 
+        title="Journeys"
+        subtitle="Explore guided journaling experiences"
+        colorClass="paths-color"
+        actions={
+          !isMobile && (
+            <button 
+              className="icon-button" 
+              onClick={toggleViewMode}
+              title={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+              aria-label={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+            >
+              {viewMode === 'grid' ? <List size={18} /> : <LayoutGrid size={18} />}
+            </button>
+          )
+        }
+      />
+
       {/* Header Section */}
       <header className="header-container">
-        <div className="page-header">
-          <div className="header-text">
-            <h1>Your Journaling Paths</h1>
-            <p className="page-subtitle">
-              Explore guided journaling experiences for personal growth and reflection
-            </p>
-          </div>
-          <div className="header-actions">
-            {!isMobile && (
-              <button 
-                className="view-toggle-button" 
-                onClick={toggleViewMode}
-                title={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
-                aria-label={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
-              >
-                {viewMode === 'grid' ? <List size={18} /> : <LayoutGrid size={18} />}
-              </button>
-            )}
-          </div>
-        </div>
-        
         {/* Search bar */}
         <div className="search-container">
           <Search className="search-icon" size={18} />
@@ -1025,11 +1160,14 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
       
       {/* Main content */}
       <main id="main-content">
+        {/* Path Suggestion Card - Only show on 'all' and 'not-started' tabs */}
+        {(activeTab === 'all' || activeTab === 'not-started') && !searchQuery && (
+          <PathSuggestionCard onStartQuestionnaire={handleStartQuestionnaire} />
+        )}
+
         {/* Path grid/list */}
         <section className="paths-section" aria-labelledby="paths-heading">
-          {isLoading ? (
-            renderLoadingSkeleton()
-          ) : filteredPaths.length > 0 ? (
+          {filteredPaths.length > 0 ? (
             <>
               {/* Section header */}
               <div className="section-header">
@@ -1075,7 +1213,26 @@ const PathSelection = ({ navigateToScreen, currentPath = 'self-discovery', curre
           }}
         />
       )}
-    </div>
+
+      {/* ✨ Path Questionnaire Modal */}
+      {showQuestionnaire && (
+        <PathQuestionnaire 
+          onComplete={handleQuestionnaireComplete}
+          onCancel={handleQuestionnaireCancel}
+        />
+      )}
+
+      {/* ✨ Questionnaire Results Modal */}
+      {showQuestionnaireResults && questionnaireRecommendation && (
+        <PathQuestionnaireResults 
+          recommendation={questionnaireRecommendation}
+          onStartPath={handleStartRecommendedPath}
+          onRetake={handleRetakeQuestionnaire}
+          onBrowseAll={handleBrowseAllPaths}
+        />
+      )}
+      </div>
+    </>
   );
 };
 

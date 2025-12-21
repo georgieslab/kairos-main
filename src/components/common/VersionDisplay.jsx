@@ -30,20 +30,20 @@ const VersionDisplay = ({ minimal = false }) => {
       )}
       
       {showChangelog && (
-        <div className="changelog-modal" onClick={() => setShowChangelog(false)}>
-          <div className="changelog-content" onClick={(e) => e.stopPropagation()}>
-            <div className="changelog-header">
-              <h2 className="changelog-title">Changelog</h2>
+        <div className="profile-modal-overlay" onClick={() => setShowChangelog(false)}>
+          <div className="profile-modal changelog-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="profile-modal-header">
+              <h2 className="profile-modal-title">Changelog</h2>
               <button 
-                className="changelog-close"
+                className="changelog-close-btn"
                 onClick={() => setShowChangelog(false)}
                 aria-label="Close changelog"
               >
-                <X className="close-icon" />
+                <X size={20} />
               </button>
             </div>
             
-            <div className="changelog-body">
+            <div className="profile-modal-content changelog-scrollable">
               {VERSION_HISTORY.slice().reverse().map((version, index) => (
                 <div className="version-item" key={version.version}>
                   <div className="version-header">
@@ -99,10 +99,6 @@ const VersionDisplay = ({ minimal = false }) => {
                   )}
                 </div>
               ))}
-            </div>
-            
-            <div className="changelog-footer">
-              <p className="copyright">© 2025 Καιρός. All rights reserved.</p>
             </div>
           </div>
         </div>

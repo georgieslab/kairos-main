@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.kairos.journal",
+    "sha256_cert_fingerprints": [
+      "6A:40:2D:18:00:07:07:EF:A5:CF:11:E9:42:A9:51:8D:4A:37:D1:39:90:09:3F:49:C5:33:26:0C:FF:6C:11:EE"
+    ]
+  }
+}]

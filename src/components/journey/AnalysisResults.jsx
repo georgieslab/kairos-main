@@ -738,46 +738,81 @@ useEffect(() => {
       case 'insights':
         return (
           <div className="ar-content ar-content--insights">
-            <div className="ar-card ar-card--summary">
+            {/* Enhanced Summary Card */}
+            <div className="ar-card ar-card--summary ar-card--featured">
               <div className="ar-card__header">
-                <Brain className="ar-card__icon" size={20} />
-                <h3 className="ar-card__title">Summary</h3>
+                <Brain className="ar-card__icon ar-card__icon--pulse" size={24} />
+                <div>
+                  <h3 className="ar-card__title">What We Discovered Together</h3>
+                  <p className="ar-card__subtitle">Your reflection reveals deep insight</p>
+                </div>
               </div>
               <div className="ar-card__content">
-                <p className="ar-card__text">{analysisResult.summary}</p>
+                <p className="ar-card__text ar-card__text--emphasis">{analysisResult.summary}</p>
               </div>
             </div>
             
+            {/* Enhanced Insights Card */}
             <div className="ar-card ar-card--insights">
               <div className="ar-card__header">
-                <Lightbulb className="ar-card__icon" size={20} />
-                <h3 className="ar-card__title">Key Insights</h3>
+                <Lightbulb className="ar-card__icon ar-card__icon--glow" size={22} />
+                <div>
+                  <h3 className="ar-card__title">Key Insights</h3>
+                  <p className="ar-card__subtitle">Patterns and growth emerging from your words</p>
+                </div>
               </div>
               <div className="ar-card__content">
                 <div className="ar-insights">
                   {analysisResult.insights.map((insight, index) => (
-                    <div key={index} className="ar-insights__item">
-                      <span className="ar-insights__number">{index + 1}</span>
-                      <span className="ar-insights__text">{insight}</span>
+                    <div key={index} className="ar-insights__item ar-insights__item--enhanced">
+                      <div className="ar-insights__number-wrapper">
+                        <span className="ar-insights__number">{index + 1}</span>
+                        <div className="ar-insights__connector"></div>
+                      </div>
+                      <div className="ar-insights__content">
+                        <p className="ar-insights__text">{insight}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
             
-            <div className="ar-card ar-card--affirmation">
+            {/* Voice-specific observations */}
+            {isVoiceEntry && analysisResult.voiceObservations && (
+              <div className="ar-card ar-card--voice-obs">
+                <div className="ar-card__header">
+                  <Volume2 className="ar-card__icon" size={20} />
+                  <div>
+                    <h3 className="ar-card__title">Your Voice, Observed</h3>
+                    <p className="ar-card__subtitle">What your spoken words reveal</p>
+                  </div>
+                </div>
+                <div className="ar-card__content">
+                  <p className="ar-card__text ar-card__text--voice">{analysisResult.voiceObservations}</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Enhanced Affirmation Card */}
+            <div className="ar-card ar-card--affirmation ar-card--highlighted">
               <div className="ar-card__header">
                 <div className="ar-sparkle-wrapper">
-                  <Sparkles className="ar-card__icon" size={20} />
+                  <Sparkles className="ar-card__icon" size={22} />
                   <div className="ar-sparkle-1"></div>
                   <div className="ar-sparkle-2"></div>
                   <div className="ar-sparkle-3"></div>
                 </div>
-                <h3 className="ar-card__title">Your Affirmation</h3>
+                <div>
+                  <h3 className="ar-card__title">Honoring Your Journey</h3>
+                  <p className="ar-card__subtitle">A message for you</p>
+                </div>
               </div>
               <div className="ar-card__content">
-                <div className="ar-affirmation">
+                <div className="ar-affirmation ar-affirmation--enhanced">
+                  <div className="ar-affirmation__quote-mark ar-affirmation__quote-mark--open">"</div>
                   {analysisResult.affirmation}
+                  <div className="ar-affirmation__quote-mark ar-affirmation__quote-mark--close">"</div>
                 </div>
               </div>
             </div>
@@ -787,34 +822,57 @@ useEffect(() => {
       case 'reflection':
         return (
           <div className="ar-content ar-content--reflection">
-            <div className="ar-reflection">
+            <div className="ar-reflection ar-reflection--enhanced">
               <div className="ar-reflection__icon-wrapper">
-                <HelpCircle size={32} />
+                <div className="ar-reflection__icon-circle">
+                  <HelpCircle size={40} />
+                </div>
               </div>
-              <h3 className="ar-reflection__title">Reflection Question</h3>
-              <p className="ar-reflection__question">{analysisResult.reflectionQuestion}</p>
+              <h3 className="ar-reflection__title">A Question to Explore</h3>
+              <div className="ar-reflection__question-wrapper">
+                <p className="ar-reflection__question">{analysisResult.reflectionQuestion}</p>
+              </div>
+              
+              <div className="ar-reflection__note">
+                <p className="ar-reflection__note-text">
+                  This question is designed to open new pathways of self-understanding. 
+                  There's no "right" answer—just honest exploration.
+                </p>
+              </div>
               
               <div className="ar-reflection__suggestions">
-                <h4 className="ar-reflection__suggestions-title">Consider exploring this through:</h4>
+                <h4 className="ar-reflection__suggestions-title">Ways to explore this further:</h4>
                 <ul className="ar-reflection__suggestions-list">
                   <li className="ar-reflection__suggestion">
-                    <BookOpen size={16} /> 
-                    <span>Writing a follow-up response</span>
-                  </li>
-                  <li className="ar-reflection__suggestion">
-                    <Heart size={16} /> 
-                    <span>Discussing with a trusted friend</span>
-                  </li>
-                  <li className="ar-reflection__suggestion">
-                    <Zap size={16} /> 
-                    <span>Quiet meditation or mindfulness</span>
+                    <BookOpen size={18} /> 
+                    <div>
+                      <strong>Journal Again</strong>
+                      <span>Write a follow-up entry exploring this question</span>
+                    </div>
                   </li>
                   {isVoiceEntry && (
                     <li className="ar-reflection__suggestion">
-                      <Volume2 size={16} /> 
-                      <span>Recording another voice reflection</span>
+                      <Volume2 size={18} /> 
+                      <div>
+                        <strong>Speak Your Answer</strong>
+                        <span>Record another voice reflection on this question</span>
+                      </div>
                     </li>
                   )}
+                  <li className="ar-reflection__suggestion">
+                    <Heart size={18} /> 
+                    <div>
+                      <strong>Share & Discuss</strong>
+                      <span>Talk it through with someone you trust</span>
+                    </div>
+                  </li>
+                  <li className="ar-reflection__suggestion">
+                    <Zap size={18} /> 
+                    <div>
+                      <strong>Meditate On It</strong>
+                      <span>Sit with this question in quiet reflection</span>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -824,19 +882,35 @@ useEffect(() => {
       case 'action':
         return (
           <div className="ar-content ar-content--action">
-            <div className="ar-action">
+            <div className="ar-action ar-action--enhanced">
               <div className="ar-action__icon-wrapper">
-                <Play size={32} />
+                <div className="ar-action__icon-circle">
+                  <Play size={40} />
+                </div>
               </div>
-              <h3 className="ar-action__title">Suggested Action</h3>
-              <div className="ar-action__text">{analysisResult.practicalAction}</div>
-              <p className="ar-action__description">
-                Small, consistent actions create meaningful change over time.
-              </p>
-              <button className="ar-action__btn">
-                <Play size={16} />
-                <span>Set a Reminder</span>
-              </button>
+              <h3 className="ar-action__title">Your Next Step</h3>
+              <p className="ar-action__subtitle">Based on today's insights</p>
+              
+              <div className="ar-action__text-wrapper">
+                <div className="ar-action__text">{analysisResult.practicalAction}</div>
+              </div>
+              
+              <div className="ar-action__insight">
+                <p className="ar-action__insight-text">
+                  <strong>Why this matters:</strong> Small, consistent actions create meaningful change over time. 
+                  This suggestion is tailored to your specific reflection today.
+                </p>
+              </div>
+              
+              <div className="ar-action__buttons">
+                <button className="ar-action__btn ar-action__btn--primary">
+                  <Play size={16} />
+                  <span>Set Reminder</span>
+                </button>
+                <button className="ar-action__btn ar-action__btn--secondary">
+                  <span>I'll Remember This</span>
+                </button>
+              </div>
             </div>
           </div>
         );

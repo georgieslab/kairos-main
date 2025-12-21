@@ -22,6 +22,12 @@ const PathContextIndicator = ({ size = "compact" }) => {
           color: 'path-ei',
           textColor: 'text-pink-100'
         };
+
+      case 'deciding-to-doing':
+      pathProgress = userProfile?.journeyProgress?.decidingToDoingProgress;
+      pathName = 'The Gap Between Deciding and Doing';
+      pathMaxDays = 7;
+      break;
       case 'mindfulness-awareness':
         return {
           name: 'Mindfulness',

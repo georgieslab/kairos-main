@@ -621,6 +621,30 @@ export const formatSubscriptionInfo = (subscription) => {
 };
 
 /**
+ * Activate journal bundle subscription
+ * @param {string} userId - User ID
+ * @param {string} journalId - Journal ID
+ * @param {string} tier - Journal tier (essential, insight, legacy)
+ * @returns {Promise<Object>} Activation result
+ */
+export const activateJournalSubscription = async (userId, journalId, tier) => {
+  try {
+    console.log(`📔 Activating journal subscription for user: ${userId}, journal: ${journalId}, tier: ${tier}`);
+    const activate = httpsCallable(functions, 'activateJournalSubscription');
+    const result = await activate({ userId, journalId, tier });
+    
+    // Clear cache since subscription changed
+    clearSubscriptionCache();
+    
+    console.log(`✅ Journal subscription activated:`, result.data);
+    return result.data;
+  } catch (error) {
+    console.error('❌ Error activating journal subscription:', error);
+    throw error;
+  }
+};
+
+/**
  * Get pricing information
  * @returns {Object} Pricing details
  */
@@ -654,5 +678,6 @@ export default {
   getPathAccessInfo,
   clearSubscriptionCache,
   formatSubscriptionInfo,
-  getPricingInfo
+  getPricingInfo,
+  activateJournalSubscription
 };

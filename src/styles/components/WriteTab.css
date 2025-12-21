@@ -232,6 +232,7 @@
 
 .write-tab-path-context {
   margin-bottom: var(--spacing-md);
+  display: flex;
 }
 
 /* Path indicator */
@@ -435,7 +436,7 @@
 }
 
 .prompt-text::before {
-  content: """;   
+  content: '"';   
   color: var(--text-muted);
   font-size: 1.5rem;
   line-height: 0;
@@ -444,7 +445,7 @@
 }
 
 .prompt-text::after {
-  content: """;
+  content: '"';
   color: var(--text-muted);
   font-size: 1.5rem;
   line-height: 0;
@@ -964,7 +965,7 @@
 
 @media (max-width: 640px) {
   .write-tab-container {
-    padding: var(--spacing-sm);
+    padding: 0.25rem;
     gap: var(--spacing-md);
   }
   
@@ -1979,7 +1980,6 @@
 
 /* Ensure main content is visible */
 .write-tab-container .write-tab-header,
-.write-tab-container .write-tab-path-context,
 .write-tab-container .prompt-card,
 .write-tab-container .journey-progress,
 .write-tab-container .journaling-tips {
@@ -2508,3 +2508,7 @@
   }
 }
 
+.write-tab-path-context {
+  display: flex!important;
+  justify-content: center;
+}

@@ -16,7 +16,8 @@ import {
   Image as ImageIcon,
   GripVertical,
   RotateCw,
-  Eye
+  Eye,
+  ImagePlus
 } from 'lucide-react';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
@@ -134,7 +135,7 @@ const JournalUpload = ({
     setIsCapturing(false);
   };
 
-  // Enhanced camera capture that allows multiple photos
+  // Enhanced camera capture with proper permissions
   const handleCameraCapture = async () => {
     if (files.length >= maxPages) {
       setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
@@ -142,24 +143,156 @@ const JournalUpload = ({
     }
 
     setIsCapturing(true);
+    setError(''); // Clear any previous errors
+    
     try {
+      console.log('📸 Checking camera permissions...');
+      
+      // Check and request camera permissions
+      const permissions = await CapacitorCamera.checkPermissions();
+      console.log('📸 Current permissions:', permissions);
+      
+      let finalPermissions = permissions;
+      
+      // If permissions are denied or not determined, request them
+      if (permissions.camera !== 'granted' || permissions.photos !== 'granted') {
+        console.log('📸 Requesting camera and photo permissions...');
+        finalPermissions = await CapacitorCamera.requestPermissions();
+        console.log('📸 Permission result:', finalPermissions);
+      }
+      
+      // Check if permissions were granted
+      if (finalPermissions.camera === 'denied' || finalPermissions.photos === 'denied') {
+        console.error('❌ Camera or photos permission denied');
+        setError('Camera and photo access is required. Please enable permissions in your device settings.');
+        setIsCapturing(false);
+        return;
+      }
+      
+      console.log('✅ Permissions granted, opening camera/gallery...');
+      
+      // Now capture the image
       const image = await CapacitorCamera.getPhoto({
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Prompt, // This will show the camera/gallery selection dialog
+        source: CameraSource.Prompt, // Show dialog to choose camera or gallery
+        promptLabelHeader: 'Select Photo Source',
+        promptLabelPhoto: 'From Gallery',
+        promptLabelPicture: 'Take Photo',
       });
+
+      console.log('✅ Image captured successfully');
+      console.log('📸 Format:', image.format);
+      console.log('📸 Base64 length:', image.base64String?.length || 0);
 
       // Convert base64 to File object with proper sequencing
       const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
       const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
       
+      console.log('✅ Processing captured image...');
       // Process the captured image
       addCapturedImage(file);
     } catch (error) {
-      console.error('Camera capture error:', error);
-      if (error.message !== 'User cancelled photos app') {
+      console.error('❌ Camera capture error:', error);
+      console.error('❌ Error name:', error.name);
+      console.error('❌ Error message:', error.message);
+      
+      // Don't show error if user cancelled
+      if (error.message && error.message.includes('cancel')) {
+        console.log('ℹ️ User cancelled photo selection');
+      } else if (error.message && error.message.includes('permission')) {
+        setError('Camera/photo permission denied. Please enable it in device settings.');
+      } else if (error.message) {
+        setError(`Failed to capture image: ${error.message}`);
+      } else {
         setError('Failed to capture image. Please try again.');
+      }
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  // Specific method to open camera directly
+  const handleTakePhoto = async () => {
+    if (files.length >= maxPages) {
+      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
+      return;
+    }
+
+    setIsCapturing(true);
+    setError('');
+    
+    try {
+      console.log('📷 Opening camera...');
+      
+      const permissions = await CapacitorCamera.checkPermissions();
+      if (permissions.camera !== 'granted') {
+        const result = await CapacitorCamera.requestPermissions();
+        if (result.camera !== 'granted') {
+          setError('Camera permission is required to take photos.');
+          setIsCapturing(false);
+          return;
+        }
+      }
+      
+      const image = await CapacitorCamera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Camera, // Force camera
+      });
+
+      const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
+      const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
+      addCapturedImage(file);
+    } catch (error) {
+      console.error('❌ Camera error:', error);
+      if (!error.message?.includes('cancel')) {
+        setError('Failed to take photo. Please try again.');
+      }
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  // Specific method to open gallery directly
+  const handleChooseFromGallery = async () => {
+    if (files.length >= maxPages) {
+      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
+      return;
+    }
+
+    setIsCapturing(true);
+    setError('');
+    
+    try {
+      console.log('🖼️ Opening gallery...');
+      
+      const permissions = await CapacitorCamera.checkPermissions();
+      if (permissions.photos !== 'granted') {
+        const result = await CapacitorCamera.requestPermissions();
+        if (result.photos !== 'granted') {
+          setError('Photo library permission is required to select photos.');
+          setIsCapturing(false);
+          return;
+        }
+      }
+      
+      const image = await CapacitorCamera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos, // Force gallery
+      });
+
+      const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
+      const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
+      addCapturedImage(file);
+    } catch (error) {
+      console.error('❌ Gallery error:', error);
+      if (!error.message?.includes('cancel')) {
+        setError('Failed to select photo. Please try again.');
       }
     } finally {
       setIsCapturing(false);
@@ -516,25 +649,45 @@ const JournalUpload = ({
             
             {images.length === 0 ? (
               <div className="upload-options">
-                {/* Enhanced Camera/Gallery button for mobile */}
+                {/* Enhanced Camera/Gallery buttons for mobile with separate options */}
                 {isMobile && (
-                  <button 
-                    className={`action-button primary camera-button ${isCapturing ? 'loading' : ''}`}
-                    onClick={handleCameraCapture}
-                    disabled={isCapturing || files.length >= maxPages}
-                  >
-                    {isCapturing ? (
-                      <>
-                        <div className="loading-spinner-small"></div>
-                        Capturing...
-                      </>
-                    ) : (
-                      <>
-                        <Camera className="camera-icon" />
-                        {uploadInstructions.cameraButtonText || 'Take Photos or Choose from Gallery'}
-                      </>
-                    )}
-                  </button>
+                  <div className="mobile-upload-buttons">
+                    <button 
+                      className={`action-button primary camera-button ${isCapturing ? 'loading' : ''}`}
+                      onClick={handleTakePhoto}
+                      disabled={isCapturing || files.length >= maxPages}
+                    >
+                      {isCapturing ? (
+                        <>
+                          <div className="loading-spinner-small"></div>
+                          Opening...
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="camera-icon" />
+                          Take Photo
+                        </>
+                      )}
+                    </button>
+                    
+                    <button 
+                      className={`action-button primary gallery-button ${isCapturing ? 'loading' : ''}`}
+                      onClick={handleChooseFromGallery}
+                      disabled={isCapturing || files.length >= maxPages}
+                    >
+                      {isCapturing ? (
+                        <>
+                          <div className="loading-spinner-small"></div>
+                          Opening...
+                        </>
+                      ) : (
+                        <>
+                          <ImagePlus className="camera-icon" />
+                          Choose from Gallery
+                        </>
+                      )}
+                    </button>
+                  </div>
                 )}
                 
                 {/* Enhanced Drag and drop area */}
@@ -655,23 +808,42 @@ const JournalUpload = ({
                   {files.length < maxPages && (
                     <>
                       {isMobile && (
-                        <button 
-                          className={`action-button secondary ${isCapturing ? 'loading' : ''}`}
-                          onClick={handleCameraCapture}
-                          disabled={isCapturing}
-                        >
-                          {isCapturing ? (
-                            <>
-                              <div className="loading-spinner-small"></div>
-                              Capturing...
-                            </>
-                          ) : (
-                            <>
-                              <Camera size={16} style={{ marginRight: '4px' }} />
-                              Add More
-                            </>
-                          )}
-                        </button>
+                        <>
+                          <button 
+                            className={`action-button secondary ${isCapturing ? 'loading' : ''}`}
+                            onClick={handleTakePhoto}
+                            disabled={isCapturing}
+                          >
+                            {isCapturing ? (
+                              <>
+                                <div className="loading-spinner-small"></div>
+                                Opening...
+                              </>
+                            ) : (
+                              <>
+                                <Camera size={16} style={{ marginRight: '4px' }} />
+                                Take Photo
+                              </>
+                            )}
+                          </button>
+                          <button 
+                            className={`action-button secondary ${isCapturing ? 'loading' : ''}`}
+                            onClick={handleChooseFromGallery}
+                            disabled={isCapturing}
+                          >
+                            {isCapturing ? (
+                              <>
+                                <div className="loading-spinner-small"></div>
+                                Opening...
+                              </>
+                            ) : (
+                              <>
+                                <ImagePlus size={16} style={{ marginRight: '4px' }} />
+                                From Gallery
+                              </>
+                            )}
+                          </button>
+                        </>
                       )}
                       <button 
                         className="action-button secondary"

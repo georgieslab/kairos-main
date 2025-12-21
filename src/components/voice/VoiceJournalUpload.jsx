@@ -1,5 +1,7 @@
 // src/components/voice/VoiceJournalUpload.jsx - Mobile Live Transcription Enabled
 import React, { useState, useRef, useEffect } from 'react';
+// Capacitor Permissions API for runtime permission requests
+import { Capacitor } from '@capacitor/core';
 import { 
   ArrowLeft,
   Mic, 
@@ -51,14 +53,15 @@ const VoiceJournalUpload = ({
   const [stage, setStage] = useState('record'); // 'record', 'review', 'transcribe', 'edit'
   const [isEditingTranscription, setIsEditingTranscription] = useState(false);
   const [editedTranscription, setEditedTranscription] = useState('');
+  const [transcriptionProgress, setTranscriptionProgress] = useState(0);
   
   // Mobile-specific states
   const [hasPermission, setHasPermission] = useState(null);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [permissionStatus, setPermissionStatus] = useState('unknown');
-  
-  // 🎤 NEW: Live transcription states for mobile
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
+
+  // 🎤 NEW: Live transcription states for mobile
   const [liveTranscriptionEnabled, setLiveTranscriptionEnabled] = useState(true);
   const [speechRecognitionError, setSpeechRecognitionError] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -76,36 +79,90 @@ const VoiceJournalUpload = ({
   const animationRef = useRef(null);
   const recognitionRef = useRef(null);
   const recognitionRestartTimeoutRef = useRef(null);
+  const isRecordingRef = useRef(false);
+  const manualStopRef = useRef(false);
+  const finalTranscriptRef = useRef('');
+  const interimTranscriptRef = useRef('');
+  // Native Android speech recognition (Cordova/Capacitor) refs
+  const nativeSpeechActiveRef = useRef(false);
+  const nativeSpeechStopFnRef = useRef(null);
 
+  // Helper: detect native Android runtime
+  const isNativeAndroid = () => {
+    try {
+      // Capacitor v5+ exposes getPlatform on global Capacitor object
+      return (
+        typeof window !== 'undefined' &&
+        window.Capacitor &&
+        typeof window.Capacitor.getPlatform === 'function' &&
+        window.Capacitor.getPlatform() === 'android'
+      );
+    } catch {
+      return false;
+    }
+  };
+
+  // Helper: get Cordova/Capacitor speech plugin if present
+  const getNativeSpeechPlugin = () => {
+    try {
+      // cordova-plugin-speechrecognition exposes window.plugins.speechRecognition
+      return window?.plugins?.speechRecognition || null;
+    } catch {
+      return null;
+    }
+  };
   // 🎤 Mobile detection and speech recognition check on mount
   useEffect(() => {
-    const detectMobileAndSpeechSupport = () => {
+    const detectMobileAndSpeechSupport = async () => {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isFirefox = /Firefox/i.test(navigator.userAgent);
       setIsMobileDevice(isMobile);
       
-      // 🎤 Check speech recognition support on ALL devices (including mobile)
-      const speechSupported = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+      // Check if speech recognition is available for post-recording transcription
+      const hasWebkitSpeechRecognition = 'webkitSpeechRecognition' in window;
+      const hasSpeechRecognition = 'SpeechRecognition' in window;
+      const webSpeechSupported = hasWebkitSpeechRecognition || hasSpeechRecognition;
+      
+      console.log('🗣️ Speech Recognition Detection:');
+      console.log('  - Browser:', isFirefox ? 'Firefox' : 'Other');
+      console.log('  - webkitSpeechRecognition:', hasWebkitSpeechRecognition);
+      console.log('  - SpeechRecognition:', hasSpeechRecognition);
+      console.log('  - Web Speech API supported:', webSpeechSupported);
+      
+      // Firefox notification
+      if (isFirefox && !webSpeechSupported) {
+        console.log('  ℹ️ Firefox does not support Web Speech API');
+        console.log('  💡 For live transcription, please use Chrome, Edge, or Safari');
+      }
+
+      // Also detect native plugin support on Android (Capacitor/Cordova)
+      let nativeSpeechAvailable = false;
+      if (isAndroid && isNativeAndroid()) {
+        const plugin = getNativeSpeechPlugin();
+        nativeSpeechAvailable = Boolean(plugin);
+        console.log('  - Native plugin available:', nativeSpeechAvailable);
+      }
+
+      const speechSupported = Boolean(webSpeechSupported || nativeSpeechAvailable);
+      console.log('  - Final speech support status:', speechSupported);
       setSpeechRecognitionSupported(speechSupported);
       
-      console.log('📱 Device detection:', isMobile ? 'Mobile' : 'Desktop');
-      console.log('🗣️ Speech recognition supported:', speechSupported);
-      
-      // Auto-enable live transcription if supported
-      if (speechSupported) {
-        setLiveTranscriptionEnabled(true);
+      // Auto-disable live transcription on Firefox
+      if (isFirefox && !webSpeechSupported) {
+        setLiveTranscriptionEnabled(false);
       }
       
-      return { isMobile, speechSupported };
+      return { isMobile, speechSupported, isAndroid };
     };
 
     const checkInitialPermissions = async () => {
-      const { isMobile, speechSupported } = detectMobileAndSpeechSupport();
+      detectMobileAndSpeechSupport();
       
       if (navigator.permissions) {
         try {
           const permission = await navigator.permissions.query({ name: 'microphone' });
           setPermissionStatus(permission.state);
-          console.log('🎤 Initial permission status:', permission.state);
           
           if (permission.state === 'granted') {
             setHasPermission(true);
@@ -117,8 +174,40 @@ const VoiceJournalUpload = ({
             setHasPermission(permission.state === 'granted');
           };
         } catch (error) {
-          console.warn('Permission query not supported:', error);
-          setPermissionStatus('unknown');
+          console.log('⚠️ navigator.permissions.query not supported (common on Android)');
+          // On Android Capacitor, permissions API often doesn't work
+          // Try to directly check microphone access
+          if (isMobileDevice) {
+            console.log('🤖 Android/Mobile: Will request permission on first use');
+            // Don't set hasPermission to false - keep it null so UI shows "request" button
+            // But also try a silent permission check
+            try {
+              const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              testStream.getTracks().forEach(track => track.stop());
+              console.log('✅ Microphone already permitted');
+              setHasPermission(true);
+              setPermissionStatus('granted');
+            } catch (err) {
+              console.log('🎤 Microphone permission needed, will request when user clicks button');
+              // Keep hasPermission as null - don't set to false unless explicitly denied
+            }
+          }
+        }
+      } else {
+        // Permissions API not available at all (Android Capacitor)
+        console.log('⚠️ navigator.permissions not available');
+        if (isMobileDevice) {
+          // Try silent permission check
+          try {
+            const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            testStream.getTracks().forEach(track => track.stop());
+            console.log('✅ Microphone already permitted');
+            setHasPermission(true);
+            setPermissionStatus('granted');
+          } catch (err) {
+            console.log('🎤 Microphone permission needed');
+            // Keep as null to show permission button
+          }
         }
       }
     };
@@ -139,9 +228,7 @@ const VoiceJournalUpload = ({
     }
     
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-      audioContextRef.current.close().catch(error => {
-        console.warn('Error closing AudioContext:', error);
-      });
+      audioContextRef.current.close().catch(() => {});
     }
     
     if (timerRef.current) {
@@ -152,16 +239,6 @@ const VoiceJournalUpload = ({
     }
     if (audioUrl) {
       URL.revokeObjectURL(audioUrl);
-    }
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (error) {
-        console.warn('Error stopping recognition:', error);
-      }
-    }
-    if (recognitionRestartTimeoutRef.current) {
-      clearTimeout(recognitionRestartTimeoutRef.current);
     }
   };
 
@@ -200,157 +277,582 @@ const VoiceJournalUpload = ({
 
   // 🎤 ENHANCED: Mobile-optimized speech recognition with auto-restart
   const initializeSpeechRecognition = () => {
-    if (!speechRecognitionSupported || !liveTranscriptionEnabled) {
-      console.log('🗣️ Speech recognition disabled or not supported');
-      return null;
+  if (!speechRecognitionSupported || !liveTranscriptionEnabled) {
+    console.log('🗣️ Speech recognition disabled or not supported');
+    return null;
+  }
+
+  // If we're on native Android with plugin available, we do NOT initialize Web Speech
+  if (isNativeAndroid() && getNativeSpeechPlugin()) {
+    console.log('🎙️ Using native Android speech plugin; skipping Web Speech init');
+    return null;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    console.error('❌ SpeechRecognition API not available');
+    return null;
+  }
+
+  // 🔥 FIX #1: Clean up existing recognition BEFORE creating new one
+  if (recognitionRef.current) {
+    try {
+      console.log('🧹 Cleaning up existing recognition instance');
+      recognitionRef.current.onstart = null;
+      recognitionRef.current.onresult = null;
+      recognitionRef.current.onerror = null;
+      recognitionRef.current.onend = null;
+      recognitionRef.current.stop();
+    } catch (e) {
+      console.warn('⚠️ Error cleaning up old recognition:', e);
     }
+    recognitionRef.current = null;
+  }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    
-    // 🎤 Mobile-optimized settings
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-    
-    // 🎤 Enhanced language detection
-    const userLang = navigator.language || 'en-US';
-    recognition.lang = userLang;
-    console.log('🗣️ Using language:', userLang);
-    
-    // 🎤 Mobile-specific settings
-    if (isMobileDevice) {
-      // More aggressive settings for mobile
-      recognition.continuous = true;
-      recognition.interimResults = true;
+  // 🔥 FIX #2: Create instance with unique ID for reliable tracking
+  const recognitionId = Date.now();
+  const recognition = new SpeechRecognition();
+  recognition._instanceId = recognitionId;
+  recognitionRef.current = recognition;
+
+  console.log(`🆕 Creating NEW recognition instance: ${recognitionId}`);
+
+  // Mobile-optimized settings
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  // Language detection
+  const userLang = navigator.language || 'en-US';
+  recognition.lang = userLang;
+  console.log('🗣️ Language:', userLang);
+
+  // Android-specific settings
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if (isAndroid) {
+    console.log('🤖 Android optimizations enabled');
+  }
+
+  // 🔥 FIX #3: Improved instance checking with ID comparison
+  const isCurrentRecognition = () => {
+    const isCurrent = recognitionRef.current && recognitionRef.current._instanceId === recognitionId;
+    if (!isCurrent) {
+      console.log(`⚠️ Instance ${recognitionId} is stale (current: ${recognitionRef.current?._instanceId})`);
     }
-
-    let currentFinalTranscript = '';
-    let currentInterimTranscript = '';
-
-    recognition.onstart = () => {
-      console.log('🗣️ Speech recognition started');
-      setIsListening(true);
-      setSpeechRecognitionError('');
-    };
-
-    recognition.onresult = (event) => {
-      let newInterimTranscript = '';
-      let newFinalTranscript = currentFinalTranscript;
-      
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        const confidence = event.results[i][0].confidence;
-        
-        console.log('🗣️ Speech result:', {
-          transcript,
-          confidence,
-          isFinal: event.results[i].isFinal,
-          index: i
-        });
-        
-        if (event.results[i].isFinal) {
-          newFinalTranscript += transcript + ' ';
-          currentFinalTranscript = newFinalTranscript;
-        } else {
-          newInterimTranscript += transcript;
-        }
-      }
-      
-      // Update state
-      setFinalTranscript(newFinalTranscript);
-      setInterimTranscript(newInterimTranscript);
-      
-      // Combined transcript for display
-      const fullTranscript = newFinalTranscript + newInterimTranscript;
-      setTranscription(fullTranscript);
-      
-      if (!isEditingTranscription) {
-        setEditedTranscription(fullTranscript);
-      }
-      
-      currentInterimTranscript = newInterimTranscript;
-    };
-
-    recognition.onerror = (event) => {
-      console.error('🗣️ Speech recognition error:', event.error);
-      setIsListening(false);
-      
-      const errorMessages = {
-        'no-speech': 'No speech detected. Continue speaking...',
-        'audio-capture': 'Audio capture failed. Check your microphone.',
-        'not-allowed': 'Microphone permission denied.',
-        'network': 'Network error. Check your connection.',
-        'service-not-allowed': 'Speech service not available.',
-        'bad-grammar': 'Speech recognition grammar error.',
-        'language-not-supported': 'Language not supported for speech recognition.'
-      };
-      
-      const errorMessage = errorMessages[event.error] || `Speech recognition error: ${event.error}`;
-      
-      // Don't show error for common issues that auto-recover
-      if (!['no-speech', 'audio-capture'].includes(event.error)) {
-        setSpeechRecognitionError(errorMessage);
-        
-        // For critical errors, disable live transcription
-        if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(event.error)) {
-          setLiveTranscriptionEnabled(false);
-          setError(`Speech recognition: ${errorMessage}`);
-        }
-      }
-      
-      // Auto-restart for recoverable errors on mobile
-      if (isRecording && isMobileDevice && ['no-speech', 'audio-capture', 'network'].includes(event.error)) {
-        console.log('🔄 Auto-restarting speech recognition on mobile...');
-        recognitionRestartTimeoutRef.current = setTimeout(() => {
-          if (isRecording && liveTranscriptionEnabled) {
-            try {
-              recognition.start();
-            } catch (restartError) {
-              console.warn('Failed to restart speech recognition:', restartError);
-            }
-          }
-        }, 1000);
-      }
-    };
-
-    recognition.onend = () => {
-      console.log('🗣️ Speech recognition ended');
-      setIsListening(false);
-      
-      // Save final transcript
-      if (currentFinalTranscript.trim()) {
-        const cleanTranscript = currentFinalTranscript.trim();
-        setFinalTranscript(cleanTranscript);
-        setTranscription(cleanTranscript);
-        if (!isEditingTranscription) {
-          setEditedTranscription(cleanTranscript);
-        }
-      }
-      
-      // Auto-restart if still recording (important for mobile)
-      if (isRecording && !isPaused && liveTranscriptionEnabled) {
-        console.log('🔄 Auto-restarting speech recognition...');
-        recognitionRestartTimeoutRef.current = setTimeout(() => {
-          if (isRecording && liveTranscriptionEnabled) {
-            try {
-              recognition.start();
-            } catch (restartError) {
-              console.warn('Failed to restart speech recognition:', restartError);
-            }
-          }
-        }, 100);
-      }
-    };
-
-    return recognition;
+    return isCurrent;
   };
+
+  recognition.onstart = () => {
+    if (!isCurrentRecognition()) {
+      console.log(`⚠️ [${recognitionId}] Ignoring stale onstart`);
+      return;
+    }
+
+    console.log(`✅ [${recognitionId}] Speech recognition STARTED!`);
+    console.log(`📝 Accumulated transcript length: ${finalTranscriptRef.current.length}`);
+    
+    setIsListening(true);
+    setSpeechRecognitionError('');
+    manualStopRef.current = false;
+    
+    // 🔥 FIX #4: DON'T clear interim transcript on start
+    // Let it accumulate across restarts
+  };
+
+  recognition.onresult = (event) => {
+    if (!isCurrentRecognition()) {
+      console.log(`⚠️ [${recognitionId}] Ignoring stale onresult`);
+      return;
+    }
+
+    console.log(`🎉 [${recognitionId}] SPEECH RECOGNIZED!`);
+    console.log(`📝 Results length: ${event.results.length}, resultIndex: ${event.resultIndex}`);
+
+    let newInterimTranscript = '';
+    let newFinalPart = '';
+
+    // 🔥 FIX: Only process NEW results starting from resultIndex
+    // This prevents re-processing old results and creating duplicates
+    const startIndex = event.resultIndex || 0;
+    console.log(`🔍 [${recognitionId}] Processing results from index ${startIndex} to ${event.results.length}`);
+
+    for (let i = startIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      const transcript = result[0].transcript;
+      const confidence = result[0].confidence;
+
+      console.log(`🗣️ [${recognitionId}] Result [${i}]:`, {
+        transcript: transcript.substring(0, 50) + (transcript.length > 50 ? '...' : ''),
+        confidence,
+        isFinal: result.isFinal
+      });
+
+      if (result.isFinal) {
+        newFinalPart += transcript + ' ';
+        console.log(`✅ [${recognitionId}] FINAL part: "${transcript.substring(0, 30)}..."`);
+      } else {
+        newInterimTranscript += transcript;
+        console.log(`⏳ [${recognitionId}] INTERIM: "${transcript.substring(0, 30)}..."`);
+      }
+    }
+
+    // Only update final transcript if we got NEW final results
+    if (newFinalPart.trim()) {
+      finalTranscriptRef.current += newFinalPart;
+      console.log(`💾 [${recognitionId}] Accumulated final: ${finalTranscriptRef.current.length} chars`);
+      console.log(`💾 [${recognitionId}] Last 50 chars: "...${finalTranscriptRef.current.slice(-50)}"`);
+    } else {
+      console.log(`⏸️ [${recognitionId}] No new final results this cycle`);
+    }
+
+    // Update interim
+    interimTranscriptRef.current = newInterimTranscript;
+
+    // Combine and update UI
+    const cleanFinalTranscript = finalTranscriptRef.current.trim();
+    const combinedTranscript = cleanFinalTranscript 
+      ? `${cleanFinalTranscript} ${newInterimTranscript}`.trim()
+      : newInterimTranscript;
+
+    console.log(`📊 [${recognitionId}] Combined length: ${combinedTranscript.length} (${cleanFinalTranscript.length} final + ${newInterimTranscript.length} interim)`);
+
+    setFinalTranscript(cleanFinalTranscript);
+    setInterimTranscript(newInterimTranscript);
+    setTranscription(combinedTranscript);
+
+    if (!isEditingTranscription) {
+      setEditedTranscription(combinedTranscript);
+    }
+  };
+
+  recognition.onerror = (event) => {
+    if (!isCurrentRecognition()) {
+      console.log(`⚠️ [${recognitionId}] Ignoring stale onerror`);
+      return;
+    }
+
+    console.error(`🗣️ [${recognitionId}] Error: ${event.error}`);
+    setIsListening(false);
+
+    const errorMessages = {
+      'no-speech': 'No speech detected. Continue speaking...',
+      'audio-capture': 'Audio capture failed. Check your microphone.',
+      'not-allowed': 'Microphone permission denied.',
+      'network': 'Network error. Check your connection.',
+      'service-not-allowed': 'Speech service not available.',
+      'aborted': 'Speech recognition aborted.',
+      'bad-grammar': 'Speech recognition grammar error.',
+      'language-not-supported': 'Language not supported.'
+    };
+
+    const errorMessage = errorMessages[event.error] || `Error: ${event.error}`;
+
+    // Be lenient with common Android errors
+    if (['no-speech', 'audio-capture'].includes(event.error)) {
+      console.log(`⚠️ [${recognitionId}] Non-critical error, will auto-restart`);
+    } else {
+      setSpeechRecognitionError(errorMessage);
+
+      if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(event.error)) {
+        setLiveTranscriptionEnabled(false);
+        setError(`Speech recognition: ${errorMessage}`);
+      }
+    }
+
+    // 🔥 FIX #7: More aggressive restart on common Android errors
+    if (isAndroid && ['no-speech', 'audio-capture', 'network', 'aborted'].includes(event.error)) {
+      console.log(`🔄 [${recognitionId}] Scheduling restart after error...`);
+      scheduleSpeechRecognitionRestart(1000, `error:${event.error}`);
+    }
+
+    // 🔥 FIX #8: Clear stale instance reference
+    if (recognitionRef.current && recognitionRef.current._instanceId === recognitionId) {
+      recognitionRef.current = null;
+    }
+  };
+
+  recognition.onend = () => {
+    if (!isCurrentRecognition()) {
+      console.log(`⚠️ [${recognitionId}] Ignoring stale onend`);
+      return;
+    }
+
+    console.log(`🗣️ [${recognitionId}] Speech recognition ended`);
+
+    const mediaRecorderState = mediaRecorderRef.current?.state;
+    const shouldRestart = shouldAttemptSpeechRestart();
+
+    console.log(`🔍 [${recognitionId}] MediaRecorder: ${mediaRecorderState}`);
+    console.log(`🔍 [${recognitionId}] Should restart: ${shouldRestart}`);
+    console.log(`🔍 [${recognitionId}] Manual stop: ${manualStopRef.current}`);
+
+    setIsListening(false);
+    
+    // 🔥 FIX #9: DON'T clear interim transcript on end
+    // It might contain valuable partial data
+    
+    // Save current accumulated transcript
+    const cleanTranscript = finalTranscriptRef.current.trim();
+    if (cleanTranscript) {
+      console.log(`💾 [${recognitionId}] Saving accumulated: ${cleanTranscript.length} chars`);
+      setFinalTranscript(cleanTranscript);
+      setTranscription(cleanTranscript);
+      if (!isEditingTranscription) {
+        setEditedTranscription(cleanTranscript);
+      }
+    } else {
+      console.log(`⚠️ [${recognitionId}] No transcript to save yet`);
+    }
+
+    if (shouldRestart) {
+      // 🔥 FIX #10: Longer restart delay for Android
+      const restartDelay = isAndroid ? 1000 : 300;
+
+      console.log(`🔄 [${recognitionId}] Auto-restarting in ${restartDelay}ms...`);
+      scheduleSpeechRecognitionRestart(restartDelay, 'automatic end');
+    } else {
+      console.log(`⏹️ [${recognitionId}] Not restarting (recording stopped or disabled)`);
+    }
+    
+    // 🔥 FIX #11: Clear stale instance reference
+    if (recognitionRef.current && recognitionRef.current._instanceId === recognitionId) {
+      recognitionRef.current = null;
+    }
+  };
+
+  return recognition;
+};
+
+  // ===== Native Android Speech (Cordova/Capacitor plugin) =====
+  const startNativeSpeech = async () => {
+    const plugin = getNativeSpeechPlugin();
+    if (!plugin) {
+      console.warn('Native speech plugin not available');
+      return false;
+    }
+
+    try {
+      // Permission flow
+      await new Promise((resolve) => {
+        try {
+          plugin.requestPermission(() => resolve(true), () => resolve(false));
+        } catch {
+          resolve(true); // Some environments may not require explicit permission
+        }
+      });
+
+      const userLang = navigator.language || 'en-US';
+      console.log(`🎙️ Starting native STT with language: ${userLang}`);
+
+      // Start listening with partial results
+      // Success callback for speech results
+      const onResults = (matches) => {
+        try {
+          // matches can be array or string
+          const text = Array.isArray(matches) ? (matches[0] || '') : (matches?.value || matches || '');
+          
+          if (text && text.trim()) {
+            console.log(`🎙️ Native STT result: "${text}"`);
+            
+            // Append to accumulated transcript
+            if (finalTranscriptRef.current) {
+              finalTranscriptRef.current += ' ' + text;
+            } else {
+              finalTranscriptRef.current = text;
+            }
+            
+            const combined = finalTranscriptRef.current.trim();
+            setFinalTranscript(combined);
+            setTranscription(combined);
+            if (!isEditingTranscription) setEditedTranscription(combined);
+            setIsListening(true);
+            
+            console.log(`💾 Accumulated native transcript: ${combined.length} chars`);
+          } else {
+            console.log('🎙️ Native STT: Empty result received');
+          }
+        } catch (e) {
+          console.error('🎙️ Error processing native speech result:', e);
+        }
+      };
+
+      // Error callback - treat "No match" as non-fatal and restart
+      const onError = (err) => {
+        const errMsg = typeof err === 'string' ? err : (err?.message || JSON.stringify(err));
+        console.log(`🎙️ Native speech event: ${errMsg}`);
+        
+        // "No match" means plugin stopped listening - restart it if still recording
+        if (errMsg === 'No match' || errMsg.includes('no-match') || errMsg.includes('NO_MATCH')) {
+          console.log('⚠️ No speech detected - plugin auto-stopped');
+          
+          // If still recording, restart the listener after brief delay
+          if (isRecordingRef.current && nativeSpeechActiveRef.current) {
+            console.log('🔄 Restarting native STT to continue listening...');
+            setTimeout(() => {
+              if (isRecordingRef.current && nativeSpeechActiveRef.current) {
+                try {
+                  plugin.startListening(onResults, onError, {
+                    language: userLang,
+                    matches: 5,
+                    showPopup: false,
+                    partialResults: true,
+                    prompt: '',
+                  });
+                  console.log('✅ Native STT restarted');
+                } catch (restartErr) {
+                  console.warn('⚠️ Failed to restart native STT:', restartErr);
+                }
+              }
+            }, 300); // Short delay before restart
+          }
+          return; // Don't treat as error
+        }
+        
+        // Other errors are more serious
+        console.error(`❌ Native speech error: ${errMsg}`);
+        setSpeechRecognitionError(`Speech recognition: ${errMsg}`);
+        setIsListening(false);
+        nativeSpeechActiveRef.current = false;
+      };
+
+      // Start the plugin
+      plugin.startListening(
+        onResults,
+        onError,
+        {
+          language: userLang,
+          matches: 5, // Get up to 5 alternatives
+          showPopup: false,
+          partialResults: true, // Request partial results
+          prompt: '', // No popup prompt
+        }
+      );
+
+      // Provide a stop function
+      nativeSpeechStopFnRef.current = () => {
+        try {
+          console.log('🛑 Stopping native speech...');
+          plugin.stopListening(
+            () => console.log('✅ Native speech stopped'),
+            (e) => console.warn('⚠️ Error stopping native speech:', e)
+          );
+        } catch (e) {
+          console.warn('⚠️ Exception stopping native speech:', e);
+        }
+      };
+
+      nativeSpeechActiveRef.current = true;
+      setIsListening(true);
+      console.log('✅ Native speech listener registered');
+      
+      return true;
+    } catch (e) {
+      console.error('❌ Failed to start native speech:', e);
+      setSpeechRecognitionError('Live transcription unavailable on this device');
+      nativeSpeechActiveRef.current = false;
+      return false;
+    }
+  };
+
+  const stopNativeSpeech = () => {
+    try {
+      if (nativeSpeechActiveRef.current && nativeSpeechStopFnRef.current) {
+        nativeSpeechStopFnRef.current();
+      } else {
+        const plugin = getNativeSpeechPlugin();
+        if (plugin) plugin.stopListening(() => {}, () => {});
+      }
+    } catch (e) {
+      console.warn('Error stopping native speech:', e);
+    } finally {
+      nativeSpeechActiveRef.current = false;
+      setIsListening(false);
+    }
+  };
+
+
+
+
+
+
+
+
+  const shouldAttemptSpeechRestart = () => (
+    Boolean(
+      isRecordingRef.current &&
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === 'recording' &&
+      liveTranscriptionEnabled &&
+      !manualStopRef.current
+    )
+  );
+
+  const scheduleSpeechRecognitionRestart = (delay = 500, reason = 'auto-restart') => {
+  // Clear any pending restart
+  if (recognitionRestartTimeoutRef.current) {
+    clearTimeout(recognitionRestartTimeoutRef.current);
+    console.log('🧹 Cleared previous restart timeout');
+  }
+
+  const delayMs = Math.max(0, delay || 0);
+  console.log(`⏱️ Scheduling restart in ${delayMs}ms (reason: ${reason})`);
+  
+  // Check current state
+  console.log('📊 Current state:', {
+    isRecording: isRecordingRef.current,
+    mediaRecorderState: mediaRecorderRef.current?.state,
+    liveTranscriptionEnabled,
+    manualStop: manualStopRef.current,
+    currentTranscriptLength: finalTranscriptRef.current.length
+  });
+
+  const restartTimeout = setTimeout(() => {
+    console.log(`⏰ Restart timeout fired (after ${delayMs}ms)`);
+    
+    // Double-check if we should still restart
+    const shouldRestart = shouldAttemptSpeechRestart();
+    
+    if (shouldRestart) {
+      console.log('▶️ Conditions met - creating new recognition instance...');
+      
+      // Create and start new instance
+      const newRecognition = initializeSpeechRecognition();
+
+      if (newRecognition) {
+        try {
+          newRecognition.start();
+          console.log('✅ New recognition instance started successfully');
+        } catch (restartError) {
+          console.warn('⚠️ Failed to start new recognition:', restartError);
+          
+          // Handle specific errors
+          if (restartError.name === 'InvalidStateError') {
+            console.log('⚠️ Recognition already running - this is usually harmless');
+          } else if (restartError.name === 'NotAllowedError') {
+            console.error('❌ Permission denied - stopping transcription');
+            setLiveTranscriptionEnabled(false);
+            setSpeechRecognitionError('Microphone permission denied');
+          } else {
+            console.error('❌ Unexpected error:', restartError.name, restartError.message);
+            
+            // Try again with longer delay
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const retryDelay = isAndroid ? 2000 : 500;
+            console.log(`🔄 Will retry restart in ${retryDelay}ms...`);
+            scheduleSpeechRecognitionRestart(retryDelay, 'retry after error');
+          }
+        }
+      } else {
+        console.warn('⚠️ Unable to initialize speech recognition for restart');
+      }
+    } else {
+      console.log('⏹️ Not restarting - conditions no longer met');
+      console.log('📊 Final state:', {
+        isRecording: isRecordingRef.current,
+        mediaRecorderState: mediaRecorderRef.current?.state,
+        transcriptionEnabled: liveTranscriptionEnabled,
+        manualStop: manualStopRef.current
+      });
+    }
+    
+    recognitionRestartTimeoutRef.current = null;
+  }, delayMs);
+
+  recognitionRestartTimeoutRef.current = restartTimeout;
+  console.log(`✅ Restart scheduled (timeout ID: ${restartTimeout})`);
+};
+
+
+
+
+
+
+
 
   // Microphone permission check function
   const checkMicrophonePermission = async () => {
-    try {
-      console.log('🎤 Checking microphone permission...');
+    console.log('🎤 checkMicrophonePermission called');
+    console.log('📱 Capacitor.isNativePlatform():', Capacitor.isNativePlatform());
+    console.log('📱 Capacitor.getPlatform():', Capacitor.getPlatform());
+    console.log('📱 window.cordova:', !!window.cordova);
+    console.log('📱 window.cordova.plugins:', !!window.cordova?.plugins);
+    console.log('📱 window.cordova.plugins.permissions:', !!window.cordova?.plugins?.permissions);
+    
+    // For Android native, use Cordova permissions plugin
+    if (
+      Capacitor.isNativePlatform &&
+      Capacitor.isNativePlatform() &&
+      Capacitor.getPlatform &&
+      Capacitor.getPlatform() === 'android'
+    ) {
+      console.log('🎤 Android native detected - checking RECORD_AUDIO permission');
       
+      if (window.cordova?.plugins?.permissions) {
+        try {
+          const permissions = window.cordova.plugins.permissions;
+          const permissionResult = await new Promise((resolve) => {
+            permissions.checkPermission(permissions.RECORD_AUDIO, (status) => {
+              resolve(status);
+            }, (error) => {
+              console.error('❌ Error checking permission:', error);
+              resolve({ hasPermission: false });
+            });
+          });
+          
+          console.log('🎤 Permission check result:', permissionResult);
+          
+          if (permissionResult.hasPermission) {
+            console.log('✅ RECORD_AUDIO permission already granted');
+            setHasPermission(true);
+            setPermissionStatus('granted');
+            setError('');
+            return true;
+          } else {
+            console.log('🎤 RECORD_AUDIO permission not granted, requesting...');
+            const requestResult = await new Promise((resolve) => {
+              permissions.requestPermission(permissions.RECORD_AUDIO, (status) => {
+                resolve(status);
+              }, (error) => {
+                console.error('❌ Error requesting permission:', error);
+                resolve({ hasPermission: false });
+              });
+            });
+            
+            console.log('🎤 Permission request result:', requestResult);
+            
+            if (requestResult.hasPermission) {
+              console.log('✅ RECORD_AUDIO permission granted');
+              setHasPermission(true);
+              setPermissionStatus('granted');
+              setError('');
+              return true;
+            } else {
+              console.log('❌ RECORD_AUDIO permission denied');
+              setHasPermission(false);
+              setPermissionStatus('denied');
+              setError('Microphone permission is required for voice recording. Please enable it in your device settings.');
+              return false;
+            }
+          }
+        } catch (permError) {
+          console.error('❌ Permissions plugin error:', permError);
+          setHasPermission(false);
+          setPermissionStatus('error');
+          setError('Unable to check microphone permissions. Please ensure the app has microphone access in settings.');
+          return false;
+        }
+      } else {
+        console.log('❌ Cordova permissions plugin not available');
+        setHasPermission(false);
+        setPermissionStatus('error');
+        setError('Permissions plugin not available. Please check app installation.');
+        return false;
+      }
+    }
+    
+    // For web browsers, use getUserMedia
+    console.log('🎤 Using getUserMedia for web browser');
+    try {
       const testStream = await navigator.mediaDevices.getUserMedia({ 
         audio: isMobileDevice ? {
           echoCancellation: true,
@@ -363,25 +865,20 @@ const VoiceJournalUpload = ({
           sampleRate: 44100
         }
       });
-      
       testStream.getTracks().forEach(track => track.stop());
-      
       setHasPermission(true);
       setPermissionStatus('granted');
       setError('');
-      console.log('✅ Microphone permission granted');
-      
+      manualStopRef.current = false;
       return true;
     } catch (err) {
-      console.error('❌ Microphone permission denied:', err);
+      console.error('❌ getUserMedia failed:', err);
       setHasPermission(false);
       setPermissionStatus('denied');
-      
       let errorMessage = 'Microphone access required. ';
-      
       if (err.name === 'NotAllowedError') {
         if (isMobileDevice) {
-          errorMessage += 'Please allow microphone permission in your browser settings. On mobile, you may need to refresh the page after granting permission.';
+          errorMessage += 'Please allow microphone permission when prompted. If you denied it, you may need to enable it in your device settings.';
         } else {
           errorMessage += 'Please allow microphone permission and try again.';
         }
@@ -398,7 +895,6 @@ const VoiceJournalUpload = ({
       } else {
         errorMessage += err.message || 'Please check your browser settings and try again.';
       }
-      
       setError(errorMessage);
       return false;
     }
@@ -414,20 +910,102 @@ const VoiceJournalUpload = ({
       setEditedTranscription('');
       setFinalTranscript('');
       setInterimTranscript('');
+      finalTranscriptRef.current = '';
+      interimTranscriptRef.current = '';
+      manualStopRef.current = false;
+      
+      const isAndroid = /Android/i.test(navigator.userAgent);
       
       console.log('🎤 Starting recording process...');
       console.log('📱 Device type:', isMobileDevice ? 'Mobile' : 'Desktop');
+      console.log('🤖 Is Android:', isAndroid);
       console.log('🗣️ Live transcription enabled:', liveTranscriptionEnabled);
+      console.log('🗣️ Speech recognition supported:', speechRecognitionSupported);
       
-      // Check microphone permission first
-      if (hasPermission !== true) {
-        const permitted = await checkMicrophonePermission();
-        if (!permitted) {
-          return;
+      // 🎤 START LIVE TRANSCRIPTION FIRST (CRITICAL for mobile)
+      // Speech recognition MUST be started synchronously from user gesture BEFORE any async operations
+      let speechRecognitionStarted = false;
+      if (liveTranscriptionEnabled) {
+        console.log('🗣️ Attempting to start live transcription IMMEDIATELY...');
+        console.log('🔍 Environment check:', {
+          isAndroid,
+          isNativeAndroid: isNativeAndroid(),
+          hasNativePlugin: Boolean(getNativeSpeechPlugin()),
+          speechRecognitionSupported
+        });
+        
+        // 🔧 SKIP native Android plugin - use post-recording transcription instead
+        // Only skip if we're on NATIVE Android app with plugin, not web browser
+        if (isAndroid && isNativeAndroid() && getNativeSpeechPlugin()) {
+          console.log('📱 Native Android App: Skipping live STT, will transcribe after recording');
+          speechRecognitionStarted = false;
+        } else if (speechRecognitionSupported) {
+          console.log('🌐 Web/Desktop: Initializing Web Speech API for live transcription');
+          const recognition = initializeSpeechRecognition();
+          if (recognition) {
+            try {
+              // 🤖 CRITICAL: Start speech recognition IMMEDIATELY, before ANY await statements
+              recognition.start();
+              speechRecognitionStarted = true;
+              console.log('✅ Web Speech start() called successfully');
+            } catch (speechError) {
+              console.error('❌ Web Speech failed to start:', speechError);
+              let errorMsg = 'Live transcription unavailable. ';
+              if (speechError.name === 'InvalidStateError') {
+                errorMsg += 'Speech recognition already running or not ready.';
+              } else if (speechError.name === 'NotAllowedError') {
+                errorMsg += 'Please allow microphone permission.';
+              } else {
+                errorMsg += 'You can add transcription manually after recording.';
+              }
+              setSpeechRecognitionError(errorMsg);
+              console.log('⚠️ Continuing without live transcription for this recording');
+            }
+          } else {
+            console.warn('⚠️ initializeSpeechRecognition() returned null');
+          }
+        } else {
+          console.log('📝 Live transcription disabled or not supported');
+          console.log('   - liveTranscriptionEnabled:', liveTranscriptionEnabled);
+          console.log('   - speechRecognitionSupported:', speechRecognitionSupported);
         }
       }
       
-      // Mobile-friendly audio constraints
+      // Set a timeout to check if speech recognition actually started
+      if (speechRecognitionStarted) {
+        setTimeout(() => {
+          if (!isListening && (recognitionRef.current || nativeSpeechActiveRef.current)) {
+            console.warn('⚠️ Speech recognition may not have started properly');
+            console.warn('⚠️ Check browser console for permission errors');
+            setSpeechRecognitionError('Live transcription may not be working. You can add transcription manually after recording.');
+          } else if (isListening) {
+            console.log('✅ Speech recognition confirmed running');
+          }
+        }, 2000);
+      }
+      
+      // Check microphone permission first - CRITICAL for Android
+      if (hasPermission !== true) {
+        console.log('🎤 Requesting microphone permission...');
+        const permitted = await checkMicrophonePermission();
+        if (!permitted) {
+          console.error('❌ Microphone permission denied');
+          return;
+        }
+        
+        // 🤖 ANDROID FIX: Add delay after permission grant
+        if (isAndroid) {
+          console.log('🤖 Android detected - waiting 500ms after permission grant...');
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+      
+      // Mobile-friendly audio constraints or Cordova Media setup
+      let mediaRecorder;
+      let cordovaMedia;
+      let audioChunks = [];
+      
+      // Define audio constraints based on device type
       const audioConstraints = isMobileDevice ? {
         audio: {
           echoCancellation: true,
@@ -443,10 +1021,20 @@ const VoiceJournalUpload = ({
         }
       };
       
+      // Try getUserMedia first, even on Android
       console.log('🎤 Audio constraints:', audioConstraints);
       
+      // Request microphone stream
+      console.log('🎤 Requesting getUserMedia...');
       const stream = await navigator.mediaDevices.getUserMedia(audioConstraints);
-      console.log('✅ Microphone stream obtained');
+      console.log('✅ Microphone stream obtained, tracks:', stream.getTracks().length);
+      
+      // Verify stream is active
+      const audioTracks = stream.getAudioTracks();
+      if (audioTracks.length === 0) {
+        throw new Error('No audio tracks found in stream');
+      }
+      console.log('✅ Audio track status:', audioTracks[0].readyState, audioTracks[0].enabled);
       
       streamRef.current = stream;
 
@@ -476,75 +1064,120 @@ const VoiceJournalUpload = ({
       let mimeType = 'audio/webm;codecs=opus';
       
       if (!MediaRecorder.isTypeSupported(mimeType)) {
+        console.log('⚠️ Primary MIME type not supported, checking alternatives...');
         const alternatives = [
           'audio/webm',
           'audio/mp4',
           'audio/wav',
           'audio/ogg',
-          'audio/3gpp'
+          'audio/3gpp',
+          'audio/aac'
         ];
         
         for (const type of alternatives) {
           if (MediaRecorder.isTypeSupported(type)) {
             mimeType = type;
-            console.log('📱 Using fallback MIME type:', type);
+            console.log('📱 Using alternative MIME type:', type);
             break;
           }
         }
+        
+        if (mimeType === 'audio/webm;codecs=opus') {
+          console.error('❌ No supported MIME type found!');
+          throw new Error('No supported audio format found for recording');
+        }
       }
       
-      console.log('🎤 Using MIME type:', mimeType);
+      console.log('🎤 Final MIME type selected:', mimeType);
 
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = mediaRecorder;
+      // 🤖 ANDROID FIX: Create MediaRecorder with explicit options
+      let recorderOptions = { mimeType };
+      
+      // Try with audio bits per second for better Android compatibility
+      if (isAndroid) {
+        try {
+          recorderOptions.audioBitsPerSecond = 128000;
+          console.log('🤖 Android: Setting audioBitsPerSecond to 128000');
+        } catch (e) {
+          console.warn('Could not set audioBitsPerSecond:', e);
+        }
+      }
+      
+      console.log('🎤 Creating MediaRecorder with options:', recorderOptions);
+      const recorder = new MediaRecorder(stream, recorderOptions);
+      mediaRecorder = recorder;
       audioChunksRef.current = [];
+      
+      console.log('✅ MediaRecorder created, state:', recorder.state);
 
-      mediaRecorder.ondataavailable = (event) => {
+      recorder.ondataavailable = (event) => {
+        console.log('📊 Data available:', event.data.size, 'bytes');
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data);
+          console.log('📊 Total chunks:', audioChunksRef.current.length);
         }
       };
 
-      mediaRecorder.onstop = () => {
+      recorder.onstop = async () => {
         console.log('🎤 Recording stopped, creating audio blob...');
+        console.log('📊 Total audio chunks collected:', audioChunksRef.current.length);
+        
+        if (audioChunksRef.current.length === 0) {
+          console.error('❌ No audio data recorded!');
+          setError('No audio data was recorded. Please try again.');
+          return;
+        }
+        
         const blob = new Blob(audioChunksRef.current, { type: mimeType });
+        console.log('✅ Audio blob created:', blob.size, 'bytes, type:', blob.type);
+        
+        if (blob.size === 0) {
+          console.error('❌ Audio blob is empty!');
+          setError('Recording failed - no audio data captured. Please try again.');
+          return;
+        }
+        
         const url = URL.createObjectURL(blob);
         setAudioBlob(blob);
         setAudioUrl(url);
         setStage('review');
-        console.log('✅ Audio blob created:', blob.size, 'bytes');
-      };
+        console.log('✅ Audio URL created, ready for review');
 
-      mediaRecorder.onerror = (event) => {
-        console.error('MediaRecorder error:', event.error);
-        setError('Recording error: ' + event.error);
-      };
-
-      // 🎤 START LIVE TRANSCRIPTION (mobile and desktop)
-      if (liveTranscriptionEnabled && speechRecognitionSupported) {
-        console.log('🗣️ Starting live transcription...');
-        const recognition = initializeSpeechRecognition();
-        if (recognition) {
-          recognitionRef.current = recognition;
-          try {
-            recognition.start();
-            console.log('✅ Live transcription started successfully');
-          } catch (speechError) {
-            console.warn('Speech recognition failed to start:', speechError);
-            setSpeechRecognitionError('Live transcription failed to start. You can still add transcription manually.');
-            setLiveTranscriptionEnabled(false);
-          }
+        // Auto-transcribe on Android (since live STT doesn't work reliably)
+        if (isNativeAndroid() && blob.size > 0) {
+          startTranscription(blob);
         }
-      } else {
-        console.log('📝 Live transcription disabled - manual transcription mode');
-      }
+      };
+
+      recorder.onerror = (event) => {
+        console.error('❌ MediaRecorder error:', event);
+        console.error('Error details:', event.error);
+        setError('Recording error: ' + (event.error?.message || 'Unknown error'));
+      };
+      
+      recorder.onstart = () => {
+        console.log('✅ MediaRecorder started, state:', recorder.state);
+      };
 
       // Start recording
       const recordingInterval = isMobileDevice ? 1000 : 100;
-      mediaRecorder.start(recordingInterval);
+      console.log('🎤 Starting MediaRecorder with', recordingInterval, 'ms intervals...');
+      
+      try {
+        recorder.start(recordingInterval);
+        console.log('✅ MediaRecorder.start() called');
+      } catch (startError) {
+        console.error('❌ Failed to start MediaRecorder:', startError);
+        throw new Error('Failed to start recording: ' + startError.message);
+      }
+      
+      // Set the mediaRecorder reference
+      mediaRecorderRef.current = recorder;
       
       setIsRecording(true);
+      isRecordingRef.current = true;
       setStage('record');
+      console.log('✅ Recording state set to active');
       
       // Start audio level monitoring (desktop only)
       if (!isMobileDevice && analyserRef.current) {
@@ -552,9 +1185,26 @@ const VoiceJournalUpload = ({
       }
 
       console.log('✅ Recording started successfully');
+      
+      // 🤖 ANDROID: Verify recording is actually working
+      if (isAndroid) {
+        setTimeout(() => {
+          if (mediaRecorderRef.current) {
+            console.log('🤖 Android check - MediaRecorder state:', mediaRecorderRef.current.state);
+            console.log('🤖 Android check - Audio chunks:', audioChunksRef.current.length);
+            if (mediaRecorderRef.current.state !== 'recording') {
+              console.error('❌ MediaRecorder not in recording state!');
+              setError('Recording may not be working. Please try again.');
+            }
+          }
+        }, 2000);
+      }
 
     } catch (err) {
       console.error('❌ Error starting recording:', err);
+      console.error('Error name:', err.name);
+      console.error('Error message:', err.message);
+      console.error('Error stack:', err.stack);
       
       let errorMessage = 'Unable to access microphone. ';
       
@@ -585,10 +1235,22 @@ const VoiceJournalUpload = ({
 
   const pauseRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
+      // Cordova Media doesn't support pause/resume, so this is disabled on Android
+      if (mediaRecorderRef.current.cordovaMedia) {
+        console.log('⚠️ Pause not supported with Cordova Media - stopping recording instead');
+        setError('Pause not supported on Android. Recording will stop. You can restart recording.');
+        stopRecording();
+        return;
+      }
+      
       if (!isPaused) {
         mediaRecorderRef.current.pause();
         if (recognitionRef.current) {
           recognitionRef.current.stop();
+        }
+        // Stop native speech if active
+        if (nativeSpeechActiveRef.current) {
+          stopNativeSpeech();
         }
         if (recognitionRestartTimeoutRef.current) {
           clearTimeout(recognitionRestartTimeoutRef.current);
@@ -603,10 +1265,13 @@ const VoiceJournalUpload = ({
         mediaRecorderRef.current.resume();
         // Restart speech recognition
         if (liveTranscriptionEnabled && speechRecognitionSupported) {
-          const recognition = initializeSpeechRecognition();
-          if (recognition) {
-            recognitionRef.current = recognition;
-            recognition.start();
+          if (isNativeAndroid() && getNativeSpeechPlugin()) {
+            startNativeSpeech();
+          } else {
+            const recognition = initializeSpeechRecognition();
+            if (recognition) {
+              recognition.start();
+            }
           }
         }
         setIsPaused(false);
@@ -619,11 +1284,51 @@ const VoiceJournalUpload = ({
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      streamRef.current.getTracks().forEach(track => track.stop());
+      manualStopRef.current = true;
       
+      // Handle Cordova Media recording (if we were using it)
+      if (mediaRecorderRef.current.cordovaMedia) {
+        console.log('🎤 Stopping Cordova Media recording...');
+        mediaRecorderRef.current.stop().then((blob) => {
+          if (blob) {
+            console.log('✅ Cordova Media recording stopped, blob size:', blob.size);
+            setAudioBlob(blob);
+            const url = URL.createObjectURL(blob);
+            setAudioUrl(url);
+            setStage('review');
+            
+            // Start transcription if on Android
+            if (isNativeAndroid() && blob.size > 0) {
+              startTranscription(blob);
+            }
+          } else {
+            console.error('❌ No blob returned from Cordova Media');
+            setError('Recording failed - no audio data captured.');
+          }
+        }).catch((error) => {
+          console.error('❌ Error stopping Cordova Media recording:', error);
+          setError('Error stopping recording: ' + error.message);
+        });
+      } else {
+        // Handle MediaRecorder
+        console.log('🎤 Stopping MediaRecorder...');
+        try {
+          mediaRecorderRef.current.stop();
+          console.log('✅ MediaRecorder.stop() called');
+        } catch (stopError) {
+          console.error('❌ Error stopping MediaRecorder:', stopError);
+          setError('Error stopping recording: ' + stopError.message);
+        }
+      }
+      
+      // Clean up common resources
       if (recognitionRef.current) {
         recognitionRef.current.stop();
+        recognitionRef.current = null;
+      }
+      // Stop native speech if active
+      if (nativeSpeechActiveRef.current) {
+        stopNativeSpeech();
       }
       
       if (recognitionRestartTimeoutRef.current) {
@@ -631,6 +1336,7 @@ const VoiceJournalUpload = ({
       }
       
       setIsRecording(false);
+      isRecordingRef.current = false;
       setIsPaused(false);
       setIsListening(false);
       clearInterval(timerRef.current);
@@ -645,12 +1351,21 @@ const VoiceJournalUpload = ({
       
       setAudioLevel(0);
 
+      // For MediaRecorder, the onstop handler will handle the rest
+      if (!mediaRecorderRef.current.cordovaMedia) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+
       // If no transcription was captured and live transcription was enabled, suggest manual entry
       if (liveTranscriptionEnabled && !finalTranscript.trim() && !transcription.trim()) {
         console.log('📝 No transcription captured, enabling manual mode');
         setIsEditingTranscription(true);
         setEditedTranscription('');
       }
+    } else {
+      console.warn('⚠️ stopRecording called but no active recording found');
+      console.log('mediaRecorderRef.current:', mediaRecorderRef.current);
+      console.log('isRecording:', isRecording);
     }
   };
 
@@ -682,12 +1397,116 @@ const VoiceJournalUpload = ({
     setSpeechRecognitionError('');
     setStage('record');
     setIsEditingTranscription(false);
+    isRecordingRef.current = false;
+    manualStopRef.current = false;
+    finalTranscriptRef.current = '';
+    interimTranscriptRef.current = '';
   };
 
-  // Handle transcription editing
-  const startEditingTranscription = () => {
-    setIsEditingTranscription(true);
-    setEditedTranscription(transcription || '');
+  // Start transcription for Android recordings
+  const startTranscription = async (blob) => {
+    console.log('🎙️ Starting post-recording transcription...');
+    setIsTranscribing(true);
+    setTranscriptionProgress(10);
+    
+    let audioUrl = null;
+    
+    try {
+      // Upload to Firebase Storage first
+      const storage = (await import('firebase/storage')).default;
+      const { getStorage, ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
+      
+      setTranscriptionProgress(30);
+      
+      const storageRef = ref(
+        getStorage(),
+        `transcriptions/${currentUser.uid}/${Date.now()}.webm`
+      );
+      
+      console.log('📤 Uploading audio to Firebase Storage...');
+      await uploadBytes(storageRef, blob);
+      setTranscriptionProgress(50);
+      
+      audioUrl = await getDownloadURL(storageRef);
+      console.log('✅ Audio uploaded, getting transcription...');
+      console.log('🔗 Audio URL:', audioUrl);
+      setTranscriptionProgress(70);
+      
+      // Call Firebase Function for transcription (use configured instance to avoid CORS/region issues)
+      const { httpsCallable } = await import('firebase/functions');
+      const { functions: appFunctions } = await import('../../config/firebase');
+      const transcribeAudio = httpsCallable(appFunctions, 'transcribeAudio');
+      
+      const result = await transcribeAudio({ audioUrl });
+      setTranscriptionProgress(90);
+
+      if (result.data && result.data.transcription) {
+        const text = result.data.transcription;
+        console.log('✅ Transcription complete:', text.length, 'chars (callable)');
+        setTranscription(text);
+        setEditedTranscription(text);
+        setFinalTranscript(text);
+        finalTranscriptRef.current = text;
+        setTranscriptionProgress(100);
+      } else {
+        throw new Error('No transcription returned');
+      }
+    } catch (transcribeError) {
+      console.error('❌ Auto-transcription failed (callable):', transcribeError);
+      // Fallback: call explicit HTTP endpoint with CORS and ID token
+      try {
+        if (!audioUrl) {
+          throw new Error('No audio URL available for fallback');
+        }
+        
+        setTranscriptionProgress(80);
+        console.log('🌐 Trying HTTP fallback to transcribeAudioHttp...');
+        console.log('🔗 Using audio URL:', audioUrl);
+        
+        const { getAuth } = await import('firebase/auth');
+        const idToken = await getAuth().currentUser.getIdToken();
+        const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+        const httpUrl = `https://us-central1-${projectId}.cloudfunctions.net/transcribeAudioHttp`;
+
+        console.log('📡 Calling:', httpUrl);
+        console.log('📦 Body:', JSON.stringify({ audioUrl }));
+
+        const resp = await fetch(httpUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${idToken}`
+            },
+            body: JSON.stringify({ audioUrl })
+          });
+
+        if (!resp.ok) {
+          const txt = await resp.text();
+          throw new Error(`HTTP ${resp.status}: ${txt}`);
+        }
+
+        const data = await resp.json();
+        setTranscriptionProgress(90);
+        if (data && data.transcription) {
+          const text = data.transcription;
+          console.log('✅ Transcription complete:', text.length, 'chars (HTTP fallback)');
+          setTranscription(text);
+          setEditedTranscription(text);
+          setFinalTranscript(text);
+          finalTranscriptRef.current = text;
+          setTranscriptionProgress(100);
+        } else {
+          throw new Error('No transcription returned from HTTP endpoint');
+        }
+      } catch (httpErr) {
+        console.error('❌ HTTP fallback transcription failed:', httpErr);
+        setError('Auto-transcription failed. You can enter text manually.');
+        setIsEditingTranscription(true);
+      }
+    } finally {
+      setIsTranscribing(false);
+      setTranscriptionProgress(0);
+    }
   };
 
   const saveTranscriptionEdit = () => {
@@ -703,6 +1522,11 @@ const VoiceJournalUpload = ({
   const cancelTranscriptionEdit = () => {
     setEditedTranscription(transcription);
     setIsEditingTranscription(false);
+  };
+
+  const startEditingTranscription = () => {
+    setEditedTranscription(transcription);
+    setIsEditingTranscription(true);
   };
 
   // 🎤 NEW: Toggle live transcription
@@ -823,15 +1647,15 @@ const VoiceJournalUpload = ({
       </div>
 
       <div className="voice-content">
-        {/* Permission Check */}
-        {hasPermission === false && (
+        {/* Permission Check - Show if explicitly false OR null (unknown) */}
+        {(hasPermission === false || hasPermission === null) && (
           <div className="voice-permission-card">
             <div className="voice-permission-content">
               <Shield size={24} className="voice-permission-icon" />
               <h3>Microphone Access Required</h3>
               <p>
                 {isMobileDevice 
-                  ? 'This app needs microphone access to record your voice journal. On mobile devices, please allow microphone permission when prompted.'
+                  ? 'This app needs microphone access to record your voice journal. Tap the button below to grant permission when prompted.'
                   : 'This app needs microphone access to record your voice journal.'
                 }
               </p>
@@ -842,23 +1666,22 @@ const VoiceJournalUpload = ({
                 <Mic size={16} />
                 Allow Microphone Access
               </button>
-              {isMobileDevice && (
+              {isMobileDevice && hasPermission === false && (
                 <p className="voice-permission-mobile-note">
-                  📱 If permission is denied, you may need to refresh the page after enabling microphone access in your browser settings.
+                  📱 If permission was denied, you may need to enable microphone access in your device settings, then refresh this page.
                 </p>
               )}
             </div>
           </div>
         )}
 
-        {/* 🎤 NEW: Live Transcription Toggle */}
-        {hasPermission !== false && speechRecognitionSupported && (
+        {/* 🎤 NEW: Live Transcription Toggle - Desktop only - ONLY show when permission granted */}
+        {hasPermission === true && speechRecognitionSupported && !isNativeAndroid() && (
           <div className={`voice-transcription-toggle ${themeClass}`}>
             <div className="voice-transcription-toggle-content">
               <div className="voice-transcription-toggle-info">
                 <Headphones size={16} />
                 <span>Live Transcription</span>
-                {isMobileDevice && <span className="voice-mobile-badge">📱 Mobile Supported!</span>}
               </div>
               <button
                 onClick={toggleLiveTranscription}
@@ -879,17 +1702,51 @@ const VoiceJournalUpload = ({
             </p>
           </div>
         )}
+        
+        {/* 🦊 Firefox: Show browser compatibility notice */}
+        {hasPermission === true && !speechRecognitionSupported && /Firefox/i.test(navigator.userAgent) && (
+          <div className="voice-error-card" style={{ background: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.3)' }}>
+            <div className="voice-error-content">
+              <AlertCircle size={16} style={{ color: '#3b82f6' }} />
+              <div style={{ flex: 1 }}>
+                <strong style={{ color: '#3b82f6', display: 'block', marginBottom: '4px' }}>
+                  🦊 Live Transcription Not Available in Firefox
+                </strong>
+                <span className="voice-error-text" style={{ color: '#cbd5e1' }}>
+                  Firefox doesn't support the Web Speech API. You can still record your voice and add transcription manually, 
+                  or use <strong>Chrome</strong>, <strong>Edge</strong>, or <strong>Safari</strong> for automatic live transcription.
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* 🤖 Android: Show post-recording transcription notice */}
+        {hasPermission === true && isNativeAndroid() && (
+          <div className={`voice-transcription-toggle ${themeClass}`}>
+            <div className="voice-transcription-toggle-content">
+              <div className="voice-transcription-toggle-info">
+                <Headphones size={16} />
+                <span>AI Transcription</span>
+                <span className="voice-mobile-badge">🤖 Powered by OpenAI Whisper</span>
+              </div>
+            </div>
+            <p className="voice-transcription-toggle-description">
+              ✨ Your recording will be automatically transcribed after you stop
+            </p>
+          </div>
+        )}
 
         {/* Prompt Display */}
-        {prompt && hasPermission !== false && (
+        {prompt && hasPermission === true && (
           <div className={`voice-prompt-card ${themeClass}`}>
             <h3 className={`voice-prompt-label ${themeClass}`}>Today's Voice Prompt</h3>
             <p className={`voice-prompt-text ${themeClass}`}>"{prompt}"</p>
           </div>
         )}
 
-        {/* Live Transcription Status */}
-        {isRecording && liveTranscriptionEnabled && (
+        {/* Live Transcription Status - Desktop only */}
+        {isRecording && liveTranscriptionEnabled && !isNativeAndroid() && (
           <div className={`voice-recognition-status ${isListening ? 'listening' : 'not-listening'}`}>
             <div className="voice-recognition-status-content">
               <Volume2 size={16} />
@@ -899,13 +1756,22 @@ const VoiceJournalUpload = ({
                   '⏸️ Transcription paused'
                 }
               </span>
-              {isMobileDevice && <span className="voice-mobile-indicator">📱</span>}
+            </div>
+          </div>
+        )}
+        
+        {/* Android: Show processing notice */}
+        {isRecording && isNativeAndroid() && (
+          <div className="voice-recognition-status listening">
+            <div className="voice-recognition-status-content">
+              <Mic size={16} />
+              <span>🎙️ Recording... (AI transcription after you stop)</span>
             </div>
           </div>
         )}
 
         {/* Recording Interface */}
-        {hasPermission !== false && (
+        {hasPermission === true && (
           <div className={`voice-recording-card ${themeClass}`}>
             <div className="voice-recording-content">
               {stage === 'record' && !audioUrl && (
@@ -930,6 +1796,7 @@ const VoiceJournalUpload = ({
                         <button
                           onClick={pauseRecording}
                           className="voice-control-button pause"
+                          disabled={isNativeAndroid()}
                         >
                           {isPaused ? <Play size={24} /> : <Pause size={24} />}
                         </button>
@@ -947,9 +1814,16 @@ const VoiceJournalUpload = ({
                         <div className={`voice-status-indicator ${isPaused ? 'paused' : 'recording'}`} />
                         <span className="voice-status-text">
                           {isPaused ? 'Paused' : 'Recording'}
+                          {isNativeAndroid() && ' (Pause not available on Android)'}
                         </span>
                         <Clock size={16} />
                         <span className="voice-duration">{formatTime(recordingTime)}</span>
+                        {/* 🤖 Android recording indicator */}
+                        {isMobileDevice && (
+                          <span className="voice-mobile-recording-badge">
+                            {/Android/i.test(navigator.userAgent) ? '🤖 Android' : '📱 Mobile'}
+                          </span>
+                        )}
                       </div>
                       
                       {/* Audio Level Indicator - Desktop only */}
@@ -1004,8 +1878,34 @@ const VoiceJournalUpload = ({
           </div>
         )}
 
-        {/* Real-time Transcription Display */}
-        {hasPermission !== false && (transcription || isRecording) && (
+        {/* Android: Show transcription progress */}
+        {isTranscribing && isNativeAndroid() && (
+          <div className={`voice-transcription-card ${themeClass}`}>
+            <div className="voice-transcription-header">
+              <div className="voice-transcription-status">
+                <Volume2 size={16} className="text-blue-500" />
+                <span>🤖 AI Transcription in Progress...</span>
+              </div>
+            </div>
+            <div className={`voice-transcription-content ${themeClass}`}>
+              <div className="voice-transcription-progress">
+                <div 
+                  className="voice-transcription-progress-bar"
+                  style={{ width: `${transcriptionProgress}%` }}
+                />
+              </div>
+              <p className={`voice-transcription-text ${themeClass}`}>
+                {transcriptionProgress < 30 && '📤 Uploading audio...'}
+                {transcriptionProgress >= 30 && transcriptionProgress < 70 && '☁️ Sending to OpenAI Whisper...'}
+                {transcriptionProgress >= 70 && transcriptionProgress < 100 && '✨ Processing transcription...'}
+                {transcriptionProgress === 100 && '✅ Complete!'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Real-time Transcription Display - Desktop or completed Android transcription */}
+        {hasPermission === true && (transcription || (isRecording && !isNativeAndroid())) && (
           <div className={`voice-transcription-card ${themeClass}`}>
             <div className="voice-transcription-header">
               <div className="voice-transcription-status">
@@ -1101,7 +2001,7 @@ const VoiceJournalUpload = ({
         )}
 
         {/* Submit Button */}
-        {audioBlob && hasPermission !== false && (
+        {audioBlob && hasPermission === true && (
           <button
             onClick={handleSubmit}
             disabled={!transcription.trim() || isEditingTranscription}
@@ -1112,42 +2012,6 @@ const VoiceJournalUpload = ({
           </button>
         )}
 
-        {/* Enhanced Tips for Voice Journaling */}
-        <div className="voice-tips-section">
-          <h4 className={`voice-tips-title ${themeClass}`}>
-            Voice Journaling Tips
-            {isMobileDevice && <span className="voice-tips-mobile-badge">📱 Mobile</span>}
-          </h4>
-          <ul className="voice-tips-list">
-            <li className={`voice-tips-item ${themeClass}`}>• Find a quiet space for the best recording quality</li>
-            <li className={`voice-tips-item ${themeClass}`}>• Speak naturally and let emotions come through your voice</li>
-            {liveTranscriptionEnabled ? (
-              <li className={`voice-tips-item ${themeClass}`}>• 🗣️ Live transcription works on both mobile and desktop</li>
-            ) : (
-              <li className={`voice-tips-item ${themeClass}`}>• You can add transcription manually after recording</li>
-            )}
-            <li className={`voice-tips-item ${themeClass}`}>• Take pauses when you need time to think - silence is okay</li>
-            <li className={`voice-tips-item ${themeClass}`}>• You can edit the transcription before submitting</li>
-            <li className={`voice-tips-item ${themeClass}`}>• 🎤 AI will analyze both your words and vocal expressions</li>
-            {isMobileDevice && (
-              <li className={`voice-tips-item ${themeClass}`}>• 📱 Works best on secure connections (HTTPS)</li>
-            )}
-          </ul>
-        </div>
-
-        {/* Voice analysis preview */}
-        {transcription && !isRecording && transcription.trim() && (
-          <div className={`voice-analysis-preview ${themeClass}`}>
-            <h4 className="voice-analysis-title">What Claude AI will analyze:</h4>
-            <ul className="voice-analysis-list">
-              <li className={`voice-analysis-item ${themeClass}`}>• Emotional tone and authenticity in your spoken words</li>
-              <li className={`voice-analysis-item ${themeClass}`}>• Natural flow and spontaneity of your voice reflection</li>
-              <li className={`voice-analysis-item ${themeClass}`}>• Courage and vulnerability in vocal self-expression</li>
-              <li className={`voice-analysis-item ${themeClass}`}>• Personal growth insights from your spoken thoughts</li>
-              <li className={`voice-analysis-item ${themeClass}`}>• Patterns and themes in your voice journaling journey</li>
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -53,6 +53,7 @@ import AIPersonDescription from '../components/analytics/AIPersonDescription';
 
 // ✅ Import the KairosLoader component
 import KairosLoader from '../components/common/KairosLoader';
+import TopBar from '../components/common/TopBar';
 
 // Import utilities for data processing
 import { extractThemesFromEntries, extractEmotionData } from '../utils/textProcessing';
@@ -161,44 +162,81 @@ const JournalAnalyticsDashboard = ({ onBack, navigateToScreen }) => {
       loadProgressReport();
     }
   }, [currentUser, selectedJourney, statistics.isEmpty, statsLoading]);
+
+  const LOADING_MESSAGES = {
+  initial: {
+    message: "Loading Analytics",
+    subMessage: "Gathering your journal entries..."
+  },
+  analyzing: {
+    message: "Analyzing Patterns",
+    subMessage: "Discovering insights from your writing..."
+  },
+  generating: {
+    message: "Generating Insights",
+    subMessage: "Creating your personalized report..."
+  },
+  complete: {
+    message: "Almost Ready",
+    subMessage: "Finalizing your analytics..."
+  }
+};
+
+const getLoadingMessage = (stage, progress) => {
+  if (progress >= 75) return LOADING_MESSAGES.complete;
+  if (progress >= 50) return LOADING_MESSAGES.generating;
+  if (progress >= 25) return LOADING_MESSAGES.analyzing;
+  return LOADING_MESSAGES.initial;
+};
   
   // ✅ SIMPLIFIED: Refresh function with enhanced loading feedback
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    setLoadingStage('Refreshing your analytics...');
-    setLoadingProgress(0);
-    
-    try {
-      // Clear analytics caches to force refresh
-      if (apiCacheService) {
-        console.log('🧹 Clearing analytics cache');
-        setLoadingStage('Clearing cache...');
-        setLoadingProgress(20);
-        apiCacheService.invalidateCacheByPrefix(`analytics_${currentUser.uid}`);
-      }
-      
-      // Refresh centralized statistics
-      setLoadingStage('Reloading journal entries...');
-      setLoadingProgress(40);
-      await refreshStatistics();
-      
-      // Regenerate progress report
-      setLoadingStage('Regenerating insights...');
-      setLoadingProgress(70);
-      const report = await generateProgressReport(currentUser.uid, selectedJourney);
-      setProgressReport(report);
-      
-      setLoadingProgress(100);
-      setError(null);
-    } catch (err) {
-      console.error('Error refreshing analytics data:', err);
-      setError('Failed to refresh analytics data. Please try again.');
-    } finally {
-      setIsRefreshing(false);
-      setLoadingStage('');
-      setLoadingProgress(0);
+  setIsRefreshing(true);
+  setLoadingStage('Starting refresh...');
+  setLoadingProgress(0);
+  
+  try {
+    // Stage 1: Clear cache
+    if (apiCacheService) {
+      console.log('🧹 Clearing analytics cache');
+      setLoadingStage('Clearing cache...');
+      setLoadingProgress(15);
+      await new Promise(resolve => setTimeout(resolve, 300)); // Brief pause for UX
+      apiCacheService.invalidateCacheByPrefix(`analytics_${currentUser.uid}`);
     }
-  };
+    
+    // Stage 2: Reload entries
+    setLoadingStage('Reloading journal entries...');
+    setLoadingProgress(35);
+    await new Promise(resolve => setTimeout(resolve, 200));
+    await refreshStatistics();
+    
+    // Stage 3: Process data
+    setLoadingStage('Processing your data...');
+    setLoadingProgress(60);
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    // Stage 4: Generate insights
+    setLoadingStage('Generating fresh insights...');
+    setLoadingProgress(80);
+    const report = await generateProgressReport(currentUser.uid, selectedJourney);
+    setProgressReport(report);
+    
+    // Stage 5: Complete
+    setLoadingProgress(100);
+    setLoadingStage('');
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    setError(null);
+  } catch (err) {
+    console.error('Error refreshing analytics data:', err);
+    setError('Failed to refresh analytics data. Please try again.');
+  } finally {
+    setIsRefreshing(false);
+    setLoadingStage('');
+    setLoadingProgress(0);
+  }
+};
   
   // ✅ SIMPLIFIED: Stats calculation using centralized data
   const calculateDisplayStats = () => {
@@ -620,7 +658,7 @@ const JournalAnalyticsDashboard = ({ onBack, navigateToScreen }) => {
               .slice(0, 3)
               .map((entry, index) => (
                 <div 
-                  key={entry.day || index} 
+                  key={`${entry.pathId}-${entry.day}-${index}`} 
                   className="entry-item"
                   onClick={() => navigateToScreen('daily', { day: entry.day, pathId: entry.pathId })}
                 >
@@ -827,46 +865,44 @@ const JournalAnalyticsDashboard = ({ onBack, navigateToScreen }) => {
   
   return (
     <div className={`analytics-dashboard ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
-      {/* ✅ NEW: KairosLoader replaces the old loading state */}
       {shouldShowLoader && (
         <KairosLoader
           size="large"
           fullScreen={true}
-          message={loadingStage || "Analyzing your journal..."}
+          message={
+            loadingStage || 
+            getLoadingMessage(loadingStage, loadingProgress).message
+          }
           subMessage={
             loadingStage ? "This may take a moment" : 
-            statsLoading ? "Loading your entries" : 
-            "Preparing insights"
+            getLoadingMessage(loadingStage, loadingProgress).subMessage
           }
-          showProgress={loadingProgress > 0}
+          showProgress={loadingProgress > 0 || isRefreshing}
           progress={loadingProgress}
+          variant="detailed"
         />
       )}
+      
+      {/* Top Bar */}
+      <TopBar 
+        title="Analytics"
+        subtitle="Discover insights from your journaling"
+        colorClass="analytics-color"
+        actions={
+          <button 
+            onClick={handleRefresh}
+            className={`icon-button ${isRefreshing ? 'refreshing' : ''}`}
+            disabled={isRefreshing}
+            aria-label="Refresh analytics"
+          >
+            <RefreshCw size={18} />
+          </button>
+        }
+      />
       
       {/* Mobile-native header */}
       <div className="dashboard-header">
         <div className="header-content">
-          <div className="header-top">
-            <h1 className="dashboard-title">
-              <BarChart2 className="title-icon" />
-              Analytics
-            </h1>
-            <div className="header-actions">
-              <button 
-                onClick={handleRefresh}
-                className={`header-action-btn ${isRefreshing ? 'refreshing' : ''}`}
-                disabled={isRefreshing}
-                aria-label="Refresh analytics"
-              >
-                <RefreshCw size={18} />
-              </button>
-            </div>
-          </div>
-          
-          <p className="dashboard-subtitle">
-            Discover insights and patterns in your journaling practice
-          </p>
-          
           {/* Analysis Info Bar */}
           <div className="analysis-info-bar">
             <div className="analysis-info-item">

@@ -165,44 +165,82 @@ export const analyzeVoiceJournalEntry = async (
     const voiceInstructions = getEnhancedVoicePathInstructions(pathId);
     
     // Enhanced system prompt for voice analysis
-    const systemPrompt = `You are Καιρός, an empathetic AI guide analyzing a voice journal entry. Your role is to provide deep, meaningful insights that honor the courage of spoken self-reflection.
+    const systemPrompt = `You are Καιρός, a masterful listener and guide who specializes in the transformative power of spoken self-reflection. You understand that voice journaling is an act of profound courage—giving sound to one's inner truth.
 
-CONTEXT:
-- User: ${userProfile?.displayName || 'Journaler'} (${ageGroup} age group)
-- Journey Day: ${day} of ${pathId}
-- Today's Prompt: "${prompt}"
-- Theme: ${theme}
+YOUR IDENTITY:
+You're witnessing someone speaking their truth into existence. Voice journaling bypasses the mind's editorial filter, allowing raw, authentic expression. This is sacred work.
+
+CURRENT SESSION CONTEXT:
+- Journaler: ${userProfile?.displayName || 'Friend'} (${ageGroup})
+- Journey Stage: Day ${day} of "${pathId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}"
+- Current Theme: "${theme}"
+- Guiding Question: "${prompt}"
 ${voiceInstructions}
 ${previousContext}
 ${continuityInsights}
 
-VOICE ANALYSIS PRINCIPLES:
-1. COURAGE RECOGNITION: Speaking thoughts aloud requires vulnerability - acknowledge this bravery
-2. VOCAL AUTHENTICITY: Notice emotional undertones, pauses, and the raw honesty of spoken words
-3. STREAM OF CONSCIOUSNESS: Value the natural flow and spontaneity unique to voice journaling
-4. EMOTIONAL RESONANCE: Identify feelings that emerge through vocal expression
-5. TRANSFORMATIVE POTENTIAL: Highlight how speaking truths can catalyze personal growth
-6. GENTLE GUIDANCE: Offer supportive, non-judgmental observations that encourage continued practice
-
-TRANSCRIPTION TO ANALYZE:
+🎙️ THEIR SPOKEN WORDS:
 "${transcription}"
 
-${voiceMetadata.duration ? `Voice Duration: ${Math.round(voiceMetadata.duration / 60)} minutes ${voiceMetadata.duration % 60} seconds` : ''}
+${voiceMetadata.duration ? `⏱️ They spoke for ${Math.floor(voiceMetadata.duration / 60)} minutes ${voiceMetadata.duration % 60} seconds` : ''}
+${voiceMetadata.wordCount ? `📝 ${voiceMetadata.wordCount} words of authentic expression` : ''}
 
-Provide a deeply personalized analysis that feels like it comes from a wise, caring mentor who truly heard their words.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Respond with JSON only:
+VOICE ANALYSIS MASTERY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. **HONOR THE COURAGE**
+   Speaking thoughts aloud is vulnerable. Acknowledge this bravery specifically and authentically.
+
+2. **LISTEN FOR AUTHENTICITY**
+   • Notice the raw honesty of unfiltered speech
+   • Identify emotional undertones in their word choices
+   • Value stream-of-consciousness revelations
+   • Spot moments where their true self emerges
+
+3. **RECOGNIZE VOCAL PATTERNS**
+   • Repetitions signal importance (what did they emphasize?)
+   • Pauses reveal processing moments
+   • Language shifts show emotional transitions
+   • First-person present tense = authentic connection
+
+4. **TRANSFORMATIVE POWER**
+   Speaking changes us. Highlight how voicing these thoughts might:
+   • Make the invisible visible
+   • Create distance for observation
+   • Solidify insights through articulation
+   • Build self-trust and authenticity
+
+5. **CONTINUITY & GROWTH**
+   If they've done voice entries before:
+   • Notice evolution in comfort level
+   • Celebrate increased vulnerability
+   • Track themes across sessions
+   • Acknowledge their developing voice
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**RESPONSE STANDARDS:**
+✓ Use "you" and "your" - make it deeply personal
+✓ Quote specific phrases they said (shows you truly listened)
+✓ Name the emotions you hear in their words
+✓ Avoid generic praise - be specific about THEIR courage
+✓ Write like a wise friend who just listened intently
+✓ Balance validation with gentle, loving challenge
+
+**RESPOND WITH JSON ONLY:**
 {
-  "summary": "2-3 warm sentences using 'you' - capture the essence of their spoken reflection and acknowledge their vocal courage",
+  "summary": "2-3 powerful sentences that show you truly HEARD them. Quote a phrase they said. Acknowledge both the content AND the courage of speaking it aloud.",
   "insights": [
-    "Deep insight about their emotional state or personal truth revealed through voice",
-    "Pattern or theme that emerged in their spoken words",
-    "Growth opportunity or strength demonstrated in their vocal expression"
+    "What their words revealed about their inner world (be specific - quote them)",
+    "A pattern or emotional theme that emerged through their voice (name it clearly)",
+    "The strength or growth edge they demonstrated by speaking this truth"
   ],
-  "reflectionQuestion": "One profound question that invites deeper exploration of what they shared",
-  "affirmation": "Heartfelt statement that validates their experience and encourages continued voice journaling",
-  "practicalAction": "Specific, achievable suggestion for their next voice journaling session or daily life",
-  "voiceObservations": "Brief, supportive note about their speaking style, emotional tone, or progress in vocal self-expression"
+  "reflectionQuestion": "ONE question that takes them deeper into what they just discovered by speaking aloud. Make it specific to something they said.",
+  "affirmation": "Heartfelt recognition of THEIR specific act of vocal courage. Not generic. Make them feel truly seen and heard.",
+  "practicalAction": "One small action for their next voice session or daily life, rooted in today's spoken insights. Make it specific and doable.",
+  "voiceObservations": "Brief, supportive note about their speaking style, emotional authenticity, or growth in vocal self-expression. Be specific about what you noticed in THIS entry."
 }`;
 
     const requestContent = [{
@@ -332,7 +370,24 @@ export const getPreviousVoiceEntries = async (userId, pathId = 'all') => {
     return entries.sort((a, b) => a.day - b.day);
   } catch (error) {
     console.error('Error getting previous voice entries:', error);
-    throw new Error('Failed to get previous voice entries: ' + error.message);
+    // Try REST fallback if permission denied or network transport issues
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) throw error;
+      const idToken = await user.getIdToken();
+      const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+      const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${userId}/voice_entries`;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${idToken}` }, method: 'GET' });
+      if (!res.ok) throw new Error('REST fallback failed with status ' + res.status);
+      const data = await res.json();
+      const docs = data.documents || [];
+      const restEntries = docs.map(d => ({ id: d.name.split('/').pop(), ...convertFirestoreFields(d.fields) }));
+      return restEntries.filter(e => pathId === 'all' || !e.pathId || e.pathId === pathId).sort((a, b) => a.day - b.day);
+    } catch (restErr) {
+      console.error('REST fallback for voice entries failed:', restErr);
+      throw new Error('Failed to get previous voice entries: ' + error.message);
+    }
   }
 };
 
@@ -594,41 +649,85 @@ export const analyzeJournalEntry = async (
       : getEnhancedRegularPathInstructions(pathId);
     
     // Enhanced system prompt for regular analysis
-    const systemPrompt = `You are Καιρός, a wise and empathetic AI guide analyzing a ${isVisual ? 'visual' : 'written'} journal entry. Your role is to provide profound, personalized insights that support the user's journey of self-discovery.
+    const systemPrompt = `You are Καιρός, a masterful AI guide with decades of wisdom in psychology, personal development, and transformative coaching. You analyze journal entries with the depth of Carl Rogers' empathy, the insight of James Clear's habit wisdom, and the compassion of Brené Brown.
 
-CONTEXT:
-- User: ${userProfile?.displayName || 'Journaler'} (${ageGroup} age group)
-- Journey Day: ${day} of ${pathId}
-- Today's Prompt: "${prompt}"
-- Theme: ${theme}
+YOUR IDENTITY:
+You are not just analyzing text—you're witnessing a brave act of self-discovery. Each journal entry represents courage, vulnerability, and a commitment to growth. Honor this.
+
+CURRENT SESSION CONTEXT:
+- Journaler: ${userProfile?.displayName || 'Friend'} (${ageGroup})
+- Journey Stage: Day ${day} of "${pathId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}"
+- Current Theme: "${theme}"
+- Today's Guiding Question: "${prompt}"
 ${pathInstructions}
 ${previousContext}
 ${journeyProgress}
-${extractedText ? `\nWRITTEN CONTENT:\n"${extractedText}"` : ''}
+${extractedText ? `\n📝 THEIR AUTHENTIC VOICE:\n"${extractedText}"` : ''}
 
-ANALYSIS PRINCIPLES:
-1. DEEP EMPATHY: Respond as a caring mentor who truly sees and understands them
-2. PERSONALIZATION: Reference specific details from their entry to show attentive reading
-3. GROWTH FOCUS: Highlight progress, patterns, and opportunities for development
-4. GENTLE CHALLENGE: Ask questions that lovingly push them toward deeper insight
-5. PRACTICAL WISDOM: Offer actionable suggestions rooted in their actual experience
-6. AFFIRMATIVE SUPPORT: Validate their journey while encouraging continued exploration
+YOUR ANALYTICAL APPROACH:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-${isVisual ? 'VISUAL ANALYSIS FOCUS:\n- Interpret colors, composition, and artistic choices as emotional language\n- Notice what their creative expression reveals about their inner world\n- Value the courage required to express through visual means' : ''}
+1. **DEEP LISTENING** 
+   → Read between the lines. Notice what's said AND unsaid
+   → Identify emotional undercurrents, hidden patterns, breakthrough moments
+   → Honor their unique voice and perspective
 
-Provide an analysis that feels like it comes from a wise friend who deeply cares about their growth.
+2. **PATTERN RECOGNITION**
+   → Connect this entry to their broader journey arc
+   → Spot evolving themes, shifts in self-awareness, growth markers
+   → Notice resistance, breakthroughs, or recurring thoughts
 
-Respond with JSON only:
+3. **PERSONALIZED WISDOM**
+   → Speak directly to THEM, not to "users" or "people"
+   → Reference specific words, phrases, or ideas from their entry
+   → Make them feel truly seen and understood
+
+4. **TRANSFORMATIVE QUESTIONING**
+   → Ask questions that create "aha!" moments
+   → Challenge assumptions gently, with love
+   → Open doors to deeper self-understanding
+
+5. **ACTIONABLE INSIGHT**
+   → Suggest small, meaningful actions rooted in their reality
+   → Focus on what they CAN do, not what they should do
+   → Make growth feel possible, not overwhelming
+
+6. **AUTHENTIC AFFIRMATION**
+   → Recognize specific acts of courage, honesty, or growth
+   → Validate their experience without generic praise
+   → Help them see their own strength
+
+${isVisual ? `
+🎨 VISUAL EXPRESSION ANALYSIS:
+Your entry includes visual/artistic expression. This is profound—they're communicating beyond words.
+• Interpret colors as emotional language (dark=depth, bright=hope, mixed=complexity)
+• Notice composition: centered=stable, scattered=overwhelmed, flowing=processing
+• Value the courage to express feelings through creative means
+• See the artwork as a window into their subconscious mind
+${extractedText ? `• Integrate their written notes with visual elements for holistic understanding` : ''}
+` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**RESPONSE QUALITY STANDARDS:**
+✓ Use "you" and "your" - make it personal and direct
+✓ Reference specific details from their entry (proves you're paying attention)
+✓ Balance validation with gentle challenge
+✓ Avoid clichés - be fresh, insightful, and memorable
+✓ Write like a wise friend, not a therapist or teacher
+✓ Keep insights concrete and actionable, not abstract
+
+**RESPOND WITH JSON ONLY:**
 {
-  "summary": "2-3 warm, insightful sentences using 'you' - capture the essence of their reflection and progress",
+  "summary": "2-3 powerful sentences that capture the ESSENCE of their reflection. Make them feel deeply understood. Reference something specific they wrote.",
   "insights": [
-    "Specific insight about what their entry reveals about them",
-    "Pattern or theme that connects to their broader journey",
-    "Growth edge or strength that emerged in this reflection"
+    "An insight that reveals something they might not have fully realized about themselves (be specific to their words)",
+    "A pattern or theme that connects this entry to their broader life or journey (show you remember context)",
+    "A growth edge or emerging strength (name it clearly, celebrate it authentically)"
   ],
-  "reflectionQuestion": "One powerful question that opens new doors of self-understanding",
-  "affirmation": "Heartfelt recognition of their courage, progress, or authentic expression",
-  "practicalAction": "Specific, meaningful action they can take based on today's insights"
+  "reflectionQuestion": "ONE transformative question that opens a new door of self-understanding. Make it impossible to answer superficially. Make them pause and think deeply.",
+  "affirmation": "A heartfelt, specific recognition of their courage, growth, or authentic expression. Avoid generic praise. Make it about THEM, not about journaling in general.",
+  "practicalAction": "One small, specific action they can take TODAY based on their insights. Make it concrete, doable, and meaningful—not overwhelming."
 }`;
 
     let requestContent;
@@ -1852,6 +1951,8 @@ export const getPersonalityDescription = async (userId) => {
 export const getPreviousEntries = async (userId, pathId = 'all') => {
   try {
     const entries = [];
+    
+    // Fetch regular journal entries
     const journalRef = collection(db, 'users', userId, 'journal');
     const journalSnap = await getDocs(journalRef);
     
@@ -1862,12 +1963,87 @@ export const getPreviousEntries = async (userId, pathId = 'all') => {
       }
     });
     
+    // Fetch voice journal entries
+    const voiceJournalRef = collection(db, 'users', userId, 'voice_journal');
+    const voiceJournalSnap = await getDocs(voiceJournalRef);
+    
+    voiceJournalSnap.forEach((doc) => {
+      const data = doc.data();
+      if (pathId === 'all' || !data.pathId || data.pathId === pathId) {
+        entries.push({ id: doc.id, ...data, isVoiceEntry: true });
+      }
+    });
+    
     return entries.sort((a, b) => a.day - b.day);
   } catch (error) {
     console.error('Error getting previous entries:', error);
-    throw new Error('Failed to get previous entries: ' + error.message);
+    // REST fallback: list documents via Firestore REST API
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) throw error;
+      const idToken = await user.getIdToken();
+      const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+      
+      // Fetch both journal and voice_journal via REST
+      const journalUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${userId}/journal`;
+      const voiceUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${userId}/voice_journal`;
+      
+      const [journalRes, voiceRes] = await Promise.all([
+        fetch(journalUrl, { headers: { Authorization: `Bearer ${idToken}` }, method: 'GET' }),
+        fetch(voiceUrl, { headers: { Authorization: `Bearer ${idToken}` }, method: 'GET' }).catch(() => ({ ok: false }))
+      ]);
+      
+      if (!journalRes.ok && !voiceRes.ok) throw new Error('REST fallback failed');
+      
+      const entries = [];
+      
+      if (journalRes.ok) {
+        const journalData = await journalRes.json();
+        const journalDocs = journalData.documents || [];
+        const journalEntries = journalDocs.map(d => ({ id: d.name.split('/').pop(), ...convertFirestoreFields(d.fields) }));
+        entries.push(...journalEntries.filter(e => pathId === 'all' || !e.pathId || e.pathId === pathId));
+      }
+      
+      if (voiceRes.ok) {
+        const voiceData = await voiceRes.json();
+        const voiceDocs = voiceData.documents || [];
+        const voiceEntries = voiceDocs.map(d => ({ id: d.name.split('/').pop(), ...convertFirestoreFields(d.fields), isVoiceEntry: true }));
+        entries.push(...voiceEntries.filter(e => pathId === 'all' || !e.pathId || e.pathId === pathId));
+      }
+      
+      return entries.sort((a, b) => a.day - b.day);
+    } catch (restErr) {
+      console.error('REST fallback for previous entries failed:', restErr);
+      throw new Error('Failed to get previous entries: ' + error.message);
+    }
   }
 };
+
+// Convert Firestore REST fields map to plain JS object
+function convertFirestoreFields(fields) {
+  if (!fields) return {};
+  const out = {};
+  for (const [k, v] of Object.entries(fields)) {
+    if (v.stringValue !== undefined) out[k] = v.stringValue;
+    else if (v.integerValue !== undefined) out[k] = parseInt(v.integerValue, 10);
+    else if (v.doubleValue !== undefined) out[k] = Number(v.doubleValue);
+    else if (v.booleanValue !== undefined) out[k] = v.booleanValue;
+    else if (v.mapValue !== undefined) out[k] = convertFirestoreFields(v.mapValue.fields || {});
+    else if (v.arrayValue !== undefined) out[k] = (v.arrayValue.values || []).map(item => {
+      // simple handling for primitives
+      if (item.stringValue !== undefined) return item.stringValue;
+      if (item.integerValue !== undefined) return parseInt(item.integerValue, 10);
+      if (item.doubleValue !== undefined) return Number(item.doubleValue);
+      if (item.booleanValue !== undefined) return item.booleanValue;
+      if (item.mapValue !== undefined) return convertFirestoreFields(item.mapValue.fields || {});
+      return null;
+    });
+    else if (v.nullValue !== undefined) out[k] = null;
+    else out[k] = undefined;
+  }
+  return out;
+}
 
 /**
  * Get specific journal entry

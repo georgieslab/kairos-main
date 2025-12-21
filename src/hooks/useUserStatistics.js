@@ -72,6 +72,12 @@ export const useUserStatistics = () => {
         entriesThisWeek: 0,
         entriesThisMonth: 0,
         isConsistent: false,
+        // Secret Achievement Stats
+        nightAndDayCount: 0,
+        uniqueEmotionsCount: 0,
+        randomPathsCompleted: 0,
+        achievedGoalsCount: 0,
+        totalInsights: 0,
         allEntries: [], // Provide access to raw data when needed
         isEmpty: true
       };
@@ -84,6 +90,128 @@ export const useUserStatistics = () => {
 
     const averageLength = Math.round(totalTextLength / totalEntries);
     const totalWords = Math.round(totalTextLength / 5); // Approximate words
+
+    // Calculate total insights
+    const totalInsights = allEntries.reduce((sum, entry) => {
+      return sum + (entry.analysis?.insights?.length || 0);
+    }, 0);
+
+    // 🎭 SECRET ACHIEVEMENT TRACKING 🎭
+    
+    // 1. Night & Day Achievement - Journal both early morning & late night same day
+    const nightAndDayCount = (() => {
+      const dayEntries = {};
+      
+      allEntries.forEach(entry => {
+        if (!entry.timestamp) return;
+        
+        try {
+          let date;
+          if (entry.timestamp.toDate) {
+            date = entry.timestamp.toDate();
+          } else if (entry.timestamp.seconds) {
+            date = new Date(entry.timestamp.seconds * 1000);
+          } else {
+            date = new Date(entry.timestamp);
+          }
+          
+          const dayKey = date.toDateString();
+          const hour = date.getHours();
+          
+          if (!dayEntries[dayKey]) {
+            dayEntries[dayKey] = { morning: false, night: false };
+          }
+          
+          // Early morning: before 9 AM
+          if (hour >= 5 && hour < 9) {
+            dayEntries[dayKey].morning = true;
+          }
+          // Late night: after 10 PM
+          if (hour >= 22 || hour < 5) {
+            dayEntries[dayKey].night = true;
+          }
+        } catch (err) {
+          console.error('Error processing timestamp:', err);
+        }
+      });
+      
+      // Count days with both morning and night entries
+      return Object.values(dayEntries).filter(day => day.morning && day.night).length;
+    })();
+
+    // 2. Mood Master Achievement - Experience all emotion categories
+    const uniqueEmotionsCount = (() => {
+      const emotionCategories = new Set();
+      const emotionKeywords = {
+        joy: ['happy', 'joyful', 'excited', 'delighted', 'cheerful', 'elated', 'content', 'pleased'],
+        sadness: ['sad', 'down', 'depressed', 'melancholy', 'grief', 'sorrow', 'unhappy', 'blue'],
+        anger: ['angry', 'frustrated', 'irritated', 'annoyed', 'furious', 'mad', 'upset', 'rage'],
+        fear: ['afraid', 'scared', 'anxious', 'worried', 'nervous', 'fearful', 'terrified', 'panic'],
+        surprise: ['surprised', 'amazed', 'astonished', 'shocked', 'startled', 'unexpected'],
+        disgust: ['disgusted', 'repulsed', 'revolted', 'appalled', 'sick'],
+        trust: ['trusting', 'confident', 'secure', 'safe', 'comfortable', 'relaxed'],
+        anticipation: ['anticipating', 'expecting', 'hopeful', 'eager', 'looking forward']
+      };
+      
+      allEntries.forEach(entry => {
+        const text = [
+          entry.extractedText || '',
+          entry.transcription || '',
+          entry.analysis?.summary || '',
+          ...(entry.analysis?.insights || [])
+        ].join(' ').toLowerCase();
+        
+        // Check which emotion categories appear in the text
+        Object.entries(emotionKeywords).forEach(([category, keywords]) => {
+          if (keywords.some(keyword => text.includes(keyword))) {
+            emotionCategories.add(category);
+          }
+        });
+      });
+      
+      return emotionCategories.size;
+    })();
+
+    // 3. Random Explorer Achievement - Complete a random path suggestion
+    const randomPathsCompleted = (() => {
+      // Check if user has completed any paths marked as "random" or "recommended"
+      // This would need to be tracked when a user starts a path from random suggestion
+      // For now, check if they've completed paths that aren't the default "self-discovery"
+      const nonDefaultCompletedPaths = completedPaths.filter(path => 
+        path.id !== 'self-discovery' && 
+        path.id !== 'journey' &&
+        !path.id.includes('voice') // Exclude voice paths for this achievement
+      );
+      
+      // Check user profile for random path tracking
+      const randomPathsFromProfile = userProfile?.randomPathsCompleted || 0;
+      
+      return Math.max(nonDefaultCompletedPaths.length, randomPathsFromProfile);
+    })();
+
+    // 4. Fortune Teller Achievement - Set and achieve 3 personal goals
+    const achievedGoalsCount = (() => {
+      // Check user profile for goals tracking
+      const goalsFromProfile = userProfile?.achievedGoals || [];
+      
+      // Also check for goal-related entries or insights
+      let goalMentions = 0;
+      const goalKeywords = ['achieved', 'accomplished', 'completed', 'reached my goal', 'met my goal', 'goal achieved'];
+      
+      allEntries.forEach(entry => {
+        const text = [
+          entry.extractedText || '',
+          entry.transcription || '',
+          entry.analysis?.summary || ''
+        ].join(' ').toLowerCase();
+        
+        if (goalKeywords.some(keyword => text.includes(keyword))) {
+          goalMentions++;
+        }
+      });
+      
+      return Math.max(goalsFromProfile.length, Math.floor(goalMentions / 2)); // Divide by 2 to avoid over-counting
+    })();
 
     // Calculate active days (unique dates)
     const uniqueDates = new Set(
@@ -209,10 +337,16 @@ export const useUserStatistics = () => {
       entriesThisWeek,
       entriesThisMonth,
       isConsistent,
+      // Secret Achievement Statistics
+      nightAndDayCount,
+      uniqueEmotionsCount,
+      randomPathsCompleted,
+      achievedGoalsCount,
+      totalInsights,
       allEntries, // Provide access when needed (for analytics)
       isEmpty: false
     };
-  }, [allEntries, progressStats, inProgressPaths, completedPaths]);
+  }, [allEntries, progressStats, inProgressPaths, completedPaths, userProfile]);
 
   // Refresh function for manual updates
   const refreshStatistics = async () => {

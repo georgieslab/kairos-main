@@ -1,4 +1,4 @@
-// src/components/common/KairosLoader.jsx
+// src/components/common/KairosLoader.jsx - Enhanced Version
 
 import React, { useEffect, useState } from 'react';
 import '../../styles/components/loader.css';
@@ -11,10 +11,12 @@ const KairosLoader = ({
   showProgress = false,
   progress = 0,
   duration = null,
-  isFading = false
+  isFading = false,
+  variant = 'default' // 'default', 'minimal', 'detailed'
 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(true);
+  const [localProgress, setLocalProgress] = useState(0);
   
   // Handle auto-hide based on duration
   useEffect(() => {
@@ -50,6 +52,21 @@ const KairosLoader = ({
     }
   }, [isFading]);
   
+  // Smooth progress animation
+  useEffect(() => {
+    if (showProgress) {
+      const diff = progress - localProgress;
+      if (Math.abs(diff) > 0.1) {
+        const timer = setTimeout(() => {
+          setLocalProgress(prev => prev + diff * 0.1);
+        }, 16); // 60fps
+        return () => clearTimeout(timer);
+      } else {
+        setLocalProgress(progress);
+      }
+    }
+  }, [progress, localProgress, showProgress]);
+  
   // Hide if not visible
   if (!isVisible) {
     return null;
@@ -59,43 +76,51 @@ const KairosLoader = ({
     <div className={`kairos-loader-container 
       ${fullScreen ? 'fullscreen' : ''} 
       ${!isAnimating ? 'fade-out' : ''} 
-      loader-${size}`}
+      loader-${size}
+      loader-${variant}`}
     >
-      <div className={`orb-wrapper ${isAnimating ? 'scale-in' : 'scale-out'}`}>
-        <div className="center">
-          <div className="ball"></div>
-          <div className="blubb-1"></div>
-          <div className="blubb-2"></div>
-          <div className="blubb-3"></div>
-          <div className="blubb-4"></div>
-          <div className="blubb-5"></div>
-          <div className="blubb-6"></div>
-          <div className="sparkle-1"></div>
-          <div className="sparkle-2"></div>
-          <div className="sparkle-3"></div>
-          <div className="sparkle-4"></div>
-          <div className="sparkle-5"></div>
-          <div className="sparkle-6"></div>
-          <div className="sparkle-7"></div>
-          <div className="sparkle-8"></div>
+      <div className="loader-content-wrapper">
+        <div className={`orb-wrapper ${isAnimating ? 'scale-in' : 'scale-out'}`}>
+          <div className="center">
+            <div className="ball"></div>
+            <div className="blubb-1"></div>
+            <div className="blubb-2"></div>
+            <div className="blubb-3"></div>
+            <div className="blubb-4"></div>
+            <div className="blubb-5"></div>
+            <div className="blubb-6"></div>
+            <div className="sparkle-1"></div>
+            <div className="sparkle-2"></div>
+            <div className="sparkle-3"></div>
+            <div className="sparkle-4"></div>
+            <div className="sparkle-5"></div>
+            <div className="sparkle-6"></div>
+            <div className="sparkle-7"></div>
+            <div className="sparkle-8"></div>
+          </div>
         </div>
+        
+        {message && (
+          <div className="loader-message">
+            <h2 className="loader-title">{message}</h2>
+            {subMessage && <p className="loader-subtitle">{subMessage}</p>}
+          </div>
+        )}
+        
+        {showProgress && (
+          <div className="loader-progress-container">
+            <div 
+              className="loader-progress-bar" 
+              style={{ width: `${localProgress}%` }}
+            >
+              <div className="loader-progress-shimmer"></div>
+            </div>
+            {variant === 'detailed' && (
+              <span className="loader-progress-text">{Math.round(localProgress)}%</span>
+            )}
+          </div>
+        )}
       </div>
-      
-      {message && (
-        <div className="loader-message">
-          <h2 className="loader-title">{message}</h2>
-          {subMessage && <p className="loader-subtitle">{subMessage}</p>}
-        </div>
-      )}
-      
-      {showProgress && progress > 0 && (
-        <div className="loader-progress-container">
-          <div 
-            className="loader-progress-bar" 
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,12 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-<<<<<<< HEAD
     <string name="app_name">Kairos Journal</string>
     <string name="title_activity_main">Kairos Journal</string>
-=======
-    <string name="app_name">Kairos</string>
-    <string name="title_activity_main">Kairos</string>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
     <string name="package_name">com.kairos.journal</string>
     <string name="custom_url_scheme">com.kairos.journal</string>
 </resources>

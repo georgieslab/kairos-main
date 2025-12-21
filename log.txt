@@ -1,0 +1,151 @@
+
+[vite] connecting... client:789:9
+🔍 DEBUG useUserProgress: Path relationship-mastery - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path relationship-mastery marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "financial-mindfulness" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "financialMindfulnessProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "financial-mindfulness": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path financial-mindfulness progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path financial-mindfulness - completedDays: 0 / 21 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path financial-mindfulness - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path financial-mindfulness marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "self-discovery" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "selfDiscoveryProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "self-discovery": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path self-discovery progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path self-discovery - completedDays: 0 / 10 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path self-discovery - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path self-discovery marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "emotional-intelligence" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "emotionalIntelligenceProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "emotional-intelligence": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path emotional-intelligence progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path emotional-intelligence - completedDays: 0 / 10 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path emotional-intelligence - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path emotional-intelligence marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "mindfulness-awareness" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "mindfulnessAwarenessProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "mindfulness-awareness": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path mindfulness-awareness progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path mindfulness-awareness - completedDays: 0 / 10 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path mindfulness-awareness - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path mindfulness-awareness marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "transformation-journey" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "transformationJourneyProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "transformation-journey": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path transformation-journey progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path transformation-journey - completedDays: 0 / 21 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path transformation-journey - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path transformation-journey marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "creative-expression" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "creativeExpressionProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "creative-expression": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path creative-expression progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path creative-expression - completedDays: 0 / 14 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path creative-expression - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path creative-expression marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "habit-formation" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "habitFormationProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "habit-formation": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path habit-formation progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path habit-formation - completedDays: 0 / 30 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path habit-formation - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path habit-formation marked as NOT STARTED useUserProgress.js:130:21
+🔍 DEBUG getUserPathProgress: pathId = "life-vision" pathUtils.js:129:11
+🔍 DEBUG getUserPathProgress: journeyProgress keys: 
+Array [ "currentPath", "hasStartedJourney" ]
+pathUtils.js:140:11
+🔍 DEBUG getUserPathProgress: Looking for field "lifeVisionProgress" pathUtils.js:144:11
+🔍 DEBUG getUserPathProgress: Found progress for "life-vision": 
+Object { completedDays: [] }
+pathUtils.js:149:11
+🔍 DEBUG useUserProgress: Path life-vision progress: 
+Object { completedDays: [] }
+useUserProgress.js:66:19
+🔍 DEBUG useUserProgress: Path life-vision - completedDays: 0 / 100 useUserProgress.js:72:19
+🔍 DEBUG useUserProgress: Path life-vision - isCompleted: false isStarted: false useUserProgress.js:78:19
+⭕ DEBUG useUserProgress: Path life-vision marked as NOT STARTED useUserProgress.js:130:21
+📊 DEBUG useUserProgress: Final stats: 
+Object { totalPaths: 46, inProgress: 0, completed: 0, notStarted: 46, totalEntries: 0, totalPathsCompleted: 0 }
+useUserProgress.js:147:15
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+🔍 DEBUG: useAuth() called 4 AuthContext.jsx:28:11
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+🔍 DEBUG: useAuth() called 4 AuthContext.jsx:28:11
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+🔍 DEBUG: useAuth() called 4 AuthContext.jsx:28:11
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+🔍 DEBUG: useAuth() called 4 AuthContext.jsx:28:11
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+🔍 DEBUG: useAuth() called 4 AuthContext.jsx:28:11
+Debug - hasCompletedJourneys: false HomeScreen.jsx:180:11
+Debug - completedPaths: 
+Array []
+HomeScreen.jsx:181:9
+
+​
+

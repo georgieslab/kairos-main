@@ -129,11 +129,8 @@ const MultiImageJournalUpload = ({
     if (images.length === 0) {
       setCurrentPage(0);
     }
-<<<<<<< HEAD
 
     setError('');
-=======
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
   };
 
   // Handle drag events
@@ -306,7 +303,6 @@ const MultiImageJournalUpload = ({
             </div>
             
             {images.length === 0 ? (
-<<<<<<< HEAD
               <div className="upload-options">
                 {/* Camera/Gallery button for mobile */}
                 {isMobile && (
@@ -348,32 +344,6 @@ const MultiImageJournalUpload = ({
                     multiple
                   />
                 </div>
-=======
-              <div 
-                ref={dropAreaRef}
-                className={`drop-area ${isDragging ? 'dragging' : ''}`}
-                onDragEnter={handleDragEnter}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                <Upload className="drop-icon" />
-                <p className="drop-text">Drag and drop your journal pages here, or click to select files</p>
-                <button 
-                  className="action-button secondary"
-                  onClick={() => fileInputRef.current.click()}
-                >
-                  Select Files
-                </button>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handleFileSelect} 
-                  style={{ display: 'none' }} 
-                  accept="image/*"
-                  multiple
-                />
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
               </div>
             ) : (
               <>
@@ -422,7 +392,6 @@ const MultiImageJournalUpload = ({
                   </button>
                   
                   {files.length < maxPages && (
-<<<<<<< HEAD
                     <>
                       {isMobile && (
                         <button 
@@ -441,15 +410,6 @@ const MultiImageJournalUpload = ({
                         {isMobile ? 'Select Files' : 'Add More Pages'} ({files.length}/{maxPages})
                       </button>
                     </>
-=======
-                    <button 
-                      className="action-button secondary"
-                      onClick={() => fileInputRef.current.click()}
-                    >
-                      <Plus size={16} style={{ marginRight: '4px' }} />
-                      Add More Pages ({files.length}/{maxPages})
-                    </button>
->>>>>>> d849eb9f8284a74721875c0198cc025c3e69e188
                   )}
                 </div>
               </>

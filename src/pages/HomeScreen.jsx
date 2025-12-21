@@ -15,6 +15,13 @@ import '../styles/components/weatherDialog.css';
 // Import VersionDisplay component
 import VersionDisplay from '../components/common/VersionDisplay';
 
+// Import Path Recommendations component
+import PathRecommendations from '../components/paths/PathRecommendations';
+import { getNextDayForPath } from '../utils/pathUtils';
+
+// Import TopBar component
+import TopBar from '../components/common/TopBar';
+
 import { 
   ChevronRight, 
   BookOpen, 
@@ -142,15 +149,11 @@ const ModernThemeToggle = () => {
       onClick={toggleTheme}
       aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} theme`}
     >
-      <div className="hs-theme-toggle-track">
-        <div className={`hs-theme-toggle-thumb ${isDarkMode ? 'hs-theme-toggle-thumb-dark' : 'hs-theme-toggle-thumb-light'}`}>
-          {isDarkMode ? (
-            <Moon className="hs-theme-icon" size={14} />
-          ) : (
-            <Sun className="hs-theme-icon" size={14} />
-          )}
-        </div>
-      </div>
+      {isDarkMode ? (
+        <Moon className="hs-theme-icon" size={18} />
+      ) : (
+        <Sun className="hs-theme-icon" size={18} />
+      )}
     </button>
   );
 };
@@ -283,6 +286,9 @@ console.log('Debug - completedPaths:', completedPaths);
   };
 
   // Get current path info using centralized progress
+  // NOTE: This dynamically works with ALL paths in the JOURNEY_PATHS registry,
+  // including new multi-modal paths (shadow-light-integration, life-chapters-trilogy, 
+  // sensory-spectrum, emotion-color-sound). No hardcoded switch statements needed!
   const getCurrentPathInfo = () => {
     if (hasActiveJourneys && inProgressPaths.length > 0) {
       const mostAdvanced = inProgressPaths[0];
@@ -548,6 +554,23 @@ const StatsOverview = () => {
   
   return (
     <div className={`hs-container ${isLoaded ? 'hs-loaded' : ''} ${isDarkMode ? 'hs-dark' : 'hs-light'}`}>
+      {/* Top Bar */}
+      <TopBar 
+        title="Home"
+        subtitle={formatDate()}
+        colorClass="home-color"
+        actions={
+          <div className="hs-top-bar-actions">
+            <WeatherWidget 
+              city={userProfile?.city} 
+              onWeatherData={setWeatherData}
+              onClick={() => weatherData && setShowWeatherDialog(true)}
+            />
+            <ModernThemeToggle />
+          </div>
+        }
+      />
+
       {/* Version Display Banner */}
       <div className="hs-version-banner">
         <VersionDisplay minimal={true} />
@@ -557,12 +580,6 @@ const StatsOverview = () => {
       <header className="hs-header">
         <div className="hs-header-content">
           <div className="hs-header-main">
-            <div className="hs-date-wrapper">
-              <div className="hs-date-badge">
-                <Clock size={14} />
-                <p className="hs-date">{formatDate()}</p>
-              </div>
-            </div>
             <h1 className="hs-greeting">
               {getGreeting()}, <span className="hs-username">{userProfile?.displayName?.split(' ')[0] || 'there'}</span>
               <div className="hs-greeting-emoji">
@@ -570,17 +587,6 @@ const StatsOverview = () => {
                  getGreeting() === 'Good afternoon' ? '☀️' : '🌙'}
               </div>
             </h1>
-          </div>
-          
-          <div className="hs-header-actions">
-            <div className="hs-weather-wrapper">
-              <WeatherWidget 
-                city={userProfile?.city} 
-                onWeatherData={setWeatherData}
-                onClick={() => weatherData && setShowWeatherDialog(true)}
-              />
-            </div>
-            <ModernThemeToggle />
           </div>
         </div>
         
@@ -661,6 +667,18 @@ const StatsOverview = () => {
               ))}
             </div>
           </div>
+        )}
+
+        {/* AI-Powered Path Recommendations */}
+        {userProfile && (
+          <PathRecommendations 
+            onPathSelect={(path) => {
+              console.log('Selected recommended path:', path.id);
+              const nextDay = getNextDayForPath(userProfile, path.id);
+              navigateToScreen('write', { pathId: path.id, day: nextDay });
+            }}
+            maxRecommendations={3}
+          />
         )}
 
         {/* Completed Journeys */}

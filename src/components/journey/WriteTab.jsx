@@ -18,6 +18,7 @@ import { getJourneyDay, getAllJourneyPaths, getJourneyPath } from '../../data/Jo
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import DynamicIcon from '../common/DynamicIcon';
+import TopBar from '../common/TopBar';
 
 // Import path utilities including voice support
 import { getNextDayForPath, getProgressFieldForPath, getAllActiveJourneys } from '../../utils/pathUtils';
@@ -246,6 +247,14 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
     }
   }, [currentPath, currentDay, activePath, activeDay, isLoading]);
   
+  // Determine the color class for the top bar (write tab)
+  // Use the same color as the 'write' tab in BottomNavigation
+  const topBarColorClass = 'write-color';
+
+  // Get path details for subtitle
+  const pathDetails = getJourneyPath(activePath) || {};
+  const subtitle = pathDetails.title ? `${pathDetails.title} • Day ${activeDay} of ${pathDetails.duration || ''}` : undefined;
+
   // Get path details for display
   const getPathDetails = useCallback(() => {
     const pathData = getJourneyPath(activePath);
@@ -437,7 +446,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
     );
   }
   
-  const pathDetails = getPathDetails();
+  // const pathDetails = getPathDetails(); // Removed duplicate declaration
   
   // Show completion message if journey is completed
   if (completionStatus === 'completed') {
@@ -474,13 +483,19 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
   
   return (
     <div className={`write-tab-container ${isDarkMode ? 'dark-theme' : 'light-theme'} ${activePath} loaded`}>
+      {/* Top Bar */}
+      <TopBar
+        title="Write"
+        subtitle={subtitle}
+        colorClass={topBarColorClass}
+      />
       {/* Header */}
-      <div className="write-tab-header">
-        <h1 className="write-tab-title">
+      <div className="write-tab-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <h1 className="write-tab-title" style={{ textAlign: 'center', marginBottom: completionStatus === 'day-completed' ? '0.5rem' : undefined }}>
           {isVoicePath(activePath) ? "Today's Voice Journal" : "Today's Journal Entry"}
         </h1>
         {completionStatus === 'day-completed' && (
-          <div className="day-completed-badge">
+          <div className="day-completed-badge" style={{ margin: '0.25rem auto 0 auto' }}>
             <CheckCircle size={16} />
             <span>Day Completed</span>
           </div>
@@ -645,21 +660,6 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             </div>
           </li>
         </ul>
-      </div>
-      
-      {/* Continue button for mobile */}
-      <div className="mobile-continue animate-fade-up" style={{ animationDelay: "0.3s" }}>
-        <button 
-          onClick={handleStartWriting}
-          className="continue-button"
-          style={{ 
-            backgroundColor: `rgb(${pathDetails.color})`,
-            boxShadow: `0 4px 12px rgba(${pathDetails.color}, 0.3)`
-          }}
-        >
-          {isVoicePath(activePath) ? 'Record Voice Entry' : 'Upload Journal'}
-          {isVoicePath(activePath) ? <Mic className="continue-icon" /> : <ArrowRight className="continue-icon" />}
-        </button>
       </div>
     </div>
   );

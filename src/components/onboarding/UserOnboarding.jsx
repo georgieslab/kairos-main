@@ -1,6 +1,6 @@
 // src/components/onboarding/UserOnboarding.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, 
   Camera, 
@@ -10,52 +10,146 @@ import {
   Settings, 
   ChevronLeft, 
   ChevronRight,
-  Check
+  Check,
+  Mic,
+  Palette,
+  Smartphone,
+  User,
+  Compass,
+  PenTool,
+  Heart,
+  Brain,
+  Zap
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import claudeLogo from '../../icons/claude.png';
+import '../../styles/components/onboarding.css';
 
 const UserOnboarding = ({ onComplete }) => {
   const { currentUser, updateUserProfile } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [preferences, setPreferences] = useState({
+    userName: currentUser?.displayName || '',
     enableNotifications: true,
     reminderTime: '20:00',
-    journalingGoals: []
+    journalingGoals: [],
+    preferredModality: 'text',
+    selectedPaths: []
   });
+
+  // Sample journey paths for preview
+  const samplePaths = [
+    { 
+      id: 'self-discovery', 
+      name: 'Self-Discovery', 
+      duration: 10, 
+      type: 'text',
+      category: 'Foundational',
+      description: 'Transform your values, fears, and aspirations',
+      icon: <Compass />
+    },
+    { 
+      id: 'anxiety-alchemy', 
+      name: 'Anxiety Alchemy', 
+      duration: 10, 
+      type: 'text',
+      category: 'Emotional',
+      description: 'Transform anxiety into wisdom and strength',
+      icon: <Heart />
+    },
+    { 
+      id: 'voice-discovery', 
+      name: 'Voice Discovery', 
+      duration: 10, 
+      type: 'voice',
+      category: 'Voice',
+      description: 'Find your authentic voice through spoken reflection',
+      icon: <Mic />,
+      isNew: true
+    },
+    { 
+      id: 'mindful-visualization', 
+      name: 'Mindful Art', 
+      duration: 33, 
+      type: 'visual',
+      category: 'Visual',
+      description: 'Express yourself through drawing and painting',
+      icon: <Palette />
+    },
+    { 
+      id: 'inner-elements', 
+      name: 'Inner Elements', 
+      duration: 9, 
+      type: 'multi',
+      category: 'Multi-Modal',
+      description: 'Explore earth, water, fire, air through all modalities',
+      icon: <Zap />,
+      isSpecial: true
+    },
+    {
+      id: 'transformation-journey',
+      name: '4-Day Breakthrough',
+      duration: 4,
+      type: 'text',
+      category: 'Intensive',
+      description: 'Rapid pattern-breaking transformation',
+      icon: <Brain />
+    }
+  ];
+
+  // Example insights for showcase
+  const exampleInsights = {
+    emotional: "I notice you're expressing more confidence in your decisions compared to Day 1. Your writing shows clearer boundaries.",
+    pattern: "You mention 'not enough time' in 3 of your last 5 entries. This might be a key stress pattern to explore.",
+    growth: "Your shift from 'I have to' to 'I choose to' shows you're reclaiming your personal agency."
+  };
 
   // Onboarding steps content
   const steps = [
     {
-      title: "Welcome to Καιρός Journal",
-      description: "Your personal journey of self-discovery begins here. Let's get you set up in a few quick steps.",
-      icon: <BookOpen className="w-12 h-12 text-emerald-500" />
+      title: `Welcome to Καιρός`,
+      description: "Let's personalize your transformative journaling experience. What should we call you?",
+      icon: <User />,
+      hasPreference: true,
+      preferenceType: 'name'
     },
     {
-      title: "10-Day Guided Journey",
-      description: "Καιρός guides you through a structured 10-day journaling experience, with thoughtful prompts for each day.",
-      icon: <Calendar className="w-12 h-12 text-emerald-500" />
+      title: "Your Smart Journal",
+      description: "Your premium NFC-enabled journal instantly connects to our app. Just tap your phone to begin each session—bridging the timeless practice of handwriting with AI insights.",
+      icon: <Smartphone />,
+      hasNFC: true
     },
     {
-      title: "How It Works",
-      description: "Write your thoughts in a physical journal, take a photo of your entry, and receive AI-powered insights.",
-      icon: <Camera className="w-12 h-12 text-emerald-500" />
+      title: "Express Your Way",
+      description: "Καιρός is the only journaling system supporting all three modalities. Choose how you want to express yourself today.",
+      icon: <Compass />,
+      hasPreference: true,
+      preferenceType: 'modality'
     },
     {
-      title: "Personalized Insights",
-      description: "Claude AI analyzes your writing to identify patterns, provide reflections, and suggest actions.",
-      icon: <Sparkles className="w-12 h-12 text-emerald-500" />
+      title: "45 Transformative Paths",
+      description: "From 4-day breakthroughs to 100-day transformations. Each journey is crafted for specific growth areas.",
+      icon: <BookOpen />,
+      hasPreference: true,
+      preferenceType: 'pathPreview'
     },
     {
-      title: "Daily Reminders",
-      description: "Set up gentle reminders to help you maintain a consistent journaling practice.",
-      icon: <Bell className="w-12 h-12 text-emerald-500" />,
+      title: "AI That Understands You",
+      description: "Claude AI analyzes your entries across all modalities, revealing patterns and insights you might miss.",
+      icon: <Sparkles />,
+      hasExample: true
+    },
+    {
+      title: "Daily Gentle Nudges",
+      description: `Great job personalizing, ${preferences.userName || 'there'}! Would you like daily reminders for your journaling practice?`,
+      icon: <Bell />,
       hasPreference: true,
       preferenceType: 'notifications'
     },
     {
-      title: "Your Journaling Goals",
-      description: "What do you hope to achieve through journaling?",
-      icon: <Settings className="w-12 h-12 text-emerald-500" />,
+      title: "Your Growth Goals",
+      description: "Tell us what you're seeking, and we'll recommend the perfect journey paths from our collection of 45.",
+      icon: <Settings />,
       hasPreference: true,
       preferenceType: 'goals'
     }
@@ -74,11 +168,9 @@ const UserOnboarding = ({ onComplete }) => {
     const newGoals = [...preferences.journalingGoals];
     
     if (newGoals.includes(goal)) {
-      // Remove goal if already selected
       const index = newGoals.indexOf(goal);
       newGoals.splice(index, 1);
     } else {
-      // Add goal if not already selected
       newGoals.push(goal);
     }
     
@@ -88,23 +180,61 @@ const UserOnboarding = ({ onComplete }) => {
     }));
   };
 
+  // Handle path interest
+  const handlePathInterest = (pathId) => {
+    const newPaths = [...preferences.selectedPaths];
+    
+    if (newPaths.includes(pathId)) {
+      const index = newPaths.indexOf(pathId);
+      newPaths.splice(index, 1);
+    } else {
+      newPaths.push(pathId);
+    }
+    
+    setPreferences(prev => ({
+      ...prev,
+      selectedPaths: newPaths
+    }));
+  };
+
+  // Get recommended paths based on goals
+  const getRecommendedPaths = () => {
+    const recommendations = [];
+    
+    if (preferences.journalingGoals.includes('Anxiety & stress')) {
+      recommendations.push('anxiety-alchemy');
+    }
+    if (preferences.journalingGoals.includes('Self-discovery')) {
+      recommendations.push('self-discovery');
+    }
+    if (preferences.journalingGoals.includes('Creative expression')) {
+      recommendations.push('mindful-visualization', 'voice-discovery');
+    }
+    if (preferences.journalingGoals.includes('Quick breakthrough')) {
+      recommendations.push('transformation-journey');
+    }
+    
+    return recommendations;
+  };
+
   // Handle completion of onboarding
   const handleFinish = async () => {
     try {
-      // Update user profile with onboarding preferences
       if (currentUser) {
         await updateUserProfile({
+          displayName: preferences.userName || currentUser.displayName,
           hasCompletedOnboarding: true,
           settings: {
             enableNotifications: preferences.enableNotifications,
             reminderTime: preferences.reminderTime,
+            preferredModality: preferences.preferredModality,
             lastUpdated: new Date().toISOString()
           },
-          journalingGoals: preferences.journalingGoals
+          journalingGoals: preferences.journalingGoals,
+          interestedPaths: preferences.selectedPaths
         });
       }
       
-      // Call the completion callback
       if (onComplete) {
         onComplete();
       }
@@ -128,138 +258,290 @@ const UserOnboarding = ({ onComplete }) => {
     }
   };
 
+  const recommendedPaths = getRecommendedPaths();
+
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-      <div className="flex-grow flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full">
+    <div className="onboarding-container">
+      <div className="onboarding-main">
+        <div className="onboarding-content">
           {/* Progress Indicator */}
-          <div className="mb-8 flex items-center justify-center">
-            <div className="flex space-x-2">
+          <div className="onboarding-progress">
+            <div className="onboarding-progress-dots">
               {steps.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index <= currentStep ? 'bg-emerald-500' : 'bg-gray-700'
+                  className={`onboarding-progress-dot ${
+                    index < currentStep ? 'completed' : ''
+                  } ${
+                    index === currentStep ? 'active' : ''
                   }`}
                 ></div>
               ))}
             </div>
+            <div className="onboarding-progress-text">
+              Step {currentStep + 1} of {steps.length}
+            </div>
           </div>
           
           {/* Content Card */}
-          <div className="glass-card p-8 shadow-lg shadow-emerald-900/10">
+          <div className="onboarding-card">
             {/* Icon */}
-            <div className="flex justify-center mb-6">
-              {steps[currentStep].icon}
+            <div className="onboarding-icon-wrapper">
+              {React.cloneElement(steps[currentStep].icon, { className: 'onboarding-icon' })}
             </div>
             
             {/* Title */}
-            <h2 className="text-2xl font-bold text-center mb-4">
+            <h2 className="onboarding-title">
               {steps[currentStep].title}
             </h2>
             
             {/* Description */}
-            <p className="text-gray-300 text-center mb-8">
+            <p className="onboarding-description">
               {steps[currentStep].description}
             </p>
             
-            {/* Preferences (if applicable) */}
-            {steps[currentStep].hasPreference && (
-              <div className="mb-8">
-                {steps[currentStep].preferenceType === 'notifications' && (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Enable daily reminders</span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="sr-only peer"
-                          checked={preferences.enableNotifications}
-                          onChange={() => handlePreferenceChange(
-                            'enableNotifications', 
-                            !preferences.enableNotifications
-                          )}
-                        />
-                        <div className={`w-11 h-6 rounded-full peer ${
-                          preferences.enableNotifications 
-                            ? 'bg-emerald-600' 
-                            : 'bg-gray-700'
-                        } after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${
-                          preferences.enableNotifications 
-                            ? 'after:translate-x-5' 
-                            : ''
-                        }`}></div>
-                      </label>
-                    </div>
-                    
-                    {preferences.enableNotifications && (
-                      <div>
-                        <label className="block text-gray-300 mb-2">Reminder time</label>
-                        <input
-                          type="time"
-                          className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md"
-                          value={preferences.reminderTime}
-                          onChange={(e) => handlePreferenceChange('reminderTime', e.target.value)}
-                        />
+            {/* NFC Feature Showcase */}
+            {steps[currentStep].hasNFC && (
+              <div className="onboarding-nfc-showcase">
+                <div className="onboarding-nfc-demo">
+                  <div className="nfc-phone">📱</div>
+                  <div className="nfc-signal">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div className="nfc-journal">📓</div>
+                </div>
+                <p className="onboarding-nfc-text">Tap to Connect • Write to Reflect • AI to Understand</p>
+              </div>
+            )}
+
+            {/* Modality Selection */}
+            {steps[currentStep].preferenceType === 'modality' && (
+              <div className="onboarding-modality-grid">
+                <button
+                  onClick={() => handlePreferenceChange('preferredModality', 'text')}
+                  className={`onboarding-modality-card ${preferences.preferredModality === 'text' ? 'selected' : ''}`}
+                >
+                  <PenTool className="modality-icon" />
+                  <h4>Written</h4>
+                  <p>Traditional handwritten journaling with AI text analysis</p>
+                </button>
+                <button
+                  onClick={() => handlePreferenceChange('preferredModality', 'voice')}
+                  className={`onboarding-modality-card ${preferences.preferredModality === 'voice' ? 'selected' : ''}`}
+                >
+                  <Mic className="modality-icon" />
+                  <h4>Voice</h4>
+                  <p>Speak your thoughts with live transcription</p>
+                  <span className="modality-badge">NEW</span>
+                </button>
+                <button
+                  onClick={() => handlePreferenceChange('preferredModality', 'visual')}
+                  className={`onboarding-modality-card ${preferences.preferredModality === 'visual' ? 'selected' : ''}`}
+                >
+                  <Palette className="modality-icon" />
+                  <h4>Visual</h4>
+                  <p>Express through art, colors, and drawings</p>
+                </button>
+              </div>
+            )}
+
+            {/* Path Preview */}
+            {steps[currentStep].preferenceType === 'pathPreview' && (
+              <div className="onboarding-paths-preview">
+                <div className="onboarding-paths-scroll">
+                  {samplePaths.map(path => (
+                    <div
+                      key={path.id}
+                      className={`onboarding-path-card ${
+                        preferences.selectedPaths.includes(path.id) ? 'interested' : ''
+                      } ${
+                        recommendedPaths.includes(path.id) ? 'recommended' : ''
+                      }`}
+                      onClick={() => handlePathInterest(path.id)}
+                    >
+                      <div className="path-card-header">
+                        <div className={`path-icon-circle ${path.type}`}>
+                          {path.icon}
+                        </div>
+                        <div className="path-duration">{path.duration} days</div>
                       </div>
-                    )}
+                      <h4>{path.name}</h4>
+                      <p className="path-description">{path.description}</p>
+                      <div className="path-badges">
+                        <span className={`path-type-badge ${path.type}`}>
+                          {path.category}
+                        </span>
+                        {path.isNew && <span className="path-new-badge">NEW</span>}
+                        {path.isSpecial && <span className="path-special-badge">UNIQUE</span>}
+                        {recommendedPaths.includes(path.id) && (
+                          <span className="path-recommended-badge">For You</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="onboarding-paths-note">
+                  Click paths you're interested in • View all 45 paths after setup
+                </p>
+              </div>
+            )}
+            
+            {/* Example Insights */}
+            {steps[currentStep].hasExample && (
+              <div className="onboarding-insights-preview">
+                <div className="insight-card">
+                  <div className="insight-type">Emotional Pattern</div>
+                  <p className="insight-text">{exampleInsights.emotional}</p>
+                </div>
+                <div className="insight-card">
+                  <div className="insight-type">Recurring Theme</div>
+                  <p className="insight-text">{exampleInsights.pattern}</p>
+                </div>
+                <div className="insight-card">
+                  <div className="insight-type">Growth Marker</div>
+                  <p className="insight-text">{exampleInsights.growth}</p>
+                </div>
+                
+                {/* Powered by Claude AI */}
+                <div className="onboarding-powered-by">
+                  <img 
+                    src={claudeLogo} 
+                    alt="Claude AI" 
+                    className="onboarding-claude-logo"
+                  />
+                  <span className="onboarding-powered-text">
+                    Powered by Claude AI (Sonnet 4 & Opus 4)
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Name Input */}
+            {steps[currentStep].preferenceType === 'name' && (
+              <div className="onboarding-name-input-wrapper">
+                <input
+                  type="text"
+                  className="onboarding-name-input"
+                  placeholder="Your first name..."
+                  value={preferences.userName}
+                  onChange={(e) => handlePreferenceChange('userName', e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && preferences.userName) {
+                      goToNextStep();
+                    }
+                  }}
+                  autoFocus
+                />
+                <p className="onboarding-privacy-note">
+                  🔒 Your privacy matters. This is only for personalization.
+                </p>
+              </div>
+            )}
+            
+            {/* Notifications Preference */}
+            {steps[currentStep].preferenceType === 'notifications' && (
+              <div className="onboarding-preferences">
+                <div className="onboarding-preference-item">
+                  <span className="onboarding-preference-label">Enable daily reminders</span>
+                  <label className="onboarding-toggle">
+                    <input
+                      type="checkbox"
+                      className="onboarding-toggle-input"
+                      checked={preferences.enableNotifications}
+                      onChange={() => handlePreferenceChange(
+                        'enableNotifications', 
+                        !preferences.enableNotifications
+                      )}
+                    />
+                    <div className="onboarding-toggle-slider"></div>
+                  </label>
+                </div>
+                
+                {preferences.enableNotifications && (
+                  <div className="onboarding-time-input-wrapper">
+                    <label className="onboarding-time-label">
+                      When's your ideal journaling time?
+                    </label>
+                    <input
+                      type="time"
+                      className="onboarding-time-input"
+                      value={preferences.reminderTime}
+                      onChange={(e) => handlePreferenceChange('reminderTime', e.target.value)}
+                    />
                   </div>
                 )}
+              </div>
+            )}
+            
+            {/* Goals Selection */}
+            {steps[currentStep].preferenceType === 'goals' && (
+              <div className="onboarding-goals-section">
+                <p className="onboarding-goals-header">Select all that resonate with you:</p>
                 
-                {steps[currentStep].preferenceType === 'goals' && (
-                  <div className="space-y-2">
-                    <p className="text-gray-300 mb-3">Select all that apply:</p>
-                    
-                    {[
-                      'Self-discovery',
-                      'Stress reduction',
-                      'Personal growth',
-                      'Memory keeping',
-                      'Emotional processing',
-                      'Gratitude practice',
-                      'Goal setting',
-                      'Creative writing'
-                    ].map(goal => (
-                      <button
-                        key={goal}
-                        onClick={() => handleGoalToggle(goal)}
-                        className={`flex items-center justify-between w-full p-3 rounded-lg border ${
-                          preferences.journalingGoals.includes(goal)
-                            ? 'bg-emerald-900/30 border-emerald-700/50 text-emerald-400'
-                            : 'bg-gray-800 border-gray-700 text-gray-300'
-                        }`}
-                      >
-                        <span>{goal}</span>
-                        {preferences.journalingGoals.includes(goal) && (
-                          <Check className="w-5 h-5" />
-                        )}
-                      </button>
-                    ))}
+                <div className="onboarding-goals-grid">
+                  {[
+                    'Self-discovery',
+                    'Anxiety & stress',
+                    'Personal growth',
+                    'Creative expression',
+                    'Emotional healing',
+                    'Gratitude practice',
+                    'Career clarity',
+                    'Relationship insights',
+                    'Life transitions',
+                    'Quick breakthrough',
+                    'Shadow work',
+                    'Voice confidence'
+                  ].map(goal => (
+                    <button
+                      key={goal}
+                      onClick={() => handleGoalToggle(goal)}
+                      className={`onboarding-goal-button ${
+                        preferences.journalingGoals.includes(goal) ? 'selected' : ''
+                      }`}
+                    >
+                      <span className="onboarding-goal-text">{goal}</span>
+                      <Check className="onboarding-goal-check" />
+                    </button>
+                  ))}
+                </div>
+                
+                {preferences.journalingGoals.length > 0 && (
+                  <div className="onboarding-recommendation-note">
+                    ✨ We'll recommend specific paths based on your selections
                   </div>
                 )}
               </div>
             )}
             
             {/* Navigation Buttons */}
-            <div className="flex justify-between">
+            <div className="onboarding-navigation">
               <button
                 onClick={goToPreviousStep}
-                className={`btn-secondary flex items-center ${currentStep === 0 ? 'invisible' : ''}`}
+                className={`onboarding-button onboarding-button-back ${currentStep === 0 ? 'hidden' : ''}`}
               >
-                <ChevronLeft className="w-5 h-5 mr-1" />
+                <ChevronLeft className="onboarding-button-icon" />
                 Back
               </button>
               
               <button
                 onClick={goToNextStep}
-                className="btn-base flex items-center"
+                className={`onboarding-button onboarding-button-next ${
+                  currentStep === 0 && !preferences.userName ? 'disabled' : ''
+                }`}
+                disabled={currentStep === 0 && !preferences.userName}
               >
                 {currentStep === steps.length - 1 ? (
-                  'Get Started'
+                  <>
+                    Start My Journey
+                    <Sparkles className="onboarding-button-icon" />
+                  </>
                 ) : (
                   <>
                     Next
-                    <ChevronRight className="w-5 h-5 ml-1" />
+                    <ChevronRight className="onboarding-button-icon" />
                   </>
                 )}
               </button>
@@ -267,19 +549,21 @@ const UserOnboarding = ({ onComplete }) => {
           </div>
           
           {/* Skip Button */}
-          <div className="text-center mt-4">
-            <button
-              onClick={handleFinish}
-              className="text-gray-500 text-sm hover:text-gray-300"
-            >
-              Skip for now
-            </button>
-          </div>
+          {currentStep < steps.length - 1 && (
+            <div className="onboarding-skip-wrapper">
+              <button
+                onClick={handleFinish}
+                className="onboarding-skip-button"
+              >
+                Skip for now
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
-      <footer className="py-4 text-center text-gray-600 text-xs">
-        © 2025 ΚΑΙΡΌΣ. All rights reserved.
+      <footer className="onboarding-footer">
+        © 2025 ΚΑΙΡΟΣ. All rights reserved. • Built with Claude AI
       </footer>
     </div>
   );

@@ -18,6 +18,7 @@ import {
   Ban
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
+import '../styles/components/terms.css';
 
 const TermsOfService = ({ onBack }) => {
   const [expandedSections, setExpandedSections] = useState({
@@ -71,7 +72,7 @@ const TermsOfService = ({ onBack }) => {
     <PageLayout title="Terms of Service" onBack={onBack}>
       <div className="legal-document">
         <div className="document-header">
-          <p className="document-date">Last Updated: March 2025</p>
+          <p className="document-date">Last Updated: November 2025</p>
           
           <div className="info-card info-card-welcome">
             <div className="info-card-icon">
@@ -80,8 +81,9 @@ const TermsOfService = ({ onBack }) => {
             <div className="info-card-content">
               <h3 className="info-card-title">Welcome to Καιρός</h3>
               <p className="info-card-text">
-                These Terms of Service govern your use of our journaling app. By using Καιρός, 
-                you agree to these terms. We've made them as clear and fair as possible.
+                These Terms of Service govern your use of Καιρός, the world's first multi-modal 
+                journaling platform. By using our app, you agree to these terms. We've made them 
+                as clear and fair as possible.
               </p>
             </div>
           </div>
@@ -92,19 +94,19 @@ const TermsOfService = ({ onBack }) => {
           <div className="summary-grid">
             <div className="summary-item">
               <Users className="summary-icon" />
-              <span>You own your journal content</span>
-            </div>
-            <div className="summary-item">
-              <MapPin className="summary-icon" />
-              <span>Location sharing is optional</span>
+              <span>Your content, your ownership</span>
             </div>
             <div className="summary-item">
               <Brain className="summary-icon" />
-              <span>AI helps with insights only</span>
+              <span>AI enhances, never replaces you</span>
+            </div>
+            <div className="summary-item">
+              <Lock className="summary-icon" />
+              <span>Privacy & security first</span>
             </div>
             <div className="summary-item">
               <Shield className="summary-icon" />
-              <span>Use the app responsibly</span>
+              <span>Respectful use required</span>
             </div>
           </div>
         </div>
@@ -126,27 +128,28 @@ const TermsOfService = ({ onBack }) => {
 
         <ExpandableSection id="service-description" title="2. What Καιρός Does" icon={Globe} isImportant>
           <p className="section-intro">
-            Καιρός is a journaling app that bridges the physical and digital worlds, combining 
-            handwritten journaling with AI-powered insights.
+            Καιρός is the world's first multi-modal journaling platform, allowing you to express 
+            yourself through text, voice, and visual art—all enhanced by AI-powered insights.
           </p>
           
           <h4 className="subsection-title">Core Features</h4>
           <div className="feature-grid">
-            <div className="feature-item">📝 Create and manage journal entries</div>
-            <div className="feature-item">📷 Upload photos of handwritten pages</div>
-            <div className="feature-item">🔤 Extract text from your photos</div>
-            <div className="feature-item">🤖 Get AI-powered insights and patterns</div>
-            <div className="feature-item">📊 Track your journaling progress</div>
-            <div className="feature-item">💭 Follow guided journaling experiences</div>
-            <div className="feature-item">🌤️ See local weather (optional)</div>
-            <div className="feature-item">📍 City selection assistance during setup</div>
+            <div className="feature-item">✍️ Text journaling with 50+ guided paths</div>
+            <div className="feature-item">🎤 Voice journaling with AI transcription</div>
+            <div className="feature-item">🎨 Visual journaling through artwork creation</div>
+            <div className="feature-item">🤖 Claude AI-powered insights & analysis</div>
+            <div className="feature-item">📊 Track your growth across all modalities</div>
+            <div className="feature-item">🌟 Personalized journey recommendations</div>
+            <div className="feature-item">🌤️ Optional weather context for entries</div>
+            <div className="feature-item">� Private, secure, encrypted storage</div>
           </div>
 
           <div className="highlight-box">
             <h4 className="highlight-title">🎯 Our Mission</h4>
             <p>
-              We believe journaling is a powerful tool for self-discovery. Καιρός helps you 
-              maintain the benefits of handwriting while gaining insights through technology.
+              We believe everyone expresses themselves differently. Καιρός empowers your self-discovery 
+              journey by letting you journal in whatever way feels right—write, speak, or create—all 
+              in one unified platform.
             </p>
           </div>
         </ExpandableSection>
@@ -384,10 +387,11 @@ const TermsOfService = ({ onBack }) => {
 
         <ExpandableSection id="ai-technology" title="9. AI Analysis & Insights" icon={Brain}>
           <div className="info-box">
-            <h4 className="info-box-title">🤖 How AI Helps You</h4>
+            <h4 className="info-box-title">🤖 How AI Empowers Your Journey</h4>
             <p>
-              Our AI analyzes your journal entries to identify patterns, themes, and insights 
-              that can support your personal growth and self-understanding.
+              Claude AI analyzes your multi-modal entries—text, voice transcriptions, and visual 
+              descriptions—to identify patterns, themes, and insights that support your personal 
+              growth and self-understanding across all forms of expression.
             </p>
           </div>
           
@@ -396,23 +400,23 @@ const TermsOfService = ({ onBack }) => {
             <AlertCircle className="warning-icon" />
             <div>
               <h4 className="warning-title">Not Professional Advice</h4>
-              <p>AI insights are for informational purposes only and should not replace professional guidance.</p>
+              <p>AI insights are for personal reflection only and should not replace professional medical, psychological, or therapeutic guidance.</p>
             </div>
           </div>
           
           <ul className="styled-list">
-            <li>AI analysis is intended for personal reflection, not medical or professional advice</li>
-            <li>Insights may not always be accurate or applicable to your specific situation</li>
-            <li>Use AI features at your own discretion and judgment</li>
-            <li>AI does not process your location data for weather services</li>
-            <li>You can disable AI analysis in your privacy settings anytime</li>
+            <li>AI analysis works across all modalities (text, voice, visual) for holistic insights</li>
+            <li>Insights are intended for personal reflection, not professional advice</li>
+            <li>Analysis quality improves as you journal more consistently</li>
+            <li>You maintain full control—disable AI analysis anytime in privacy settings</li>
+            <li>Your multi-modal data is processed securely and never shared</li>
           </ul>
           
           <div className="info-box">
             <h4 className="info-box-title">💡 Continuous Improvement</h4>
             <p>
-              We continually work to improve our AI technology, so the quality and nature of 
-              insights may evolve over time.
+              We continually enhance our AI to better understand your unique expression across 
+              different modalities, ensuring more meaningful insights over time.
             </p>
           </div>
         </ExpandableSection>

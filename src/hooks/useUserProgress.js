@@ -19,7 +19,12 @@ export const useUserProgress = () => {
 
   // Memoized calculation of all paths progress
   const progressData = useMemo(() => {
+    console.log('🔍 DEBUG useUserProgress: Calculating progress data...');
+    console.log('🔍 DEBUG useUserProgress: userProfile exists:', !!userProfile);
+    console.log('🔍 DEBUG useUserProgress: currentUser exists:', !!currentUser);
+    
     if (!userProfile || !currentUser) {
+      console.log('⚠️ DEBUG useUserProgress: No userProfile or currentUser, returning empty data');
       return {
         allPaths: [],
         inProgressPaths: [],
@@ -35,9 +40,13 @@ export const useUserProgress = () => {
       };
     }
 
+    console.log('🔍 DEBUG useUserProgress: userProfile.journeyProgress:', userProfile.journeyProgress);
+
     try {
       const allJourneyPaths = getAllJourneyPaths();
       const pathsArray = Object.values(allJourneyPaths);
+      
+      console.log('🔍 DEBUG useUserProgress: Total paths to process:', pathsArray.length);
       
       const allPaths = [];
       const inProgressPaths = [];
@@ -54,13 +63,31 @@ export const useUserProgress = () => {
         try {
           const pathProgress = getUserPathProgress(userProfile, path.id);
           
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} progress:`, pathProgress);
+          
           const completedDays = pathProgress?.completedDays || [];
           const currentStreak = pathProgress?.currentStreak || 0;
           const bestStreak = pathProgress?.bestStreak || 0;
           
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} - completedDays:`, completedDays.length, '/', path.duration);
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} - completedDaysList:`, completedDays);
+          
           // Enhanced completion detection
-          const isCompleted = completedDays.length >= path.duration;
+          // Check if the user has completed enough days (count-based)
+          const hasEnoughDays = completedDays.length >= path.duration;
+          
+          // Check if the highest completed day equals the path duration
+          const highestDay = completedDays.length > 0 ? Math.max(...completedDays) : 0;
+          const completedFinalDay = highestDay >= path.duration;
+          
+          // Path is complete if EITHER condition is met:
+          // 1. They've completed the required number of days (even with gaps)
+          // 2. They've completed the final day of the path
+          const isCompleted = hasEnoughDays || completedFinalDay;
           const isStarted = completedDays.length > 0;
+          
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} - hasEnoughDays:`, hasEnoughDays, 'completedFinalDay:', completedFinalDay, 'highestDay:', highestDay);
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} - isCompleted:`, isCompleted, 'isStarted:', isStarted);
           
           // Additional validation for edge cases
           const hasAllDays = path.duration > 0 && completedDays.length === path.duration;
@@ -68,7 +95,15 @@ export const useUserProgress = () => {
           
           // Calculate next day
           const nextDay = isDefinitelyComplete ? path.duration : getNextDayForPath(userProfile, path.id);
-          const percentage = Math.round((completedDays.length / path.duration) * 100);
+          
+          // Calculate percentage based on completed days count
+          // Cap at 100% if the journey is marked as complete
+          let percentage = Math.round((completedDays.length / path.duration) * 100);
+          if (isDefinitelyComplete && percentage < 100) {
+            percentage = 100; // Ensure completed journeys show 100%
+          }
+          
+          console.log(`🔍 DEBUG useUserProgress: Path ${path.id} - percentage:`, percentage, '% (', completedDays.length, '/', path.duration, ')');
 
           const pathData = {
             id: path.id,
@@ -105,11 +140,14 @@ export const useUserProgress = () => {
           if (isDefinitelyComplete) {
             completedPaths.push(pathData);
             totalPathsCompleted++;
+            console.log(`✅ DEBUG useUserProgress: Path ${path.id} marked as COMPLETED`);
           } else if (isStarted) {
             inProgressPaths.push(pathData);
             totalPathsStarted++;
+            console.log(`🔄 DEBUG useUserProgress: Path ${path.id} marked as IN PROGRESS`);
           } else {
             notStartedPaths.push(pathData);
+            console.log(`⭕ DEBUG useUserProgress: Path ${path.id} marked as NOT STARTED`);
           }
 
           // Update stats
@@ -124,6 +162,15 @@ export const useUserProgress = () => {
         } catch (pathError) {
           console.error(`Error processing path ${path.id}:`, pathError);
         }
+      });
+
+      console.log('📊 DEBUG useUserProgress: Final stats:', {
+        totalPaths: allPaths.length,
+        inProgress: inProgressPaths.length,
+        completed: completedPaths.length,
+        notStarted: notStartedPaths.length,
+        totalEntries,
+        totalPathsCompleted
       });
 
       // Sort arrays

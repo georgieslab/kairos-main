@@ -50,6 +50,10 @@ import {
   CheckSquare
 } from 'lucide-react';
 
+// Import components
+import PathRecommendations from '../paths/PathRecommendations';
+import { getNextDayForPath } from '../../utils/pathUtils';
+
 // Import styles
 import '../../styles/components/journeyCompletion.css';
 import '../../styles/components/aiSummary.css';
@@ -479,13 +483,31 @@ const EnhancedJourneyCompletion = ({
 
         {/* What's Next Actions */}
         <div className="glass-card actions-section">
-          <h3 className="glass-card-header">What's Next?</h3>
+          <h3 className="glass-card-header">
+            <Sparkles className="header-icon" />
+            Ready for Your Next Journey?
+          </h3>
           
-          <button 
-            className="action-button glass primary"
-            onClick={() => navigateToScreen('path-selection')}
-          >
-            <Compass className="button-icon" />
+          {/* AI-Powered Path Recommendations */}
+          <div className="completion-recommendations">
+            <PathRecommendations 
+              onPathSelect={(path) => {
+                console.log('Selected recommended path from completion screen:', path.id);
+                const nextDay = getNextDayForPath(userProfile, path.id);
+                navigateToScreen('write', { pathId: path.id, day: nextDay });
+              }}
+              maxRecommendations={3}
+            />
+          </div>
+
+          <div className="additional-actions">
+            <h4 className="actions-subheader">Or explore on your own:</h4>
+          
+            <button 
+              className="action-button glass primary"
+              onClick={() => navigateToScreen('path-selection')}
+            >
+              <Compass className="button-icon" />
             <div className="button-content">
               <span className="button-title">Start New Journey</span>
               <span className="button-subtitle">Explore another path</span>
@@ -528,6 +550,7 @@ const EnhancedJourneyCompletion = ({
             </div>
             <ArrowRight className="arrow-icon" />
           </button>
+          </div> {/* Close additional-actions */}
         </div>
       </div>
     </div>

@@ -1,10 +1,16 @@
 // src/App.jsx - v5.1.0-alpha - Complete Production Ready Version
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useAuth } from './contexts/AuthContext';
+import { useFirestoreConnection } from './hooks/useFirestoreConnection';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useNavigation } from './contexts/NavigationContext';
 import { Capacitor } from '@capacitor/core';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { StatusBar, Style } from '@capacitor/status-bar';
+
+// NFC Integration
+import { useNFCQuickUpload } from './hooks/useNFC';
+import JournalRegistration from './components/journal/JournalRegistration';
 
 // Core Services
 import { 
@@ -16,6 +22,7 @@ import {
 import apiCacheService from './services/apiCacheService.js';
 import useJourneyCompletion from './hooks/useJourneyCompletion';
 import EnhancedJourneyCompletion from './components/journey/EnhancedJourneyCompletion';
+import useNFCQuickAccess from './hooks/useNFCQuickAccess';
 
 
 // Core Components
@@ -118,6 +125,7 @@ const takePhoto = async () => {
 const App = () => {
   const { currentUser, userProfile, logout, loading } = useAuth();
   const navigation = useNavigation();
+  const firestoreState = useFirestoreConnection();
   const { 
     currentScreen,
     currentPath, 
@@ -146,6 +154,16 @@ const App = () => {
     isJourneyCompleted 
   } = useJourneyCompletion(currentPath, navigateToScreen);
   
+  // NFC Quick Access Hook - handles NFC taps when app opens
+  useNFCQuickAccess({
+    enableQuickUpload: true,
+    enableContextAware: true,
+    onTagDetected: (nfcData) => {
+      console.log('📱 NFC tag detected in app:', nfcData);
+      // Could show a toast notification here
+    }
+  });
+  
   // Local State
   const [pendingUploads, setPendingUploads] = useState([]);
   const [settingsData, setSettingsData] = useState({ activeSection: 'profile' });
@@ -155,12 +173,73 @@ const App = () => {
   const [isBackNavigation, setIsBackNavigation] = useState(false);
   const [isTabNavigation, setIsTabNavigation] = useState(false);
   const pageRef = useRef(null);
+  
+  // NFC Registration State
+  const [showRegistration, setShowRegistration] = useState(false);
+
+  // NFC Quick Upload - Auto-detect journal taps
+  const nfcQuickUpload = useNFCQuickUpload((journalData) => {
+    console.log('📖 Journal scanned via NFC:', journalData.journalId);
+    
+    // Check if journal is registered to this user
+    if (userProfile?.journals?.includes(journalData.journalId)) {
+      // Journal is registered - navigate to upload screen
+      console.log('✅ Journal registered, navigating to upload...');
+      navigateToScreen('upload', {
+        journalId: journalData.journalId,
+        fromNFC: true
+      });
+    } else {
+      // Journal not registered - show registration modal
+      console.log('📝 Journal not registered, showing registration modal...');
+      setShowRegistration(true);
+    }
+  });
 
   // Development Mode Setup
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       localStorage.setItem('devPremium', 'false');
     }
+  }, []);
+
+  // NFC Quick Upload Listener - Start when user is logged in
+  useEffect(() => {
+    if (currentUser && userProfile) {
+      console.log('🔷 Starting NFC quick upload listener...');
+      nfcQuickUpload.startListening();
+    }
+    
+    // Cleanup on unmount or logout
+    return () => {
+      if (nfcQuickUpload.isListening) {
+        console.log('🔷 Stopping NFC quick upload listener...');
+        nfcQuickUpload.stopListening();
+      }
+    };
+  }, [currentUser, userProfile]);
+
+  // Logout handler with navigation
+  const handleLogout = async () => {
+    console.log('👋 Logging out and navigating to welcome screen...');
+    await logout();
+    navigateToScreen('welcome');
+  };
+
+  // Configure StatusBar for Android
+  useEffect(() => {
+    const setupStatusBar = async () => {
+      if (Capacitor.isNativePlatform()) {
+        try {
+          await StatusBar.setOverlaysWebView({ overlay: true });
+          await StatusBar.hide();
+        } catch (error) {
+          console.error('Error configuring StatusBar:', error);
+        }
+      }
+    };
+    
+    setupStatusBar();
   }, []);
 
   // Page Transitions
@@ -190,6 +269,7 @@ const App = () => {
   // Initial Loading and Authentication Flow
   useEffect(() => {
     if (currentScreen === 'loading') {
+      console.log('🔄 Showing loader for loading screen');
       showLoader({ 
         size: 'large', 
         fullScreen: true
@@ -198,21 +278,35 @@ const App = () => {
   }, [showLoader, currentScreen]);
   
   useEffect(() => {
+    console.log('🔍 Auth state update:', {
+      loading,
+      currentScreen,
+      hasCurrentUser: !!currentUser,
+      hasUserProfile: !!userProfile
+    });
+
     if (loading) {
+      console.log('⏳ Still loading auth state, showing loading screen');
       navigateToScreen('loading');
       return;
     }
     
     if (currentScreen === 'loading') {
       const handleInitialLoad = async () => {
+        console.log('🚀 Starting initial load handler');
         await new Promise(resolve => setTimeout(resolve, 1500));
         
         if (!currentUser) {
+          console.log('👤 No user found, navigating to welcome screen');
+          // Clear persisted navigation context when no user is logged in
+          console.log('🧹 Clearing persisted navigation context (no user)');
+          localStorage.removeItem('kairosContext');
           navigateToScreen('welcome');
           return;
         } 
         
         if (!userProfile) {
+          console.log('⚠️ No user profile found, waiting...');
           return;
         }
         
@@ -440,15 +534,29 @@ const App = () => {
   return (
     <ThemeProvider>
       <OfflineStatusProvider>
-        {({ isOnline }) => (
+        {({ isOnline }) => {
+          // 🤖 ANDROID FIX: On mobile, be more lenient with connectivity checks
+          const isMobile = Capacitor.isNativePlatform();
+          const showOfflineWarning = !isMobile 
+            ? (!isOnline || !firestoreState.isConnected) 
+            : (!isOnline && !firestoreState.isConnected); // Both must be false on mobile
+          
+          return (
           <div className="min-h-screen bg-gray-950 text-white flex flex-col">
             {/* Global Loader */}
             {isLoading && <KairosLoader {...loaderProps} isFading={loaderProps.isFading} />}
             
-            {/* Offline Indicator */}
-            {!isOnline && (
-              <div className="bg-yellow-700 text-yellow-100 text-center py-1 text-sm">
-                You are offline. Some features may be limited.
+            {/* Network Status Indicators - More lenient on mobile */}
+            {showOfflineWarning && (
+              <div className={`text-center py-1 text-sm ${
+                !isOnline ? 'bg-yellow-700 text-yellow-100' : 
+                !firestoreState.isConnected ? 'bg-orange-700 text-orange-100' : ''
+              }`}>
+                {!isOnline ? (
+                  'You are offline. Some features may be limited.'
+                ) : !firestoreState.isConnected ? (
+                  'Having trouble connecting to the server. Retrying...'
+                ) : null}
               </div>
             )}
             
@@ -486,7 +594,10 @@ const App = () => {
                 {/* Authentication Screens */}
                 {currentScreen === 'signup' && (
                   <SignUpScreen 
-                    onNext={() => navigateToScreen('home')} 
+                    onNext={() => {
+                      console.log('🔄 SignUpScreen onNext triggered, navigating to home screen...');
+                      navigateToScreen('home', {}, { skipCompletionCheck: true });
+                    }}
                     onBack={() => navigateToScreen('welcome')}
                     navigateToScreen={navigateToScreen}
                   />
@@ -494,7 +605,7 @@ const App = () => {
                 
                 {currentScreen === 'profile' && (
                   <ProfileScreen 
-                    handleSignOut={logout}
+                    handleSignOut={handleLogout}
                     navigateToScreen={navigateToScreen}
                   />
                 )}
@@ -814,8 +925,28 @@ const App = () => {
                 </div>
               </footer>
             )}
+
+            {/* NFC Journal Registration Modal */}
+            {currentUser && (
+              <JournalRegistration
+                isOpen={showRegistration}
+                onClose={() => setShowRegistration(false)}
+                onComplete={(journalData) => {
+                  console.log('✅ Journal registration complete:', journalData);
+                  setShowRegistration(false);
+                  
+                  // Navigate to upload screen with new journal
+                  navigateToScreen('upload', {
+                    journalId: journalData.journalId,
+                    fromNFC: true,
+                    newlyRegistered: true
+                  });
+                }}
+              />
+            )}
           </div>
-        )}
+          );
+        }}
       </OfflineStatusProvider>
     </ThemeProvider>
   );

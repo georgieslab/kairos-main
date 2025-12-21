@@ -567,3 +567,53 @@
     transform: translateY(0);
   }
 }
+/* ================================
+   COMPLETION RECOMMENDATIONS
+   ================================ */
+.completion-recommendations {
+  margin: 1.5rem 0 2rem 0;
+}
+
+.actions-subheader {
+  color: rgba(224, 242, 233, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(64, 224, 208, 0.15);
+}
+
+.additional-actions {
+  margin-top: 1.5rem;
+}
+
+/* Header icon styling */
+.glass-card-header .header-icon {
+  margin-right: 0.5rem;
+  color: #40e0d0;
+  animation: sparkle-rotate 3s ease-in-out infinite;
+}
+
+@keyframes sparkle-rotate {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1); 
+    opacity: 0.8;
+  }
+  50% { 
+    transform: rotate(180deg) scale(1.1); 
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .completion-recommendations {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  .actions-subheader {
+    font-size: 0.8125rem;
+  }
+}

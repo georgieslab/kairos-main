@@ -1,442 +1,224 @@
-// src/contexts/AuthContext.jsx
+// src/contexts/AuthContext.jsx - Simplified and Corrected with DEBUG LOGGING
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged, 
-  GoogleAuthProvider, 
-  signInWithPopup 
+import {
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  serverTimestamp 
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp
 } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 
-// Create context
+console.log('🔍 DEBUG: AuthContext.jsx is loading...');
+console.log('🔍 DEBUG: auth object:', auth);
+console.log('🔍 DEBUG: db object:', db);
+
 const AuthContext = createContext();
 
-// Custom hook to use the auth context
 export function useAuth() {
+  console.log('🔍 DEBUG: useAuth() called');
   return useContext(AuthContext);
 }
 
-// Auth provider component
 export function AuthProvider({ children }) {
+  console.log('🔍 DEBUG: AuthProvider component mounting...');
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Enhanced sign up with additional user data
-  async function signup(email, password, name, age, gender, city, additionalData = {}) {
+  const refreshUserProfile = useCallback(async (user) => {
+    console.log('🔍 DEBUG: refreshUserProfile called with user:', user?.uid || 'null');
+    
+    if (!user) {
+      console.log('🔍 DEBUG: No user provided, clearing profile');
+      setUserProfile(null);
+      return;
+    }
+
     try {
-      // Create user in Firebase Auth
+      console.log(`🔄 DEBUG: Refreshing profile for user: ${user.uid}`);
+      const userRef = doc(db, 'users', user.uid);
+      console.log('🔍 DEBUG: userRef created:', userRef.path);
+      
+      console.log('🔍 DEBUG: Calling getDoc...');
+      const userSnap = await getDoc(userRef);
+      console.log('🔍 DEBUG: getDoc completed. exists:', userSnap.exists());
+
+      if (userSnap.exists()) {
+        const profileData = userSnap.data();
+        console.log('✅ DEBUG: Profile data retrieved:', {
+          uid: profileData.uid,
+          email: profileData.email,
+          displayName: profileData.displayName
+        });
+        setUserProfile(profileData);
+        console.log('✅ DEBUG: Profile state updated');
+      } else {
+        console.warn(`⚠️ DEBUG: No profile document found for user ${user.uid}`);
+        setUserProfile(null);
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ DEBUG: Error in refreshUserProfile:', error);
+      console.error('❌ DEBUG: Error details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        stack: error.stack
+      });
+      // Don't throw here, allow app to function in offline mode
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('🔍 DEBUG: Setting up onAuthStateChanged listener...');
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log(`🔐 DEBUG: Auth state changed. User: ${user ? user.uid : 'null'}`);
+      console.log('🔍 DEBUG: User details:', user ? {
+        uid: user.uid,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        displayName: user.displayName
+      } : 'null');
+      
+      setCurrentUser(user);
+      console.log('🔍 DEBUG: currentUser state updated');
+      
+      console.log('🔍 DEBUG: About to call refreshUserProfile...');
+      await refreshUserProfile(user);
+      console.log('🔍 DEBUG: refreshUserProfile completed');
+      
+      setLoading(false);
+      console.log('✅ DEBUG: Auth state change handled, loading set to false');
+    });
+
+    console.log('✅ DEBUG: onAuthStateChanged listener setup complete');
+    return () => {
+      console.log('🔍 DEBUG: Cleaning up onAuthStateChanged listener');
+      unsubscribe();
+    };
+  }, [refreshUserProfile]);
+
+  async function signup(email, password, name, additionalData = {}) {
+    console.log('🔍 DEBUG: signup called with email:', email);
+    try {
+      console.log('🔍 DEBUG: Calling createUserWithEmailAndPassword...');
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
-      // Create comprehensive user profile in Firestore
+      console.log('✅ DEBUG: User created in Firebase Auth:', user.uid);
+
       const userProfileData = {
         uid: user.uid,
         email: user.email,
         displayName: name,
-        age: age,
-        gender: gender,
-        city: city,
-        
-        // New multi-step signup data
-        interests: additionalData.interests || [],
-        journalingGoals: additionalData.journalingGoals || [],
-        preferredTheme: additionalData.preferredTheme || 'dark',
-        
-        // Profile completion tracking
-        hasCompletedOnboarding: true,
-        profileCompletionStep: 'complete',
-        
-        // Journey progress initialization
-        journeyProgress: {
-          currentPath: 'self-discovery', // Default first journey
-          hasStartedJourney: false,
-        },
-        
-        // User preferences and settings
-        settings: {
-          enableNotifications: true,
-          reminderTime: '20:00',
-          weatherEnabled: !!city,
-          analyticsEnabled: true,
-          themePreference: additionalData.preferredTheme || 'dark',
-          language: 'en',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        },
-        
-        // Metadata
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         lastActive: serverTimestamp(),
-        accountStatus: 'active',
-        subscriptionTier: 'free',
-        
-        // Analytics opt-in (can be customized based on user choice)
-        analyticsConsent: {
-          functionalAnalytics: true,
-          performanceAnalytics: true,
-          marketingAnalytics: false, // Default to false, user can opt-in later
-          consentDate: serverTimestamp()
-        }
+        ...additionalData,
       };
-      
+      console.log('🔍 DEBUG: Creating user profile document...');
+
       await setDoc(doc(db, 'users', user.uid), userProfileData);
+      console.log('✅ DEBUG: User profile document created');
       
-      // CRITICAL: Immediately set the userProfile state to prevent App.jsx redirect
       setUserProfile(userProfileData);
+      console.log('✅ DEBUG: Local profile state updated');
       
-      console.log('✅ User account created successfully with enhanced profile data');
       return user;
     } catch (error) {
-      console.error('❌ Error during enhanced signup:', error);
+      console.error('❌ DEBUG: Error in signup:', error);
+      console.error('❌ DEBUG: Error details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code
+      });
       throw error;
     }
   }
 
-  // Sign in with email and password
   async function login(email, password) {
+    console.log('🔍 DEBUG: login called with email:', email);
     try {
+      console.log('🔍 DEBUG: Calling signInWithEmailAndPassword...');
       const result = await signInWithEmailAndPassword(auth, email, password);
-      
-      // Update last active timestamp
-      if (result.user) {
-        await updateDoc(doc(db, 'users', result.user.uid), {
-          lastActive: serverTimestamp()
-        });
-      }
-      
+      console.log('✅ DEBUG: Login successful for user:', result.user.uid);
+      // onAuthStateChanged will handle the profile refresh
       return result;
     } catch (error) {
-      console.error('❌ Error during login:', error);
+      console.error('❌ DEBUG: Error in login:', error);
+      console.error('❌ DEBUG: Error details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code
+      });
       throw error;
     }
   }
 
-  // Enhanced sign in with Google
   async function signInWithGoogle() {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      
-      // Check if user profile already exists
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      
-      if (!userDoc.exists()) {
-        // Create new user profile with enhanced structure for Google users
-        const userProfileData = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName || '',
-          profileImage: user.photoURL || '',
-          
-          // For Google users, we'll need to collect additional info later
-          hasCompletedOnboarding: false,
-          profileCompletionStep: 'personal-info', // They'll need to complete the profile
-          
-          // Default values for Google signup
-          interests: [],
-          journalingGoals: [],
-          age: null,
-          gender: '',
-          city: '',
-          preferredTheme: 'dark',
-          
-          // Journey progress initialization
-          journeyProgress: {
-            currentPath: 'self-discovery',
-            hasStartedJourney: false,
-          },
-          
-          // Default settings
-          settings: {
-            enableNotifications: true,
-            reminderTime: '20:00',
-            weatherEnabled: false,
-            analyticsEnabled: true,
-            themePreference: 'dark',
-            language: 'en',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          },
-          
-          // Metadata
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          lastActive: serverTimestamp(),
-          accountStatus: 'active',
-          subscriptionTier: 'free',
-          
-          // Analytics consent (default for Google users)
-          analyticsConsent: {
-            functionalAnalytics: true,
-            performanceAnalytics: true,
-            marketingAnalytics: false,
-            consentDate: serverTimestamp()
-          }
-        };
-        
-        await setDoc(doc(db, 'users', user.uid), userProfileData);
-        console.log('✅ New Google user profile created');
-      } else {
-        // Update last active for existing user
-        await updateDoc(doc(db, 'users', user.uid), {
-          lastActive: serverTimestamp()
-        });
-        console.log('✅ Existing Google user signed in');
-      }
-      
-      return user;
-    } catch (error) {
-      console.error('❌ Error during Google sign-in:', error);
-      throw error;
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists()) {
+      const userProfileData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || '',
+        profileImage: user.photoURL || '',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        lastActive: serverTimestamp(),
+      };
+      await setDoc(doc(db, 'users', user.uid), userProfileData);
     }
+    // onAuthStateChanged will handle the profile refresh
+    return user;
   }
 
-  // Sign out
-  function logout() {
-    return signOut(auth);
+  async function logout() {
+    await signOut(auth);
+    setCurrentUser(null);
+    setUserProfile(null);
   }
 
-  // 🆕 NEW: Refresh user profile from Firebase
-  const refreshUserProfile = useCallback(async () => {
-    if (!currentUser) {
-      console.warn('⚠️ Cannot refresh profile: No user signed in');
-      return null;
-    }
-    
-    try {
-      console.log('🔄 Refreshing user profile from Firebase...');
-      
-      // Re-fetch user profile from Firestore
-      const userRef = doc(db, 'users', currentUser.uid);
-      const userSnap = await getDoc(userRef);
-      
-      if (userSnap.exists()) {
-        const freshUserData = userSnap.data();
-        setUserProfile(freshUserData);
-        console.log('✅ User profile refreshed successfully');
-        
-        // Also dispatch a custom event to notify components
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('userProfileRefreshed', {
-            detail: { 
-              userId: currentUser.uid, 
-              timestamp: Date.now(),
-              profile: freshUserData
-            }
-          }));
-        }
-        
-        return freshUserData;
-      } else {
-        console.error('❌ User profile document not found');
-        return null;
-      }
-    } catch (error) {
-      console.error('❌ Error refreshing user profile:', error);
-      throw error;
-    }
-  }, [currentUser]);
-
-  // Enhanced update user profile
   async function updateUserProfile(profileData) {
     if (!currentUser) throw new Error('No user signed in');
-    
-    try {
-      const userRef = doc(db, 'users', currentUser.uid);
-      
-      // Prepare update data with proper structure
-      const updateData = {
-        ...profileData,
-        updatedAt: serverTimestamp()
-      };
-      
-      // Handle nested updates for settings
-      if (profileData.settings) {
-        updateData.settings = {
-          ...userProfile?.settings,
-          ...profileData.settings
-        };
-      }
-      
-      // Handle analytics consent updates
-      if (profileData.analyticsConsent) {
-        updateData.analyticsConsent = {
-          ...userProfile?.analyticsConsent,
-          ...profileData.analyticsConsent,
-          consentDate: serverTimestamp()
-        };
-      }
-      
-      // Update the document
-      await updateDoc(userRef, updateData);
-      
-      // Update local state
-      setUserProfile(prevProfile => ({
-        ...prevProfile,
-        ...updateData
-      }));
-      
-      console.log('✅ User profile updated successfully');
-      return true;
-    } catch (error) {
-      console.error('❌ Error updating user profile:', error);
-      throw error;
-    }
-  }
-
-  // 🆕 NEW: Complete profile for Google users or profile updates
-  async function completeUserProfile(additionalData) {
-    if (!currentUser) throw new Error('No user signed in');
-    
-    try {
-      const completionData = {
-        ...additionalData,
-        hasCompletedOnboarding: true,
-        profileCompletionStep: 'complete',
-        updatedAt: serverTimestamp()
-      };
-      
-      // Update settings if theme preference is provided
-      if (additionalData.preferredTheme) {
-        completionData.settings = {
-          ...userProfile?.settings,
-          themePreference: additionalData.preferredTheme,
-          weatherEnabled: !!additionalData.city
-        };
-      }
-      
-      await updateUserProfile(completionData);
-      console.log('✅ User profile completion successful');
-      return true;
-    } catch (error) {
-      console.error('❌ Error completing user profile:', error);
-      throw error;
-    }
-  }
-
-  // 🆕 NEW: Expose refresh function globally for claudeService
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.authContextRefresh = refreshUserProfile;
-      console.log('🌍 Global auth refresh function registered');
-    }
-    
-    // Cleanup on unmount
-    return () => {
-      if (typeof window !== 'undefined') {
-        delete window.authContextRefresh;
-        console.log('🧹 Global auth refresh function cleanup');
-      }
+    const userRef = doc(db, 'users', currentUser.uid);
+    const updateData = {
+      ...profileData,
+      updatedAt: serverTimestamp(),
     };
-  }, [refreshUserProfile]);
-
-  // Effect to handle auth state changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      
-      if (user) {
-        try {
-          // Get user profile from Firestore
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserProfile(userData);
-            
-            // Check if profile needs completion (for Google users or incomplete profiles)
-            if (!userData.hasCompletedOnboarding) {
-              console.log('👤 User profile needs completion');
-            }
-            
-          } else {
-            // Create basic profile if it doesn't exist (should not happen normally)
-            console.warn('⚠️ User auth exists but no profile found. Creating basic profile.');
-            
-            const basicProfile = {
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName || '',
-              profileImage: user.photoURL || '',
-              hasCompletedOnboarding: false,
-              profileCompletionStep: 'personal-info',
-              
-              // Default empty values
-              interests: [],
-              journalingGoals: [],
-              birthday: '',
-              age: null,
-              city: '',
-              preferredTheme: 'dark',
-              
-              journeyProgress: {
-                currentPath: 'self-discovery',
-                hasStartedJourney: false,
-              },
-              
-              settings: {
-                enableNotifications: true,
-                reminderTime: '20:00',
-                weatherEnabled: false,
-                analyticsEnabled: true,
-                themePreference: 'dark',
-                language: 'en',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              },
-              
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-              lastActive: serverTimestamp(),
-              accountStatus: 'active',
-              subscriptionTier: 'free',
-              
-              analyticsConsent: {
-                functionalAnalytics: true,
-                performanceAnalytics: true,
-                marketingAnalytics: false,
-                consentDate: serverTimestamp()
-              }
-            };
-            
-            await setDoc(doc(db, 'users', user.uid), basicProfile);
-            setUserProfile(basicProfile);
-          }
-        } catch (error) {
-          console.error('❌ Error fetching user profile:', error);
-        }
-      } else {
-        setUserProfile(null);
-      }
-      
-      setLoading(false);
-    });
-    
-    return unsubscribe;
-  }, []);
+    await updateDoc(userRef, updateData);
+    // Refresh local profile state after update
+    await refreshUserProfile(currentUser);
+  }
 
   const value = {
     currentUser,
     userProfile,
+    loading,
     signup,
     login,
     logout,
     signInWithGoogle,
     updateUserProfile,
-    completeUserProfile, // 🆕 NEW: For completing profiles
-    refreshUserProfile, // 🆕 NEW: Add refresh function to context
-    loading
+    refreshUserProfile: () => refreshUserProfile(currentUser), // Expose a simple refresh function
   };
+
+  console.log('🔍 DEBUG: AuthProvider rendering. Loading:', loading);
+  console.log('🔍 DEBUG: Current user:', currentUser?.uid || 'null');
+  console.log('🔍 DEBUG: User profile loaded:', !!userProfile);
 
   return (
     <AuthContext.Provider value={value}>
@@ -445,4 +227,5 @@ export function AuthProvider({ children }) {
   );
 }
 
+console.log('✅ DEBUG: AuthContext.jsx module loaded');
 export default AuthContext;

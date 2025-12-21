@@ -1344,3 +1344,9 @@
     transform: none;
   }
 }
+
+.page-content h3 {
+    font-size: 1.23rem;
+    font-weight: 600;
+    color: #afaf62 !important;
+    margin-top: 3rem;}

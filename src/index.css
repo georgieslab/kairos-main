@@ -38,6 +38,10 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 body {
@@ -47,6 +51,14 @@ body {
   background-color: var(--color-background);
   color: var(--color-text-primary);
   line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Android edge-to-edge support */
+#root {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  width: 100%;
   overflow-x: hidden;
 }
 

@@ -39,7 +39,10 @@ export const PATHS = {
   GRATITUDE_PRACTICE: 'gratitude-practice',
   SHADOW_WORK: 'shadow-work',
   NATURE_CONNECTION: 'nature-connection',
-  HOLISTIC_TRANSFORMATION: 'holistic-transformation'
+  HOLISTIC_TRANSFORMATION: 'holistic-transformation',
+  VOCAL_CONFIDENCE: 'vocal-confidence',
+  MEDITATION_SPEAKING: 'meditation-speaking',
+  DECIDING_TO_DOING: 'deciding-to-doing'
 
 };
 

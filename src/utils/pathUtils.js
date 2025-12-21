@@ -126,15 +126,27 @@ export const getNextDayForPath = (userProfile, pathId) => {
  * @returns {Object} Progress object with completedDays array
  */
 export const getUserPathProgress = (userProfile, pathId) => {
+  console.log(`🔍 DEBUG getUserPathProgress: pathId = "${pathId}"`);
+  
   if (!userProfile || !userProfile.journeyProgress || !pathId) {
+    console.log('⚠️ DEBUG getUserPathProgress: Missing data', {
+      hasUserProfile: !!userProfile,
+      hasJourneyProgress: !!userProfile?.journeyProgress,
+      hasPathId: !!pathId
+    });
     return { completedDays: [] };
   }
   
+  console.log('🔍 DEBUG getUserPathProgress: journeyProgress keys:', Object.keys(userProfile.journeyProgress));
+  
   // Get the progress field name for this path
   const progressField = getProgressFieldForPath(pathId);
+  console.log(`🔍 DEBUG getUserPathProgress: Looking for field "${progressField}"`);
   
   // Get the progress object for this path, with fallbacks
   const progress = userProfile.journeyProgress[progressField] || { completedDays: [] };
+  
+  console.log(`🔍 DEBUG getUserPathProgress: Found progress for "${pathId}":`, progress);
   
   // Ensure completedDays is an array
   if (!progress.completedDays) {

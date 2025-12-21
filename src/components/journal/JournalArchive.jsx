@@ -18,12 +18,15 @@ import {
   Clock,
   Star,
   Bookmark,
-  Plus
+  Plus,
+  Mic,
+  Archive
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getPreviousEntries } from '../../services/claudeService';
 import { getJourneyPath } from '../../data/JourneyData';
 import { useTheme } from '../../contexts/ThemeContext';
+import TopBar from '../common/TopBar';
 
 import '../../styles/components/journal-archive.css';
 
@@ -161,7 +164,8 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
       result = result.filter(entry => 
         (entry.theme && entry.theme.toLowerCase().includes(term)) ||
         (entry.prompt && entry.prompt.toLowerCase().includes(term)) ||
-        (entry.analysis && entry.analysis.summary && entry.analysis.summary.toLowerCase().includes(term))
+        (entry.analysis && entry.analysis.summary && entry.analysis.summary.toLowerCase().includes(term)) ||
+        (entry.transcription && entry.transcription.toLowerCase().includes(term)) // Include voice transcriptions
       );
     }
     
@@ -295,22 +299,30 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
 
   return (
     <div className={`ja-container ${isDarkMode ? 'ja-dark' : 'ja-light'}`}>
+      {/* Top Bar */}
+      <TopBar 
+        title="Journal Archive"
+        subtitle={`${stats.totalEntries} entries across ${stats.totalPaths} paths`}
+        icon={Archive}
+        actions={
+          <>
+            <button className="ja-back-btn" onClick={onBack}>
+              <ArrowLeft size={20} />
+            </button>
+            <button 
+              className="icon-button"
+              onClick={() => setShowFilterModal(true)}
+            >
+              <Filter size={18} />
+            </button>
+          </>
+        }
+      />
+
       {/* Header */}
       <div className="ja-header">
-        <button className="ja-back-btn" onClick={onBack}>
-          <ArrowLeft size={20} />
-        </button>
-        <h1 className="ja-title">Your Journal</h1>
-        <button 
-          className="ja-filter-btn"
-          onClick={() => setShowFilterModal(true)}
-        >
-          <Filter size={18} />
-        </button>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="ja-stats-grid">
+        {/* Stats Cards */}
+        <div className="ja-stats-grid">
         <div className="ja-stat-card">
           <div className="ja-stat-value">{stats.totalEntries}</div>
           <div className="ja-stat-label">Total Entries</div>
@@ -327,6 +339,7 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
           <div className="ja-stat-value">{stats.thisWeek}</div>
           <div className="ja-stat-label">This Week</div>
         </div>
+      </div>
       </div>
 
       {/* Search */}
@@ -408,6 +421,7 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
                     <div className="ja-entry-content">
                       <div className="ja-entry-title-row">
                         <h3 className="ja-entry-title">
+                          {entry.isVoiceEntry && <Mic size={14} style={{ marginRight: '4px', display: 'inline' }} />}
                           {entry.theme || `Day ${entry.day}`}
                         </h3>
                         <div className="ja-entry-actions">
@@ -425,9 +439,11 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
                       </div>
                       
                       <p className="ja-entry-preview">
-                        {entry.analysis?.summary ? 
-                          entry.analysis.summary.substring(0, 80) + '...' :
-                          entry.prompt?.substring(0, 80) + '...'
+                        {entry.isVoiceEntry && entry.transcription ? 
+                          entry.transcription.substring(0, 80) + '...' :
+                          entry.analysis?.summary ? 
+                            entry.analysis.summary.substring(0, 80) + '...' :
+                            entry.prompt?.substring(0, 80) + '...'
                         }
                       </p>
                       
@@ -438,6 +454,11 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
                         <span className="ja-entry-date">
                           {formatDate(entry.timestamp)}
                         </span>
+                        {entry.isVoiceEntry && (
+                          <span className="ja-entry-type" style={{ color: `rgb(${pathInfo.color})` }}>
+                            🎤 Voice
+                          </span>
+                        )}
                       </div>
                     </div>
                     

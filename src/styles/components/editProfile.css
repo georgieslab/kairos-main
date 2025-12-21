@@ -1,0 +1,430 @@
+/* src/styles/components/editProfile.css - Edit Profile Modal */
+
+.ep-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: epFadeIn 0.2s ease-out;
+}
+
+@keyframes epFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ep-modal {
+  background: var(--profile-bg-card, #ffffff);
+  border-radius: 1rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 0, 0, 0.1);
+  animation: epSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes epSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.ep-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--profile-border-primary, #e2e8f0);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(85, 139, 110, 0.05) 0%,
+    transparent 100%
+  );
+}
+
+.ep-header-content {
+  flex: 1;
+}
+
+.ep-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--profile-text-primary, #0f172a);
+  margin: 0 0 0.25rem 0;
+  background: linear-gradient(135deg, 
+    var(--profile-text-primary, #0f172a) 0%,
+    rgba(85, 139, 110, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ep-subtitle {
+  font-size: 0.875rem;
+  color: var(--profile-text-tertiary, #475569);
+  margin: 0;
+}
+
+.ep-close-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--profile-text-tertiary, #475569);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ep-close-btn:hover {
+  background: var(--profile-bg-hover, #f1f5f9);
+  color: var(--profile-text-primary, #0f172a);
+}
+
+.ep-close-btn:active {
+  transform: scale(0.95);
+}
+
+/* Content */
+.ep-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ep-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ep-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--profile-text-secondary, #334155);
+  margin-bottom: 0.25rem;
+}
+
+.ep-section-label svg {
+  color: rgba(85, 139, 110, 1);
+}
+
+.ep-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--profile-text-secondary, #334155);
+}
+
+.ep-label svg {
+  color: rgba(85, 139, 110, 1);
+}
+
+.ep-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--profile-border-primary, #e2e8f0);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  color: var(--profile-text-primary, #0f172a);
+  background: var(--profile-bg-card, #ffffff);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.ep-input:focus {
+  outline: none;
+  border-color: rgba(85, 139, 110, 0.5);
+  box-shadow: 
+    0 0 0 3px rgba(85, 139, 110, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ep-input::placeholder {
+  color: var(--profile-text-muted, #94a3b8);
+}
+
+.ep-input-error {
+  border-color: #ef4444;
+}
+
+.ep-input-error:focus {
+  border-color: #ef4444;
+  box-shadow: 
+    0 0 0 3px rgba(239, 68, 68, 0.1),
+    0 2px 8px rgba(239, 68, 68, 0.1);
+}
+
+.ep-input-readonly {
+  background: var(--profile-bg-secondary, #f8fafc);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.ep-hint {
+  font-size: 0.75rem;
+  color: var(--profile-text-muted, #64748b);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ep-error {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: -0.25rem;
+}
+
+.ep-error svg {
+  flex-shrink: 0;
+}
+
+.ep-error-general {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Avatar Section */
+.ep-avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(85, 139, 110, 0.05) 0%,
+    rgba(85, 139, 110, 0.02) 100%
+  );
+  border: 2px solid rgba(85, 139, 110, 0.15);
+  border-radius: 1rem;
+}
+
+.ep-avatar-change-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, 
+    rgba(85, 139, 110, 1) 0%,
+    rgba(74, 122, 95, 1) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 4px 12px rgba(85, 139, 110, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ep-avatar-change-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 16px rgba(85, 139, 110, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.ep-avatar-change-btn:active {
+  transform: translateY(0);
+}
+
+.ep-avatar-hint {
+  font-size: 0.75rem;
+  color: var(--profile-text-muted, #64748b);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Footer */
+.ep-footer {
+  padding: 1rem 1.5rem;
+  border-top: 2px solid var(--profile-border-primary, #e2e8f0);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  background: var(--profile-bg-secondary, #f8fafc);
+}
+
+.ep-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+  min-height: 44px;
+}
+
+.ep-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ep-btn-cancel {
+  background: transparent;
+  color: var(--profile-text-secondary, #334155);
+  border: 2px solid var(--profile-border-primary, #e2e8f0);
+}
+
+.ep-btn-cancel:hover:not(:disabled) {
+  background: var(--profile-bg-hover, #f1f5f9);
+  border-color: var(--profile-border-hover, #94a3b8);
+}
+
+.ep-btn-cancel:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ep-btn-save {
+  background: linear-gradient(135deg, 
+    rgba(85, 139, 110, 1) 0%,
+    rgba(74, 122, 95, 1) 100%
+  );
+  color: white;
+  box-shadow: 
+    0 4px 12px rgba(85, 139, 110, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ep-btn-save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 16px rgba(85, 139, 110, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.ep-btn-save:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Avatar Picker Sub-Modal */
+.ep-submodal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: epFadeIn 0.2s ease-out;
+}
+
+.ep-submodal {
+  background: var(--profile-bg-card, #ffffff);
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 0, 0, 0.1);
+  animation: epSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .ep-modal {
+    max-height: 95vh;
+  }
+
+  .ep-header {
+    padding: 1.25rem;
+  }
+
+  .ep-content {
+    padding: 1.25rem;
+  }
+
+  .ep-footer {
+    padding: 1rem;
+    flex-direction: column-reverse;
+  }
+
+  .ep-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ep-avatar-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ep-avatar-change-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Dark mode support */
+.profile-dark .ep-modal {
+  background: var(--profile-bg-card);
+}
+
+.profile-dark .ep-header {
+  border-bottom-color: var(--profile-border-primary);
+}
+
+.profile-dark .ep-input {
+  background: var(--profile-bg-secondary);
+  border-color: var(--profile-border-primary);
+  color: var(--profile-text-primary);
+}
+
+.profile-dark .ep-input:focus {
+  background: var(--profile-bg-card);
+}
+
+.profile-dark .ep-footer {
+  background: var(--profile-bg-secondary);
+  border-top-color: var(--profile-border-primary);
+}

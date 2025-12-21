@@ -92,6 +92,15 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
   const [autocompleteInitialized, setAutocompleteInitialized] = useState(false);
   const cityInputRef = useRef(null);
   const stepRefs = useRef([]);
+  const containerRef = useRef(null);
+  
+  // 🤖 ANDROID FIX: Use refs for input fields
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  const nameInputRef = useRef(null);
+  
+  // 🤖 ANDROID FIX: Track composition state for IME
+  const [isComposing, setIsComposing] = useState(false);
 
   // Available interests and goals
   const availableInterests = [
@@ -234,6 +243,27 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     setError('');
     setFieldErrors({});
     setTouchedFields({});
+    
+    // Scroll to top when switching between sign-up and sign-in
+    // Use setTimeout to ensure DOM is updated before scrolling
+    setTimeout(() => {
+      if (containerRef.current) {
+        // Try scrolling the container itself
+        containerRef.current.scrollTop = 0;
+        
+        // Also use scrollIntoView which finds the scrollable ancestor
+        containerRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+      
+      // Fallback: scroll window and document
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }, 0);
   }, [isSignIn]);
 
   // Field validation
@@ -302,6 +332,47 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     }
   };
 
+  // 🤖 ANDROID FIX: Handle input changes properly for IME
+  const handleInputChange = (fieldName) => (e) => {
+    // Don't update during composition (IME)
+    if (isComposing) return;
+    
+    const value = e.target.value;
+    
+    // Update state immediately
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: value
+    }));
+    
+    // Clear errors
+    if (error) setError('');
+    
+    // Validate if touched
+    if (touchedFields[fieldName]) {
+      validateField(fieldName, value);
+    }
+  };
+  
+  // 🤖 ANDROID FIX: Handle IME composition events
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+  
+  const handleCompositionEnd = (fieldName) => (e) => {
+    setIsComposing(false);
+    // Update with final value after composition ends
+    const value = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: value
+    }));
+    if (error) setError('');
+    if (touchedFields[fieldName]) {
+      validateField(fieldName, value);
+    }
+  };
+
   const handleFieldBlur = (fieldName, value) => {
     setTouchedFields(prev => ({
       ...prev,
@@ -338,13 +409,15 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     }
 
     try {
+      console.log('🔄 Starting sign-in process...');
       setIsLoading(true);
       setIsNavigatingFrom(true);
       
-      await login(formData.email, formData.password);
+      const result = await login(formData.email, formData.password);
+      console.log('✅ Login successful, user:', result.user.email);
       onNext();
     } catch (error) {
-      console.error('Sign-in error:', error);
+      console.error('❌ Sign-in error:', error);
       setIsNavigatingFrom(false);
       
       switch (error.code) {
@@ -518,6 +591,12 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
     }
   };
 
+  // Handle form submission (Enter key)
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    goToNextStep();
+  };
+
   // FIXED: Render step content with proper sign-in handling
   const renderStepContent = () => {
     const stepConfig = steps[currentStep];
@@ -552,66 +631,57 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
             </div>
           </div>
           
-          <div className="su-floating-label-group">
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleFieldChange('email', e.target.value)}
-              onBlur={(e) => handleFieldBlur('email', e.target.value)}
-              className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
-              placeholder=" "
-              autoComplete="email"
-            />
-            <label htmlFor="email" className="su-floating-label">Email Address</label>
-            <Mail className="su-input-icon" />
-            {fieldErrors.email && touchedFields.email && (
-              <span className="su-field-error">{fieldErrors.email}</span>
-            )}
-          </div>
-          
-          <div className="su-floating-label-group">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              onChange={(e) => handleFieldChange('password', e.target.value)}
-              onBlur={(e) => handleFieldBlur('password', e.target.value)}
-              className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
-              placeholder=" "
-              autoComplete="current-password"
-            />
-            <label htmlFor="password" className="su-floating-label">Password</label>
-            <Lock className="su-input-icon" />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="su-password-toggle"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-            {fieldErrors.password && touchedFields.password && (
-              <span className="su-field-error">{fieldErrors.password}</span>
-            )}
-          </div>
-
-          {/* Toggle to Sign Up */}
-          <div className="su-toggle-section">
-            <button
-              type="button"
-              onClick={() => {
-                setIsSignIn(false);
-                setError('');
-                setFieldErrors({});
-                setTouchedFields({});
-              }}
-              className="su-toggle-button"
-            >
-              Don't have an account? {' '}
-              <span className="su-toggle-action">Sign up</span>
-            </button>
-          </div>
+          <form id="sign-in-form" onSubmit={handleFormSubmit}>
+            <div className="su-floating-label-group">
+              <input
+                id="email"
+                type="email"
+                ref={emailInputRef}
+                value={formData.email}
+                onChange={handleInputChange('email')}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd('email')}
+                onBlur={(e) => handleFieldBlur('email', e.target.value)}
+                className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
+                placeholder=" "
+                autoComplete="email"
+              />
+              <label htmlFor="email" className="su-floating-label">Email Address</label>
+              <Mail className="su-input-icon" />
+              {fieldErrors.email && touchedFields.email && (
+                <span className="su-field-error">{fieldErrors.email}</span>
+              )}
+            </div>
+            
+            <div className="su-floating-label-group">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                ref={passwordInputRef}
+                value={formData.password}
+                onChange={handleInputChange('password')}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd('password')}
+                onBlur={(e) => handleFieldBlur('password', e.target.value)}
+                className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
+                placeholder=" "
+                autoComplete="current-password"
+              />
+              <label htmlFor="password" className="su-floating-label">Password</label>
+              <Lock className="su-input-icon" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="su-password-toggle"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+              {fieldErrors.password && touchedFields.password && (
+                <span className="su-field-error">{fieldErrors.password}</span>
+              )}
+            </div>
+          </form>
         </div>
       );
     }
@@ -647,67 +717,78 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
               </div>
             </div>
 
-            <div className="su-floating-label-group">
-              <input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => handleFieldChange('name', e.target.value)}
-                onBlur={(e) => handleFieldBlur('name', e.target.value)}
-                className={`su-floating-input ${fieldErrors.name && touchedFields.name ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="given-name"
-              />
-              <label htmlFor="name" className="su-floating-label">Full Name</label>
-              <User className="su-input-icon" />
-              {fieldErrors.name && touchedFields.name && (
-                <span className="su-field-error">{fieldErrors.name}</span>
-              )}
-            </div>
-            
-            <div className="su-floating-label-group">
-              <input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleFieldChange('email', e.target.value)}
-                onBlur={(e) => handleFieldBlur('email', e.target.value)}
-                className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="email"
-              />
-              <label htmlFor="email" className="su-floating-label">Email Address</label>
-              <Mail className="su-input-icon" />
-              {fieldErrors.email && touchedFields.email && (
-                <span className="su-field-error">{fieldErrors.email}</span>
-              )}
-            </div>
-            
-            <div className="su-floating-label-group">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={formData.password}
-                onChange={(e) => handleFieldChange('password', e.target.value)}
-                onBlur={(e) => handleFieldBlur('password', e.target.value)}
-                className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="new-password"
-              />
-              <label htmlFor="password" className="su-floating-label">Create Password</label>
-              <Lock className="su-input-icon" />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="su-password-toggle"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-              {fieldErrors.password && touchedFields.password && (
-                <span className="su-field-error">{fieldErrors.password}</span>
-              )}
-            </div>
+            <form id="sign-up-form" onSubmit={handleFormSubmit}>
+              <div className="su-floating-label-group">
+                <input
+                  id="name"
+                  type="text"
+                  ref={nameInputRef}
+                  value={formData.name}
+                  onChange={handleInputChange('name')}
+                  onCompositionStart={handleCompositionStart}
+                  onCompositionEnd={handleCompositionEnd('name')}
+                  onBlur={(e) => handleFieldBlur('name', e.target.value)}
+                  className={`su-floating-input ${fieldErrors.name && touchedFields.name ? 'su-input-error' : ''}`}
+                  placeholder=" "
+                  autoComplete="given-name"
+                />
+                <label htmlFor="name" className="su-floating-label">Full Name</label>
+                <User className="su-input-icon" />
+                {fieldErrors.name && touchedFields.name && (
+                  <span className="su-field-error">{fieldErrors.name}</span>
+                )}
+              </div>
+              
+              <div className="su-floating-label-group">
+                <input
+                  id="email"
+                  type="email"
+                  ref={emailInputRef}
+                  value={formData.email}
+                  onChange={handleInputChange('email')}
+                  onCompositionStart={handleCompositionStart}
+                  onCompositionEnd={handleCompositionEnd('email')}
+                  onBlur={(e) => handleFieldBlur('email', e.target.value)}
+                  className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
+                  placeholder=" "
+                  autoComplete="email"
+                />
+                <label htmlFor="email" className="su-floating-label">Email Address</label>
+                <Mail className="su-input-icon" />
+                {fieldErrors.email && touchedFields.email && (
+                  <span className="su-field-error">{fieldErrors.email}</span>
+                )}
+              </div>
+              
+              <div className="su-floating-label-group">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  ref={passwordInputRef}
+                  value={formData.password}
+                  onChange={handleInputChange('password')}
+                  onCompositionStart={handleCompositionStart}
+                  onCompositionEnd={handleCompositionEnd('password')}
+                  onBlur={(e) => handleFieldBlur('password', e.target.value)}
+                  className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
+                  placeholder=" "
+                  autoComplete="new-password"
+                />
+                <label htmlFor="password" className="su-floating-label">Create Password</label>
+                <Lock className="su-input-icon" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="su-password-toggle"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+                {fieldErrors.password && touchedFields.password && (
+                  <span className="su-field-error">{fieldErrors.password}</span>
+                )}
+              </div>
+            </form>
 
             {/* Toggle Sign In/Sign Up */}
             <div className="su-toggle-section">
@@ -846,7 +927,9 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
                 type="text"
                 ref={cityInputRef}
                 value={formData.city}
-                onChange={(e) => handleFieldChange('city', e.target.value)}
+                onChange={handleInputChange('city')}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd('city')}
                 onBlur={(e) => handleFieldBlur('city', e.target.value)}
                 className={`su-floating-input ${fieldErrors.city && touchedFields.city ? 'su-input-error' : ''}`}
                 placeholder=" "
@@ -988,7 +1071,7 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
   };
 
   return (
-    <div className="su-container">
+    <div className="su-container" ref={containerRef}>
       <div className="su-card-container">
         {/* Back Button */}
         {onBack && currentStep === 0 && (
@@ -1066,10 +1149,11 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
                   </button>
                 )}
                 
-                {/* FIXED: Action button with proper text */}
+                {/* FIXED: Action button - submit type for sign-in/first sign-up step, button otherwise */}
                 <button
-                  type="button"
-                  onClick={goToNextStep}
+                  type={(isSignIn || currentStep === 0) ? "submit" : "button"}
+                  onClick={(isSignIn || currentStep === 0) ? undefined : goToNextStep}
+                  form={isSignIn ? "sign-in-form" : (currentStep === 0 ? "sign-up-form" : undefined)}
                   className="nav-button nav-button-primary"
                   disabled={isLoading || isTransitioning}
                 >
@@ -1084,6 +1168,25 @@ const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
                       {!isSignIn && currentStep < steps.length - 2 && <ChevronRight className="nav-icon" />}
                     </>
                   )}
+                </button>
+              </div>
+            )}
+
+            {/* Toggle Section - shown after navigation button for sign-in */}
+            {isSignIn && (
+              <div className="su-toggle-section">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSignIn(false);
+                    setError('');
+                    setFieldErrors({});
+                    setTouchedFields({});
+                  }}
+                  className="su-toggle-button"
+                >
+                  Don't have an account? {' '}
+                  <span className="su-toggle-action">Sign up</span>
                 </button>
               </div>
             )}

@@ -398,11 +398,21 @@
   line-height: 1.5;
 }
 
+.kairos-hero-tagline {
+  font-size: 0.95rem;
+  color: var(--color-text-tertiary);
+  margin: 0.75rem 0 0 0;
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
 .kairos-hero-features {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   width: 100%;
 }
 
@@ -436,6 +446,28 @@
   border-color: var(--color-brand);
 }
 
+/* Highlight chip for multi-modal messaging */
+.kairos-feature-chip.kairos-chip-highlight {
+  background: linear-gradient(135deg, rgba(85, 139, 110, 0.2), rgba(230, 184, 156, 0.15));
+  border: 2px solid rgba(85, 139, 110, 0.5);
+  box-shadow: 0 4px 20px rgba(85, 139, 110, 0.3), 0 0 30px rgba(85, 139, 110, 0.15);
+  animation: kairosHighlightPulse 2s ease-in-out infinite, kairosFeatureSlideIn 0.4s ease-out forwards;
+}
+
+.kairos-feature-chip.kairos-chip-highlight:hover {
+  box-shadow: 0 8px 35px rgba(85, 139, 110, 0.4), 0 0 40px rgba(85, 139, 110, 0.25);
+  border-color: var(--color-brand);
+}
+
+@keyframes kairosHighlightPulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(85, 139, 110, 0.3), 0 0 30px rgba(85, 139, 110, 0.15);
+  }
+  50% {
+    box-shadow: 0 6px 25px rgba(85, 139, 110, 0.4), 0 0 40px rgba(85, 139, 110, 0.25);
+  }
+}
+
 .kairos-chip-icon {
   width: 44px;
   height: 44px;
@@ -447,6 +479,53 @@
   box-shadow: 0 4px 20px rgba(85, 139, 110, 0.2);
 }
 
+/* Hero Highlights Section */
+.kairos-hero-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.kairos-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid rgba(85, 139, 110, 0.2);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(-40px);
+  animation: kairosFeatureSlideIn 0.4s ease-out forwards;
+  transition: all 0.2s ease;
+}
+
+.kairos-highlight-item:nth-child(1) {
+  animation-delay: 1.1s;
+}
+
+.kairos-highlight-item:nth-child(2) {
+  animation-delay: 1.3s;
+}
+
+.kairos-highlight-item:nth-child(3) {
+  animation-delay: 1.5s;
+}
+
+.kairos-highlight-item:hover {
+  background: var(--color-surface-hover);
+  transform: translateX(4px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(85, 139, 110, 0.15);
+  border-color: var(--color-brand);
+}
+
 .kairos-swipe-hint {
   display: flex;
   align-items: center;
@@ -454,8 +533,73 @@
   gap: 0.75rem;
   color: var(--color-text-secondary);
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
   font-weight: 500;
+  animation: kairosSwipeHintBounce 2s ease-in-out infinite;
+}
+
+.kairos-swipe-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.kairos-swipe-icon.kairos-bounce {
+  animation: kairosSwipeArrowBounce 1.5s ease-in-out infinite;
+}
+
+.kairos-swipe-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-brand);
+}
+
+.kairos-swipe-echo {
+  position: absolute;
+  left: 0;
+  opacity: 0.3;
+  animation: kairosSwipeEcho 1.5s ease-in-out infinite;
+}
+
+.kairos-swipe-text {
+  animation: kairosSwipeTextFade 2s ease-in-out infinite;
+}
+
+@keyframes kairosSwipeArrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes kairosSwipeEcho {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+}
+
+@keyframes kairosSwipeTextFade {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes kairosSwipeHintBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 .kairos-ai-icon {
@@ -553,6 +697,40 @@
   transform: translateY(-1px) scale(1.01);
 }
 
+/* Pulse button effect for CTA */
+.kairos-start-button.kairos-pulse-button {
+  animation: kairosButtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes kairosButtonPulse {
+  0%, 100% {
+    box-shadow: 0 15px 60px rgba(85, 139, 110, 0.2);
+  }
+  50% {
+    box-shadow: 0 20px 70px rgba(85, 139, 110, 0.35), 0 0 40px rgba(85, 139, 110, 0.2);
+  }
+}
+
+.kairos-button-shimmer {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: kairosButtonShimmer 3s ease-in-out infinite;
+}
+
+@keyframes kairosButtonShimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
 .kairos-button-icon {
   width: 20px;
   height: 20px;
@@ -603,7 +781,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.25rem;
   transition: all 0.2s ease;
   pointer-events: auto;
 }
@@ -674,6 +852,17 @@
 @keyframes kairosFeatureSlideIn {
   from { opacity: 0; transform: translateX(-40px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes kairosSlideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
 
 @keyframes kairosSwipeBounce {
@@ -784,7 +973,7 @@
   }
   
   .kairos-welcome-page {
-    padding: 1.5rem 1rem;
+    padding: 2.5rem 1rem;
   }
   
   .kairos-feature-chip {
@@ -1398,6 +1587,41 @@
   animation: kairosCheckPop 0.5s ease-out 0.5s both;
 }
 
+/* Powered by Claude AI */
+.kairos-powered-by-claude {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  background: linear-gradient(135deg, 
+    rgba(85, 139, 110, 0.08) 0%, 
+    rgba(85, 139, 110, 0.02) 100%
+  );
+  border: 1px solid rgba(85, 139, 110, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(85, 139, 110, 0.1);
+  animation: kairosQuestionSlideIn 0.4s ease-out forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.kairos-powered-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.kairos-powered-text {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .kairos-example-questions {
   display: flex;
   flex-direction: column;
@@ -1630,3 +1854,1164 @@
   }
 }
 
+/* ============================================
+   ΚΑΙΡΌΣ WELCOME SCREEN - NEW FEATURE STYLES
+   Add these styles to welcomeScreen.css
+   For Multi-Modal & Voice Journaling Features
+   ============================================ */
+
+/* ==========================================
+   MULTI-MODAL FEATURE STYLES
+   ========================================== */
+
+/* Revolutionary badge */
+.kairos-badge-revolutionary {
+  background: linear-gradient(135deg, 
+    var(--color-accent-light) 0%, 
+    var(--color-brand) 50%, 
+    var(--color-accent) 100%);
+  background-size: 200% 200%;
+  animation: kairosGradientShift 3s ease infinite;
+}
+
+/* Multi-modal feature icon */
+.kairos-feature-icon.kairos-multimodal {
+  background: linear-gradient(135deg, 
+    var(--color-brand) 0%, 
+    var(--color-accent) 50%, 
+    var(--color-brand-light) 100%);
+  position: relative;
+  overflow: visible;
+}
+
+/* Container for orbiting modality icons */
+.kairos-modality-icons {
+  position: absolute;
+  inset: -40px;
+}
+
+/* Individual modality icons (orbiting) */
+.kairos-modality-icon {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-brand-light);
+  border-radius: 50%;
+  color: var(--color-brand);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Text icon (top-left orbit position) */
+.kairos-text-icon {
+  top: 10%;
+  left: 10%;
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+/* Voice icon (top-right orbit position) */
+.kairos-voice-icon {
+  top: 10%;
+  right: 10%;
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 2.67s;
+}
+
+/* Art icon (bottom-center orbit position) */
+.kairos-art-icon {
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 5.33s;
+}
+
+/* Modality cards container */
+.kairos-modality-cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Individual modality card */
+.kairos-modality-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid rgba(85, 139, 110, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  min-width: 90px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: kairosModalityCardSlideIn 0.4s ease-out forwards;
+  transition: all 0.3s ease;
+}
+
+.kairos-modality-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(85, 139, 110, 0.15);
+  border-color: var(--color-brand);
+}
+
+.kairos-modality-card:nth-child(1) { animation-delay: 0.1s; }
+.kairos-modality-card:nth-child(2) { animation-delay: 0.2s; }
+.kairos-modality-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Modality card icon */
+.kairos-modality-card-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--color-brand);
+  animation: kairosIconPulse 3s ease-in-out infinite;
+}
+
+/* Modality card text */
+.kairos-modality-card span {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* ==========================================
+   VOICE JOURNALING FEATURE STYLES
+   ========================================== */
+
+/* Voice feature icon */
+.kairos-feature-icon.kairos-voice {
+  background: linear-gradient(135deg, 
+    var(--color-accent-light) 0%, 
+    var(--color-accent) 100%);
+  position: relative;
+  overflow: visible;
+}
+
+/* Sound waves container */
+.kairos-sound-waves {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 30px;
+}
+
+/* Individual sound wave bar */
+.kairos-sound-wave {
+  width: 4px;
+  background: rgba(245, 245, 240, 0.6);
+  border-radius: 2px;
+  animation: kairosSoundPulse 1.5s ease-in-out infinite;
+}
+
+.kairos-sound-wave:nth-child(1) {
+  height: 12px;
+  animation-delay: 0s;
+}
+
+.kairos-sound-wave:nth-child(2) {
+  height: 20px;
+  animation-delay: 0.2s;
+}
+
+.kairos-sound-wave:nth-child(3) {
+  height: 16px;
+  animation-delay: 0.4s;
+}
+
+.kairos-sound-wave:nth-child(4) {
+  height: 24px;
+  animation-delay: 0.6s;
+}
+
+/* ==========================================
+   NEW ANIMATIONS
+   ========================================== */
+
+/* Orbiting modality icons animation */
+@keyframes kairosOrbitIcon {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.8;
+  }
+  25% {
+    transform: scale(1.1) translateY(-5px);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1) translateY(0);
+    opacity: 0.8;
+  }
+  75% {
+    transform: scale(0.95) translateY(3px);
+    opacity: 0.7;
+  }
+}
+
+/* Modality card slide in */
+@keyframes kairosModalityCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sound wave pulse animation */
+@keyframes kairosSoundPulse {
+  0%, 100% {
+    height: 12px;
+    opacity: 0.6;
+  }
+  25% {
+    height: 24px;
+    opacity: 1;
+  }
+  50% {
+    height: 16px;
+    opacity: 0.8;
+  }
+  75% {
+    height: 20px;
+    opacity: 0.9;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+
+/* Mobile optimizations for new features */
+@media (max-width: 767px) {
+  .kairos-modality-icons {
+    inset: -30px;
+  }
+  
+  .kairos-modality-icon {
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+  }
+  
+  .kairos-modality-cards {
+    gap: 0.75rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 80px;
+    padding: 1rem 0.75rem;
+  }
+  
+  .kairos-sound-waves {
+    height: 24px;
+    gap: 3px;
+  }
+  
+  .kairos-sound-wave {
+    width: 3px;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .kairos-modality-cards {
+    gap: 1.25rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 100px;
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1200px) {
+  .kairos-modality-icons {
+    inset: -50px;
+  }
+  
+  .kairos-modality-icon {
+    width: 32px;
+    height: 32px;
+    padding: 7px;
+  }
+  
+  .kairos-modality-cards {
+    gap: 1.5rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 110px;
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .kairos-modality-icon,
+  .kairos-sound-wave {
+    animation: none;
+  }
+  
+  .kairos-badge-revolutionary {
+    animation: none;
+    background: var(--color-brand);
+  }
+  
+  .kairos-modality-card {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .kairos-modality-card {
+    border-width: 2px;
+    border-color: var(--color-brand);
+  }
+  
+  .kairos-sound-wave {
+    background: var(--color-text-primary);
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   PRINT STYLES (if needed)
+   ========================================== */
+
+@media print {
+  .kairos-welcome-container {
+    display: none;
+  }
+}
+
+/* ============================================
+   NEW FEATURES STYLES - COLOR MATCHED
+   Multi-Modal & Voice Journaling
+   Matching homeScreen.css color system
+   ============================================ */
+
+/* ==========================================================================
+   MULTI-MODAL FEATURE STYLES
+   ========================================================================== */
+
+/* Revolutionary badge - uses accent gradient */
+.kairos-badge-revolutionary {
+  background: linear-gradient(135deg, 
+    #3b82f6 0%,      /* --hs-info blue */
+    #558b6e 50%,     /* --hs-primary green */
+    #3b82f6 100%);   /* --hs-info blue */
+  background-size: 200% 200%;
+  animation: kairosGradientShift 3s ease infinite;
+  color: white;
+}
+
+/* Multi-modal feature icon - combines primary & accent */
+.kairos-feature-icon.kairos-multimodal {
+  background: linear-gradient(135deg, 
+    #558b6e 0%,      /* primary */
+    #3b82f6 50%,     /* accent */
+    #7ba892 100%);   /* primary-light */
+  position: relative;
+  overflow: visible;
+}
+
+/* Container for orbiting modality icons */
+.kairos-modality-icons {
+  position: absolute;
+  inset: -40px;
+}
+
+/* Individual modality icons (orbiting) */
+.kairos-modality-icon {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  background: #1e2430; /* --hs-bg-card */
+  border: 2px solid #7ba892; /* primary-light */
+  border-radius: 50%;
+  color: #558b6e; /* primary */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Text icon (top-left orbit position) */
+.kairos-text-icon {
+  top: 10%;
+  left: 10%;
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+/* Voice icon (top-right orbit position) */
+.kairos-voice-icon {
+  top: 10%;
+  right: 10%;
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 2.67s;
+  border-color: #3b82f6; /* accent for voice */
+  color: #3b82f6;
+}
+
+/* Art icon (bottom-center orbit position) */
+.kairos-art-icon {
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: kairosOrbitIcon 8s ease-in-out infinite;
+  animation-delay: 5.33s;
+}
+
+/* Modality cards container */
+.kairos-modality-cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Individual modality card */
+.kairos-modality-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  min-width: 90px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: kairosModalityCardSlideIn 0.4s ease-out forwards;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kairos-modality-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #558b6e; /* primary */
+  background: #2a3040; /* --hs-bg-hover */
+}
+
+.kairos-modality-card:nth-child(1) { animation-delay: 0.1s; }
+.kairos-modality-card:nth-child(2) { animation-delay: 0.2s; }
+.kairos-modality-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Modality card icon */
+.kairos-modality-card-icon {
+  width: 32px;
+  height: 32px;
+  color: #558b6e; /* primary */
+  animation: kairosIconPulse 3s ease-in-out infinite;
+}
+
+/* Modality card text */
+.kairos-modality-card span {
+  font-size: 0.875rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VOICE JOURNALING FEATURE STYLES
+   ========================================================================== */
+
+/* Voice feature icon - uses accent blue */
+.kairos-feature-icon.kairos-voice {
+  background: linear-gradient(135deg, 
+    #3b82f6 0%,      /* --hs-info */
+    #60a5fa 100%);   /* lighter blue */
+  position: relative;
+  overflow: visible;
+}
+
+/* Sound waves container */
+.kairos-sound-waves {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 30px;
+}
+
+/* Individual sound wave bar */
+.kairos-sound-wave {
+  width: 4px;
+  background: rgba(248, 250, 252, 0.7); /* --hs-text-primary with opacity */
+  border-radius: 2px;
+  animation: kairosSoundPulse 1.5s ease-in-out infinite;
+}
+
+.kairos-sound-wave:nth-child(1) {
+  height: 12px;
+  animation-delay: 0s;
+}
+
+.kairos-sound-wave:nth-child(2) {
+  height: 20px;
+  animation-delay: 0.2s;
+}
+
+.kairos-sound-wave:nth-child(3) {
+  height: 16px;
+  animation-delay: 0.4s;
+}
+
+.kairos-sound-wave:nth-child(4) {
+  height: 24px;
+  animation-delay: 0.6s;
+}
+
+/* ==========================================================================
+   BENEFIT ITEMS (MATCHING HOMESCREEN CHECKMARKS)
+   ========================================================================== */
+
+.kairos-feature-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kairos-benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: kairosBenefitSlideIn 0.4s ease-out forwards;
+}
+
+.kairos-benefit-item:nth-child(1) { animation-delay: 0.1s; }
+.kairos-benefit-item:nth-child(2) { animation-delay: 0.2s; }
+.kairos-benefit-item:nth-child(3) { animation-delay: 0.3s; }
+
+.kairos-benefit-check {
+  color: #558b6e; /* --hs-primary */
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  animation: kairosCheckPop 0.5s ease-out 0.5s both;
+}
+
+/* ==========================================================================
+   QUESTION CARDS (MATCHING HOMESCREEN CARDS)
+   ========================================================================== */
+
+.kairos-example-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.kairos-question-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: kairosQuestionSlideIn 0.4s ease-out forwards;
+}
+
+.kairos-question-card:nth-child(1) { animation-delay: 0.2s; }
+.kairos-question-card:nth-child(2) { animation-delay: 0.4s; }
+
+.kairos-question-icon {
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  background: linear-gradient(135deg, #7ba892 0%, #558b6e 100%); /* primary gradient */
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+
+.kairos-question-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  font-style: italic;
+}
+
+/* ==========================================================================
+   PATH PREVIEW CARDS (MATCHING HOMESCREEN)
+   ========================================================================== */
+
+.kairos-path-preview {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.kairos-path-mini-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.75rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  font-weight: 500;
+  min-width: 80px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: kairosPathCardPop 0.4s ease-out forwards;
+}
+
+.kairos-path-mini-card:nth-child(1) { animation-delay: 0.1s; }
+.kairos-path-mini-card:nth-child(2) { animation-delay: 0.2s; }
+.kairos-path-mini-card:nth-child(3) { animation-delay: 0.3s; }
+
+.kairos-path-mini-icon {
+  color: #558b6e; /* primary */
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   STAT CHIPS (MATCHING HOMESCREEN STATS)
+   ========================================================================== */
+
+.kairos-stats-preview {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.kairos-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.8125rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  font-weight: 500;
+}
+
+.kairos-stat-icon {
+  color: #558b6e; /* primary */
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================================================
+   AI FEATURES (MATCHING HOMESCREEN CARDS)
+   ========================================================================== */
+
+.kairos-ai-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.kairos-ai-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.875rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+}
+
+.kairos-ai-icon {
+  color: #3b82f6; /* accent for AI features */
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   PRIVACY BADGES (MATCHING HOMESCREEN)
+   ========================================================================== */
+
+.kairos-privacy-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.kairos-privacy-badge {
+  padding: 0.875rem 1.25rem;
+  background: #1e2430; /* --hs-bg-card */
+  border: 1px solid #334155; /* --hs-border-primary */
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.875rem;
+  color: #cbd5e1; /* --hs-text-secondary */
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ==========================================================================
+   VISUAL TOOLS (MATCHING HOMESCREEN)
+   ========================================================================== */
+
+.kairos-visual-tools {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.kairos-tool-emoji {
+  font-size: 2rem;
+  animation: kairosToolBounce 2s ease-in-out infinite;
+}
+
+.kairos-tool-emoji:nth-child(1) { animation-delay: 0s; }
+.kairos-tool-emoji:nth-child(2) { animation-delay: 0.2s; }
+.kairos-tool-emoji:nth-child(3) { animation-delay: 0.4s; }
+.kairos-tool-emoji:nth-child(4) { animation-delay: 0.6s; }
+
+/* ==========================================================================
+   SUCCESS CONTAINER (FINAL PAGE)
+   ========================================================================== */
+
+.kairos-success-container {
+  margin-bottom: 2rem;
+}
+
+.kairos-success-icon {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kairos-success-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+.kairos-success-rings {
+  position: absolute;
+  inset: 0;
+}
+
+.kairos-success-ring {
+  position: absolute;
+  border: 2px solid rgba(85, 139, 110, 0.3); /* primary */
+  border-radius: 50%;
+  animation: kairosSuccessRing 3s ease-out infinite;
+}
+
+.kairos-success-ring:nth-child(1) {
+  inset: -8px;
+  animation-delay: 0s;
+}
+
+.kairos-success-ring:nth-child(2) {
+  inset: -16px;
+  animation-delay: 0.5s;
+}
+
+.kairos-success-ring:nth-child(3) {
+  inset: -24px;
+  animation-delay: 1s;
+}
+
+/* ==========================================================================
+   ANIMATED ELEMENTS (MATCHING HOMESCREEN)
+   ========================================================================== */
+
+.kairos-pulse-rings {
+  position: absolute;
+  inset: 0;
+}
+
+.kairos-pulse-ring {
+  position: absolute;
+  border: 2px solid rgba(248, 250, 252, 0.3); /* text-primary */
+  border-radius: 30px;
+  animation: kairosPulseRing 3s ease-out infinite;
+}
+
+.kairos-pulse-ring:nth-child(1) {
+  inset: -8px;
+  animation-delay: 0s;
+}
+
+.kairos-pulse-ring:nth-child(2) {
+  inset: -16px;
+  animation-delay: 0.5s;
+}
+
+.kairos-pulse-ring:nth-child(3) {
+  inset: -24px;
+  animation-delay: 1s;
+}
+
+.kairos-chat-bubbles {
+  position: absolute;
+  inset: 0;
+}
+
+.kairos-chat-bubble {
+  position: absolute;
+  background: rgba(248, 250, 252, 0.3);
+  border-radius: 15px;
+  animation: kairosBubbleFloat 3s ease-in-out infinite;
+}
+
+.kairos-chat-bubble:nth-child(1) {
+  width: 20px;
+  height: 12px;
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.kairos-chat-bubble:nth-child(2) {
+  width: 16px;
+  height: 10px;
+  top: 40%;
+  right: 25%;
+  animation-delay: 1s;
+}
+
+.kairos-chat-bubble:nth-child(3) {
+  width: 24px;
+  height: 14px;
+  bottom: 30%;
+  left: 30%;
+  animation-delay: 2s;
+}
+
+/* ==========================================================================
+   SWIPE HINT
+   ========================================================================== */
+
+.kairos-swipe-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  opacity: 0.7;
+}
+
+.kairos-swipe-icon {
+  color: #558b6e; /* primary */
+  animation: kairosSwipeBounce 2s ease-in-out infinite;
+}
+
+.kairos-swipe-hint span {
+  font-size: 0.875rem;
+  color: #94a3b8; /* --hs-text-tertiary */
+}
+
+/* ==========================================================================
+   NEW ANIMATIONS (MATCHING HOMESCREEN TIMING)
+   ========================================================================== */
+
+/* Orbiting modality icons animation */
+@keyframes kairosOrbitIcon {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.8;
+  }
+  25% {
+    transform: scale(1.1) translateY(-5px);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1) translateY(0);
+    opacity: 0.8;
+  }
+  75% {
+    transform: scale(0.95) translateY(3px);
+    opacity: 0.7;
+  }
+}
+
+/* Modality card slide in */
+@keyframes kairosModalityCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sound wave pulse animation */
+@keyframes kairosSoundPulse {
+  0%, 100% {
+    height: 12px;
+    opacity: 0.6;
+  }
+  25% {
+    height: 24px;
+    opacity: 1;
+  }
+  50% {
+    height: 16px;
+    opacity: 0.8;
+  }
+  75% {
+    height: 20px;
+    opacity: 0.9;
+  }
+}
+
+/* Benefit slide in */
+@keyframes kairosBenefitSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Check pop */
+@keyframes kairosCheckPop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Question slide in */
+@keyframes kairosQuestionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Path card pop */
+@keyframes kairosPathCardPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tool bounce */
+@keyframes kairosToolBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Success ring */
+@keyframes kairosSuccessRing {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+/* Pulse ring */
+@keyframes kairosPulseRing {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+/* Bubble float */
+@keyframes kairosBubbleFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Swipe bounce */
+@keyframes kairosSwipeBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .kairos-modality-icons {
+    inset: -30px;
+  }
+  
+  .kairos-modality-icon {
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+  }
+  
+  .kairos-modality-cards {
+    gap: 0.75rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 80px;
+    padding: 1rem 0.75rem;
+  }
+  
+  .kairos-sound-waves {
+    height: 24px;
+    gap: 3px;
+  }
+  
+  .kairos-sound-wave {
+    width: 3px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .kairos-modality-cards {
+    gap: 1.25rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 100px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .kairos-modality-icons {
+    inset: -50px;
+  }
+  
+  .kairos-modality-icon {
+    width: 32px;
+    height: 32px;
+    padding: 7px;
+  }
+  
+  .kairos-modality-cards {
+    gap: 1.5rem;
+  }
+  
+  .kairos-modality-card {
+    min-width: 110px;
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .kairos-modality-icon,
+  .kairos-sound-wave,
+  .kairos-badge-revolutionary {
+    animation: none;
+  }
+  
+  .kairos-modality-card {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-contrast: high) {
+  .kairos-modality-card {
+    border-width: 2px;
+    border-color: #558b6e; /* primary */
+  }
+  
+  .kairos-sound-wave {
+    background: #f8fafc; /* text-primary */
+    opacity: 1;
+  }
+}

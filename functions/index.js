@@ -4,6 +4,8 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const stripe = require("stripe");
 const cors = require('cors')({ origin: true });
+const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
@@ -680,4 +682,280 @@ exports.testWebhook = functions.https.onRequest(async (req, res) => {
       timestamp: new Date().toISOString()
     });
   });
+});
+
+// 🎙️ NEW: Transcribe audio using OpenAI Whisper
+exports.transcribeAudio = functions.https.onCall(async (data, context) => {
+  try {
+    console.log("🎙️ transcribeAudio called");
+    
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { audioUrl } = data;
+    if (!audioUrl) {
+      throw new functions.https.HttpsError('invalid-argument', 'Audio URL is required');
+    }
+
+    // Get OpenAI API key from config
+    const config = functions.config();
+    const openaiApiKey = config.openai?.api_key;
+    
+    if (!openaiApiKey) {
+      throw new functions.https.HttpsError('failed-precondition', 'OpenAI API key not configured');
+    }
+
+    console.log("📥 Downloading audio from:", audioUrl);
+
+    // Download the audio file from Firebase Storage
+    const audioResponse = await fetch(audioUrl);
+    if (!audioResponse.ok) {
+      throw new Error(`Failed to download audio: ${audioResponse.statusText}`);
+    }
+
+    const audioBuffer = await audioResponse.buffer();
+    console.log("✅ Audio downloaded, size:", audioBuffer.length, "bytes");
+
+    // Create form data for Whisper API
+    const formData = new FormData();
+    formData.append('file', audioBuffer, {
+      filename: 'audio.webm',
+      contentType: 'audio/webm'
+    });
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'en'); // Adjust if needed
+    formData.append('response_format', 'json');
+
+    console.log("🚀 Sending to OpenAI Whisper API...");
+
+    // Call OpenAI Whisper API
+    const whisperResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiApiKey}`,
+        ...formData.getHeaders()
+      },
+      body: formData
+    });
+
+    if (!whisperResponse.ok) {
+      const errorText = await whisperResponse.text();
+      console.error("❌ Whisper API error:", errorText);
+      throw new Error(`Whisper API failed: ${whisperResponse.statusText}`);
+    }
+
+    const result = await whisperResponse.json();
+    console.log("✅ Transcription successful, length:", result.text?.length || 0);
+
+    return {
+      transcription: result.text || '',
+      success: true
+    };
+
+  } catch (error) {
+    console.error("❌ Transcription error:", error);
+    throw new functions.https.HttpsError('internal', `Transcription failed: ${error.message}`);
+  }
+});
+
+// 🎙️ HTTP fallback with explicit CORS for environments where callable preflight fails
+exports.transcribeAudioHttp = functions.https.onRequest(async (req, res) => {
+  cors(req, res, async () => {
+    try {
+      if (req.method === 'OPTIONS') {
+        // cors middleware will handle response headers
+        return res.status(204).send('');
+      }
+
+      // Verify Firebase ID token from Authorization header
+      const authHeader = req.headers.authorization || '';
+      const match = authHeader.match(/^Bearer (.+)$/);
+      if (!match) {
+        return res.status(401).json({ error: 'Unauthorized: Missing Bearer token' });
+      }
+
+      let decoded;
+      try {
+        decoded = await admin.auth().verifyIdToken(match[1]);
+      } catch (e) {
+        console.error('❌ ID token verification failed:', e);
+        return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+      }
+
+      const { audioUrl } = req.body || {};
+      if (!audioUrl) {
+        return res.status(400).json({ error: 'Audio URL is required' });
+      }
+
+      // Get OpenAI API key from config
+      const config = functions.config();
+      const openaiApiKey = config.openai?.api_key;
+      if (!openaiApiKey) {
+        return res.status(500).json({ error: 'OpenAI API key not configured' });
+      }
+
+      console.log('📥 [HTTP] Downloading audio from:', audioUrl, ' for user:', decoded.uid);
+
+      // Download the audio file from Firebase Storage
+      const audioResponse = await fetch(audioUrl);
+      if (!audioResponse.ok) {
+        const t = await audioResponse.text().catch(() => '');
+        console.error('❌ [HTTP] Failed to download audio:', audioResponse.status, t);
+        return res.status(400).json({ error: `Failed to download audio: ${audioResponse.statusText}` });
+      }
+
+      const audioBuffer = await audioResponse.buffer();
+      console.log('✅ [HTTP] Audio downloaded, size:', audioBuffer.length, 'bytes');
+
+      // Create form data for Whisper API
+      const formData = new FormData();
+      formData.append('file', audioBuffer, { filename: 'audio.webm', contentType: 'audio/webm' });
+      formData.append('model', 'whisper-1');
+      formData.append('language', 'en');
+      formData.append('response_format', 'json');
+
+      console.log('🚀 [HTTP] Sending to OpenAI Whisper API...');
+
+      // Call OpenAI Whisper API
+      const whisperResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openaiApiKey}`,
+          ...formData.getHeaders()
+        },
+        body: formData
+      });
+
+      if (!whisperResponse.ok) {
+        const errorText = await whisperResponse.text();
+        console.error('❌ [HTTP] Whisper API error:', errorText);
+        return res.status(502).json({ error: `Whisper API failed: ${whisperResponse.statusText}` });
+      }
+
+      const result = await whisperResponse.json();
+      console.log('✅ [HTTP] Transcription successful, length:', result.text?.length || 0);
+
+      return res.status(200).json({ transcription: result.text || '', success: true });
+    } catch (error) {
+      console.error('❌ [HTTP] Transcription error:', error);
+      return res.status(500).json({ error: `Transcription failed: ${error.message}` });
+    }
+  });
+});
+
+/**
+ * Activate journal bundle subscription when user registers a physical journal
+ * Grants free Artisan access for 3/6/12 months based on journal tier
+ */
+exports.activateJournalSubscription = functions.https.onCall(async (data, context) => {
+  try {
+    console.log("📔 activateJournalSubscription called with:", data);
+    
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { userId, journalId, tier } = data;
+    
+    if (!userId || !journalId || !tier) {
+      throw new functions.https.HttpsError(
+        'invalid-argument', 
+        'userId, journalId, and tier are required'
+      );
+    }
+
+    // Validate tier
+    const validTiers = ['essential', 'insight', 'legacy'];
+    if (!validTiers.includes(tier)) {
+      throw new functions.https.HttpsError(
+        'invalid-argument', 
+        `Invalid tier: ${tier}. Must be one of: ${validTiers.join(', ')}`
+      );
+    }
+
+    // Get user document
+    const userRef = db.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+    
+    if (!userDoc.exists) {
+      throw new functions.https.HttpsError('not-found', 'User not found');
+    }
+
+    const userData = userDoc.data();
+    const currentSubscription = userData.subscription || { status: 'free' };
+
+    // Calculate subscription duration based on tier
+    const tierMonths = {
+      essential: 3,
+      insight: 6,
+      legacy: 12
+    };
+    
+    const months = tierMonths[tier];
+    const now = new Date();
+    
+    // Calculate end date
+    let subscriptionEndDate;
+    
+    // If user already has an active subscription, extend it
+    if (currentSubscription.status === 'active' && currentSubscription.currentPeriodEnd) {
+      const existingEnd = currentSubscription.currentPeriodEnd.toDate 
+        ? currentSubscription.currentPeriodEnd.toDate() 
+        : new Date(currentSubscription.currentPeriodEnd);
+      
+      // If existing subscription is in the future, extend from there
+      if (existingEnd > now) {
+        subscriptionEndDate = new Date(existingEnd);
+        subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + months);
+        console.log(`📅 Extending existing subscription by ${months} months`);
+      } else {
+        // Existing subscription expired, start fresh
+        subscriptionEndDate = new Date(now);
+        subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + months);
+        console.log(`📅 Starting new ${months}-month subscription`);
+      }
+    } else {
+      // No active subscription, start fresh
+      subscriptionEndDate = new Date(now);
+      subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + months);
+      console.log(`📅 Starting new ${months}-month subscription`);
+    }
+
+    // Update user subscription
+    const subscriptionUpdate = {
+      subscription: {
+        status: 'active',
+        tier: 'artisan',
+        source: 'journal_bundle',
+        journalId: journalId,
+        journalTier: tier,
+        currentPeriodEnd: admin.firestore.Timestamp.fromDate(subscriptionEndDate),
+        activatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        autoRenew: false // Journal bundles don't auto-renew, user must subscribe separately
+      },
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    await userRef.update(subscriptionUpdate);
+
+    console.log(`✅ Journal subscription activated for user ${userId}`);
+    console.log(`📔 Journal: ${journalId} (${tier} tier)`);
+    console.log(`📅 Valid until: ${subscriptionEndDate.toISOString()}`);
+
+    return {
+      success: true,
+      subscription: {
+        status: 'active',
+        tier: 'artisan',
+        months: months,
+        currentPeriodEnd: subscriptionEndDate.toISOString(),
+        message: `${months} months of Artisan access activated!`
+      }
+    };
+
+  } catch (error) {
+    console.error("❌ Error activating journal subscription:", error);
+    throw new functions.https.HttpsError('internal', error.message);
+  }
 });

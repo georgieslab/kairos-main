@@ -457,7 +457,11 @@ const getDefaultPathName = (pathId) => {
     'digital-detox': 'Digital Detox Reflection',
     'grief-growth': 'Grief & Growth',
     'courage-cultivation': 'Courage Cultivation',
-    'inner-elements': 'Inner Elements Journey' // Added new multi-modal path
+    'inner-elements': 'Inner Elements Journey',
+    'shadow-light-integration': 'Shadow & Light Integration',
+    'life-chapters-trilogy': 'Life Chapters Trilogy',
+    'sensory-spectrum': 'Sensory Spectrum Journey',
+    'emotion-color-sound': 'Emotion-Color-Sound Trinity'
   };
   
   return pathNames[pathId] || 'Καιρός Journey';
@@ -495,7 +499,12 @@ const getDefaultPathDuration = (pathId) => {
     'digital-detox': 7,
     'grief-growth': 30,
     'courage-cultivation': 12,
-    'inner-elements': 9 // Added new multi-modal path
+    'inner-elements': 9,
+    'deciding-to-doing': 7,
+    'shadow-light-integration': 12,
+    'life-chapters-trilogy': 15,
+    'sensory-spectrum': 21,
+    'emotion-color-sound': 18
   };
   
   return durations[pathId] || 10;
@@ -528,7 +537,17 @@ const getDefaultPathDescription = (pathId) => {
     'anxiety-alchemy': 'Transform anxiety from an enemy into a messenger, learning to work with worry as a pathway to wisdom and growth.',
     'dream-decoder': 'Unlock the wisdom of your dreams through systematic recording, analysis, and interpretation of your nighttime messages.',
     'seasonal-rhythms': 'Align your inner seasons with nature\'s cycles, learning to honor your natural rhythms and seasonal energy patterns.',
-    'inner-elements': 'A 9-day multi-modal journey exploring Earth, Water, and Fire elements through writing, visual art, and voice to discover your elemental nature.' // Added new multi-modal path
+    'inner-elements': 'A 9-day multi-modal journey exploring Earth, Water, and Fire elements through writing, visual art, and voice to discover your elemental nature.',
+    'forgiveness-freedom': 'A 17-day journey to cultivate forgiveness for yourself and others, releasing burdens and fostering emotional freedom.',
+    'transitions-navigator': 'A 21-day path to navigate life transitions with resilience, clarity, and purpose through reflective journaling and strategic planning.',
+    'digital-detox': 'A 7-day journey to reduce digital overwhelm, cultivate mindful technology use, and reconnect with offline presence through reflective practices.',
+    'grief-growth': 'A 30-day path to navigate grief and loss, fostering healing, meaning-making, and personal growth through compassionate journaling.',
+    'courage-cultivation': 'A 12-day journey to build courage and resilience by confronting fears, embracing vulnerability, and taking bold actions aligned with your values.',
+    'deciding-to-doing': 'A 7-day focused journey to bridge the gap between intention and action, transforming decisions into tangible steps toward your goals.',
+    'shadow-light-integration': 'A 12-day multi-modal journey alternating between exploring your shadow self and celebrating your light. Integrate the full spectrum of who you are through text, voice, and visual expression.',
+    'life-chapters-trilogy': 'A 15-day narrative journey through past, present, and future chapters of your life story. Explore your life as an unfolding book using multiple modalities.',
+    'sensory-spectrum': 'A 21-day exploration of all five senses. Deepen your embodied awareness through text, visual, and voice journaling focused on sensory experience.',
+    'emotion-color-sound': 'An 18-day journey exploring six core emotions (joy, sadness, anger, fear, love, peace) through feeling, color, and sound. Express each emotion across all three modalities.'
   };
   
   return descriptions[pathId] || 'A guided journaling experience that supports personal reflection and growth.';
