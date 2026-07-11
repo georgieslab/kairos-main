@@ -2,9 +2,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Search, X, Play, ArrowRight, BookOpen, Clock, Target, Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun, 
+  Search, X, Play, ArrowRight, BookOpen, Clock, Target, Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
   Book, Droplet, Star, Zap, Archive, Lightbulb, Leaf, Coins, Brush, Feather,
-  Sparkles, CheckCircle, ChevronRight, Layers
+  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserProgress } from '../../hooks/useUserProgress';
@@ -13,28 +13,44 @@ import { getNextDayForPath } from '../../utils/userProgress';
 import PathSuggestionCard from './PathSuggestionCard';
 import PathQuestionnaire from './PathQuestionnaire';
 import PathQuestionnaireResults from './PathQuestionnaireResults';
+import PathUnlockModal from '../subscription/PathUnlockModal';
 import '../../styles/components/pathSelection.css';
 import '../../styles/components/appleGlassNav.css';
 
 // Icon map
 const ICON_MAP = {
-  Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun, 
-  Book, Droplet, Star, Zap, Clock, Archive, Target, Lightbulb, Leaf, 
-  Coins, Brush, Sparkles, Feather
+  Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
+  Book, Droplet, Star, Zap, Clock, Archive, Target, Lightbulb, Leaf,
+  Coins, Brush, Sparkles, Feather, Hourglass
 };
 
 const PathSelection = ({ navigateToScreen, currentPath }) => {
   const { t } = useTranslation('paths');
-  const { userProfile } = useAuth();
+  const { userProfile, currentUser } = useAuth();
   const { inProgressPaths, completedPaths } = useUserProgress();
-  
+
   const [activeTab, setActiveTab] = useState('explore');
   const [searchQuery, setSearchQuery] = useState('');
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [recommendation, setRecommendation] = useState(null);
+  const [unlockPath, setUnlockPath] = useState(null);
 
-  const allPaths = useMemo(() => getAllJourneyPaths(), []);
+  // Exclusive paths are one-time purchases stored on the user doc
+  const isPathUnlocked = useCallback((path) => {
+    if (!path?.isExclusive) return true;
+    return (userProfile?.purchasedPaths || []).includes(path.id);
+  }, [userProfile?.purchasedPaths]);
+
+  // Exclusive and new paths surface at the top of the grid (stable sort keeps
+  // the registry order for everything else)
+  const allPaths = useMemo(() => {
+    return [...getAllJourneyPaths()].sort(
+      (a, b) =>
+        (b.isExclusive === true) - (a.isExclusive === true) ||
+        (b.isNew === true) - (a.isNew === true)
+    );
+  }, []);
 
   // Filter logic
   const filteredPaths = useMemo(() => {
@@ -62,6 +78,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
   };
 
   const handleAction = useCallback((pathId) => {
+    const path = allPaths.find(p => p.id === pathId);
+    if (path?.isExclusive && !isPathUnlocked(path)) {
+      setUnlockPath(path);
+      return;
+    }
+
     const nextDay = getNextDayForPath(userProfile, pathId);
     const isActive = inProgressPaths.some(p => p.id === pathId);
     const isCompleted = completedPaths.some(p => p.id === pathId);
@@ -71,7 +93,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     } else {
       navigateToScreen('write', { pathId, day: isActive ? nextDay : 1 });
     }
-  }, [userProfile, navigateToScreen, inProgressPaths, completedPaths]);
+  }, [userProfile, navigateToScreen, inProgressPaths, completedPaths, allPaths, isPathUnlocked]);
 
   // --- Renderers ---
 
@@ -109,6 +131,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     const isCompleted = completedPaths.some(p => p.id === path.id);
     const isActive = !!progress;
     const completionPct = isActive ? path.percentage || 0 : (isCompleted ? 100 : 0);
+    const isLocked = path.isExclusive && !isPathUnlocked(path);
 
     const getDifficultyLabel = (diff) => {
       if (!diff) return null;
@@ -120,14 +143,20 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     };
 
     return (
-      <div 
-        className="glass-path-card"
+      <div
+        className={`glass-path-card${path.isExclusive ? ' is-exclusive' : ''}`}
         style={{ '--c': path.color }}
         onClick={() => handleAction(path.id)}
       >
         {/* Top Accent Line */}
         <div className="card-accent-line" />
-        
+
+        {path.isNew && (
+          <span className="card-new-badge" aria-label={t('pathSelection.newBadge', 'New path')}>
+            {t('pathSelection.new', 'NEW')}
+          </span>
+        )}
+
         <div className="card-main-content">
           {/* Icon */}
           <div className="card-icon-wrap">
@@ -150,6 +179,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
                 <span className="meta-pill">
                   <Target size={12} />
                   {getDifficultyLabel(path.difficulty)}
+                </span>
+              )}
+              {isLocked && path.price && (
+                <span className="meta-pill meta-pill-price">
+                  <Lock size={12} />
+                  {path.price}
                 </span>
               )}
             </div>
@@ -190,6 +225,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
             <button className="card-cta-btn completed" onClick={(e) => { e.stopPropagation(); handleAction(path.id); }}>
               <BookOpen size={14} />
               {t('pathSelection.reviewJourney', 'Review Journey')}
+              <ArrowRight size={14} />
+            </button>
+          ) : isLocked ? (
+            <button className="card-cta-btn unlock" onClick={(e) => { e.stopPropagation(); handleAction(path.id); }}>
+              <Lock size={14} />
+              {t('pathSelection.unlockFor', 'Unlock for {{price}}', { price: path.price })}
               <ArrowRight size={14} />
             </button>
           ) : (
@@ -288,6 +329,14 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
           onStartPath={(path) => { setShowResults(false); setRecommendation(null); handleAction(path.id); }}
           onRetake={() => { setShowResults(false); setShowQuestionnaire(true); }}
           onBrowseAll={() => { setShowResults(false); setRecommendation(null); }}
+        />
+      )}
+
+      {unlockPath && (
+        <PathUnlockModal
+          path={unlockPath}
+          userId={currentUser?.uid}
+          onClose={() => setUnlockPath(null)}
         />
       )}
     </div>

@@ -283,6 +283,11 @@
     "completed": "Abgeschlossen",
     "voiceJournal": "Sprachjournal",
     "journalEntry": "Journaleintrag",
+    "flexJournal": "Stimme oder Leinwand",
+    "flexPrompt": "Sprechen oder zeichnen",
+    "flexChoiceLabel": "Wie möchtest du heute antworten?",
+    "flexSpeak": "Sprich es",
+    "flexDraw": "Zeichne es",
     "dayOf": "Tag {{day}} von {{total}}",
     "dayLabel": "Tag {{day}}",
     "voicePrompt": "Sprachimpuls",
@@ -325,5 +330,16 @@
     "entries": "Einträge",
     "complete": "Abgeschlossen",
     "tapForReflection": "Tippen zum Reflektieren"
+  },
+  "whatsNew": {
+    "title": "Was ist neu",
+    "close": "Schließen",
+    "eyebrow": "Neuer exklusiver Pfad",
+    "pathTitle": "Kairos-Momente",
+    "pathText": "Der Pfad, nach dem die App benannt ist — 9 Tage über die Kunst des richtigen Augenblicks: ihn erkennen, auf ihn warten, ihn ergreifen.",
+    "perkChoice": "Du wählst jeden Tag: sprich es aus oder zeichne es",
+    "perkPrompts": "Neun sorgfältig gestaltete Impulse, ein Bogen",
+    "perkPrice": "Einmalig freischalten für 2,99 € — oder mit Einladungscode",
+    "cta": "Zum Pfad"
   }
 }

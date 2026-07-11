@@ -283,6 +283,11 @@
     "completed": "Completed",
     "voiceJournal": "Voice Journal",
     "journalEntry": "Journal Entry",
+    "flexJournal": "Voice or Canvas",
+    "flexPrompt": "Speak or draw",
+    "flexChoiceLabel": "How do you want to answer today?",
+    "flexSpeak": "Speak It",
+    "flexDraw": "Draw It",
     "dayOf": "Day {{day}} of {{total}}",
     "dayLabel": "Day {{day}}",
     "voicePrompt": "Voice prompt",
@@ -325,5 +330,16 @@
     "entries": "Entries",
     "complete": "Complete",
     "tapForReflection": "Tap for reflection"
+  },
+  "whatsNew": {
+    "title": "What's New",
+    "close": "Close",
+    "eyebrow": "New exclusive path",
+    "pathTitle": "Kairos Moments",
+    "pathText": "The path the app is named for — 9 days on the art of the opportune moment: recognizing it, waiting for it, seizing it.",
+    "perkChoice": "You choose each day: speak it or draw it",
+    "perkPrompts": "Nine carefully crafted prompts, one arc",
+    "perkPrice": "One-time unlock for €2.99 — or an invite code",
+    "cta": "See the path"
   }
 }

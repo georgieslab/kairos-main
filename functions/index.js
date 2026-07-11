@@ -185,12 +185,105 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
 
   } catch (error) {
     console.error("❌ createCheckoutSession error:", error);
-    
+
     if (error.code && error.code.startsWith('functions/')) {
       throw error;
     }
-    
+
     throw new functions.https.HttpsError('internal', `Checkout session creation failed: ${error.message}`);
+  }
+});
+
+// 💎 ONE-TIME PATH PURCHASE (exclusive paths outside the Artisan subscription)
+// Prices are defined inline (price_data) so no Stripe Dashboard product setup
+// is needed — deploy and it works. Grant happens in the webhook via
+// users/{uid}.purchasedPaths arrayUnion.
+const EXCLUSIVE_PATH_PRODUCTS = {
+  'kairos-moments': {
+    name: 'Kairos Moments — 9-day exclusive journey',
+    description: 'One-time unlock of the Kairos Moments path in Καιρός Smart Journal',
+    currency: 'eur',
+    unitAmount: 299 // €2.99
+  }
+};
+
+exports.createPathCheckoutSession = functions.https.onCall(async (data, context) => {
+  try {
+    console.log("💎 createPathCheckoutSession called:", JSON.stringify(data));
+
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { userId, pathId } = data;
+    if (!userId || !pathId) {
+      throw new functions.https.HttpsError('invalid-argument', 'User ID and path ID are required');
+    }
+
+    const product = EXCLUSIVE_PATH_PRODUCTS[pathId];
+    if (!product) {
+      throw new functions.https.HttpsError('invalid-argument', `Unknown exclusive path: ${pathId}`);
+    }
+
+    const config = functions.config();
+    const stripeSecretKey = config.stripe && config.stripe.secret_key;
+    if (!stripeSecretKey) {
+      throw new functions.https.HttpsError('failed-precondition', 'Payment system configuration error');
+    }
+    const stripeClient = stripe(stripeSecretKey);
+
+    // Reuse the existing Stripe customer if there is one
+    let customerId;
+    const userDoc = await db.collection("users").doc(userId).get();
+    if (userDoc.exists && userDoc.data().stripeCustomerId) {
+      customerId = userDoc.data().stripeCustomerId;
+    } else {
+      const customer = await stripeClient.customers.create({
+        metadata: { firebaseUID: userId }
+      });
+      customerId = customer.id;
+      await db.collection("users").doc(userId).update({ stripeCustomerId: customerId });
+    }
+
+    // Already purchased? Don't charge twice.
+    const purchased = (userDoc.exists && userDoc.data().purchasedPaths) || [];
+    if (purchased.includes(pathId)) {
+      throw new functions.https.HttpsError('already-exists', 'Path already purchased');
+    }
+
+    const session = await stripeClient.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [{
+        price_data: {
+          currency: product.currency,
+          unit_amount: product.unitAmount,
+          product_data: {
+            name: product.name,
+            description: product.description
+          }
+        },
+        quantity: 1
+      }],
+      success_url: `https://reflection-writer.web.app/success?type=path&path=${pathId}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://reflection-writer.web.app/cancel`,
+      metadata: {
+        firebaseUID: userId,
+        pathId: pathId,
+        type: 'path_purchase'
+      }
+    });
+
+    console.log("✅ Path checkout session created:", session.id);
+    return { sessionId: session.id, url: session.url };
+
+  } catch (error) {
+    console.error("❌ createPathCheckoutSession error:", error);
+    if (error.code && error.code.startsWith('functions/')) {
+      throw error;
+    }
+    throw new functions.https.HttpsError('internal', `Path checkout creation failed: ${error.message}`);
   }
 });
 
@@ -280,13 +373,26 @@ async function handleCheckoutSessionCompleted(session, stripeClient) {
   try {
     console.log("✅ Processing completed checkout session:", session.id);
     console.log("🔍 Session data:", JSON.stringify(session, null, 2));
-    
+
     const firebaseUID = session.metadata?.firebaseUID;
     if (!firebaseUID) {
       console.error("❌ No Firebase UID in session metadata");
       return;
     }
-    
+
+    // 💎 One-time path purchase — grant the path and stop. Must NOT fall
+    // through to the subscription activation below.
+    if (session.metadata?.type === 'path_purchase' && session.metadata?.pathId) {
+      const pathId = session.metadata.pathId;
+      console.log(`💎 Granting exclusive path '${pathId}' to user:`, firebaseUID);
+      await db.collection('users').doc(firebaseUID).update({
+        purchasedPaths: admin.firestore.FieldValue.arrayUnion(pathId),
+        updatedAt: admin.firestore.Timestamp.now()
+      });
+      console.log("✅ Exclusive path granted:", pathId);
+      return;
+    }
+
     console.log("👤 Activating subscription for user:", firebaseUID);
     
     // Get subscription details from Stripe

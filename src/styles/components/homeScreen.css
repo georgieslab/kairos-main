@@ -130,9 +130,44 @@
   align-items: center;
   gap: 7px;
   flex: 1;
+  position: relative;
+  animation: weekDotIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both;
+}
+
+@keyframes weekDotIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Connects consecutive days of an in-progress streak with a traveling
+   light, so a run of active dots reads as one continuous streak rather
+   than isolated marks. */
+.home-week-day.in-streak:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--journey-color, 85, 139, 110), 0.25),
+    rgba(var(--journey-color, 85, 139, 110), 0.9),
+    rgba(var(--journey-color, 85, 139, 110), 0.25)
+  );
+  background-size: 250% 100%;
+  animation: streakFlow 2.8s linear infinite;
+  z-index: 0;
+}
+
+@keyframes streakFlow {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -150% 0; }
 }
 
 .home-week-dot {
+  position: relative;
+  z-index: 1;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -154,6 +189,12 @@
 .home-week-day.is-today.is-active .home-week-dot {
   border: 2px solid #fff;
   transform: scale(1.08);
+  animation: todayStreakPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes todayStreakPulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.5); }
+  50%      { box-shadow: 0 0 22px rgba(var(--journey-color, 85, 139, 110), 0.85); }
 }
 
 .home-week-day.is-future .home-week-dot {
@@ -227,18 +268,50 @@
 }
 
 .hero-greeting {
-  font-size: 28px;
+  font-size: 44px;
   font-weight: 700;
   margin: 0 0 4px;
-  color: rgba(255, 255, 255, 0.95);
-  letter-spacing: -0.3px;
-}
-
-.hero-name {
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(var(--journey-color, 85, 139, 110), 0.8));
+  letter-spacing: -0.8px;
+  line-height: 1.08;
+  /* Journey-tinted sheen travels through otherwise-white text. Both ends of
+     the gradient are plain base color so the infinite loop wraps seamlessly. */
+  background-image: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.95) 38%,
+    rgba(var(--journey-color, 85, 139, 110), 0.95) 50%,
+    rgba(255, 255, 255, 0.95) 62%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: heroTextSheen 7s linear infinite;
+}
+
+.hero-name {
+  /* The name leans harder into the journey color, with a white glint
+     sweeping through on the same clock (offset so they don't sync up). */
+  background-image: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(var(--journey-color, 85, 139, 110), 0.9) 30%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(var(--journey-color, 85, 139, 110), 0.9) 70%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: heroTextSheen 7s linear infinite;
+  animation-delay: -2.5s;
+}
+
+@keyframes heroTextSheen {
+  0%   { background-position: 125% 0; }
+  100% { background-position: -125% 0; }
 }
 
 .hero-subtitle {
@@ -552,10 +625,29 @@
   }
 }
 
+/* ===== ACTIVE STREAK (any streak ≥ 1 day) ===== */
+/* A quiet ambient glow on the card itself, not just the flame icon, so an
+   ongoing streak reads as "alive" even before it hits a milestone. */
+.vital-streak.has-streak {
+  border-color: rgba(var(--c-orange), 0.2);
+  animation: vitalStreakGlow 3.2s ease-in-out infinite;
+}
+
+@keyframes vitalStreakGlow {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 0 rgba(var(--c-orange), 0); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 16px rgba(var(--c-orange), 0.3); }
+}
+
 /* ===== STREAK MILESTONES (7 / 30 / 100 / 365 days) ===== */
-/* The flame card quietly celebrates: warm ring, gradient number, soft pulse */
+/* The flame card celebrates more visibly: warmer ring, gradient number, stronger card-level pulse */
 .vital-streak.is-milestone {
-  border-color: rgba(var(--c-orange), 0.28);
+  border-color: rgba(var(--c-orange), 0.4);
+  animation: vitalStreakGlowMilestone 2.2s ease-in-out infinite;
+}
+
+@keyframes vitalStreakGlowMilestone {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 10px rgba(var(--c-orange), 0.25); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 30px rgba(var(--c-orange), 0.6); }
 }
 
 .vital-streak.is-milestone .vital-number {
@@ -730,11 +822,24 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
-.hs-light .hero-greeting,
 .hs-light .hero-prompt-text,
 .hs-light .vital-number,
 .hs-light .spark-text {
   color: rgba(0, 0, 0, 0.85);
+}
+
+/* Greeting keeps its clip-text sheen in light mode, just on a dark base —
+   a plain `color` here would paint over the animated gradient. */
+.hs-light .hero-greeting {
+  background-image: linear-gradient(
+    110deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.85) 38%,
+    rgba(var(--journey-color, 85, 139, 110), 1) 50%,
+    rgba(0, 0, 0, 0.85) 62%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  color: transparent;
 }
 
 .hs-light .hero-subtitle,
@@ -750,7 +855,15 @@
 
 /* Greeting name gradient — the dark-theme version starts white (invisible on light) */
 .hs-light .hero-name {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(var(--journey-color, 85, 139, 110), 0.95));
+  background-image: linear-gradient(
+    110deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(var(--journey-color, 85, 139, 110), 0.95) 30%,
+    rgba(0, 0, 0, 0.75) 50%,
+    rgba(var(--journey-color, 85, 139, 110), 0.95) 70%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -837,13 +950,24 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-header,
   .home-week,
+  .home-week-day,
   .hero-card,
   .vitals-section,
   .spark-section {
     animation: none;
   }
+  .home-week-day.in-streak::after,
+  .home-week-day.is-today.is-active .home-week-dot,
+  .vital-streak.has-streak,
+  .vital-streak.is-milestone,
   .vital-streak.is-milestone .flame-glow {
     animation: none;
+  }
+  /* Freeze the greeting sheen mid-sweep so the gradient still reads nicely */
+  .hero-greeting,
+  .hero-name {
+    animation: none;
+    background-position: 50% 0;
   }
   .spark-content {
     transition: opacity 0.2s ease;
@@ -853,3 +977,4 @@
     transform: none;
   }
 }
+

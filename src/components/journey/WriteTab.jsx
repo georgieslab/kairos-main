@@ -14,13 +14,14 @@ import {
   Trophy,
   Mic,
   ChevronRight,
+  Palette,
 } from 'lucide-react';
 import { getJourneyDay, getJourneyPath } from '../../data/JourneyData';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import DynamicIcon from '../common/DynamicIcon';
 import { getNextDayForPath, getProgressFieldForPath } from '../../utils/pathUtils';
-import { isVoicePath } from '../../utils/pathTypeUtils';
+import { isVoicePath, isFlexPath } from '../../utils/pathTypeUtils';
 import '../../styles/components/WriteTab.css';
 
 const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
@@ -117,19 +118,23 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
     title: 'Self-Discovery', iconName: 'Compass', color: '85,139,110', duration: 10 
   };
   const pathColorRgb = pathDetails.color || '85,139,110';
+  const isFlex = isFlexPath(activePath);
   const isVoice = isVoicePath(activePath);
 
-  const handleStart = () => {
+  // `mode` matters only for flex paths (voice-or-draw): 'voice' | 'draw'.
+  // Everything else keeps its single path-type-derived flow.
+  const handleStart = (mode) => {
     if (isNavigating.current) return;
-    
+
     if (completionStatus === 'completed') {
       isNavigating.current = true;
       navigateToScreen('journey-complete', { pathId: activePath, day: activeDay });
       return;
     }
-    
+
+    const useVoice = isFlex ? mode === 'voice' : isVoice;
     isNavigating.current = true;
-    navigateToScreen(isVoice ? 'voice-upload' : 'upload', {
+    navigateToScreen(useVoice ? 'voice-upload' : 'upload', {
       pathId: activePath,
       day: activeDay,
       prompt: journeyData?.prompt,
@@ -224,7 +229,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
         </div>
 
         <h1 className="write-title">
-          {isVoice ? t('writeTab.voiceJournal', 'Voice Journal') : t('writeTab.journalEntry', 'Journal Entry')}
+          {isFlex
+            ? t('writeTab.flexJournal', 'Voice or Canvas')
+            : isVoice ? t('writeTab.voiceJournal', 'Voice Journal') : t('writeTab.journalEntry', 'Journal Entry')}
         </h1>
         <p className="write-subtitle">{t('writeTab.dayOf', 'Day {{day}} of {{total}}', { day: activeDay, total: pathDetails.duration })}</p>
       </div>
@@ -250,7 +257,11 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
         <div className="write-prompt-body">
           <div className="write-prompt-label">
             <MessageSquare size={16} />
-            <span>{isVoice ? t('writeTab.voicePrompt', 'Voice prompt') : t('writeTab.writingPrompt', 'Writing prompt')}</span>
+            <span>
+              {isFlex
+                ? t('writeTab.flexPrompt', 'Speak or draw')
+                : isVoice ? t('writeTab.voicePrompt', 'Voice prompt') : t('writeTab.writingPrompt', 'Writing prompt')}
+            </span>
           </div>
 
           <p className="write-prompt-text">
@@ -265,10 +276,43 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
 
         {/* Action Buttons */}
         <div className="write-actions">
-          <button 
+          {isFlex ? (
+            <div className="write-flex-choice">
+              <p className="write-flex-choice-label">
+                {t('writeTab.flexChoiceLabel', 'How do you want to answer today?')}
+              </p>
+              <div className="write-flex-choice-buttons">
+                <button
+                  className="write-action-primary write-flex-option"
+                  onClick={() => handleStart('voice')}
+                  style={{
+                    backgroundColor: `rgba(${pathColorRgb}, 0.15)`,
+                    borderColor: `rgba(${pathColorRgb}, 0.25)`,
+                    color: `rgb(${pathColorRgb})`
+                  }}
+                >
+                  <Mic size={20} />
+                  <span>{t('writeTab.flexSpeak', 'Speak It')}</span>
+                </button>
+                <button
+                  className="write-action-primary write-flex-option"
+                  onClick={() => handleStart('draw')}
+                  style={{
+                    backgroundColor: `rgba(${pathColorRgb}, 0.15)`,
+                    borderColor: `rgba(${pathColorRgb}, 0.25)`,
+                    color: `rgb(${pathColorRgb})`
+                  }}
+                >
+                  <Palette size={20} />
+                  <span>{t('writeTab.flexDraw', 'Draw It')}</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+          <button
             className="write-action-primary"
             onClick={handleStart}
-            style={{ 
+            style={{
               backgroundColor: `rgba(${pathColorRgb}, 0.15)`,
               borderColor: `rgba(${pathColorRgb}, 0.25)`,
               color: `rgb(${pathColorRgb})`
@@ -282,6 +326,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             </span>
             <ChevronRight size={16} />
           </button>
+          )}
 
           <button
             className="write-action-secondary"

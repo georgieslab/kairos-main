@@ -9,6 +9,7 @@ import { getMostRecentActivePathId } from '../utils/pathUtils';
 import DynamicIcon from '../components/common/DynamicIcon';
 import ThemeSwitcher from '../components/common/ThemeSwitcher';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
+import WhatsNew from '../components/common/WhatsNew';
 import MoodWeather from '../components/common/MoodWeather';
 import { Sparkles, ArrowRight, Flame, FileText, Target, Quote } from 'lucide-react';
 import '../styles/components/homeScreen.css';
@@ -77,7 +78,7 @@ const HomeScreen = ({ navigateToScreen }) => {
     const now = new Date();
     // Mon-first weekday initials, e.g. ['M','T','W','T','F','S','S']
     const weekdayInitials = t('home.weekdayInitials', { returnObjects: true, defaultValue: ['M', 'T', 'W', 'T', 'F', 'S', 'S'] });
-    return Array.from({ length: 7 }, (_, i) => {
+    const days = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(now);
       d.setDate(now.getDate() - (6 - i));
       const mondayFirstIndex = (d.getDay() + 6) % 7; // Sun(0)->6, Mon(1)->0, ... Sat(6)->5
@@ -87,6 +88,13 @@ const HomeScreen = ({ navigateToScreen }) => {
         isToday: i === 6
       };
     });
+    // Mark the trailing run of consecutive active days ending today, so the
+    // strip can visually connect an in-progress streak instead of just
+    // lighting up isolated dots.
+    for (let i = days.length - 1; i >= 0 && days[i].active; i--) {
+      days[i].inStreak = true;
+    }
+    return days;
   }, [statistics.allEntries, t]);
 
   const getGreeting = () => {
@@ -100,6 +108,8 @@ const HomeScreen = ({ navigateToScreen }) => {
 
   // Streak milestones (7/30/100/365) get a celebratory treatment on the flame card — CSS only
   const isStreakMilestone = [7, 30, 100, 365].includes(statistics.currentStreak || 0);
+  // Any active streak gets a subtler ambient glow; milestones layer a stronger one on top
+  const hasStreak = (statistics.currentStreak || 0) > 0;
 
   return (
     <div
@@ -120,6 +130,7 @@ const HomeScreen = ({ navigateToScreen }) => {
             <div className="header-controls">
               <LanguageSwitcher />
               <ThemeSwitcher />
+              <WhatsNew navigateToScreen={navigateToScreen} />
             </div>
       </div>
 
@@ -138,7 +149,8 @@ const HomeScreen = ({ navigateToScreen }) => {
           {weekActivity.map((d, i) => (
             <div
               key={i}
-              className={`home-week-day${d.active ? ' is-active' : ''}${d.isToday ? ' is-today' : ''}`}
+              className={`home-week-day${d.active ? ' is-active' : ''}${d.isToday ? ' is-today' : ''}${d.inStreak ? ' in-streak' : ''}`}
+              style={{ '--d': `${i * 60}ms` }}
             >
               <span className="home-week-dot" />
               <span className="home-week-label">{d.label}</span>
@@ -227,7 +239,7 @@ const HomeScreen = ({ navigateToScreen }) => {
         </section>
       ) : statistics.totalEntries > 0 && (
         <section className="vitals-section">
-          <button className={`vital-card vital-streak${isStreakMilestone ? ' is-milestone' : ''}`} onClick={() => navigateToScreen('analytics-dashboard')}>
+          <button className={`vital-card vital-streak${hasStreak ? ' has-streak' : ''}${isStreakMilestone ? ' is-milestone' : ''}`} onClick={() => navigateToScreen('analytics-dashboard')}>
             <div className="vital-icon-wrap flame-glow">
               <Flame size={18} />
             </div>

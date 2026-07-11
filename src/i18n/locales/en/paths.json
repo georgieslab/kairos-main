@@ -118,11 +118,30 @@
     "exploreTab": "Explore",
     "completedTab": "Completed",
     "noPathsFound": "No paths found",
-    "tryAdjusting": "Try adjusting your search or filters"
+    "tryAdjusting": "Try adjusting your search or filters",
+    "new": "NEW",
+    "newBadge": "New path",
+    "unlockFor": "Unlock for {{price}}"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "AI-matched",
     "title": "Not sure where to start?",
     "description": "Answer a few quick questions and we'll find your perfect path."
+  },
+  "unlockModal": {
+    "close": "Close",
+    "perkDays": "{{count}} carefully crafted days",
+    "perkChoice": "You choose each day: speak it or draw it",
+    "perkExclusive": "Exclusive path — yours forever, one payment",
+    "buy": "Unlock for {{price}}",
+    "opening": "Opening secure checkout...",
+    "error": "Could not start the payment. Please try again.",
+    "note": "Secure payment via Stripe. Access unlocks automatically after payment — just return to this screen.",
+    "haveCode": "Have an invite code?",
+    "codePlaceholder": "Enter invite code",
+    "redeem": "Redeem",
+    "codeInvalid": "That code isn't valid for this path.",
+    "codeFailed": "Could not redeem the code. Please try again.",
+    "codeSuccess": "Path unlocked — enjoy the journey!"
   }
 }

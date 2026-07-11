@@ -143,6 +143,36 @@ export const createCheckoutSession = async (userId, popupWindow = null) => {
 };
 
 /**
+ * 💎 One-time exclusive path purchase (e.g. Kairos Moments, €2.99).
+ * Opens the popup synchronously (before the async call) to dodge popup
+ * blockers, same trick as startUpgradeProcess below.
+ * @param {string} userId - User ID
+ * @param {string} pathId - Exclusive path ID, e.g. 'kairos-moments'
+ */
+export const startPathPurchase = async (userId, pathId) => {
+  const popupWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+
+  try {
+    const createSession = httpsCallable(functions, 'createPathCheckoutSession');
+    const result = await createSession({ userId, pathId });
+    const url = result.data?.url;
+    if (!url) throw new Error('No checkout URL returned');
+
+    if (popupWindow && !popupWindow.closed) {
+      popupWindow.location.href = url;
+    } else {
+      // Popup blocked — same-tab fallback
+      window.location.href = url;
+    }
+    return result.data;
+  } catch (error) {
+    if (popupWindow && !popupWindow.closed) popupWindow.close();
+    console.error('❌ Error starting path purchase:', error);
+    throw error;
+  }
+};
+
+/**
  * 🔧 FIXED: Enhanced upgrade handler with popup blocker prevention for WEB APPS
  * @param {string} userId - User ID
  * @returns {Promise<Window|null>} Popup window reference

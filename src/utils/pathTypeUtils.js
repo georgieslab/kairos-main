@@ -24,15 +24,28 @@ export const getDayType = (pathId, day) => {
   return getPathType(pathId);
 };
 
+// Flex paths: the user chooses voice OR drawing per day. Listed in
+// VISUAL_PATHS below so the artwork upload flow works out of the box
+// (no text extraction); the voice flow is reached by navigating straight
+// to the voice-upload screen, which doesn't consult path type.
+const FLEX_PATHS = [
+  'kairos-moments'
+];
+
+export const isFlexPath = (pathId) => {
+  return FLEX_PATHS.includes(pathId);
+};
+
 const VISUAL_PATHS = [
   'mindful-visualization',
-  'artistic-soul-expression', 
+  'artistic-soul-expression',
   'color-psychology',
   'sacred-geometry',
   'nature-sketching',
   'abstract-emotions',
   'visual-storytelling',
-  'ink-essence'
+  'ink-essence',
+  'kairos-moments' // flex: drawing branch of the voice-or-draw choice
 ];
 
 // Traditional Text-Based Journaling Paths - handwritten reflection
@@ -370,7 +383,8 @@ export const isSamePathType = (pathId1, pathId2) => {
 export {
   VISUAL_PATHS,
   TEXT_EXTRACTION_PATHS,
-  VOICE_PATHS
+  VOICE_PATHS,
+  FLEX_PATHS
 };
 
 // Export all paths combined
@@ -393,6 +407,7 @@ export default {
   isTextExtractionPath,
   isWritingPath,
   isVoicePath,
+  isFlexPath,
   requiresTextExtraction,
   getPathType,
   getAllVisualPaths,

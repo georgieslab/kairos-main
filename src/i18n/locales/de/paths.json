@@ -118,11 +118,30 @@
     "exploreTab": "Entdecken",
     "completedTab": "Abgeschlossen",
     "noPathsFound": "Keine Pfade gefunden",
-    "tryAdjusting": "Versuche deine Suche oder Filter anzupassen"
+    "tryAdjusting": "Versuche deine Suche oder Filter anzupassen",
+    "new": "NEU",
+    "newBadge": "Neuer Pfad",
+    "unlockFor": "Freischalten für {{price}}"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "KI-abgestimmt",
     "title": "Unsicher, wo du anfangen sollst?",
     "description": "Beantworte ein paar kurze Fragen und wir finden deinen perfekten Pfad."
+  },
+  "unlockModal": {
+    "close": "Schließen",
+    "perkDays": "{{count}} sorgfältig gestaltete Tage",
+    "perkChoice": "Du wählst jeden Tag: sprich es aus oder zeichne es",
+    "perkExclusive": "Exklusiver Pfad — für immer deiner, eine Zahlung",
+    "buy": "Freischalten für {{price}}",
+    "opening": "Sichere Kasse wird geöffnet...",
+    "error": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.",
+    "note": "Sichere Zahlung über Stripe. Der Zugang wird nach der Zahlung automatisch freigeschaltet — kehre einfach zu diesem Bildschirm zurück.",
+    "haveCode": "Hast du einen Einladungscode?",
+    "codePlaceholder": "Einladungscode eingeben",
+    "redeem": "Einlösen",
+    "codeInvalid": "Dieser Code ist für diesen Pfad nicht gültig.",
+    "codeFailed": "Der Code konnte nicht eingelöst werden. Bitte versuche es erneut.",
+    "codeSuccess": "Pfad freigeschaltet — genieße die Reise!"
   }
 }

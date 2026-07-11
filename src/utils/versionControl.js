@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.0.3-beta';
+export const APP_VERSION = '1.0.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2215,7 +2215,7 @@ export const VERSION_HISTORY = [
 },
 
 {
-  version: '1.0.3-beta',
+  version: '0.3-beta',
   releaseDate: '2026-07-11',
   codename: 'Inner Aura & German Language',
   features: [
@@ -2239,6 +2239,34 @@ export const VERSION_HISTORY = [
   notes: [
     'This release focuses on making Καιρός genuinely bilingual and giving the daily mood check-in a real, working home across the app.',
     'German speakers now get a fully localized experience, from the interface down to AI-generated reflections.',
+    'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+
+{
+  version: '1.0.0',
+  releaseDate: '2026-07-11',
+  codename: 'Kairos Moments',
+  features: [
+    'New exclusive path: "Kairos Moments" — 9 days on the art of the opportune moment, the path the app is named for',
+    'Voice or canvas, your choice: each day of Kairos Moments lets you decide whether to speak your answer aloud or draw it',
+    'One-time unlock for €2.99 via secure Stripe checkout — no subscription required, yours forever',
+    'Invite codes: redeem a code in the unlock screen to open the path instantly',
+    'A "What\'s New" button on the Home screen (under the theme and language toggles) with a glassy announcement of the latest addition',
+    'The Kairos Moments card glows gold at the top of the Paths screen with a NEW badge and a glass sheen that glints across it'
+  ],
+  improvements: [
+    'Home screen greeting now shimmers with a slow, journey-colored gradient sweep through the text',
+    'The 7-day activity strip animates in day by day, and consecutive journaling days are connected by a traveling light',
+    'The Day Streak card breathes with a soft ambient glow whenever a streak is alive, and more strongly at milestones',
+    'New and exclusive journeys now appear at the top of the Explore grid'
+  ],
+  bugFixes: [
+    'Fixed popups being covered by other Home screen elements (overlays now render above everything, always)'
+  ],
+  notes: [
+    'Καιρός 1.0 — the first stable release. Thank you to every beta tester who journaled along the way.',
+    'Kairos Moments is the first exclusive path: a one-time purchase outside the subscription, with invite codes for friends of the app.',
     'All changes are fully backward compatible with existing user data and progress.'
   ]
 }
