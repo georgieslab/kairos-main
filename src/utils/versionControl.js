@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '0.2-beta';
+export const APP_VERSION = '1.0.3-beta';
 
 export const VERSION_HISTORY = [
   {
@@ -2212,9 +2212,36 @@ export const VERSION_HISTORY = [
     'Famous phrases are now shared from a single source across the Home and analyzing screens for a consistent voice.',
     'All changes are fully backward compatible with existing user data and progress.'
   ]
+},
+
+{
+  version: '1.0.3-beta',
+  releaseDate: '2026-07-11',
+  codename: 'Inner Aura & German Language',
+  features: [
+    'Full German language support — switch the entire app, including journey prompts and AI-generated insights, between English and German',
+    'New "Inner Aura" daily mood check-in on the Home screen — pick how your energy feels today and see it reflected in your Insights and Profile mood history',
+    'Journal entry exports are now a styled, infographic-style PDF with your mood and a hand-drawn mood glyph, instead of plain text',
+    'A small decorative journal illustration on each registered journal card in My Journals'
+  ],
+  bugFixes: [
+    'Fixed mood check-ins not visibly registering in the Insights and Profile mood history after selecting a mood',
+    'Fixed the selected mood icon not lighting up correctly in light theme',
+    'Fixed the exported PDF showing the raw mood id instead of its translated name',
+    'Replaced the continuously looping glow/sparkle animation on the selected mood with a quieter one-shot effect',
+    'Fixed broken app icons and a missing web app manifest link affecting "Add to Home Screen" installs'
+  ],
+  improvements: [
+    'Consistent mood naming and colors across the Home screen, Insights, Profile, PDF export, and AI context',
+    'Landing page and app SEO metadata cleanup, plus a sitemap and robots.txt for better discoverability',
+    'Home screen weekly activity strip now shows a loading skeleton instead of popping in empty'
+  ],
+  notes: [
+    'This release focuses on making Καιρός genuinely bilingual and giving the daily mood check-in a real, working home across the app.',
+    'German speakers now get a fully localized experience, from the interface down to AI-generated reflections.',
+    'All changes are fully backward compatible with existing user data and progress.'
+  ]
 }
-
-
 
 ];
 
