@@ -22,7 +22,10 @@ const useLoader = ({ initialState = false, defaultDuration = 0 } = {}) => {
     setLoaderProps(prevProps => ({
       ...prevProps,
       ...props,
-      autoHide: props.duration || props.autoHide || defaultDuration
+      autoHide: props.duration || props.autoHide || defaultDuration,
+      // Transient: never persist across loaders — only show the quote when a
+      // caller (the analysis loader) explicitly opts in.
+      showQuote: props.showQuote ?? false
     }));
     setIsLoading(true);
     

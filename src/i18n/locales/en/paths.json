@@ -1,0 +1,128 @@
+{
+  "disclaimerModal": {
+    "header": "Important Information",
+    "aboutTitle": "About This Journey",
+    "aboutText": "The \"Transformation Journey: Breaking Patterns\" is designed to support you in addressing and transforming challenging patterns in your life. This may include habits related to substances, behaviors, or thought patterns that you wish to change.",
+    "disclaimerTitle": "Important Disclaimer",
+    "disclaimerText": "While journaling can be a powerful tool for personal growth and recovery, this journey is not a substitute for professional treatment, therapy, or medical advice. If you're struggling with addiction or other serious mental health issues, please consult with a healthcare professional.",
+    "privacyTitle": "Privacy & Personalization",
+    "privacyText1": "The prompts in this journey will refer to \"[substance/behavior]\" - mentally replace this with the specific pattern you\\'re working to transform. Your responses are private and processed according to your privacy settings.",
+    "privacyText2": "For maximum privacy, we recommend enabling local processing in your privacy settings.",
+    "resourcesTitle": "Support Resources",
+    "resourceSamhsa": "SAMHSA National Helpline: 1-800-662-4357",
+    "resourceAA": "Alcoholics Anonymous",
+    "resourceSmartRecovery": "SMART Recovery",
+    "resourceFindTherapist": "Find a Therapist",
+    "cancel": "Cancel",
+    "accept": "I Understand & Want to Begin"
+  },
+  "pathCard": {
+    "progressText": "{{count}} of 10 days completed",
+    "details": "Details",
+    "continueJourney": "Continue Journey",
+    "startJourney": "Start Journey"
+  },
+  "pathDaysList": {
+    "dayLabel": "Day {{day}}"
+  },
+  "pathInfoModal": {
+    "benefits": "Benefits",
+    "journeyStructure": "Journey Structure",
+    "continueJourney": "Continue Journey"
+  },
+  "pathProgressBar": {
+    "progressText": "{{completed}} of {{total}} days completed"
+  },
+  "pathRecommendation": {
+    "title": "Begin Your Journey",
+    "text": "We recommend starting with the Self-Discovery journey to establish a strong foundation for your journaling practice.",
+    "button": "Start Self-Discovery"
+  },
+  "premiumSection": {
+    "title": "Premium Journeys",
+    "comingSoon": "(Coming Soon)",
+    "premiumBadge": "Premium",
+    "durationDays": "{{count}} days",
+    "lockedText": "Available with premium subscription"
+  },
+  "pathQuestionnaire": {
+    "loading": {
+      "message": "Finding Your Perfect Path",
+      "subMessage": "Analyzing your answers..."
+    },
+    "brand": "Find your path",
+    "closeAriaLabel": "Close",
+    "stepLabel": "Question {{current}} of {{total}}",
+    "back": "Back"
+  },
+  "pathQuestionnaireResults": {
+    "errorText": "Unable to generate recommendation. Please try again.",
+    "retakeButton": "Retake Questionnaire",
+    "closeAriaLabel": "Close",
+    "title": "Your Perfect Path",
+    "subtitle": "Chosen just for you, right now",
+    "matchBadge": "{{score}}% Match",
+    "daysCount": "{{count}} days",
+    "showLess": "Show Less",
+    "whyThisPath": "Why This Path?",
+    "whatYoullGain": "What You'll Gain",
+    "whyNow": "Why Now?",
+    "startJourney": "Start This Journey",
+    "browseAll": "Browse All Paths"
+  },
+  "pathRecommendationCard": {
+    "category": {
+      "growth": "Build on Progress",
+      "exploration": "New Territory",
+      "challenge": "Stretch Goal"
+    },
+    "matchBadge": "{{score}}% Match",
+    "duration": "Duration",
+    "daysCount": "{{count}} days",
+    "difficulty": "Difficulty",
+    "whyThisPath": "Why This Path?",
+    "whatYoullGain": "What You'll Gain",
+    "whyNow": "Why Now?",
+    "startJourney": "Start Journey",
+    "expandHint": "Tap to see why this is perfect for you"
+  },
+  "pathRecommendations": {
+    "loadError": "Failed to load recommendations",
+    "loadingText": "Finding your perfect next journey...",
+    "loadingSubtext": "Analyzing your interests and progress",
+    "unableToGenerate": "Unable to generate recommendations",
+    "noneAvailable": "No recommendations available",
+    "completeFirstJourney": "Complete your first journey to get personalized suggestions",
+    "title": "Recommended For You",
+    "subtitle": "AI-curated paths based on your journey",
+    "refreshAriaLabel": "Refresh recommendations",
+    "refresh": "Refresh"
+  },
+  "pathSelection": {
+    "dayLabel": "Day {{day}}",
+    "totalDaysAbbrev": "{{count}}d",
+    "continue": "Continue",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "durationDays": "{{count}} Days",
+    "percentComplete": "{{pct}}% complete",
+    "done": "Done",
+    "continueDay": "Continue Day {{day}}",
+    "reviewJourney": "Review Journey",
+    "startJourney": "Start Journey",
+    "searchPlaceholder": "Search journeys...",
+    "currentJourneys": "Current Journeys",
+    "exploreTab": "Explore",
+    "completedTab": "Completed",
+    "noPathsFound": "No paths found",
+    "tryAdjusting": "Try adjusting your search or filters"
+  },
+  "pathSuggestionCard": {
+    "aiMatchedTag": "AI-matched",
+    "title": "Not sure where to start?",
+    "description": "Answer a few quick questions and we'll find your perfect path."
+  }
+}

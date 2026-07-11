@@ -1,0 +1,134 @@
+[
+  {
+    "id": "lifeValuesDays:1",
+    "title": "Values Introduction",
+    "theme": "Self-Awareness",
+    "prompt": "What are values and why do they matter? Reflect on times when you felt most aligned and fulfilled. What values were you honoring in those moments?"
+  },
+  {
+    "id": "lifeValuesDays:2",
+    "title": "Values Exploration",
+    "theme": "Discovery",
+    "prompt": "From a list of common values (integrity, freedom, creativity, security, etc.), which 10-15 initially resonate with you? Why do these particular values stand out?"
+  },
+  {
+    "id": "lifeValuesDays:3",
+    "title": "Core Values Identification",
+    "theme": "Prioritization",
+    "prompt": "From yesterday's list, which 5-7 values feel most essential to who you are? What makes these your core values rather than simply preferences?"
+  },
+  {
+    "id": "lifeValuesDays:4",
+    "title": "Values in Action",
+    "theme": "Manifestation",
+    "prompt": "For each of your core values, describe a specific time when you lived that value fully. How did it feel? What impact did it have?"
+  },
+  {
+    "id": "lifeValuesDays:5",
+    "title": "Values Conflicts",
+    "theme": "Tension",
+    "prompt": "When have your core values come into conflict with each other? How did you navigate this tension? What did you prioritize and why?"
+  },
+  {
+    "id": "lifeValuesDays:6",
+    "title": "Family Values",
+    "theme": "Origins",
+    "prompt": "What values were emphasized in your family of origin? Which did you absorb, reject, or modify as you developed your own value system?"
+  },
+  {
+    "id": "lifeValuesDays:7",
+    "title": "Cultural Values",
+    "theme": "Societal Influence",
+    "prompt": "How have your cultural background and societal expectations shaped your values? Which culturally-transmitted values do you embrace, and which do you question?"
+  },
+  {
+    "id": "lifeValuesDays:8",
+    "title": "Values Assessment",
+    "theme": "Congruence",
+    "prompt": "How aligned is your current life with your core values? Rate each value on a scale of 1-10 for how fully you're living it. Where are the gaps?"
+  },
+  {
+    "id": "lifeValuesDays:9",
+    "title": "Work Values",
+    "theme": "Professional Alignment",
+    "prompt": "How do your values show up in your work or career? Which values are honored in your current role, and which are compromised? What would greater alignment look like?"
+  },
+  {
+    "id": "lifeValuesDays:10",
+    "title": "Relationship Values",
+    "theme": "Connection",
+    "prompt": "How do your values influence your relationships? Which values do you share with those closest to you? Where do your values differ, and how do you navigate those differences?"
+  },
+  {
+    "id": "lifeValuesDays:11",
+    "title": "Values and Time",
+    "theme": "Priorities",
+    "prompt": "Examine how you spend your time in a typical week. Which activities align with your core values? Which activities don't serve your values? What adjustments would create better alignment?"
+  },
+  {
+    "id": "lifeValuesDays:12",
+    "title": "Values Under Pressure",
+    "theme": "Resilience",
+    "prompt": "When under stress or pressure, which of your values are easiest to maintain and which tend to be compromised? What helps you stay aligned with your values during difficult times?"
+  },
+  {
+    "id": "lifeValuesDays:13",
+    "title": "Values and Decision-Making",
+    "theme": "Choices",
+    "prompt": "Recall a significant decision you've made recently. How did your values influence this choice? Create a values-based framework for making future decisions."
+  },
+  {
+    "id": "lifeValuesDays:14",
+    "title": "Values Evolution",
+    "theme": "Growth",
+    "prompt": "How have your values evolved over time? Which values have remained constant throughout your life, and which have shifted? What catalyzed these changes?"
+  },
+  {
+    "id": "lifeValuesDays:15",
+    "title": "Aspirational Values",
+    "theme": "Future Self",
+    "prompt": "What values do you aspire to embody more fully? What qualities do you admire in others that you'd like to develop in yourself? What would living these values look like?"
+  },
+  {
+    "id": "lifeValuesDays:16",
+    "title": "Values and Ethics",
+    "theme": "Principles",
+    "prompt": "How do your values inform your ethical framework? Consider a morally complex situation. How do your values guide your approach to ethical dilemmas?"
+  },
+  {
+    "id": "lifeValuesDays:17",
+    "title": "Values in Community",
+    "theme": "Collective Belonging",
+    "prompt": "Which communities or groups share your core values? How does belonging to these communities reinforce your values? How might you contribute to communities that matter to you?"
+  },
+  {
+    "id": "lifeValuesDays:18",
+    "title": "Living Your Values",
+    "theme": "Alignment",
+    "prompt": "Choose one value you want to express more fully. What specific actions, habits, or practices would help you live this value more intentionally? Create a concrete plan."
+  },
+  {
+    "id": "lifeValuesDays:19",
+    "title": "Values Legacy",
+    "theme": "Impact",
+    "prompt": "What values do you hope to pass on or be remembered for? How might your living these values impact others and continue beyond your lifetime?"
+  },
+  {
+    "id": "lifeValuesDays:20",
+    "title": "Personal Values Statement",
+    "theme": "Integration",
+    "prompt": "Draft a personal values statement that captures your core principles and how you aim to live them. How might this statement guide your choices and actions?"
+  },
+  {
+    "id": "lifeValuesDays:21",
+    "title": "Values and Purpose",
+    "theme": "Meaning",
+    "prompt": "How do your values connect to your sense of purpose or meaning? What kind of contribution feels aligned with your core values? How might living your values create a more meaningful life?"
+  },
+  {
+    "id": "lifeValuesDays:22",
+    "title": "Values Journey Integration",
+    "theme": "Commitment",
+    "prompt": "Looking back on your values exploration, what key insights have emerged? What commitments will you make to ensure your life remains aligned with what matters most to you?"
+  }
+]

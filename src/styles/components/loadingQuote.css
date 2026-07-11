@@ -1,0 +1,60 @@
+/* src/styles/components/loadingQuote.css
+   Rotating famous phrase for analysis/loading screens.
+   Sits on the loader backdrop (dark by default, light in .light-theme). */
+
+.loading-quote {
+  max-width: 340px;
+  margin: 1.5rem auto 0;
+  padding: 0 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.loading-quote.is-fading {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.loading-quote__icon {
+  color: rgba(85, 139, 110, 0.9);
+  flex-shrink: 0;
+}
+
+.loading-quote__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.loading-quote__author {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Light theme — loader backdrop is light, so darken the text */
+.light-theme .loading-quote__text {
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.light-theme .loading-quote__author {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-quote,
+  .loading-quote.is-fading {
+    transition: none;
+    transform: none;
+  }
+}

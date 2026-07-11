@@ -1,0 +1,74 @@
+[
+  {
+    "id": "vocalConfidenceDays:1",
+    "title": "Voice Assessment",
+    "theme": "Current State",
+    "prompt": "Speak about how you currently feel about your voice and speaking abilities. When do you feel confident speaking, and when do you feel less sure? What would greater vocal confidence mean to you?"
+  },
+  {
+    "id": "vocalConfidenceDays:2",
+    "title": "Authority in Voice",
+    "theme": "Personal Power",
+    "prompt": "Practice speaking with authority about something you know well. Notice how knowledge and passion affect your vocal confidence. What topics make you feel most authoritative when speaking?"
+  },
+  {
+    "id": "vocalConfidenceDays:3",
+    "title": "Speaking Your Truth",
+    "theme": "Authenticity",
+    "prompt": "Talk about a belief or value that's important to you. Practice speaking your truth clearly and confidently. How does speaking authentically affect your voice and presence?"
+  },
+  {
+    "id": "vocalConfidenceDays:4",
+    "title": "Setting Vocal Boundaries",
+    "theme": "Boundaries",
+    "prompt": "Practice saying 'no' or setting a boundary using your voice. Notice how boundary-setting affects your vocal tone and confidence. What boundaries do you need to speak more clearly?"
+  },
+  {
+    "id": "vocalConfidenceDays:5",
+    "title": "Overcoming Voice Fears",
+    "theme": "Fear Transformation",
+    "prompt": "Speak about a fear you have related to public speaking or vocal expression. What would change if you could release this fear? Practice speaking through the fear rather than avoiding it."
+  },
+  {
+    "id": "vocalConfidenceDays:6",
+    "title": "Power Posture and Voice",
+    "theme": "Embodiment",
+    "prompt": "Stand in a confident posture and speak about your strengths and capabilities. Notice how your physical stance affects your vocal power. How do body and voice work together for confidence?"
+  },
+  {
+    "id": "vocalConfidenceDays:7",
+    "title": "Leadership Voice",
+    "theme": "Influence",
+    "prompt": "Speak as if you're leading a team or inspiring others toward a goal. What does leadership sound like in your voice? How can you use your voice to positively influence others?"
+  },
+  {
+    "id": "vocalConfidenceDays:8",
+    "title": "Handling Disagreement",
+    "theme": "Conflict Resolution",
+    "prompt": "Practice speaking confidently about a topic where others might disagree with you. How can you maintain vocal confidence while remaining respectful and open to dialogue?"
+  },
+  {
+    "id": "vocalConfidenceDays:9",
+    "title": "Public Speaking Practice",
+    "theme": "Presentation",
+    "prompt": "Give a mini presentation about something you care about, speaking as if addressing a group. What techniques help you feel more confident when speaking to others?"
+  },
+  {
+    "id": "vocalConfidenceDays:10",
+    "title": "Vocal Presence",
+    "theme": "Charisma",
+    "prompt": "Focus on speaking with full presence and attention. How does being completely present affect your vocal confidence? What does it mean to have vocal charisma?"
+  },
+  {
+    "id": "vocalConfidenceDays:11",
+    "title": "Confident Conversations",
+    "theme": "Social Confidence",
+    "prompt": "Practice speaking confidently in different social scenarios - meetings, parties, interviews. What strategies help you maintain vocal confidence in various social situations?"
+  },
+  {
+    "id": "vocalConfidenceDays:12",
+    "title": "Your Confident Voice",
+    "theme": "Integration",
+    "prompt": "Reflect on your vocal confidence journey. How has your relationship with your speaking voice evolved? What practices will you continue to maintain and grow your vocal confidence?"
+  }
+]

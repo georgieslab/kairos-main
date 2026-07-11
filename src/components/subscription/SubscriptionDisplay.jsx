@@ -1,8 +1,9 @@
 // src/components/subscription/SubscriptionDisplay.jsx - Centralized Component
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Crown, 
+import { useTranslation } from 'react-i18next';
+import {
+  Crown,
   CreditCard, 
   Calendar, 
   CheckCircle, 
@@ -35,6 +36,7 @@ const SubscriptionDisplay = ({
   className = '',
   size = 'default'
 }) => {
+  const { t } = useTranslation('subscription');
   const { currentUser } = useAuth();
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,7 +84,7 @@ const SubscriptionDisplay = ({
       window.open(url, '_blank');
     } catch (err) {
       console.error('❌ Error creating checkout session:', err);
-      alert('Error starting upgrade process. Please try again.');
+      alert(t('errors.upgradeStart', 'Error starting upgrade process. Please try again.'));
     } finally {
       setProcessingUpgrade(false);
     }
@@ -96,7 +98,7 @@ const SubscriptionDisplay = ({
       window.open(url, '_blank');
     } catch (err) {
       console.error('❌ Error opening customer portal:', err);
-      alert('Error opening subscription management. Please try again.');
+      alert(t('errors.managementOpen', 'Error opening subscription management. Please try again.'));
     } finally {
       setProcessingPortal(false);
     }
@@ -109,7 +111,7 @@ const SubscriptionDisplay = ({
         {mode === 'badge' ? (
           <div className="subscription-badge loading">
             <div className="loading-spinner-small"></div>
-            <span>Loading...</span>
+            <span>{t('common.loading', 'Loading...')}</span>
           </div>
         ) : (
           <div className="subscription-loading-card">
@@ -127,9 +129,9 @@ const SubscriptionDisplay = ({
       <div className={`subscription-display error ${mode} ${className}`}>
         <div className="subscription-error">
           <AlertCircle size={20} />
-          <span>Unable to load subscription status</span>
+          <span>{t('errors.unableToLoad', 'Unable to load subscription status')}</span>
           <button onClick={loadSubscriptionStatus} className="retry-button">
-            Retry
+            {t('common.retry', 'Retry')}
           </button>
         </div>
       </div>
@@ -151,7 +153,7 @@ const SubscriptionDisplay = ({
     return (
       <div className={`subscription-badge ${isArtisan ? 'artisan' : 'free'} ${size} ${className}`}>
         {isArtisan ? <Crown size={14} /> : <User size={14} />}
-        <span>{isArtisan ? 'Artisan' : 'Free'}</span>
+        <span>{isArtisan ? t('common.artisan', 'Artisan') : t('common.free', 'Free')}</span>
       </div>
     );
   }
@@ -162,7 +164,7 @@ const SubscriptionDisplay = ({
       <div className={`subscription-header ${isArtisan ? 'artisan' : 'free'} ${className}`}>
         <div className="header-badge">
           {isArtisan ? <Crown size={16} /> : <User size={16} />}
-          <span>{isArtisan ? 'Artisan' : 'Free'}</span>
+          <span>{isArtisan ? t('common.artisan', 'Artisan') : t('common.free', 'Free')}</span>
         </div>
       </div>
     );
@@ -191,16 +193,16 @@ const SubscriptionDisplay = ({
                 disabled={processingUpgrade}
               >
                 {processingUpgrade ? <Zap className="spin" size={14} /> : <Crown size={14} />}
-                Upgrade
+                {t('common.upgrade', 'Upgrade')}
               </button>
             ) : (
-              <button 
+              <button
                 className="compact-manage-btn"
                 onClick={handleManageSubscription}
                 disabled={processingPortal}
               >
                 {processingPortal ? <Zap className="spin" size={14} /> : <CreditCard size={14} />}
-                Manage
+                {t('common.manage', 'Manage')}
               </button>
             )}
           </div>
@@ -219,25 +221,25 @@ const SubscriptionDisplay = ({
         </div>
         <div className="header-content">
           <h3 className="card-title">
-            {subscriptionInfo.displayStatus || 'Free Plan'}
+            {subscriptionInfo.displayStatus || t('common.freePlan', 'Free Plan')}
           </h3>
           {!isArtisan && showActions && (
-            <button 
+            <button
               className="upgrade-button-small"
               onClick={handleUpgrade}
               disabled={processingUpgrade}
             >
               <Crown size={16} />
-              {processingUpgrade ? 'Processing...' : 'Upgrade'}
+              {processingUpgrade ? t('common.processing', 'Processing...') : t('common.upgrade', 'Upgrade')}
             </button>
           )}
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="card-content">
         <p className="subscription-description">
-          {subscriptionInfo.description || 'Free journeys included'}
+          {subscriptionInfo.description || t('common.freeJourneysIncluded', 'Free journeys included')}
         </p>
         
         {/* Benefits */}
@@ -246,55 +248,55 @@ const SubscriptionDisplay = ({
             <div className="benefit-item">
               <CheckCircle size={16} className={isArtisan ? 'text-green-500' : 'text-gray-400'} />
               <span className={isArtisan ? '' : 'text-gray-500'}>
-                {isArtisan ? 'All 33+ Journey Paths' : '9 Free Journey Paths (10 days)'}
+                {isArtisan ? t('benefits.allPaths', 'All 33+ Journey Paths') : t('benefits.freePaths', '9 Free Journey Paths (10 days)')}
               </span>
             </div>
             <div className="benefit-item">
               <CheckCircle size={16} className={isArtisan ? 'text-green-500' : 'text-gray-400'} />
               <span className={isArtisan ? '' : 'text-gray-500'}>
-                {isArtisan ? 'Advanced AI Analysis' : 'Basic AI Analysis'}
+                {isArtisan ? t('benefits.advancedAI', 'Advanced AI Analysis') : t('benefits.basicAI', 'Basic AI Analysis')}
               </span>
             </div>
             <div className="benefit-item">
               <CheckCircle size={16} className={isArtisan ? 'text-green-500' : 'text-gray-400'} />
               <span className={isArtisan ? '' : 'text-gray-500'}>
-                {isArtisan ? 'Unlimited PDF Exports' : 'Limited PDF Exports'}
+                {isArtisan ? t('benefits.unlimitedExports', 'Unlimited PDF Exports') : t('benefits.limitedExports', 'Limited PDF Exports')}
               </span>
             </div>
             {isArtisan && (
               <>
                 <div className="benefit-item">
                   <CheckCircle size={16} className="text-green-500" />
-                  <span>Premium Analytics Dashboard</span>
+                  <span>{t('benefits.premiumAnalytics', 'Premium Analytics Dashboard')}</span>
                 </div>
                 <div className="benefit-item">
                   <CheckCircle size={16} className="text-green-500" />
-                  <span>Priority Support</span>
+                  <span>{t('benefits.prioritySupport', 'Priority Support')}</span>
                 </div>
               </>
             )}
           </div>
         )}
-        
+
         {/* Renewal Information */}
         {subscriptionInfo.renewalDate && (
           <div className="renewal-info">
             <Calendar size={16} />
             <span>
-              Renews {new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString()}
+              {t('common.renews', 'Renews {{date}}', { date: new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString() })}
             </span>
           </div>
         )}
-        
+
         {/* Action Buttons */}
         {showActions && isArtisan && (
-          <button 
+          <button
             className="manage-subscription-button"
             onClick={handleManageSubscription}
             disabled={processingPortal}
           >
             <CreditCard size={16} />
-            {processingPortal ? 'Opening...' : 'Manage Subscription'}
+            {processingPortal ? t('common.opening', 'Opening...') : t('common.manageSubscription', 'Manage Subscription')}
             <ExternalLink size={14} />
           </button>
         )}

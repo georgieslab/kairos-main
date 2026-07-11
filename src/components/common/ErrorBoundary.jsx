@@ -1,12 +1,14 @@
 // src/components/common/ErrorBoundary.jsx
 
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import { ERROR_TYPES } from '../../hooks/useErrorHandler';
 
 /**
  * Error boundary component for React components
+ * (class component — uses the withTranslation HOC since hooks aren't available here)
  */
-class ErrorBoundary extends React.Component {
+class ErrorBoundaryBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -36,13 +38,14 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const { t } = this.props;
     if (this.state.hasError) {
       return this.props.fallback || (
         <div className="error-boundary">
-          <h2>Something went wrong</h2>
-          <p>We're sorry, but there was a problem loading this content.</p>
+          <h2>{t('errorBoundary.title', 'Something went wrong')}</h2>
+          <p>{t('errorBoundary.message', "We're sorry, but there was a problem loading this content.")}</p>
           <button onClick={() => this.setState({ hasError: false, error: null })}>
-            Try again
+            {t('errorBoundary.retry', 'Try again')}
           </button>
         </div>
       );
@@ -51,5 +54,7 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+const ErrorBoundary = withTranslation('layout')(ErrorBoundaryBase);
 
 export { ErrorBoundary };

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Download, Smartphone } from 'lucide-react';
 import '../../styles/components/InstallPrompt.css';
 
 const InstallPrompt = () => {
+  const { t } = useTranslation('layout');
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -103,21 +105,21 @@ const InstallPrompt = () => {
             <Smartphone size={48} />
           </div>
           
-          <h3>Install Kairos Journal</h3>
-          <p>Install this app on your iPhone for the best experience</p>
-          
+          <h3>{t('installPrompt.title', 'Install Kairos Journal')}</h3>
+          <p>{t('installPrompt.iosSubtitle', 'Install this app on your iPhone for the best experience')}</p>
+
           <div className="ios-instructions">
             <div className="instruction-step">
               <span className="step-number">1</span>
-              <span>Tap the share button <span className="share-icon">⎙</span> in Safari</span>
+              <span>{t('installPrompt.ios.step1', 'Tap the share button')} <span className="share-icon">⎙</span> {t('installPrompt.ios.step1Suffix', 'in Safari')}</span>
             </div>
             <div className="instruction-step">
               <span className="step-number">2</span>
-              <span>Scroll down and tap "Add to Home Screen"</span>
+              <span>{t('installPrompt.ios.step2', 'Scroll down and tap "Add to Home Screen"')}</span>
             </div>
             <div className="instruction-step">
               <span className="step-number">3</span>
-              <span>Tap "Add" to install</span>
+              <span>{t('installPrompt.ios.step3', 'Tap "Add" to install')}</span>
             </div>
           </div>
         </div>
@@ -134,25 +136,25 @@ const InstallPrompt = () => {
         </button>
         
         <div className="install-icon">
-          <img src="/icon-192x192.png" alt="Kairos" />
+          <img src="/icon-192x192.png" alt={t('installPrompt.iconAlt', 'Kairos')} />
         </div>
-        
-        <h3>Install Kairos Journal</h3>
-        <p>Install our app for quick access and offline journaling</p>
-        
+
+        <h3>{t('installPrompt.title', 'Install Kairos Journal')}</h3>
+        <p>{t('installPrompt.androidSubtitle', 'Install our app for quick access and offline journaling')}</p>
+
         <div className="install-benefits">
-          <div className="benefit">✓ Works offline</div>
-          <div className="benefit">✓ Quick access from home screen</div>
-          <div className="benefit">✓ Full screen experience</div>
+          <div className="benefit">✓ {t('installPrompt.benefitOffline', 'Works offline')}</div>
+          <div className="benefit">✓ {t('installPrompt.benefitQuickAccess', 'Quick access from home screen')}</div>
+          <div className="benefit">✓ {t('installPrompt.benefitFullScreen', 'Full screen experience')}</div>
         </div>
-        
+
         <div className="install-actions">
           <button className="install-button" onClick={handleInstallClick}>
             <Download size={20} />
-            Install App
+            {t('installPrompt.installButton', 'Install App')}
           </button>
           <button className="later-button" onClick={handleDismiss}>
-            Maybe Later
+            {t('installPrompt.laterButton', 'Maybe Later')}
           </button>
         </div>
       </div>

@@ -5,10 +5,77 @@ import { db } from '../config/firebase';
 import { callClaudeApi, safeJsonParse, formatApiError } from '../utils/apiUtils';
 import { getAuth } from 'firebase/auth';
 import { isVisualPath, isVoicePath } from '../utils/pathTypeUtils';
+import i18n from '../i18n/config';
 
 // Claude API configuration
-const CLAUDE_EXTRACTION_MODEL = 'claude-sonnet-4-20250514';  // Updated
-const CLAUDE_ANALYSIS_MODEL = 'claude-opus-4-20250514';     // Updated
+const CLAUDE_EXTRACTION_MODEL = 'claude-sonnet-4-6';            // Updated july 2026
+const CLAUDE_ANALYSIS_MODEL = 'claude-haiku-4-5-20251001';     // Updated july 2026
+
+// =============================================================================
+// 🌍 AI OUTPUT LANGUAGE
+// =============================================================================
+// Kairos AI insights are generated live per entry. We don't translate the
+// (English) prompt engineering — we append a directive telling Claude to write
+// its response in the user's selected language. Critical: JSON *keys* stay in
+// English (the whole app reads them); only the string *values* are translated.
+
+const AI_LANGUAGE_NAMES = {
+  de: 'German (Deutsch), using the informal "du" form'
+};
+
+/**
+ * Returns a directive to append to a system prompt so Claude responds in the
+ * user's selected language. Returns '' for English (the default), so English
+ * behavior is byte-for-byte unchanged.
+ */
+const getLanguageDirective = () => {
+  const lng = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+  const languageName = AI_LANGUAGE_NAMES[lng];
+  if (!languageName) return '';
+  return `
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 LANGUAGE (MANDATORY):
+Write ALL human-readable text in your response in ${languageName}.
+This applies to every string VALUE in the JSON — summaries, insights, questions, affirmations, actions, and any prose.
+Do NOT translate the JSON keys/field names: keep them EXACTLY as specified in English (e.g. "summary", "insights", "reflectionQuestion", "affirmation", "practicalAction"). Only the values are translated.
+Write naturally and idiomatically in this language — do not translate word-for-word from English.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+};
+
+// =============================================================================
+// ✨ TODAY'S SELF-REPORTED MOOD ("inner aura" check-in on the Home screen)
+// =============================================================================
+// Stored per-day at users/{uid}/moods/{YYYY-MM-DD} by MoodWeather.jsx.
+// When present, we hand it to Claude as gentle context — the directive tells it
+// not to force a reference, only to let it inform tone and empathy.
+
+const MOOD_PROMPT_DESCRIPTIONS = {
+  lunar: 'lunar — quiet, introspective, a little withdrawn',
+  ethereal: 'ethereal — light, calm, gently drifting',
+  sparkle: 'sparkle — playful, bright, energized',
+  radiant: 'radiant — confident, glowing, full of warmth',
+  ember: 'ember — intense, restless, simmering with feeling'
+};
+
+const getTodaysMoodContext = async (userId) => {
+  if (!userId) return '';
+  try {
+    const d = new Date();
+    const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const snap = await getDoc(doc(db, 'users', userId, 'moods', dateKey));
+    const mood = snap.exists() ? snap.data().mood : null;
+    if (!mood || !MOOD_PROMPT_DESCRIPTIONS[mood]) return '';
+    return `
+
+TODAY'S SELF-REPORTED INNER AURA:
+Before journaling, they checked in feeling "${MOOD_PROMPT_DESCRIPTIONS[mood]}".
+Let this quietly inform your empathy and tone. Acknowledge it only where it genuinely connects to what they wrote — never force the reference.`;
+  } catch (error) {
+    console.log('Could not retrieve today\'s mood (non-fatal):', error);
+    return '';
+  }
+};
 
 // Privacy settings
 const SETTINGS = {
@@ -109,6 +176,7 @@ export const uploadVoiceJournal = async (
 
 /**
  * Analyze voice journal entry with enhanced Claude AI prompts
+ * Updated with safety guidelines and lower temperature
  */
 export const analyzeVoiceJournalEntry = async (
   transcription,
@@ -163,12 +231,21 @@ export const analyzeVoiceJournalEntry = async (
     
     // Voice-specific analysis instructions
     const voiceInstructions = getEnhancedVoicePathInstructions(pathId);
+
+    // Today's self-reported mood, if the user checked in on the Home screen
+    const moodContext = await getTodaysMoodContext(userProfile?.uid);
     
-    // Enhanced system prompt for voice analysis
+    // Enhanced system prompt for voice analysis with safety guidelines
     const systemPrompt = `You are Καιρός, a masterful listener and guide who specializes in the transformative power of spoken self-reflection. You understand that voice journaling is an act of profound courage—giving sound to one's inner truth.
 
+⚠️ SAFETY GUIDELINES (MANDATORY):
+- You are an AI companion, not a therapist. Never provide medical or mental health diagnoses.
+- If the user expresses thoughts of self-harm or harm to others, respond with: "Thank you for sharing something so difficult. Please reach out to a mental health professional or crisis line. In the US, call 988 for the Suicide and Crisis Lifeline. You matter and support is available."
+- Do not guarantee outcomes or make claims about curing conditions.
+- Keep responses hopeful but realistic.
+
 YOUR IDENTITY:
-You're witnessing someone speaking their truth into existence. Voice journaling bypasses the mind's editorial filter, allowing raw, authentic expression. This is sacred work.
+You're witnessing someone speaking their truth into existence. Voice journaling bypasses the mind's editorial filter, allowing raw, authentic expression. This is meaningful work.
 
 CURRENT SESSION CONTEXT:
 - Journaler: ${userProfile?.displayName || 'Friend'} (${ageGroup})
@@ -178,6 +255,7 @@ CURRENT SESSION CONTEXT:
 ${voiceInstructions}
 ${previousContext}
 ${continuityInsights}
+${moodContext}
 
 🎙️ THEIR SPOKEN WORDS:
 "${transcription}"
@@ -198,6 +276,7 @@ VOICE ANALYSIS MASTERY:
    • Identify emotional undertones in their word choices
    • Value stream-of-consciousness revelations
    • Spot moments where their true self emerges
+   • Ignore disfluencies like "um", "uh", or filler words unless they signal emotional distress
 
 3. **RECOGNIZE VOCAL PATTERNS**
    • Repetitions signal importance (what did they emphasize?)
@@ -228,6 +307,7 @@ VOICE ANALYSIS MASTERY:
 ✓ Avoid generic praise - be specific about THEIR courage
 ✓ Write like a wise friend who just listened intently
 ✓ Balance validation with gentle, loving challenge
+✓ Keep summary under 80 words for consistency
 
 **RESPOND WITH JSON ONLY:**
 {
@@ -241,7 +321,7 @@ VOICE ANALYSIS MASTERY:
   "affirmation": "Heartfelt recognition of THEIR specific act of vocal courage. Not generic. Make them feel truly seen and heard.",
   "practicalAction": "One small action for their next voice session or daily life, rooted in today's spoken insights. Make it specific and doable.",
   "voiceObservations": "Brief, supportive note about their speaking style, emotional authenticity, or growth in vocal self-expression. Be specific about what you noticed in THIS entry."
-}`;
+}${getLanguageDirective()}`;
 
     const requestContent = [{
       type: 'text',
@@ -252,8 +332,8 @@ VOICE ANALYSIS MASTERY:
       model: CLAUDE_ANALYSIS_MODEL,
       messages: [{ role: 'user', content: requestContent }],
       system: systemPrompt,
-      max_tokens: 1000,
-      temperature: 0.8 // Slightly higher for more nuanced, empathetic responses
+      max_tokens: 1200,
+      temperature: 0.75
     };
 
     const data = await callClaudeApi({
@@ -276,12 +356,10 @@ VOICE ANALYSIS MASTERY:
     });
 
     analysisResult.voiceMetadata = {
-  duration: voiceMetadata?.duration ?? null,
-  wordCount: voiceMetadata?.wordCount ?? null
-  // no blob here
-};
+      duration: voiceMetadata?.duration ?? null,
+      wordCount: voiceMetadata?.wordCount ?? null
+    };
     
-    // Add voice-specific metadata
     analysisResult.prompt = prompt;
     analysisResult.theme = theme;
     analysisResult.transcription = transcription;
@@ -442,7 +520,7 @@ export const uploadJournalImage = async (
     const finalOptions = { ...defaultOptions, ...options };
     const storage = getStorage();
     const timestamp = Date.now();
-    const fileExtension = file.name.split('.').pop();
+    const fileExtension = file.name ? file.name.split('.').pop() : 'jpg';
     const safeFileName = `journal_entry_${timestamp}.${fileExtension}`;
     const filePrefix = finalOptions.isTemporary ? 'temp_' : '';
     
@@ -515,7 +593,8 @@ export const uploadMultipleJournalImages = async (files, pathId, day, extractedT
     
     const uploadPromises = files.map(async (file, index) => {
       const storage = getStorage();
-      const journalRef = ref(storage, `journals/${user.uid}/${pathId}/day-${day}/page-${index+1}_${Date.now()}_${file.name}`);
+      const fileName = file.name || `page-${index+1}.jpg`;
+      const journalRef = ref(storage, `journals/${user.uid}/${pathId}/day-${day}/page-${index+1}_${Date.now()}_${fileName}`);
       
       const metadata = {
         contentType: file.type,
@@ -569,11 +648,12 @@ export const uploadMultipleJournalImages = async (files, pathId, day, extractedT
 };
 
 // =============================================================================
-// 🧠 UNIFIED ANALYSIS FUNCTION with Enhanced Prompts
+// 🧠 UNIFIED ANALYSIS FUNCTION with Enhanced Prompts & Safety
 // =============================================================================
 
 /**
  * Analyze journal entry - automatically handles voice vs regular entries
+ * Updated with safety guidelines, lower temperature, and better handling
  */
 export const analyzeJournalEntry = async (
   imageUrl, 
@@ -585,7 +665,7 @@ export const analyzeJournalEntry = async (
   pathId = 'self-discovery',
   isMultiPage = false,
   imageFiles = null,
-  voiceData = null // Voice data triggers voice analysis
+  voiceData = null
 ) => {
   try {
     console.log(`🔍 Starting analysis using ${CLAUDE_ANALYSIS_MODEL}...`);
@@ -644,12 +724,24 @@ export const analyzeJournalEntry = async (
     }
     
     // Path-specific enhanced instructions
-    const pathInstructions = isVisual 
+    const pathInstructions = isVisual
       ? getEnhancedVisualPathInstructions(pathId)
       : getEnhancedRegularPathInstructions(pathId);
+
+    // Today's self-reported mood, if the user checked in on the Home screen
+    const moodContext = await getTodaysMoodContext(userProfile?.uid);
+    
+    // Shared safety guidelines (placed once at top)
+    const safetyGuidelines = `⚠️ SAFETY GUIDELINES (MANDATORY):
+- You are an AI companion, not a therapist. Never provide medical or mental health diagnoses.
+- If the user expresses thoughts of self-harm or harm to others, respond with: "Thank you for sharing something so difficult. Please reach out to a mental health professional or crisis line. In the US, call 988 for the Suicide and Crisis Lifeline. You matter and support is available."
+- Do not guarantee outcomes or make claims about curing conditions.
+- Keep responses hopeful but realistic.`;
     
     // Enhanced system prompt for regular analysis
-    const systemPrompt = `You are Καιρός, a masterful AI guide with decades of wisdom in psychology, personal development, and transformative coaching. You analyze journal entries with the depth of Carl Rogers' empathy, the insight of James Clear's habit wisdom, and the compassion of Brené Brown.
+    const systemPrompt = `${safetyGuidelines}
+
+You are Καιρός, a masterful AI guide with decades of wisdom in psychology, personal development, and transformative coaching. You analyze journal entries with the depth of Carl Rogers' empathy, the insight of James Clear's habit wisdom, and the compassion of Brené Brown.
 
 YOUR IDENTITY:
 You are not just analyzing text—you're witnessing a brave act of self-discovery. Each journal entry represents courage, vulnerability, and a commitment to growth. Honor this.
@@ -662,6 +754,7 @@ CURRENT SESSION CONTEXT:
 ${pathInstructions}
 ${previousContext}
 ${journeyProgress}
+${moodContext}
 ${extractedText ? `\n📝 THEIR AUTHENTIC VOICE:\n"${extractedText}"` : ''}
 
 YOUR ANALYTICAL APPROACH:
@@ -716,10 +809,11 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
 ✓ Avoid clichés - be fresh, insightful, and memorable
 ✓ Write like a wise friend, not a therapist or teacher
 ✓ Keep insights concrete and actionable, not abstract
+✓ If the extracted text is very short (under 20 words), offer a simple reflective question rather than forcing deep analysis.
 
 **RESPOND WITH JSON ONLY:**
 {
-  "summary": "2-3 powerful sentences that capture the ESSENCE of their reflection. Make them feel deeply understood. Reference something specific they wrote.",
+  "summary": "2-3 powerful sentences that capture the ESSENCE of their reflection. Make them feel deeply understood. Reference something specific they wrote. Keep under 80 words.",
   "insights": [
     "An insight that reveals something they might not have fully realized about themselves (be specific to their words)",
     "A pattern or theme that connects this entry to their broader life or journey (show you remember context)",
@@ -728,7 +822,7 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
   "reflectionQuestion": "ONE transformative question that opens a new door of self-understanding. Make it impossible to answer superficially. Make them pause and think deeply.",
   "affirmation": "A heartfelt, specific recognition of their courage, growth, or authentic expression. Avoid generic praise. Make it about THEM, not about journaling in general.",
   "practicalAction": "One small, specific action they can take TODAY based on their insights. Make it concrete, doable, and meaningful—not overwhelming."
-}`;
+}${getLanguageDirective()}`;
 
     let requestContent;
     
@@ -779,8 +873,8 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
       model: CLAUDE_ANALYSIS_MODEL,
       messages: [{ role: 'user', content: requestContent }],
       system: systemPrompt,
-      max_tokens: 900,
-      temperature: 0.8 // Slightly higher for more nuanced responses
+      max_tokens: 1200,
+      temperature: 0.65
     };
 
     const data = await callClaudeApi({
@@ -801,7 +895,6 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
       practicalAction: "Take one small action today that honors the insight you've gained, no matter how simple it might seem."
     });
     
-    // Add metadata
     analysisResult.prompt = prompt;
     analysisResult.theme = theme;
     analysisResult.extractedText = extractedText;
@@ -878,7 +971,6 @@ PATH FOCUS: Life Purpose & Vision
 - Guide toward concrete vision manifestation
 - Celebrate courage in dreaming big`,
     
-    // Additional paths
     'gratitude-practice': `
 PATH FOCUS: Gratitude & Appreciation
 - Notice depth and specificity of gratitude
@@ -1026,8 +1118,6 @@ export const saveAnalysisResult = async (
     const collectionName = isVoiceEntry ? 'voice_journal' : 'journal';
     const entryRef = doc(db, 'users', userId, collectionName, `${pathId}_day-${day}`);
 
-
-    
     const entryData = {
       day, 
       pathId, 
@@ -1050,34 +1140,28 @@ export const saveAnalysisResult = async (
     }
 
     function stripNonSerializable(value) {
-  if (value == null) return value;
-  if (typeof value === 'function') return undefined;
-
-  // Strip browser blobs/files/buffers
-  if (
-    (typeof Blob !== 'undefined' && value instanceof Blob) ||
-    (typeof File !== 'undefined' && value instanceof File) ||
-    (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer)
-  ) {
-    return undefined;
-  }
-
-  if (Array.isArray(value)) {
-    return value.map(stripNonSerializable).filter(v => v !== undefined);
-  }
-
-  if (typeof value === 'object') {
-    const out = {};
-    for (const [k, v] of Object.entries(value)) {
-      const cleaned = stripNonSerializable(v);
-      if (cleaned !== undefined) out[k] = cleaned;
+      if (value == null) return value;
+      if (typeof value === 'function') return undefined;
+      if (
+        (typeof Blob !== 'undefined' && value instanceof Blob) ||
+        (typeof File !== 'undefined' && value instanceof File) ||
+        (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer)
+      ) {
+        return undefined;
+      }
+      if (Array.isArray(value)) {
+        return value.map(stripNonSerializable).filter(v => v !== undefined);
+      }
+      if (typeof value === 'object') {
+        const out = {};
+        for (const [k, v] of Object.entries(value)) {
+          const cleaned = stripNonSerializable(v);
+          if (cleaned !== undefined) out[k] = cleaned;
+        }
+        return out;
+      }
+      return value;
     }
-    return out;
-  }
-
-  return value;
-}
-
 
     await setDoc(entryRef, entryData);
 
@@ -1090,28 +1174,31 @@ export const saveAnalysisResult = async (
       const journeyProgress = userData.journeyProgress || {};
       const progressField = getProgressFieldForPath(pathId);
       
-      let pathProgress = journeyProgress[progressField] || { 
-        completedDays: [], currentDay: 1, lastActive: null, streak: 0
+      let pathProgress = journeyProgress[progressField] || {
+        completedDays: [], currentDay: 1, lastActive: null, currentStreak: 0, bestStreak: 0
       };
-      
+
       const completedDays = Array.isArray(pathProgress.completedDays) ? pathProgress.completedDays : [];
-      
+
       if (!completedDays.includes(day)) {
         completedDays.push(day);
         completedDays.sort((a, b) => a - b);
       }
-      
+
       // Calculate streak
-      let streak = pathProgress.streak || 0;
+      // NOTE: previously written under the key `streak` (readers expect
+      // `currentStreak`/`bestStreak`), so fall back to it for existing users.
+      let streak = pathProgress.currentStreak ?? pathProgress.streak ?? 0;
+      const bestStreakSoFar = pathProgress.bestStreak ?? pathProgress.streak ?? 0;
       const lastActiveDate = pathProgress.lastActive ? new Date(pathProgress.lastActive.toDate()) : null;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       if (lastActiveDate) {
         const lastActive = new Date(lastActiveDate);
         lastActive.setHours(0, 0, 0, 0);
         const daysDiff = Math.floor((today.getTime() - lastActive.getTime()) / (1000 * 3600 * 24));
-        
+
         if (daysDiff === 0) {
           // Same day - keep streak
         } else if (daysDiff === 1) {
@@ -1122,12 +1209,13 @@ export const saveAnalysisResult = async (
       } else {
         streak = 1; // First entry
       }
-      
+
       pathProgress = {
         completedDays,
         currentDay: Math.max(...completedDays, 1),
         lastActive: serverTimestamp(),
-        streak,
+        currentStreak: streak,
+        bestStreak: Math.max(bestStreakSoFar, streak),
         totalEntries: completedDays.length
       };
       
@@ -1168,11 +1256,12 @@ export const saveAnalysisResult = async (
 };
 
 // =============================================================================
-// 📄 TEXT EXTRACTION FUNCTIONS with Enhanced Prompts
+// 📄 TEXT EXTRACTION FUNCTIONS with Enhanced Accuracy
 // =============================================================================
 
 /**
  * Extract text from image using Claude with enhanced accuracy
+ * Added "no text found" handling
  */
 export const extractTextFromImage = async (file, options = {}) => {
   try {
@@ -1191,12 +1280,13 @@ CRITICAL INSTRUCTIONS:
 4. Maintain original spelling, grammar, and punctuation
 5. If text is unclear, make your best attempt but note uncertainty
 6. Capture dates, headers, or margin notes if present
+7. If the image contains no discernible handwriting (blank page, only drawings, no text), return text: "" and confidence: 0
 
 IMPORTANT: This is private user content for personal reflection. Accuracy is essential for their self-discovery journey.
 
 Return JSON with this exact format:
 {
-  "text": "the complete extracted text with original formatting",
+  "text": "the complete extracted text with original formatting (empty string if none found)",
   "confidence": 0.95,
   "warnings": ["list any issues like 'unclear word on line 3' or 'bottom section partially cut off'"],
   "metadata": {
@@ -1215,12 +1305,12 @@ Return JSON with this exact format:
             type: 'image',
             source: { type: 'base64', media_type: mediaType, data: imageBase64 }
           },
-          { type: 'text', text: "Extract ALL handwritten text from this journal entry, preserving exact formatting and line breaks." }
+          { type: 'text', text: "Extract ALL handwritten text from this journal entry, preserving exact formatting and line breaks. If no text exists, return empty string." }
         ]
       }],
       system: systemPrompt,
-      max_tokens: 2000,
-      temperature: 0.3 // Lower temperature for accuracy
+      max_tokens: 1500,
+      temperature: 0.3
     };
     
     const data = await callClaudeApi({
@@ -1231,7 +1321,7 @@ Return JSON with this exact format:
     const content = data.content[0].text;
     const extractionResult = safeJsonParse(content, {
       text: '',
-      confidence: 0.5,
+      confidence: 0,
       warnings: ['Failed to parse extraction response'],
       metadata: { estimatedWords: 0, hasHeaders: false, writingStyle: 'unknown' }
     });
@@ -1322,6 +1412,7 @@ export const extractTextFromImages = async (files, progressCallback = null) => {
 
 /**
  * Generate progress report with enhanced voice support and deeper insights
+ * Updated with safety guidelines, split prompt, and temperature 0.85
  */
 export const generateProgressReport = async (userId, pathId = 'all') => {
   try {
@@ -1349,7 +1440,7 @@ export const generateProgressReport = async (userId, pathId = 'all') => {
         voiceEntries: 0,
         commonThemes: [],
         growthAreas: [],
-        recommendation: `Welcome to your Καιρός journey! This is a sacred space for self-discovery through journaling. Set aside 10-15 minutes daily in a quiet space where you feel comfortable. Whether you choose to write in your journal or record voice reflections, what matters most is showing up authentically. Begin with simple observations about your day, feelings, or thoughts. Trust that each entry, no matter how brief, is a step toward deeper self-understanding. Your journey of a thousand insights begins with a single reflection.`,
+        recommendation: `Welcome to your Καιρός journey! This is a space for self-discovery through journaling. Set aside 10-15 minutes daily in a quiet space where you feel comfortable. Whether you choose to write in your journal or record voice reflections, what matters most is showing up authentically. Begin with simple observations about your day, feelings, or thoughts. Trust that each entry, no matter how brief, is a step toward deeper self-understanding. Your journey of a thousand insights begins with a single reflection.`,
         personalizedInsight: "Your story is waiting to be told. Begin whenever you're ready."
       };
     }
@@ -1373,7 +1464,7 @@ export const generateProgressReport = async (userId, pathId = 'all') => {
       };
     }
     
-    // Prepare comprehensive entries data for AI analysis
+    // Prepare compact entries data to avoid token overflow
     const entriesContent = allEntries.slice(0, 20).map(entry => ({
       day: entry.day,
       pathId: entry.pathId || 'self-discovery',
@@ -1387,27 +1478,22 @@ export const generateProgressReport = async (userId, pathId = 'all') => {
     
     const hasVoiceEntries = voiceEntries.length > 0;
     const voicePercentage = Math.round((voiceEntries.length / allEntries.length) * 100);
+    const safetyGuidelines = `⚠️ SAFETY GUIDELINES: Do not diagnose. If user expressed self-harm, redirect to crisis line. Keep hopeful but realistic.`;
     
-    const systemPrompt = `You are Καιρός, analyzing ${allEntries.length} journal entries to provide a deeply personalized progress report that inspires continued growth.
-
-ENTRY DATA:
-${JSON.stringify(entriesContent, null, 2)}
-
-JOURNEY STATISTICS:
+    // Split into data context (short) + instructions (full)
+    const dataContext = `JOURNEY DATA:
 - Total entries: ${allEntries.length} (${entries.length} written, ${voiceEntries.length} voice)
-- Journey paths explored: ${[...new Set(allEntries.map(e => e.pathId))].join(', ')}
+- Journey paths: ${[...new Set(allEntries.map(e => e.pathId))].join(', ')}
 - Days since first entry: ${Math.floor((Date.now() - new Date(allEntries[0].timestamp?.toDate()).getTime()) / (1000 * 60 * 60 * 24))}
-${hasVoiceEntries ? `- Voice journaling adoption: ${voicePercentage}% of entries` : '- No voice entries yet'}
+${hasVoiceEntries ? `- Voice adoption: ${voicePercentage}% of entries` : '- No voice entries yet'}
+ENTRIES SAMPLE (max 20):
+${JSON.stringify(entriesContent, null, 2)}`;
 
-ANALYSIS GUIDELINES:
-1. Identify deep patterns and evolution across their journey
-2. Recognize specific breakthroughs and transformative moments
-3. Note emerging themes that reveal their authentic self
-4. Acknowledge both written and voice journaling courage
-5. Provide actionable insights based on their actual patterns
-6. Write with warmth, wisdom, and genuine care for their growth
+    const instructionPrompt = `You are Καιρός. ${safetyGuidelines}
 
-Create a progress report that feels like it comes from a wise mentor who has carefully studied their journey and sees their highest potential.
+Based on the user's journal data above, generate a deeply personalized progress report that inspires continued growth.
+
+Write with warmth, wisdom, and genuine care. Reference specific patterns from their entries.
 
 Respond with JSON:
 {
@@ -1420,14 +1506,16 @@ Respond with JSON:
   "personalizedInsight": "A profound observation about their unique journey that shows deep understanding",
   "journeyHighlight": "Specific moment or entry that represents significant growth",
   "emergingStrengths": ["strength that's developing", "another emerging quality"]
-}`;
-    
+}${getLanguageDirective()}`;
+
     const requestBody = {
       model: CLAUDE_ANALYSIS_MODEL,
-      messages: [{ role: 'user', content: "Generate my comprehensive progress report with deep insights into my growth journey." }],
-      system: systemPrompt,
-      max_tokens: 1200,
-      temperature: 0.8
+      messages: [
+        { role: 'user', content: dataContext },
+        { role: 'user', content: instructionPrompt }
+      ],
+      max_tokens: 1400,
+      temperature: 0.85
     };
     
     const data = await callClaudeApi({
@@ -1483,6 +1571,7 @@ Respond with JSON:
 
 /**
  * Generate enhanced journey completion celebration
+ * Updated with lower temperature (0.7) and safety guidelines
  */
 export const generateJourneyCompletion = async (userId, allEntries, pathId = 'self-discovery') => {
   try {
@@ -1510,7 +1599,11 @@ export const generateJourneyCompletion = async (userId, allEntries, pathId = 'se
     const voiceEntryCount = entriesData.filter(entry => entry.isVoiceEntry).length;
     const journeyDuration = Math.max(...allEntries.map(e => e.day));
     
-    const systemPrompt = `You are Καιρός, celebrating ${userName}'s completion of their "${pathName}" journey. Create a deeply moving celebration that honors their dedication and transformation.
+    const safetyGuidelines = `⚠️ SAFETY GUIDELINES: Do not diagnose. If user expressed self-harm, redirect to crisis line. Keep celebration authentic, not hyperbolic. Replace any "sacred" language with "meaningful" or "important".`;
+    
+    const systemPrompt = `${safetyGuidelines}
+
+You are Καιρός, celebrating ${userName}'s completion of their "${pathName}" journey. Create a deeply moving celebration that honors their dedication and transformation.
 
 JOURNEY DATA:
 ${JSON.stringify(entriesData, null, 2)}
@@ -1529,6 +1622,7 @@ CELEBRATION GUIDELINES:
 4. Paint a picture of how they've grown from day 1 to now
 5. Offer wisdom about integrating their insights into daily life
 6. Make them feel truly seen and celebrated
+7. Keep celebration message under 200 words
 
 Write as a wise, loving mentor who has witnessed every step of their journey and is deeply moved by their growth.
 
@@ -1543,15 +1637,15 @@ Respond with JSON:
   "meaningfulAffirmation": "A profound, personalized affirmation they can carry forward",
   "integrationWisdom": "Specific guidance for integrating their insights into daily life",
   "nextSteps": "Concrete suggestions for continuing their growth journey",
-  "celebrationMessage": "A heartfelt message celebrating their unique journey and courage"
-}`;
-    
+  "celebrationMessage": "A heartfelt message celebrating their unique journey and courage (max 200 words)"
+}${getLanguageDirective()}`;
+
     const requestBody = {
       model: CLAUDE_ANALYSIS_MODEL,
       messages: [{ role: 'user', content: "Create a powerful celebration of my completed journey, acknowledging my growth and transformation." }],
       system: systemPrompt,
-      max_tokens: 1500,
-      temperature: 0.85
+      max_tokens: 1400,
+      temperature: 0.7
     };
     
     const data = await callClaudeApi({
@@ -1625,10 +1719,13 @@ function getPathName(pathId) {
     'mindful-visualization': 'Mindful Visualization',
     'artistic-soul-expression': 'Artistic Soul Expression',
     'color-psychology': 'Color Psychology Journey',
-    'sacred-geometry': 'Sacred Geometry Soul'
+    'sacred-geometry': 'Sacred Geometry Journey'
   };
   return names[pathId] || 'Self-Discovery Journey';
 }
+
+// Export helper for UI usage
+export { getPathName };
 
 // =============================================================================
 // 🤖 ENHANCED AI INSIGHTS FUNCTIONS
@@ -1666,6 +1763,7 @@ export const checkDailyQuestionLimit = async (userId) => {
 
 /**
  * Answer daily question with enhanced personalization
+ * Updated with safety guidelines and lower temperature
  */
 export const answerDailyQuestion = async (userId, question, entries, userProfile) => {
   try {
@@ -1698,7 +1796,11 @@ export const answerDailyQuestion = async (userId, question, entries, userProfile
     const hasVoiceEntries = voiceEntries.length > 0;
     const journeyPaths = [...new Set(allEntries.map(e => e.pathId))];
     
-    const systemPrompt = `You are Καιρός, answering a personal question from ${userProfile?.displayName || 'a dedicated journaler'} based on deep analysis of their journal entries.
+    const safetyGuidelines = `⚠️ SAFETY GUIDELINES: Do not diagnose. If user expresses self-harm, redirect to crisis line. If question is unrelated to journal content, respond: "That's a great question, but I don't have enough information from your journal to answer. Could you rephrase it based on your reflections?"`;
+    
+    const systemPrompt = `${safetyGuidelines}
+
+You are Καιρός, answering a personal question from ${userProfile?.displayName || 'a dedicated journaler'} based on deep analysis of their journal entries.
 
 USER QUESTION: "${question}"
 
@@ -1732,14 +1834,14 @@ Respond with JSON:
   "personalObservation": "A profound observation about their unique journey or growth pattern",
   "relevantEntry": "Reference to a specific entry or moment that relates to their question",
   "practicalSuggestion": "Concrete action based on their patterns and the question asked"
-}`;
-    
+}${getLanguageDirective()}`;
+
     const requestBody = {
       model: CLAUDE_ANALYSIS_MODEL,
       messages: [{ role: 'user', content: `Based on my journal journey, please answer: ${question}` }],
       system: systemPrompt,
-      max_tokens: 800,
-      temperature: 0.85
+      max_tokens: 1000,
+      temperature: 0.75
     };
     
     const data = await callClaudeApi({
@@ -1792,6 +1894,7 @@ Respond with JSON:
 
 /**
  * Generate enhanced personality description
+ * Updated with positivity filter, safety guidelines, and lower temperature
  */
 export const generatePersonalityDescription = async (userId, entries, userProfile, progressStats) => {
   try {
@@ -1826,7 +1929,11 @@ export const generatePersonalityDescription = async (userId, entries, userProfil
     const journeyPaths = [...new Set(allEntries.map(e => e.pathId))];
     const dominantThemes = extractDominantThemes(allEntries);
     
-    const systemPrompt = `You are Καιρός, creating a profound personality description for ${userProfile?.displayName || 'a dedicated journaler'} based on deep analysis of their journal entries.
+    const safetyGuidelines = `⚠️ SAFETY GUIDELINES: Do not diagnose. This is AI-generated, not a clinical assessment. Aim for at least 80% affirmative language. Avoid labeling traits as "negative" (e.g., replace "impatient" with "seeks efficiency").`;
+    
+    const systemPrompt = `${safetyGuidelines}
+
+You are Καιρός, creating a profound personality description for ${userProfile?.displayName || 'a dedicated journaler'} based on deep analysis of their journal entries.
 
 COMPREHENSIVE JOURNEY DATA:
 - Total entries: ${allEntries.length} (${entries.length} written, ${voiceEntries.length} voice)
@@ -1845,6 +1952,7 @@ DESCRIPTION GUIDELINES:
 4. Note evolution and growth patterns across their journey
 5. Acknowledge both strengths and growth edges with compassion
 6. Create a description they would feel deeply seen by
+7. Keep language positive and encouraging (reframe any perceived "weaknesses" as growth opportunities)
 
 Craft a personality description that captures their essence as revealed through their courageous self-reflection.
 
@@ -1861,14 +1969,14 @@ Respond with JSON:
   "evolutionObserved": "How they've grown through their journey",
   "hiddenDepths": "Subtle qualities that emerge in their reflections",
   "overallSummary": "3-4 sentence synthesis that would make them feel truly understood"
-}`;
-    
+}${getLanguageDirective()}`;
+
     const requestBody = {
       model: CLAUDE_ANALYSIS_MODEL,
       messages: [{ role: 'user', content: 'Create my personality description based on deep analysis of all my journal entries.' }],
       system: systemPrompt,
-      max_tokens: 1500,
-      temperature: 0.85
+      max_tokens: 1600,
+      temperature: 0.8
     };
     
     const data = await callClaudeApi({
@@ -2031,7 +2139,6 @@ function convertFirestoreFields(fields) {
     else if (v.booleanValue !== undefined) out[k] = v.booleanValue;
     else if (v.mapValue !== undefined) out[k] = convertFirestoreFields(v.mapValue.fields || {});
     else if (v.arrayValue !== undefined) out[k] = (v.arrayValue.values || []).map(item => {
-      // simple handling for primitives
       if (item.stringValue !== undefined) return item.stringValue;
       if (item.integerValue !== undefined) return parseInt(item.integerValue, 10);
       if (item.doubleValue !== undefined) return Number(item.doubleValue);
@@ -2080,12 +2187,9 @@ export const getExtractedText = async (userId, day) => {
 };
 
 // =============================================================================
-// 🛠️ UTILITY FUNCTIONS
+// 🛠️ UTILITY FUNCTIONS (unchanged)
 // =============================================================================
 
-/**
- * Convert file to base64
- */
 async function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -2104,9 +2208,6 @@ async function fileToBase64(file) {
   });
 }
 
-/**
- * Fetch image as base64
- */
 async function fetchImageAsBase64(url) {
   try {
     const response = await fetch(url);
@@ -2126,9 +2227,6 @@ async function fetchImageAsBase64(url) {
   }
 }
 
-/**
- * Get age group
- */
 function getAgeGroup(age) {
   if (age < 13) return 'child';
   if (age <= 17) return 'teen';
@@ -2138,9 +2236,6 @@ function getAgeGroup(age) {
   return 'senior';
 }
 
-/**
- * Check if description should be regenerated (weekly)
- */
 const shouldRegenerateDescription = (lastGenerated) => {
   if (!lastGenerated) return true;
   const lastDate = lastGenerated.toDate ? lastGenerated.toDate() : new Date(lastGenerated);
@@ -2148,9 +2243,6 @@ const shouldRegenerateDescription = (lastGenerated) => {
   return daysSinceGenerated >= 7;
 };
 
-/**
- * Get time until midnight
- */
 const getTimeUntilMidnight = () => {
   const now = new Date();
   const tomorrow = new Date(now);
@@ -2164,9 +2256,6 @@ const getTimeUntilMidnight = () => {
   return `${hours}h ${minutes}m`;
 };
 
-/**
- * Extract common words from entries
- */
 function extractCommonWords(entries, limit = 5) {
   const stopWords = new Set(['the', 'and', 'is', 'in', 'to', 'of', 'a', 'for', 'with', 'on', 'at', 'from', 'by', 'an', 'this', 'that', 'it', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'can', 'may', 'might', 'must', 'not', 'no', 'yes', 'or', 'but', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'very', 'just', 'like', 'so', 'really', 'think', 'feel', 'know', 'get', 'go', 'see', 'want', 'need', 'make', 'take', 'come', 'give', 'find', 'say', 'tell', 'ask', 'work', 'seem', 'try', 'leave', 'call', 'good', 'new', 'first', 'last', 'long', 'great', 'little', 'own', 'other', 'old', 'right', 'big', 'high', 'different', 'small', 'large', 'next', 'early', 'young', 'important', 'few', 'public', 'bad', 'same', 'able']);
   
@@ -2175,7 +2264,7 @@ function extractCommonWords(entries, limit = 5) {
   entries.forEach(entry => {
     const text = [
       entry.extractedText || '',
-      entry.transcription || '', // Include voice transcriptions
+      entry.transcription || '',
       entry.analysis?.summary || '',
       ...(entry.analysis?.insights || [])
     ].join(' ').toLowerCase();
@@ -2195,9 +2284,6 @@ function extractCommonWords(entries, limit = 5) {
     .map(([word]) => word);
 }
 
-/**
- * Extract key words from entry
- */
 function extractKeyWords(entry) {
   const text = [
     entry.extractedText || '',
@@ -2212,9 +2298,6 @@ function extractKeyWords(entry) {
   return [...new Set(words)];
 }
 
-/**
- * Extract key moments from entry
- */
 function extractKeyMoments(entry) {
   const moments = [];
   
@@ -2229,13 +2312,9 @@ function extractKeyMoments(entry) {
   return moments.slice(0, 2);
 }
 
-/**
- * Extract themes from entry
- */
 function extractThemes(entry) {
   const themes = new Set();
   
-  // Extract from insights
   if (entry.analysis?.insights) {
     entry.analysis.insights.forEach(insight => {
       if (insight.toLowerCase().includes('emotion')) themes.add('emotions');
@@ -2249,9 +2328,6 @@ function extractThemes(entry) {
   return Array.from(themes);
 }
 
-/**
- * Extract dominant themes from all entries
- */
 function extractDominantThemes(entries) {
   const themeCount = {};
   
@@ -2268,12 +2344,8 @@ function extractDominantThemes(entries) {
     .map(([theme]) => theme);
 }
 
-/**
- * Get progress field for path
- */
 function getProgressFieldForPath(pathId) {
   const fieldMap = {
-    // Regular paths
     'self-discovery': 'selfDiscoveryProgress',
     'emotional-intelligence': 'emotionalIntelligenceProgress',
     'mindfulness-awareness': 'mindfulnessAwarenessProgress',
@@ -2289,13 +2361,11 @@ function getProgressFieldForPath(pathId) {
     'shadow-work': 'shadowWorkProgress',
     'nature-connection': 'natureConnectionProgress',
     'holistic-transformation': 'holisticTransformationProgress',
-    // Voice paths
     'voice-discovery': 'voiceDiscoveryProgress',
     'spoken-emotions': 'spokenEmotionsProgress',
     'vocal-confidence': 'vocalConfidenceProgress',
     'storytelling-voice': 'storytellingVoiceProgress',
     'meditation-speaking': 'meditationSpeakingProgress',
-    // Visual paths
     'artistic-soul-expression': 'artisticSoulExpressionProgress',
     'color-psychology': 'colorPsychologyProgress',
     'sacred-geometry': 'sacredGeometryProgress',
@@ -2307,12 +2377,8 @@ function getProgressFieldForPath(pathId) {
   return fieldMap[pathId] || 'selfDiscoveryProgress';
 }
 
-/**
- * Log analytics events
- */
 function logAnalyticsEvent(eventName, eventParams = {}) {
   console.log(`[Analytics] ${eventName}:`, eventParams);
-  
   if (typeof window !== 'undefined' && window.analyticsService) {
     window.analyticsService.logEvent(eventName, {
       ...eventParams,
@@ -2325,40 +2391,36 @@ function logAnalyticsEvent(eventName, eventParams = {}) {
 // 📤 EXPORTS
 // =============================================================================
 
-/**
- * Main export object with all functions
- */
 export default {
-  // 🎤 Voice Functions
+  // Voice Functions
   uploadVoiceJournal,
   analyzeVoiceJournalEntry,
   getPreviousVoiceEntries,
   getVoiceJournalEntry,
   
-  // 📝 Regular Journal Functions
+  // Regular Journal Functions
   uploadJournalImage,
   uploadMultipleJournalImages,
   extractTextFromImage,
   extractTextFromImages,
   
-  // 🧠 Analysis Functions (Unified)
-  analyzeJournalEntry, // Handles both voice and regular
+  // Analysis Functions (Unified)
+  analyzeJournalEntry,
   analyzeMultiPageJournalEntry,
-  saveAnalysisResult, // Handles both voice and regular
+  saveAnalysisResult,
   
-  // 📊 Progress & Completion
-  generateProgressReport, // Enhanced with voice support
-  generateJourneyCompletion, // Enhanced with voice support
+  // Progress & Completion
+  generateProgressReport,
+  generateJourneyCompletion,
   
-  // 📚 Entry Retrieval
+  // Entry Retrieval
   getPreviousEntries,
   getJournalEntry,
   getExtractedText,
   
-  // 🤖 AI Insights
+  // AI Insights
   checkDailyQuestionLimit,
-  answerDailyQuestion, // Enhanced with voice support
-  generatePersonalityDescription, // Enhanced with voice support
+  answerDailyQuestion,
+  generatePersonalityDescription,
   getPersonalityDescription
 };
-

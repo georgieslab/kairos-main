@@ -1,0 +1,62 @@
+[
+  {
+    "id": "voiceDiscoveryDays:1",
+    "title": "Finding Your Voice",
+    "theme": "Voice Discovery",
+    "prompt": "Speak freely about who you are today. Don't worry about perfection - just let your authentic voice emerge. What makes you uniquely you?"
+  },
+  {
+    "id": "voiceDiscoveryDays:2",
+    "title": "Childhood Echoes",
+    "theme": "Voice Memory",
+    "prompt": "Think back to your childhood voice. How did you express yourself as a child? What stories did you love to tell? Let your inner child speak."
+  },
+  {
+    "id": "voiceDiscoveryDays:3",
+    "title": "Emotional Tones",
+    "theme": "Voice Emotion",
+    "prompt": "Speak about an emotion you're feeling right now. Notice how your voice changes with different feelings. What does your voice reveal about your inner state?"
+  },
+  {
+    "id": "voiceDiscoveryDays:4",
+    "title": "Speaking Your Dreams",
+    "theme": "Voice Vision",
+    "prompt": "Describe your dreams and aspirations as if you're telling a close friend. Let excitement and passion color your voice. What future are you creating with your words?"
+  },
+  {
+    "id": "voiceDiscoveryDays:5",
+    "title": "Voice of Gratitude",
+    "theme": "Voice Appreciation",
+    "prompt": "Speak about what you're grateful for, letting warmth and appreciation flow through your voice. How does gratitude change the way you sound?"
+  },
+  {
+    "id": "voiceDiscoveryDays:6",
+    "title": "Difficult Conversations",
+    "theme": "Voice Courage",
+    "prompt": "Practice speaking about something challenging in your life. Notice how your voice carries both vulnerability and strength. What truth needs to be spoken?"
+  },
+  {
+    "id": "voiceDiscoveryDays:7",
+    "title": "Voice of Wisdom",
+    "theme": "Voice Guidance",
+    "prompt": "Speak as if you're giving advice to a younger version of yourself. What wisdom does your voice carry? What lessons have shaped how you speak?"
+  },
+  {
+    "id": "voiceDiscoveryDays:8",
+    "title": "Creative Expression",
+    "theme": "Voice Creativity",
+    "prompt": "Tell a story, share a poem, or sing a song - let your creative voice flow freely. How does creativity change your vocal expression?"
+  },
+  {
+    "id": "voiceDiscoveryDays:9",
+    "title": "Voice in Relationships",
+    "theme": "Voice Connection",
+    "prompt": "Reflect on how you use your voice in relationships. How do you communicate love, set boundaries, and connect with others through speech?"
+  },
+  {
+    "id": "voiceDiscoveryDays:10",
+    "title": "Your Authentic Voice",
+    "theme": "Voice Integration",
+    "prompt": "After nine days of vocal exploration, speak about what you've discovered about your authentic voice. How will you carry this awareness forward?"
+  }
+]

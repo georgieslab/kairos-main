@@ -1,8 +1,10 @@
 // src/components/common/PathContextIndicator.jsx
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Compass, Heart, Brain } from 'lucide-react';
 import useNavigation from '../../hooks/useNavigation';
+import { getJourneyPath } from '../../data/JourneyData';
 
 /**
  * A component to display the current path and day context
@@ -10,27 +12,30 @@ import useNavigation from '../../hooks/useNavigation';
  * @param {string} props.size - "compact" or "full" size variant
  */
 const PathContextIndicator = ({ size = "compact" }) => {
+  const { t } = useTranslation('layout');
   const { currentPath, currentDay } = useNavigation();
-  
+
   // Get path-specific properties
   const getPathInfo = () => {
     switch(currentPath) {
       case 'emotional-intelligence':
         return {
-          name: 'Emotional Intelligence',
+          name: t('pathContext.names.emotionalIntelligence', 'Emotional Intelligence'),
           icon: Heart,
           color: 'path-ei',
           textColor: 'text-pink-100'
         };
 
       case 'deciding-to-doing':
-      pathProgress = userProfile?.journeyProgress?.decidingToDoingProgress;
-      pathName = 'The Gap Between Deciding and Doing';
-      pathMaxDays = 7;
-      break;
+        return {
+          name: t('pathContext.names.decidingToDoing', 'The Gap Between Deciding and Doing'),
+          icon: Compass,
+          color: 'path-sd',
+          textColor: 'text-emerald-100'
+        };
       case 'mindfulness-awareness':
         return {
-          name: 'Mindfulness',
+          name: t('pathContext.names.mindfulness', 'Mindfulness'),
           icon: Brain,
           color: 'path-ma',
           textColor: 'text-purple-100'
@@ -38,7 +43,7 @@ const PathContextIndicator = ({ size = "compact" }) => {
       case 'self-discovery':
       default:
         return {
-          name: 'Self-Discovery',
+          name: t('pathContext.names.selfDiscovery', 'Self-Discovery'),
           icon: Compass,
           color: 'path-sd',
           textColor: 'text-emerald-100'
@@ -47,13 +52,14 @@ const PathContextIndicator = ({ size = "compact" }) => {
   };
   
   const { name, icon: Icon, color } = getPathInfo();
+  const maxDays = getJourneyPath(currentPath)?.duration || 10;
   
   // Compact version for headers
   if (size === "compact") {
     return (
       <div className={`path-indicator-compact ${color}`}>
         <Icon className="path-indicator-icon" />
-        <span className="path-indicator-text">{name} • Day {currentDay}</span>
+        <span className="path-indicator-text">{t('pathContext.dayCompact', '{{name}} • Day {{day}}', { name, day: currentDay })}</span>
       </div>
     );
   }
@@ -70,10 +76,10 @@ const PathContextIndicator = ({ size = "compact" }) => {
           <div className="progress-bar">
             <div 
               className="progress-fill" 
-              style={{ width: `${(currentDay / 10) * 100}%` }}
+              style={{ width: `${Math.min(currentDay / maxDays, 1) * 100}%` }}
             ></div>
           </div>
-          <span className="progress-text">Day {currentDay}/10</span>
+          <span className="progress-text">{t('pathContext.dayProgress', 'Day {{day}}/{{maxDays}}', { day: currentDay, maxDays })}</span>
         </div>
       </div>
     </div>

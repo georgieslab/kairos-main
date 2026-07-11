@@ -1,135 +1,114 @@
 /* src/styles/components/themeSwitcher.css */
-.theme-switcher {
+/* Apple Spatial Glass Theme & Language Switcher */
+
+/* ===== BASE SWITCH PILL ===== */
+.liquid-theme-switch {
   position: relative;
-  border: none;
-  background: transparent;
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
   cursor: pointer;
-  padding: 0;
-  outline: none;
-  transition: transform 0.2s ease;
-}
-
-.theme-switcher:hover {
-  transform: translateY(-2px);
-}
-
-.theme-switcher:active {
-  transform: translateY(0);
-}
-
-/* Retro Switcher */
-.retro-switcher {
-  width: 48px;
-  height: 28px;
-  position: relative;
+  transition: transform 0.1s ease, background 0.3s ease, border-color 0.3s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 6px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  transition: all 0.3s ease;
 }
 
-.retro-switch-track {
-  width: 100%;
-  height: 16px;
-  background: #E0E0E0;
-  border-radius: 8px;
-  position: relative;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s ease;
+/* Desktop Hover */
+@media (hover: hover) {
+  .liquid-theme-switch:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
 }
 
-.retro-switcher.dark .retro-switch-track {
-  background: #313945dd;
+/* Tactile Press */
+@media (hover: none) {
+  .liquid-theme-switch:active {
+    transform: scale(0.95);
+  }
 }
 
-.retro-switch-handle {
+/* ===== GLASS THUMB ===== */
+.glass-thumb {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  top: -2px;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.retro-switcher.light .retro-switch-handle {
+  top: 2px;
   left: 2px;
-  background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-  border: 1px solid #FFD54F;
-}
-
-.retro-switcher.dark .retro-switch-handle {
-  left: calc(100% - 22px);
-  background: linear-gradient(135deg, #64748B, #475569);
-  border: 1px solid #334155;
-}
-
-.retro-icons {
-  position: absolute;
-  width: 100%;
+  width: 26px;
+  height: 26px;
   display: flex;
-  justify-content: space-between;
-  padding: 0 6px;
-  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.retro-sun {
-  color: #FF9800;
-  transition: opacity 0.3s ease, filter 0.3s ease;
+/* Theme-specific thumb colors */
+.liquid-theme-switch.light .glass-thumb {
+  color: #fbbf24; /* Warm sun */
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4));
 }
 
-.retro-moon {
-  color: #64748B;
-  transition: opacity 0.3s ease, filter 0.3s ease;
+.liquid-theme-switch.dark .glass-thumb {
+  transform: translateX(26px);
+  background: rgba(20, 20, 22, 0.6); /* Darker glass for night */
+  color: #a78bfa; /* Cool moon */
+  filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.4));
 }
 
-.retro-switcher.light .retro-sun {
-  opacity: 1;
-  filter: drop-shadow(0 0 5px rgba(255, 152, 0, 0.3));
+/* ===== ICON ANIMATION ===== */
+.theme-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), opacity 0.2s ease;
 }
 
-.retro-switcher.dark .retro-sun {
-  opacity: 0.5;
+/* ===== LIGHT MODE OVERRIDES ===== */
+.hs-light .liquid-theme-switch {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 6px rgba(0, 0, 0, 0.04);
 }
 
-.retro-switcher.light .retro-moon {
-  opacity: 0.5;
+.hs-light .liquid-theme-switch:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
-.retro-switcher.dark .retro-moon {
-  opacity: 1;
-  filter: drop-shadow(0 0 5px rgba(100, 116, 139, 0.3));
+.hs-light .liquid-theme-switch .glass-thumb {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Animation states */
-.theme-switcher.animating .retro-switch-handle {
-  animation: pulseEffect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.hs-light .liquid-theme-switch.dark .glass-thumb {
+  background: #1f2937; /* Dark thumb on light bg for contrast */
+  color: #818cf8;
 }
 
-@keyframes pulseEffect {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+/* ===== LANGUAGE SWITCHER SHARED STYLES ===== */
+/* Keeps the pill layout identical for the language toggle */
+.liquid-theme-switch.active .glass-thumb {
+  transform: translateX(26px);
 }
 
-/* Focus styles for accessibility */
-.theme-switcher:focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 2px;
+.lang-thumb {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+  transition: color 0.3s ease;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .retro-switcher {
-    width: 44px;
-    height: 24px;
-  }
-  
-  .retro-switch-handle {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .retro-switcher.dark .retro-switch-handle {
-    left: calc(100% - 20px);
-  }
+.hs-light .lang-thumb {
+  color: rgba(0, 0, 0, 0.65);
 }

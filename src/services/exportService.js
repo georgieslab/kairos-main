@@ -1,6 +1,8 @@
 // src/services/exportService.js - Enhanced with Mobile-Friendly Features & Icons
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
 import { getPreviousEntries, getJournalEntry } from './claudeService';
 import { generateJourneyCompletion } from './claudeService';
 // Import getJourneyPath from JourneyData
@@ -83,6 +85,129 @@ const addKairosLogo = (pdf, x, y, width = 30, height = 10, useCoverLogo = false)
 const setupPDF = (pdf) => {
   // Use default fonts only
   pdf.setFont('helvetica');
+};
+
+// =============================================================================
+// ✨ "Daily Aura" mood check-in — reused as the PDF's aura infographic.
+// There's no real meteorological data stored per journal entry, so we use the
+// same daily mood check-in the Home/Insights screens already show, keyed by
+// the entry's actual date. Ids/colours must match src/constants/moods.js
+// exactly (that's the single source of truth for the app + Firestore values).
+// =============================================================================
+
+const MOOD_META = {
+  lunar:    { color: [129, 140, 248] }, // Indigo
+  ethereal: { color: [56, 189, 248]  }, // Sky Blue
+  sparkle:  { color: [192, 132, 252] }, // Violet
+  radiant:  { color: [251, 191, 36]  }, // Amber
+  ember:    { color: [251, 113, 133] }  // Rose
+};
+
+/** Local (not UTC) YYYY-MM-DD key, matching MoodWeather.jsx's localDateKey() */
+export const dateKeyFromDate = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+/** Fetches the mood id ('lunar'|'ethereal'|'sparkle'|'radiant'|'ember') for
+ * a given date, or null if the user never checked in that day / the read fails. */
+export const getMoodForDate = async (userId, dateKey) => {
+  if (!userId || !dateKey) return null;
+  try {
+    const snap = await getDoc(doc(db, 'users', userId, 'moods', dateKey));
+    return snap.exists() ? (snap.data().mood || null) : null;
+  } catch (error) {
+    console.warn('Could not load mood for PDF export (non-fatal):', error);
+    return null;
+  }
+};
+
+/** Mixes an accent colour toward white — used for card backgrounds instead of
+ * true alpha compositing, so it renders identically across jsPDF versions. */
+const tintColor = (rgb, amount = 0.1) => rgb.map((c) => Math.round(255 - amount * (255 - c)));
+
+/** Draws a small vector aura glyph for the given mood id, centred at (cx, cy).
+ * These are hand-drawn with jsPDF primitives (circle/triangle/line) since the
+ * standard PDF fonts can't render icon glyphs or emoji. The lunar crescent is
+ * carved by overpainting a white circle, so it only reads correctly on a white
+ * badge backdrop — which is the only place this is currently used. */
+const drawMoodGlyph = (pdf, moodId, cx, cy, scale, color) => {
+  switch (moodId) {
+    case 'lunar': {
+      pdf.setFillColor(...color);
+      pdf.circle(cx, cy, scale * 0.55, 'F');
+      pdf.setFillColor(255, 255, 255);
+      pdf.circle(cx + scale * 0.28, cy - scale * 0.12, scale * 0.48, 'F');
+      break;
+    }
+    case 'ethereal': {
+      const x1 = cx - scale * 0.5, y1 = cy + scale * 0.55;
+      const x2 = cx + scale * 0.5, y2 = cy - scale * 0.55;
+      pdf.setDrawColor(...color);
+      pdf.setLineWidth(0.6);
+      pdf.setLineCap('round');
+      pdf.line(x1, y1, x2, y2); // spine
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      const px = -(y2 - y1) / len, py = (x2 - x1) / len; // perpendicular unit vector
+      for (let i = 1; i <= 3; i++) {
+        const t = i / 4;
+        const sx = x1 + (x2 - x1) * t, sy = y1 + (y2 - y1) * t;
+        const barbLen = scale * (0.5 - t * 0.25);
+        pdf.line(sx, sy, sx + px * barbLen, sy + py * barbLen);
+      }
+      pdf.setFillColor(...color);
+      pdf.circle(x1, y1, scale * 0.12, 'F'); // quill tip
+      break;
+    }
+    case 'sparkle': {
+      pdf.setFillColor(...color);
+      const spike = scale * 1.0, base = scale * 0.15;
+      pdf.triangle(cx, cy - spike, cx - base, cy, cx + base, cy, 'F'); // up
+      pdf.triangle(cx, cy + spike, cx - base, cy, cx + base, cy, 'F'); // down
+      pdf.triangle(cx - spike, cy, cx, cy - base, cx, cy + base, 'F'); // left
+      pdf.triangle(cx + spike, cy, cx, cy - base, cx, cy + base, 'F'); // right
+      break;
+    }
+    case 'radiant': {
+      pdf.setFillColor(...color);
+      pdf.circle(cx, cy, scale * 0.28, 'F');
+      for (let i = 0; i < 5; i++) {
+        const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+        const perp = angle + Math.PI / 2;
+        const tipX = cx + Math.cos(angle) * scale * 1.0;
+        const tipY = cy + Math.sin(angle) * scale * 1.0;
+        const baseX = cx + Math.cos(angle) * scale * 0.22;
+        const baseY = cy + Math.sin(angle) * scale * 0.22;
+        const bw = scale * 0.22;
+        pdf.triangle(
+          tipX, tipY,
+          baseX + Math.cos(perp) * bw, baseY + Math.sin(perp) * bw,
+          baseX - Math.cos(perp) * bw, baseY - Math.sin(perp) * bw,
+          'F'
+        );
+      }
+      break;
+    }
+    case 'ember':
+    default: {
+      pdf.setFillColor(...color);
+      // rounded base
+      pdf.circle(cx, cy + scale * 0.32, scale * 0.34, 'F');
+      // lower body, tapering up toward the left
+      pdf.triangle(
+        cx - scale * 0.34, cy + scale * 0.32,
+        cx + scale * 0.34, cy + scale * 0.32,
+        cx - scale * 0.06, cy - scale * 0.15,
+        'F'
+      );
+      // flickering tip, curling to the right and tapering to a point
+      pdf.triangle(
+        cx - scale * 0.2, cy - scale * 0.05,
+        cx + scale * 0.22, cy - scale * 0.1,
+        cx + scale * 0.08, cy - scale * 0.85,
+        'F'
+      );
+      break;
+    }
+  }
 };
 
 /**
@@ -1167,6 +1292,361 @@ export const exportJourneyToText = async (userId, pathId) => {
 };
 
 /**
+ * Generate a styled, infographic-flavoured single-entry PDF for the Analysis
+ * Results screen.
+ *
+ * Unlike exportJourneyToPDF (whole-journey, cover page + many entries), this is a
+ * compact 1–2 page document for ONE entry: a branded header with a vector mood
+ * ("inner aura") glyph, a row of stat chips, a journey-progress bar, and
+ * tinted per-section cards mirroring the in-app tabs (Insights / Reflection /
+ * Action / Affirmation), plus page footers. Text/labels are passed in already
+ * localized via `strings`, so this stays free of i18n coupling and the AI content
+ * (which is generated in the user's language) prints in that language.
+ *
+ * @param {Object} data
+ * @param {number} data.dayNumber
+ * @param {string} data.pathName        - localized/display path name
+ * @param {number[]} [data.pathColor]   - journey path accent colour, e.g. [85,139,110]
+ * @param {number} [data.pathDuration]  - total days in the journey, for the progress bar
+ * @param {string} data.theme
+ * @param {string} [data.prompt]
+ * @param {string} [data.entryText]     - written entry or voice transcription
+ * @param {boolean} [data.isVoiceEntry]
+ * @param {Object} [data.analysis]      - { summary, insights[], reflectionQuestion, practicalAction, affirmation }
+ * @param {Object} [data.mood]          - { id: 'lunar'|'ethereal'|'sparkle'|'radiant'|'ember', label } from that day's check-in
+ * @param {Object} data.strings         - localized labels (see AnalysisResults handleExport)
+ * @returns {Blob} PDF as a Blob
+ */
+export const exportSingleEntryToPDF = ({
+  dayNumber,
+  pathName,
+  pathColor,
+  pathDuration,
+  theme,
+  prompt,
+  entryText,
+  isVoiceEntry = false,
+  analysis = null,
+  mood = null,
+  strings = {}
+}) => {
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+  setupPDF(pdf);
+
+  // Layout constants (mm)
+  const PAGE_W = 210;
+  const MARGIN = 16;
+  const CONTENT_W = PAGE_W - MARGIN * 2;
+  const TOP_Y = 20;      // top text baseline on continuation pages
+  const MAX_Y = 268;     // last usable baseline before the footer
+  const FOOTER_Y = 285;
+
+  // Palette (matches the app's accent system)
+  const DARKGREEN = [43, 70, 60];
+  const GREEN = pathColor && pathColor.length === 3 ? pathColor : [85, 139, 110];
+  const GOLD = [216, 178, 63];
+  const BLUE = [59, 130, 246];
+  const ORANGE = [249, 115, 22];
+  const PURPLE = [139, 92, 246];
+  const INK = [38, 38, 42];
+  const MUTE = [122, 122, 130];
+  const TRACK = [232, 232, 236];
+
+  let y = 0;
+
+  const ensureSpace = (needed) => {
+    if (y + needed > MAX_Y) {
+      pdf.addPage();
+      y = TOP_Y;
+    }
+  };
+
+  // Wrapped body text with automatic page breaks (used outside cards, e.g. the entry text)
+  const addWrapped = (text, { size = 10.5, style = 'normal', color = INK, x = MARGIN, w = CONTENT_W, lh = 5.3, gapAfter = 3 } = {}) => {
+    if (!text) return;
+    pdf.setFont('helvetica', style);
+    pdf.setFontSize(size);
+    pdf.setTextColor(...color);
+    const lines = pdf.splitTextToSize(String(text), w);
+    for (const line of lines) {
+      if (y > MAX_Y) { pdf.addPage(); y = TOP_Y; }
+      pdf.text(line, x, y);
+      y += lh;
+    }
+    y += gapAfter;
+  };
+
+  // A plain (uncarded) coloured section heading with a small accent tick —
+  // used only for the entry/transcription text, which can be arbitrarily
+  // long and so isn't a good fit for a fixed-height card.
+  const sectionHeading = (label, color) => {
+    ensureSpace(14);
+    y += 4;
+    pdf.setFillColor(...color);
+    pdf.roundedRect(MARGIN, y - 3.4, 2.4, 4.6, 1, 1, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.setTextColor(...color);
+    pdf.text(String(label), MARGIN + 5.5, y);
+    y += 6.5;
+  };
+
+  // A tinted, rounded card containing a heading + wrapped body text. Height is
+  // measured up front so the card never gets split across a page break —
+  // safe here because these sections (summary/reflection/action) are always
+  // short; the one unbounded section (entry text) intentionally isn't carded.
+  const textSectionCard = (label, color, text, { style = 'normal', fontSize = 10.5, lh = 5.4 } = {}) => {
+    if (!text) return;
+    pdf.setFont('helvetica', style);
+    pdf.setFontSize(fontSize);
+    const lines = pdf.splitTextToSize(String(text), CONTENT_W - 16);
+    const headingH = 11;
+    const cardH = headingH + lines.length * lh + 8;
+    ensureSpace(cardH + 6);
+    y += 4;
+    const top = y;
+    pdf.setFillColor(...tintColor(color, 0.09));
+    pdf.roundedRect(MARGIN, top, CONTENT_W, cardH, 3, 3, 'F');
+    pdf.setFillColor(...color);
+    pdf.roundedRect(MARGIN, top, 2.4, cardH, 1, 1, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(11.5);
+    pdf.setTextColor(...color);
+    pdf.text(String(label), MARGIN + 8, top + 8);
+    pdf.setFont('helvetica', style);
+    pdf.setFontSize(fontSize);
+    pdf.setTextColor(...INK);
+    let ty = top + headingH + 4;
+    lines.forEach((line) => { pdf.text(line, MARGIN + 8, ty); ty += lh; });
+    y = top + cardH + 5;
+  };
+
+  // ===== Header band (page 1) =====
+  const HEADER_H = 54;
+  pdf.setFillColor(...DARKGREEN);
+  pdf.rect(0, 0, PAGE_W, HEADER_H, 'F');
+  pdf.setFillColor(...GREEN);
+  pdf.rect(0, HEADER_H, PAGE_W, 1.4, 'F');
+
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(19);
+  pdf.text('Kairos', MARGIN, 19);
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(9);
+  pdf.setTextColor(206, 220, 211);
+  pdf.text(strings.tagline || 'Smart Journal', MARGIN, 25);
+
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(15);
+  const dayHeading = strings.dayHeading || `Day ${dayNumber}`;
+  const headerTextW = mood ? CONTENT_W - 26 : CONTENT_W; // leave room for the mood badge
+  const themeLines = theme ? pdf.splitTextToSize(`${dayHeading}  ·  ${theme}`, headerTextW) : [dayHeading];
+  pdf.text(themeLines[0], MARGIN, 38);
+
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(9.5);
+  pdf.setTextColor(206, 220, 211);
+  const metaLine = [pathName, strings.generatedOn].filter(Boolean).join('   ·   ');
+  pdf.text(pdf.splitTextToSize(metaLine, headerTextW)[0], MARGIN, 45);
+
+  // Mood ("inner aura") badge, top-right of the header
+  if (mood?.id && MOOD_META[mood.id]) {
+    const bcx = PAGE_W - MARGIN - 11;
+    const bcy = 24;
+    pdf.setFillColor(255, 255, 255);
+    pdf.circle(bcx, bcy, 10, 'F');
+    drawMoodGlyph(pdf, mood.id, bcx, bcy, 6, MOOD_META[mood.id].color);
+    if (mood.label) {
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text(String(mood.label), bcx, bcy + 15, { align: 'center' });
+    }
+  }
+
+  y = 66;
+
+  // ===== Infographic strip: stat chips + journey progress =====
+  {
+    const wordCount = !isVoiceEntry && entryText ? entryText.trim().split(/\s+/).filter(Boolean).length : 0;
+    const hasProgress = Number.isFinite(pathDuration) && pathDuration > 0;
+    const percent = hasProgress ? Math.max(0, Math.min(100, Math.round((dayNumber / pathDuration) * 100))) : null;
+
+    const chips = [
+      {
+        big: hasProgress ? `${dayNumber}/${pathDuration}` : `${dayNumber}`,
+        label: strings.dayChipLabel || 'Day'
+      },
+      isVoiceEntry
+        ? { big: strings.durationValue || '0:00', label: strings.durationChipLabel || 'Duration' }
+        : { big: String(wordCount), label: strings.wordsChipLabel || 'Words' },
+      hasProgress
+        ? { big: `${percent}%`, label: strings.completeChipLabel || 'Complete' }
+        : { big: isVoiceEntry ? '🎤' : '📝', label: strings.entryTypeChipLabel || (isVoiceEntry ? 'Voice' : 'Written') }
+    ];
+
+    const gap = 4;
+    const chipW = (CONTENT_W - gap * 2) / 3;
+    const chipH = 18;
+    chips.forEach((chip, i) => {
+      const cx = MARGIN + i * (chipW + gap);
+      pdf.setFillColor(...tintColor(GREEN, 0.1));
+      pdf.roundedRect(cx, y, chipW, chipH, 3, 3, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(13);
+      pdf.setTextColor(...GREEN);
+      pdf.text(chip.big, cx + chipW / 2, y + 9, { align: 'center' });
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(...MUTE);
+      pdf.text(String(chip.label).toUpperCase(), cx + chipW / 2, y + 15, { align: 'center' });
+    });
+    y += chipH + 6;
+
+    if (hasProgress) {
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(...MUTE);
+      const progressCaption = strings.progressCaption
+        ? strings.progressCaption.replace('{{percent}}', percent)
+        : `${percent}% of journey`;
+      pdf.text(progressCaption, PAGE_W - MARGIN, y, { align: 'right' });
+      y += 3;
+      const barH = 3.6;
+      pdf.setFillColor(...TRACK);
+      pdf.roundedRect(MARGIN, y, CONTENT_W, barH, 1.8, 1.8, 'F');
+      const fillW = Math.max(barH, (CONTENT_W * percent) / 100);
+      pdf.setFillColor(...GREEN);
+      pdf.roundedRect(MARGIN, y, fillW, barH, 1.8, 1.8, 'F');
+      y += barH + 8;
+    } else {
+      y += 4;
+    }
+  }
+
+  // ===== Prompt =====
+  if (prompt) {
+    textSectionCard(strings.promptLabel || 'Prompt', GREEN, prompt, { style: 'italic' });
+  }
+
+  // ===== Entry / transcription (unbounded length — not carded) =====
+  if (entryText) {
+    sectionHeading(
+      isVoiceEntry ? (strings.transcriptionLabel || 'Voice Transcription') : (strings.entryLabel || 'Journal Entry'),
+      GREEN
+    );
+    if (isVoiceEntry && strings.voiceMeta) {
+      addWrapped(strings.voiceMeta, { size: 9, color: MUTE, gapAfter: 2 });
+    }
+    addWrapped(entryText, {});
+  }
+
+  if (analysis) {
+    // ===== Summary =====
+    if (analysis.summary) {
+      textSectionCard(strings.summaryLabel || 'Summary', GREEN, analysis.summary);
+    }
+
+    // ===== Key insights (numbered, inside one tinted card) =====
+    if (Array.isArray(analysis.insights) && analysis.insights.length > 0) {
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(10.5);
+      const itemLineGroups = analysis.insights.map((insight) => pdf.splitTextToSize(String(insight), CONTENT_W - 24));
+      const headingH = 11;
+      const itemsH = itemLineGroups.reduce((sum, lines) => sum + lines.length * 5.3 + 2.5, 0);
+      const cardH = headingH + itemsH + 6;
+      ensureSpace(cardH + 6);
+      y += 4;
+      const top = y;
+      pdf.setFillColor(...tintColor(GOLD, 0.09));
+      pdf.roundedRect(MARGIN, top, CONTENT_W, cardH, 3, 3, 'F');
+      pdf.setFillColor(...GOLD);
+      pdf.roundedRect(MARGIN, top, 2.4, cardH, 1, 1, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(11.5);
+      pdf.setTextColor(...GOLD);
+      pdf.text(strings.insightsLabel || 'Key Insights', MARGIN + 8, top + 8);
+
+      let iy = top + headingH + 4;
+      itemLineGroups.forEach((lines, i) => {
+        pdf.setFillColor(...GOLD);
+        pdf.circle(MARGIN + 11, iy - 1.4, 2.3, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.text(String(i + 1), MARGIN + 11, iy - 0.2, { align: 'center' });
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(10.5);
+        pdf.setTextColor(...INK);
+        lines.forEach((line) => { pdf.text(line, MARGIN + 17, iy); iy += 5.3; });
+        iy += 2.5;
+      });
+      y = top + cardH + 5;
+    }
+
+    // ===== Reflection question =====
+    if (analysis.reflectionQuestion) {
+      textSectionCard(strings.reflectionLabel || 'A Question to Explore', BLUE, analysis.reflectionQuestion, { style: 'italic' });
+    }
+
+    // ===== Suggested action =====
+    if (analysis.practicalAction) {
+      textSectionCard(strings.actionLabel || 'Your Next Step', ORANGE, analysis.practicalAction);
+    }
+
+    // ===== Affirmation (highlighted card) =====
+    if (analysis.affirmation) {
+      pdf.setFont('helvetica', 'italic');
+      pdf.setFontSize(11);
+      const quote = `"${analysis.affirmation}"`;
+      const lines = pdf.splitTextToSize(quote, CONTENT_W - 12);
+      const cardH = lines.length * 5.6 + 18;
+      ensureSpace(cardH + 6);
+      y += 4;
+      // tinted card
+      pdf.setFillColor(...tintColor(PURPLE, 0.08));
+      pdf.roundedRect(MARGIN, y, CONTENT_W, cardH, 3, 3, 'F');
+      pdf.setFillColor(...PURPLE);
+      pdf.roundedRect(MARGIN, y, 2.4, cardH, 1, 1, 'F'); // accent edge
+      // label
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9);
+      pdf.setTextColor(...PURPLE);
+      pdf.text((strings.affirmationLabel || 'Affirmation').toUpperCase(), MARGIN + 8, y + 8);
+      // quote
+      pdf.setFont('helvetica', 'italic');
+      pdf.setFontSize(11);
+      pdf.setTextColor(60, 45, 90);
+      let qy = y + 15;
+      lines.forEach((line) => {
+        pdf.text(line, MARGIN + 8, qy);
+        qy += 5.6;
+      });
+      y += cardH + 4;
+    }
+  }
+
+  // ===== Footers on every page =====
+  const pageCount = pdf.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    pdf.setPage(i);
+    pdf.setDrawColor(220, 220, 224);
+    pdf.setLineWidth(0.3);
+    pdf.line(MARGIN, FOOTER_Y - 4, PAGE_W - MARGIN, FOOTER_Y - 4);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(8);
+    pdf.setTextColor(...MUTE);
+    pdf.text('Kairos Smart Journal', MARGIN, FOOTER_Y);
+    pdf.text(`${i} / ${pageCount}`, PAGE_W - MARGIN, FOOTER_Y, { align: 'right' });
+  }
+
+  return pdf.output('blob');
+};
+
+/**
  * Download a file in the browser with enhanced error handling
  * @param {Blob|string} content - File content
  * @param {string} filename - Filename
@@ -1276,5 +1756,6 @@ const getImageDimensions = (dataURL) => {
 export default {
   exportJourneyToPDF,
   exportJourneyToText,
+  exportSingleEntryToPDF,
   downloadFile
 };

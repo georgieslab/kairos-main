@@ -2371,7 +2371,8 @@
   padding: 0;
   margin: 0;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip; /* avoid becoming a nested scroll container (mobile scroll trap) */
 }
 
 /* === HEADER SECTION === */

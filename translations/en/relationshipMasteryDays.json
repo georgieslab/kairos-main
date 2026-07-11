@@ -1,0 +1,182 @@
+[
+  {
+    "id": "relationshipMasteryDays:1",
+    "title": "Relationship Audit",
+    "theme": "Assessment",
+    "prompt": "Map your key relationships (family, friends, romantic, professional). For each, note what's working well and what could be improved. What patterns do you notice across relationships?"
+  },
+  {
+    "id": "relationshipMasteryDays:2",
+    "title": "Relationship Values",
+    "theme": "Principles",
+    "prompt": "What qualities do you most value in relationships (trust, humor, depth, etc.)? Which of these do you embody consistently, and which do you aspire to develop more fully?"
+  },
+  {
+    "id": "relationshipMasteryDays:3",
+    "title": "Attachment Patterns",
+    "theme": "Connection Styles",
+    "prompt": "Reflect on your attachment style. Do you tend to cling, avoid, or remain secure in close relationships? How do these patterns stem from early experiences and affect your connections now?"
+  },
+  {
+    "id": "relationshipMasteryDays:4",
+    "title": "Communication Inventory",
+    "theme": "Expression",
+    "prompt": "Assess your communication habits. When do you express yourself clearly vs. hold back? What helps you communicate effectively, and what triggers poor communication?"
+  },
+  {
+    "id": "relationshipMasteryDays:5",
+    "title": "Active Listening",
+    "theme": "Receptivity",
+    "prompt": "When did you last truly listen to someone without planning your response? What helps you be fully present? How might you improve your listening in important relationships?"
+  },
+  {
+    "id": "relationshipMasteryDays:6",
+    "title": "Boundaries Exploration",
+    "theme": "Healthy Limits",
+    "prompt": "Where do you maintain healthy boundaries, and where are they weak or rigid? How might clearer boundaries actually enhance your most important connections?"
+  },
+  {
+    "id": "relationshipMasteryDays:7",
+    "title": "Conflict Patterns",
+    "theme": "Disagreement",
+    "prompt": "How do you typically approach conflict (avoid, accommodate, compete, compromise, collaborate)? What was modeled for you growing up? How effective is your current approach?"
+  },
+  {
+    "id": "relationshipMasteryDays:8",
+    "title": "Trust Builders",
+    "theme": "Reliability",
+    "prompt": "What builds trust for you in relationships? When have you experienced deep trust with someone? What specific behaviors helped create this foundation?"
+  },
+  {
+    "id": "relationshipMasteryDays:9",
+    "title": "Trust Breakers",
+    "theme": "Rupture",
+    "prompt": "When has trust been broken in a significant relationship? What impact did this have? What helped (or would help) rebuild that trust? What did you learn from this experience?"
+  },
+  {
+    "id": "relationshipMasteryDays:10",
+    "title": "Vulnerability Exploration",
+    "theme": "Openness",
+    "prompt": "How comfortable are you with being vulnerable? What makes vulnerability easier or harder for you? How might appropriate vulnerability deepen your key relationships?"
+  },
+  {
+    "id": "relationshipMasteryDays:11",
+    "title": "Asking for What You Need",
+    "theme": "Self-Advocacy",
+    "prompt": "How effectively do you express your needs in relationships? What makes this challenging? Draft language for clearly expressing an important need to someone in your life."
+  },
+  {
+    "id": "relationshipMasteryDays:12",
+    "title": "Giving vs. Receiving",
+    "theme": "Balance",
+    "prompt": "Do you find it easier to give or receive in relationships? Where might your relationships be unbalanced? What helps you maintain a healthy flow of giving and receiving?"
+  },
+  {
+    "id": "relationshipMasteryDays:13",
+    "title": "Empathy Practices",
+    "theme": "Understanding Others",
+    "prompt": "Recall a recent disagreement. How well did you understand the other person's perspective? Reimagine the situation, fully stepping into their experience and feelings."
+  },
+  {
+    "id": "relationshipMasteryDays:14",
+    "title": "Forgiveness Exploration",
+    "theme": "Letting Go",
+    "prompt": "Is there someone you're struggling to forgive? What makes forgiveness difficult? What might become possible if you could release this resentment? What would help you move toward forgiveness?"
+  },
+  {
+    "id": "relationshipMasteryDays:15",
+    "title": "Relationship Mid-Point Check",
+    "theme": "Progress",
+    "prompt": "Review insights from the past two weeks. What relationship patterns have you recognized? What shifts have you begun to make? What remains challenging?"
+  },
+  {
+    "id": "relationshipMasteryDays:16",
+    "title": "Digital Communication",
+    "theme": "Modern Connection",
+    "prompt": "How do digital tools affect your relationships? When do they enhance connection, and when do they detract? What boundaries around technology would benefit your relationships?"
+  },
+  {
+    "id": "relationshipMasteryDays:17",
+    "title": "Appreciation Practices",
+    "theme": "Gratitude",
+    "prompt": "How often do you express genuine appreciation to others? For three key relationships, note specific qualities you appreciate. How might you express this appreciation more consistently?"
+  },
+  {
+    "id": "relationshipMasteryDays:18",
+    "title": "Difficult Conversations",
+    "theme": "Courage",
+    "prompt": "What conversation have you been avoiding? Why is it difficult? How might you approach it constructively? Script an opening that's both honest and respectful."
+  },
+  {
+    "id": "relationshipMasteryDays:19",
+    "title": "Relationship Maintenance",
+    "theme": "Nurturing",
+    "prompt": "What regular practices keep your important relationships healthy? Which relationships need more intentional maintenance? Design a simple practice for nurturing a key relationship."
+  },
+  {
+    "id": "relationshipMasteryDays:20",
+    "title": "Support Systems",
+    "theme": "Community",
+    "prompt": "Map your support network. Who do you turn to for different types of support? Where are there gaps? How might you strengthen or expand your support system?"
+  },
+  {
+    "id": "relationshipMasteryDays:21",
+    "title": "Relationship Repair",
+    "theme": "Healing",
+    "prompt": "Reflect on a relationship that needs repair. What steps could begin a healing process? What would a first conversation include? What outcome are you hoping for?"
+  },
+  {
+    "id": "relationshipMasteryDays:22",
+    "title": "Mentorship & Learning",
+    "theme": "Growth",
+    "prompt": "Who has modeled healthy relationships for you? What have you learned from them? What relationship skills are you still developing, and where might you find guidance?"
+  },
+  {
+    "id": "relationshipMasteryDays:23",
+    "title": "Expectations vs. Reality",
+    "theme": "Acceptance",
+    "prompt": "Where do your relationship expectations create disappointment or frustration? Which expectations are reasonable, and which might need adjustment? How might greater acceptance transform a challenging relationship?"
+  },
+  {
+    "id": "relationshipMasteryDays:24",
+    "title": "Cultural Influences",
+    "theme": "Societal Context",
+    "prompt": "How have cultural messages shaped your relationship expectations and behaviors? Which of these influences serve you well, and which might you want to reconsider?"
+  },
+  {
+    "id": "relationshipMasteryDays:25",
+    "title": "Self-Relationship",
+    "theme": "Inner Connection",
+    "prompt": "How is your relationship with yourself? Where are you self-critical vs. self-compassionate? How does your self-relationship affect your connections with others?"
+  },
+  {
+    "id": "relationshipMasteryDays:26",
+    "title": "Interdependence Balance",
+    "theme": "Connection & Autonomy",
+    "prompt": "How do you balance closeness and independence in relationships? Where do you lean toward unhealthy dependence or distance? What helps you maintain healthy interdependence?"
+  },
+  {
+    "id": "relationshipMasteryDays:27",
+    "title": "Relationship Vision",
+    "theme": "Aspiration",
+    "prompt": "Envision your ideal relationship ecosystem 5 years from now. What qualities characterize these relationships? What changes would lead toward this vision? What first steps can you take?"
+  },
+  {
+    "id": "relationshipMasteryDays:28",
+    "title": "Relationship Action Plan",
+    "theme": "Implementation",
+    "prompt": "Choose one key relationship to focus on improving. What specific actions will you take? What conversation might you initiate? What personal change would make the biggest difference?"
+  },
+  {
+    "id": "relationshipMasteryDays:29",
+    "title": "Navigating Change",
+    "theme": "Evolution",
+    "prompt": "How do you adapt when relationships change? Reflect on a relationship that's evolved significantly. What helped you navigate this transition? What wisdom can you apply to future changes?"
+  },
+  {
+    "id": "relationshipMasteryDays:30",
+    "title": "Relationship Mastery Integration",
+    "theme": "Wisdom",
+    "prompt": "Looking back over the past month, what key relationship insights have emerged? What patterns have you recognized? What new practices are you committed to continuing? What's your next step in relationship growth?"
+  }
+]

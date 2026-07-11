@@ -1,0 +1,44 @@
+[
+  {
+    "id": "freestyleDiscoveryDays:1",
+    "title": "Today's Mental Weather",
+    "theme": "Current State",
+    "prompt": "If your mind was weather today, what would it be? Sunny and clear? Stormy and chaotic? Foggy and uncertain? Describe your mental landscape and what's contributing to today's 'weather.'"
+  },
+  {
+    "id": "freestyleDiscoveryDays:2",
+    "title": "Three Things Right Now",
+    "theme": "Present Moment",
+    "prompt": "Write about three things: something that's exciting you, something that's bothering you, and something you're grateful for right now. Don't overthink it - just let your thoughts flow."
+  },
+  {
+    "id": "freestyleDiscoveryDays:3",
+    "title": "If I Could Tell Someone...",
+    "theme": "Unexpressed Thoughts",
+    "prompt": "If you could tell someone something you've been keeping to yourself, what would it be? Write as if you're having an honest conversation with a trusted friend who just asked 'What's really going on?'"
+  },
+  {
+    "id": "freestyleDiscoveryDays:4",
+    "title": "Energy & Motivation Check",
+    "theme": "Inner Resources",
+    "prompt": "How are your energy levels lately? What's draining you? What's giving you life? Write about the push and pull of your current motivation and what you need more (or less) of."
+  },
+  {
+    "id": "freestyleDiscoveryDays:5",
+    "title": "Random Thoughts & Observations",
+    "theme": "Stream of Consciousness",
+    "prompt": "Write whatever random thoughts are bouncing around in your head. Something you noticed today, a memory that popped up, a weird connection you made, or just the mental chatter that's been playing in the background."
+  },
+  {
+    "id": "freestyleDiscoveryDays:6",
+    "title": "What's Changing?",
+    "theme": "Personal Evolution",
+    "prompt": "What's shifting in your life lately? Maybe it's how you think about something, a relationship that's evolving, or just a subtle change in your daily routine. What feels different from a few months ago?"
+  },
+  {
+    "id": "freestyleDiscoveryDays:7",
+    "title": "Week in Review",
+    "theme": "Integration & Discovery",
+    "prompt": "Looking back at this week of writing, what themes keep showing up? What did you learn about your current headspace? What patterns in your thinking or feeling did you notice? What surprised you about yourself?"
+  }
+]

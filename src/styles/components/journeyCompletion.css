@@ -1,619 +1,565 @@
 /* src/styles/components/journeyCompletion.css */
+/* Apple Spatial Glass – Journey Completion with animated ambient background */
+
+@import url('https://fonts.googleapis.com/css?family=Space%20Grotesk:700|Space%20Grotesk:400');
+
+:root {
+  /* Forest green accent (path color fallback) */
+  --c-green: 85, 139, 110;
+  --c-gold: 234, 179, 8;
+  --c-purple: 139, 92, 246;
+  
+  /* Animation scaling */
+  --m: 2rem;
+}
 
 /* ================================
-   BASE CONTAINER
+   MAIN CONTAINER – ANIMATED GLASS BORDER
    ================================ */
 .journey-completion-container {
   min-height: 100vh;
-  padding: 1rem;
-  background: linear-gradient(135deg, #0a1f1a 0%, #0f2922 50%, #0a1f1a 100%);
+  padding: 20px 16px;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip; /* avoid becoming a nested scroll container (mobile scroll trap) */
+  background: #000;
+  
+  /* Animated gradient border (rainbow – but we use forest green variation) */
+  border: calc(0.08 * var(--m)) solid transparent;
+  border-radius: calc(0.7 * var(--m));
+  background: 
+    linear-gradient(#000, #000),
+    linear-gradient(#121213, #121213),
+    linear-gradient(90deg, 
+      rgba(var(--c-green), 0.8), 
+      rgba(var(--c-green), 0.4), 
+      rgba(var(--c-gold), 0.6), 
+      rgba(var(--c-purple), 0.5), 
+      rgba(var(--c-green), 0.8)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  background-size: 200%;
+  animation: borderMove 4s infinite linear;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-.journey-completion-container.dark {
-  background: linear-gradient(135deg, #0a1f1a 0%, #0f2922 50%, #0a1f1a 100%);
-}
-
-.journey-completion-container.light {
-  background: linear-gradient(135deg, #1a3a32 0%, #2d5a4f 50%, #1a3a32 100%);
-}
-
-/* ================================
-   GLASSMORPHISM CARDS
-   ================================ */
-.glass-card {
-  background: rgba(16, 48, 39, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(64, 224, 208, 0.2);
-  border-radius: 20px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.glass-card::before {
+/* Blurred glow that follows the border */
+.journey-completion-container::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.8), transparent);
-  animation: border-glow 3s ease-in-out infinite;
+  inset: -10px;
+  background: linear-gradient(90deg, 
+    rgba(var(--c-green), 0.3), 
+    rgba(var(--c-gold), 0.2), 
+    rgba(var(--c-purple), 0.2), 
+    rgba(var(--c-green), 0.3)
+  );
+  height: 30%;
+  width: 60%;
+  bottom: -20%;
+  left: 20%;
+  z-index: -1;
+  background-size: 200%;
+  animation: borderMove 4s infinite linear;
+  filter: blur(calc(0.8 * var(--m)));
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
-@keyframes border-glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* AI Insight Cards */
-.ai-insight-card {
-  background: rgba(13, 38, 32, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(64, 224, 208, 0.3);
-  border-radius: 16px;
-  padding: 1.25rem;
-  margin-bottom: 0.75rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.ai-insight-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #40e0d0, #20b2aa, #40e0d0);
-  background-size: 200% 100%;
-  animation: gradient-slide 3s linear infinite;
-}
-
-@keyframes gradient-slide {
+@keyframes borderMove {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
 
-/* ================================
-   COMPLETION HEADER
-   ================================ */
-.completion-header {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Ambient deep forest background (behind the glass) */
+.journey-completion-container::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(30, 70, 40, 0.25) 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(85, 139, 110, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -2;
+  animation: ambientPulse 20s ease infinite;
 }
 
-.icon-glow {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 1rem;
-  background: rgba(64, 224, 208, 0.1);
-  border: 2px solid rgba(64, 224, 208, 0.5);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 40px rgba(64, 224, 208, 0.5);
-  animation: icon-pulse 2s ease-in-out infinite;
-}
-
-@keyframes icon-pulse {
-  0%, 100% { 
-    transform: scale(1); 
-    box-shadow: 0 0 40px rgba(64, 224, 208, 0.5); 
-  }
-  50% { 
-    transform: scale(1.05); 
-    box-shadow: 0 0 60px rgba(64, 224, 208, 0.8); 
-  }
-}
-
-.completion-icon {
-  width: 3rem;
-  height: 3rem;
-  color: #40e0d0;
-}
-
-.completion-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem;
-  color: #40e0d0;
-  text-shadow: 0 0 20px rgba(64, 224, 208, 0.5);
-}
-
-.path-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
-  color: #e0f2e9;
-  opacity: 0.9;
-}
-
-.completion-subtitle {
-  font-size: 0.875rem;
-  color: rgba(224, 242, 233, 0.8);
-  margin: 0 0 1.5rem;
-}
-
-/* ================================
-   STATS
-   ================================ */
-.completion-stats {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.stat-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #40e0d0;
-  opacity: 0.8;
-}
-
-.stat-value {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #e0f2e9;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: rgba(224, 242, 233, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* ================================
-   AI CONTENT STYLING
-   ================================ */
-.glass-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0 0 1rem;
-  color: #e0f2e9;
-}
-
-.header-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #40e0d0;
-  filter: drop-shadow(0 0 8px rgba(64, 224, 208, 0.6));
-}
-
-.overview-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgba(224, 242, 233, 0.9);
-  margin: 0;
-}
-
-.insight-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.75rem;
-  color: #40e0d0;
-}
-
-.insight-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-/* Themes */
-.themes-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.theme-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: rgba(64, 224, 208, 0.2);
-  border: 1px solid rgba(64, 224, 208, 0.4);
-  padding: 0.375rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.813rem;
-  color: #e0f2e9;
-  transition: all 0.3s ease;
-}
-
-.theme-tag:hover {
-  background: rgba(64, 224, 208, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
-}
-
-/* Strengths */
-.strengths-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.strength-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(224, 242, 233, 0.9);
-  font-size: 0.875rem;
-}
-
-.check-icon {
-  width: 1rem;
-  height: 1rem;
-  color: #40e0d0;
-  flex-shrink: 0;
-}
-
-/* Transformation */
-.transformation-text {
-  font-size: 0.925rem;
-  line-height: 1.5;
-  color: rgba(224, 242, 233, 0.9);
-  font-style: italic;
-  margin: 0;
-}
-
-/* Wisdom */
-.wisdom-text {
-  font-size: 0.925rem;
-  line-height: 1.5;
-  color: rgba(224, 242, 233, 0.9);
-  margin: 0;
-}
-
-/* Celebration */
-.celebration-message {
-  text-align: center;
-  background: rgba(64, 224, 208, 0.1);
-  border: 1px solid rgba(64, 224, 208, 0.3);
-}
-
-.celebration-icon {
-  width: 2rem;
-  height: 2rem;
-  color: #40e0d0;
-  margin-bottom: 0.5rem;
-}
-
-/* ================================
-   ACTION BUTTONS
-   ================================ */
-.action-button {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: rgba(16, 48, 39, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(64, 224, 208, 0.3);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  width: 100%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.action-button.primary {
-  background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(32, 178, 170, 0.2));
-  border-color: rgba(64, 224, 208, 0.5);
-}
-
-.action-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(64, 224, 208, 0.3);
-  border-color: rgba(64, 224, 208, 0.6);
-}
-
-.action-button:active {
-  transform: scale(0.98);
-}
-
-.button-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #40e0d0;
-  flex-shrink: 0;
-}
-
-.button-icon.spinning {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.button-content {
-  flex: 1;
-  text-align: left;
-}
-
-.button-title {
-  display: block;
-  font-size: 0.925rem;
-  font-weight: 600;
-  color: #e0f2e9;
-  margin-bottom: 0.125rem;
-}
-
-.button-subtitle {
-  display: block;
-  font-size: 0.75rem;
-  color: rgba(224, 242, 233, 0.7);
-}
-
-.arrow-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: rgba(64, 224, 208, 0.6);
-  transition: transform 0.3s ease;
-}
-
-.action-button:hover .arrow-icon {
-  transform: translateX(4px);
-  color: #40e0d0;
-}
-
-/* ================================
-   SHARE BUTTONS
-   ================================ */
-.share-buttons-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.social-share-row {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.share-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: rgba(16, 48, 39, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(64, 224, 208, 0.3);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.share-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(64, 224, 208, 0.4);
-  border-color: rgba(64, 224, 208, 0.6);
-}
-
-.share-button.twitter:hover {
-  background: rgba(29, 161, 242, 0.2);
-  border-color: rgba(29, 161, 242, 0.6);
-}
-
-.share-button.facebook:hover {
-  background: rgba(66, 103, 178, 0.2);
-  border-color: rgba(66, 103, 178, 0.6);
-}
-
-.share-button.linkedin:hover {
-  background: rgba(0, 119, 181, 0.2);
-  border-color: rgba(0, 119, 181, 0.6);
-}
-
-.share-button.copy.success {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.6);
-}
-
-.share-button svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #40e0d0;
-}
-
-/* ================================
-   ERROR STATES
-   ================================ */
-.error-card {
-  text-align: center;
-  padding: 3rem 2rem;
-}
-
-.error-icon {
-  color: #f87171;
-  margin-bottom: 1rem;
-}
-
-.export-error {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  border-radius: 8px;
-  color: #fecaca;
-  font-size: 0.875rem;
-  margin-top: 0.75rem;
-}
-
-/* ================================
-   RESPONSIVE DESIGN
-   ================================ */
-@media (max-width: 768px) {
-  .journey-completion-container {
-    padding: 0.75rem;
-  }
-
-  .glass-card {
-    padding: 1.25rem;
-  }
-
-  .completion-title {
-    font-size: 1.5rem;
-  }
-
-  .path-title {
-    font-size: 1.125rem;
-  }
-
-  .completion-stats {
-    gap: 1.5rem;
-  }
-
-  .icon-glow {
-    width: 80px;
-    height: 80px;
-  }
-
-  .completion-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .completion-stats {
-    gap: 1rem;
-    font-size: 0.875rem;
-  }
-
-  .stat-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .theme-tag {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.625rem;
-  }
-
-  .action-button {
-    padding: 0.875rem;
-  }
-
-  .button-title {
-    font-size: 0.875rem;
-  }
-
-  .share-button {
-    width: 44px;
-    height: 44px;
-  }
+@keyframes ambientPulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 0.6; transform: scale(1); }
 }
 
 /* ================================
    LOADING STATE
    ================================ */
-.journey-completion-container .loading-content {
+.loading-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 80vh;
-  color: #e0f2e9;
+  color: rgba(255,255,255,0.7);
 }
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: rgba(var(--c-green), 1);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ================================
-   CONTENT WIDTH
+   CONTENT WRAPPER
    ================================ */
 .completion-content {
   max-width: 600px;
   margin: 0 auto;
-  animation: content-fade-in 0.6s ease-out;
+  animation: contentFade 0.6s ease-out;
+}
+@keyframes contentFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes content-fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 /* ================================
-   COMPLETION RECOMMENDATIONS
+   HEADER
    ================================ */
-.completion-recommendations {
-  margin: 1.5rem 0 2rem 0;
+.completion-header {
+  text-align: center;
+  margin-bottom: 32px;
 }
 
-.actions-subheader {
-  color: rgba(224, 242, 233, 0.7);
-  font-size: 0.875rem;
-  font-weight: 500;
+.completion-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.icon-background {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.completion-icon {
+  width: 48px;
+  height: 48px;
+  color: rgba(var(--c-green), 1);
+  filter: drop-shadow(0 0 8px rgba(var(--c-green), 0.5));
+}
+.completion-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: rgba(var(--c-gold), 1);
+  border-radius: 30px;
+  padding: 6px;
+  box-shadow: 0 4px 12px rgba(var(--c-gold), 0.4);
+}
+.badge-icon {
+  width: 20px;
+  height: 20px;
+  color: #000;
+}
+
+.completion-title-section {
+  margin-bottom: 20px;
+}
+.completion-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: -0.3px;
+}
+.path-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: rgba(var(--c-green), 1);
+}
+.completion-subtitle {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+/* Quick stats – glass chips */
+.completion-stats-quick {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 12px;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(28, 28, 30, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 10px 20px;
+}
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  color: rgba(var(--c-green), 0.8);
+}
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+}
+.stat-label {
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 1rem 0;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(64, 224, 208, 0.15);
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.5);
 }
 
-.additional-actions {
-  margin-top: 1.5rem;
+/* ================================
+   SUMMARY CARDS (Glass grid)
+   ================================ */
+.journey-summary {
+  margin-bottom: 32px;
+}
+.journey-summary h3,
+.journey-timeline-preview h3,
+.completion-actions h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 16px;
+}
+.section-icon {
+  width: 20px;
+  height: 20px;
+  color: rgba(var(--c-green), 1);
 }
 
-/* Header icon styling */
-.glass-card-header .header-icon {
-  margin-right: 0.5rem;
-  color: #40e0d0;
-  animation: sparkle-rotate 3s ease-in-out infinite;
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.summary-card {
+  background: rgba(28, 28, 30, 0.6);
+  backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: transform 0.1s ease;
+}
+.summary-card:active {
+  transform: scale(0.97);
+}
+.summary-icon {
+  width: 28px;
+  height: 28px;
+  color: rgba(var(--c-green), 1);
+  margin-bottom: 8px;
+}
+.summary-card h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  margin: 0 0 4px;
+}
+.summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  margin: 0 0 4px;
+}
+.summary-description {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
 }
 
-@keyframes sparkle-rotate {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1); 
-    opacity: 0.8;
-  }
-  50% { 
-    transform: rotate(180deg) scale(1.1); 
-    opacity: 1;
-  }
+/* ================================
+   TIMELINE
+   ================================ */
+.journey-timeline-preview {
+  margin-bottom: 32px;
+}
+.timeline-container {
+  background: rgba(28, 28, 30, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.timeline-day {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.timeline-day:last-child {
+  border-bottom: none;
+}
+.timeline-day:active {
+  transform: scale(0.98);
+}
+.timeline-marker {
+  width: 28px;
+  height: 28px;
+  background: rgba(var(--c-green), 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeline-check {
+  width: 16px;
+  height: 16px;
+  color: rgba(var(--c-green), 1);
+}
+.timeline-content h5 {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 2px;
+}
+.timeline-content p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .completion-recommendations {
-    margin: 1rem 0 1.5rem 0;
-  }
+.view-all-days-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(var(--c-green), 0.8);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+.view-all-days-btn:active {
+  transform: scale(0.96);
+}
 
-  .actions-subheader {
-    font-size: 0.8125rem;
-  }
+/* ================================
+   ACTION BUTTONS (Glass)
+   ================================ */
+.completion-actions {
+  margin-bottom: 32px;
+}
+.actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(28, 28, 30, 0.6);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.action-button:active {
+  transform: scale(0.97);
+}
+.action-button.primary {
+  background: rgba(var(--c-green), 0.15);
+  border-color: rgba(var(--c-green), 0.3);
+}
+.action-button.secondary {
+  background: rgba(28,28,30,0.5);
+}
+.action-button.tertiary {
+  background: rgba(255,255,255,0.03);
+}
+.action-icon {
+  width: 24px;
+  height: 24px;
+  color: rgba(var(--c-green), 1);
+  flex-shrink: 0;
+}
+.action-content {
+  flex: 1;
+}
+.action-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 2px;
+}
+.action-content p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+.action-arrow {
+  width: 18px;
+  height: 18px;
+  color: rgba(255,255,255,0.3);
+  transition: transform 0.2s;
+}
+.action-button:active .action-arrow {
+  transform: translateX(4px);
+}
+
+/* ================================
+   QUOTE SECTION
+   ================================ */
+.completion-quote {
+  background: rgba(28, 28, 30, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+}
+.quote-content blockquote {
+  font-size: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+  margin: 0 0 8px;
+}
+.quote-content cite {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  font-style: normal;
+}
+
+/* ================================
+   CELEBRATION OVERLAY (optional)
+   ================================ */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+.confetti {
+  /* Placeholder – can be implemented with canvas or CSS */
+  display: none;
+}
+.celebration-burst {
+  display: none;
+}
+
+.achievement-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(28,28,30,0.8);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(var(--c-gold), 0.4);
+  border-radius: 28px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.3);
+  animation: slideDown 0.4s cubic-bezier(0.2,0.9,0.4,1.1);
+  z-index: 1001;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.achievement-icon {
+  width: 28px;
+  height: 28px;
+  color: rgba(var(--c-gold), 1);
+}
+.achievement-text h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+  margin: 0 0 2px;
+}
+.achievement-text p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+/* ================================
+   LIGHT MODE OVERRIDES
+   ================================ */
+.journey-completion-container.light {
+  background: #f5f5f7;
+}
+.journey-completion-container.light::after {
+  background: radial-gradient(circle at 30% 20%, rgba(30,70,40,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(85,139,110,0.05) 0%, transparent 50%);
+}
+.journey-completion-container.light .completion-title,
+.journey-completion-container.light .summary-card h4,
+.journey-completion-container.light .action-content h4,
+.journey-completion-container.light .timeline-content h5 {
+  color: rgba(0,0,0,0.85);
+}
+.journey-completion-container.light .completion-subtitle,
+.journey-completion-container.light .summary-description,
+.journey-completion-container.light .action-content p,
+.journey-completion-container.light .timeline-content p,
+.journey-completion-container.light .stat-label,
+.journey-completion-container.light .quote-content cite {
+  color: rgba(0,0,0,0.5);
+}
+.journey-completion-container.light .summary-card,
+.journey-completion-container.light .action-button,
+.journey-completion-container.light .timeline-container,
+.journey-completion-container.light .completion-quote,
+.journey-completion-container.light .stat-item {
+  background: rgba(255,255,255,0.7);
+  border-color: rgba(0,0,0,0.05);
+}
+.journey-completion-container.light .action-button.primary {
+  background: rgba(var(--c-green), 0.15);
+}
+.journey-completion-container.light .action-button.tertiary {
+  background: rgba(0,0,0,0.02);
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 640px) {
+  .completion-title { font-size: 24px; }
+  .path-title { font-size: 18px; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .completion-stats-quick { gap: 12px; flex-wrap: wrap; }
+  .stat-item { padding: 8px 16px; }
+  .icon-background { width: 80px; height: 80px; }
+  .completion-icon { width: 36px; height: 36px; }
 }

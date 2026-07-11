@@ -1,0 +1,211 @@
+{
+  "archive": {
+    "title": "Journal Archive",
+    "loading": "Loading your journal archive…",
+    "emptyState": {
+      "title": "No Entries Yet",
+      "description": "Start your journaling journey – your entries will appear here.",
+      "cta": "Begin Writing"
+    },
+    "filters": {
+      "all": "All Entries",
+      "recent": "This Week",
+      "favorites": "Favorites",
+      "pathFilter": "Path: {{path}}",
+      "journeyPath": "Journey Path",
+      "allPaths": "All Paths",
+      "sortOrder": "Sort Order",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "resetAll": "Reset All",
+      "applyFilters": "Apply Filters",
+      "filterAndSort": "Filter & Sort"
+    },
+    "stats": {
+      "entries": "Entries",
+      "dayStreak": "Day Streak",
+      "paths": "Paths",
+      "thisWeek": "This Week"
+    },
+    "search": {
+      "placeholder": "Search entries…"
+    },
+    "results": {
+      "count": "{{count}} {{noun}}",
+      "entrySingular": "entry",
+      "entryPlural": "entries",
+      "oldestFirstNote": "Oldest first"
+    },
+    "noResults": {
+      "message": "No entries match your search",
+      "clearFilters": "Clear Filters"
+    },
+    "entry": {
+      "day": "Day",
+      "dayFallback": "Day {{day}}",
+      "voice": "Voice"
+    }
+  },
+  "registration": {
+    "tiers": {
+      "essential": {
+        "name": "Essential",
+        "features": [
+          "200 pages cream paper",
+          "Dark green leatherette cover",
+          "Single ribbon bookmark",
+          "3 months digital subscription"
+        ]
+      },
+      "insight": {
+        "name": "Insight",
+        "features": [
+          "250 pages premium paper",
+          "Genuine leather with gold accents",
+          "Dual ribbon bookmarks",
+          "6 months digital subscription"
+        ]
+      },
+      "legacy": {
+        "name": "Legacy",
+        "features": [
+          "300 pages archival paper",
+          "Hand-bound leather with embossing",
+          "Three silk ribbon bookmarks",
+          "12 months digital subscription"
+        ]
+      }
+    },
+    "errors": {
+      "alreadyOwned": "This journal is already registered to your account!",
+      "alreadyRegistered": "This journal is already registered to another account. Contact support if this is your journal.",
+      "scanError": "Error processing journal. Please try again.",
+      "registrationFailed": "Failed to register journal. Please try again."
+    },
+    "welcome": {
+      "title": "Register Your Καιρός Journal",
+      "subtitle": "Connect your physical journal to the digital app for seamless journaling",
+      "maybeLater": "Maybe Later",
+      "getStarted": "Get Started",
+      "features": {
+        "nfcTitle": "NFC Quick Upload",
+        "nfcDescription": "Tap your journal to instantly open the camera and capture entries",
+        "progressTitle": "Progress Tracking",
+        "progressDescription": "See your journaling journey, entry counts, and patterns over time",
+        "aiTitle": "AI Analysis",
+        "aiDescription": "Get personalized insights and emotional pattern recognition"
+      }
+    },
+    "selectTier": {
+      "title": "Select Your Journal Tier",
+      "subtitle": "Choose the tier that matches your physical journal"
+    },
+    "scan": {
+      "title": "Scan Your Journal",
+      "subtitle": "Hold your phone near the NFC chip on your journal cover",
+      "waiting": "Waiting for journal...",
+      "holdSteady": "Hold your phone steady near the journal cover",
+      "howToScanTitle": "How to scan:",
+      "steps": {
+        "openCover": "Open your journal to the front cover",
+        "placePhone": "Place your phone on the NFC chip area (usually center or top)",
+        "holdSteady": "Hold steady for 2-3 seconds",
+        "waitConfirmation": "Wait for the confirmation"
+      },
+      "notAvailable": "NFC not available on this device. You can still register manually.",
+      "disabled": "NFC is disabled.",
+      "enableInSettings": "Enable it in settings",
+      "alertMessage": "Hold phone near journal NFC chip",
+      "startScanning": "Start Scanning",
+      "cancelScan": "Cancel Scan",
+      "registerManually": "Register Manually"
+    },
+    "confirm": {
+      "title": "Confirm Registration",
+      "subtitle": "Review your journal details before registering",
+      "journalTier": "Journal Tier",
+      "journalId": "Journal ID",
+      "serialNumber": "Serial Number",
+      "owner": "Owner",
+      "registering": "Registering...",
+      "registerJournal": "Register Journal"
+    },
+    "success": {
+      "title": "Journal Registered!",
+      "subtitle": "Your {{tier}} journal is now connected to your account",
+      "subscriptionActivated": "Artisan Subscription Activated!",
+      "monthsCount": "{{months}} months",
+      "premiumAccessIncluded": "of premium access included",
+      "validUntil": "Valid until: {{date}}",
+      "whatsNextTitle": "What's Next?",
+      "nextSteps": {
+        "tapToUpload": "Tap your journal to instantly upload entries",
+        "startPath": "Start your first journey path",
+        "aiInsights": "Get personalized AI insights on your writing",
+        "trackPatterns": "Track your emotional patterns over time"
+      },
+      "startJournaling": "Start Journaling"
+    },
+    "actions": {
+      "back": "Back",
+      "continue": "Continue"
+    },
+    "progress": {
+      "stepOf": "Step {{stepNumber}} of {{totalSteps}}"
+    }
+  },
+  "myJournals": {
+    "title": "My Journals",
+    "closeAriaLabel": "Close",
+    "loading": "Loading journals...",
+    "journalNumber": "Journal #{{number}}",
+    "tierLabel": "{{tier}} Tier",
+    "deleteJournal": "Delete journal",
+    "serial": "Serial: {{serialNumber}}",
+    "primary": "Primary",
+    "emptyState": {
+      "title": "No journals registered yet",
+      "hint": "Register your first physical journal to get started"
+    },
+    "close": "Close",
+    "registerAnother": "Register Another Journal",
+    "confirmDelete": "Are you sure you want to delete this journal?\\n\\nJournal ID: {{journalId}}\\n\\nThis action cannot be undone.",
+    "deleteSuccess": "Journal deleted successfully!",
+    "deleteFailed": "Failed to delete journal. Please try again."
+  },
+  "nfcStatus": {
+    "badge": {
+      "not_available": "NFC Not Available",
+      "disabled": "NFC Disabled",
+      "ready": "NFC Ready",
+      "scanning": "Scanning...",
+      "clickToOpenSettings": "Click to open NFC settings"
+    },
+    "card": {
+      "notSupported": {
+        "title": "NFC Not Supported",
+        "message": "Your device doesn\\'t support NFC. You can still use Καιρός by manually uploading journal photos."
+      },
+      "enableNfc": {
+        "title": "Enable NFC",
+        "message": "NFC is available but disabled on your device. Enable it to quickly scan and upload journal entries.",
+        "action": "Open Settings"
+      },
+      "readyToScan": {
+        "title": "Ready to Scan",
+        "message": "Hold your phone near the NFC chip on your journal cover to instantly start uploading.",
+        "action": "Stop Scanning"
+      },
+      "ready": {
+        "title": "NFC Ready",
+        "message": "Your device is ready to scan Καιρός journals. Tap your journal to instantly upload entries."
+      }
+    },
+    "inline": {
+      "tapToScan": "Tap journal to scan",
+      "enableToScan": "Enable NFC to scan journals",
+      "startScan": "Start Scan",
+      "enable": "Enable"
+    }
+  }
+}

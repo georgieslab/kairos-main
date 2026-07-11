@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /nfc/
+
+Sitemap: https://reflection-writer.web.app/sitemap.xml

@@ -6,6 +6,8 @@ const stripe = require("stripe");
 const cors = require('cors')({ origin: true });
 const fetch = require('node-fetch');
 const FormData = require('form-data');
+const { defineSecret } = require("firebase-functions/params");
+const anthropicApiKey = defineSecret("ANTHROPIC_API_KEY");
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
@@ -959,3 +961,89 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
     throw new functions.https.HttpsError('internal', error.message);
   }
 });
+
+
+exports.callClaude = functions
+  .runWith({
+    timeoutSeconds: 300,
+    memory: "512MB",
+    secrets: [anthropicApiKey], // binds the secret so this function can read it
+  })
+  .https.onCall(async (data, context) => {
+    try {
+      if (!context.auth) {
+        throw new functions.https.HttpsError(
+          "unauthenticated",
+          "User must be authenticated"
+        );
+      }
+
+      const key = anthropicApiKey.value();
+      if (!key) {
+        console.error("❌ ANTHROPIC_API_KEY secret is empty / not set");
+        throw new functions.https.HttpsError(
+          "failed-precondition",
+          "Anthropic API key not configured"
+        );
+      }
+
+      const requestBody = data || {};
+      if (!requestBody.model || !requestBody.messages) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Request must include 'model' and 'messages'"
+        );
+      }
+
+      if (!requestBody.max_tokens || requestBody.max_tokens > 8192) {
+        requestBody.max_tokens = Math.min(requestBody.max_tokens || 4096, 8192);
+      }
+
+      console.log(
+        "🤖 callClaude:",
+        requestBody.model,
+        "| max_tokens:",
+        requestBody.max_tokens,
+        "| user:",
+        context.auth.uid
+      );
+
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": key,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => "");
+        console.error("❌ Anthropic API error:", response.status, errText);
+        throw new functions.https.HttpsError(
+          "internal",
+          `Claude API error: ${response.status}`
+        );
+      }
+
+      const result = await response.json();
+      console.log(
+        "✅ callClaude success | input tokens:",
+        result.usage && result.usage.input_tokens,
+        "| output tokens:",
+        result.usage && result.usage.output_tokens
+      );
+
+      return result;
+    } catch (error) {
+      console.error("❌ callClaude error:", error);
+      if (error.code && String(error.code).startsWith("functions/")) {
+        throw error;
+      }
+      throw new functions.https.HttpsError(
+        "internal",
+        `Claude request failed: ${error.message}`
+      );
+    }
+  });

@@ -1,5 +1,6 @@
 // src/components/journey/EnhancedJourneyCompletion.jsx
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getJourneyPath } from '../../data/JourneyData';
@@ -65,9 +66,10 @@ const EnhancedJourneyCompletion = ({
   onRestart, 
   onViewDay 
 }) => {
+  const { t } = useTranslation('journey');
   const { currentUser, userProfile } = useAuth();
   const { isDarkMode } = useTheme();
-  
+
   // State management
   const [isLoading, setIsLoading] = useState(true);
   const [aiSummary, setAiSummary] = useState(null);
@@ -149,11 +151,20 @@ const EnhancedJourneyCompletion = ({
         
         // Set fallback summary for better UX
         setAiSummary({
-          journeyOverview: "You've completed an incredible journey of self-discovery and growth!",
-          celebrationMessage: "Your dedication to personal growth is truly inspiring.",
-          keyThemes: ["Self-awareness", "Personal growth", "Resilience", "Authenticity"],
-          personalStrengths: ["Commitment to growth", "Honest self-reflection", "Courage to explore"],
-          nextSteps: "Continue your journey with another path or revisit your insights regularly."
+          journeyOverview: t('enhancedCompletion.fallbackOverview', "You've completed an incredible journey of self-discovery and growth!"),
+          celebrationMessage: t('enhancedCompletion.fallbackCelebration', 'Your dedication to personal growth is truly inspiring.'),
+          keyThemes: [
+            t('enhancedCompletion.fallbackTheme1', 'Self-awareness'),
+            t('enhancedCompletion.fallbackTheme2', 'Personal growth'),
+            t('enhancedCompletion.fallbackTheme3', 'Resilience'),
+            t('enhancedCompletion.fallbackTheme4', 'Authenticity')
+          ],
+          personalStrengths: [
+            t('enhancedCompletion.fallbackStrength1', 'Commitment to growth'),
+            t('enhancedCompletion.fallbackStrength2', 'Honest self-reflection'),
+            t('enhancedCompletion.fallbackStrength3', 'Courage to explore')
+          ],
+          nextSteps: t('enhancedCompletion.fallbackNextSteps', 'Continue your journey with another path or revisit your insights regularly.')
         });
       } finally {
         setIsLoading(false);
@@ -166,7 +177,7 @@ const EnhancedJourneyCompletion = ({
   // PDF Export functionality
   const handleExportPDF = async () => {
     if (!currentUser || !pathData || !aiSummary) {
-      alert('Cannot export: Missing required data');
+      alert(t('enhancedCompletion.exportMissingData', 'Cannot export: Missing required data'));
       return;
     }
 
@@ -244,11 +255,11 @@ const EnhancedJourneyCompletion = ({
   };
 
   const generateShareText = () => {
-    const pathName = pathData?.title || 'Personal Growth Journey';
-    const userName = userProfile?.displayName || 'I';
+    const pathName = pathData?.title || t('enhancedCompletion.defaultPathName', 'Personal Growth Journey');
+    const userName = userProfile?.displayName || t('enhancedCompletion.defaultUserName', 'I');
     const dayCount = allEntries.length;
-    
-    return `🎉 ${userName} just completed the ${pathName}! ${dayCount} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos`;
+
+    return t('enhancedCompletion.shareText', '🎉 {{userName}} just completed the {{pathName}}! {{dayCount}} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos', { userName, pathName, dayCount });
   };
 
   const handleShare = (platform) => {
@@ -269,11 +280,11 @@ const EnhancedJourneyCompletion = ({
   if (isLoading) {
     return (
       <div className={`journey-completion-container ${isDarkMode ? 'dark' : 'light'}`}>
-        <KairosLoader 
+        <KairosLoader
           size="medium"
           fullScreen={false}
-          message="Analyzing your transformation journey..."
-          subMessage="Creating your personalized insights"
+          message={t('enhancedCompletion.analyzingJourney', 'Analyzing your transformation journey...')}
+          subMessage={t('enhancedCompletion.creatingInsights', 'Creating your personalized insights')}
         />
       </div>
     );
@@ -285,13 +296,13 @@ const EnhancedJourneyCompletion = ({
       <div className={`journey-completion-container ${isDarkMode ? 'dark' : 'light'}`}>
         <div className="glass-card error-card">
           <AlertCircle size={48} className="error-icon" />
-          <h3>Unable to Load Journey</h3>
+          <h3>{t('enhancedCompletion.unableToLoad', 'Unable to Load Journey')}</h3>
           <p>{error}</p>
-          <button 
+          <button
             onClick={() => navigateToScreen('home')}
             className="action-button glass primary"
           >
-            Return Home
+            {t('enhancedCompletion.returnHome', 'Return Home')}
           </button>
         </div>
       </div>
@@ -312,29 +323,29 @@ const EnhancedJourneyCompletion = ({
             <DynamicIcon name={pathData?.iconName || 'Trophy'} className="completion-icon" />
           </div>
           
-          <h1 className="completion-title">Journey Complete!</h1>
-          <h2 className="path-title">{pathData?.title || 'Journey'}</h2>
+          <h1 className="completion-title">{t('enhancedCompletion.journeyComplete', 'Journey Complete!')}</h1>
+          <h2 className="path-title">{pathData?.title || t('enhancedCompletion.journeyFallback', 'Journey')}</h2>
           <p className="completion-subtitle">
-            {allEntries.length} days of transformation
+            {t('enhancedCompletion.daysOfTransformation', '{{count}} days of transformation', { count: allEntries.length })}
           </p>
 
           <div className="completion-stats">
             <div className="stat-item">
               <Calendar className="stat-icon" />
               <span className="stat-value">{allEntries.length}</span>
-              <span className="stat-label">Days</span>
+              <span className="stat-label">{t('enhancedCompletion.days', 'Days')}</span>
             </div>
             <div className="stat-item">
               <Target className="stat-icon" />
               <span className="stat-value">100%</span>
-              <span className="stat-label">Complete</span>
+              <span className="stat-label">{t('enhancedCompletion.complete', 'Complete')}</span>
             </div>
             <div className="stat-item">
               <Heart className="stat-icon" />
               <span className="stat-value">
-                {allEntries.filter(e => e.isVoiceEntry).length > 0 ? 'Multi' : 'Written'}
+                {allEntries.filter(e => e.isVoiceEntry).length > 0 ? t('enhancedCompletion.multi', 'Multi') : t('enhancedCompletion.written', 'Written')}
               </span>
-              <span className="stat-label">Mode</span>
+              <span className="stat-label">{t('enhancedCompletion.mode', 'Mode')}</span>
             </div>
           </div>
         </div>
@@ -346,7 +357,7 @@ const EnhancedJourneyCompletion = ({
             <div className="glass-card ai-overview-card">
               <h3 className="glass-card-header">
                 <Sparkles className="header-icon" />
-                Your Journey Story
+                {t('enhancedCompletion.yourJourneyStory', 'Your Journey Story')}
               </h3>
               <p className="overview-text">{aiSummary.journeyOverview}</p>
             </div>
@@ -356,7 +367,7 @@ const EnhancedJourneyCompletion = ({
               <div className="ai-insight-card glass">
                 <h4 className="insight-header">
                   <Star className="insight-icon" />
-                  Key Themes
+                  {t('enhancedCompletion.keyThemes', 'Key Themes')}
                 </h4>
                 <div className="themes-container">
                   {aiSummary.keyThemes.map((theme, index) => (
@@ -373,7 +384,7 @@ const EnhancedJourneyCompletion = ({
               <div className="ai-insight-card glass">
                 <h4 className="insight-header">
                   <Trophy className="insight-icon" />
-                  Your Strengths
+                  {t('enhancedCompletion.yourStrengths', 'Your Strengths')}
                 </h4>
                 <div className="strengths-list">
                   {aiSummary.personalStrengths.map((strength, index) => (
@@ -391,7 +402,7 @@ const EnhancedJourneyCompletion = ({
               <div className="ai-insight-card glass highlight-card">
                 <h4 className="insight-header">
                   <TrendingUp className="insight-icon" />
-                  Biggest Transformation
+                  {t('enhancedCompletion.biggestTransformation', 'Biggest Transformation')}
                 </h4>
                 <p className="transformation-text">{aiSummary.transformationHighlight}</p>
               </div>
@@ -402,7 +413,7 @@ const EnhancedJourneyCompletion = ({
               <div className="ai-insight-card glass wisdom-card">
                 <h4 className="insight-header">
                   <Compass className="insight-icon" />
-                  Moving Forward
+                  {t('enhancedCompletion.movingForward', 'Moving Forward')}
                 </h4>
                 <p className="wisdom-text">{aiSummary.nextSteps}</p>
               </div>

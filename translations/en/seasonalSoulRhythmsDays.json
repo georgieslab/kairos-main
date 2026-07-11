@@ -1,0 +1,170 @@
+[
+  {
+    "id": "seasonalSoulRhythmsDays:1",
+    "title": "Current Season Awareness",
+    "theme": "Present Moment",
+    "prompt": "What season are you currently experiencing, both externally in nature and internally in your life? How does this season manifest in your environment, your body, and your emotional state?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:2",
+    "title": "Seasonal Childhood",
+    "theme": "Memory",
+    "prompt": "What are your earliest memories of seasonal changes? Which season felt most magical or significant to you as a child? How did your family or culture mark seasonal transitions?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:3",
+    "title": "Body Seasons",
+    "theme": "Physical Rhythms",
+    "prompt": "How does your body respond to seasonal changes? Consider energy levels, sleep patterns, appetite, and physical comfort. What does your body need during different seasons?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:4",
+    "title": "Emotional Seasons",
+    "theme": "Inner Weather",
+    "prompt": "What emotional season are you experiencing right now? Just as nature has seasons, our inner lives have periods of growth, harvest, decay, and rest. What is your soul's current season?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:5",
+    "title": "Spring Energy",
+    "theme": "New Beginnings",
+    "prompt": "Whether or not it's spring externally, explore the spring energy within you. What wants to be born, grow, or begin in your life? What seeds of possibility are you nurturing?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:6",
+    "title": "Summer Fullness",
+    "theme": "Peak Expression",
+    "prompt": "Connect with summer energy - the time of fullness, activity, and peak expression. What aspects of your life are in full bloom? Where are you expressing your gifts most fully?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:7",
+    "title": "Autumn Harvest",
+    "theme": "Gathering",
+    "prompt": "Explore autumn energy - the time of harvest and gathering wisdom. What fruits of your efforts are you harvesting? What wisdom have you gained from recent experiences? What are you grateful to have gathered?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:8",
+    "title": "Winter Rest",
+    "theme": "Contemplation",
+    "prompt": "Connect with winter energy - the time of rest, reflection, and going inward. What in your life needs rest or hibernation? What wants to be released or composted to nourish future growth?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:9",
+    "title": "Natural Rhythms",
+    "theme": "Observation",
+    "prompt": "Spend time observing the natural world around you. What seasonal signs do you notice? How do plants, animals, and landscapes embody the current season? What can you learn from nature's rhythms?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:10",
+    "title": "Resistance to Seasons",
+    "theme": "Acceptance",
+    "prompt": "What seasonal changes do you resist, both in nature and in your personal life? Why might you prefer certain seasons over others? How might accepting all seasons enrich your experience?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:11",
+    "title": "Seasonal Self-Care",
+    "theme": "Adaptation",
+    "prompt": "How might you adjust your self-care practices to align with the current season? What does your body, mind, and spirit need during this particular time of year?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:12",
+    "title": "Light and Dark",
+    "theme": "Balance",
+    "prompt": "How do changing patterns of light and darkness affect you? Consider both literal daylight cycles and metaphorical periods of illumination and mystery in your life."
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:13",
+    "title": "Seasonal Creativity",
+    "theme": "Expression",
+    "prompt": "How does your creativity express itself differently across seasons? What season feels most creatively fertile for you? How might you honor your creative rhythms throughout the year?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:14",
+    "title": "Seasonal Relationships",
+    "theme": "Connection",
+    "prompt": "How do your relationships change with the seasons? Do you crave more or less social connection during different times of year? How might seasonal awareness improve your relationships?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:15",
+    "title": "Weather Patterns",
+    "theme": "External Reflection",
+    "prompt": "What is your relationship with different types of weather? How do rain, sunshine, wind, or snow affect your mood and energy? What might weather patterns teach you about adaptability?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:16",
+    "title": "Seasonal Foods",
+    "theme": "Nourishment",
+    "prompt": "What foods does your body crave during different seasons? How might eating seasonally support your health and connection to natural cycles? What seasonal nourishment practices call to you?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:17",
+    "title": "Holiday and Ritual",
+    "theme": "Ceremony",
+    "prompt": "What seasonal celebrations or rituals feel meaningful to you? How might you create personal ceremonies to honor seasonal transitions? What rituals would support your alignment with natural cycles?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:18",
+    "title": "Seasonal Work",
+    "theme": "Professional Rhythms",
+    "prompt": "How does your work or career align with seasonal rhythms? What would it look like to honor natural energy cycles in your professional life? How might seasonal awareness improve your productivity?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:19",
+    "title": "Climate and Location",
+    "theme": "Geography",
+    "prompt": "How does your geographic location affect your experience of seasons? What seasonal patterns are unique to where you live? How do you connect with seasonal rhythms if you live in a climate with subtle changes?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:20",
+    "title": "Life Season Assessment",
+    "theme": "Personal Timing",
+    "prompt": "What season of life are you in overall? Consider your age, life circumstances, and developmental stage. How might understanding your life season guide your choices and expectations?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:21",
+    "title": "Seasonal Challenges",
+    "theme": "Difficulty",
+    "prompt": "What seasonal challenges do you face? This might include seasonal depression, difficult anniversaries, or challenging weather. How might you prepare for and navigate these seasonal difficulties with compassion?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:22",
+    "title": "Micro-Seasons",
+    "theme": "Subtle Changes",
+    "prompt": "Can you notice micro-seasonal changes - subtle shifts that happen within longer seasons? How might paying attention to these small transitions increase your sensitivity to natural rhythms?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:23",
+    "title": "Seasonal Ancestors",
+    "theme": "Heritage",
+    "prompt": "How did your ancestors live in relationship with seasonal cycles? What traditional knowledge about seasonal living might inform your modern approach to natural rhythms?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:24",
+    "title": "Urban Seasons",
+    "theme": "City Rhythms",
+    "prompt": "If you live in an urban environment, how do you connect with seasonal rhythms? What signs of seasonal change can you notice in city life? How might you strengthen your connection to natural cycles in an urban setting?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:25",
+    "title": "Seasonal Meditation",
+    "theme": "Contemplation",
+    "prompt": "Spend time in meditation or quiet reflection focusing on the current season. What qualities of this season live within you? How might you embody seasonal energy more fully?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:26",
+    "title": "Next Season Preparation",
+    "theme": "Transition",
+    "prompt": "What season is approaching next? How might you prepare for this transition? What does your soul need to let go of or embrace as you move into the next seasonal phase?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:27",
+    "title": "Seasonal Wisdom",
+    "theme": "Learning",
+    "prompt": "What has each season taught you about life, growth, and natural rhythms? How has paying attention to seasonal cycles changed your understanding of yourself and your place in the natural world?"
+  },
+  {
+    "id": "seasonalSoulRhythmsDays:28",
+    "title": "Rhythmic Living",
+    "theme": "Integration",
+    "prompt": "How will you continue to align your life with seasonal and natural rhythms? What practices, awareness, or lifestyle changes will help you live more in harmony with the cycles of nature and your own seasonal soul?"
+  }
+]

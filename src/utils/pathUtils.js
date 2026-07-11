@@ -54,15 +54,27 @@ export const getAllActiveJourneys = (userProfile) => {
   
   // Sort by most recently active
   return activeJourneys.sort((a, b) => {
-    const aTimestamp = a.progress.lastActive 
-      ? (a.progress.lastActive.toMillis ? a.progress.lastActive.toMillis() : a.progress.lastActive) 
+    const aTimestamp = a.progress.lastActive
+      ? (a.progress.lastActive.toMillis ? a.progress.lastActive.toMillis() : a.progress.lastActive)
       : 0;
-    const bTimestamp = b.progress.lastActive 
-      ? (b.progress.lastActive.toMillis ? b.progress.lastActive.toMillis() : b.progress.lastActive) 
+    const bTimestamp = b.progress.lastActive
+      ? (b.progress.lastActive.toMillis ? b.progress.lastActive.toMillis() : b.progress.lastActive)
       : 0;
-    
+
     return bTimestamp - aTimestamp;
   });
+};
+
+/**
+ * Returns the pathId of the journey the user worked on most recently
+ * (started but not yet completed), based on each path's lastActive timestamp.
+ * Shared by the Home hero-card and the Journal tab so both stay in sync.
+ * @param {Object} userProfile - User profile object
+ * @returns {string|null} The most-recently-active path id, or null if none
+ */
+export const getMostRecentActivePathId = (userProfile) => {
+  const activeJourneys = getAllActiveJourneys(userProfile);
+  return activeJourneys.length > 0 ? activeJourneys[0].pathId : null;
 };
 
 /**
@@ -126,27 +138,15 @@ export const getNextDayForPath = (userProfile, pathId) => {
  * @returns {Object} Progress object with completedDays array
  */
 export const getUserPathProgress = (userProfile, pathId) => {
-  console.log(`🔍 DEBUG getUserPathProgress: pathId = "${pathId}"`);
-  
   if (!userProfile || !userProfile.journeyProgress || !pathId) {
-    console.log('⚠️ DEBUG getUserPathProgress: Missing data', {
-      hasUserProfile: !!userProfile,
-      hasJourneyProgress: !!userProfile?.journeyProgress,
-      hasPathId: !!pathId
-    });
     return { completedDays: [] };
   }
   
-  console.log('🔍 DEBUG getUserPathProgress: journeyProgress keys:', Object.keys(userProfile.journeyProgress));
-  
   // Get the progress field name for this path
   const progressField = getProgressFieldForPath(pathId);
-  console.log(`🔍 DEBUG getUserPathProgress: Looking for field "${progressField}"`);
   
   // Get the progress object for this path, with fallbacks
   const progress = userProfile.journeyProgress[progressField] || { completedDays: [] };
-  
-  console.log(`🔍 DEBUG getUserPathProgress: Found progress for "${pathId}":`, progress);
   
   // Ensure completedDays is an array
   if (!progress.completedDays) {

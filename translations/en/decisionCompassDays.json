@@ -1,0 +1,86 @@
+[
+  {
+    "id": "decisionCompassDays:1",
+    "title": "Your Current Decision-Making Style",
+    "theme": "Self-Awareness",
+    "prompt": "How do you typically make decisions? Do you rely on logic, intuition, others' opinions, or emotion? Write about your current approach and what works or doesn't work for you."
+  },
+  {
+    "id": "decisionCompassDays:2",
+    "title": "Values-Based Decision Framework",
+    "theme": "Values",
+    "prompt": "What are your core values? Write about how your deepest values can serve as a compass for decisions. How would your choices change if you always honored your values first?"
+  },
+  {
+    "id": "decisionCompassDays:3",
+    "title": "Intuition vs. Logic Balance",
+    "theme": "Balance",
+    "prompt": "Reflect on a recent decision where your intuition and logic conflicted. How do you find balance between analytical thinking and gut feelings? What does your body tell you about decisions?"
+  },
+  {
+    "id": "decisionCompassDays:4",
+    "title": "Fear-Based vs. Love-Based Choices",
+    "theme": "Motivation",
+    "prompt": "Examine a current decision you're facing. Write about whether your options come from fear (avoiding something) or love (moving toward something). How does this awareness change your perspective?"
+  },
+  {
+    "id": "decisionCompassDays:5",
+    "title": "The Cost of Indecision",
+    "theme": "Consequences",
+    "prompt": "Think about a time when you delayed making a decision. What was the cost of waiting? How does indecision affect your energy, relationships, and opportunities?"
+  },
+  {
+    "id": "decisionCompassDays:6",
+    "title": "Future Self Consultation",
+    "theme": "Perspective",
+    "prompt": "Imagine yourself five years from now looking back at a current decision. What advice would your future self give you? What would you regret not doing?"
+  },
+  {
+    "id": "decisionCompassDays:7",
+    "title": "External Influences and Pressure",
+    "theme": "Boundaries",
+    "prompt": "Who or what influences your decisions? Write about family expectations, social pressure, and cultural conditioning. How can you honor others' input while staying true to yourself?"
+  },
+  {
+    "id": "decisionCompassDays:8",
+    "title": "Decision-Making in Uncertainty",
+    "theme": "Uncertainty",
+    "prompt": "How comfortable are you with making decisions without having all the information? Explore your relationship with uncertainty and how to move forward when you can't guarantee outcomes."
+  },
+  {
+    "id": "decisionCompassDays:9",
+    "title": "Small Daily Choices Matter",
+    "theme": "Daily Practice",
+    "prompt": "Reflect on how small daily decisions shape your life. What routine choices could you make more consciously? How do minor decisions align with or conflict with your bigger goals?"
+  },
+  {
+    "id": "decisionCompassDays:10",
+    "title": "Learning from Past Decisions",
+    "theme": "Learning",
+    "prompt": "Think about a decision you made that didn't turn out as expected. What did you learn? How can you apply this wisdom to current choices without being paralyzed by past mistakes?"
+  },
+  {
+    "id": "decisionCompassDays:11",
+    "title": "Energy and Decision Quality",
+    "theme": "Energy",
+    "prompt": "Notice how your energy levels affect your decision-making. When do you make your best choices? How can you optimize your physical and mental state for important decisions?"
+  },
+  {
+    "id": "decisionCompassDays:12",
+    "title": "Reversible vs. Irreversible Decisions",
+    "theme": "Flexibility",
+    "prompt": "Categorize current decisions as reversible or irreversible. How does this distinction change how much energy you invest in deciding? When is it okay to just try something?"
+  },
+  {
+    "id": "decisionCompassDays:13",
+    "title": "Your Personal Decision Ritual",
+    "theme": "Process",
+    "prompt": "Design a personal process for making important decisions. What steps help you gain clarity? Create a decision-making ritual that incorporates your values, intuition, and wisdom."
+  },
+  {
+    "id": "decisionCompassDays:14",
+    "title": "Commitment and Moving Forward",
+    "theme": "Commitment",
+    "prompt": "Reflect on your decision-making journey. What insights will you carry forward? Choose one decision you've been avoiding and commit to a process for moving forward with clarity and confidence."
+  }
+]

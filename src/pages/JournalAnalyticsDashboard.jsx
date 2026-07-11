@@ -1,75 +1,96 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+// src/pages/AnalyticsScreen.jsx - Apple Glass v4.1 (Fixed)
+import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { getPreviousEntries, generateProgressReport } from '../services/claudeService';
-import { useUserProgress } from '../hooks/useUserProgress';
 import { useUserStatistics } from '../hooks/useUserStatistics';
-import { 
-  ArrowLeft, 
-  BarChart2, 
-  Calendar as CalendarIcon, 
-  Clock, 
-  Cloud,
-  Heart,
-  PieChart,
-  RefreshCw,
-  Zap,
-  Loader,
-  AlertCircle,
-  ChevronDown,
-  ChevronUp,
-  Filter,
-  BookOpen,
-  Flame,
-  Map,
-  TrendingUp,
-  Award,
-  MessageCircle,
-  CheckCircle,
-  Lightbulb,
-  List,
-  LayoutGrid,
-  Target,
-  Users,
-  Brain,
-  FileText,
-  Calendar,
-  BarChart3,
-  Sparkles,
-  MoreVertical,
-  Share2,
-  Download
-} from 'lucide-react';
-
-// Import visualization components
+import { useUserProgress } from '../hooks/useUserProgress';
+import { extractThemesFromEntries, extractEmotionData } from '../utils/textProcessing';
+import { useTheme } from '../contexts/ThemeContext';
+import AnalyticsSkeleton from '../components/analytics/AnalyticsSkeleton';
+import AIPersonDescription from '../components/analytics/AIPersonDescription';
+import DailyAIQuestion from '../components/analytics/DailyAIQuestion';
 import EmotionTrends from '../components/analytics/EmotionTrends';
 import ThemeCloud from '../components/analytics/ThemeCloud';
 import JournalCalendar from '../components/analytics/JournalCalendar';
 import InsightSummary from '../components/analytics/InsightSummary';
-import useNavigation from '../hooks/useNavigation';
+import MoodTrends from '../components/analytics/MoodTrends';
+import {
+  Flame, FileText, Target, TrendingUp, Sparkles, Heart, Calendar,
+  ChevronRight, RefreshCw, Brain, Eye, EyeOff, Cloud, Moon
+} from 'lucide-react';
+import '../styles/pages/analyticsScreen.css';
 
-// Import new AI components
-import DailyAIQuestion from '../components/analytics/DailyAIQuestion';
-import AIPersonDescription from '../components/analytics/AIPersonDescription';
+// Reusable Glass Card with prefixed class
+const AsGlass = ({ children, className = '', onClick, ariaExpanded, style }) => (
+  <div 
+    className={`as-glass ${className}`}
+    onClick={onClick}
+    role={onClick ? 'button' : undefined}
+    tabIndex={onClick ? 0 : undefined}
+    aria-expanded={ariaExpanded}
+    style={style}
+  >
+    {children}
+  </div>
+);
 
-// ✅ Import the KairosLoader component
-import KairosLoader from '../components/common/KairosLoader';
-import TopBar from '../components/common/TopBar';
+// Expandable Section
+const AsExpandable = ({ 
+  icon: Icon, 
+  title, 
+  subtitle, 
+  sectionId, 
+  isOpen, 
+  onToggle, 
+  children,
+  colorRgb = '85, 139, 110'
+}) => (
+  <AsGlass 
+    className="as-expandable"
+    onClick={() => onToggle(sectionId)}
+    ariaExpanded={isOpen}
+  >
+    <div className="as-expand-header">
+      <div 
+        className="as-expand-icon"
+        style={{ 
+          background: `rgba(${colorRgb}, 0.15)`,
+          color: `rgb(${colorRgb})`
+        }}
+      >
+        <Icon size={18} />
+      </div>
+      <div className="as-expand-info">
+        <h3 className="as-expand-title">{title}</h3>
+        <p className="as-expand-subtitle">{subtitle}</p>
+      </div>
+      <div className={`as-expand-chevron ${isOpen ? 'as-open' : ''}`}>
+        <ChevronRight size={16} />
+      </div>
+    </div>
+    
+    <div 
+      className={`as-expand-body ${isOpen ? 'as-open' : ''}`}
+      aria-hidden={!isOpen}
+    >
+      {children}
+    </div>
+  </AsGlass>
+);
 
-// Import utilities for data processing
-import { extractThemesFromEntries, extractEmotionData } from '../utils/textProcessing';
+// Pulse Stat
+const AsPulseStat = ({ icon: Icon, value, label }) => (
+  <div className="as-pulse-stat">
+    <Icon size={14} className="as-pulse-icon" />
+    <span className="as-pulse-value">{value}</span>
+    <span className="as-pulse-label">{label}</span>
+  </div>
+);
 
-// Import the theme context
-import { useTheme } from '../contexts/ThemeContext';
-
-// Import styles
-import '../styles/pages/analyticsDashboard.css';
-import '../styles/components/analyticsComponents.css';
-
-const JournalAnalyticsDashboard = ({ onBack, navigateToScreen }) => {
+const AnalyticsScreen = ({ navigateToScreen }) => {
+  const { t } = useTranslation('analytics');
   const { currentUser, userProfile } = useAuth();
-  const { isDarkMode } = useTheme();
-  
-  // ✅ NEW: Use centralized statistics instead of duplicate entry management
+  const { isDarkMode } = useTheme(); // ADD THIS
   const { 
     statistics, 
     isLoading: statsLoading, 
@@ -78,1027 +99,370 @@ const JournalAnalyticsDashboard = ({ onBack, navigateToScreen }) => {
     refreshStatistics 
   } = useUserStatistics();
   
-  // Use centralized progress data for consistency
-  const { stats: progressStats, inProgressPaths, completedPaths } = useUserProgress();
+  const { progressStats, inProgressPaths, completedPaths } = useUserProgress();
   
-  // Simplified state management - mobile-focused
-  const [activeSection, setActiveSection] = useState('overview');
-  const [timePeriod, setTimePeriod] = useState('all');
-  const [progressReport, setProgressReport] = useState(null);
-  const [error, setError] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedJourney, setSelectedJourney] = useState('all');
-  
-  // ✅ NEW: Loading states for more granular control
-  const [loadingStage, setLoadingStage] = useState('');
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  
-  const { currentPath } = useNavigation();
-  
-  // Get API cache service from window global
-  const apiCacheService = window.apiCacheService;
-  
-  // ✅ NEW: Get entries using centralized hook - single source of truth
-  const allEntries = statistics.allEntries; // Complete dataset for AI analysis
-  const filteredEntries = getFilteredEntries({ 
-    timePeriod: timePeriod === 'all' ? undefined : timePeriod,
-    journeyId: selectedJourney === 'all' ? undefined : selectedJourney 
-  }); // Filtered dataset for display
-  
-  // ✅ SIMPLIFIED: Load only progress report, entries come from centralized hook
-  useEffect(() => {
-    const loadProgressReport = async () => {
-      if (!currentUser || statistics.isEmpty) return;
-      
-      try {
-        setError(null);
-        setLoadingStage('Analyzing your journal patterns...');
-        setLoadingProgress(25);
-        
-        console.log('📊 Analytics loading - Total entries:', statistics.totalEntries);
-        
-        // Check cache first
-        if (apiCacheService) {
-          setLoadingStage('Checking for cached insights...');
-          setLoadingProgress(50);
-          
-          const reportCacheKey = `analytics_report_${currentUser.uid}_${selectedJourney}`;
-          const cachedReport = apiCacheService.getFromCache(reportCacheKey);
-          
-          if (cachedReport) {
-            console.log("✅ Using cached progress report");
-            setProgressReport(cachedReport);
-            setLoadingProgress(100);
-            return;
-          }
-        }
-        
-        // Generate fresh progress report
-        setLoadingStage('Generating personalized insights...');
-        setLoadingProgress(75);
-        console.log("🔄 Generating fresh progress report");
-        
-        const report = await generateProgressReport(currentUser.uid, selectedJourney);
-        setProgressReport(report);
-        setLoadingProgress(100);
-        
-        // Cache report if cache service is available
-        if (apiCacheService) {
-          const reportCacheKey = `analytics_report_${currentUser.uid}_${selectedJourney}`;
-          apiCacheService.storeInCache(reportCacheKey, report);
-        }
-        
-      } catch (err) {
-        console.error('Error loading progress report:', err);
-        setError('Failed to load analytics insights. Please try again.');
-        setLoadingStage('');
-        setLoadingProgress(0);
-      }
-    };
-    
-    // Only load if we have statistics ready and not empty
-    if (!statsLoading && !statistics.isEmpty) {
-      loadProgressReport();
-    }
-  }, [currentUser, selectedJourney, statistics.isEmpty, statsLoading]);
+  const [expandedSection, setExpandedSection] = useState(null);
+  const [timePeriod, setTimePeriod] = useState('all');
 
-  const LOADING_MESSAGES = {
-  initial: {
-    message: "Loading Analytics",
-    subMessage: "Gathering your journal entries..."
-  },
-  analyzing: {
-    message: "Analyzing Patterns",
-    subMessage: "Discovering insights from your writing..."
-  },
-  generating: {
-    message: "Generating Insights",
-    subMessage: "Creating your personalized report..."
-  },
-  complete: {
-    message: "Almost Ready",
-    subMessage: "Finalizing your analytics..."
-  }
-};
-
-const getLoadingMessage = (stage, progress) => {
-  if (progress >= 75) return LOADING_MESSAGES.complete;
-  if (progress >= 50) return LOADING_MESSAGES.generating;
-  if (progress >= 25) return LOADING_MESSAGES.analyzing;
-  return LOADING_MESSAGES.initial;
-};
-  
-  // ✅ SIMPLIFIED: Refresh function with enhanced loading feedback
   const handleRefresh = async () => {
-  setIsRefreshing(true);
-  setLoadingStage('Starting refresh...');
-  setLoadingProgress(0);
-  
-  try {
-    // Stage 1: Clear cache
-    if (apiCacheService) {
-      console.log('🧹 Clearing analytics cache');
-      setLoadingStage('Clearing cache...');
-      setLoadingProgress(15);
-      await new Promise(resolve => setTimeout(resolve, 300)); // Brief pause for UX
-      apiCacheService.invalidateCacheByPrefix(`analytics_${currentUser.uid}`);
-    }
-    
-    // Stage 2: Reload entries
-    setLoadingStage('Reloading journal entries...');
-    setLoadingProgress(35);
-    await new Promise(resolve => setTimeout(resolve, 200));
+    setIsRefreshing(true);
     await refreshStatistics();
-    
-    // Stage 3: Process data
-    setLoadingStage('Processing your data...');
-    setLoadingProgress(60);
-    await new Promise(resolve => setTimeout(resolve, 200));
-    
-    // Stage 4: Generate insights
-    setLoadingStage('Generating fresh insights...');
-    setLoadingProgress(80);
-    const report = await generateProgressReport(currentUser.uid, selectedJourney);
-    setProgressReport(report);
-    
-    // Stage 5: Complete
-    setLoadingProgress(100);
-    setLoadingStage('');
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    setError(null);
-  } catch (err) {
-    console.error('Error refreshing analytics data:', err);
-    setError('Failed to refresh analytics data. Please try again.');
-  } finally {
-    setIsRefreshing(false);
-    setLoadingStage('');
-    setLoadingProgress(0);
-  }
-};
-  
-  // ✅ SIMPLIFIED: Stats calculation using centralized data
-  const calculateDisplayStats = () => {
-    // Base stats from centralized source
-    const baseStats = {
-      totalEntries: statistics.totalEntries,
-      averageLength: statistics.averageLength,
-      journeyProgress: statistics.journeyProgress,
-      longestStreak: statistics.longestStreak,
-      commonThemes: progressReport?.commonThemes || [],
-      wordsWritten: statistics.totalWords,
-      activePathsCount: statistics.activePathsCount,
-      currentPathName: statistics.currentPathName
-    };
-    
-    // If we're showing filtered view, calculate filtered-specific stats
-    if (filteredEntries.length !== statistics.totalEntries) {
-      const filteredTextLength = filteredEntries.reduce((sum, entry) => {
-        const entryText = entry.extractedText || '';
-        return sum + entryText.length;
-      }, 0);
-      
-      const filteredAverageLength = filteredEntries.length > 0 ? 
-        Math.round(filteredTextLength / filteredEntries.length) : 0;
-      
-      return {
-        ...baseStats,
-        displayEntries: filteredEntries.length,
-        averageLength: filteredAverageLength,
-        isFiltered: true
-      };
-    }
-    
-    return {
-      ...baseStats,
-      displayEntries: statistics.totalEntries,
-      isFiltered: false
-    };
+    setTimeout(() => setIsRefreshing(false), 600);
   };
+
+  const toggleSection = useCallback((sectionId) => {
+    setExpandedSection(prev => prev === sectionId ? null : sectionId);
+  }, []);
+
+  const filteredEntries = getFilteredEntries({ 
+    timePeriod: timePeriod === 'all' ? undefined : timePeriod
+  });
   
-  const displayStats = calculateDisplayStats();
-  
-  // Process data for visualizations using filtered entries
   const emotionData = filteredEntries.length > 0 ? extractEmotionData(filteredEntries).emotions : [];
   const themeData = filteredEntries.length > 0 ? extractThemesFromEntries(filteredEntries) : [];
   
-  // Process data for calendar view
-  const processCalendarData = () => {
-    if (!filteredEntries.length) return [];
-    
-    const calendarData = {};
-    
-    // Process each entry
+  const calendarData = filteredEntries.length > 0 ? (() => {
+    const calData = {};
     filteredEntries.forEach(entry => {
       if (!entry.timestamp) return;
-      
       try {
-        // Handle different timestamp formats safely
         let entryDate;
-        
-        if (typeof entry.timestamp === 'object') {
-          if (entry.timestamp.toDate) {
-            // Firestore Timestamp with method
-            entryDate = entry.timestamp.toDate();
-          } else if (entry.timestamp.seconds !== undefined) {
-            // Serialized Firestore Timestamp (from cache)
-            entryDate = new Date(entry.timestamp.seconds * 1000);
-          } else if (entry.timestamp instanceof Date) {
-            // Date object
-            entryDate = entry.timestamp;
-          } else {
-            // Other object format, try to convert
-            entryDate = new Date(entry.timestamp);
-          }
+        if (entry.timestamp?.toDate) {
+          entryDate = entry.timestamp.toDate();
+        } else if (entry.timestamp?.seconds !== undefined) {
+          entryDate = new Date(entry.timestamp.seconds * 1000);
         } else if (typeof entry.timestamp === 'string') {
-          // ISO string or other string format
           entryDate = new Date(entry.timestamp);
         } else if (typeof entry.timestamp === 'number') {
-          // Unix timestamp in milliseconds
           entryDate = new Date(entry.timestamp);
         } else {
-          // Skip invalid timestamps
-          console.warn('Invalid timestamp format:', entry.timestamp);
           return;
         }
         
-        // Validate the date before using it
-        if (isNaN(entryDate.getTime())) {
-          console.warn('Invalid date created from timestamp:', entry.timestamp);
-          return;
-        }
+        if (isNaN(entryDate.getTime())) return;
         
-        // Create a valid YYYY-MM-DD format
-        const year = entryDate.getFullYear();
-        const month = String(entryDate.getMonth() + 1).padStart(2, '0');
-        const day = String(entryDate.getDate()).padStart(2, '0');
-        const dateStr = `${year}-${month}-${day}`;
-        
-        if (!calendarData[dateStr]) {
-          calendarData[dateStr] = 0;
-        }
-        
-        calendarData[dateStr] += 1;
+        const dateStr = entryDate.toISOString().split('T')[0];
+        calData[dateStr] = (calData[dateStr] || 0) + 1;
       } catch (err) {
-        console.warn('Error processing date for calendar:', err, entry.timestamp);
+        return;
       }
     });
-    
-    // Convert to array format for calendar heatmap
-    return Object.entries(calendarData).map(([date, count]) => ({
-      date,
-      count,
-    }));
-  };
-  
-  const calendarData = processCalendarData();
-  
-  // Toggle filters visibility
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  };
-  
-  // Get available journey paths for filter
-  const getAvailableJourneys = () => {
-    if (!filteredEntries || filteredEntries.length === 0) return [];
-    
-    // Get unique path IDs
-    const uniquePaths = [...new Set(filteredEntries.map(entry => entry.pathId))].filter(Boolean);
-    
-    // Map path IDs to display names
-    return uniquePaths.map(pathId => ({
-      id: pathId,
-      name: getPathDisplayName(pathId)
-    }));
-  };
-  
-  // Get display name for a path - Complete list of all 34 journey paths
-  const getPathDisplayName = (pathId) => {
-    switch(pathId) {
-      // ===== Visual/Artistic Paths (8 paths) =====
-      case 'mindful-visualization':
-        return 'Mindful Visualization';
-      case 'artistic-soul-expression':
-        return 'Artistic Soul Expression';
-      case 'color-psychology':
-        return 'Color Psychology Journey';
-      case 'sacred-geometry':
-        return 'Sacred Geometry Soul';
-      case 'nature-sketching':
-        return 'Nature Sketching Sanctuary';
-      case 'abstract-emotions':
-        return 'Abstract Emotions';
-      case 'visual-storytelling':
-        return 'Visual Storytelling';
-      case 'ink-essence':
-        return 'Ink & Essence: Black Ink Mastery';
-      
-      // ===== Foundational Personal Growth (10-14 days) =====
-      case 'self-discovery':
-        return 'Self-Discovery Journey';
-      case 'emotional-intelligence':
-        return 'Emotional Intelligence Expedition';
-      case 'mindfulness-awareness':
-        return 'Mindfulness & Present Awareness';
-      case 'gratitude-practice':
-        return 'Gratitude Practice';
-      case 'shadow-work':
-        return 'Shadow Work Exploration';
-      case 'nature-connection':
-        return 'Nature Connection';
-      case 'anxiety-alchemy':
-        return 'Anxiety Alchemy';
-      case 'courage-cultivation':
-        return 'Courage Cultivation';
-      case 'inner-child':
-        return 'Inner Child Healing';
-      case 'creative-expression':
-        return 'Creative Expression';
-      case 'dream-decoder':
-        return 'Dream Journal Decoder';
-      
-      // ===== Specialized Focus Areas (17-22 days) =====
-      case 'forgiveness-freedom':
-        return 'Forgiveness Freedom';
-      case 'career-compass':
-        return 'Career Compass';
-      case 'transitions-navigator':
-        return 'Life Transitions Navigator';
-      case 'transformation-journey':
-        return 'Transformation Journey: Breaking Patterns';
-      case 'financial-mindfulness':
-        return 'Financial Mindfulness';
-      case 'life-values':
-        return 'Life Values & Core Principles';
-      
-      // ===== Extended Journeys (28-30 days) =====
-      case 'seasonal-rhythms':
-        return 'Seasonal Soul Rhythms';
-      case 'habit-formation':
-        return 'Habit Formation';
-      case 'relationship-mastery':
-        return 'Relationship Mastery';
-      case 'grief-growth':
-        return 'Grief & Growth';
-      
-      // ===== Micro Journeys (7 days) =====
-      case 'digital-detox':
-        return 'Digital Detox Reflection';
-      
-      // ===== Comprehensive Life Journeys (100 days) =====
-      case 'holistic-transformation':
-        return 'Holistic Transformation';
-      case 'life-vision':
-        return 'Life Vision & Purpose';
-      
-      // ===== Fallback for any new paths =====
-      default:
-        return pathId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-  };
-  
-  const availableJourneys = getAvailableJourneys();
-  
-  // Use centralized data to determine if there's enough data
-  const notEnoughData = statistics.totalEntries < 2;
+    return Object.entries(calData).map(([date, count]) => ({ date, count }));
+  })() : [];
 
-  // ✅ NEW: Determine if we should show the KairosLoader
-  const shouldShowLoader = statsLoading || isRefreshing || (loadingStage && loadingProgress < 100);
-  
-  // Tab configuration for mobile
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart2 },
-    { id: 'emotions', label: 'Emotions', icon: Heart },
-    { id: 'themes', label: 'Themes', icon: Cloud },
-    { id: 'habits', label: 'Habits', icon: Calendar },
-    { id: 'ai', label: 'AI Insights', icon: Sparkles }
-  ];
+  if (statsLoading) {
+    return <AnalyticsSkeleton />;
+  }
 
-  // Mobile-optimized section rendering
-  const renderMobileSection = () => {
-    switch(activeSection) {
-      case 'overview':
-        return renderOverviewSection();
-      case 'emotions':
-        return renderEmotionsSection();
-      case 'themes':
-        return renderThemesSection();
-      case 'habits':
-        return renderHabitsSection();
-      case 'ai':
-        return renderAISection();
-      default:
-        return renderOverviewSection();
-    }
-  };
-
-  const renderOverviewSection = () => (
-    <div className="dashboard-section fade-in">
-      <div className="section-header">
-        <h2 className="section-title">
-          <BarChart2 className="section-title-icon" />
-          Your Journal Overview
-        </h2>
-        <p className="analysis-context">
-          Based on {displayStats.totalEntries} journal entries
-        </p>
-      </div>
-      
-      {/* AI Features Section - Featured prominently */}
-      <div className="daily-ai-section slide-in-bottom" style={{"--delay": "0.1s"}}>
-        <DailyAIQuestion 
-          entries={allEntries}
-          totalEntries={statistics.totalEntries}
-          progressStats={progressStats}
-        />
-      </div>
-      
-      <div className="ai-person-section slide-in-bottom" style={{"--delay": "0.2s"}}>
-        <AIPersonDescription 
-          entries={allEntries}
-          totalEntries={statistics.totalEntries}
-          progressStats={progressStats}
-        />
-      </div>
-      
-      {/* Quick insights */}
-      <div className="visualization-card slide-in-bottom" style={{"--delay": "0.3s"}}>
-        <h3 className="visualization-title">
-          <Lightbulb className="visualization-title-icon" />
-          Quick Insights
-          <span className="data-count">Latest trends</span>
-        </h3>
-        <div className="visualization-content">
-          <InsightSummary 
-            entries={filteredEntries} 
-            progressReport={progressReport}
-          />
-        </div>
-      </div>
-
-      {/* Achievement badges */}
-      <div className="progress-badges-section slide-in-bottom" style={{"--delay": "0.4s"}}>
-        <h3 className="section-subtitle">
-          <Award className="section-subtitle-icon" />
-          Your Achievements
-        </h3>
-        
-        <div className="progress-badges">
-          {displayStats.totalEntries >= 1 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <CheckCircle />
-              </div>
-              <div className="badge-label">First Entry</div>
-            </div>
-          )}
-          
-          {displayStats.totalEntries >= 5 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <BookOpen />
-              </div>
-              <div className="badge-label">5 Entries</div>
-            </div>
-          )}
-          
-          {displayStats.totalEntries >= 10 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <Target />
-              </div>
-              <div className="badge-label">10 Entries</div>
-            </div>
-          )}
-          
-          {displayStats.longestStreak >= 3 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <Flame />
-              </div>
-              <div className="badge-label">3-Day Streak</div>
-            </div>
-          )}
-          
-          {displayStats.longestStreak >= 7 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <Calendar />
-              </div>
-              <div className="badge-label">Weekly Warrior</div>
-            </div>
-          )}
-          
-          {displayStats.wordsWritten >= 1000 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <FileText />
-              </div>
-              <div className="badge-label">1000+ Words</div>
-            </div>
-          )}
-          
-          {displayStats.journeyProgress >= 50 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <Map />
-              </div>
-              <div className="badge-label">Halfway There</div>
-            </div>
-          )}
-          
-          {displayStats.journeyProgress >= 100 && (
-            <div className="badge">
-              <div className="badge-icon">
-                <Award />
-              </div>
-              <div className="badge-label">Journey Complete</div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderEmotionsSection = () => (
-    <div className="dashboard-section fade-in">
-      <div className="section-header">
-        <h2 className="section-title">
-          <Heart className="section-title-icon" />
-          Emotional Patterns
-        </h2>
-        <p className="analysis-context">
-          Analysis of {displayStats.displayEntries} entries
-        </p>
-      </div>
-      
-      <div className="visualization-card slide-in-bottom" style={{"--delay": "0.1s"}}>
-        <h3 className="visualization-title">
-          <Heart className="visualization-title-icon" />
-          Emotion Trends
-          <span className="data-count">{emotionData.length} emotions detected</span>
-        </h3>
-        <div className="visualization-content">
-          <EmotionTrends data={emotionData} hideTitle={true} isDarkMode={isDarkMode} />
-        </div>
-      </div>
-
-      {/* Most emotional entries */}
-      {filteredEntries.length > 0 && (
-        <div className="visualization-card slide-in-bottom" style={{"--delay": "0.2s"}}>
-          <h3 className="visualization-title">
-            <MessageCircle className="visualization-title-icon" />
-            Most Emotional Entries
-            <span className="data-count">Recent highlights</span>
-          </h3>
-          <div className="entries-list">
-            {filteredEntries
-              .filter(entry => entry.analysis && entry.analysis.summary)
-              .slice(0, 3)
-              .map((entry, index) => (
-                <div 
-                  key={`${entry.pathId}-${entry.day}-${index}`} 
-                  className="entry-item"
-                  onClick={() => navigateToScreen('daily', { day: entry.day, pathId: entry.pathId })}
-                >
-                  <div className="entry-header">
-                    <div className="entry-day">Day {entry.day}</div>
-                    <div className="entry-theme">{entry.theme || 'Reflection'}</div>
-                  </div>
-                  <div className="entry-summary">{entry.analysis.summary}</div>
-                  <div className="entry-meta">
-                    {entry.extractedText && (
-                      <span className="entry-word-count">
-                        {Math.round(entry.extractedText.length / 5)} words
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderThemesSection = () => (
-    <div className="dashboard-section fade-in">
-      <div className="section-header">
-        <h2 className="section-title">
-          <Cloud className="section-title-icon" />
-          Recurring Themes
-        </h2>
-        <p className="analysis-context">
-          {themeData.length} themes from {displayStats.displayEntries} entries
-        </p>
-      </div>
-      
-      <div className="visualization-card slide-in-bottom" style={{"--delay": "0.1s"}}>
-        <h3 className="visualization-title">
-          <Cloud className="visualization-title-icon" />
-          Theme Cloud
-          <span className="data-count">Your focus areas</span>
-        </h3>
-        <div className="visualization-content">
-          <ThemeCloud data={themeData} isDarkMode={isDarkMode} />
-        </div>
-      </div>
-      
-      {/* Theme frequency breakdown */}
-      {themeData.length > 0 && (
-        <div className="themes-breakdown-container slide-in-bottom" style={{"--delay": "0.2s"}}>
-          <h3 className="visualization-title">
-            <BarChart3 className="visualization-title-icon" />
-            Top Themes
-            <span className="data-count">Most frequent topics</span>
-          </h3>
-          <div className="themes-frequency-list">
-            {themeData.slice(0, 6).map((theme, index) => (
-              <div key={index} className="theme-frequency-item">
-                <div className="theme-frequency-header">
-                  <div className="theme-name">{theme.text}</div>
-                  <div className="theme-mentions">
-                    {Math.round(theme.size * 10)} mentions
-                  </div>
-                </div>
-                <div className="theme-frequency-bar">
-                  <div 
-                    className="theme-frequency-fill" 
-                    style={{ 
-                      width: `${(theme.size / themeData[0].size) * 100}%` 
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderHabitsSection = () => (
-    <div className="dashboard-section fade-in">
-      <div className="section-header">
-        <h2 className="section-title">
-          <Calendar className="section-title-icon" />
-          Journaling Habits
-        </h2>
-        <p className="analysis-context">
-          {calendarData.length} active days tracked
-        </p>
-      </div>
-
-      {/* Calendar Section */}
-      <div className="visualization-card slide-in-bottom" style={{"--delay": "0.1s"}}>
-        <h3 className="visualization-title">
-          <CalendarIcon className="visualization-title-icon" />
-          Activity Heatmap
-          <span className="data-count">{calendarData.length} days active</span>
-        </h3>
-        <div className="visualization-content">
-          <JournalCalendar data={calendarData} />
-        </div>
-      </div>
-      
-      {/* Consistency Metrics */}
-      <div className="consistency-stats slide-in-bottom" style={{"--delay": "0.2s"}}>
-        <div className="consistency-stat">
-          <h4 className="consistency-stat-label">Current Streak</h4>
-          <div className="consistency-stat-value">{progressStats?.currentStreak || 0} days</div>
-          <div className="stat-bar-container">
-            <div 
-              className="stat-bar-fill" 
-              style={{
-                width: `${Math.min(100, ((progressStats?.currentStreak || 0) / 10) * 100)}%`
-              }}
-            ></div>
-          </div>
-          <div className="stat-description">
-            {progressStats?.currentStreak > 0 ? 
-              `${progressStats.currentStreak} consecutive days` : 
-              'Ready to start your streak!'}
-          </div>
-        </div>
-        
-        <div className="consistency-stat">
-          <h4 className="consistency-stat-label">Journey Progress</h4>
-          <div className="consistency-stat-value">{displayStats.journeyProgress}%</div>
-          <div className="stat-bar-container">
-            <div 
-              className="stat-bar-fill"
-              style={{
-                width: `${displayStats.journeyProgress}%`
-              }}
-            ></div>
-          </div>
-          <div className="stat-description">
-            of your current path completed
-          </div>
-        </div>
-        
-        <div className="consistency-stat">
-          <h4 className="consistency-stat-label">Average Length</h4>
-          <div className="consistency-stat-value">{displayStats.averageLength}</div>
-          <div className="stat-bar-container">
-            <div 
-              className="stat-bar-fill"
-              style={{
-                width: `${Math.min(100, (displayStats.averageLength / 500) * 100)}%`
-              }}
-            ></div>
-          </div>
-          <div className="stat-description">
-            characters per entry
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderAISection = () => (
-    <div className="dashboard-section fade-in">
-      <div className="section-header">
-        <h2 className="section-title">
-          <Sparkles className="section-title-icon" />
-          AI-Powered Insights
-        </h2>
-        <p className="analysis-context">
-          Personalized analysis of your {statistics.totalEntries} entries
-        </p>
-      </div>
-      
-      {/* Daily AI Question - Featured */}
-      <div className="ai-insight-card slide-in-bottom" style={{"--delay": "0.1s"}}>
-        <DailyAIQuestion 
-          entries={allEntries}
-          totalEntries={statistics.totalEntries}
-          progressStats={progressStats}
-        />
-      </div>
-      
-      {/* AI Person Description - Featured */}
-      <div className="ai-insight-card slide-in-bottom" style={{"--delay": "0.2s"}}>
-        <AIPersonDescription 
-          entries={allEntries}
-          totalEntries={statistics.totalEntries}
-          progressStats={progressStats}
-        />
-      </div>
-      
-      {/* Coming Soon */}
-      <div className="coming-soon-card slide-in-bottom" style={{"--delay": "0.3s"}}>
-        <div className="coming-soon-content">
-          <div className="coming-soon-icon">
-            <Sparkles size={24} />
-          </div>
-          <h3 className="coming-soon-title">More AI Features Coming</h3>
-          <p className="coming-soon-description">
-            We're working on mood predictions, writing style analysis, and personalized recommendations.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-  
-  return (
-    <div className={`analytics-dashboard ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
-      {shouldShowLoader && (
-        <KairosLoader
-          size="large"
-          fullScreen={true}
-          message={
-            loadingStage || 
-            getLoadingMessage(loadingStage, loadingProgress).message
-          }
-          subMessage={
-            loadingStage ? "This may take a moment" : 
-            getLoadingMessage(loadingStage, loadingProgress).subMessage
-          }
-          showProgress={loadingProgress > 0 || isRefreshing}
-          progress={loadingProgress}
-          variant="detailed"
-        />
-      )}
-      
-      {/* Top Bar */}
-      <TopBar 
-        title="Analytics"
-        subtitle="Discover insights from your journaling"
-        colorClass="analytics-color"
-        actions={
-          <button 
-            onClick={handleRefresh}
-            className={`icon-button ${isRefreshing ? 'refreshing' : ''}`}
-            disabled={isRefreshing}
-            aria-label="Refresh analytics"
-          >
-            <RefreshCw size={18} />
-          </button>
-        }
-      />
-      
-      {/* Mobile-native header */}
-      <div className="dashboard-header">
-        <div className="header-content">
-          {/* Analysis Info Bar */}
-          <div className="analysis-info-bar">
-            <div className="analysis-info-item">
-              <FileText size={14} />
-              <span>{displayStats.totalEntries} entries</span>
-            </div>
-            <div className="analysis-info-item">
-              <Calendar size={14} />
-              <span>{calendarData.length} active days</span>
-            </div>
-            <div className="analysis-info-item">
-              <Brain size={14} />
-              <span>AI insights</span>
-            </div>
-            {displayStats.isFiltered && (
-              <div className="analysis-info-item">
-                <Filter size={14} />
-                <span>Filtered: {displayStats.displayEntries}/{displayStats.totalEntries}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile filters */}
-      <div className="filters-section">
-        <button 
-          className="filters-toggle"
-          onClick={toggleFilters}
-          aria-label="Toggle filters"
-          aria-expanded={showFilters}
-        >
-          <Filter size={16} />
-          <span>Filters</span>
-          {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-        
-        {showFilters && (
-          <div className="filters-container">
-            <div className="filter-group">
-              <label className="filter-label">Time Period</label>
-              <div className="filter-options">
-                <button 
-                  className={`filter-option ${timePeriod === 'all' ? 'active' : ''}`}
-                  onClick={() => setTimePeriod('all')}
-                >
-                  All Time
-                </button>
-                <button 
-                  className={`filter-option ${timePeriod === 'week' ? 'active' : ''}`}
-                  onClick={() => setTimePeriod('week')}
-                >
-                  Past Week
-                </button>
-                <button 
-                  className={`filter-option ${timePeriod === 'month' ? 'active' : ''}`}
-                  onClick={() => setTimePeriod('month')}
-                >
-                  Past Month
-                </button>
-                <button 
-                  className={`filter-option ${timePeriod === 'quarter' ? 'active' : ''}`}
-                  onClick={() => setTimePeriod('quarter')}
-                >
-                  Past 3 Months
-                </button>
-              </div>
-            </div>
-            
-            {availableJourneys.length > 1 && (
-              <div className="filter-group">
-                <label className="filter-label">Journey Path</label>
-                <div className="filter-options">
-                  <button 
-                    className={`filter-option ${selectedJourney === 'all' ? 'active' : ''}`}
-                    onClick={() => setSelectedJourney('all')}
-                  >
-                    All Journeys
-                  </button>
-                  
-                  {availableJourneys.map(journey => (
-                    <button 
-                      key={journey.id}
-                      className={`filter-option ${selectedJourney === journey.id ? 'active' : ''}`}
-                      onClick={() => setSelectedJourney(journey.id)}
-                    >
-                      {journey.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      
-      {/* Error state */}
-      {(error || statsError) && !shouldShowLoader && (
-        <div className="error-container">
-          <AlertCircle size={32} />
-          <h2 className="message-title">Something went wrong</h2>
-          <p className="message-text">{error || statsError}</p>
-          <button 
-            onClick={handleRefresh}
-            className="retry-button"
-          >
+  if (statsError) {
+    return (
+      <div className="as-state-wrap">
+        <AsGlass className="as-state-card">
+          <Brain size={40} strokeWidth={1} className="as-state-icon" />
+          <h2>{t('dashboard.errorTitle', "Couldn't load insights")}</h2>
+          <p>{statsError}</p>
+          <button onClick={handleRefresh} className="as-action-btn">
             <RefreshCw size={16} />
-            Try Again
+            {t('dashboard.tryAgain', 'Try Again')}
           </button>
-        </div>
-      )}
-      
-      {/* Not enough data */}
-      {notEnoughData && !shouldShowLoader && !error && !statsError && (
-        <div className="not-enough-data">
-          <BarChart2 size={48} />
-          <h2 className="message-title">Not Enough Data</h2>
-          <p className="message-text">
-            Complete at least 2 journal entries to see analytics.
-            The more you journal, the richer your insights become!
-          </p>
-          <button 
-            className="action-button"
-            onClick={() => navigateToScreen('upload')}
+        </AsGlass>
+      </div>
+    );
+  }
+
+  if (statistics.totalEntries < 2) {
+    return (
+      <div className="as-state-wrap">
+        <AsGlass className="as-state-card">
+          <Target size={40} strokeWidth={1} className="as-state-icon" />
+          <h2>{t('dashboard.notEnoughDataTitle', 'Not Enough Data Yet')}</h2>
+          <p>{t('dashboard.notEnoughDataText', 'Complete at least 2 journal entries to unlock your personal insights.')}</p>
+          <button
+            onClick={() => navigateToScreen('write')}
+            className="as-action-btn as-primary"
           >
-            <MessageCircle size={16} />
-            Write a Journal Entry
+            <Sparkles size={16} />
+            {t('dashboard.writeFirstEntry', 'Write Your First Entry')}
+            <ChevronRight size={16} />
           </button>
-        </div>
-      )}
+        </AsGlass>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`analytics-screen ${!isDarkMode ? 'light-mode' : ''}`}>
       
-      {/* Main content */}
-      {!shouldShowLoader && !error && !statsError && !notEnoughData && (
-        <>
-          {/* Mobile stats overview */}
-          <div className="stats-overview">
-            <div className="stat-card">
-              <div className="stat-icon-container">
-                <BookOpen className="stat-icon" />
-              </div>
-              <div className="stat-label">Total Entries</div>
-              <div className="stat-value">{displayStats.totalEntries}</div>
-              <div className="stat-subtext">analyzed by AI</div>
+
+      <div className="as-content">
+        {/* PULSE */}
+        <section className="as-section">
+          <AsGlass className="as-pulse">
+            <div className="as-pulse-row">
+              <AsPulseStat icon={FileText} value={filteredEntries.length} label={t('dashboard.pulseEntries', 'Entries')} />
+              <div className="as-pulse-divider" />
+              <AsPulseStat icon={Flame} value={statistics.currentStreak || 0} label={t('dashboard.pulseStreak', 'Streak')} />
+              <div className="as-pulse-divider" />
+              <AsPulseStat icon={Target} value={`${inProgressPaths[0]?.percentage || 0}%`} label={t('dashboard.pulseProgress', 'Progress')} />
+            </div>
+            {/* Refresh action moved from TopBar into page content */}
+            <div className="as-pulse-actions">
+              <button 
+                onClick={handleRefresh}
+                className={`as-refresh-btn ${isRefreshing ? 'as-refreshing' : ''}`}
+                disabled={isRefreshing}
+                aria-label={t('dashboard.refreshInsights', 'Refresh insights')}
+              >
+                <RefreshCw size={16} />
+              </button>
             </div>
             
-            <div className="stat-card">
-              <div className="stat-icon-container">
-                <Map className="stat-icon" />
-              </div>
-              <div className="stat-label">Progress</div>
-              <div className="stat-value">{displayStats.journeyProgress}%</div>
-              <div className="stat-subtext">{displayStats.currentPathName}</div>
-            </div>
-            
-            <div className="stat-card">
-              <div className="stat-icon-container">
-                <FileText className="stat-icon" />
-              </div>
-              <div className="stat-label">Words Written</div>
-              <div className="stat-value">{displayStats.wordsWritten > 999 ? `${Math.round(displayStats.wordsWritten/1000)}k` : displayStats.wordsWritten}</div>
-              <div className="stat-subtext">total words</div>
-            </div>
-            
-            <div className="stat-card">
-              <div className="stat-icon-container">
-                <Flame className="stat-icon" />
-              </div>
-              <div className="stat-label">Best Streak</div>
-              <div className="stat-value">{displayStats.longestStreak}</div>
-              <div className="stat-subtext">days in a row</div>
-            </div>
-          </div>
-          
-          {/* Mobile-native tabs */}
-          <div className="dashboard-tabs-container">
-            <div className="dashboard-tabs">
-              {tabs.map(tab => (
+            <div className="as-time-filter">
+              {[
+                { key: 'all', label: t('dashboard.filterAllTime', 'All Time') },
+                { key: 'week', label: t('dashboard.filter7Days', '7 Days') },
+                { key: 'month', label: t('dashboard.filter30Days', '30 Days') },
+                { key: 'quarter', label: t('dashboard.filter90Days', '90 Days') }
+              ].map(({ key, label }) => (
                 <button 
-                  key={tab.id}
-                  className={`dashboard-tab ${activeSection === tab.id ? 'active' : ''}`}
-                  onClick={() => setActiveSection(tab.id)}
+                  key={key}
+                  className={`as-time-pill ${timePeriod === key ? 'as-active' : ''}`}
+                  onClick={() => setTimePeriod(key)}
                 >
-                  {tab.label}
+                  {label}
                 </button>
               ))}
             </div>
+          </AsGlass>
+        </section>
+
+        {/* CURRENT JOURNEY */}
+        {inProgressPaths.length > 0 && (
+          <section className="as-section">
+            <AsGlass 
+              className="as-focus"
+              style={{ '--as-focus-color': inProgressPaths[0].color }}
+              onClick={() => navigateToScreen('daily', { 
+                pathId: inProgressPaths[0].id, 
+                day: inProgressPaths[0].nextDay 
+              })}
+            >
+              <div className="as-focus-header">
+                <span className="as-focus-badge">
+                  <TrendingUp size={12} />
+                  {t('dashboard.currentJourney', 'Current Journey')}
+                </span>
+                <span className="as-focus-action">
+                  {t('dashboard.view', 'View')}
+                  <ChevronRight size={14} />
+                </span>
+              </div>
+              <h3 className="as-focus-title">{inProgressPaths[0].title}</h3>
+              <div className="as-focus-track">
+                <div 
+                  className="as-focus-fill"
+                  style={{ 
+                    transform: `translateX(${inProgressPaths[0].percentage - 100}%)`,
+                    backgroundColor: `rgb(${inProgressPaths[0].color})`
+                  }}
+                />
+              </div>
+              <div className="as-focus-meta">
+                <span>{t('dashboard.dayOf', 'Day {{current}} of {{total}}', { current: inProgressPaths[0].nextDay, total: inProgressPaths[0].totalDays })}</span>
+                <span className="as-focus-dot">•</span>
+                <span>{t('dashboard.completedCount', '{{count}} completed', { count: inProgressPaths[0].completedDaysList?.length || 0 })}</span>
+              </div>
+            </AsGlass>
+          </section>
+        )}
+
+        {/* AI PERSONALITY */}
+        {statistics.totalEntries >= 5 && (
+          <section className="as-section">
+            <AIPersonDescription 
+              entries={statistics.allEntries}
+              totalEntries={statistics.totalEntries}
+              progressStats={progressStats}
+            />
+          </section>
+        )}
+
+        {/* DAILY AI QUESTION */}
+        {statistics.totalEntries >= 3 && (
+          <section className="as-section">
+            <DailyAIQuestion 
+              entries={statistics.allEntries}
+              totalEntries={statistics.totalEntries}
+              progressStats={progressStats}
+            />
+          </section>
+        )}
+
+        {/* EMOTIONS */}
+        <section className="as-section">
+          <AsExpandable
+            icon={Heart}
+            title={t('dashboard.emotionsTitle', 'Emotional Patterns')}
+            subtitle={emotionData.length > 0
+              ? t('dashboard.emotionsSubtitle', '{{emotions}} emotions in {{entries}} entries', { emotions: emotionData.length, entries: filteredEntries.length })
+              : t('dashboard.emotionsSubtitleEmpty', 'Emotional analysis of your writing')
+            }
+            sectionId="emotions"
+            isOpen={expandedSection === 'emotions'}
+            onToggle={toggleSection}
+            colorRgb="239, 68, 68"
+          >
+            <EmotionTrends
+              data={emotionData}
+              isDarkMode={isDarkMode}
+              hideTitle={true}
+              simplified={true}
+            />
+          </AsExpandable>
+        </section>
+
+        {/* THEMES */}
+        <section className="as-section">
+          <AsExpandable
+            icon={Cloud}
+            title={t('dashboard.themesTitle', 'Recurring Themes')}
+            subtitle={themeData.length > 0
+              ? t('dashboard.themesSubtitle', '{{themes}} themes from {{entries}} entries', { themes: themeData.length, entries: filteredEntries.length })
+              : t('dashboard.themesSubtitleEmpty', 'Topics that appear frequently')
+            }
+            sectionId="themes"
+            isOpen={expandedSection === 'themes'}
+            onToggle={toggleSection}
+            colorRgb="59, 130, 246"
+          >
+            <ThemeCloud data={themeData} isDarkMode={isDarkMode} />
+          </AsExpandable>
+        </section>
+
+        {/* RHYTHM */}
+        <section className="as-section">
+          <AsExpandable
+            icon={Calendar}
+            title={t('dashboard.rhythmTitle', 'Journaling Rhythm')}
+            subtitle={t('dashboard.rhythmSubtitle', '{{count}} active days tracked', { count: calendarData.length })}
+            sectionId="habits"
+            isOpen={expandedSection === 'habits'}
+            onToggle={toggleSection}
+            colorRgb="16, 185, 129"
+          >
+            <div className="as-habits-stats">
+              <div className="as-habit-stat">
+                <span className="as-habit-value">{progressStats?.currentStreak || 0}</span>
+                <span className="as-habit-label">{t('dashboard.habitCurrent', 'Current')}</span>
+              </div>
+              <div className="as-habit-stat">
+                <span className="as-habit-value">{statistics.longestStreak}</span>
+                <span className="as-habit-label">{t('dashboard.habitBest', 'Best')}</span>
+              </div>
+              <div className="as-habit-stat">
+                <span className="as-habit-value">{statistics.averageLength}</span>
+                <span className="as-habit-label">{t('dashboard.habitAvgLength', 'Avg Length')}</span>
+              </div>
+            </div>
+            <JournalCalendar data={calendarData} />
+          </AsExpandable>
+        </section>
+
+        {/* INNER AURA (mood check-ins) */}
+        <section className="as-section">
+          <AsExpandable
+            icon={Moon}
+            title={t('dashboard.innerAuraTitle', 'Inner Aura')}
+            subtitle={t('dashboard.innerAuraSubtitle', 'Your daily mood check-ins')}
+            sectionId="inner-aura"
+            isOpen={expandedSection === 'inner-aura'}
+            onToggle={toggleSection}
+            colorRgb="129, 140, 248"
+          >
+            <MoodTrends />
+          </AsExpandable>
+        </section>
+
+        {/* AI INSIGHTS */}
+        <section className="as-section">
+          <AsExpandable
+            icon={Sparkles}
+            title={t('dashboard.aiInsightsTitle', 'AI Insights')}
+            subtitle={t('dashboard.aiInsightsSubtitle', 'Smart analysis of your entries')}
+            sectionId="ai"
+            isOpen={expandedSection === 'ai'}
+            onToggle={toggleSection}
+            colorRgb="139, 92, 246"
+          >
+            <InsightSummary entries={filteredEntries} progressReport={null} />
+          </AsExpandable>
+        </section>
+
+        {/* COMPLETED */}
+        {completedPaths.length > 0 && (
+          <section className="as-section">
+            <AsExpandable
+              icon={Target}
+              title={t('dashboard.completedTitle', 'Completed Journeys')}
+              subtitle={t('dashboard.completedSubtitle', '{{count}} paths finished', { count: completedPaths.length })}
+              sectionId="completed"
+              isOpen={expandedSection === 'completed'}
+              onToggle={toggleSection}
+              colorRgb="245, 158, 11"
+            >
+              <div className="as-completed-list">
+                {completedPaths.slice(0, 10).map((path, index) => (
+                  <div key={index} className="as-completed-item">
+                    <div 
+                      className="as-completed-dot"
+                      style={{ backgroundColor: `rgb(${path.color})` }}
+                    />
+                    <span className="as-completed-name">{path.title}</span>
+                    <span className="as-completed-days">{t('dashboard.daysCount', '{{count}} days', { count: path.totalDays })}</span>
+                  </div>
+                ))}
+              </div>
+            </AsExpandable>
+          </section>
+        )}
+
+        {/* ARCHIVE */}
+        <section className="as-section">
+          <AsGlass className="as-archive" onClick={() => navigateToScreen('journal-archive')}>
+            <div className="as-archive-inner">
+              <div 
+                className="as-archive-icon"
+                style={{ 
+                  background: 'rgba(148, 163, 184, 0.15)',
+                  color: 'rgb(148, 163, 184)'
+                }}
+              >
+                <FileText size={18} />
+              </div>
+              <div className="as-archive-info">
+                <h3 className="as-archive-title">{t('dashboard.archiveTitle', 'Entry Archive')}</h3>
+                <p className="as-archive-subtitle">{t('dashboard.archiveSubtitle', 'Browse all {{count}} past entries', { count: statistics.totalEntries })}</p>
+              </div>
+              <ChevronRight size={16} className="as-archive-chevron" />
+            </div>
+          </AsGlass>
+        </section>
+
+        {/* FOOTER */}
+        <section className="as-section as-footer">
+          <div className="as-privacy-row">
+            <Eye size={12} />
+            <span>{t('dashboard.privacyOnDevice', 'All insights are private and processed securely on-device')}</span>
           </div>
-          
-          {/* Dynamic section content */}
-          <div className="dashboard-content">
-            {renderMobileSection()}
+          <div className="as-privacy-row">
+            <EyeOff size={12} />
+            <span>{t('dashboard.privacyNeverShared', 'Your journal entries are never shared or sold')}</span>
           </div>
-        </>
-      )}
+        </section>
+      </div>
     </div>
   );
 };
 
-export default JournalAnalyticsDashboard;
+export default AnalyticsScreen;

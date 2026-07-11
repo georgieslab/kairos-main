@@ -1,0 +1,62 @@
+[
+  {
+    "id": "journeyDays:1",
+    "title": "Beginning the Journey",
+    "theme": "Self-Awareness",
+    "prompt": "What are your hopes for this journaling journey? Write about why you've decided to begin this practice and what you hope to discover about yourself."
+  },
+  {
+    "id": "journeyDays:2",
+    "title": "Values Exploration",
+    "theme": "Core Values",
+    "prompt": "What are 3-5 core values that guide your life? Explore why these matter to you and how they shape your choices."
+  },
+  {
+    "id": "journeyDays:3",
+    "title": "Life Chapters",
+    "theme": "Personal Narrative",
+    "prompt": "If your life were a book, what would the chapters be so far? Name each chapter and write a brief summary of that period."
+  },
+  {
+    "id": "journeyDays:4",
+    "title": "Inner Critic",
+    "theme": "Self-Compassion",
+    "prompt": "Describe your inner critic. What does this voice say to you? How long has it been with you? How might you respond to it with compassion?"
+  },
+  {
+    "id": "journeyDays:5",
+    "title": "Sources of Joy",
+    "theme": "Meaning & Purpose",
+    "prompt": "What activities make you lose track of time? When do you feel most alive and engaged? Explore what these experiences have in common."
+  },
+  {
+    "id": "journeyDays:6",
+    "title": "Relationship Patterns",
+    "theme": "Connection",
+    "prompt": "What patterns do you notice in your closest relationships? What do you tend to seek from others? What do you find challenging about connection?"
+  },
+  {
+    "id": "journeyDays:7",
+    "title": "Future Self",
+    "theme": "Growth",
+    "prompt": "Imagine yourself 5 years from now, living a fulfilling life. What does that look like? What qualities have you developed? What advice would this future self give you today?"
+  },
+  {
+    "id": "journeyDays:8",
+    "title": "Limiting Beliefs",
+    "theme": "Mindset",
+    "prompt": "What beliefs about yourself or the world might be holding you back? Choose one and explore where it came from and how your life might be different without it."
+  },
+  {
+    "id": "journeyDays:9",
+    "title": "Gratitude Reflection",
+    "theme": "Appreciation",
+    "prompt": "What are you grateful for in this season of life? Include small daily joys as well as bigger blessings. How does focusing on gratitude affect your perspective?"
+  },
+  {
+    "id": "journeyDays:10",
+    "title": "Integration",
+    "theme": "Wisdom",
+    "prompt": "Looking back at your journaling from the past days, what patterns, insights or themes do you notice? What is one truth about yourself that you want to remember going forward?"
+  }
+]

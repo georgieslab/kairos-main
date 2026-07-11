@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { MessageCircle, Send, Sparkles, Clock, CheckCircle, AlertCircle, Brain, Lightbulb, TrendingUp } from 'lucide-react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -6,6 +7,7 @@ import { db } from '../../config/firebase';
 import { callClaudeApi, safeJsonParse } from '../../utils/apiUtils';
 
 const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
+  const { t } = useTranslation('analytics');
   const { currentUser, userProfile } = useAuth();
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -20,21 +22,21 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
   // Enhanced question suggestions based on journaling themes and total entries
   const getQuestionSuggestions = () => {
     const baseQuestions = [
-      "What pattern in my emotions do you notice across my recent entries?",
-      "Based on my writing, what do you think my biggest strength is right now?", 
-      "What growth opportunity do you see for me based on my journal entries?",
-      "How has my mindset or perspective evolved over my journaling journey?",
-      "What recurring theme in my life deserves more attention?",
-      "What advice would you give me based on the challenges I've written about?"
+      t('dailyAIQuestion.suggestions.emotionPattern', 'What pattern in my emotions do you notice across my recent entries?'),
+      t('dailyAIQuestion.suggestions.biggestStrength', 'Based on my writing, what do you think my biggest strength is right now?'),
+      t('dailyAIQuestion.suggestions.growthOpportunity', 'What growth opportunity do you see for me based on my journal entries?'),
+      t('dailyAIQuestion.suggestions.mindsetEvolution', 'How has my mindset or perspective evolved over my journaling journey?'),
+      t('dailyAIQuestion.suggestions.recurringTheme', 'What recurring theme in my life deserves more attention?'),
+      t('dailyAIQuestion.suggestions.adviceOnChallenges', "What advice would you give me based on the challenges I've written about?")
     ];
 
     const advancedQuestions = [
-      "What positive changes do you notice in my recent entries compared to earlier ones?",
-      "Based on my writing style and content, what kind of person do you think I am?",
-      "What goal or aspiration comes through most clearly in my journal entries?",
-      "What do my entries suggest about what truly matters to me?",
-      "How do my different journal paths complement each other in my growth?",
-      "What blind spots or areas for exploration do you see in my journaling?"
+      t('dailyAIQuestion.suggestions.positiveChanges', 'What positive changes do you notice in my recent entries compared to earlier ones?'),
+      t('dailyAIQuestion.suggestions.kindOfPerson', 'Based on my writing style and content, what kind of person do you think I am?'),
+      t('dailyAIQuestion.suggestions.clearGoal', 'What goal or aspiration comes through most clearly in my journal entries?'),
+      t('dailyAIQuestion.suggestions.trulyMatters', 'What do my entries suggest about what truly matters to me?'),
+      t('dailyAIQuestion.suggestions.pathsComplement', 'How do my different journal paths complement each other in my growth?'),
+      t('dailyAIQuestion.suggestions.blindSpots', 'What blind spots or areas for exploration do you see in my journaling?')
     ];
 
     // Return more sophisticated questions for users with more entries
@@ -262,21 +264,21 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
             <Brain className="question-accent-icon" />
           </div>
           <div className="question-header-content">
-            <h3 className="question-title">Daily AI Insight</h3>
+            <h3 className="question-title">{t('dailyAIQuestion.title', 'Daily AI Insight')}</h3>
             <p className="question-subtitle">
-              Ask me one personalized question about your journaling journey
+              {t('dailyAIQuestion.subtitle', 'Ask me one personalized question about your journaling journey')}
             </p>
           </div>
           <div className="question-status">
             {hasAskedToday ? (
               <div className="status-used">
                 <CheckCircle size={16} />
-                <span>Used Today</span>
+                <span>{t('dailyAIQuestion.usedToday', 'Used Today')}</span>
               </div>
             ) : (
               <div className="status-available">
                 <Clock size={16} />
-                <span>Available</span>
+                <span>{t('dailyAIQuestion.available', 'Available')}</span>
               </div>
             )}
           </div>
@@ -286,14 +288,14 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
         {hasAskedToday ? (
           <div className="previous-question-section">
             <div className="previous-question">
-              <h4 className="previous-question-title">Today's Question:</h4>
+              <h4 className="previous-question-title">{t('dailyAIQuestion.todaysQuestion', "Today's Question:")}</h4>
               <p className="previous-question-text">"{todaysQuestion}"</p>
             </div>
-            
+
             <div className="ai-answer">
               <div className="answer-header">
                 <Lightbulb className="answer-icon" />
-                <span>AI Response</span>
+                <span>{t('dailyAIQuestion.aiResponse', 'AI Response')}</span>
               </div>
               <div className="answer-content">
                 {answer}
@@ -305,7 +307,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
               <div className="insights-section">
                 <div className="insights-header">
                   <TrendingUp className="insights-icon" />
-                  <span>Key Insights</span>
+                  <span>{t('dailyAIQuestion.keyInsights', 'Key Insights')}</span>
                 </div>
                 <div className="insights-list">
                   {todaysInsights.map((insight, index) => (
@@ -323,7 +325,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
               <div className="personal-observation">
                 <div className="observation-header">
                   <Brain className="observation-icon" />
-                  <span>Personal Observation</span>
+                  <span>{t('dailyAIQuestion.personalObservation', 'Personal Observation')}</span>
                 </div>
                 <p className="observation-text">{todaysObservation}</p>
               </div>
@@ -331,7 +333,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
 
             <div className="reset-timer">
               <Clock size={14} />
-              <span>Next question available in {timeUntilReset}</span>
+              <span>{t('dailyAIQuestion.nextQuestionIn', 'Next question available in {{time}}', { time: timeUntilReset })}</span>
             </div>
           </div>
         ) : (
@@ -341,7 +343,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
                 <textarea
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder={`What would you like to know about your ${totalEntries}-entry journaling journey? Be specific for the best insights...`}
+                  placeholder={t('dailyAIQuestion.inputPlaceholder', 'What would you like to know about your {{count}}-entry journaling journey? Be specific for the best insights...', { count: totalEntries })}
                   className="question-input"
                   maxLength={300}
                   rows={3}
@@ -357,7 +359,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
                     type="button"
                   >
                     <Lightbulb size={16} />
-                    {totalEntries >= 10 ? 'Advanced Ideas' : 'Suggestions'}
+                    {totalEntries >= 10 ? t('dailyAIQuestion.advancedIdeas', 'Advanced Ideas') : t('dailyAIQuestion.suggestionsLabel', 'Suggestions')}
                   </button>
                 </div>
               </div>
@@ -370,12 +372,12 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
                 {isLoading ? (
                   <>
                     <div className="loading-spinner" />
-                    <span>Analyzing {totalEntries} entries...</span>
+                    <span>{t('dailyAIQuestion.analyzingEntries', 'Analyzing {{count}} entries...', { count: totalEntries })}</span>
                   </>
                 ) : (
                   <>
                     <Send size={18} />
-                    <span>Ask AI</span>
+                    <span>{t('dailyAIQuestion.askAI', 'Ask AI')}</span>
                   </>
                 )}
               </button>
@@ -385,7 +387,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
             {showSuggestions && (
               <div className="question-suggestions">
                 <h4 className="suggestions-title">
-                  {totalEntries >= 10 ? 'Advanced Question Ideas:' : 'Question Ideas:'}
+                  {totalEntries >= 10 ? t('dailyAIQuestion.advancedQuestionIdeas', 'Advanced Question Ideas:') : t('dailyAIQuestion.questionIdeas', 'Question Ideas:')}
                 </h4>
                 <div className="suggestions-grid">
                   {questionSuggestions.slice(0, totalEntries >= 10 ? 8 : 6).map((suggestion, index) => (
@@ -400,7 +402,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
                 </div>
                 {totalEntries >= 10 && (
                   <p className="suggestions-note">
-                    With {totalEntries} entries, you can ask more sophisticated questions about patterns and growth!
+                    {t('dailyAIQuestion.sophisticatedQuestionsNote', 'With {{count}} entries, you can ask more sophisticated questions about patterns and growth!', { count: totalEntries })}
                   </p>
                 )}
               </div>
@@ -410,9 +412,9 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
             <div className="context-info">
               <MessageCircle size={14} />
               <span>
-                AI will analyze your {totalEntries} journal entries  
-                {progressStats?.currentStreak > 0 && ` (${progressStats.currentStreak}-day streak!)`} 
-                 , in order provide personalized insights
+                {t('dailyAIQuestion.contextInfo', 'AI will analyze your {{count}} journal entries', { count: totalEntries })}
+                {progressStats?.currentStreak > 0 && ` (${t('dailyAIQuestion.dayStreak', '{{count}}-day streak!', { count: progressStats.currentStreak })})`}
+                {' '}{t('dailyAIQuestion.toProvideInsights', 'to provide personalized insights')}
               </span>
             </div>
           </div>

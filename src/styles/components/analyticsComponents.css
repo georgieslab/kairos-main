@@ -3019,7 +3019,7 @@
 }
 
 /* ==================== THEME ADJUSTMENTS ==================== */
-.analytics-dashboard.dark-theme .daily-ai-question-card {
+.dark-theme .daily-ai-question-card {
   background: linear-gradient(
     135deg,
     rgba(85, 139, 110, 0.1) 0%,
@@ -3030,7 +3030,7 @@
   );
 }
 
-.analytics-dashboard.light-theme .daily-ai-question-card {
+.light-theme .daily-ai-question-card {
   background: linear-gradient(
     135deg,
     rgba(85, 139, 110, 0.08) 0%,
@@ -3041,7 +3041,7 @@
   );
 }
 
-.analytics-dashboard.dark-theme .ai-person-description-card {
+.dark-theme .ai-person-description-card {
   background: linear-gradient(
     135deg,
     rgba(216, 76, 147, 0.08) 0%,
@@ -3052,7 +3052,7 @@
   );
 }
 
-.analytics-dashboard.light-theme .ai-person-description-card {
+.light-theme .ai-person-description-card {
   background: linear-gradient(
     135deg,
     rgba(216, 76, 147, 0.06) 0%,
@@ -4369,7 +4369,8 @@
   color: var(--text-primary);
   padding: 0;
   padding-bottom: 80px; /* Bottom nav space */
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip; /* avoid becoming a nested scroll container (mobile scroll trap) */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -5246,7 +5247,8 @@
   color: var(--text-primary);
   padding: 0;
   padding-bottom: 80px; /* Bottom nav space */
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip; /* avoid becoming a nested scroll container (mobile scroll trap) */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -8097,6 +8099,41 @@ button:focus-visible,
   }
 }
 
+/* ==========================================================================
+   MOBILE FIX: AI Personality Insight — stop text from disappearing
+   On Android WebView, the heavy infinite animations (animated gradient border
+   + opacity behind a backdrop-filter glass card) trigger repaints that cause
+   the gradient-clipped `.person-title` to flash transparent / vanish.
+   On mobile we render the title in a solid brand color and calm the
+   repaint-heavy animations. Desktop keeps the full animated treatment.
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Solid fill so the header can never paint as transparent */
+  .person-title {
+    background: none;
+    -webkit-text-fill-color: rgb(192, 80, 197);
+    color: rgb(192, 80, 197);
+  }
+
+  /* Stop the repaint-heavy decorative animations that cause the flicker */
+  .ai-person-description-card::before {
+    animation: none;
+  }
+  .person-icon-container::before {
+    animation: none;
+  }
+  .person-sparkle-icon {
+    animation: none;
+  }
+}
+
 .analytics-dashboard {
   padding: 0.25rem;
+}
+/* about-help.css adds a decorative gradient underline to the *global*
+   .section-title; it leaks onto the analytics AI cards where it doesn't
+   belong. Remove the pseudo-element there. */
+.analytics-screen .section-title::after,
+.ai-person-description-card .section-title::after {
+  content: none;
 }

@@ -439,6 +439,26 @@
   }
 }
 
+/* ===== LIGHT THEME ===== */
+/* The app sets .light-theme on <html>; recolour the overlay + text so the
+   loader isn't a dark box on a light UI. The orb itself stays colourful. */
+.light-theme .kairos-loader-container {
+  background-color: rgba(245, 245, 247, 0.92);
+}
+
+.light-theme .loader-title {
+  color: #1e293b;
+}
+
+.light-theme .loader-subtitle,
+.light-theme .loader-progress-text {
+  color: #64748b;
+}
+
+.light-theme .loader-progress-container {
+  background: rgba(0, 0, 0, 0.08);
+}
+
 /* ===== Accessibility ===== */
 @media (prefers-reduced-motion: reduce) {
   .kairos-loader-container,

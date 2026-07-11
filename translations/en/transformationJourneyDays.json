@@ -1,0 +1,128 @@
+[
+  {
+    "id": "transformationJourneyDays:1",
+    "title": "Honest Assessment",
+    "theme": "Self-Awareness",
+    "prompt": "Describe your relationship with [substance/behavior] honestly and without judgment. When did it begin? How has it evolved? What role does it play in your life currently?"
+  },
+  {
+    "id": "transformationJourneyDays:2",
+    "title": "Understanding Your Why",
+    "theme": "Motivation",
+    "prompt": "Why do you want to transform this pattern in your life? Write about your deepest motivations for change. What has brought you to this point of wanting transformation?"
+  },
+  {
+    "id": "transformationJourneyDays:3",
+    "title": "Commitment Setting",
+    "theme": "Intention",
+    "prompt": "Write a letter to yourself about the commitment you're making. Be specific about what you're committing to and why it matters. What are you willing to do differently starting today?"
+  },
+  {
+    "id": "transformationJourneyDays:4",
+    "title": "Identifying Triggers",
+    "theme": "Trigger Awareness",
+    "prompt": "Reflect on the situations, people, emotions, or thoughts that trigger your desire for [substance/behavior]. Try to be as specific as possible about the circumstances that precede the behavior."
+  },
+  {
+    "id": "transformationJourneyDays:5",
+    "title": "The Emotional Landscape",
+    "theme": "Emotional Awareness",
+    "prompt": "Explore the emotions you experience before, during, and after engaging in [substance/behavior]. Does it provide comfort, excitement, relief, or something else? What emotions are you trying to fulfill or avoid?"
+  },
+  {
+    "id": "transformationJourneyDays:6",
+    "title": "The Physical Experience",
+    "theme": "Body Awareness",
+    "prompt": "Describe the physical sensations you experience when craving [substance/behavior]. Where do you feel it in your body? How does your body feel during and after?"
+  },
+  {
+    "id": "transformationJourneyDays:7",
+    "title": "The Pattern Cycle",
+    "theme": "Pattern Recognition",
+    "prompt": "Map out your full pattern cycle from trigger to behavior to aftermath. Are there predictable stages? Where in this cycle might you have the power to intervene?"
+  },
+  {
+    "id": "transformationJourneyDays:8",
+    "title": "The Pause Practice",
+    "theme": "Mindful Response",
+    "prompt": "Explore how you might create a mindful pause between trigger and response. What would help you stop and breathe before automatically following the pattern?"
+  },
+  {
+    "id": "transformationJourneyDays:9",
+    "title": "Replacement Behaviors",
+    "theme": "Healthy Alternatives",
+    "prompt": "Brainstorm at least 5 specific alternative activities you could turn to when experiencing a craving. Which ones might address the same needs but in healthier ways?"
+  },
+  {
+    "id": "transformationJourneyDays:10",
+    "title": "Managing Difficult Emotions",
+    "theme": "Emotional Resilience",
+    "prompt": "Reflect on healthy ways to process difficult emotions without [substance/behavior]. How might you sit with discomfort, anxiety, boredom, or stress?"
+  },
+  {
+    "id": "transformationJourneyDays:11",
+    "title": "Building Your Support System",
+    "theme": "Connection",
+    "prompt": "Who can support you in this transformation journey? Write about specific people and how they might help. Consider both personal connections and professional resources."
+  },
+  {
+    "id": "transformationJourneyDays:12",
+    "title": "Preparing for Challenges",
+    "theme": "Resilience Planning",
+    "prompt": "Anticipate your most likely challenges or setbacks. For each one, create a specific plan for how you'll respond and recover."
+  },
+  {
+    "id": "transformationJourneyDays:13",
+    "title": "Designing Your Environment",
+    "theme": "Environmental Design",
+    "prompt": "How can you redesign your physical environment to support your new patterns? What changes to your space would make it easier to maintain your commitment?"
+  },
+  {
+    "id": "transformationJourneyDays:14",
+    "title": "Daily Rituals and Routines",
+    "theme": "Positive Routines",
+    "prompt": "Create a daily routine that incorporates healthy activities during vulnerable times. Be specific about when and how you'll implement these new habits."
+  },
+  {
+    "id": "transformationJourneyDays:15",
+    "title": "Nurturing Physical Wellbeing",
+    "theme": "Physical Health",
+    "prompt": "Reflect on how improved sleep, nutrition, hydration, and movement might support your transformation. Choose one aspect to focus on improving."
+  },
+  {
+    "id": "transformationJourneyDays:16",
+    "title": "Finding Meaning and Purpose",
+    "theme": "Values and Meaning",
+    "prompt": "Write about activities and pursuits that give you a sense of meaning, purpose, or flow. How might you incorporate more of these into your daily life?"
+  },
+  {
+    "id": "transformationJourneyDays:17",
+    "title": "Celebrating Small Wins",
+    "theme": "Progress Recognition",
+    "prompt": "Reflect on the progress you've made so far, no matter how small. What changes have you noticed in your thoughts, feelings, or behaviors?"
+  },
+  {
+    "id": "transformationJourneyDays:18",
+    "title": "Managing Stress and Pressure",
+    "theme": "Stress Resilience",
+    "prompt": "Consider how stress affects your vulnerability to old patterns. Develop a specific stress management plan that you can implement during high-pressure periods."
+  },
+  {
+    "id": "transformationJourneyDays:19",
+    "title": "Identity Transformation",
+    "theme": "Self-Concept",
+    "prompt": "How has your self-image begun to change during this journey? Write about who you are becoming as you transform this pattern."
+  },
+  {
+    "id": "transformationJourneyDays:20",
+    "title": "Planning for the Future",
+    "theme": "Sustainable Change",
+    "prompt": "Create a specific plan for maintaining your progress beyond these 21 days. What ongoing practices, check-ins, or support will you need?"
+  },
+  {
+    "id": "transformationJourneyDays:21",
+    "title": "Integration and Commitment Renewal",
+    "theme": "Integration",
+    "prompt": "Reflect on your entire 21-day journey. What have you learned about yourself? How has your relationship with [substance/behavior] changed? Renew your commitment to yourself for the path ahead."
+  }
+]

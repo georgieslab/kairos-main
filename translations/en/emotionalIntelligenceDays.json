@@ -1,0 +1,62 @@
+[
+  {
+    "id": "emotionalIntelligenceDays:1",
+    "title": "Emotional Awareness",
+    "theme": "Feeling Recognition",
+    "prompt": "Describe 3-5 emotions you've experienced today. Where did you feel them in your body? What triggered them? How did you respond?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:2",
+    "title": "Emotional Vocabulary",
+    "theme": "Expression",
+    "prompt": "Beyond happy, sad, angry, or scared, what nuanced emotions do you experience? Create a list of at least 10 specific feeling words that resonate with your emotional life."
+  },
+  {
+    "id": "emotionalIntelligenceDays:3",
+    "title": "Emotional Patterns",
+    "theme": "Self-Knowledge",
+    "prompt": "What emotion tends to arise most frequently in your life? What situations typically trigger it? How does this emotion serve you or challenge you?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:4",
+    "title": "Difficult Emotions",
+    "theme": "Acceptance",
+    "prompt": "Choose an emotion you find uncomfortable or try to avoid. How do you typically respond when it arises? What might this emotion be trying to tell you?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:5",
+    "title": "Emotional Triggers",
+    "theme": "Self-Regulation",
+    "prompt": "What situations reliably trigger strong emotional responses in you? Identify patterns in these triggers and explore why they might affect you so deeply."
+  },
+  {
+    "id": "emotionalIntelligenceDays:6",
+    "title": "Emotion & the Body",
+    "theme": "Embodiment",
+    "prompt": "How do your emotions manifest physically? Describe the bodily sensations of a recent strong emotion. How might you use these physical cues as early warning signs?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:7",
+    "title": "Emotional Needs",
+    "theme": "Self-Care",
+    "prompt": "What emotional needs are most important for your wellbeing? How can you recognize when these needs aren't being met? What helps you address them?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:8",
+    "title": "Empathy Practice",
+    "theme": "Understanding Others",
+    "prompt": "Recall a recent disagreement with someone. Try to imagine the situation from their perspective. What emotions might they have been feeling? What needs might they have been trying to meet?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:9",
+    "title": "Emotional Resilience",
+    "theme": "Recovery",
+    "prompt": "How do you recover from emotionally challenging experiences? What helps you process and move through difficult feelings? What new strategies might you try?"
+  },
+  {
+    "id": "emotionalIntelligenceDays:10",
+    "title": "Emotional Integration",
+    "theme": "Wisdom",
+    "prompt": "Looking back at your emotional awareness journey, what have you learned about your emotional life? What is one way you'd like to grow in your relationship with your emotions?"
+  }
+]

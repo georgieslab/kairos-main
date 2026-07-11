@@ -1,7 +1,7 @@
 /* src/styles/components/about-help.css */
 
 /* General About Page Styling */
-.info-card {
+.about-help-page .info-card {
   background: linear-gradient(135deg, rgba(43, 70, 60, 0.25), rgba(85, 139, 110, 0.15));
   border-radius: 16px;
   padding: 2rem;
@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-.info-card::before {
+.about-help-page .info-card::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -35,7 +35,7 @@
   }
 }
 
-.info-card:hover {
+.about-help-page .info-card:hover {
   background: linear-gradient(135deg, rgba(43, 70, 60, 0.35), rgba(85, 139, 110, 0.25));
   border-color: rgba(85, 139, 110, 0.5);
   transform: translateY(-4px) scale(1.01);
@@ -43,7 +43,7 @@
               0 0 30px rgba(85, 139, 110, 0.2);
 }
 
-.section-title {
+.about-help-page .section-title {
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 2rem;
@@ -54,7 +54,7 @@
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.section-title::after {
+.about-help-page .section-title::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -786,19 +786,19 @@ blockquote cite {
 }
 
 /* Utility Classes */
-.mt-4 {
+.about-help-page .mt-4 {
   margin-top: 1.5rem;
 }
 
-.mb-8 {
+.about-help-page .mb-8 {
   margin-bottom: 2rem;
 }
 
-.text-lg {
+.about-help-page .text-lg {
   font-size: 1.1rem;
 }
 
-.glass-card {
+.about-help-page .glass-card {
   background: rgba(43, 70, 60, 0.2);
   border: 1px solid rgba(85, 139, 110, 0.2);
   border-radius: 12px;

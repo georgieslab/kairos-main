@@ -1,0 +1,24 @@
+{
+  "header": {
+    "title": "Dein Journal-Dashboard",
+    "subtitle": "Verfolge deinen Journaling-Fortschritt und deine Einblicke"
+  },
+  "stats": {
+    "totalEntries": "Einträge gesamt",
+    "journeyCompleted": "Reise abgeschlossen!",
+    "percentComplete": "{{percent}}% der Reise abgeschlossen",
+    "currentStreak": "Aktuelle Serie",
+    "daysInARowCount": "{{count}} Tage in Folge",
+    "daysInARow": "Tage in Folge",
+    "topTheme": "Top-Thema",
+    "noneYet": "Noch keins",
+    "basedOnJournalContent": "Basierend auf deinem Journal-Inhalt",
+    "bestJournalingDay": "Bester Journaling-Tag",
+    "mostFrequentDay": "An diesem Tag schreibst du am häufigsten"
+  },
+  "tabs": {
+    "overview": "Übersicht",
+    "keyInsights": "Wichtigste Einblicke",
+    "pastEntries": "Frühere Einträge"
+  }
+}

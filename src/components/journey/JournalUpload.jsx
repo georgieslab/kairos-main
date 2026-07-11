@@ -1,1032 +1,603 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  Camera, 
-  Upload, 
-  X, 
-  AlertCircle, 
-  Check, 
-  ChevronLeft, 
-  ChevronRight, 
-  Plus, 
-  Trash, 
-  FileText,
-  Palette,
-  Info,
-  Image as ImageIcon,
-  GripVertical,
-  RotateCw,
-  Eye,
-  ImagePlus
-} from 'lucide-react';
+// src/components/journal/JournalUpload.jsx
+import React, { useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Camera, ImagePlus, X, Plus } from 'lucide-react';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
-import { uploadJournalImage, extractTextFromImage, uploadMultipleJournalImages } from '../../services/claudeService';
+import { uploadJournalImage, uploadMultipleJournalImages } from '../../services/claudeService';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
-import { 
-  isVisualPath, 
-  requiresTextExtraction, 
-  getUploadInstructions, 
-  getMaxPages,
-  getAcceptedFileTypes,
-  getAnalysisApproach 
-} from '../../utils/pathTypeUtils';
+import { isVisualPath, getUploadInstructions, getMaxPages } from '../../utils/pathTypeUtils';
+import KairosLoader from '../common/KairosLoader';
 import '../../styles/components/JournalUpload.css';
+
+// ===================== GLASS UPLOAD SVG ICON =====================
+const GlassUploadIcon = ({ pathColorRgb = '85,139,110' }) => {
+  const c = pathColorRgb;
+  return (
+    <div className="glass-upload-icon-wrapper" style={{ '--c': c }}>
+      <svg
+        className="glass-upload-svg"
+        viewBox="0 0 80 80"
+        fill="none"
+      >
+        {/* ── Outer glow ring ── */}
+        <circle
+          cx="40" cy="40" r="37"
+          fill="rgba(255,255,255,0.03)"
+          stroke={`rgba(${c}, 0.2)`}
+          strokeWidth="1.5"
+          className="glass-icon-circle"
+        />
+
+        {/* ── Inner subtle ring ── */}
+        <circle
+          cx="40" cy="40" r="33"
+          fill="none"
+          stroke={`rgba(${c}, 0.07)`}
+          strokeWidth="0.75"
+          className="glass-icon-ring-inner"
+        />
+
+        {/* ── Upload arrow shaft ── */}
+        <line
+          x1="40" y1="25" x2="40" y2="12"
+          stroke={`rgba(${c}, 0.85)`}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          className="glass-upload-shaft"
+        />
+
+        {/* ── Upload arrow head ── */}
+        <path
+          d="M35.5 16.5L40 12L44.5 16.5"
+          stroke={`rgba(${c}, 0.85)`}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+          className="glass-upload-head"
+        />
+
+        {/* ── Camera body + top bump (single path) ── */}
+        <path
+          d="M27 33H33.5L36 28.5C36.2 28 36.6 27.5 37.2 27.5H42.8C43.4 27.5 43.8 28 44 28.5L46.5 33H53C54.1 33 55 33.9 55 35V53C55 54.1 54.1 55 53 55H27C25.9 55 25 54.1 25 53V35C25 33.9 25.9 33 27 33Z"
+          stroke={`rgba(${c}, 0.65)`}
+          strokeWidth="2"
+          fill="none"
+          className="glass-camera-body"
+        />
+
+        {/* ── Camera flash indicator ── */}
+        <circle
+          cx="50" cy="36.5" r="1.5"
+          fill={`rgba(${c}, 0.35)`}
+          className="glass-camera-flash"
+        />
+
+        {/* ── Lens glow (behind ring) ── */}
+        <circle
+          cx="40" cy="45" r="9"
+          fill={`rgba(${c}, 0.06)`}
+          className="glass-lens-glow"
+        />
+
+        {/* ── Lens outer ring ── */}
+        <circle
+          cx="40" cy="45" r="7.5"
+          stroke={`rgba(${c}, 0.55)`}
+          strokeWidth="2"
+          fill="none"
+          className="glass-camera-lens-ring"
+        />
+
+        {/* ── Lens center ── */}
+        <circle
+          cx="40" cy="45" r="3.5"
+          fill={`rgba(${c}, 0.3)`}
+          className="glass-camera-lens"
+        />
+
+        {/* ── Lens reflection highlight ── */}
+        <circle
+          cx="38" cy="43" r="1.5"
+          fill="rgba(255,255,255,0.2)"
+          className="glass-lens-highlight"
+        />
+
+        {/* ── Sparkle 1 — top right (diamond) ── */}
+        <path
+          d="M49 9L49.8 11L49 13L48.2 11Z"
+          fill={`rgba(${c}, 0.6)`}
+          className="glass-sparkle glass-sparkle-1"
+        />
+
+        {/* ── Sparkle 2 — top left (diamond) ── */}
+        <path
+          d="M29 14L29.6 15.5L29 17L28.4 15.5Z"
+          fill={`rgba(${c}, 0.4)`}
+          className="glass-sparkle glass-sparkle-2"
+        />
+
+        {/* ── Sparkle 3 — right (diamond) ── */}
+        <path
+          d="M53 19L53.5 20.5L53 22L52.5 20.5Z"
+          fill={`rgba(${c}, 0.3)`}
+          className="glass-sparkle glass-sparkle-3"
+        />
+      </svg>
+    </div>
+  );
+};
+// ================================================================
+
+// Extracted: Glass Image Preview Carousel
+const GlassImagePreview = ({ images, currentIndex, onRemove, onIndexChange }) => {
+  const touchStartX = useRef(0);
+  
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentIndex < images.length - 1) {
+        onIndexChange(currentIndex + 1);
+      } else if (diff < 0 && currentIndex > 0) {
+        onIndexChange(currentIndex - 1);
+      }
+    }
+  };
+
+  return (
+    <div className="glass-preview-container">
+      <div 
+        className="glass-preview-track"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {images.map((img, i) => (
+          <div key={i} className="glass-preview-slide">
+            <img src={img} alt={`Page ${i + 1}`} className="glass-preview-image" />
+            <button 
+              className="glass-preview-remove"
+              onClick={() => onRemove(i)}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ))}
+      </div>
+      
+      {images.length > 1 && (
+        <>
+          <div className="glass-preview-indicator">
+            {currentIndex + 1} / {images.length}
+          </div>
+          <div className="glass-preview-dots">
+            {images.map((_, i) => (
+              <div 
+                key={i} 
+                className={`glass-dot ${i === currentIndex ? 'active' : ''}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// Extracted: Glass Action Buttons
+const GlassActionButtons = ({ onCamera, onGallery, onAddMore, fileCount, maxPages, isCapturing }) => {
+  const { t } = useTranslation('journey');
+  return (
+  <div className="glass-actions">
+    <button
+      className="glass-btn glass-btn-camera"
+      onClick={onCamera}
+      disabled={isCapturing || fileCount >= maxPages}
+    >
+      <Camera size={20} />
+      <span>{t('journalUpload.takePhoto', 'Take Photo')}</span>
+    </button>
+
+    <button
+      className="glass-btn glass-btn-gallery"
+      onClick={onGallery}
+      disabled={isCapturing || fileCount >= maxPages}
+    >
+      <ImagePlus size={20} />
+      <span>{t('journalUpload.fromGallery', 'From Gallery')}</span>
+    </button>
+
+    {fileCount > 0 && fileCount < maxPages && (
+      <button
+        className="glass-btn glass-btn-add"
+        onClick={onAddMore}
+        disabled={isCapturing}
+      >
+        <Plus size={18} />
+        <span>{t('journalUpload.addMore', 'Add More')}</span>
+      </button>
+    )}
+  </div>
+  );
+};
+
+// Extracted: Glass Notes Field
+const GlassNotesField = ({ value, onChange, placeholder }) => (
+  <div className="glass-notes">
+    <textarea
+      className="glass-notes-input"
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      rows={3}
+    />
+  </div>
+);
 
 const JournalUpload = ({ 
   onBack, 
   onUploadComplete, 
   dayNumber, 
   pathId,
-  unifiedUpload = false
+  pathColor = '85, 139, 110' // Default to self-discovery green
 }) => {
   const { currentUser } = useAuth();
-  const { isDarkMode } = useTheme();
-  
+  const { t } = useTranslation('journey');
+
+  // State (no localStorage persistence)
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [extractedText, setExtractedText] = useState('');
-  const [isExtracting, setIsExtracting] = useState(false);
-  const [extractionProgress, setExtractionProgress] = useState(0);
-  const [error, setError] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [notes, setNotes] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
-  
-  // Get path-specific configurations
-  const isVisualJourney = isVisualPath(pathId);
-  const needsTextExtraction = requiresTextExtraction(pathId);
-  const uploadInstructions = getUploadInstructions(pathId);
-  const maxPages = Math.min(getMaxPages(pathId), 5); // Cap at 5 images
-  const acceptedFileTypes = getAcceptedFileTypes(pathId);
-  const analysisApproach = getAnalysisApproach(pathId);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const [error, setError] = useState('');
   
   const fileInputRef = useRef(null);
-  const dropAreaRef = useRef(null);
-
-  // Check if we're running on a mobile device
   const isMobile = Capacitor.isNativePlatform();
+  const isVisualJourney = isVisualPath(pathId);
+  const maxPages = Math.min(getMaxPages(pathId), 5);
+  const instructions = getUploadInstructions(pathId);
 
-  // Helper function to convert base64 to File object
-  const base64ToFile = (base64String, fileName) => {
+  // Convert base64 to Blob
+  const base64ToBlob = (base64String, mimeType = 'image/jpeg') => {
     const arr = base64String.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
+    const u8arr = new Uint8Array(bstr.length);
+    for (let i = 0; i < bstr.length; i++) {
+      u8arr[i] = bstr.charCodeAt(i);
     }
-    return new File([u8arr], fileName, { type: mime });
+    return new Blob([u8arr], { type: mimeType });
   };
 
-  // Helper function to resize an image by 50%
-  const resizeImage = (file, callback) => {
-    const img = new Image();
-    const reader = new FileReader();
-    
-    reader.onload = (e) => {
-      img.src = e.target.result;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Calculate new dimensions (50% of original)
-        const newWidth = img.width * 0.5;
-        const newHeight = img.height * 0.5;
-        
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        
-        // Draw the resized image
-        ctx.drawImage(img, 0, 0, newWidth, newHeight);
-        
-        // Convert canvas to a new File object
-        canvas.toBlob((blob) => {
-          const resizedFile = new File([blob], file.name, {
-            type: file.type,
-            lastModified: Date.now()
-          });
-          callback(resizedFile, URL.createObjectURL(resizedFile));
-        }, file.type, 0.8); // Use 0.8 quality for JPEG
+  // Resize image to 50% for performance
+  const resizeImage = (blob) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width * 0.5;
+          canvas.height = img.height * 0.5;
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          canvas.toBlob((resizedBlob) => {
+            if (!resizedBlob) {
+              reject(new Error('Failed to resize image'));
+              return;
+            }
+            // Create data URL for preview
+            const reader2 = new FileReader();
+            reader2.onload = (e2) => resolve({ blob: resizedBlob, url: e2.target.result });
+            reader2.onerror = reject;
+            reader2.readAsDataURL(resizedBlob);
+          }, blob.type, 0.85);
+        };
+        img.onerror = reject;
       };
-    };
-    
-    reader.readAsDataURL(file);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   };
 
-  // Reset component state
-  const resetState = () => {
-    setImages([]);
-    setFiles([]);
-    setExtractedText('');
-    setError('');
-    setExtractionProgress(0);
-    setUploadProgress(0);
-    setIsExtracting(false);
-    setIsUploading(false);
-    setIsButtonClicked(false);
-    setCurrentPage(0);
-    setIsCapturing(false);
-  };
-
-  // Enhanced camera capture with proper permissions
-  const handleCameraCapture = async () => {
+  // Add image to state
+  const addImage = async (blob) => {
     if (files.length >= maxPages) {
-      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
+      setError(t('journalUpload.errorMaxImages', 'Maximum {{count}} images allowed', { count: maxPages }));
       return;
     }
 
-    setIsCapturing(true);
-    setError(''); // Clear any previous errors
-    
     try {
-      console.log('📸 Checking camera permissions...');
-      
-      // Check and request camera permissions
-      const permissions = await CapacitorCamera.checkPermissions();
-      console.log('📸 Current permissions:', permissions);
-      
-      let finalPermissions = permissions;
-      
-      // If permissions are denied or not determined, request them
-      if (permissions.camera !== 'granted' || permissions.photos !== 'granted') {
-        console.log('📸 Requesting camera and photo permissions...');
-        finalPermissions = await CapacitorCamera.requestPermissions();
-        console.log('📸 Permission result:', finalPermissions);
-      }
-      
-      // Check if permissions were granted
-      if (finalPermissions.camera === 'denied' || finalPermissions.photos === 'denied') {
-        console.error('❌ Camera or photos permission denied');
-        setError('Camera and photo access is required. Please enable permissions in your device settings.');
-        setIsCapturing(false);
-        return;
-      }
-      
-      console.log('✅ Permissions granted, opening camera/gallery...');
-      
-      // Now capture the image
-      const image = await CapacitorCamera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Prompt, // Show dialog to choose camera or gallery
-        promptLabelHeader: 'Select Photo Source',
-        promptLabelPhoto: 'From Gallery',
-        promptLabelPicture: 'Take Photo',
+      const { blob: resizedBlob, url } = await resizeImage(blob);
+      setFiles(prev => [...prev, resizedBlob]);
+      setImages(prev => {
+        const newImages = [...prev, url];
+        setCurrentIndex(newImages.length - 1);
+        return newImages;
       });
-
-      console.log('✅ Image captured successfully');
-      console.log('📸 Format:', image.format);
-      console.log('📸 Base64 length:', image.base64String?.length || 0);
-
-      // Convert base64 to File object with proper sequencing
-      const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
-      const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
-      
-      console.log('✅ Processing captured image...');
-      // Process the captured image
-      addCapturedImage(file);
-    } catch (error) {
-      console.error('❌ Camera capture error:', error);
-      console.error('❌ Error name:', error.name);
-      console.error('❌ Error message:', error.message);
-      
-      // Don't show error if user cancelled
-      if (error.message && error.message.includes('cancel')) {
-        console.log('ℹ️ User cancelled photo selection');
-      } else if (error.message && error.message.includes('permission')) {
-        setError('Camera/photo permission denied. Please enable it in device settings.');
-      } else if (error.message) {
-        setError(`Failed to capture image: ${error.message}`);
-      } else {
-        setError('Failed to capture image. Please try again.');
-      }
-    } finally {
-      setIsCapturing(false);
+      setError('');
+    } catch (err) {
+      setError(t('journalUpload.errorProcessImage', 'Failed to process image'));
     }
   };
 
-  // Specific method to open camera directly
-  const handleTakePhoto = async () => {
-    if (files.length >= maxPages) {
-      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
-      return;
-    }
-
+  // Camera capture
+  const handleCamera = async () => {
     setIsCapturing(true);
     setError('');
     
     try {
-      console.log('📷 Opening camera...');
-      
       const permissions = await CapacitorCamera.checkPermissions();
       if (permissions.camera !== 'granted') {
         const result = await CapacitorCamera.requestPermissions();
         if (result.camera !== 'granted') {
-          setError('Camera permission is required to take photos.');
-          setIsCapturing(false);
+          setError(t('journalUpload.errorCameraPermission', 'Camera permission required'));
           return;
         }
       }
       
       const image = await CapacitorCamera.getPhoto({
-        quality: 90,
-        allowEditing: false,
+        quality: 85,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Camera, // Force camera
+        source: CameraSource.Camera,
       });
-
-      const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
-      const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
-      addCapturedImage(file);
-    } catch (error) {
-      console.error('❌ Camera error:', error);
-      if (!error.message?.includes('cancel')) {
-        setError('Failed to take photo. Please try again.');
+      
+      const blob = base64ToBlob(`data:image/${image.format};base64,${image.base64String}`);
+      await addImage(blob);
+    } catch (err) {
+      if (!err.message?.includes('cancel')) {
+        setError(t('journalUpload.errorCapturePhoto', 'Failed to capture photo'));
       }
     } finally {
       setIsCapturing(false);
     }
   };
 
-  // Specific method to open gallery directly
-  const handleChooseFromGallery = async () => {
-    if (files.length >= maxPages) {
-      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
-      return;
-    }
-
+  // Gallery selection
+  const handleGallery = async () => {
     setIsCapturing(true);
     setError('');
     
     try {
-      console.log('🖼️ Opening gallery...');
-      
       const permissions = await CapacitorCamera.checkPermissions();
       if (permissions.photos !== 'granted') {
         const result = await CapacitorCamera.requestPermissions();
         if (result.photos !== 'granted') {
-          setError('Photo library permission is required to select photos.');
-          setIsCapturing(false);
+          setError(t('journalUpload.errorPhotoPermission', 'Photo library permission required'));
           return;
         }
       }
       
       const image = await CapacitorCamera.getPhoto({
-        quality: 90,
-        allowEditing: false,
+        quality: 85,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Photos, // Force gallery
+        source: CameraSource.Photos,
       });
-
-      const fileName = `journal_${Date.now()}_${files.length + 1}.${image.format}`;
-      const file = base64ToFile(`data:image/${image.format};base64,${image.base64String}`, fileName);
-      addCapturedImage(file);
-    } catch (error) {
-      console.error('❌ Gallery error:', error);
-      if (!error.message?.includes('cancel')) {
-        setError('Failed to select photo. Please try again.');
+      
+      const blob = base64ToBlob(`data:image/${image.format};base64,${image.base64String}`);
+      await addImage(blob);
+    } catch (err) {
+      if (!err.message?.includes('cancel')) {
+        setError(t('journalUpload.errorSelectPhoto', 'Failed to select photo'));
       }
     } finally {
       setIsCapturing(false);
     }
   };
 
-  // Process captured image from camera with proper sequencing
-  const addCapturedImage = (file) => {
-    // Check if adding this file would exceed the limit
-    if (files.length >= maxPages) {
-      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
-      return;
-    }
-
-    // Resize the image and add to state with preserved order
-    resizeImage(file, (resizedFile, imageUrl) => {
-      setFiles(prevFiles => {
-        const newFiles = [...prevFiles, resizedFile];
-        return newFiles;
-      });
-      setImages(prevImages => {
-        const newImages = [...prevImages, imageUrl];
-        // Set current page to the new image
-        setCurrentPage(newImages.length - 1);
-        return newImages;
-      });
-      
-      setError('');
-    });
-  };
-
-  // Process newly added files with preserved order
-  const addNewFiles = (newFiles) => {
-    // Check if adding these files would exceed the limit
-    if (files.length + newFiles.length > maxPages) {
-      setError(`You can only upload up to ${maxPages} ${isVisualJourney ? 'images' : 'pages'} at once.`);
-      return;
-    }
-
-    // Filter for image files and maintain order
-    const imageFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'));
+  // File input (web fallback)
+  const handleFileSelect = async (e) => {
+    const selectedFiles = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+    if (selectedFiles.length === 0) return;
     
-    if (imageFiles.length === 0) {
-      setError('Please select image files (JPG, PNG, etc.)');
-      return;
+    for (const file of selectedFiles) {
+      if (files.length >= maxPages) break;
+      await addImage(file);
     }
-
-    // Process each image file to resize it while preserving order
-    const processFilesSequentially = async () => {
-      const newResizedFiles = [];
-      const newImageUrls = [];
-
-      for (let i = 0; i < imageFiles.length; i++) {
-        const file = imageFiles[i];
-        await new Promise((resolve) => {
-          resizeImage(file, (resizedFile, imageUrl) => {
-            newResizedFiles.push(resizedFile);
-            newImageUrls.push(imageUrl);
-            resolve();
-          });
-        });
-      }
-
-      // Update state with all new files at once to preserve order
-      setFiles(prevFiles => [...prevFiles, ...newResizedFiles]);
-      setImages(prevImages => {
-        const updatedImages = [...prevImages, ...newImageUrls];
-        // Set current page to the first new image if this is the first upload
-        if (prevImages.length === 0) {
-          setCurrentPage(0);
-        }
-        return updatedImages;
-      });
-
-      setError('');
-    };
-
-    processFilesSequentially();
+    e.target.value = '';
   };
 
-  // Handle file selection (for web fallback)
-  const handleFileSelect = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    addNewFiles(selectedFiles);
-    // Reset the input to allow selecting the same files again if needed
-    event.target.value = '';
-  };
-
-  // Enhanced drag and drop for file upload
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.currentTarget === dropAreaRef.current) {
-      setIsDragging(false);
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      addNewFiles(Array.from(e.dataTransfer.files));
-    }
-  };
-
-  // Drag and drop reordering functions
-  const handleImageDragStart = (e, index) => {
-    e.dataTransfer.setData('text/plain', index);
-    e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleImageDragOver = (e, index) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    setDragOverIndex(index);
-  };
-
-  const handleImageDragLeave = (e) => {
-    e.preventDefault();
-    setDragOverIndex(null);
-  };
-
-  const handleImageDrop = (e, dropIndex) => {
-    e.preventDefault();
-    const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
-    
-    if (dragIndex !== dropIndex) {
-      const newImages = [...images];
-      const newFiles = [...files];
-      
-      // Remove items from drag position
-      const [draggedImage] = newImages.splice(dragIndex, 1);
-      const [draggedFile] = newFiles.splice(dragIndex, 1);
-      
-      // Insert items at drop position
-      newImages.splice(dropIndex, 0, draggedImage);
-      newFiles.splice(dropIndex, 0, draggedFile);
-      
-      setImages(newImages);
-      setFiles(newFiles);
-      
-      // Update current page if needed
-      if (currentPage === dragIndex) {
-        setCurrentPage(dropIndex);
-      } else if (currentPage === dropIndex) {
-        setCurrentPage(dragIndex);
-      }
-    }
-    
-    setDragOverIndex(null);
-  };
-
-  // Navigation between pages
-  const goToNextPage = () => {
-    if (currentPage < images.length - 1) {
-      setCurrentPage(prev => prev + 1);
-    }
-  };
-
-  const goToPrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(prev => prev - 1);
-    }
-  };
-
-  // Navigate to specific page
-  const goToPage = (pageIndex) => {
-    setCurrentPage(pageIndex);
-  };
-
-  // Remove a specific image
+  // Remove image
   const removeImage = (index) => {
-    URL.revokeObjectURL(images[index]);
-    
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
-    
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
-    
-    if (index === currentPage && newImages.length > 0) {
-      setCurrentPage(Math.min(currentPage, newImages.length - 1));
-    } else if (newImages.length === 0) {
-      setCurrentPage(0);
-    }
-  };
-
-  // Extract text from images
-  const handleExtractText = async () => {
-    if (files.length === 0) {
-      setError('Please upload at least one image first.');
-      return;
-    }
-
-    setIsExtracting(true);
-    setExtractionProgress(0);
-    setError('');
-
-    try {
-      let combinedText = '';
-      for (let i = 0; i < files.length; i++) {
-        setExtractionProgress(Math.round(((i) / files.length) * 100));
-        const result = await extractTextFromImage(files[i]);
-        
-        if (i > 0) {
-          combinedText += `\n\n--- Page ${i + 1} ---\n\n`;
-        } else if (files.length > 1) {
-          combinedText += `--- Page 1 ---\n\n`;
-        }
-        
-        combinedText += result.text;
-        await new Promise(r => setTimeout(r, 300));
+    setImages(prev => {
+      const newImages = prev.filter((_, i) => i !== index);
+      if (currentIndex >= newImages.length) {
+        setCurrentIndex(Math.max(0, newImages.length - 1));
       }
-      
-      setExtractionProgress(100);
-      setExtractedText(combinedText);
-      await new Promise(r => setTimeout(r, 500));
-    } catch (error) {
-      console.error('Text extraction error:', error);
-      setError(`Failed to extract text: ${error.message}`);
-    } finally {
-      setIsExtracting(false);
-    }
+      return newImages;
+    });
+    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Handle text changes
-  const handleTextChange = (e) => {
-    setExtractedText(e.target.value);
-  };
-
-  // Handle the upload process
-  const handleUpload = async () => {
-    if (files.length === 0) {
-      setError('Please upload at least one image first.');
-      return;
-    }
+  // Submit and analyze
+  const handleSubmit = async () => {
+    if (files.length === 0) return;
     
-    // For visual journeys, we don't require text extraction
-    if (isVisualJourney && !extractedText) {
-      console.log('Visual journey detected - proceeding without text extraction');
-    } else if (!isVisualJourney && !extractedText) {
-      setError('Please extract text from your journal entry first.');
-      return;
-    }
-    
-    setIsButtonClicked(true);
     setIsUploading(true);
-    setUploadProgress(0);
+    setShowLoader(true);
     setError('');
     
     try {
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          const newProgress = prev + Math.floor(Math.random() * 5);
-          return newProgress > 90 ? 90 : newProgress;
-        });
-      }, 200);
-      
       let result;
       const isMultiPage = files.length > 1;
       
       if (isMultiPage) {
-        const imageUrls = await uploadMultipleJournalImages(
-          files,
-          pathId,
-          dayNumber,
-          extractedText
-        );
-        
+        const imageUrls = await uploadMultipleJournalImages(files, pathId, dayNumber, notes);
         result = {
           primaryImageUrl: imageUrls[0],
           additionalImages: imageUrls,
-          imageFiles: isVisualJourney ? files : null
+          // Always pass the local File objects through so analysis reads the
+          // image directly instead of re-fetching the Storage download URL —
+          // that fetch() fails with a CORS error (Storage URLs work fine in
+          // <img> tags, but need CORS headers for fetch(), which this bucket
+          // doesn't have configured).
+          imageFiles: files
         };
       } else {
-        const imageUrl = await uploadJournalImage(
-          files[0],
-          currentUser.uid,
-          dayNumber,
-          extractedText,
-          pathId
-        );
-        
+        const imageUrl = await uploadJournalImage(files[0], currentUser.uid, dayNumber, notes, pathId);
         result = {
           primaryImageUrl: imageUrl,
           additionalImages: [imageUrl],
-          imageFiles: isVisualJourney ? [files[0]] : null
+          imageFiles: [files[0]]
         };
       }
       
-      clearInterval(progressInterval);
-      setUploadProgress(100);
+      // Brief delay for satisfying transition
+      await new Promise(resolve => setTimeout(resolve, 800));
       
-      setTimeout(() => {
-        onUploadComplete(
-          result.primaryImageUrl, 
-          extractedText, 
-          pathId, 
-          false, // Never textOnly anymore
-          isMultiPage, 
-          result.additionalImages,
-          result.imageFiles
-        );
-      }, 500);
-    } catch (error) {
-      console.error('Upload error:', error);
-      setError(`Failed to upload ${isVisualJourney ? 'artwork' : 'journal'}: ${error.message}`);
+      onUploadComplete(
+        result.primaryImageUrl,
+        notes, // Pass notes instead of extracted text
+        pathId,
+        false,
+        isMultiPage,
+        result.additionalImages,
+        result.imageFiles
+      );
+    } catch (err) {
+      setError(t('journalUpload.errorUploadFailed', 'Upload failed: {{message}}', { message: err.message }));
       setIsUploading(false);
-      setIsButtonClicked(false);
+      setShowLoader(false);
     }
   };
 
-  const themeClass = isDarkMode ? 'dark-theme' : 'light-theme';
+  // Show loader during upload
+  if (showLoader) {
+    return (
+      <KairosLoader
+        size="large"
+        fullScreen={true}
+        message={t('journalUpload.loaderMessage', 'Analyzing Your Entry')}
+        subMessage={t('journalUpload.loaderSubMessage', 'Claude is examining your images and crafting insights...')}
+        variant="default"
+      />
+    );
+  }
 
   return (
-    <div className={`upload-container ${themeClass}`}>
-      <div className="upload-header">
-        <button className="back-button" onClick={onBack} disabled={isUploading || isExtracting || isButtonClicked}>
-          <ArrowLeft className="icon-small" />
-          <span>Back</span>
+    <div className="upload-glass-container" style={{ '--c': pathColor }}>
+      {/* Header */}
+      <div className="upload-glass-header">
+        <button className="upload-glass-back" onClick={onBack} disabled={isUploading}>
+          <ArrowLeft size={20} />
         </button>
       </div>
 
-      <div className="upload-card animate-fade-up">
-        <h1 className="upload-title">
-          {uploadInstructions.title}
-        </h1>
-        
-        <div className="upload-stages">
-          <div className={`upload-stage ${images.length === 0 ? 'active' : 'completed'}`}>
-            <div className="stage-header">
-              <div className="stage-number">1</div>
-              <div className="stage-title">
-                {uploadInstructions.stageTitle}
-              </div>
-              {images.length > 0 && <Check className="stage-check" />}
+      {/* Main Card */}
+      <div className="upload-glass-card">
+        <h1 className="upload-glass-title">{instructions.title}</h1>
+        <p className="upload-glass-subtitle">
+          {isVisualJourney
+            ? t('journalUpload.subtitleVisual', 'Share your visual creation for artistic analysis')
+            : t('journalUpload.subtitleText', 'Capture your journal pages for deep reflection')
+          }
+        </p>
+
+        {images.length === 0 ? (
+          /* Empty State: Show Glass Upload Icon + Action Buttons */
+          <div className="upload-glass-empty">
+            <GlassUploadIcon pathColorRgb={pathColor} />
+            <div className="upload-glass-empty-text">
+              <p>{t('journalUpload.noImages', 'No images added yet')}</p>
+              <span>{t('journalUpload.useButtons', 'Use the buttons below to upload')}</span>
             </div>
-            
-            {images.length === 0 ? (
-              <div className="upload-options">
-                {/* Enhanced Camera/Gallery buttons for mobile with separate options */}
-                {isMobile && (
-                  <div className="mobile-upload-buttons">
-                    <button 
-                      className={`action-button primary camera-button ${isCapturing ? 'loading' : ''}`}
-                      onClick={handleTakePhoto}
-                      disabled={isCapturing || files.length >= maxPages}
-                    >
-                      {isCapturing ? (
-                        <>
-                          <div className="loading-spinner-small"></div>
-                          Opening...
-                        </>
-                      ) : (
-                        <>
-                          <Camera className="camera-icon" />
-                          Take Photo
-                        </>
-                      )}
-                    </button>
-                    
-                    <button 
-                      className={`action-button primary gallery-button ${isCapturing ? 'loading' : ''}`}
-                      onClick={handleChooseFromGallery}
-                      disabled={isCapturing || files.length >= maxPages}
-                    >
-                      {isCapturing ? (
-                        <>
-                          <div className="loading-spinner-small"></div>
-                          Opening...
-                        </>
-                      ) : (
-                        <>
-                          <ImagePlus className="camera-icon" />
-                          Choose from Gallery
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-                
-                {/* Enhanced Drag and drop area */}
-                <div 
-                  ref={dropAreaRef}
-                  className={`drop-area ${isDragging ? 'dragging' : ''} ${isMobile ? 'mobile-fallback' : ''}`}
-                  onDragEnter={handleDragEnter}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                >
-                  <Upload className="drop-icon" />
-                  <p className="drop-text">
-                    {isMobile ? 'Or select files manually' : uploadInstructions.dropText}
-                  </p>
-                  <p className="drop-subtext">
-                    Upload up to {maxPages} {isVisualJourney ? 'images' : 'pages'} • JPG, PNG accepted
-                  </p>
-                  <button 
-                    className="action-button secondary"
-                    onClick={() => fileInputRef.current.click()}
-                  >
-                    <ImageIcon size={16} style={{ marginRight: '4px' }} />
-                    {uploadInstructions.selectButtonText}
-                  </button>
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    onChange={handleFileSelect} 
-                    style={{ display: 'none' }} 
-                    accept={acceptedFileTypes}
-                    multiple={maxPages > 1}
-                  />
-                </div>
-              </div>
+            {isMobile ? (
+              <GlassActionButtons
+                onCamera={handleCamera}
+                onGallery={handleGallery}
+                fileCount={0}
+                maxPages={maxPages}
+                isCapturing={isCapturing}
+              />
             ) : (
               <>
-                {/* Enhanced Image Gallery with Thumbnails */}
-                <div className="image-gallery-container">
-                  <div className="image-carousel">
-                    <img 
-                      src={images[currentPage]} 
-                      alt={`${isVisualJourney ? 'Artwork' : 'Journal'} page ${currentPage + 1}`} 
-                      className="image-preview" 
-                    />
-                    
-                    <div className="page-indicator">
-                      {isVisualJourney ? 'Image' : 'Page'} {currentPage + 1} of {images.length}
-                    </div>
-                    
-                    {images.length > 1 && (
-                      <div className="carousel-controls">
-                        <button 
-                          className="carousel-button"
-                          onClick={goToPrevPage}
-                          disabled={currentPage === 0}
-                        >
-                          <ChevronLeft size={20} />
-                        </button>
-                        <button 
-                          className="carousel-button"
-                          onClick={goToNextPage}
-                          disabled={currentPage === images.length - 1}
-                        >
-                          <ChevronRight size={20} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                <button 
+                  className="glass-btn glass-btn-primary"
+                  onClick={() => fileInputRef.current.click()}
+                  disabled={isCapturing}
+                >
+                  <ImagePlus size={20} />
+                  <span>{t('journalUpload.selectImages', 'Select Images')}</span>
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                />
+              </>
+            )}
+            <p className="upload-glass-hint">
+              {t('journalUpload.hint', 'Up to {{count}} images • JPG, PNG', { count: maxPages })}
+            </p>
+          </div>
+        ) : (
+          /* Has Images: Preview + Actions */
+          <div className="upload-glass-content">
+            <GlassImagePreview
+              images={images}
+              currentIndex={currentIndex}
+              onRemove={removeImage}
+              onIndexChange={setCurrentIndex}
+            />
 
-                  {/* Thumbnail strip with drag-and-drop reordering */}
-                  {images.length > 1 && (
-                    <div className="thumbnail-strip">
-                      <p className="thumbnail-strip-title">
-                        <GripVertical size={16} />
-                        Drag to reorder your {isVisualJourney ? 'images' : 'pages'}
-                      </p>
-                      <div className="thumbnail-container">
-                        {images.map((image, index) => (
-                          <div
-                            key={index}
-                            className={`thumbnail-item ${index === currentPage ? 'active' : ''} ${dragOverIndex === index ? 'drag-over' : ''}`}
-                            draggable
-                            onDragStart={(e) => handleImageDragStart(e, index)}
-                            onDragOver={(e) => handleImageDragOver(e, index)}
-                            onDragLeave={handleImageDragLeave}
-                            onDrop={(e) => handleImageDrop(e, index)}
-                            onClick={() => goToPage(index)}
-                          >
-                            <img src={image} alt={`Thumbnail ${index + 1}`} className="thumbnail-image" />
-                            <div className="thumbnail-number">{index + 1}</div>
-                            <button 
-                              className="thumbnail-remove"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeImage(index);
-                              }}
-                            >
-                              <X size={12} />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Enhanced Action Buttons */}
-                <div className="image-preview-actions">
-                  <button 
-                    className="image-action-button remove"
-                    onClick={() => removeImage(currentPage)}
-                  >
-                    <Trash className="image-action-icon" />
-                    Remove {isVisualJourney ? 'Image' : 'Page'}
-                  </button>
-                  
-                  {files.length < maxPages && (
-                    <>
-                      {isMobile && (
-                        <>
-                          <button 
-                            className={`action-button secondary ${isCapturing ? 'loading' : ''}`}
-                            onClick={handleTakePhoto}
-                            disabled={isCapturing}
-                          >
-                            {isCapturing ? (
-                              <>
-                                <div className="loading-spinner-small"></div>
-                                Opening...
-                              </>
-                            ) : (
-                              <>
-                                <Camera size={16} style={{ marginRight: '4px' }} />
-                                Take Photo
-                              </>
-                            )}
-                          </button>
-                          <button 
-                            className={`action-button secondary ${isCapturing ? 'loading' : ''}`}
-                            onClick={handleChooseFromGallery}
-                            disabled={isCapturing}
-                          >
-                            {isCapturing ? (
-                              <>
-                                <div className="loading-spinner-small"></div>
-                                Opening...
-                              </>
-                            ) : (
-                              <>
-                                <ImagePlus size={16} style={{ marginRight: '4px' }} />
-                                From Gallery
-                              </>
-                            )}
-                          </button>
-                        </>
-                      )}
-                      <button 
-                        className="action-button secondary"
-                        onClick={() => fileInputRef.current.click()}
-                      >
-                        <Plus size={16} style={{ marginRight: '4px' }} />
-                        {isMobile ? 'Select Files' : `Add More ${isVisualJourney ? 'Images' : 'Pages'}`}
-                      </button>
-                    </>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-          
-          <div className={`upload-stage ${images.length > 0 ? 'active' : ''}`}>
-            <div className="stage-header">
-              <div className="stage-number">2</div>
-              <div className="stage-title">
-                {isVisualJourney ? 'Review and Analyze Visual Entry' : 'Review and Submit'}
-              </div>
-              {(extractedText || isVisualJourney) && !isExtracting && <Check className="stage-check" />}
-            </div>
+            <GlassActionButtons
+              onCamera={handleCamera}
+              onGallery={handleGallery}
+              onAddMore={() => fileInputRef.current?.click()}
+              fileCount={files.length}
+              maxPages={maxPages}
+              isCapturing={isCapturing}
+            />
             
-            {images.length > 0 && (
-              <>
-                {isVisualJourney ? (
-                  <div className="visual-journey-ready">
-                    <div className="visual-ready-icon">
-                      <Palette className="icon" />
-                    </div>
-                    <p className="visual-ready-text">
-                      {uploadInstructions.analysisText} 
-                      Claude will examine the artistic elements, colors, composition, 
-                      and emotional expression in your {images.length > 1 ? 'images' : 'image'}.
-                    </p>
-                    {!extractedText && (
-                      <div className="visual-note">
-                        <Info className="note-icon" />
-                        <p>No text extraction needed for visual journaling paths.</p>
-                      </div>
-                    )}
-                    
-                    <div className="visual-notes-section">
-                      <h4 className="visual-notes-title">
-                        {uploadInstructions.notesTitle}
-                      </h4>
-                      <textarea
-                        className="visual-notes-textarea"
-                        value={extractedText}
-                        onChange={handleTextChange}
-                        placeholder={uploadInstructions.notesPlaceholder}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    {isExtracting ? (
-                      <div className="scanning-container">
-                        <div className="scanning-info">
-                          <Camera className="scanning-icon" />
-                          <p className="scanning-text">
-                            Analyzing journal {images.length > 1 ? 'pages' : 'page'}...
-                          </p>
-                          <div className="progress-bar">
-                            <div 
-                              className="progress-fill" 
-                              style={{ width: `${extractionProgress}%` }}
-                            ></div>
-                          </div>
-                          <p className="progress-text">
-                            {extractionProgress < 100 
-                              ? `Extracting text (${extractionProgress}%)`
-                              : 'Extraction complete!'}
-                          </p>
-                        </div>
-                      </div>
-                    ) : extractedText ? (
-                      <div className="extracted-text-container">
-                        <div className="extracted-text-header">
-                          <h4 className="extracted-text-title">
-                            <FileText className="text-icon" />
-                            Extracted Text
-                          </h4>
-                          <p className="extracted-text-help">Review and edit if needed before submitting</p>
-                        </div>
-                        <textarea
-                          className="extracted-text-editor"
-                          value={extractedText}
-                          onChange={handleTextChange}
-                          placeholder="You can edit the extracted text here or add your own notes..."
-                        />
-                      </div>
-                    ) : (
-                      <div className="upload-analyze-container">
-                        <p className="upload-analyze-text">
-                          {uploadInstructions.analysisDescription}
-                        </p>
-                        <button 
-                          className="action-button primary upload-analyze-button"
-                          onClick={handleExtractText}
-                          disabled={isExtracting || files.length === 0}
-                        >
-                          <Camera className="upload-analyze-icon" />
-                          Upload and Analyze
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*"
+              multiple
+              style={{ display: 'none' }}
+            />
+
+            {/* Optional Notes for Visual Journeys */}
+            {isVisualJourney && (
+              <GlassNotesField
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder={t('journalUpload.notesPlaceholder', 'Add any context about your creation (optional)...')}
+              />
             )}
-          </div>
-          
-          {error && (
-            <div className="error-message">
-              <AlertCircle className="error-icon" />
-              <span>{error}</span>
-            </div>
-          )}
-          
-          {images.length > 0 && (extractedText || isVisualJourney) && !isExtracting && (
+
+            {/* Submit Button */}
             <button 
-              className={`submit-button ${isButtonClicked ? 'clicked' : ''} ${isUploading ? 'loading' : ''}`}
-              onClick={handleUpload}
-              disabled={isUploading || isExtracting || isButtonClicked}
+              className="glass-btn glass-btn-submit"
+              onClick={handleSubmit}
+              disabled={isUploading || isCapturing}
             >
-              {isUploading ? (
-                <>
-                  <svg className="loading-spinner" viewBox="0 0 24 24" width="16" height="16">
-                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="4" />
-                    <path fill="none" stroke="white" strokeWidth="4" d="M12 2a10 10 0 0 1 10 10"></path>
-                  </svg>
-                  Uploading ({uploadProgress}%)
-                </>
-              ) : isButtonClicked ? (
-                <>
-                  <div className="pulse-dot"></div>
-                  Preparing Upload...
-                </>
-              ) : (
-                <>{uploadInstructions.submitButtonText}</>
-              )}
+              <span>{t('journalUpload.submitAnalyze', 'Submit & Analyze')}</span>
             </button>
-          )}
-          
-          {/* Enhanced Upload Information */}
-          {images.length > 0 && (
-            <div className="upload-info animate-fade-up">
-              <div className="upload-info-stats">
-                <div className="upload-stat">
-                  <span className="stat-number">{files.length}</span>
-                  <span className="stat-label">of {maxPages} {isVisualJourney ? 'images' : 'pages'}</span>
-                </div>
-                {files.length > 1 && (
-                  <div className="upload-stat">
-                    <Eye size={16} />
-                    <span className="stat-label">Viewing page {currentPage + 1}</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="upload-progress-visual">
-                <div className="progress-dots">
-                  {Array.from({ length: maxPages }, (_, index) => (
-                    <div 
-                      key={index}
-                      className={`progress-dot ${index < files.length ? 'filled' : ''}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              
-              {files.length === maxPages && (
-                <p className="upload-complete-message">
-                  <Check size={16} />
-                  Maximum {isVisualJourney ? 'images' : 'pages'} uploaded - Ready to analyze!
-                </p>
-              )}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="upload-glass-error">
+          <span>{error}</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,230 +1,193 @@
 /* src/components/achievements/AchievementsModal.css */
-/* Achievements Modal Styles */
+/* Apple Spatial Glass – Achievements Modal with glass cards, animated entries */
 
+:root {
+  --c-green: 85, 139, 110;
+  --c-purple: 139, 92, 246;
+  --c-blue: 59, 130, 246;
+  --c-red: 239, 68, 68;
+  --c-orange: 249, 115, 22;
+  --c-cyan: 6, 182, 212;
+  --c-pink: 236, 72, 153;
+  --c-indigo: 99, 102, 241;
+  --c-gold: 234, 179, 8;
+  
+  /* Rarity colors (RGB) */
+  --common-rgb: 107, 114, 128;
+  --rare-rgb: 59, 130, 246;
+  --epic-rgb: 139, 92, 246;
+  --legendary-rgb: 234, 179, 8;
+}
+
+/* Modal overlay – dark blur background */
 .am-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  animation: am-fadeIn 0.2s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
 }
 
-@keyframes am-fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
+/* Glass modal */
 .am-modal {
-  background: var(--background-primary, #ffffff);
-  border-radius: 20px;
-  max-width: 900px;
   width: 100%;
+  max-width: 800px;
   max-height: 90vh;
+  background: rgba(28, 28, 30, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 44px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
-  animation: am-slideUp 0.3s ease-out;
+  overflow: hidden;
+  animation: modalRise 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-@keyframes am-slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+@keyframes modalRise {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-[data-theme="dark"] .am-modal {
-  background: #1f2937;
-  border: 1px solid #374151;
-}
-
-/* Header */
+/* ===== HEADER ===== */
 .am-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  padding: 24px 28px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-}
-
-[data-theme="dark"] .am-header {
-  border-bottom-color: #374151;
+  align-items: center;
+  padding: 24px 24px 12px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .am-title-wrapper {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .am-title-icon {
-  color: #f59e0b;
-  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));
+  color: rgba(var(--c-green), 1);
+  filter: drop-shadow(0 0 6px rgba(var(--c-green), 0.4));
 }
 
 .am-title {
   font-size: 24px;
   font-weight: 700;
-  margin: 0 0 4px 0;
-  color: var(--text-primary, #111827);
-}
-
-[data-theme="dark"] .am-title {
-  color: #f9fafb;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.3px;
 }
 
 .am-subtitle {
-  font-size: 14px;
-  color: var(--text-secondary, #6b7280);
-  margin: 0;
-}
-
-[data-theme="dark"] .am-subtitle {
-  color: #9ca3af;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 2px 0 0;
 }
 
 .am-close-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary, #6b7280);
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.am-close-btn:hover {
-  background: var(--background-secondary, #f3f4f6);
-  color: var(--text-primary, #111827);
+.am-close-btn:active {
+  transform: scale(0.92);
 }
 
-[data-theme="dark"] .am-close-btn:hover {
-  background: #374151;
-  color: #f9fafb;
-}
-
-/* Progress Section */
+/* ===== PROGRESS BAR ===== */
 .am-progress-section {
-  padding: 20px 28px;
-  background: var(--background-secondary, #f9fafb);
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-}
-
-[data-theme="dark"] .am-progress-section {
-  background: #111827;
-  border-bottom-color: #374151;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .am-progress-bar {
-  height: 8px;
-  background: var(--background-tertiary, #e5e7eb);
-  border-radius: 10px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 8px;
-}
-
-[data-theme="dark"] .am-progress-bar {
-  background: #374151;
 }
 
 .am-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
-  border-radius: 10px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, rgba(var(--c-green), 0.8), rgba(var(--c-green), 1));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 6px rgba(var(--c-green), 0.5);
 }
 
 .am-progress-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary, #6b7280);
-  margin: 0;
-  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+  text-align: right;
 }
 
-[data-theme="dark"] .am-progress-text {
-  color: #9ca3af;
-}
-
-/* Categories */
+/* ===== CATEGORY FILTER (glass chips) ===== */
 .am-categories {
   display: flex;
   gap: 8px;
-  padding: 16px 28px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding: 16px 24px;
   overflow-x: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .am-categories::-webkit-scrollbar {
-  display: none;
-}
-
-[data-theme="dark"] .am-categories {
-  border-bottom-color: #374151;
+  height: 2px;
 }
 
 .am-category-btn {
-  padding: 8px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color, #e5e7eb);
-  background: var(--background-primary, #ffffff);
-  color: var(--text-secondary, #6b7280);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
   white-space: nowrap;
-  transition: all 0.2s ease;
-  margin-bottom:5rem;
-}
-
-[data-theme="dark"] .am-category-btn {
-  background: #1f2937;
-  border-color: #374151;
-  color: #9ca3af;
-}
-
-.am-category-btn:hover {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.05);
-  color: #10b981;
 }
 
 .am-category-btn.active {
-  background: #10b981;
-  border-color: #10b981;
-  color: white;
+  background: rgba(var(--c-green), 0.2);
+  border-color: rgba(var(--c-green), 0.4);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.am-category-btn:active {
+  transform: scale(0.96);
 }
 
 .am-category-count {
-  font-size: 12px;
-  opacity: 0.8;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2px 6px;
+  margin-left: 4px;
 }
 
-/* Content */
+/* ===== ACHIEVEMENTS GRID (scrollable) ===== */
 .am-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 28px;
+  padding: 20px 24px;
+  scrollbar-width: thin;
 }
 
 .am-achievements-grid {
@@ -233,212 +196,219 @@
   gap: 16px;
 }
 
-/* Achievement Cards */
+/* Glass achievement card */
 .am-achievement-card {
   position: relative;
-  padding: 20px;
-  background: var(--background-secondary, #f9fafb);
-  border: 2px solid var(--border-color, #e5e7eb);
-  border-radius: 14px;
+  background: rgba(28, 28, 30, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 16px;
   display: flex;
-  gap: 16px;
-  transition: all 0.3s ease;
-}
-
-[data-theme="dark"] .am-achievement-card {
-  background: #111827;
-  border-color: #374151;
+  gap: 14px;
+  transition: transform 0.1s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .am-achievement-card.earned {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.02) 100%);
-  border-color: #10b981;
-}
-
-[data-theme="dark"] .am-achievement-card.earned {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+  background: rgba(28, 28, 30, 0.7);
+  border-color: rgba(var(--c-green), 0.3);
 }
 
 .am-achievement-card.locked {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
-.am-achievement-card.earned:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
-}
-
-/* Rarity Borders */
-.am-achievement-card.earned.rare {
-  border-color: #3b82f6;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.02) 100%);
-}
-
-.am-achievement-card.earned.epic {
-  border-color: #8b5cf6;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(124, 58, 237, 0.02) 100%);
-}
-
-.am-achievement-card.earned.legendary {
-  border-color: #f59e0b;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.02) 100%);
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
-}
-
-/* Lock Overlay */
+/* Lock overlay for locked cards */
 .am-lock-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--text-tertiary, #9ca3af);
-  z-index: 1;
+  top: 12px;
+  right: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 2;
 }
 
-/* Achievement Icon */
+/* Icon container */
 .am-achievement-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.achievement-orange { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-.achievement-yellow { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
-.achievement-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-.achievement-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-.achievement-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-.achievement-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-.achievement-cyan { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
-.achievement-indigo { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
-.achievement-pink { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); }
+/* Color variants for rarity/category */
+.am-achievement-icon.achievement-orange {
+  color: rgba(var(--c-orange), 1);
+}
+.am-achievement-icon.achievement-yellow {
+  color: rgba(var(--c-gold), 1);
+}
+.am-achievement-icon.achievement-gold {
+  color: rgba(var(--c-gold), 1);
+}
+.am-achievement-icon.achievement-purple {
+  color: rgba(var(--c-purple), 1);
+}
+.am-achievement-icon.achievement-blue {
+  color: rgba(var(--c-blue), 1);
+}
+.am-achievement-icon.achievement-green {
+  color: rgba(var(--c-green), 1);
+}
+.am-achievement-icon.achievement-cyan {
+  color: rgba(var(--c-cyan), 1);
+}
+.am-achievement-icon.achievement-indigo {
+  color: rgba(var(--c-indigo), 1);
+}
+.am-achievement-icon.achievement-pink {
+  color: rgba(var(--c-pink), 1);
+}
 
-/* Achievement Content */
+/* Content area */
 .am-achievement-content {
   flex: 1;
-  min-width: 0;
 }
 
 .am-achievement-title {
   font-size: 16px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  color: var(--text-primary, #111827);
-}
-
-[data-theme="dark"] .am-achievement-title {
-  color: #f9fafb;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .am-achievement-description {
-  font-size: 13px;
-  color: var(--text-secondary, #6b7280);
-  margin: 0 0 12px 0;
-}
-
-[data-theme="dark"] .am-achievement-description {
-  color: #9ca3af;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 8px;
 }
 
 .am-achievement-footer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  margin-top: 8px;
 }
 
 .am-rarity-badge {
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .am-rarity-badge.common {
-  background: rgba(107, 114, 128, 0.15);
-  color: #6b7280;
+  color: rgba(var(--common-rgb), 1);
 }
-
 .am-rarity-badge.rare {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  color: rgba(var(--rare-rgb), 1);
 }
-
 .am-rarity-badge.epic {
-  background: rgba(139, 92, 246, 0.15);
-  color: #8b5cf6;
+  color: rgba(var(--epic-rgb), 1);
 }
-
 .am-rarity-badge.legendary {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: rgba(var(--legendary-rgb), 1);
 }
 
 .am-points {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-tertiary, #9ca3af);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(var(--c-green), 0.9);
 }
 
-/* Earned Badge */
+/* Earned badge (checkmark) */
 .am-earned-badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #10b981;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  color: rgba(var(--c-green), 1);
+  filter: drop-shadow(0 0 4px rgba(var(--c-green), 0.5));
+}
+
+/* Light mode overrides */
+.light-theme .am-overlay {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.light-theme .am-modal {
+  background: rgba(245, 245, 247, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .am-title,
+.light-theme .am-achievement-title {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.light-theme .am-subtitle,
+.light-theme .am-achievement-description,
+.light-theme .am-progress-text,
+.light-theme .am-category-btn {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.light-theme .am-category-btn.active {
+  background: rgba(var(--c-green), 0.15);
+  border-color: rgba(var(--c-green), 0.3);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.light-theme .am-achievement-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .am-modal {
-    max-width: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-  }
-
+@media (max-width: 640px) {
   .am-achievements-grid {
     grid-template-columns: 1fr;
   }
-
   .am-categories {
-    padding: 12px 20px;
+    padding: 12px 16px;
   }
-
-  .am-header,
-  .am-progress-section,
+  .am-header {
+    padding: 16px;
+  }
   .am-content {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 16px;
   }
 }
-
-@media (max-width: 640px) {
-  .am-achievement-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .am-achievement-icon {
-    width: 64px;
-    height: 64px;
-  }
-
-  .am-achievement-footer {
-    justify-content: center;
-  }
+/* Light theme — elements the original partial block missed */
+.light-theme .am-header,
+.light-theme .am-progress-section,
+.light-theme .am-categories { border-bottom-color: rgba(0, 0, 0, 0.06); }
+.light-theme .am-close-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.6);
 }
+.light-theme .am-progress-bar { background: rgba(0, 0, 0, 0.08); }
+.light-theme .am-category-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.light-theme .am-category-count { background: rgba(0, 0, 0, 0.06); color: rgba(0, 0, 0, 0.55); }
+.light-theme .am-achievement-card.earned {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(var(--c-green), 0.35);
+}
+.light-theme .am-achievement-icon {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.light-theme .am-rarity-badge {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.light-theme .am-lock-overlay { color: rgba(0, 0, 0, 0.35); }

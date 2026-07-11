@@ -1,0 +1,62 @@
+[
+  {
+    "id": "anxietyAlchemyDays:1",
+    "title": "Anxiety Mapping",
+    "theme": "Awareness",
+    "prompt": "Describe your personal experience of anxiety in detail. Where do you feel it in your body? What physical sensations arise? What thoughts typically accompany it? When does it tend to show up most strongly?"
+  },
+  {
+    "id": "anxietyAlchemyDays:2",
+    "title": "Anxiety Origins",
+    "theme": "Understanding",
+    "prompt": "When did you first remember experiencing anxiety? What circumstances or life events may have contributed to your anxiety patterns? How has your relationship with anxiety evolved over time?"
+  },
+  {
+    "id": "anxietyAlchemyDays:3",
+    "title": "Anxiety Triggers",
+    "theme": "Patterns",
+    "prompt": "What specific situations, thoughts, or circumstances reliably trigger your anxiety? Look for patterns in timing, environments, relationships, or internal states that precede anxious episodes."
+  },
+  {
+    "id": "anxietyAlchemyDays:4",
+    "title": "Anxiety Messages",
+    "theme": "Wisdom",
+    "prompt": "If your anxiety could speak, what might it be trying to tell you? What might it be trying to protect you from or alert you to? How might it actually be attempting to help or guide you?"
+  },
+  {
+    "id": "anxietyAlchemyDays:5",
+    "title": "Body and Anxiety",
+    "theme": "Physical",
+    "prompt": "How does anxiety manifest in your body? Explore the physical sensations, tension patterns, and bodily responses. What helps your body feel safer when anxiety arises?"
+  },
+  {
+    "id": "anxietyAlchemyDays:6",
+    "title": "Anxiety and Control",
+    "theme": "Acceptance",
+    "prompt": "What aspects of life do you try to control when feeling anxious? What happens when you can't control these things? How might accepting uncertainty reduce your anxiety burden?"
+  },
+  {
+    "id": "anxietyAlchemyDays:7",
+    "title": "Reframing Practice",
+    "theme": "Transformation",
+    "prompt": "Choose a current worry or anxiety. How might you reframe this concern as valuable information, motivation for positive action, or preparation for challenges? What would change if you saw anxiety as guidance rather than suffering?"
+  },
+  {
+    "id": "anxietyAlchemyDays:8",
+    "title": "Anxiety Allies",
+    "theme": "Support",
+    "prompt": "What practices, people, or environments help you feel calmer when anxiety arises? What tools have you found most effective for managing anxious thoughts and feelings?"
+  },
+  {
+    "id": "anxietyAlchemyDays:9",
+    "title": "Future Self",
+    "theme": "Growth",
+    "prompt": "Imagine a version of yourself who has learned to work skillfully with anxiety. How does this future self relate to anxious thoughts and feelings? What wisdom would they share with you?"
+  },
+  {
+    "id": "anxietyAlchemyDays:10",
+    "title": "Anxiety Integration",
+    "theme": "Partnership",
+    "prompt": "How can you develop a more collaborative relationship with your anxiety? What practices will help you work with anxious energy rather than against it? What have you learned about transforming worry into wisdom?"
+  }
+]

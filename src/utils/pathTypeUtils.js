@@ -1,4 +1,6 @@
 // Add to pathTypeUtils.js
+import { getJourneyPath } from '../data/JourneyData';
+
 const MULTI_MODAL_PATHS = [
   'inner-elements',
   'shadow-light-integration',

@@ -1,0 +1,77 @@
+{
+  "premiumPathCheck": {
+    "checkingAccess": "Zugriff wird geprüft...",
+    "defaultPathName": "Premium-Pfad"
+  },
+  "errors": {
+    "upgradeStart": "Fehler beim Starten des Upgrades. Bitte versuche es erneut.",
+    "managementOpen": "Fehler beim Öffnen der Abo-Verwaltung. Bitte versuche es erneut.",
+    "unableToLoad": "Abo-Status konnte nicht geladen werden"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "retry": "Erneut versuchen",
+    "artisan": "Artisan",
+    "free": "Kostenlos",
+    "upgrade": "Upgrade",
+    "manage": "Verwalten",
+    "freePlan": "Kostenloser Plan",
+    "processing": "Wird verarbeitet...",
+    "freeJourneysIncluded": "Kostenlose Reisen inklusive",
+    "renews": "Verlängert sich am {{date}}",
+    "opening": "Wird geöffnet...",
+    "manageSubscription": "Abo verwalten",
+    "upgradeToArtisan": "Auf Artisan upgraden",
+    "perMonth": "/Monat",
+    "cancelAnytime": "Jederzeit kündbar"
+  },
+  "benefits": {
+    "allPaths": "Alle 33+ Reisepfade",
+    "freePaths": "9 kostenlose Reisepfade (10 Tage)",
+    "advancedAI": "Erweiterte KI-Analyse",
+    "basicAI": "Grundlegende KI-Analyse",
+    "unlimitedExports": "Unbegrenzte PDF-Exporte",
+    "limitedExports": "Begrenzte PDF-Exporte",
+    "premiumAnalytics": "Premium-Analyse-Dashboard",
+    "prioritySupport": "Prioritäts-Support",
+    "premiumAnalyticsShort": "Premium-Analysen",
+    "freePathsShort": "9 kostenlose Reisepfade"
+  },
+  "detailed": {
+    "yourBenefits": "Deine Vorteile",
+    "premiumPathsLocked": "Premium-Pfade gesperrt",
+    "limitedExports": "Begrenzte Exporte",
+    "trialEnds": "Testphase endet am {{date}}"
+  },
+  "upgradePrompt": {
+    "title": "Artisan-Zugang erforderlich",
+    "messageSuffix": "ist eine Artisan-Reise, die ein aktives Abonnement erfordert.",
+    "includesTitle": "Artisan beinhaltet:",
+    "benefit1": "Alle 33+ Premium-Reisepfade",
+    "benefit2": "Erweiterte KI-Analyse & Einblicke",
+    "benefit3": "Unbegrenzte PDF-Exporte",
+    "benefit4": "Erweitertes Analyse-Dashboard",
+    "benefit5": "Prioritäts-Support",
+    "maybeLater": "Vielleicht später"
+  },
+  "plans": {
+    "header": "Wähle dein Καιρός-Erlebnis",
+    "subheader": "Starte mit kostenlosen Reisen oder entfalte dein volles Potenzial mit Artisan",
+    "freeFeature1": "9 geführte 10-Tage-Reisen",
+    "freeFeature2": "Grundlegende KI-Analyse",
+    "freeFeature3": "Standard-Analysen",
+    "freeFeature4": "PDF-Exporte (begrenzt)",
+    "freeFeature5": "Community-Support",
+    "currentPlan": "Aktueller Plan",
+    "mostPopular": "Am beliebtesten",
+    "artisanFeature1": "Alle 33+ Reisepfade",
+    "artisanFeature2": "Erweiterte KI-Einblicke",
+    "artisanFeature3": "Unbegrenzte PDF-Exporte",
+    "artisanFeature4": "Premium-Analyse-Dashboard",
+    "artisanFeature5": "Längere Reisen (14-100 Tage)",
+    "artisanFeature6": "Visuelle Journaling-Pfade",
+    "artisanFeature7": "Prioritäts-Support",
+    "footer1": "Alle Pläne beinhalten sicheren Cloud-Sync und geräteübergreifenden Zugriff",
+    "footer2": "Jederzeit kündbar mit vollständigem Datenexport"
+  }
+}

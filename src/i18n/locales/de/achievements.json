@@ -1,0 +1,98 @@
+{
+  "achievements": {
+    "title": "Erfolge",
+    "unlockedSummary": "{{earned}} von {{total}} freigeschaltet · {{points}} Punkte",
+    "close": "Schließen",
+    "percentComplete": "{{percentage}}% abgeschlossen",
+    "categoryAll": "Alle",
+    "categoryStreaks": "Serien",
+    "categoryVolume": "Umfang",
+    "categoryJourneys": "Reisen",
+    "categoryConsistency": "Beständigkeit",
+    "pointsLabel": "{{count}} Pkt.",
+    "rarity": {
+      "common": "gewöhnlich",
+      "rare": "selten",
+      "epic": "episch",
+      "legendary": "legendär"
+    },
+    "items": {
+      "firstWeek": {
+        "title": "Wochen-Kämpfer",
+        "description": "7 Tage Serie"
+      },
+      "twoWeeks": {
+        "title": "Zwei-Wochen-Power",
+        "description": "14 Tage Serie"
+      },
+      "monthMaster": {
+        "title": "Monatsmeister",
+        "description": "30 Tage Serie"
+      },
+      "streakLegend": {
+        "title": "Serien-Legende",
+        "description": "100 Tage Serie"
+      },
+      "firstEntry": {
+        "title": "Erste Schritte",
+        "description": "Erster Journaleintrag"
+      },
+      "tenEntries": {
+        "title": "Guter Start",
+        "description": "10 Einträge"
+      },
+      "fiftyEntries": {
+        "title": "Fleißige Schreiberin",
+        "description": "50 Einträge"
+      },
+      "hundredEntries": {
+        "title": "Jahrhundert-Club",
+        "description": "100 Einträge"
+      },
+      "fiveHundredEntries": {
+        "title": "Meister-Chronist",
+        "description": "500 Einträge"
+      },
+      "firstJourney": {
+        "title": "Wegfinder",
+        "description": "Schließe deine erste Reise ab"
+      },
+      "threeJourneys": {
+        "title": "Reise-Entdecker",
+        "description": "Schließe 3 Reisen ab"
+      },
+      "allJourneys": {
+        "title": "Reise-Meister",
+        "description": "Schließe alle verfügbaren Reisen ab"
+      },
+      "weeklyConsistency": {
+        "title": "Wochen-Kämpfer",
+        "description": "Journalführe an 5+ Tagen pro Woche, 4 Wochen lang"
+      },
+      "monthlyConsistency": {
+        "title": "König der Beständigkeit",
+        "description": "Journalführe an 20+ Tagen pro Monat, 3 Monate lang"
+      },
+      "longFormWriter": {
+        "title": "Vielschreiber",
+        "description": "Schreibe 10 Einträge mit 500+ Wörtern"
+      },
+      "deepThinker": {
+        "title": "Tiefer Denker",
+        "description": "Durchschnittlich 300+ Wörter pro Eintrag über 30 Einträge"
+      },
+      "firstMonth": {
+        "title": "Einen Monat dabei",
+        "description": "30 Tage Mitglied"
+      },
+      "sixMonths": {
+        "title": "Halbjahres-Held",
+        "description": "180 Tage Mitglied"
+      },
+      "oneYear": {
+        "title": "Jahres-Erfolg",
+        "description": "365 Tage Mitglied"
+      }
+    }
+  }
+}

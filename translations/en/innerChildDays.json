@@ -1,0 +1,86 @@
+[
+  {
+    "id": "innerChildDays:1",
+    "title": "Childhood Memories",
+    "theme": "Exploration",
+    "prompt": "What are your earliest and most vivid childhood memories? Which ones bring joy, and which bring sadness or confusion? What do these memories tell you about your young self and your early experiences of the world?"
+  },
+  {
+    "id": "innerChildDays:2",
+    "title": "Young Self Description",
+    "theme": "Identity",
+    "prompt": "Describe yourself as a child. What were your personality traits, favorite activities, and natural tendencies? What did you love most about being young? What aspects of your childhood self do you miss?"
+  },
+  {
+    "id": "innerChildDays:3",
+    "title": "Family Dynamics",
+    "theme": "Relationships",
+    "prompt": "How would you describe your family dynamics as a child? What spoken and unspoken rules existed? How did you learn to get attention, love, or approval? What survival strategies did you develop?"
+  },
+  {
+    "id": "innerChildDays:4",
+    "title": "Childhood Wounds",
+    "theme": "Healing",
+    "prompt": "What experiences from childhood still feel painful or unresolved? Consider times you felt misunderstood, rejected, or hurt. Approach these memories with compassion rather than judgment."
+  },
+  {
+    "id": "innerChildDays:5",
+    "title": "Lost Dreams",
+    "theme": "Reclamation",
+    "prompt": "What did you dream of becoming as a child? What interests and passions did you have that you may have abandoned or been told were impractical? Which of these still spark something in you today?"
+  },
+  {
+    "id": "innerChildDays:6",
+    "title": "Childhood Gifts",
+    "theme": "Strengths",
+    "prompt": "What special qualities, talents, or ways of seeing the world did you have as a child? What gifts did others recognize in you? How might these natural gifts still be part of who you are today?"
+  },
+  {
+    "id": "innerChildDays:7",
+    "title": "Protective Patterns",
+    "theme": "Survival",
+    "prompt": "What patterns did you develop as a child to feel safe, loved, or accepted? Consider people-pleasing, perfectionism, withdrawal, or rebellion. How do these patterns still show up in your adult life?"
+  },
+  {
+    "id": "innerChildDays:8",
+    "title": "Messages Received",
+    "theme": "Beliefs",
+    "prompt": "What messages did you receive about yourself, relationships, and the world as a child? Which messages were spoken, and which were implied through actions? How have these shaped your adult beliefs?"
+  },
+  {
+    "id": "innerChildDays:9",
+    "title": "Play and Joy",
+    "theme": "Spontaneity",
+    "prompt": "How did you experience play and joy as a child? What made you laugh, feel free, or lose track of time? How might you bring more of this natural playfulness into your adult life?"
+  },
+  {
+    "id": "innerChildDays:10",
+    "title": "Inner Child Dialogue",
+    "theme": "Communication",
+    "prompt": "Write a conversation between your adult self and your inner child. What does your inner child need to hear? What fears or concerns does your inner child have? What wisdom does your inner child offer you?"
+  },
+  {
+    "id": "innerChildDays:11",
+    "title": "Reparenting Practices",
+    "theme": "Nurturing",
+    "prompt": "What did you need more of as a child that you can now provide for yourself? Consider comfort, validation, encouragement, boundaries, or fun. How might you 'reparent' yourself in healthy ways?"
+  },
+  {
+    "id": "innerChildDays:12",
+    "title": "Forgiveness Process",
+    "theme": "Release",
+    "prompt": "What aspects of your childhood are you ready to forgive - in yourself, your parents, or others? Remember that forgiveness is for your own freedom, not about condoning harmful behavior."
+  },
+  {
+    "id": "innerChildDays:13",
+    "title": "Childhood Wisdom",
+    "theme": "Integration",
+    "prompt": "What wisdom did you have as a child that you've since forgotten or dismissed? Consider your natural intuition, creativity, or ways of seeing the world. How might this childhood wisdom serve you now?"
+  },
+  {
+    "id": "innerChildDays:14",
+    "title": "Integration",
+    "theme": "Wholeness",
+    "prompt": "How can you honor and integrate your inner child into your adult life? What small actions could you take to bring more playfulness, curiosity, wonder, or authenticity into your daily experience? What commitment will you make to your inner child?"
+  }
+]

@@ -36,22 +36,33 @@
   padding: 0;
 }
 
-html, body {
+/* Scroll architecture: the DOCUMENT must be the one and only vertical
+   scroller. `overflow-x: hidden` silently forces `overflow-y: auto`,
+   turning the element into a nested scroll container — with body pinned
+   to viewport height this created 3 nested scrollers (body, #root,
+   .spatial-home) and touch scrolling on mobile would dead-end in
+   whichever one the finger landed on. `overflow-x: clip` clips without
+   creating a scroll container; `hidden` stays as an old-browser fallback. */
+html {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
 
 body {
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-text-primary);
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip;
 }
 
 /* Android edge-to-edge support */
@@ -59,7 +70,8 @@ body {
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile */
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip;
 }
 
 #root {
@@ -926,10 +938,6 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   position: fixed !important;
 }
 
-/* Main content padding to prevent content from being hidden under nav */
-main {
-  padding-bottom: 80px !important;
-}
 
 /* Primary action button styling */
 .bg-brand {

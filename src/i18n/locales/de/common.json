@@ -1,0 +1,33 @@
+{
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "back": "Zurück",
+  "next": "Weiter",
+  "continue": "Fortfahren",
+  "close": "Schließen",
+  "confirm": "Bestätigen",
+  "delete": "Löschen",
+  "edit": "Bearbeiten",
+  "loading": "Wird geladen...",
+  "error": "Etwas ist schiefgelaufen",
+  "retry": "Erneut versuchen",
+  "yes": "Ja",
+  "no": "Nein",
+  "done": "Fertig",
+  "language": "Sprache",
+  "languageEnglish": "Englisch",
+  "languageGerman": "Deutsch",
+  "offlineWarning": "Du bist offline. Einige Funktionen sind möglicherweise eingeschränkt.",
+  "reconnecting": "Verbindung zum Server wird wiederhergestellt...",
+  "footerRights": "© 2025 Καιρός. Alle Rechte vorbehalten.",
+  "footerTagline": "Fördert persönliches Wachstum durch achtsames Journaling und KI-Einblicke.",
+  "journeyDayFallback": {
+    "title": "Tag {{day}}",
+    "theme": "Reflexion",
+    "prompt": "Was denkst und fühlst du heute?"
+  },
+  "errors": {
+    "voiceAnalysisFailed": "Die Sprachaufnahme konnte nicht analysiert werden. Bitte versuche es erneut.",
+    "analysisFailed": "Der Journaleintrag konnte nicht analysiert werden. Bitte versuche es erneut."
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "innerElementsDays:1",
+    "title": "Earth Foundation",
+    "theme": "Grounding & Stability",
+    "prompt": "Write about what truly grounds you. What gives you stability? Describe your roots - family, values, places that feel like home. What in your life feels solid and unshakeable?"
+  },
+  {
+    "id": "innerElementsDays:2",
+    "title": "Earth Roots",
+    "theme": "Visual Grounding",
+    "prompt": "Draw or paint your sense of stability and grounding. This could be actual roots, a tree, mountains, your childhood home, or abstract shapes that represent security. Use earthy colors - browns, greens, deep oranges."
+  },
+  {
+    "id": "innerElementsDays:3",
+    "title": "Earth Voice",
+    "theme": "Spoken Foundation",
+    "prompt": "Speak about your foundation with the deep, steady voice of the earth. Talk about what makes you feel secure, your core values, your unshakeable truths. Let your voice be grounded and steady."
+  },
+  {
+    "id": "innerElementsDays:4",
+    "title": "Water Emotions",
+    "theme": "Emotional Flow",
+    "prompt": "Write about your emotional landscape. How do feelings flow through you? Describe your emotional depths, your currents of joy, streams of sadness, or oceans of love. What emotions need to flow more freely?"
+  },
+  {
+    "id": "innerElementsDays:5",
+    "title": "Water Flow",
+    "theme": "Visual Emotions",
+    "prompt": "Create art representing your emotional flow. Paint or draw water in any form - rivers, rain, tears, oceans, or abstract flowing shapes. Use blues, greens, and flowing movements to express your inner emotional currents."
+  },
+  {
+    "id": "innerElementsDays:6",
+    "title": "Water Voice",
+    "theme": "Spoken Emotions",
+    "prompt": "Let your voice flow like water as you speak about your emotions. Talk about how you feel, let your voice be fluid and adaptive. Express the flowing, changing nature of your emotional world."
+  },
+  {
+    "id": "innerElementsDays:7",
+    "title": "Fire Passion",
+    "theme": "Inner Flame",
+    "prompt": "Write about what ignites your soul. What are you passionate about? What burns within you - dreams, desires, anger that needs transformation, or love that blazes bright? What wants to be transformed in the fire of your spirit?"
+  },
+  {
+    "id": "innerElementsDays:8",
+    "title": "Fire Creation",
+    "theme": "Visual Passion",
+    "prompt": "Create art of your inner flame. Paint or draw fire, light, sun, lightning, or abstract representations of your passion and energy. Use warm colors - reds, oranges, yellows, golds. Let your creativity blaze!"
+  },
+  {
+    "id": "innerElementsDays:9",
+    "title": "Fire Declaration",
+    "theme": "Spoken Power",
+    "prompt": "Speak with the power of fire! Declare your passions, your dreams, your burning desires. Let your voice carry the intensity and warmth of flame. What do you want to bring into the world with the fire of your spirit?"
+  }
+]

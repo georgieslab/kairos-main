@@ -1,0 +1,152 @@
+[
+  {
+    "id": "portraitEmotionsDays:1",
+    "title": "Self-Portrait Baseline",
+    "theme": "Foundation",
+    "prompt": "Create a simple self-portrait reflecting how you see yourself today. Don't worry about technical skill - focus on capturing your essence. What emotions do you see in your own eyes?"
+  },
+  {
+    "id": "portraitEmotionsDays:2",
+    "title": "Joy Expression Study",
+    "theme": "Joy",
+    "prompt": "Draw or paint a portrait (yourself or imagined) expressing pure joy. Pay attention to how joy changes facial features - the eyes, mouth, overall expression. What colors represent joy to you?"
+  },
+  {
+    "id": "portraitEmotionsDays:3",
+    "title": "Melancholy and Sadness",
+    "theme": "Sadness",
+    "prompt": "Explore sadness through portraiture. How do you show melancholy in the eyes, posture, or overall composition? There's beauty in sadness - try to capture that depth."
+  },
+  {
+    "id": "portraitEmotionsDays:4",
+    "title": "Anger and Fire",
+    "theme": "Anger",
+    "prompt": "Channel anger or frustration into a portrait. How do you show intensity and fire in facial expression? What colors and strokes convey this powerful emotion?"
+  },
+  {
+    "id": "portraitEmotionsDays:5",
+    "title": "Fear and Vulnerability",
+    "theme": "Fear",
+    "prompt": "Draw fear or anxiety in a portrait. Focus on the vulnerability in the eyes, tension in features. How can you show fear with compassion rather than judgment?"
+  },
+  {
+    "id": "portraitEmotionsDays:6",
+    "title": "Surprise and Wonder",
+    "theme": "Surprise",
+    "prompt": "Capture the moment of surprise or wonder. How do features change when someone is amazed? Focus on the openness and expansion that surprise brings."
+  },
+  {
+    "id": "portraitEmotionsDays:7",
+    "title": "Love and Tenderness",
+    "theme": "Love",
+    "prompt": "Create a portrait expressing love or deep tenderness. This might be romantic love, parental love, or universal compassion. How does love soften features?"
+  },
+  {
+    "id": "portraitEmotionsDays:8",
+    "title": "Confidence and Strength",
+    "theme": "Confidence",
+    "prompt": "Draw someone (yourself or imagined) radiating confidence and inner strength. How do you show power that comes from within rather than aggression?"
+  },
+  {
+    "id": "portraitEmotionsDays:9",
+    "title": "Contemplation and Wisdom",
+    "theme": "Contemplation",
+    "prompt": "Capture a contemplative moment - someone deep in thought or meditation. Focus on the inward-turning quality of reflection and the peace of inner focus."
+  },
+  {
+    "id": "portraitEmotionsDays:10",
+    "title": "Longing and Desire",
+    "theme": "Longing",
+    "prompt": "Express longing or yearning in a portrait. This could be romantic longing, homesickness, or spiritual seeking. How do you show desire that hasn't been fulfilled?"
+  },
+  {
+    "id": "portraitEmotionsDays:11",
+    "title": "Peaceful Serenity",
+    "theme": "Peace",
+    "prompt": "Create a portrait of deep peace and serenity. Focus on relaxed features, soft expressions, and the quality of inner calm. What does true peace look like?"
+  },
+  {
+    "id": "portraitEmotionsDays:12",
+    "title": "Curiosity and Interest",
+    "theme": "Curiosity",
+    "prompt": "Draw someone in a state of curiosity or deep interest. How do you show the alert, engaged quality of a mind that's actively exploring?"
+  },
+  {
+    "id": "portraitEmotionsDays:13",
+    "title": "Embarrassment and Shyness",
+    "theme": "Embarrassment",
+    "prompt": "Explore embarrassment or shyness through portraiture. Focus on the turning away, the hiding, but also the endearing quality of vulnerability."
+  },
+  {
+    "id": "portraitEmotionsDays:14",
+    "title": "Excitement and Anticipation",
+    "theme": "Excitement",
+    "prompt": "Capture the energy of excitement or anticipation. How do features light up when someone is enthusiastic? What body language shows excitement?"
+  },
+  {
+    "id": "portraitEmotionsDays:15",
+    "title": "Disappointment and Loss",
+    "theme": "Disappointment",
+    "prompt": "Draw disappointment or the weight of loss. Focus on the heaviness in features, the way disappointment settles in the face and posture."
+  },
+  {
+    "id": "portraitEmotionsDays:16",
+    "title": "Determination and Grit",
+    "theme": "Determination",
+    "prompt": "Show determination or fierce resolve in a portrait. How do you capture the set jaw, focused eyes, and unwavering commitment of someone who won't give up?"
+  },
+  {
+    "id": "portraitEmotionsDays:17",
+    "title": "Playfulness and Mischief",
+    "theme": "Playfulness",
+    "prompt": "Express playfulness, humor, or mischief in a portrait. Focus on the lightness, the sparkle in the eyes, and the smile that suggests fun."
+  },
+  {
+    "id": "portraitEmotionsDays:18",
+    "title": "Nostalgia and Memory",
+    "theme": "Nostalgia",
+    "prompt": "Capture the distant, soft quality of nostalgia or remembering. How do you show someone lost in a memory, with that far-away look in their eyes?"
+  },
+  {
+    "id": "portraitEmotionsDays:19",
+    "title": "Pride and Accomplishment",
+    "theme": "Pride",
+    "prompt": "Draw someone experiencing pride or satisfaction in accomplishment. Focus on the expansion, the straightened posture, the glow of achievement."
+  },
+  {
+    "id": "portraitEmotionsDays:20",
+    "title": "Envy and Wanting",
+    "theme": "Envy",
+    "prompt": "Explore envy or jealousy through portraiture. How do you show the tension of wanting what someone else has? Can you find compassion for this difficult emotion?"
+  },
+  {
+    "id": "portraitEmotionsDays:21",
+    "title": "Gratitude and Appreciation",
+    "theme": "Gratitude",
+    "prompt": "Express gratitude or deep appreciation in a portrait. Focus on the softness, warmth, and openness that comes with genuine thankfulness."
+  },
+  {
+    "id": "portraitEmotionsDays:22",
+    "title": "Confusion and Uncertainty",
+    "theme": "Confusion",
+    "prompt": "Show confusion or uncertainty in a portrait. How do you capture the furrowed brow, the questioning look, the discomfort of not knowing?"
+  },
+  {
+    "id": "portraitEmotionsDays:23",
+    "title": "Relief and Release",
+    "theme": "Relief",
+    "prompt": "Draw the moment of relief - when tension finally releases. Focus on the softening, the exhale, the visible relaxation that comes with relief."
+  },
+  {
+    "id": "portraitEmotionsDays:24",
+    "title": "Complex Emotional Mix",
+    "theme": "Complexity",
+    "prompt": "Create a portrait showing mixed emotions - bittersweet, conflicted feelings, or multiple emotions at once. Life is complex; how do you show that in a face?"
+  },
+  {
+    "id": "portraitEmotionsDays:25",
+    "title": "Your Emotional Spectrum Complete",
+    "theme": "Integration",
+    "prompt": "Create a final self-portrait incorporating all the emotional understanding you've gained. How has exploring emotions through art changed how you see yourself and others?"
+  }
+]

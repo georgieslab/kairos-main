@@ -1,0 +1,78 @@
+{
+  "header": {
+    "goBackAria": "Zurück",
+    "settingsAria": "Einstellungen",
+    "dayTitle": "Tag {{day}}",
+    "screenTitles": {
+      "home": "Καιρός",
+      "pathSelection": "Journaling-Pfade",
+      "daily": "Tägliches Journal",
+      "upload": "Journal hochladen",
+      "analysis": "Journal-Analyse",
+      "analyticsDashboard": "Journal-Statistiken",
+      "settings": "Einstellungen",
+      "profile": "Dein Profil",
+      "journalArchive": "Journal-Archiv",
+      "feedback": "Feedback senden",
+      "bugReport": "Fehler melden",
+      "journeyComplete": "Reise abgeschlossen"
+    }
+  },
+  "bottomNav": {
+    "navAriaLabel": "Hauptnavigation",
+    "home": "Start",
+    "paths": "Pfade",
+    "journal": "Journal",
+    "insights": "Einblicke",
+    "profile": "Profil"
+  },
+  "fab": {
+    "giveFeedback": "Feedback geben",
+    "reportBug": "Fehler melden",
+    "helpCenter": "Hilfe-Center",
+    "closeMenu": "Menü schließen",
+    "openMenu": "Hilfemenü öffnen"
+  },
+  "installPrompt": {
+    "title": "Kairos Journal installieren",
+    "iconAlt": "Kairos",
+    "iosSubtitle": "Installiere diese App auf deinem iPhone für das beste Erlebnis",
+    "androidSubtitle": "Installiere unsere App für schnellen Zugriff und Journaling offline",
+    "benefitOffline": "Funktioniert offline",
+    "benefitQuickAccess": "Schneller Zugriff vom Homescreen",
+    "benefitFullScreen": "Vollbild-Erlebnis",
+    "installButton": "App installieren",
+    "laterButton": "Vielleicht später",
+    "ios": {
+      "step1": "Tippe auf das Teilen-Symbol",
+      "step1Suffix": "in Safari",
+      "step2": "Scrolle runter und tippe auf \"Zum Home-Bildschirm\"",
+      "step3": "Tippe auf \"Hinzufügen\", um zu installieren"
+    }
+  },
+  "errorBoundary": {
+    "title": "Etwas ist schiefgelaufen",
+    "message": "Es tut uns leid, aber beim Laden dieses Inhalts ist ein Problem aufgetreten.",
+    "retry": "Erneut versuchen"
+  },
+  "pathContext": {
+    "dayCompact": "{{name}} • Tag {{day}}",
+    "dayProgress": "Tag {{day}}/10",
+    "names": {
+      "emotionalIntelligence": "Emotionale Intelligenz",
+      "decidingToDoing": "Die Lücke zwischen Entscheiden und Tun",
+      "mindfulness": "Achtsamkeit",
+      "selfDiscovery": "Selbstfindung"
+    }
+  },
+  "versionDisplay": {
+    "viewChangelogAria": "Änderungsprotokoll anzeigen",
+    "closeChangelogAria": "Änderungsprotokoll schließen",
+    "changelog": "Änderungsprotokoll",
+    "current": "Aktuell",
+    "newFeatures": "Neue Funktionen",
+    "bugFixes": "Fehlerbehebungen",
+    "improvements": "Verbesserungen",
+    "notes": "Hinweise"
+  }
+}

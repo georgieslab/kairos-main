@@ -1,5 +1,6 @@
 import React from 'react';
-import { 
+import { useTranslation } from 'react-i18next';
+import {
   Lock, 
   Briefcase, 
   Paintbrush, 
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react';
 
 const PremiumPathsSection = () => {
+  const { t } = useTranslation('paths');
   const premiumPaths = [
     {
       id: 'relationship-mastery',
@@ -129,8 +131,8 @@ const PremiumPathsSection = () => {
   return (
     <div className="path-section">
       <h2 className="section-title upcoming">
-        Premium Journeys 
-        <span className="text-sm text-gray-400 ml-2 font-normal">(Coming Soon)</span>
+        {t('premiumSection.title', 'Premium Journeys')}
+        <span className="text-sm text-gray-400 ml-2 font-normal">{t('premiumSection.comingSoon', '(Coming Soon)')}</span>
       </h2>
       
       <div className="path-grid">
@@ -150,7 +152,7 @@ const PremiumPathsSection = () => {
                 color: `rgb(${path.color})`
               }}
             >
-              Premium
+              {t('premiumSection.premiumBadge', 'Premium')}
             </div>
             
             <div className="path-card-header">
@@ -180,7 +182,7 @@ const PremiumPathsSection = () => {
               </div>
               <div className="flex items-center text-sm text-gray-400">
                 <Calendar className="w-4 h-4 mr-1" />
-                {path.duration} days
+                {t('premiumSection.durationDays', '{{count}} days', { count: path.duration })}
               </div>
             </div>
             
@@ -193,7 +195,7 @@ const PremiumPathsSection = () => {
               }}
             >
               <Lock className="lock-icon" />
-              <span>Available with premium subscription</span>
+              <span>{t('premiumSection.lockedText', 'Available with premium subscription')}</span>
             </div>
           </div>
         ))}

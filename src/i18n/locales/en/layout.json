@@ -1,0 +1,78 @@
+{
+  "header": {
+    "goBackAria": "Go back",
+    "settingsAria": "Settings",
+    "dayTitle": "Day {{day}}",
+    "screenTitles": {
+      "home": "Καιρός",
+      "pathSelection": "Journaling Paths",
+      "daily": "Daily Journal",
+      "upload": "Journal Upload",
+      "analysis": "Journal Analysis",
+      "analyticsDashboard": "Journal Analytics",
+      "settings": "Settings",
+      "profile": "Your Profile",
+      "journalArchive": "Journal Archive",
+      "feedback": "Send Feedback",
+      "bugReport": "Report a Bug",
+      "journeyComplete": "Journey Complete"
+    }
+  },
+  "bottomNav": {
+    "navAriaLabel": "Main navigation",
+    "home": "Home",
+    "paths": "Paths",
+    "journal": "Journal",
+    "insights": "Insights",
+    "profile": "Profile"
+  },
+  "fab": {
+    "giveFeedback": "Give Feedback",
+    "reportBug": "Report a Bug",
+    "helpCenter": "Help Center",
+    "closeMenu": "Close menu",
+    "openMenu": "Open help menu"
+  },
+  "installPrompt": {
+    "title": "Install Kairos Journal",
+    "iconAlt": "Kairos",
+    "iosSubtitle": "Install this app on your iPhone for the best experience",
+    "androidSubtitle": "Install our app for quick access and offline journaling",
+    "benefitOffline": "Works offline",
+    "benefitQuickAccess": "Quick access from home screen",
+    "benefitFullScreen": "Full screen experience",
+    "installButton": "Install App",
+    "laterButton": "Maybe Later",
+    "ios": {
+      "step1": "Tap the share button",
+      "step1Suffix": "in Safari",
+      "step2": "Scroll down and tap \"Add to Home Screen\"",
+      "step3": "Tap \"Add\" to install"
+    }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "We're sorry, but there was a problem loading this content.",
+    "retry": "Try again"
+  },
+  "pathContext": {
+    "dayCompact": "{{name}} • Day {{day}}",
+    "dayProgress": "Day {{day}}/10",
+    "names": {
+      "emotionalIntelligence": "Emotional Intelligence",
+      "decidingToDoing": "The Gap Between Deciding and Doing",
+      "mindfulness": "Mindfulness",
+      "selfDiscovery": "Self-Discovery"
+    }
+  },
+  "versionDisplay": {
+    "viewChangelogAria": "View changelog",
+    "closeChangelogAria": "Close changelog",
+    "changelog": "Changelog",
+    "current": "Current",
+    "newFeatures": "New Features",
+    "bugFixes": "Bug Fixes",
+    "improvements": "Improvements",
+    "notes": "Notes"
+  }
+}

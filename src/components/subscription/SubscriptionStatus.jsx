@@ -1,8 +1,9 @@
 // src/components/subscription/SubscriptionStatus.jsx - Enhanced and Reusable
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Crown, 
+import { useTranslation } from 'react-i18next';
+import {
+  Crown,
   CreditCard, 
   Calendar, 
   AlertCircle, 
@@ -33,8 +34,9 @@ const SubscriptionStatus = ({
   onUpgrade, 
   showActions = true,
   className = '',
-  refreshTrigger = null 
+  refreshTrigger = null
 }) => {
+  const { t } = useTranslation('subscription');
   const { currentUser } = useAuth();
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -95,7 +97,7 @@ const SubscriptionStatus = ({
         {mode === 'badge' ? (
           <div className="subscription-badge loading">
             <div className="badge-spinner"></div>
-            <span>Loading...</span>
+            <span>{t('common.loading', 'Loading...')}</span>
           </div>
         ) : (
           <div className="status-skeleton"></div>
@@ -113,7 +115,7 @@ const SubscriptionStatus = ({
     return (
       <div className={`subscription-badge ${isArtisan ? 'artisan' : 'free'} ${className}`}>
         {isArtisan ? <Crown size={12} /> : <User size={12} />}
-        <span>{isArtisan ? 'Artisan' : 'Free'}</span>
+        <span>{isArtisan ? t('common.artisan', 'Artisan') : t('common.free', 'Free')}</span>
       </div>
     );
   }
@@ -130,7 +132,7 @@ const SubscriptionStatus = ({
             <span className="compact-title">{subscriptionInfo.displayStatus}</span>
             {subscriptionInfo.renewalDate && (
               <span className="compact-renewal">
-                Renews {new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString()}
+                {t('common.renews', 'Renews {{date}}', { date: new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString() })}
               </span>
             )}
           </div>
@@ -145,16 +147,16 @@ const SubscriptionStatus = ({
                 disabled={processingUpgrade}
               >
                 {processingUpgrade ? <Zap className="spin" size={14} /> : <Crown size={14} />}
-                Upgrade
+                {t('common.upgrade', 'Upgrade')}
               </button>
             ) : (
-              <button 
+              <button
                 className="compact-manage-btn"
                 onClick={handleManageSubscription}
                 disabled={managingSubscription}
               >
                 {managingSubscription ? <Zap className="spin" size={14} /> : <CreditCard size={14} />}
-                Manage
+                {t('common.manage', 'Manage')}
               </button>
             )}
           </div>
@@ -187,40 +189,40 @@ const SubscriptionStatus = ({
       {/* Benefits Display */}
       {mode === 'detailed' && (
         <div className="status-benefits">
-          <h4 className="benefits-title">Your Benefits</h4>
+          <h4 className="benefits-title">{t('detailed.yourBenefits', 'Your Benefits')}</h4>
           <ul className="benefits-list">
             {isArtisan ? (
               <>
                 <li className="benefit-item">
                   <CheckCircle size={16} />
-                  <span>All 33+ journey paths</span>
+                  <span>{t('benefits.allPaths', 'All 33+ journey paths')}</span>
                 </li>
                 <li className="benefit-item">
                   <CheckCircle size={16} />
-                  <span>Advanced AI analysis</span>
+                  <span>{t('benefits.advancedAI', 'Advanced AI analysis')}</span>
                 </li>
                 <li className="benefit-item">
                   <CheckCircle size={16} />
-                  <span>Unlimited PDF exports</span>
+                  <span>{t('benefits.unlimitedExports', 'Unlimited PDF exports')}</span>
                 </li>
                 <li className="benefit-item">
                   <CheckCircle size={16} />
-                  <span>Premium analytics</span>
+                  <span>{t('benefits.premiumAnalyticsShort', 'Premium analytics')}</span>
                 </li>
               </>
             ) : (
               <>
                 <li className="benefit-item">
                   <CheckCircle size={16} />
-                  <span>9 free journey paths</span>
+                  <span>{t('benefits.freePathsShort', '9 free journey paths')}</span>
                 </li>
                 <li className="benefit-item limited">
                   <X size={16} />
-                  <span>Premium paths locked</span>
+                  <span>{t('detailed.premiumPathsLocked', 'Premium paths locked')}</span>
                 </li>
                 <li className="benefit-item limited">
                   <X size={16} />
-                  <span>Limited exports</span>
+                  <span>{t('detailed.limitedExports', 'Limited exports')}</span>
                 </li>
               </>
             )}
@@ -232,14 +234,14 @@ const SubscriptionStatus = ({
       {subscriptionInfo.renewalDate && (
         <div className="renewal-info">
           <Calendar className="calendar-icon" />
-          <span>Renews {new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString()}</span>
+          <span>{t('common.renews', 'Renews {{date}}', { date: new Date(subscriptionInfo.renewalDate.seconds * 1000).toLocaleDateString() })}</span>
         </div>
       )}
 
       {subscriptionInfo.trialEndDate && (
         <div className="trial-info">
           <Gift className="alert-icon" />
-          <span>Trial ends {new Date(subscriptionInfo.trialEndDate.seconds * 1000).toLocaleDateString()}</span>
+          <span>{t('detailed.trialEnds', 'Trial ends {{date}}', { date: new Date(subscriptionInfo.trialEndDate.seconds * 1000).toLocaleDateString() })}</span>
         </div>
       )}
 
@@ -247,22 +249,22 @@ const SubscriptionStatus = ({
       {showActions && (
         <div className="status-actions">
           {!isArtisan ? (
-            <button 
+            <button
               className="upgrade-button"
               onClick={handleUpgrade}
               disabled={processingUpgrade}
             >
               {processingUpgrade ? <Zap className="spin" /> : <Crown className="button-icon" />}
-              {processingUpgrade ? 'Processing...' : 'Upgrade to Artisan'}
+              {processingUpgrade ? t('common.processing', 'Processing...') : t('common.upgradeToArtisan', 'Upgrade to Artisan')}
             </button>
           ) : (
-            <button 
+            <button
               className="manage-button"
               onClick={handleManageSubscription}
               disabled={managingSubscription}
             >
               {managingSubscription ? <Zap className="spin" /> : <CreditCard className="button-icon" />}
-              {managingSubscription ? 'Opening...' : 'Manage Subscription'}
+              {managingSubscription ? t('common.opening', 'Opening...') : t('common.manageSubscription', 'Manage Subscription')}
               <ExternalLink size={14} />
             </button>
           )}
@@ -276,6 +278,7 @@ const SubscriptionStatus = ({
  * Upgrade Prompt Modal Component
  */
 export const UpgradePrompt = ({ pathName, onUpgrade, onCancel, isOpen = false }) => {
+  const { t } = useTranslation('subscription');
   const pricingInfo = getPricingInfo();
 
   if (!isOpen) return null;
@@ -285,47 +288,47 @@ export const UpgradePrompt = ({ pathName, onUpgrade, onCancel, isOpen = false })
       <div className="upgrade-prompt">
         <div className="prompt-header">
           <Crown className="crown-icon-large" />
-          <h2>Artisan Access Required</h2>
+          <h2>{t('upgradePrompt.title', 'Artisan Access Required')}</h2>
         </div>
-        
+
         <div className="prompt-content">
           <p className="prompt-message">
-            <strong>{pathName}</strong> is an Artisan journey that requires an active subscription.
+            <strong>{pathName}</strong> {t('upgradePrompt.messageSuffix', 'is an Artisan journey that requires an active subscription.')}
           </p>
-          
+
           <div className="artisan-benefits">
-            <h4>Artisan includes:</h4>
+            <h4>{t('upgradePrompt.includesTitle', 'Artisan includes:')}</h4>
             <ul>
-              <li>• All 33+ premium journey paths</li>
-              <li>• Advanced AI analysis & insights</li>
-              <li>• Unlimited PDF exports</li>
-              <li>• Extended analytics dashboard</li>
-              <li>• Priority support</li>
+              <li>• {t('upgradePrompt.benefit1', 'All 33+ premium journey paths')}</li>
+              <li>• {t('upgradePrompt.benefit2', 'Advanced AI analysis & insights')}</li>
+              <li>• {t('upgradePrompt.benefit3', 'Unlimited PDF exports')}</li>
+              <li>• {t('upgradePrompt.benefit4', 'Extended analytics dashboard')}</li>
+              <li>• {t('upgradePrompt.benefit5', 'Priority support')}</li>
             </ul>
           </div>
-          
+
           <div className="pricing-info">
             <div className="price">
               <span className="amount">€{pricingInfo.monthly.price}</span>
-              <span className="period">/month</span>
+              <span className="period">{t('common.perMonth', '/month')}</span>
             </div>
-            <p className="price-note">Cancel anytime</p>
+            <p className="price-note">{t('common.cancelAnytime', 'Cancel anytime')}</p>
           </div>
         </div>
-        
+
         <div className="prompt-actions">
-          <button 
+          <button
             className="upgrade-button-primary"
             onClick={onUpgrade}
           >
             <Crown className="button-icon" />
-            Upgrade to Artisan
+            {t('common.upgradeToArtisan', 'Upgrade to Artisan')}
           </button>
-          <button 
+          <button
             className="cancel-button"
             onClick={onCancel}
           >
-            Maybe Later
+            {t('upgradePrompt.maybeLater', 'Maybe Later')}
           </button>
         </div>
       </div>
@@ -337,40 +340,41 @@ export const UpgradePrompt = ({ pathName, onUpgrade, onCancel, isOpen = false })
  * Subscription Plans Comparison Component
  */
 export const SubscriptionPlans = ({ onSelectPlan, currentSubscription }) => {
+  const { t } = useTranslation('subscription');
   const isCurrentlyArtisan = hasArtisanAccess(currentSubscription);
   const pricingInfo = getPricingInfo();
 
   return (
     <div className="subscription-plans">
       <div className="plans-header">
-        <h2>Choose Your Καιρός Experience</h2>
-        <p>Start with free journeys or unlock your full potential with Artisan</p>
+        <h2>{t('plans.header', 'Choose Your Καιρός Experience')}</h2>
+        <p>{t('plans.subheader', 'Start with free journeys or unlock your full potential with Artisan')}</p>
       </div>
 
       <div className="plans-grid">
         {/* Free Plan */}
         <div className="plan-card free-plan">
           <div className="plan-header">
-            <h3>Free</h3>
+            <h3>{t('common.free', 'Free')}</h3>
             <div className="plan-price">
               <span className="amount">€0</span>
-              <span className="period">/month</span>
+              <span className="period">{t('common.perMonth', '/month')}</span>
             </div>
           </div>
-          
+
           <ul className="plan-features">
-            <li>• 9 guided 10-day journeys</li>
-            <li>• Basic AI analysis</li>
-            <li>• Standard analytics</li>
-            <li>• PDF exports (limited)</li>
-            <li>• Community support</li>
+            <li>• {t('plans.freeFeature1', '9 guided 10-day journeys')}</li>
+            <li>• {t('plans.freeFeature2', 'Basic AI analysis')}</li>
+            <li>• {t('plans.freeFeature3', 'Standard analytics')}</li>
+            <li>• {t('plans.freeFeature4', 'PDF exports (limited)')}</li>
+            <li>• {t('plans.freeFeature5', 'Community support')}</li>
           </ul>
-          
-          <button 
+
+          <button
             className="plan-button free-button"
             disabled
           >
-            Current Plan
+            {t('plans.currentPlan', 'Current Plan')}
           </button>
         </div>
 
@@ -378,40 +382,40 @@ export const SubscriptionPlans = ({ onSelectPlan, currentSubscription }) => {
         <div className={`plan-card artisan-plan ${isCurrentlyArtisan ? 'current-plan' : ''}`}>
           <div className="plan-badge">
             <Crown className="badge-icon" />
-            Most Popular
+            {t('plans.mostPopular', 'Most Popular')}
           </div>
-          
+
           <div className="plan-header">
-            <h3>Artisan</h3>
+            <h3>{t('common.artisan', 'Artisan')}</h3>
             <div className="plan-price">
               <span className="amount">€{pricingInfo.monthly.price}</span>
-              <span className="period">/month</span>
+              <span className="period">{t('common.perMonth', '/month')}</span>
             </div>
           </div>
-          
+
           <ul className="plan-features">
-            <li>• All 33+ journey paths</li>
-            <li>• Advanced AI insights</li>
-            <li>• Unlimited PDF exports</li>
-            <li>• Premium analytics dashboard</li>
-            <li>• Longer journeys (14-100 days)</li>
-            <li>• Visual journaling paths</li>
-            <li>• Priority support</li>
+            <li>• {t('plans.artisanFeature1', 'All 33+ journey paths')}</li>
+            <li>• {t('plans.artisanFeature2', 'Advanced AI insights')}</li>
+            <li>• {t('plans.artisanFeature3', 'Unlimited PDF exports')}</li>
+            <li>• {t('plans.artisanFeature4', 'Premium analytics dashboard')}</li>
+            <li>• {t('plans.artisanFeature5', 'Longer journeys (14-100 days)')}</li>
+            <li>• {t('plans.artisanFeature6', 'Visual journaling paths')}</li>
+            <li>• {t('plans.artisanFeature7', 'Priority support')}</li>
           </ul>
-          
-          <button 
+
+          <button
             className={`plan-button artisan-button ${isCurrentlyArtisan ? 'manage' : 'upgrade'}`}
             onClick={() => onSelectPlan('artisan')}
           >
             <Crown className="button-icon" />
-            {isCurrentlyArtisan ? 'Manage Subscription' : 'Upgrade to Artisan'}
+            {isCurrentlyArtisan ? t('common.manageSubscription', 'Manage Subscription') : t('common.upgradeToArtisan', 'Upgrade to Artisan')}
           </button>
         </div>
       </div>
-      
+
       <div className="plans-footer">
-        <p>✨ All plans include secure cloud sync and cross-device access</p>
-        <p>🔒 Cancel anytime with full data export</p>
+        <p>✨ {t('plans.footer1', 'All plans include secure cloud sync and cross-device access')}</p>
+        <p>🔒 {t('plans.footer2', 'Cancel anytime with full data export')}</p>
       </div>
     </div>
   );

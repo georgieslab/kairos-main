@@ -1,5 +1,6 @@
 // src/App.jsx - v5.1.0-alpha - Complete Production Ready Version
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from './contexts/AuthContext';
 import { useFirestoreConnection } from './hooks/useFirestoreConnection';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -39,9 +40,9 @@ import BottomNavigation from './components/layout/BottomNavigation';
 import HomeScreen from './pages/HomeScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import WriteTab from './components/journey/WriteTab';
-import FeedbackForm from './components/feedback/FeedbackForm';
-import FloatingActionButton from './components/common/FloatingActionButton';
 import KairosLoader from './components/common/KairosLoader';
+import AmbientBackground from './components/common/AmbientBackground';
+import AnalyticsSkeleton from './components/analytics/AnalyticsSkeleton';
 
 // Static Pages
 import PrivacyPolicy from './pages/Privacy';
@@ -59,11 +60,12 @@ const CompletedPathsScreen = lazy(() => import('./pages/CompletedPathsScreen'));
 
 // Data and Utils
 import { getJourneyDay, getJourneyPath } from './data/JourneyData';
-import { 
-  getProgressFieldForPath, 
-  getAllActiveJourneys, 
+import {
+  getProgressFieldForPath,
+  getAllActiveJourneys,
   getNextDayForPath,
-  updateCurrentPath 
+  getMostRecentActivePathId,
+  updateCurrentPath
 } from './utils/pathUtils';
 
 // Styles
@@ -123,7 +125,8 @@ const takePhoto = async () => {
 
 // Main App Component
 const App = () => {
-  const { currentUser, userProfile, logout, loading } = useAuth();
+  const { t } = useTranslation('common');
+  const { currentUser, userProfile, logout, loading, refreshUserProfile } = useAuth();
   const navigation = useNavigation();
   const firestoreState = useFirestoreConnection();
   const { 
@@ -167,7 +170,6 @@ const App = () => {
   // Local State
   const [pendingUploads, setPendingUploads] = useState([]);
   const [settingsData, setSettingsData] = useState({ activeSection: 'profile' });
-  const [feedbackType, setFeedbackType] = useState('feedback');
   const [previousScreen, setPreviousScreen] = useState(null);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const [isBackNavigation, setIsBackNavigation] = useState(false);
@@ -389,9 +391,13 @@ const App = () => {
     processPendingUploads();
   }, [pendingUploads, showLoader, hideLoader]);
 
-  // Reset Scroll Position
+  // Reset Scroll Position — also reset element scrollers directly: on browsers
+  // without overflow-x:clip support, body falls back to being the scroll
+  // container and window.scrollTo alone doesn't reach it.
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [currentScreen]);
 
   // Get Current Journey Day
@@ -404,19 +410,19 @@ const App = () => {
       if (!journeyData) {
         return {
           day: currentDay,
-          title: `Day ${currentDay}`,
-          theme: "Reflection",
-          prompt: "What are you thinking and feeling today?"
+          title: t('journeyDayFallback.title', 'Day {{day}}', { day: currentDay }),
+          theme: t('journeyDayFallback.theme', 'Reflection'),
+          prompt: t('journeyDayFallback.prompt', 'What are you thinking and feeling today?')
         };
       }
-      
+
       return journeyData;
     } catch (error) {
       return {
         day: currentDay,
-        title: `Day ${currentDay}`,
-        theme: "Reflection",
-        prompt: "What are you thinking and feeling today?"
+        title: t('journeyDayFallback.title', 'Day {{day}}', { day: currentDay }),
+        theme: t('journeyDayFallback.theme', 'Reflection'),
+        prompt: t('journeyDayFallback.prompt', 'What are you thinking and feeling today?')
       };
     }
   };
@@ -428,9 +434,10 @@ const App = () => {
     }
 
     try {
-      showLoader({ 
+      showLoader({
         size: 'medium',
-        message: voiceData ? 'Analyzing your voice journal...' : 'Analyzing your journal...'
+        message: voiceData ? 'Analyzing your voice journal...' : 'Analyzing your journal...',
+        showQuote: true
       });
 
       const journeyDay = getCurrentJourneyDay();
@@ -461,6 +468,11 @@ const App = () => {
           voiceData.pathId || currentPath,
           true
         );
+
+        // Refresh the in-memory profile so Home/Paths/Profile reflect the new
+        // progress without needing a manual reload (userProfile is a one-time
+        // getDoc snapshot, not a live listener).
+        await refreshUserProfile();
 
         navigateToScreen('analysis', {
           pathId: voiceData.pathId || currentPath,
@@ -501,6 +513,10 @@ const App = () => {
           false
         );
 
+        // Refresh the in-memory profile so Home/Paths/Profile reflect the new
+        // progress without needing a manual reload.
+        await refreshUserProfile();
+
         navigateToScreen('analysis', {
           pathId: pathId || currentPath,
           day: currentDay,
@@ -519,9 +535,9 @@ const App = () => {
       }
 
     } catch (error) {
-      const errorMessage = voiceData 
-        ? 'Failed to analyze voice journal. Please try again.'
-        : 'Failed to analyze journal entry. Please try again.';
+      const errorMessage = voiceData
+        ? t('errors.voiceAnalysisFailed', 'Failed to analyze voice journal. Please try again.')
+        : t('errors.analysisFailed', 'Failed to analyze journal entry. Please try again.');
         
       alert(errorMessage);
       navigateBack();
@@ -543,6 +559,7 @@ const App = () => {
           
           return (
           <div className="min-h-screen bg-gray-950 text-white flex flex-col">
+            <AmbientBackground />
             {/* Global Loader */}
             {isLoading && <KairosLoader {...loaderProps} isFading={loaderProps.isFading} />}
             
@@ -553,9 +570,9 @@ const App = () => {
                 !firestoreState.isConnected ? 'bg-orange-700 text-orange-100' : ''
               }`}>
                 {!isOnline ? (
-                  'You are offline. Some features may be limited.'
+                  t('offlineWarning')
                 ) : !firestoreState.isConnected ? (
-                  'Having trouble connecting to the server. Retrying...'
+                  t('reconnecting')
                 ) : null}
               </div>
             )}
@@ -585,21 +602,22 @@ const App = () => {
               >
                 {/* Welcome Screen */}
                 {currentScreen === 'welcome' && (
-                  <WelcomeScreen 
-                    onStart={() => navigateToScreen('signup')} 
+                  <WelcomeScreen
+                    onStart={() => navigateToScreen('signup', { authMode: 'signin' })}
                     onNavigate={(screen) => navigateToScreen(screen)}
                   />
                 )}
-                        
+
                 {/* Authentication Screens */}
                 {currentScreen === 'signup' && (
-                  <SignUpScreen 
+                  <SignUpScreen
                     onNext={() => {
                       console.log('🔄 SignUpScreen onNext triggered, navigating to home screen...');
                       navigateToScreen('home', {}, { skipCompletionCheck: true });
                     }}
                     onBack={() => navigateToScreen('welcome')}
                     navigateToScreen={navigateToScreen}
+                    initialMode={screenData?.authMode || 'signin'}
                   />
                 )}
                 
@@ -676,19 +694,32 @@ const App = () => {
 
                 {/* Writing Interface */}
                 {currentScreen === 'write' && (
-                  <WriteTab 
-                    currentPath={screenData?.pathId || currentPath}
-                    currentDay={screenData?.day || currentDay}
+                  <WriteTab
+                    currentPath={screenData?.pathId || getMostRecentActivePathId(userProfile) || currentPath}
+                    currentDay={screenData?.day}
                     navigateToScreen={navigateToScreen}
                   />
                 )}
                         
                 {/* Daily Journey View */}
                 {currentScreen === 'daily' && (
-                  <DailyJourneyView 
-                    currentDay={currentDay}
-                    pathId={currentPath}
-                    onUpload={() => navigateToScreen('upload')}
+                  <DailyJourneyView
+                    currentDay={screenData?.day || currentDay}
+                    pathId={screenData?.pathId || currentPath}
+                    onUpload={(pathId) => {
+                      const targetPath = pathId || screenData?.pathId || currentPath;
+                      const p = getJourneyPath(targetPath);
+                      if (p?.isVoiceJourney) {
+                        navigateToScreen('voice-upload', {
+                          pathId: targetPath,
+                          day: screenData?.day || currentDay,
+                          prompt: getCurrentJourneyDay().prompt,
+                          theme: getCurrentJourneyDay().theme
+                        });
+                      } else {
+                        navigateToScreen('upload');
+                      }
+                    }}
                     onNavigate={(pathId, day) => navigateToScreen('daily', { pathId, day })}
                     onBack={navigateBack}
                   />
@@ -723,8 +754,8 @@ const App = () => {
 
                 {/* Analytics Dashboard */}
                 {currentScreen === 'analytics-dashboard' && (
-                  <Suspense fallback={<LazyLoadingScreen />}>
-                    <JournalAnalyticsDashboard 
+                  <Suspense fallback={<AnalyticsSkeleton />}>
+                    <JournalAnalyticsDashboard
                       navigateToScreen={navigateToScreen}
                     />
                   </Suspense>
@@ -739,30 +770,7 @@ const App = () => {
                   </Suspense>
                 )}
 
-                {/* Feedback Screens */}
-                {currentScreen === 'feedback' && (
-                  <FeedbackForm 
-                    type={feedbackType}
-                    onBack={navigateBack}
-                    onSubmitSuccess={(result) => {
-                      setTimeout(() => {
-                        navigateToScreen('home');
-                      }, 500);
-                    }}
-                  />
-                )}
 
-                {currentScreen === 'bug-report' && (
-                  <FeedbackForm 
-                    type="bug"
-                    onBack={navigateBack}
-                    onSubmitSuccess={(result) => {
-                      setTimeout(() => {
-                        navigateToScreen('home');
-                      }, 500);
-                    }}
-                  />
-                )}
 
                 {/* Journal Archive */}
                 {currentScreen === 'journal-archive' && (
@@ -885,27 +893,27 @@ const App = () => {
               </div>
             </main>
 
-            {/* Floating Action Button */}
-            {currentUser && !['welcome', 'signup', 'feedback', 'bug-report'].includes(currentScreen) && (
-              <FloatingActionButton navigateToScreen={navigateToScreen} />
-            )}
+            {/* Floating Action Button removed per UX request */}
             
             {/* Bottom Navigation */}
             {currentUser && (
               (() => {
                 const hideBottomNavScreens = [
-                  'welcome', 
-                  'signup', 
-                  'feedback', 
-                  'bug-report',
+                  'welcome',
+                  'signup',
                   'loading',
                   'privacy-policy',
                   'terms-of-service',
                   'contact-us',
-                  'about'
+                  'about',
+                  'upload',        // Journal/Artwork upload — focused capture flow
+                  'voice-upload',  // Voice journal — focused capture flow
+                  'analysis'       // Analysis (incl. its loading state) — has its own back/tab nav
                 ];
-                
-                const shouldShowBottomNav = !hideBottomNavScreens.includes(currentScreen);
+
+                // Hide the nav on the listed screens AND whenever a global
+                // loader is active — loading screens should never show the nav.
+                const shouldShowBottomNav = !hideBottomNavScreens.includes(currentScreen) && !isLoading;
                 
                 return shouldShowBottomNav ? (
                   <BottomNavigation 
@@ -920,8 +928,8 @@ const App = () => {
             {(currentScreen === 'welcome' || currentScreen === 'signup') && (
               <footer className="bg-gray-950 border-t border-gray-800 py-8">
                 <div className="container mx-auto text-center text-gray-500 text-sm">
-                  <p>© 2025 Καιρός. All rights reserved.</p>
-                  <p className="mt-2">Empowering personal growth through mindful journaling and AI insights.</p>
+                  <p>{t('footerRights')}</p>
+                  <p className="mt-2">{t('footerTagline')}</p>
                 </div>
               </footer>
             )}

@@ -1,6 +1,7 @@
 // src/pages/SubscriptionSuccess.jsx
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { handleSubscriptionSuccess } from '../services/stripeService';
 import {
@@ -12,6 +13,7 @@ import {
 import '../styles/components/subscription.css';
 
 const SubscriptionSuccess = ({ navigateToScreen }) => {
+  const { t } = useTranslation('pages');
   const { currentUser, refreshUserProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,23 +35,23 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
         const sessionId = getSessionId();
         
         if (!sessionId) {
-          throw new Error('No session ID found');
+          throw new Error(t('subscriptionSuccess.errorNoSessionId', 'No session ID found'));
         }
-        
+
         if (!currentUser) {
-          throw new Error('No user logged in');
+          throw new Error(t('subscriptionSuccess.errorNoUser', 'No user logged in'));
         }
-        
+
         // Process the subscription
         const result = await handleSubscriptionSuccess(sessionId);
-        
+
         // Refresh user profile to get updated subscription status
         await refreshUserProfile();
-        
+
         setSubscription(result);
       } catch (error) {
         console.error('Error processing subscription:', error);
-        setError(error.message || 'An error occurred while processing your subscription');
+        setError(error.message || t('subscriptionSuccess.errorGeneric', 'An error occurred while processing your subscription'));
       } finally {
         setIsLoading(false);
       }
@@ -60,7 +62,7 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
   
   // Format date for display
   const formatDate = (timestamp) => {
-    if (!timestamp) return 'Unknown';
+    if (!timestamp) return t('subscriptionSuccess.unknownDate', 'Unknown');
     
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', { 
@@ -76,8 +78,8 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
       <div className="subscription-success-container">
         <div className="success-content loading">
           <Loader className="loading-icon" />
-          <h2>Processing Your Subscription</h2>
-          <p>Please wait while we confirm your payment...</p>
+          <h2>{t('subscriptionSuccess.loadingTitle', 'Processing Your Subscription')}</h2>
+          <p>{t('subscriptionSuccess.loadingText', 'Please wait while we confirm your payment...')}</p>
         </div>
       </div>
     );
@@ -89,13 +91,13 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
       <div className="subscription-success-container">
         <div className="success-content error">
           <AlertTriangle className="error-icon" />
-          <h2>Something Went Wrong</h2>
+          <h2>{t('subscriptionSuccess.errorTitle', 'Something Went Wrong')}</h2>
           <p>{error}</p>
-          <button 
+          <button
             className="try-again-button"
             onClick={() => navigateToScreen('path-selection')}
           >
-            Return to Journeys
+            {t('subscriptionSuccess.returnToJourneys', 'Return to Journeys')}
           </button>
         </div>
       </div>
@@ -110,49 +112,48 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
           <CheckCircle className="success-icon" />
         </div>
         
-        <h2>Thank You for Your Subscription!</h2>
-        
+        <h2>{t('subscriptionSuccess.thankYouTitle', 'Thank You for Your Subscription!')}</h2>
+
         <p className="success-message">
-          Your subscription to Καιρός Premium is now active. You have access to all premium
-          journeys and features.
+          {t('subscriptionSuccess.thankYouText', 'Your subscription to Καιρός Premium is now active. You have access to all premium journeys and features.')}
         </p>
-        
+
         <div className="subscription-details-card">
           <div className="detail-item">
-            <span className="detail-label">Subscription Plan:</span>
-            <span className="detail-value">{subscription?.plan || 'Premium'}</span>
+            <span className="detail-label">{t('subscriptionSuccess.planLabel', 'Subscription Plan:')}</span>
+            <span className="detail-value">{subscription?.plan || t('subscriptionSuccess.planDefault', 'Premium')}</span>
           </div>
-          
+
           <div className="detail-item">
-            <span className="detail-label">Status:</span>
-            <span className="detail-value status-active">Active</span>
+            <span className="detail-label">{t('subscriptionSuccess.statusLabel', 'Status:')}</span>
+            <span className="detail-value status-active">{t('subscriptionSuccess.statusActive', 'Active')}</span>
           </div>
-          
+
           <div className="detail-item">
-            <span className="detail-label">Start Date:</span>
+            <span className="detail-label">{t('subscriptionSuccess.startDateLabel', 'Start Date:')}</span>
             <span className="detail-value">{formatDate(subscription?.startDate || new Date())}</span>
           </div>
-          
+
           <div className="detail-item">
-            <span className="detail-label">Next Billing Date:</span>
+            <span className="detail-label">{t('subscriptionSuccess.nextBillingLabel', 'Next Billing Date:')}</span>
             <span className="detail-value">{formatDate(subscription?.renewalDate || new Date())}</span>
           </div>
         </div>
-        
+
         <div className="success-actions">
-          <button 
+          <button
             className="primary-button"
             onClick={() => navigateToScreen('path-selection')}
           >
-            Explore Premium Journeys
+            {t('subscriptionSuccess.explorePremium', 'Explore Premium Journeys')}
             <ArrowRight className="button-icon" />
           </button>
-          
-          <button 
+
+          <button
             className="secondary-button"
             onClick={() => navigateToScreen('account-settings')}
           >
-            Manage Subscription
+            {t('subscriptionSuccess.manageSubscription', 'Manage Subscription')}
           </button>
         </div>
       </div>

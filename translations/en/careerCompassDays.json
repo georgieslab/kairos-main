@@ -1,0 +1,128 @@
+[
+  {
+    "id": "careerCompassDays:1",
+    "title": "Career Inventory",
+    "theme": "Assessment",
+    "prompt": "Take an honest inventory of your current professional situation. What aspects of your work energize you, and what drains you? What skills do you most enjoy using, and which feel like a burden?"
+  },
+  {
+    "id": "careerCompassDays:2",
+    "title": "Professional Strengths",
+    "theme": "Capabilities",
+    "prompt": "What are your greatest professional strengths and natural talents? When do you feel most competent and confident at work? How might these strengths be better utilized or developed?"
+  },
+  {
+    "id": "careerCompassDays:3",
+    "title": "Work Environment Preferences",
+    "theme": "Context",
+    "prompt": "Describe your ideal work environment. Consider physical space, company culture, team dynamics, autonomy level, and structure. How does your current environment compare to this ideal?"
+  },
+  {
+    "id": "careerCompassDays:4",
+    "title": "Career Influences",
+    "theme": "Origins",
+    "prompt": "What influenced your career choices? Consider family expectations, societal pressures, practical considerations, and personal interests. Which influences still serve you, and which might you question?"
+  },
+  {
+    "id": "careerCompassDays:5",
+    "title": "Professional Relationships",
+    "theme": "Connection",
+    "prompt": "Reflect on your relationships with colleagues, supervisors, clients, or team members. What patterns create connection or tension? How do these relationships impact your job satisfaction?"
+  },
+  {
+    "id": "careerCompassDays:6",
+    "title": "Work-Life Integration",
+    "theme": "Balance",
+    "prompt": "How well does your career integrate with your personal life and values? Where do you experience conflict or harmony? What adjustments would create better alignment?"
+  },
+  {
+    "id": "careerCompassDays:7",
+    "title": "Values at Work",
+    "theme": "Alignment",
+    "prompt": "How do your core personal values show up (or not show up) in your work? What would it look like to have greater alignment between your values and your career?"
+  },
+  {
+    "id": "careerCompassDays:8",
+    "title": "Career Fears",
+    "theme": "Obstacles",
+    "prompt": "What fears hold you back professionally? Consider fears about failure, success, change, or judgment. How might these fears be both protecting and limiting you?"
+  },
+  {
+    "id": "careerCompassDays:9",
+    "title": "Professional Learning",
+    "theme": "Growth",
+    "prompt": "What new skills or knowledge would most enhance your career satisfaction and effectiveness? What learning opportunities excite you, and what barriers prevent your development?"
+  },
+  {
+    "id": "careerCompassDays:10",
+    "title": "Impact and Contribution",
+    "theme": "Purpose",
+    "prompt": "What kind of impact do you want to have through your work? How do you want to contribute to your organization, industry, or society? What would make your work feel more meaningful?"
+  },
+  {
+    "id": "careerCompassDays:11",
+    "title": "Career Role Models",
+    "theme": "Inspiration",
+    "prompt": "Who do you admire professionally? What qualities do they embody that you'd like to develop? What can you learn from their career paths and approaches to work?"
+  },
+  {
+    "id": "careerCompassDays:12",
+    "title": "Professional Challenges",
+    "theme": "Obstacles",
+    "prompt": "What are your biggest professional challenges right now? Which are within your control to address, and which require acceptance or creative adaptation?"
+  },
+  {
+    "id": "careerCompassDays:13",
+    "title": "Success Redefinition",
+    "theme": "Achievement",
+    "prompt": "How do you currently define professional success? Is this definition truly yours, or influenced by others? How might you redefine success to better align with your authentic goals?"
+  },
+  {
+    "id": "careerCompassDays:14",
+    "title": "Future Vision",
+    "theme": "Aspiration",
+    "prompt": "Envision your ideal professional life 5 years from now. What type of work are you doing? What impact are you having? What environment are you working in? Be as specific as possible."
+  },
+  {
+    "id": "careerCompassDays:15",
+    "title": "Career Transitions",
+    "theme": "Change",
+    "prompt": "If you were to make a career change, what would it look like? What's attracting you toward change, and what's holding you back? What would a gradual transition involve?"
+  },
+  {
+    "id": "careerCompassDays:16",
+    "title": "Financial Considerations",
+    "theme": "Resources",
+    "prompt": "How do financial needs and goals impact your career choices? What's the relationship between money and fulfillment in your work? How might you balance financial and personal satisfaction?"
+  },
+  {
+    "id": "careerCompassDays:17",
+    "title": "Professional Legacy",
+    "theme": "Impact",
+    "prompt": "What professional legacy do you want to leave? How do you want to be remembered by colleagues and those you've worked with? What would you like your career to have contributed?"
+  },
+  {
+    "id": "careerCompassDays:18",
+    "title": "Networking and Community",
+    "theme": "Connection",
+    "prompt": "What professional communities or networks support your growth? How might you contribute to and benefit from professional relationships? What communities would you like to join or build?"
+  },
+  {
+    "id": "careerCompassDays:19",
+    "title": "Skill Gap Analysis",
+    "theme": "Development",
+    "prompt": "What gaps exist between your current capabilities and your career aspirations? What specific skills, knowledge, or experiences would bridge these gaps? How might you acquire them?"
+  },
+  {
+    "id": "careerCompassDays:20",
+    "title": "Risk Assessment",
+    "theme": "Strategy",
+    "prompt": "What risks are you willing to take for career growth or change? What's the cost of staying in your current situation versus the cost of making changes? How do you typically approach professional risks?"
+  },
+  {
+    "id": "careerCompassDays:21",
+    "title": "Action Planning",
+    "theme": "Implementation",
+    "prompt": "Based on your reflections, what are the top 3 concrete steps you could take to move toward your ideal career vision? What obstacles might you face, and how will you address them? Set specific timelines and accountability measures."
+  }
+]

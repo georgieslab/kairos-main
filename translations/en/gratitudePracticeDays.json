@@ -1,0 +1,62 @@
+[
+  {
+    "id": "gratitudePracticeDays:1",
+    "title": "Gratitude Foundations",
+    "theme": "Awareness",
+    "prompt": "What does gratitude mean to you personally? Reflect on a time when you felt deeply grateful. How did it feel in your body? What thoughts accompanied this feeling?"
+  },
+  {
+    "id": "gratitudePracticeDays:2",
+    "title": "Simple Pleasures",
+    "theme": "Daily Appreciation",
+    "prompt": "What are five simple pleasures you experienced today that often go unnoticed? Consider each of your senses - what did you see, hear, taste, smell, or touch that brought you joy?"
+  },
+  {
+    "id": "gratitudePracticeDays:3",
+    "title": "People Appreciation",
+    "theme": "Connection",
+    "prompt": "Who are three people who have positively impacted your life recently? What specific actions did they take that you're grateful for? Consider expressing your gratitude directly to at least one of them."
+  },
+  {
+    "id": "gratitudePracticeDays:4",
+    "title": "Challenge Gratitude",
+    "theme": "Growth",
+    "prompt": "Reflect on a recent challenge or obstacle. What lessons or growth has it brought into your life? What aspects of this difficult experience can you find gratitude for?"
+  },
+  {
+    "id": "gratitudePracticeDays:5",
+    "title": "Body Gratitude",
+    "theme": "Physical Wellbeing",
+    "prompt": "What aspects of your physical body are you grateful for today? Consider functions, abilities, or features that serve you well, even if you don't normally acknowledge them."
+  },
+  {
+    "id": "gratitudePracticeDays:6",
+    "title": "Abundance Awareness",
+    "theme": "Sufficiency",
+    "prompt": "What material resources, opportunities, or privileges do you have that others might not? How do these elements of abundance support your daily life and wellbeing?"
+  },
+  {
+    "id": "gratitudePracticeDays:7",
+    "title": "Nature's Gifts",
+    "theme": "Environmental Connection",
+    "prompt": "What elements of the natural world bring you joy or support your existence? Consider everything from the air you breathe to landscapes that inspire you. How does nature enrich your life?"
+  },
+  {
+    "id": "gratitudePracticeDays:8",
+    "title": "Self-Appreciation",
+    "theme": "Inner Worth",
+    "prompt": "What personal qualities, achievements, or actions of your own are you grateful for? How have you contributed to your own wellbeing or growth recently? Acknowledge yourself fully."
+  },
+  {
+    "id": "gratitudePracticeDays:9",
+    "title": "Future Gratitude",
+    "theme": "Anticipation",
+    "prompt": "What upcoming experiences or possibilities are you looking forward to with gratitude? How might cultivating gratitude in advance enhance your experience of these future events?"
+  },
+  {
+    "id": "gratitudePracticeDays:10",
+    "title": "Gratitude Integration",
+    "theme": "Practice",
+    "prompt": "Reflect on how your relationship with gratitude has evolved over the past nine days. What new awareness has emerged? How might you incorporate gratitude more consistently in your daily life?"
+  }
+]

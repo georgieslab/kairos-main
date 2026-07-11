@@ -1,0 +1,182 @@
+[
+  {
+    "id": "griefAndGrowthDays:1",
+    "title": "Naming Your Loss",
+    "theme": "Recognition",
+    "prompt": "What loss are you processing - whether recent or from the past? This might be death, divorce, job loss, health changes, or any significant ending. Gently name what you're grieving without trying to fix or minimize it."
+  },
+  {
+    "id": "griefAndGrowthDays:2",
+    "title": "Grief's Many Faces",
+    "theme": "Emotions",
+    "prompt": "What emotions are present in your grief? Consider sadness, anger, fear, guilt, relief, or numbness. All feelings are valid parts of grief - there's no 'right' way to grieve. What emotions surprise or confuse you?"
+  },
+  {
+    "id": "griefAndGrowthDays:3",
+    "title": "The Body of Grief",
+    "theme": "Physical",
+    "prompt": "How does grief show up in your body? Consider fatigue, tension, appetite changes, or physical sensations. What does your body need during this time? How can you care for your physical self with extra compassion?"
+  },
+  {
+    "id": "griefAndGrowthDays:4",
+    "title": "What Was Lost",
+    "theme": "Specificity",
+    "prompt": "Beyond the primary loss, what else was lost? Consider future plans, daily routines, identity aspects, or sources of meaning that were connected to what you're grieving. Acknowledge the multiple layers of loss."
+  },
+  {
+    "id": "griefAndGrowthDays:5",
+    "title": "Memories and Stories",
+    "theme": "Remembrance",
+    "prompt": "What memories of what you've lost bring you comfort? What stories capture the essence of what made this person, relationship, or situation precious? How might remembering be part of your healing?"
+  },
+  {
+    "id": "griefAndGrowthDays:6",
+    "title": "Guilt and Regret",
+    "theme": "Self-Compassion",
+    "prompt": "What guilt or regret accompanies your loss? Consider things left unsaid, done differently, or wishes about the past. Can you offer yourself compassion for being human and imperfect in relationships and situations?"
+  },
+  {
+    "id": "griefAndGrowthDays:7",
+    "title": "Anger in Grief",
+    "theme": "Difficult Emotions",
+    "prompt": "What anger is present in your grief? Anger at the person/situation, at yourself, at life's unfairness, or at others' responses? How might acknowledging anger be part of honoring your loss rather than being disloyal?"
+  },
+  {
+    "id": "griefAndGrowthDays:8",
+    "title": "Support and Isolation",
+    "theme": "Connection",
+    "prompt": "How has your loss affected your relationships? Who provides support, and who feels absent or unhelpful? What do you need from others, and how might you communicate these needs or find additional support?"
+  },
+  {
+    "id": "griefAndGrowthDays:9",
+    "title": "Grief Waves",
+    "theme": "Process",
+    "prompt": "Grief often comes in waves - sometimes manageable, sometimes overwhelming. What have you noticed about your grief patterns? What helps you ride the waves without being knocked over by them?"
+  },
+  {
+    "id": "griefAndGrowthDays:10",
+    "title": "Meaning Making",
+    "theme": "Purpose",
+    "prompt": "How do you make meaning of your loss? What beliefs, spirituality, or philosophy help or hinder your processing? How might you find purpose or meaning within or despite your grief?"
+  },
+  {
+    "id": "griefAndGrowthDays:11",
+    "title": "Continuing Bonds",
+    "theme": "Connection",
+    "prompt": "If your loss involves someone who died, how do you maintain connection with them? If it's another type of loss, what from the past do you want to carry forward? How might love continue despite physical absence?"
+  },
+  {
+    "id": "griefAndGrowthDays:12",
+    "title": "Rituals and Ceremonies",
+    "theme": "Honoring",
+    "prompt": "What rituals might honor your loss and support your grieving process? Consider formal ceremonies, personal practices, or memorial activities that help you process and remember meaningfully."
+  },
+  {
+    "id": "griefAndGrowthDays:13",
+    "title": "Accepting Support",
+    "theme": "Receiving",
+    "prompt": "What makes it difficult to accept help during grief? How might allowing others to support you be a gift to them as well as to you? What would make receiving support feel safer or more comfortable?"
+  },
+  {
+    "id": "griefAndGrowthDays:14",
+    "title": "Grief's Gifts",
+    "theme": "Transformation",
+    "prompt": "What unexpected gifts has grief brought - perhaps deeper compassion, clarity about what matters, or appreciation for life's preciousness? How has loss changed your perspective or priorities?"
+  },
+  {
+    "id": "griefAndGrowthDays:15",
+    "title": "Identity After Loss",
+    "theme": "Self-Concept",
+    "prompt": "How has your sense of identity shifted through this loss? What roles, self-concepts, or ways of being have changed? Who are you becoming as you integrate this experience into your life story?"
+  },
+  {
+    "id": "griefAndGrowthDays:16",
+    "title": "Others' Discomfort",
+    "theme": "Social Navigation",
+    "prompt": "How do others respond to your grief, and how does this affect you? Consider both helpful and unhelpful responses. How might you navigate others' discomfort with loss while still honoring your own process?"
+  },
+  {
+    "id": "griefAndGrowthDays:17",
+    "title": "Complicated Relationships",
+    "theme": "Ambivalence",
+    "prompt": "If your loss involves a complicated relationship, how do you grieve someone or something that brought both joy and pain? How do you process mixed feelings about what you've lost?"
+  },
+  {
+    "id": "griefAndGrowthDays:18",
+    "title": "Seasonal Grief",
+    "theme": "Cycles",
+    "prompt": "How do anniversaries, holidays, or seasonal changes affect your grief? What times feel particularly difficult or meaningful? How might you prepare for and navigate these challenging periods?"
+  },
+  {
+    "id": "griefAndGrowthDays:19",
+    "title": "Future Without",
+    "theme": "Reimagining",
+    "prompt": "What does your future look like without what you've lost? How do you rebuild dreams and plans? What would it look like to move forward while still honoring what you've lost?"
+  },
+  {
+    "id": "griefAndGrowthDays:20",
+    "title": "Small Steps Forward",
+    "theme": "Progress",
+    "prompt": "What small steps toward healing feel possible? This might be tiny actions, gentle self-care, or moments of engagement with life. How can you honor both your need to grieve and your capacity for healing?"
+  },
+  {
+    "id": "griefAndGrowthDays:21",
+    "title": "Joy and Guilt",
+    "theme": "Mixed Emotions",
+    "prompt": "When moments of joy or laughter arise during grief, what emotions follow? Can you allow happiness without feeling guilty or disloyal? How might joy and grief coexist rather than compete?"
+  },
+  {
+    "id": "griefAndGrowthDays:22",
+    "title": "Professional Help",
+    "theme": "Resources",
+    "prompt": "When might professional support be helpful in grief? Consider therapy, support groups, or counseling. What would make seeking help feel empowering rather than weak? What additional resources might serve your healing?"
+  },
+  {
+    "id": "griefAndGrowthDays:23",
+    "title": "Patience with Process",
+    "theme": "Timing",
+    "prompt": "Grief has its own timeline that can't be rushed or scheduled. How might you cultivate patience with your own process? What would it look like to trust that healing unfolds in its own time?"
+  },
+  {
+    "id": "griefAndGrowthDays:24",
+    "title": "Legacy and Impact",
+    "theme": "Continuation",
+    "prompt": "What legacy does your loss leave - in you, in others, or in the world? How has what you've lost contributed to who you are or what you value? How might you honor this impact going forward?"
+  },
+  {
+    "id": "griefAndGrowthDays:25",
+    "title": "Compassion Practice",
+    "theme": "Self-Kindness",
+    "prompt": "How can you extend more compassion to yourself in grief? What would you tell a dear friend going through similar loss? How might self-compassion accelerate rather than hinder your healing?"
+  },
+  {
+    "id": "griefAndGrowthDays:26",
+    "title": "Creative Expression",
+    "theme": "Art and Grief",
+    "prompt": "How might creative expression support your grief processing? Consider writing, art, music, movement, or any form of creativity that helps you explore and express your loss."
+  },
+  {
+    "id": "griefAndGrowthDays:27",
+    "title": "Wisdom from Loss",
+    "theme": "Learning",
+    "prompt": "What wisdom have you gained through this loss that you might not have learned otherwise? How has grief been a teacher, even if an unwelcome one? What insights will you carry forward?"
+  },
+  {
+    "id": "griefAndGrowthDays:28",
+    "title": "Post-Traumatic Growth",
+    "theme": "Resilience",
+    "prompt": "In what ways have you grown stronger, wiser, or more compassionate through your loss? How has grief revealed capacities you didn't know you had? What strengths have emerged from your pain?"
+  },
+  {
+    "id": "griefAndGrowthDays:29",
+    "title": "Helping Others",
+    "theme": "Service",
+    "prompt": "How might your experience with loss enable you to support others in grief? What understanding or compassion has your loss given you that could serve others facing similar challenges?"
+  },
+  {
+    "id": "griefAndGrowthDays:30",
+    "title": "Integration and Moving Forward",
+    "theme": "Wholeness",
+    "prompt": "How will you carry this loss as part of your wholeness rather than as something that defines or limits you? What does 'moving forward' mean to you? How will you honor both your loss and your capacity for continued growth and joy?"
+  }
+]

@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '6.1.0_alpha';
+export const APP_VERSION = '0.2-beta';
 
 export const VERSION_HISTORY = [
   {
@@ -2147,6 +2147,70 @@ export const VERSION_HISTORY = [
     "This update brings a visually unified and brand-consistent experience across all main screens.",
     "Top bar color now always matches the active tab for instant context feedback.",
     "All changes are fully backward compatible with previous user data and navigation."
+  ]
+},
+
+{
+  version: '0.1-beta',
+  releaseDate: '2026-06-25',
+  codename: 'Polish & Motion (Public Beta)',
+  features: [
+    'Smooth sliding active indicator on the bottom navigation — the glass pill now glides between tabs on every device, including touch, instead of appearing instantly',
+    'Cohesive loading skeletons that mirror the real layout on the Home and Insights screens, so content settles into place without flashing or jumping',
+    'Redesigned Android voice journaling screen with clear, step-by-step recording instructions'
+  ],
+  bugFixes: [
+    'Fixed the Home screen vitals (streak/entries/progress) appearing late and pushing the layout down while statistics loaded',
+    'Insights tab no longer shows two different loaders back-to-back; a single skeleton now spans both the screen load and the statistics fetch',
+    'Home hero card and the Journal tab now always show the same journey and prompt — the one you worked on most recently',
+    'Fixed an internal issue where a journey\'s last-activity timestamp was not being read, so "most recent journey" is now accurate',
+    'Profile screen "View All" under Active Journeys now opens the Paths screen instead of the Home screen',
+    'Improved visibility of the "Ink & Essence: Black Ink Mastery" path on the Paths screen (its near-black color was hard to see on dark cards)'
+  ],
+  improvements: [
+    'Home and Journal now share a single source of truth for the active journey, keeping them perfectly in sync',
+    'Cleaner, friendlier copy throughout the Android voice recording flow',
+    'Hid the unusable pause control on Android voice recording to avoid confusion',
+    'Loading states now respect reduced-motion preferences',
+    'Bottom navigation slider repositions correctly on screen resize and orientation change'
+  ],
+  notes: [
+    'First public beta release of Καιρός.',
+    'This release focuses on polish, smoother motion, and consistency across the Home, Insights, Journal, Profile, and Paths screens.',
+    'Voice journaling on Android now reads as a simple, guided experience with no technical jargon.',
+    'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+
+{
+  version: '0.2-beta',
+  releaseDate: '2026-07-04',
+  codename: 'Voice, Streaks & Liquid Glass',
+  features: [
+    'Voice journal entries now appear in your day archive — play back the audio and read the transcription right alongside your written and painted days',
+    'The analyzing screen now shows rotating reflections from great thinkers while your entry is processed, matching the Home screen',
+    'The daily journey view now has a full light theme, with refined "liquid glass" cards, a rounded path badge, a pulsing current-day marker, and gentle entrance animations',
+    'Sign-in and sign-up screens redesigned with an Apple-style liquid-glass card and soft sparks drifting behind it'
+  ],
+  bugFixes: [
+    'Fixed journey progress not updating on the Paths and Profile screens after journaling — voice and written entries now show immediately, no reload needed',
+    'Fixed the day streak showing too low a number — it now counts every consecutive day you journal across all paths, instead of tracking each path separately',
+    'Fixed the final day of a journey offering to "Continue to Day 13" on a 12-day path — the last day now correctly reads "Complete Journey"',
+    'Voice journeys now show a "Start Recording" button that opens the recorder, instead of a "Start Writing" camera button',
+    'The navigation bar is now hidden on all loading and analyzing screens for a cleaner, distraction-free view'
+  ],
+  improvements: [
+    'Start Journey now opens the sign-in screen first, with a one-tap switch to create a new account',
+    'Your profile now refreshes automatically after each entry, so streaks, entry counts, and active journeys stay accurate in real time',
+    'Streaks are now calculated from your actual entry history, so any previously incorrect number self-corrects',
+    'The day archive merges written, painted, and voice entries so every completed day appears, whatever the format',
+    'The daily journey screen reads its path and day from the same navigation context, preventing mismatched journey lengths'
+  ],
+  notes: [
+    'This release focuses on voice journaling, accurate streaks, and a more polished, glassy look across sign-in, the daily view, and loading screens.',
+    'The day-streak fix recalculates from your real journaling history, so a previously incorrect streak will correct itself automatically.',
+    'Famous phrases are now shared from a single source across the Home and analyzing screens for a consistent voice.',
+    'All changes are fully backward compatible with existing user data and progress.'
   ]
 }
 

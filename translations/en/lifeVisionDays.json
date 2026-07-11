@@ -1,0 +1,602 @@
+[
+  {
+    "id": "lifeVisionDays:1",
+    "title": "Life Mapping",
+    "theme": "Overview",
+    "prompt": "Create a timeline of your life's major events and turning points. What patterns do you notice? What themes have defined your journey so far?"
+  },
+  {
+    "id": "lifeVisionDays:2",
+    "title": "Core Identity",
+    "theme": "Self-Concept",
+    "prompt": "Who are you at your core? Beyond roles and responsibilities, what defines you as a person? What parts of yourself have remained constant through change?"
+  },
+  {
+    "id": "lifeVisionDays:3",
+    "title": "Values Exploration",
+    "theme": "Principles",
+    "prompt": "What 5-7 values are most important to you? For each value, explore why it matters and how it manifests in your life choices."
+  },
+  {
+    "id": "lifeVisionDays:4",
+    "title": "Strengths Inventory",
+    "theme": "Capabilities",
+    "prompt": "What are your natural talents and developed strengths? When do you feel most capable and in flow? How might these strengths shape your future?"
+  },
+  {
+    "id": "lifeVisionDays:5",
+    "title": "Meaningful Achievements",
+    "theme": "Accomplishment",
+    "prompt": "What achievements are you most proud of? What made these meaningful? What do they reveal about what matters to you?"
+  },
+  {
+    "id": "lifeVisionDays:6",
+    "title": "Life Roles",
+    "theme": "Identity",
+    "prompt": "What roles do you play in your life (e.g., parent, friend, professional)? Which feel most authentic? Which feel constraining or expansive?"
+  },
+  {
+    "id": "lifeVisionDays:7",
+    "title": "Personal Beliefs",
+    "theme": "Worldview",
+    "prompt": "What core beliefs shape how you see the world? Which have you consciously chosen, and which have you inherited? Which serve you well?"
+  },
+  {
+    "id": "lifeVisionDays:8",
+    "title": "Character Strengths",
+    "theme": "Virtues",
+    "prompt": "What character strengths (e.g., courage, kindness, curiosity) do you embody? Which would you like to develop further? How might these guide your life vision?"
+  },
+  {
+    "id": "lifeVisionDays:9",
+    "title": "Multiple Intelligences",
+    "theme": "Abilities",
+    "prompt": "Beyond traditional intelligence, reflect on your emotional, social, creative, physical, and other intelligences. How do these shape your potential path?"
+  },
+  {
+    "id": "lifeVisionDays:10",
+    "title": "Foundation Integration",
+    "theme": "Self-Knowledge",
+    "prompt": "Looking at your reflections from the past 9 days, write a comprehensive self-description. What essential truths about yourself will inform your life vision?"
+  },
+  {
+    "id": "lifeVisionDays:11",
+    "title": "Childhood Influences",
+    "theme": "Origins",
+    "prompt": "How has your childhood shaped who you are today? What lessons, beliefs, or patterns stem from your early experiences?"
+  },
+  {
+    "id": "lifeVisionDays:12",
+    "title": "Formative Experiences",
+    "theme": "Key Moments",
+    "prompt": "What 3-5 experiences have most shaped your life path? How did each change your direction, perspective, or sense of what's possible?"
+  },
+  {
+    "id": "lifeVisionDays:13",
+    "title": "Teachers & Mentors",
+    "theme": "Guidance",
+    "prompt": "Who has guided or influenced your life journey? What wisdom from them continues to shape your choices and perspectives?"
+  },
+  {
+    "id": "lifeVisionDays:14",
+    "title": "Past Dreams",
+    "theme": "Aspirations",
+    "prompt": "What did you dream of becoming or doing when you were younger? Which dreams did you pursue, abandon, or postpone? What might these tell you about your authentic desires?"
+  },
+  {
+    "id": "lifeVisionDays:15",
+    "title": "Life Challenges",
+    "theme": "Resilience",
+    "prompt": "What significant challenges have you faced? How did you navigate them? What strengths and capacities emerged from these difficulties?"
+  },
+  {
+    "id": "lifeVisionDays:16",
+    "title": "Regrets & Lessons",
+    "theme": "Learning",
+    "prompt": "What decisions or actions do you regret? What have you learned from these experiences? How might these lessons guide your future choices?"
+  },
+  {
+    "id": "lifeVisionDays:17",
+    "title": "Relationship Patterns",
+    "theme": "Connection History",
+    "prompt": "What patterns have you noticed in your relationships over time? How have these shaped who you are and how you connect with others?"
+  },
+  {
+    "id": "lifeVisionDays:18",
+    "title": "Career Journey",
+    "theme": "Work History",
+    "prompt": "Trace your work or career path. What patterns emerge in what you've sought, enjoyed, or avoided? What has this journey taught you about meaningful work?"
+  },
+  {
+    "id": "lifeVisionDays:19",
+    "title": "Personal Evolution",
+    "theme": "Growth",
+    "prompt": "How have you evolved as a person over time? What beliefs, values, or priorities have shifted? What aspects of yourself have remained constant?"
+  },
+  {
+    "id": "lifeVisionDays:20",
+    "title": "Past Integration",
+    "theme": "Life Lessons",
+    "prompt": "Reflecting on your past, what are the 5-7 most significant lessons you've learned? How will these inform your vision for the future?"
+  },
+  {
+    "id": "lifeVisionDays:21",
+    "title": "Current Reality Check",
+    "theme": "Present State",
+    "prompt": "Assess your life as it is today. What's working well? What's not working? Where do you feel alignment or misalignment with your true self?"
+  },
+  {
+    "id": "lifeVisionDays:22",
+    "title": "Life Satisfaction",
+    "theme": "Fulfillment Areas",
+    "prompt": "Rate your satisfaction (1-10) in key life areas: career, relationships, health, finances, personal growth, fun, physical environment, etc. What patterns do you notice?"
+  },
+  {
+    "id": "lifeVisionDays:23",
+    "title": "Energy Inventory",
+    "theme": "Vitality",
+    "prompt": "What activities, people, or environments energize you? What depletes you? How might you design a life with more of what fills your cup?"
+  },
+  {
+    "id": "lifeVisionDays:24",
+    "title": "Time Audit",
+    "theme": "Priorities",
+    "prompt": "How do you currently spend your time? Does this alignment with your values and priorities? What adjustments would create better alignment?"
+  },
+  {
+    "id": "lifeVisionDays:25",
+    "title": "Relationship Assessment",
+    "theme": "Current Connections",
+    "prompt": "Evaluate your key relationships. Which support your growth and authentic expression? Which feel challenging? What might need to shift?"
+  },
+  {
+    "id": "lifeVisionDays:26",
+    "title": "Work & Contribution",
+    "theme": "Meaningful Activity",
+    "prompt": "Assess your current work or main activities. How meaningful do they feel? How well do they utilize your strengths and align with your values?"
+  },
+  {
+    "id": "lifeVisionDays:27",
+    "title": "Financial Landscape",
+    "theme": "Resource Reality",
+    "prompt": "Examine your relationship with money and resources. What's working well? What needs attention? How does this impact your life choices?"
+  },
+  {
+    "id": "lifeVisionDays:28",
+    "title": "Physical Wellbeing",
+    "theme": "Body Assessment",
+    "prompt": "How are you caring for your physical health? What's supporting your wellbeing? What habits or patterns might you want to change?"
+  },
+  {
+    "id": "lifeVisionDays:29",
+    "title": "Emotional Landscape",
+    "theme": "Feeling States",
+    "prompt": "What emotions dominate your daily experience? Which do you welcome, and which do you avoid? What might your emotional patterns be telling you?"
+  },
+  {
+    "id": "lifeVisionDays:30",
+    "title": "Present Integration",
+    "theme": "Current Snapshot",
+    "prompt": "Create a comprehensive snapshot of your life today - the fulfilling and challenging aspects. What does this reveal about what you need and want moving forward?"
+  },
+  {
+    "id": "lifeVisionDays:31",
+    "title": "Permission to Dream",
+    "theme": "Liberation",
+    "prompt": "If anything were possible - with no limitations of money, time, or expectations - what would you do, be, or create? Allow yourself to dream without constraints."
+  },
+  {
+    "id": "lifeVisionDays:32",
+    "title": "Alternate Lives",
+    "theme": "Possibilities",
+    "prompt": "Imagine 3-5 completely different lives you could lead. Describe each in detail. What elements across these scenarios feel most exciting or meaningful?"
+  },
+  {
+    "id": "lifeVisionDays:33",
+    "title": "Childhood Dreams Revisited",
+    "theme": "Original Desires",
+    "prompt": "Return to your childhood dreams. Which still resonate? Is there wisdom or authentic desire in these early visions that might inform your life vision now?"
+  },
+  {
+    "id": "lifeVisionDays:34",
+    "title": "Idealized Day",
+    "theme": "Daily Rhythm",
+    "prompt": "Describe your ideal day in detail from morning to night. What activities, people, places, and feelings are present? What does this reveal about what matters to you?"
+  },
+  {
+    "id": "lifeVisionDays:35",
+    "title": "Adventure & Growth",
+    "theme": "Expansion",
+    "prompt": "What adventures, challenges, or growth experiences do you yearn for? What would stretch you beyond your comfort zone in meaningful ways?"
+  },
+  {
+    "id": "lifeVisionDays:36",
+    "title": "Dream Environment",
+    "theme": "Physical Context",
+    "prompt": "Describe your ideal living environment and location. What elements would nourish your spirit? How would this environment support your best life?"
+  },
+  {
+    "id": "lifeVisionDays:37",
+    "title": "Relationship Vision",
+    "theme": "Connection Dreams",
+    "prompt": "Envision your ideal relationship landscape - romantic, family, friendship, community. What qualities and experiences would these relationships embody?"
+  },
+  {
+    "id": "lifeVisionDays:38",
+    "title": "Creative Expression",
+    "theme": "Artistic Vision",
+    "prompt": "What forms of creative expression call to you? What would you create if you knew you couldn't fail? How might creativity be part of your life vision?"
+  },
+  {
+    "id": "lifeVisionDays:39",
+    "title": "Impact Imagination",
+    "theme": "Contribution Vision",
+    "prompt": "If you could create any positive impact in the world, what would it be? How might your unique gifts address needs that matter to you?"
+  },
+  {
+    "id": "lifeVisionDays:40",
+    "title": "Dreams Integration",
+    "theme": "Possibility Patterns",
+    "prompt": "Review your dreams and visions from the past 10 days. What patterns emerge? What elements feel most alive, exciting, and authentic to you?"
+  },
+  {
+    "id": "lifeVisionDays:41",
+    "title": "Sources of Meaning",
+    "theme": "Significance",
+    "prompt": "When have you felt that your life had deep meaning or purpose? What conditions or elements were present? What activities make you lose track of time?"
+  },
+  {
+    "id": "lifeVisionDays:42",
+    "title": "Life as Legacy",
+    "theme": "Contribution",
+    "prompt": "What mark do you want to leave on the world? How would you like your life to have mattered? What contribution feels uniquely yours to make?"
+  },
+  {
+    "id": "lifeVisionDays:43",
+    "title": "Core Motivations",
+    "theme": "Driving Forces",
+    "prompt": "What fundamentally motivates you? Beyond external rewards, what drives your choices and actions at the deepest level?"
+  },
+  {
+    "id": "lifeVisionDays:44",
+    "title": "Intersections",
+    "theme": "Sweet Spots",
+    "prompt": "Where do your talents, passions, values, and the world's needs intersect? What activities or roles combine what you're good at, love, value, and what's needed?"
+  },
+  {
+    "id": "lifeVisionDays:45",
+    "title": "Purpose Statements",
+    "theme": "Mission",
+    "prompt": "Draft 3-5 possible purpose statements that might guide your life. Example: 'My purpose is to...' Which resonates most deeply?"
+  },
+  {
+    "id": "lifeVisionDays:46",
+    "title": "Meaning Through Adversity",
+    "theme": "Transformation",
+    "prompt": "How have you found meaning in difficult experiences? What purpose might your challenges serve in your larger life story?"
+  },
+  {
+    "id": "lifeVisionDays:47",
+    "title": "Transcendent Experiences",
+    "theme": "Beyond Self",
+    "prompt": "When have you felt connected to something larger than yourself? What practices, places, or activities provide this sense of transcendence or connection?"
+  },
+  {
+    "id": "lifeVisionDays:48",
+    "title": "Mortality Reflection",
+    "theme": "Limited Time",
+    "prompt": "Reflecting on life's finite nature, what becomes most important? If you had limited time, how would you spend it? What would you no longer tolerate?"
+  },
+  {
+    "id": "lifeVisionDays:49",
+    "title": "Personal Philosophy",
+    "theme": "Wisdom",
+    "prompt": "What wisdom have you gained about living a good life? What principles or understandings guide your approach to life's fundamental questions?"
+  },
+  {
+    "id": "lifeVisionDays:50",
+    "title": "Purpose Integration",
+    "theme": "Unified Direction",
+    "prompt": "Synthesize your reflections on purpose and meaning. What central purpose might guide your life vision? How might this purpose express itself across different domains?"
+  },
+  {
+    "id": "lifeVisionDays:51",
+    "title": "Relationship Values",
+    "theme": "Connection Principles",
+    "prompt": "What values are most important to you in relationships? What qualities do you bring to your relationships? What qualities do you seek in others?"
+  },
+  {
+    "id": "lifeVisionDays:52",
+    "title": "Family Vision",
+    "theme": "Kin Connections",
+    "prompt": "What kind of family life do you envision? How do family relationships (chosen or birth) fit into your life vision? What patterns would you continue or change?"
+  },
+  {
+    "id": "lifeVisionDays:53",
+    "title": "Friendship Landscape",
+    "theme": "Peer Bonds",
+    "prompt": "What role do friendships play in your ideal life? What qualities and experiences define your most meaningful friendships? How might these evolve over time?"
+  },
+  {
+    "id": "lifeVisionDays:54",
+    "title": "Romantic Connection",
+    "theme": "Partnership",
+    "prompt": "What place does romantic partnership have in your life vision? What would an ideal partnership look and feel like? How would it support your growth and purpose?"
+  },
+  {
+    "id": "lifeVisionDays:55",
+    "title": "Community Belonging",
+    "theme": "Larger Circles",
+    "prompt": "What communities do you want to belong to? What would meaningful community connection look like in your vision? How might you contribute and receive?"
+  },
+  {
+    "id": "lifeVisionDays:56",
+    "title": "Relationship Patterns",
+    "theme": "Connection Habits",
+    "prompt": "What patterns in relationships would you like to transform? What new relational skills or approaches would support your vision for connection?"
+  },
+  {
+    "id": "lifeVisionDays:57",
+    "title": "Communication Vision",
+    "theme": "Authentic Expression",
+    "prompt": "How do you want to communicate and be heard? What would authentic, effective communication look like in your key relationships?"
+  },
+  {
+    "id": "lifeVisionDays:58",
+    "title": "Boundaries & Space",
+    "theme": "Healthy Limits",
+    "prompt": "What boundaries would support healthy relationships in your life vision? How do you balance connection with others and connection with yourself?"
+  },
+  {
+    "id": "lifeVisionDays:59",
+    "title": "Conflict & Growth",
+    "theme": "Productive Tension",
+    "prompt": "How might conflict be generative in your relationships? What approach to differences would allow both parties to grow while preserving connection?"
+  },
+  {
+    "id": "lifeVisionDays:60",
+    "title": "Relationships Integration",
+    "theme": "Connection Ecosystem",
+    "prompt": "Design your ideal ecosystem of relationships. Who would be in your inner, middle, and outer circles? How would these relationships support your wholeness and purpose?"
+  },
+  {
+    "id": "lifeVisionDays:61",
+    "title": "Work Purpose",
+    "theme": "Meaningful Contribution",
+    "prompt": "What kind of work feels most meaningful to you? How might your work express your purpose and values? What impact would you like to have through your work?"
+  },
+  {
+    "id": "lifeVisionDays:62",
+    "title": "Ideal Work Environment",
+    "theme": "Context & Culture",
+    "prompt": "Describe your ideal work environment - physical space, culture, pace, structure, colleagues. What conditions allow you to thrive and contribute at your best?"
+  },
+  {
+    "id": "lifeVisionDays:63",
+    "title": "Skills & Mastery",
+    "theme": "Competence",
+    "prompt": "What skills would you like to develop or master? What expertise would be most fulfilling to cultivate? How might developing these serve your larger purposes?"
+  },
+  {
+    "id": "lifeVisionDays:64",
+    "title": "Financial Vision",
+    "theme": "Resource Stewardship",
+    "prompt": "What role does money play in your life vision? What would 'enough' look like? How would you like to earn, save, spend, invest, and share financial resources?"
+  },
+  {
+    "id": "lifeVisionDays:65",
+    "title": "Balance & Integration",
+    "theme": "Work-Life Harmony",
+    "prompt": "How does work integrate with other dimensions of your life vision? What would healthy balance look and feel like for you?"
+  },
+  {
+    "id": "lifeVisionDays:66",
+    "title": "Leadership & Influence",
+    "theme": "Positive Impact",
+    "prompt": "How might you lead or influence others through your work? What approach to leadership aligns with your values and purpose?"
+  },
+  {
+    "id": "lifeVisionDays:67",
+    "title": "Entrepreneurship & Creation",
+    "theme": "Building & Innovating",
+    "prompt": "What might you create or build? Does creating your own venture or project fit into your vision? What would you bring into being if you could?"
+  },
+  {
+    "id": "lifeVisionDays:68",
+    "title": "Service & Giving",
+    "theme": "Altruism",
+    "prompt": "How might service or volunteering fit into your life vision? What causes or communities would you like to support through your time, talent, or resources?"
+  },
+  {
+    "id": "lifeVisionDays:69",
+    "title": "Legacy Through Work",
+    "theme": "Enduring Impact",
+    "prompt": "What professional legacy would you like to leave? How might your work contributions outlast your direct involvement? What would you like to be remembered for?"
+  },
+  {
+    "id": "lifeVisionDays:70",
+    "title": "Work Integration",
+    "theme": "Contribution Synthesis",
+    "prompt": "Synthesize your reflections on work and contribution. What would your ideal work life look like? How would it express your purpose and utilize your gifts?"
+  },
+  {
+    "id": "lifeVisionDays:71",
+    "title": "Physical Vitality",
+    "theme": "Body Care",
+    "prompt": "What role does physical health play in your life vision? What practices, activities, and choices would support your ideal of physical wellbeing?"
+  },
+  {
+    "id": "lifeVisionDays:72",
+    "title": "Emotional Wellbeing",
+    "theme": "Feeling Life",
+    "prompt": "What would emotional wellbeing look and feel like for you? What practices and approaches would help you develop emotional resilience and richness?"
+  },
+  {
+    "id": "lifeVisionDays:73",
+    "title": "Mental Clarity",
+    "theme": "Cognitive Health",
+    "prompt": "How would you like to develop and maintain your mental faculties? What practices would support clear thinking, learning, and cognitive wellbeing?"
+  },
+  {
+    "id": "lifeVisionDays:74",
+    "title": "Spiritual Connection",
+    "theme": "Transcendent Dimension",
+    "prompt": "What role does spirituality play in your life vision? How might you nurture connection to what you consider sacred, meaningful, or greater than yourself?"
+  },
+  {
+    "id": "lifeVisionDays:75",
+    "title": "Play & Joy",
+    "theme": "Pleasure & Delight",
+    "prompt": "What brings you genuine joy and pleasure? How would play, fun, and enjoyment be integrated into your ideal life? What would you do just because it delights you?"
+  },
+  {
+    "id": "lifeVisionDays:76",
+    "title": "Rest & Restoration",
+    "theme": "Renewal",
+    "prompt": "How would you ideally rest and restore your energy? What would healthy rhythms of activity and recovery look like in your vision?"
+  },
+  {
+    "id": "lifeVisionDays:77",
+    "title": "Creative Expression",
+    "theme": "Making & Imagining",
+    "prompt": "How would creative expression nurture your wellbeing? What forms of creativity would you include in your vision for a joyful, fulfilled life?"
+  },
+  {
+    "id": "lifeVisionDays:78",
+    "title": "Nature Connection",
+    "theme": "Environmental Bond",
+    "prompt": "What role does connection with the natural world play in your vision? How would you integrate nature experiences into your ideal life?"
+  },
+  {
+    "id": "lifeVisionDays:79",
+    "title": "Learning & Growth",
+    "theme": "Development",
+    "prompt": "How would continual learning and personal growth feature in your vision? What would you like to learn, study, or explore throughout your life?"
+  },
+  {
+    "id": "lifeVisionDays:80",
+    "title": "Wellbeing Integration",
+    "theme": "Wholeness",
+    "prompt": "Design a comprehensive approach to wellbeing that integrates physical, emotional, mental, and spiritual dimensions. What practices and priorities would support your thriving?"
+  },
+  {
+    "id": "lifeVisionDays:81",
+    "title": "Vision to Reality",
+    "theme": "Implementation",
+    "prompt": "What would it take to move from vision to reality? What specific changes or actions would bridge where you are now and where you want to be?"
+  },
+  {
+    "id": "lifeVisionDays:82",
+    "title": "Core Goal Areas",
+    "theme": "Key Focuses",
+    "prompt": "What 3-5 areas of your life vision feel most important to focus on first? For each, what specific goals would create meaningful progress?"
+  },
+  {
+    "id": "lifeVisionDays:83",
+    "title": "Habit Design",
+    "theme": "Daily Practices",
+    "prompt": "What daily and weekly habits would support your vision? Design specific routines that would gradually shift your life toward your vision."
+  },
+  {
+    "id": "lifeVisionDays:84",
+    "title": "Resource Inventory",
+    "theme": "Assets & Needs",
+    "prompt": "What resources (skills, relationships, finances, etc.) do you already have to support your vision? What additional resources will you need to develop or acquire?"
+  },
+  {
+    "id": "lifeVisionDays:85",
+    "title": "Obstacle Planning",
+    "theme": "Challenge Management",
+    "prompt": "What internal and external obstacles might hinder your vision? For each, develop specific strategies to overcome or navigate these challenges."
+  },
+  {
+    "id": "lifeVisionDays:86",
+    "title": "Support System",
+    "theme": "Help & Accountability",
+    "prompt": "Who could support you in realizing your vision? How might you enlist help, feedback, accountability, or encouragement from others?"
+  },
+  {
+    "id": "lifeVisionDays:87",
+    "title": "Decision Framework",
+    "theme": "Choice Architecture",
+    "prompt": "What framework will help you make decisions aligned with your vision? Develop specific questions or criteria to guide future choices."
+  },
+  {
+    "id": "lifeVisionDays:88",
+    "title": "Metrics & Feedback",
+    "theme": "Progress Tracking",
+    "prompt": "How will you measure progress toward your vision? What indicators would show you're moving in the right direction? How will you gather feedback?"
+  },
+  {
+    "id": "lifeVisionDays:89",
+    "title": "Adjustment Process",
+    "theme": "Adaptive Planning",
+    "prompt": "How will you review and adjust your vision and plans over time? Design a process for periodically reflecting on your journey and course-correcting as needed."
+  },
+  {
+    "id": "lifeVisionDays:90",
+    "title": "Action Plan",
+    "theme": "First Steps",
+    "prompt": "Develop a concrete action plan for your first three months. What specific steps will you take? What calendar commitments will you make to yourself?"
+  },
+  {
+    "id": "lifeVisionDays:91",
+    "title": "Living Your Vision",
+    "theme": "Daily Embodiment",
+    "prompt": "How can you begin living elements of your vision today, even before external circumstances fully change? What mindsets or practices can you embody now?"
+  },
+  {
+    "id": "lifeVisionDays:92",
+    "title": "Personal Credo",
+    "theme": "Guiding Principles",
+    "prompt": "Write a personal credo or manifesto that captures the essence of how you want to live. What principles will guide your choices and actions?"
+  },
+  {
+    "id": "lifeVisionDays:93",
+    "title": "Life Chapters Ahead",
+    "theme": "Future Story",
+    "prompt": "Envision the chapters of your life story yet to be written. What titles would you give these chapters? What themes and developments might unfold?"
+  },
+  {
+    "id": "lifeVisionDays:94",
+    "title": "Aging With Purpose",
+    "theme": "Lifelong Development",
+    "prompt": "How do you envision growing older with purpose and grace? What would meaningful aging look like within your life vision?"
+  },
+  {
+    "id": "lifeVisionDays:95",
+    "title": "Wisdom Cultivation",
+    "theme": "Growing Deeper",
+    "prompt": "What wisdom would you like to develop over your lifetime? How might you grow not just older but wiser, deeper, and more compassionate?"
+  },
+  {
+    "id": "lifeVisionDays:96",
+    "title": "Legacy Statement",
+    "theme": "Impact",
+    "prompt": "Draft a personal legacy statement. What positive impact do you want to have on others and the world? How do you want to be remembered?"
+  },
+  {
+    "id": "lifeVisionDays:97",
+    "title": "One-Year Vision",
+    "theme": "Near Future",
+    "prompt": "Create a detailed vision of your life one year from now. What will have changed? What will you be doing, feeling, and experiencing?"
+  },
+  {
+    "id": "lifeVisionDays:98",
+    "title": "Five-Year Vision",
+    "theme": "Medium Future",
+    "prompt": "Envision your life five years from now. What will you have accomplished? How will your daily life look and feel? What will matter most?"
+  },
+  {
+    "id": "lifeVisionDays:99",
+    "title": "Ten-Year Horizon",
+    "theme": "Long Future",
+    "prompt": "Look ten years ahead. What possibilities excite you? What impact will you have made? How will your wisdom and experience have deepened?"
+  },
+  {
+    "id": "lifeVisionDays:100",
+    "title": "Your Legacy",
+    "theme": "Integration",
+    "prompt": "After this 100-day journey of reflection, what do you want your life to stand for? What legacy do you hope to create? What will be your next chapter?"
+  }
+]

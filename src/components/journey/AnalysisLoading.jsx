@@ -1,6 +1,8 @@
 // src/components/journey/AnalysisLoading.jsx - Enhanced version
 
 import React, { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import LoadingQuote from '../common/LoadingQuote';
 import '../../styles/components/analysisLoading.css';
 
 /**
@@ -9,20 +11,21 @@ import '../../styles/components/analysisLoading.css';
  * @param {number} props.progress Loading progress percentage (0-100)
  */
 const AnalysisLoading = ({ progress = 0 }) => {
+  const { t } = useTranslation('journey');
   const [currentState, setCurrentState] = useState(0);
   const containerRef = useRef(null);
   const particlesRef = useRef([]);
   const particleCount = 12;
-  
+
   // Enhanced loading messages for a more engaging experience
   const states = [
-    'Processing your journal entry...',
-    'Identifying key themes and emotional patterns...',
-    'Analyzing your writing style and content...',
-    'Generating personalized insights just for you...',
-    'Creating meaningful reflections based on your writing...',
-    'Connecting your thoughts to your journey themes...',
-    'Almost there! Finalizing your analysis...'
+    t('analysisLoading.state1', 'Processing your journal entry...'),
+    t('analysisLoading.state2', 'Identifying key themes and emotional patterns...'),
+    t('analysisLoading.state3', 'Analyzing your writing style and content...'),
+    t('analysisLoading.state4', 'Generating personalized insights just for you...'),
+    t('analysisLoading.state5', 'Creating meaningful reflections based on your writing...'),
+    t('analysisLoading.state6', 'Connecting your thoughts to your journey themes...'),
+    t('analysisLoading.state7', 'Almost there! Finalizing your analysis...')
   ];
   
   // Initialize particles
@@ -160,10 +163,10 @@ const AnalysisLoading = ({ progress = 0 }) => {
   
   // Get appropriate status message based on progress
   const getProcessingStatus = () => {
-    if (calculatedProgress < 30) return 'Initializing analysis...';
-    if (calculatedProgress < 60) return 'Processing text and extracting patterns...';
-    if (calculatedProgress < 85) return 'Generating insights and recommendations...';
-    return 'Almost complete, finalizing your results...';
+    if (calculatedProgress < 30) return t('analysisLoading.statusInit', 'Initializing analysis...');
+    if (calculatedProgress < 60) return t('analysisLoading.statusProcessing', 'Processing text and extracting patterns...');
+    if (calculatedProgress < 85) return t('analysisLoading.statusGenerating', 'Generating insights and recommendations...');
+    return t('analysisLoading.statusFinalizing', 'Almost complete, finalizing your results...');
   };
   
   return (
@@ -194,7 +197,7 @@ const AnalysisLoading = ({ progress = 0 }) => {
           </div>
         </div>
         
-        <h2 className="analysis-loading-title">Generating Personalized Insights</h2>
+        <h2 className="analysis-loading-title">{t('analysisLoading.title', 'Generating Personalized Insights')}</h2>
         <p className="analysis-loading-message">{states[currentState]}</p>
         
         <div className="progress-container progress-active">
@@ -207,6 +210,8 @@ const AnalysisLoading = ({ progress = 0 }) => {
         <div className="processing-status">
           {getProcessingStatus()}
         </div>
+
+        <LoadingQuote />
       </div>
     </div>
   );

@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getJourneyPath } from '../../data/JourneyData';
 import { useSubscription } from '../../contexts/SubscriptionContext';
 import SubscriptionModal from './SubscriptionModal';
 
 // Helper function to check premium path access
-const PremiumPathCheck = ({ 
-  pathId, 
+const PremiumPathCheck = ({
+  pathId,
   onAccessGranted,
   onAccessDenied,
   navigateToScreen,
   children
 }) => {
+  const { t } = useTranslation('subscription');
   const { canAccessPremiumPath, loading } = useSubscription();
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
@@ -67,7 +69,7 @@ const PremiumPathCheck = ({
     return (
       <div className="flex justify-center items-center p-4">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-        <span className="ml-2 text-gray-300">Checking access...</span>
+        <span className="ml-2 text-gray-300">{t('premiumPathCheck.checkingAccess', 'Checking access...')}</span>
       </div>
     );
   }
@@ -81,7 +83,7 @@ const PremiumPathCheck = ({
         <SubscriptionModal
           navigateToScreen={navigateToScreen}
           pathId={pathId}
-          pathName={path?.title || 'Premium Path'}
+          pathName={path?.title || t('premiumPathCheck.defaultPathName', 'Premium Path')}
         />
       )}
     </>

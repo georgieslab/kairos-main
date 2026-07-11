@@ -1,0 +1,128 @@
+[
+  {
+    "id": "lifeTransitionsNavigatorDays:1",
+    "title": "Transition Recognition",
+    "theme": "Awareness",
+    "prompt": "What transition are you currently experiencing or anticipating? Consider endings, beginnings, career changes, relationship shifts, life stages, or internal transformations. How do you know you're in transition?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:2",
+    "title": "The Neutral Zone",
+    "theme": "In-Between",
+    "prompt": "Transitions often include a 'neutral zone' - the uncomfortable space between what was and what's coming. What does this in-between space feel like for you? How might you navigate uncertainty with more grace?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:3",
+    "title": "What's Ending",
+    "theme": "Closure",
+    "prompt": "What chapter of your life is ending or needs to end? What are you leaving behind - roles, relationships, identities, or ways of being? What feelings arise as you consider these endings?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:4",
+    "title": "Grief and Loss",
+    "theme": "Mourning",
+    "prompt": "What are you losing in this transition? Even positive changes involve loss - of familiarity, identity, or security. Allow yourself to feel sadness for what's passing away without rushing to the positive."
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:5",
+    "title": "Transition Fears",
+    "theme": "Anxiety",
+    "prompt": "What fears arise around this transition? Consider fears about failure, success, change, or the unknown. Which fears might be realistic preparation, and which might be anxiety that limits you?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:6",
+    "title": "Past Transitions",
+    "theme": "Experience",
+    "prompt": "Reflect on significant transitions you've navigated before. What helped you through previous changes? What patterns do you notice in how you handle transition? What wisdom can you draw from past experience?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:7",
+    "title": "Identity Shifts",
+    "theme": "Self-Concept",
+    "prompt": "How is your sense of identity shifting through this transition? What aspects of yourself are you discovering, developing, or letting go of? Who are you becoming in this process of change?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:8",
+    "title": "Support Systems",
+    "theme": "Connection",
+    "prompt": "Who and what supports you during times of change? Consider people, practices, beliefs, or resources that provide stability and encouragement. How might you activate or strengthen your support network?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:9",
+    "title": "Values Compass",
+    "theme": "Direction",
+    "prompt": "How can your core values guide you through this transition? What values are most important to honor during times of change? How might staying connected to your values provide direction in uncertainty?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:10",
+    "title": "Resistance and Flow",
+    "theme": "Acceptance",
+    "prompt": "Where are you resisting this transition, and where are you flowing with it? What happens when you fight change versus when you work with it? How might acceptance transform your experience of transition?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:11",
+    "title": "New Beginnings",
+    "theme": "Emergence",
+    "prompt": "What wants to be born through this transition? What new aspects of yourself, new directions, or new possibilities are emerging? What excites you about what might be coming?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:12",
+    "title": "Transition Rituals",
+    "theme": "Ceremony",
+    "prompt": "What rituals might help you navigate this transition? Consider ceremonies to honor endings, mark the journey, or celebrate new beginnings. How might ritual provide meaning and support during change?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:13",
+    "title": "Learning and Growth",
+    "theme": "Development",
+    "prompt": "What is this transition teaching you? Consider insights about yourself, life, or what matters most. How is this change contributing to your growth and development as a person?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:14",
+    "title": "Patience with Process",
+    "theme": "Timing",
+    "prompt": "Transitions have their own timing and can't be rushed. How might you cultivate patience with the process of change? What would it look like to trust the unfolding of your transition journey?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:15",
+    "title": "External Changes",
+    "theme": "Environment",
+    "prompt": "What external changes are required or would support your transition? Consider living situation, work environment, relationships, or daily routines. What outer changes would align with your inner transformation?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:16",
+    "title": "Skills and Capacities",
+    "theme": "Development",
+    "prompt": "What new skills, capacities, or ways of being do you need to develop for this new chapter? What qualities would serve you well in your emerging life? How might you cultivate these capabilities?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:17",
+    "title": "Meaning Making",
+    "theme": "Purpose",
+    "prompt": "What meaning do you make of this transition? How does this change fit into your larger life story and purpose? How might this transition be serving your growth and authentic expression?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:18",
+    "title": "Future Visioning",
+    "theme": "Aspiration",
+    "prompt": "What vision draws you forward through this transition? What do you hope to create, become, or experience on the other side of this change? Let yourself dream into the possibilities ahead."
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:19",
+    "title": "Practical Planning",
+    "theme": "Strategy",
+    "prompt": "What practical steps will support your transition? Consider timelines, resources, preparations, or actions needed. How can you balance planning with staying open to unexpected possibilities?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:20",
+    "title": "Trust and Faith",
+    "theme": "Confidence",
+    "prompt": "What helps you trust the process of transition when you can't see the whole path? Consider faith in yourself, in life's unfolding, or in something greater. How do you cultivate trust during uncertainty?"
+  },
+  {
+    "id": "lifeTransitionsNavigatorDays:21",
+    "title": "Embracing Change",
+    "theme": "Integration",
+    "prompt": "Looking back over this transition exploration, what insights will you carry forward? How has your relationship with change evolved? What commitment will you make to navigating life transitions with wisdom and grace?"
+  }
+]

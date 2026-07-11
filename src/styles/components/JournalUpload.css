@@ -1,1431 +1,1188 @@
-/* src/styles/components/JournalUpload.css - Enhanced with drag-and-drop and improved UX */
+/* JournalUpload.css - Apple Spatial Glass Design System */
 
-:root {
-  /* Dark Theme Colors */
-  --dark-bg-primary: #1a1e2a;
-  --dark-bg-secondary: #111827;
-  --dark-bg-tertiary: #374151;
-  --dark-bg-hover: #2d3748;
-  --dark-bg-active: #4b5563;
-  --dark-border-primary: #374151;
-  --dark-border-secondary: #4b5563;
-  --dark-border-hover: #6b7280;
-  --dark-text-primary: #f9fafb;
-  --dark-text-secondary: #d1d5db;
-  --dark-text-muted: #9ca3af;
-  --dark-text-disabled: #6b7280;
-  
-  /* Light Theme Colors */
-  --light-bg-primary: #ffffff;
-  --light-bg-secondary: #f3f4f6;
-  --light-bg-tertiary: #e5e7eb;
-  --light-bg-hover: #f9fafb;
-  --light-bg-active: #e5e7eb;
-  --light-border-primary: #d1d5db;
-  --light-border-secondary: #9ca3af;
-  --light-border-hover: #6b7280;
-  --light-text-primary: #111827;
-  --light-text-secondary: #374151;
-  --light-text-muted: #6b7280;
-  --light-text-disabled: #9ca3af;
-  
-  /* Path Colors */
-  --color-self-discovery: 85, 139, 110;
-  --color-emotional-intelligence: 216, 76, 147;
-  --color-mindfulness-awareness: 142, 68, 173;
-  --color-transformation-journey: 26, 155, 155;
-  --color-creative-expression: 217, 70, 239;
-  --color-mindful-visualization: 254, 124, 192;
-  
-  /* Semantic Colors */
-  --color-success: #10b981;
-  --color-info: #3b82f6;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  
-  /* Spacing and Sizing */
-  --border-radius-sm: 0.375rem;
-  --border-radius-md: 0.5rem;
-  --border-radius-lg: 0.75rem;
-  --border-radius-xl: 1rem;
-  --border-radius-full: 9999px;
-  
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 0.75rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  
-  /* Animations */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-  
-  /* Glow Effects */
-  --glow-sm: 0 0 8px rgba(255, 255, 255, 0.1);
-  --glow-md: 0 0 15px rgba(255, 255, 255, 0.15);
-  --glow-lg: 0 0 25px rgba(255, 255, 255, 0.2);
-  
-  --light-glow-sm: 0 0 8px rgba(0, 0, 0, 0.05);
-  --light-glow-md: 0 0 15px rgba(0, 0, 0, 0.08);
-  --light-glow-lg: 0 0 25px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== Theme Configuration ===== */
-.upload-container {
-  --bg-primary: var(--dark-bg-primary);
-  --bg-secondary: var(--dark-bg-secondary);
-  --bg-tertiary: var(--dark-bg-tertiary);
-  --bg-hover: var(--dark-bg-hover);
-  --bg-active: var(--dark-bg-active);
-  --border-primary: var(--dark-border-primary);
-  --border-secondary: var(--dark-border-secondary);
-  --border-hover: var(--dark-border-hover);
-  --text-primary: var(--dark-text-primary);
-  --text-secondary: var(--dark-text-secondary);
-  --text-muted: var(--dark-text-muted);
-  --text-disabled: var(--dark-text-disabled);
-  --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  --modal-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
-  --card-glow: var(--glow-sm);
-}
-
-.upload-container.light-theme {
-  --bg-primary: var(--light-bg-primary);
-  --bg-secondary: var(--light-bg-secondary);
-  --bg-tertiary: var(--light-bg-tertiary);
-  --bg-hover: var(--light-bg-hover);
-  --bg-active: var(--light-bg-active);
-  --border-primary: var(--light-border-primary);
-  --border-secondary: var(--light-border-secondary);
-  --border-hover: var(--light-border-hover);
-  --text-primary: var(--light-text-primary);
-  --text-secondary: var(--light-text-secondary);
-  --text-muted: var(--light-text-muted);
-  --text-disabled: var(--light-text-disabled);
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-  --modal-shadow: 0 20px 25px rgba(0, 0, 0, 0.12);
-  --card-glow: var(--light-glow-sm);
-}
-
-/* Fade up animation for sections */
-.animate-fade-up {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.6s ease forwards;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== BASE CONTAINER ===== */
-.upload-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: var(--spacing-md);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+/* ===== CONTAINER ===== */
+.upload-glass-container {
   min-height: 100vh;
+  padding: 20px 16px;
+  padding-bottom: 40px;
+  background: #000;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ===== HEADER ===== */
-.upload-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
+.upload-glass-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 12px 0;
+  margin-bottom: 16px;
 }
 
-/* ===== UPLOAD CARD ===== */
-.upload-card {
-  background-color: var(--bg-secondary);
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--border-primary);
-  padding: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-  box-shadow: var(--card-shadow);
-  transition: all var(--transition-slow);
-}
-
-.upload-card:hover {
-  border-color: var(--border-secondary);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* ===== HEADER STYLES ===== */
-.upload-title {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-lg);
-  color: var(--text-primary);
-  text-align: center;
-  letter-spacing: 0.01em;
-}
-
-/* ===== NAVIGATION ===== */
-.back-button {
-  display: flex;
-  align-items: center;
-  color: var(--text-muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-fast);
-}
-
-.back-button:hover {
-  color: var(--text-primary);
-  transform: translateX(-2px);
-}
-
-.back-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.icon-small {
-  width: 1rem;
-  height: 1rem;
-  margin-right: var(--spacing-xs);
-}
-
-/* ===== UPLOAD STAGES ===== */
-.upload-stages {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-}
-
-.upload-stage {
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius-md);
-  overflow: hidden;
-  transition: all var(--transition-normal);
-  background-color: var(--bg-tertiary);
-}
-
-.upload-stage.active {
-  border-color: var(--border-secondary);
-  box-shadow: 0 0 0 2px rgba(var(--color-self-discovery), 0.1);
-}
-
-.upload-stage.completed {
-  border-color: var(--border-secondary);
-  background-color: var(--bg-hover);
-}
-
-.stage-header {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-md);
-  background-color: var(--bg-tertiary);
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.stage-number {
-  width: 24px;
-  height: 24px;
-  background-color: rgba(var(--color-self-discovery), 0.7);
-  color: white;
-  border-radius: var(--border-radius-full);
+.upload-glass-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.upload-glass-back:active {
+  transform: scale(0.95);
+}
+
+.upload-glass-back:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ===== MAIN GLASS CARD ===== */
+.upload-glass-card {
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 32px 24px;
+}
+
+
+
+/* ===== TYPOGRAPHY ===== */
+.upload-glass-title {
+  font-size: 28px;
   font-weight: 600;
-  margin-right: var(--spacing-md);
-}
-
-.stage-title {
-  flex: 1;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.stage-check {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--color-success);
-}
-
-/* ===== DROP AREA ===== */
-.drop-area {
-  border: 2px dashed var(--border-primary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-2xl) var(--spacing-md);
+  color: rgba(255, 255, 255, 0.95);
   text-align: center;
-  margin: var(--spacing-md);
-  background-color: var(--bg-secondary);
-  transition: all var(--transition-fast);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.drop-area.dragging {
-  border-color: rgba(var(--color-self-discovery), 0.7);
-  background-color: rgba(var(--color-self-discovery), 0.05);
-  transform: scale(1.01);
-}
-
-.drop-area:hover {
-  border-color: var(--border-hover);
-  background-color: var(--bg-hover);
-}
-
-.drop-icon {
-  color: var(--text-muted);
-  width: 2.5rem;
-  height: 2.5rem;
-  margin-bottom: var(--spacing-md);
-  transition: transform var(--transition-normal);
-}
-
-.drop-area:hover .drop-icon {
-  transform: translateY(-5px);
-  color: rgba(var(--color-self-discovery), 0.7);
-}
-
-.drop-text {
-  color: var(--text-muted);
-  margin-bottom: var(--spacing-sm);
-  font-size: 1rem;
+.upload-glass-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  margin: 0 0 32px 0;
   line-height: 1.5;
 }
 
-.drop-subtext {
-  color: var(--text-disabled);
-  font-size: 0.875rem;
-  margin-bottom: var(--spacing-lg);
-}
-
-/* ===== ENHANCED IMAGE GALLERY ===== */
-.image-gallery-container {
-  margin: var(--spacing-md);
-}
-
-/* ===== IMAGE CAROUSEL ===== */
-.image-carousel {
-  position: relative;
-  width: 100%;
-  margin-bottom: var(--spacing-md);
-  max-height: 350px;
-  overflow: hidden;
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius-md);
-  background-color: var(--bg-secondary);
-}
-
-.image-preview {
-  max-width: 100%;
-  max-height: 300px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: var(--border-radius-md);
-  margin: 0 auto;
-  display: block;
-  transition: transform var(--transition-normal);
-}
-
-.page-indicator {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  z-index: 10;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.carousel-controls {
-  position: absolute;
-  top: 50%;
-  width: 100%;
+/* ===== EMPTY STATE ===== */
+.upload-glass-empty {
   display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  z-index: 10;
-  padding: 0 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 0;
 }
 
-.carousel-button {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-full);
-  width: 36px;
-  height: 36px;
+.upload-glass-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+}
+
+/* ===== GLASS BUTTONS ===== */
+.glass-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.glass-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  backdrop-filter: blur(4px);
-}
-
-.carousel-button:hover {
-  background: rgba(0, 0, 0, 0.7);
-  transform: scale(1.1);
-}
-
-.carousel-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ===== ENHANCED THUMBNAIL STRIP ===== */
-.thumbnail-strip {
-  margin-top: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--bg-tertiary), rgba(var(--color-self-discovery), 0.03));
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--border-primary);
-  box-shadow: var(--card-glow);
-}
-
-.thumbnail-strip-title {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-lg);
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 500;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(var(--color-self-discovery), 0.08);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid rgba(var(--color-self-discovery), 0.15);
-}
-
-.thumbnail-strip-title svg {
-  color: rgba(var(--color-self-discovery), 0.7);
-}
-
-.thumbnail-container {
-  display: flex;
-  gap: var(--spacing-md);
-  overflow-x: auto;
-  padding: var(--spacing-sm) var(--spacing-xs);
-  scroll-behavior: smooth;
-}
-
-.thumbnail-container::-webkit-scrollbar {
-  height: 4px;
-}
-
-.thumbnail-container::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: var(--border-radius-sm);
-}
-
-.thumbnail-container::-webkit-scrollbar-thumb {
-  background: rgba(var(--color-self-discovery), 0.3);
-  border-radius: var(--border-radius-sm);
-}
-
-.thumbnail-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--color-self-discovery), 0.5);
-}
-
-/* ===== ENHANCED THUMBNAILS ===== */
-.thumbnail-item {
-  position: relative;
-  min-width: 80px;
-  width: 80px;
-  height: 80px;
-  border-radius: var(--border-radius-lg);
-  border: 3px solid var(--border-primary);
-  overflow: hidden;
-  cursor: grab;
-  transition: all var(--transition-normal);
-  background-color: var(--bg-secondary);
-  box-shadow: var(--shadow-sm);
-  user-select: none;
-}
-
-.thumbnail-item:hover {
-  border-color: rgba(var(--color-self-discovery), 0.5);
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(var(--color-self-discovery), 0.2);
-  cursor: grab;
-}
-
-.thumbnail-item:active {
-  cursor: grabbing;
-  transform: translateY(-2px) scale(1.02);
-}
-
-.thumbnail-item.active {
-  border-color: rgba(var(--color-self-discovery), 0.8);
-  box-shadow: 0 0 0 3px rgba(var(--color-self-discovery), 0.3), var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.thumbnail-item.active:hover {
-  transform: translateY(-6px) scale(1.05);
-}
-
-/* ===== ENHANCED DRAG STATES ===== */
-.thumbnail-item[draggable="true"] {
-  cursor: grab;
-}
-
-.thumbnail-item[draggable="true"]:active {
-  cursor: grabbing;
-}
-
-.thumbnail-item.dragging {
-  opacity: 0.5;
-  transform: rotate(5deg) scale(1.1);
-  z-index: 1000;
-  border-color: rgba(var(--color-self-discovery), 0.9);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(var(--color-self-discovery), 0.4);
-  cursor: grabbing;
-}
-
-.thumbnail-item.drag-over {
-  border-color: rgba(var(--color-self-discovery), 1);
-  background: linear-gradient(135deg, 
-    rgba(var(--color-self-discovery), 0.15), 
-    rgba(var(--color-self-discovery), 0.25)
-  );
-  transform: scale(1.1) translateY(-3px);
-  box-shadow: 0 0 25px rgba(var(--color-self-discovery), 0.4), 
-              inset 0 0 20px rgba(var(--color-self-discovery), 0.1);
-  animation: dragOverPulse 0.6s ease-in-out infinite alternate;
-}
-
-.thumbnail-item.drag-over::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border: 2px dashed rgba(var(--color-self-discovery), 0.8);
-  border-radius: var(--border-radius-lg);
-  animation: dashMove 1s linear infinite;
-}
-
-.thumbnail-item.drop-zone {
-  border-color: rgba(var(--color-success), 0.8);
-  background: rgba(var(--color-success), 0.1);
-  transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(var(--color-success), 0.3);
-}
-
-.thumbnail-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all var(--transition-normal);
-  border-radius: var(--border-radius-md);
-}
-
-.thumbnail-item:hover .thumbnail-image {
-  transform: scale(1.08);
-  filter: brightness(1.1);
-}
-
-.thumbnail-item.dragging .thumbnail-image {
-  filter: grayscale(0.3) brightness(0.8);
-}
-
-.thumbnail-item.drag-over .thumbnail-image {
-  transform: scale(1.1);
-  filter: brightness(1.2) saturate(1.3);
-}
-
-/* ===== ENHANCED THUMBNAIL OVERLAYS ===== */
-.thumbnail-number {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
-  color: white;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--border-radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all var(--transition-fast);
-  z-index: 10;
-}
-
-.thumbnail-item:hover .thumbnail-number {
-  background: linear-gradient(135deg, rgba(var(--color-self-discovery), 0.9), rgba(var(--color-self-discovery), 1));
-  transform: scale(1.1);
-  box-shadow: 0 0 8px rgba(var(--color-self-discovery), 0.5);
-}
-
-.thumbnail-remove {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.95));
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-full);
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  opacity: 0;
-  transform: scale(0.8);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  z-index: 10;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 140px;
 }
 
-.thumbnail-item:hover .thumbnail-remove {
-  opacity: 1;
-  transform: scale(1);
+.glass-btn:active {
+  transform: scale(0.97);
 }
 
-.thumbnail-remove:hover {
-  background: linear-gradient(135deg, rgba(220, 38, 38, 1), rgba(185, 28, 28, 1));
-  transform: scale(1.15);
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+.glass-btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
 }
 
-/* ===== DRAG HANDLE INDICATOR ===== */
-.thumbnail-item::before {
-  content: '';
+/* Camera Button - Accent Color */
+.glass-btn-camera {
+  background: rgba(var(--c), 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Gallery Button - Subtle */
+.glass-btn-gallery {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Add More Button - Compact */
+.glass-btn-add {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px 20px;
+  min-width: auto;
+}
+
+/* Primary Button (Web Fallback) */
+.glass-btn-primary {
+  background: rgba(var(--c), 0.25);
+  color: rgba(255, 255, 255, 0.95);
+  width: 100%;
+  padding: 16px 24px;
+}
+
+/* Submit Button */
+.glass-btn-submit {
+  width: 100%;
+  padding: 18px 24px;
+  background: rgba(var(--c), 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 8px;
+  border-color: rgba(var(--c), 0.3);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 30px rgba(var(--c), 0.15);
+}
+
+.glass-btn-submit:active:not(:disabled) {
+  background: rgba(var(--c), 0.4);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(var(--c), 0.2);
+}
+
+/* ===== IMAGE PREVIEW ===== */
+.glass-preview-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.glass-preview-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.glass-preview-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glass-preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.glass-preview-remove {
   position: absolute;
-  bottom: 4px;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  z-index: 5;
+}
+
+.glass-preview-remove:active {
+  transform: scale(0.9);
+  background: rgba(239, 68, 68, 0.6);
+}
+
+.glass-preview-indicator {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 5;
+}
+
+.glass-preview-dots {
+  position: absolute;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 16px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: var(--border-radius-sm);
-  opacity: 0;
-  transition: all var(--transition-fast);
-}
-
-.thumbnail-item:hover::before {
-  opacity: 1;
-  background: rgba(var(--color-self-discovery), 0.8);
-  box-shadow: 0 0 8px rgba(var(--color-self-discovery), 0.4);
-}
-
-.thumbnail-item.dragging::before {
-  opacity: 1;
-  background: rgba(var(--color-self-discovery), 1);
-  width: 20px;
-  height: 4px;
-}
-
-/* ===== IMAGE ACTIONS ===== */
-.image-preview-actions {
   display: flex;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  margin: var(--spacing-md);
-  flex-wrap: wrap;
+  gap: 8px;
+  z-index: 5;
 }
 
-.image-action-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all var(--transition-fast);
-  color: var(--text-secondary);
-}
-
-.image-action-button:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  transform: translateY(-2px);
-}
-
-.image-action-button.remove {
-  color: var(--color-danger);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.image-action-button.remove:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.5);
-}
-
-.image-action-icon {
-  width: 1rem;
-  height: 1rem;
-  margin-right: var(--spacing-sm);
-}
-
-/* ===== ENHANCED UPLOAD INFO ===== */
-.upload-info {
-  margin-top: var(--spacing-md);
-  text-align: center;
-  padding: var(--spacing-lg);
-  background-color: var(--bg-tertiary);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-primary);
-}
-
-.upload-info-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
-}
-
-.upload-stat {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-.stat-number {
-  font-weight: 600;
-  font-size: 1.125rem;
-  color: rgba(var(--color-self-discovery), 0.8);
-}
-
-.stat-label {
-  color: var(--text-muted);
-}
-
-.upload-progress-visual {
-  margin-bottom: var(--spacing-md);
-}
-
-.progress-dots {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-xs);
-}
-
-.progress-dot {
+.glass-dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--border-radius-full);
-  background-color: var(--border-primary);
-  transition: all var(--transition-fast);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: transform 0.25s ease, background 0.25s ease;
 }
 
-.progress-dot.filled {
-  background-color: rgba(var(--color-self-discovery), 0.7);
+.glass-dot.active {
+  background: rgba(255, 255, 255, 0.9);
   transform: scale(1.2);
-  box-shadow: 0 0 8px rgba(var(--color-self-discovery), 0.4);
 }
 
-.upload-complete-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-  color: var(--color-success);
-  font-weight: 500;
-  font-size: 0.875rem;
-  background: rgba(16, 185, 129, 0.1);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+/* ===== NOTES FIELD ===== */
+.glass-notes {
+  margin: 20px 0;
 }
 
-/* ===== BUTTONS ===== */
-.action-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.action-button.primary {
-  background-color: rgba(var(--color-self-discovery), 0.7);
-  color: white;
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-weight: 500;
-  box-shadow: var(--shadow-sm);
-}
-
-.action-button.primary:hover {
-  background-color: rgba(var(--color-self-discovery), 0.8);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.action-button.secondary {
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-secondary);
-}
-
-.action-button.secondary:hover {
-  background-color: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border-secondary);
-  transform: translateY(-2px);
-}
-
-.action-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.action-button.loading {
-  opacity: 0.8;
-  cursor: not-allowed;
-}
-
-/* Camera button */
-.camera-button {
+.glass-notes-input {
   width: 100%;
-  margin-bottom: var(--spacing-md);
-  padding: var(--spacing-lg);
-  font-size: 1rem;
-}
-
-.camera-icon {
-  margin-right: var(--spacing-sm);
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* ===== UPLOAD AND ANALYZE ===== */
-.upload-analyze-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  text-align: center;
-  background-color: var(--bg-secondary);
-  border-radius: var(--border-radius-md);
-  margin: var(--spacing-md);
-  border: 1px dashed var(--border-primary);
-  animation: fadeIn var(--transition-slow);
-}
-
-.upload-analyze-text {
-  color: var(--text-muted);
-  margin-bottom: var(--spacing-lg);
-  font-size: 1rem;
+  min-height: 100px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  font-size: 15px;
   line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
-.upload-analyze-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: rgba(var(--color-self-discovery), 0.7);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  min-width: 200px;
-  box-shadow: var(--shadow-sm);
+.glass-notes-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.upload-analyze-button:hover {
-  background-color: rgba(var(--color-self-discovery), 0.8);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+.glass-notes-input:focus {
+  border-color: rgba(var(--c), 0.4);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 3px rgba(var(--c), 0.1);
 }
 
-.upload-analyze-button:active {
-  transform: translateY(0);
-}
-
-.upload-analyze-icon {
-  margin-right: var(--spacing-sm);
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.upload-analyze-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* ===== SCANNING ANIMATION ===== */
-.scanning-container {
-  margin: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.scanning-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ===== ERROR MESSAGE ===== */
+.upload-glass-error {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
   text-align: center;
+  animation: glassFadeIn 0.3s ease-out;
 }
 
-.scanning-icon {
-  color: rgba(var(--color-self-discovery), 0.7);
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-bottom: var(--spacing-sm);
-  animation: pulse 2s infinite;
+/* ===== CONTENT AREA ===== */
+.upload-glass-content {
+  animation: glassFadeIn 0.3s ease-out 0.1s both;
 }
 
-.scanning-text {
-  color: var(--text-muted);
-  margin-bottom: var(--spacing-md);
+/* ===== RESPONSIVE ===== */
+@media (max-width: 380px) {
+  .upload-glass-card {
+    padding: 24px 16px;
+  }
+  
+  .upload-glass-title {
+    font-size: 24px;
+  }
+  
+  .glass-actions {
+    flex-direction: column;
+  }
+  
+  .glass-btn {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .glass-preview-container {
+    height: 260px;
+  }
 }
 
-.progress-bar {
-  width: 100%;
-  height: 0.5rem;
-  background-color: var(--bg-tertiary);
-  border-radius: var(--border-radius-full);
-  overflow: hidden;
-  margin-bottom: var(--spacing-sm);
+/* ===== MOBILE TOUCH OPTIMIZATIONS ===== */
+@media (hover: none) {
+  .glass-btn:hover {
+    transform: none;
+  }
+  
+  .glass-preview-remove:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ===== DARK MODE ONLY (This is a dark-first design) ===== */
+@media (prefers-color-scheme: light) {
+  /* Future: Add light mode glass variants here if needed */
+  /* For now, KAIros uses dark mode exclusively */
+}
+
+/* Glass Container – Base (your existing code) */
+.glass-upload-container {
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),   /* inner top light catch */
+    0 8px 32px rgba(0, 0, 0, 0.2);              /* outer shadow – deep but soft */
+  border-radius: 24px;
+  padding: 32px 24px;
+  animation: glassFadeIn 0.4s ease-out, floatGlow 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Outer Glow Enhancement – adds a coloured radiant aura */
+/* Use CSS custom property --glow-color (default is the path's RGB) */
+.glass-upload-container {
+  --glow-color: var(--c, 85, 139, 110);  /* fallback green */
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.02),          /* subtle edge light */
+  0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Light theme adjustment */
+.light .glass-upload-container {
+  --glow-color: var(--c, 85, 139, 110);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.02),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* === Moving (Floating) Animation === */
+@keyframes floatGlow {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Optional: subtle pulse for the glow colour (extra polish) */
+@keyframes glowPulse {
+  0% {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.25),
+      /* coloured outer glow removed */
+  }
+  50% {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.3),
+  /* coloured outer glow removed */
+  }
+  100% {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.25),
+      /* coloured outer glow removed */
+  }
+}
+
+/* To use the pulsing glow instead of static, replace the animation on container:
+   animation: glassFadeIn 0.4s ease-out, floatGlow 4s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
+*/
+
+/* Glass Container – Base (your existing code) */
+.glass-upload-container {
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),   /* inner top light catch */
+    0 8px 32px rgba(0, 0, 0, 0.2);              /* outer shadow – deep but soft */
+  border-radius: 24px;
+  padding: 32px 24px;
+  animation: glassFadeIn 0.4s ease-out, floatGlow 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Outer Glow Enhancement removed to keep UI subtle */
+.glass-upload-container {
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.02),          /* subtle edge light */
+    0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Light theme adjustment */
+.light .glass-upload-container {
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.02),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* === Moving (Floating) Animation === */
+@keyframes floatGlow {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* glowPulse animation removed (no coloured glow) */
+
+/* To use the pulsing glow instead of static, replace the animation on container:
+   animation: glassFadeIn 0.4s ease-out, floatGlow 4s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
+*/
+.upload-glass-card {
+  --violette: 139, 92, 246;      /* Rich purple — adjust if needed */
+  --glow-color: var(--violette);
+  
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 32px 24px;
+  
+  /* Inner light catch + elevation (no coloured outer glow) */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  transition: box-shadow 0.3s ease;
+ 
+  will-change: transform, box-shadow;
   position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(to right, rgba(var(--color-self-discovery), 0.7), rgba(var(--color-self-discovery), 0.5));
-  transition: width 0.3s ease;
-  border-radius: var(--border-radius-full);
+/* Light mode variant (if needed) */
+.hs-light .upload-glass-card {
+  background: rgba(245, 245, 247, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  animation: glassFadeIn 0.4s ease-out;
 }
 
-.progress-fill::after {
+/* Outer glow pulse animation (dark mode) */
+@keyframes gentleGlowPulse {
+  0% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.02);
+  }
+  50% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  100% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.02);
+  }
+}
+
+/* Light mode pulse – softer */
+@keyframes gentleGlowPulseLight {
+  0% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.02); }
+  50% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 10px 28px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04); }
+  100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.02); }
+}
+
+/* ============================================
+   ANIMATED INNER SHINE (light sweep) – OPTIONAL
+   ============================================ */
+.upload-glass-card::before {
   content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.25) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  animation: innerShine 5s ease-in-out infinite;
+}
+
+/* Light mode inner shine – darker, more subtle */
+.hs-light .upload-glass-card::before {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.08) 45%,
+    rgba(0, 0, 0, 0.12) 50%,
+    rgba(0, 0, 0, 0.08) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+}
+
+@keyframes innerShine {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-100%);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(100%);
+  }
+  35% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Soft radial inner glow (continuous) – adds a gentle breathing effect */
+.upload-glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  animation: innerPulse 4s ease-in-out infinite;
+}
+
+@keyframes innerPulse {
+  0% { opacity: 0.15; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.15; }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .upload-glass-card,
+  .upload-glass-card::before,
+  .upload-glass-card::after {
+    animation: none !important;
+  }
+  .upload-glass-card::before {
+    opacity: 0 !important;
+  }
+  .upload-glass-card::after {
+    opacity: 0.2 !important;
+  }
+}
+
+.glass-btn-primary {
+    background: rgb(112 85 216 / 61%);
+    color: rgba(255, 255, 255, 0.95);
+    width: 100%;
+    padding: 16px 24px;
+}
+
+.glass-card {
+  position: relative;
+  --glow-color: var(--c, 85, 139, 110);
+  border-radius: 24px;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 26px;
+  /* removed coloured gradient to avoid outside glow */
+  background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(255,255,255,0.02));
+  /* remove hover-visible outer border to avoid outside glow */
+  opacity: 0 !important;
+  transition: none !important;
+  z-index: -1;
+}
+
+.glass-card:hover::before {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+@keyframes gentleBorderPulse {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+  100% { opacity: 0.2; }
+}
+
+/* ===== Glass Upload SVG Icon ===== */
+.glass-upload-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  animation: floatUploadIcon 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floatUploadIcon {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.glass-upload-svg {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 8px rgba(var(--c), 0.4));
+}
+
+.glass-icon-circle {
+  animation: pulseCircle 2s ease-in-out infinite;
+}
+
+@keyframes pulseCircle {
+  0% {
+    stroke: rgba(var(--c), 0.3);
+    transform: scale(1);
+  }
+  50% {
+    stroke: rgba(var(--c), 0.8);
+    transform: scale(1.02);
+  }
+  100% {
+    stroke: rgba(var(--c), 0.3);
+    transform: scale(1);
+  }
+}
+
+.glass-upload-arrow {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: drawArrow 0.8s ease-in-out forwards 0.2s;
+}
+
+@keyframes drawArrow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.glass-camera-body {
+  animation: fadeInLens 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.glass-camera-lens {
+  animation: fadeInLens 0.5s ease-out forwards 0.2s;
+  opacity: 0;
+}
+
+@keyframes fadeInLens {
+  to {
+    opacity: 1;
+  }
+}
+
+.upload-glass-empty-text {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.upload-glass-empty-text p {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 4px 0;
+}
+.upload-glass-empty-text span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Light mode adjustments */
+.hs-light .glass-upload-empty-text p {
+  color: rgba(0, 0, 0, 0.85);
+}
+.hs-light .glass-upload-empty-text span {
+  color: rgba(0, 0, 0, 0.5);
+}
+.hs-light .glass-icon-circle {
+  stroke: rgba(var(--c), 0.6);
+}
+
+/* ===== Rotating Border Animation (Glass Edition) ===== */
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rotating-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.rotating-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;                     /* extends just outside the card */
+  border-radius: inherit;          /* matches parent’s border-radius */
+  background: linear-gradient(
+    var(--rotate),
+    rgba(126, 179, 127, 0.1),     /* #7eb37f at 10% – nearly invisible */
+    rgba(126, 179, 127, 0.7),     /* #7eb37f at 70% – the “moving line” */
+    rgba(126, 179, 127, 0.1)
+  );
+  z-index: -1;
+  animation: spinRotate 8s linear infinite;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Light mode adjustment – softer version */
+.hs-light .rotating-border::before {
+  background: linear-gradient(
+    var(--rotate),
+    rgba(126, 179, 127, 0.05),
+    rgba(126, 179, 127, 0.4),
+    rgba(126, 179, 127, 0.05)
+  );
+}
+
+@keyframes spinRotate {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}
+
+/* Respect user’s motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .rotating-border::before {
+    animation: none;
+    opacity: 0.2;
+  }
+}
+
+.upload-glass-container {
+    min-height: 100vh;
+    padding: 20px 16px;
+    padding-bottom: 40px;
+    background: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ===== Glass Upload SVG Icon ===== */
+.glass-upload-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  animation: floatUploadIcon 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floatUploadIcon {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+.glass-upload-svg {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 10px rgba(var(--c), 0.3));
+}
+
+/* ── Outer ring: slow pulse ── */
+.glass-icon-circle {
+  animation: pulseCircle 3s ease-in-out infinite;
+}
+
+@keyframes pulseCircle {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+
+/* ── Inner ring: delayed counter-pulse ── */
+.glass-icon-ring-inner {
+  animation: pulseCircle 3s ease-in-out infinite 1.5s;
+}
+
+/* ── Camera body: stroke draw-in ── */
+.glass-camera-body {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawPath 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.3s;
+}
+
+/* ── Camera flash: subtle blink ── */
+.glass-camera-flash {
+  opacity: 0;
+  animation: flashBlink 3.5s ease-in-out infinite 1.8s;
+}
+
+@keyframes flashBlink {
+  0%, 82%, 100% { opacity: 0.35; }
+  88%           { opacity: 0.9; }
+  94%           { opacity: 0.35; }
+}
+
+/* ── Lens glow: breathing aura ── */
+.glass-lens-glow {
+  opacity: 0;
+  animation: lensGlow 3s ease-in-out infinite 1.4s;
+}
+
+@keyframes lensGlow {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.7; }
+}
+
+/* ── Lens ring: stroke draw-in ── */
+.glass-camera-lens-ring {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: drawPath 0.6s ease-out forwards 1s;
+}
+
+/* ── Lens center dot: fade-in ── */
+.glass-camera-lens {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards 1.3s;
+}
+
+/* ── Lens reflection: shimmer ── */
+.glass-lens-highlight {
+  opacity: 0;
+  animation: shimmer 2.5s ease-in-out infinite 1.6s;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.5; }
+}
+
+/* ── Upload arrow shaft: draw bottom → top ── */
+.glass-upload-shaft {
+  stroke-dasharray: 14;
+  stroke-dashoffset: 14;
+  animation: drawPath 0.5s ease-out forwards 0.1s;
+}
+
+/* ── Upload arrow head: draw chevron ── */
+.glass-upload-head {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: drawPath 0.35s ease-out forwards 0.4s;
+}
+
+/* ── Sparkles: twinkle with spin ── */
+.glass-sparkle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.glass-sparkle-1 { animation-delay: 0.8s; }
+.glass-sparkle-2 { animation-delay: 1.6s; }
+.glass-sparkle-3 { animation-delay: 2.4s; }
+
+@keyframes twinkle {
+  0%, 35%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+  15%           { opacity: 1;   transform: scale(1.3) rotate(45deg); }
+  25%           { opacity: 0.6; transform: scale(1)   rotate(90deg); }
+}
+
+/* ── Shared reusable keyframes ── */
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ── Light mode ── */
+.hs-light .glass-icon-circle {
+  opacity: 0.7;
+}
+.hs-light .glass-upload-svg {
+  filter: drop-shadow(0 0 8px rgba(var(--c), 0.2));
+}
+.hs-light .glass-lens-highlight {
+  fill: rgba(0, 0, 0, 0.12);
+}
+
+/* ── Accessibility: respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .glass-upload-icon-wrapper {
+    animation: none;
+  }
+  .glass-icon-circle,
+  .glass-icon-ring-inner,
+  .glass-camera-body,
+  .glass-camera-flash,
+  .glass-lens-glow,
+  .glass-camera-lens-ring,
+  .glass-camera-lens,
+  .glass-lens-highlight,
+  .glass-upload-shaft,
+  .glass-upload-head,
+  .glass-sparkle {
+    animation: none !important;
+    opacity: 1 !important;
+    stroke-dashoffset: 0 !important;
+    transform: none !important;
+  }
+  .glass-lens-highlight {
+    opacity: 0.25 !important;
+  }
+  .glass-lens-glow {
+    opacity: 0.4 !important;
+  }
+}/* ===== Glass Upload SVG Icon (Morpheus Morph Style) ===== */
+.glass-upload-icon-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  animation: floatUploadIcon 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floatUploadIcon {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* Stack all SVGs on top of each other */
+.glass-morph-icon {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    transparent 100%
-  );
-  animation: shimmer 1.5s infinite;
+  opacity: 0;
+  transform: scale(0.85);
+  filter: blur(6px);
+  will-change: opacity, transform, filter;
+  animation: morphFade 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-.progress-text {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+/* Stagger the 3 icons so they loop seamlessly */
+.glass-morph-icon-1 { animation-delay: 0s; }
+.glass-morph-icon-2 { animation-delay: 3s; }
+.glass-morph-icon-3 { animation-delay: 6s; }
+
+@keyframes morphFade {
+  0%   { opacity: 0; transform: scale(0.85); filter: blur(6px); }
+  8%   { opacity: 1; transform: scale(1.02); filter: blur(0px); }   /* Snap into focus */
+  12%  { transform: scale(1); }                                     /* Settle scale */
+  28%  { opacity: 1; transform: scale(1); filter: blur(0px); }     /* Hold visible */
+  36%  { opacity: 0; transform: scale(1.08); filter: blur(6px); }  /* Breathe out */
+  100% { opacity: 0; transform: scale(0.85); filter: blur(6px); }  /* Stay hidden */
 }
 
-/* ===== EXTRACTED TEXT ===== */
-.extracted-text-container {
-  margin: var(--spacing-md);
-  position: relative;
+/* Light mode adjustments */
+.hs-light .glass-morph-icon {
+  filter: blur(4px);
 }
 
-.extracted-text-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-md);
-}
-
-.extracted-text-title {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.extracted-text-help {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-.text-icon {
-  width: 1rem;
-  height: 1rem;
-  color: rgba(var(--color-self-discovery), 0.7);
-}
-
-.extracted-text-editor {
-  width: 100%;
-  padding: var(--spacing-md);
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius-md);
-  color: var(--text-primary);
-  font-size: 1rem;
-  line-height: 1.6;
-  resize: vertical;
-  outline: none;
-  transition: all var(--transition-fast);
-  min-height: 200px;
-  max-height: 400px;
-}
-
-.extracted-text-editor:focus {
-  border-color: rgba(var(--color-self-discovery), 0.7);
-  box-shadow: 0 0 0 3px rgba(var(--color-self-discovery), 0.2);
-}
-
-/* ===== SUBMIT BUTTON ===== */
-.submit-button {
-  background-color: rgba(var(--color-self-discovery), 0.7);
-  color: white;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  position: relative;
-  overflow: hidden;
-  margin-top: var(--spacing-lg);
-  font-size: 1.125rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.submit-button:hover {
-  background-color: rgba(var(--color-self-discovery), 0.8);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.submit-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.submit-button.loading {
-  background-color: rgba(var(--color-self-discovery), 0.8);
-}
-
-.submit-button.clicked {
-  background-color: rgba(var(--color-self-discovery), 0.8);
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===== STATUS INDICATORS ===== */
-/* Loading spinner */
-.loading-spinner {
-  animation: spin 1s linear infinite;
-  margin-right: var(--spacing-sm);
-}
-
-.loading-spinner-small {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(var(--color-self-discovery), 0.2);
-  border-radius: 50%;
-  border-top-color: rgba(var(--color-self-discovery), 0.7);
-  animation: spin 1s linear infinite;
-  margin-right: var(--spacing-sm);
-  vertical-align: middle;
-}
-
-/* Pulsing animation */
-.pulse-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: white;
-  margin-right: var(--spacing-sm);
-  animation: pulse-animation 1.2s infinite;
-}
-
-/* Error message */
-.error-message {
-  display: flex;
-  align-items: center;
-  color: var(--color-danger);
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  margin: var(--spacing-md) 0;
-  font-size: 0.875rem;
-}
-
-.error-icon {
-  width: 1rem;
-  height: 1rem;
-  margin-right: var(--spacing-md);
-  flex-shrink: 0;
-}
-
-/* ===== VISUAL JOURNEY STYLES ===== */
-.visual-journey-ready {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--spacing-xl);
-  text-align: center;
-}
-
-.visual-ready-icon {
-  width: 60px;
-  height: 60px;
-  background: rgba(var(--color-mindful-visualization), 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--spacing-lg);
-  animation: pulse 2s infinite;
-}
-
-.visual-ready-icon .icon {
-  width: 30px;
-  height: 30px;
-  color: rgb(var(--color-mindful-visualization));
-}
-
-.visual-ready-text {
-  font-size: 1.125rem;
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-lg);
-  max-width: 500px;
-  line-height: 1.6;
-}
-
-.visual-note {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  background: rgba(var(--color-info), 0.1);
-  border-radius: var(--border-radius-md);
-  margin-top: var(--spacing-md);
-}
-
-.visual-note .note-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--color-info);
-  flex-shrink: 0;
-}
-
-.visual-note p {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-/* Visual notes section */
-.visual-notes-section {
-  width: 100%;
-  margin-top: var(--spacing-xl);
-  text-align: left;
-}
-
-.visual-notes-title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.visual-notes-textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: var(--spacing-md);
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius-md);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  resize: vertical;
-  outline: none;
-  transition: all var(--transition-fast);
-}
-
-.visual-notes-textarea:focus {
-  border-color: rgba(var(--color-mindful-visualization), 0.5);
-  box-shadow: 0 0 0 3px rgba(var(--color-mindful-visualization), 0.1);
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-upload-icon-wrapper {
+    animation: none;
   }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
+  .glass-morph-icon {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    filter: none !important;
   }
-  100% {
-    transform: scale(1);
-    opacity: 1;
+  /* Hide icons 2 & 3 if motion is reduced to prevent overlapping */
+  .glass-morph-icon-2,
+  .glass-morph-icon-3 {
+    display: none;
   }
-}
-
-@keyframes pulse-animation {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.3;
-    transform: scale(1.5);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes dragOverPulse {
-  0% {
-    box-shadow: 0 0 25px rgba(var(--color-self-discovery), 0.4), 
-                inset 0 0 20px rgba(var(--color-self-discovery), 0.1);
-  }
-  100% {
-    box-shadow: 0 0 35px rgba(var(--color-self-discovery), 0.6), 
-                inset 0 0 30px rgba(var(--color-self-discovery), 0.2);
-  }
-}
-
-@keyframes dashMove {
-  0% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 20px;
-  }
-}
-
-@keyframes thumbnailHover {
-  0% {
-    transform: translateY(-4px) scale(1.05);
-  }
-  50% {
-    transform: translateY(-6px) scale(1.08);
-  }
-  100% {
-    transform: translateY(-4px) scale(1.05);
-  }
-}
-
-/* ===== RESPONSIVE STYLES ===== */
-@media (max-width: 640px) {
-  .upload-container {
-    padding: var(--spacing-sm);
-  }
-  
-  .upload-card {
-    padding: var(--spacing-md);
-  }
-  
-  .drop-area {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .image-preview {
-    max-height: 250px;
-  }
-  
-  .upload-analyze-button {
+}.glass-btn-primary {
+    background: #558b6e7d;
+    color: rgba(255, 255, 255, 0.95);
     width: 100%;
-    padding: var(--spacing-md);
-  }
-  
-  .upload-analyze-container {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .extracted-text-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .extracted-text-help {
-    margin-top: var(--spacing-xs);
-  }
-  
-  .image-preview-actions {
-    flex-direction: column;
-  }
-  
-  .thumbnail-strip {
-    padding: var(--spacing-md);
-  }
-  
-  .thumbnail-container {
-    gap: var(--spacing-sm);
-  }
-  
-  .thumbnail-item {
-    min-width: 70px;
-    width: 70px;
-    height: 70px;
-  }
-  
-  .thumbnail-number {
-    width: 18px;
-    height: 18px;
-    font-size: 0.7rem;
-  }
-  
-  .thumbnail-remove {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .upload-info-stats {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-  
-  .visual-journey-ready {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
+    padding: 16px 24px;
 }
 
-/* Extra Small Mobile Devices */
-@media (max-width: 375px) {
-  .upload-title {
-    font-size: 1.5rem;
-  }
-  
-  .drop-area {
-    padding: var(--spacing-md);
-  }
-  
-  .drop-icon {
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  .drop-text {
-    font-size: 0.875rem;
-  }
-  
-  .image-preview {
-    max-height: 200px;
-  }
-  
-  .carousel-button {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .thumbnail-strip {
-    padding: var(--spacing-sm);
-  }
-  
-  .thumbnail-container {
-    gap: var(--spacing-xs);
-  }
-  
-  .thumbnail-item {
-    min-width: 60px;
-    width: 60px;
-    height: 60px;
-  }
-  
-  .thumbnail-number {
-    width: 16px;
-    height: 16px;
-    font-size: 0.65rem;
-  }
-  
-  .thumbnail-remove {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .thumbnail-strip-title {
-    font-size: 0.8rem;
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
+/* ==========================================================================
+   LIGHT THEME — app sets .light-theme on <html>.
+   The component uses .upload-glass-* classes with no theme class of its own,
+   and the container is hardcoded #000; the older .hs-light / .light / mis-named
+   (.glass-upload-*) overrides never matched. These target the real classes.
+   ========================================================================== */
+.light-theme .upload-glass-container {
+  background: linear-gradient(180deg, #f5f6f8 0%, #eef0f4 100%);
 }
+
+.light-theme .upload-glass-back {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.light-theme .upload-glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(0, 0, 0, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+/* The white light-sweep is invisible on a light card — make it a soft dark sweep */
+.light-theme .upload-glass-card::before {
+  background: linear-gradient(
+    105deg,
+    transparent 0%, transparent 30%,
+    rgba(0, 0, 0, 0.05) 45%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.05) 55%,
+    transparent 70%, transparent 100%
+  );
+}
+
+/* Text */
+.light-theme .upload-glass-title { color: rgba(0, 0, 0, 0.88); }
+.light-theme .upload-glass-subtitle { color: rgba(0, 0, 0, 0.5); }
+.light-theme .upload-glass-hint { color: rgba(0, 0, 0, 0.4); }
+.light-theme .upload-glass-empty-text p { color: rgba(0, 0, 0, 0.85); }
+.light-theme .upload-glass-empty-text span { color: rgba(0, 0, 0, 0.5); }
+
+/* Buttons — neutral ones need light tints; path-colour ones need dark text */
+.light-theme .glass-btn-gallery {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.7);
+}
+.light-theme .glass-btn-add {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.6);
+}
+.light-theme .glass-btn-camera,
+.light-theme .glass-btn-submit { color: rgb(var(--c)); }
+.light-theme .glass-btn-primary { background: rgba(85, 139, 110, 0.9); color: #fff; }
+
+/* Notes field */
+.light-theme .glass-notes-input {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.85);
+}
+.light-theme .glass-notes-input::placeholder { color: rgba(0, 0, 0, 0.35); }
+
+/* Error */
+.light-theme .upload-glass-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #b91c1c;
+}
+
+/* Upload icon — fix the white reflection dot that vanishes on light */
+.light-theme .glass-lens-highlight { fill: rgba(0, 0, 0, 0.15); }
+
+.upload-glass-card {
+  --glow: 85, 139, 110;
+
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+
+  padding: 32px 24px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+

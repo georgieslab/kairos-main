@@ -1,1209 +1,689 @@
-// src/components/auth/SignUpScreen.jsx - FIXED VERSION
+// src/components/auth/SignUpScreen.jsx
+// Refactored: 3-step glass onboarding with flip transition between modes
 
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  ArrowLeft, 
-  Mail, 
-  Lock, 
-  User, 
-  Calendar, 
-  X, 
-  MapPin, 
-  Eye, 
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  ArrowLeft,
+  Mail,
+  Lock,
+  User,
+  Eye,
   EyeOff,
   ChevronRight,
   ChevronLeft,
   Check,
-  Sun,
-  Moon,
   Heart,
-  BookOpen,
   Target,
   Sparkles,
   Brain,
   Leaf,
-  Camera,
-  PenTool
+  PenTool,
+  BookOpen,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/components/signup.css';
 
-// Google Maps API Key - Replace with your actual key
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyBrXIv6K7Uto7fwe8MuzgRM_79W5WXsRM8';
+// Reusable glass input with floating label
+const GlassInput = ({
+  id,
+  type = 'text',
+  icon: Icon,
+  value,
+  onChange,
+  onBlur,
+  label,
+  error,
+  touched,
+  autoComplete,
+  inputMode,
+}) => {
+  const { t } = useTranslation('auth');
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === 'password';
+  const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
-// Function to load Google Maps API script
-const loadGoogleMapsScript = (callback) => {
-  if (window.google && window.google.maps) {
-    callback();
-    return;
-  }
-  
-  const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
-  script.async = true;
-  script.defer = true;
-  script.onload = callback;
-  script.onerror = () => console.error('Error loading Google Maps API');
-  document.head.appendChild(script);
+  return (
+    <div className="glass-input-group">
+      {Icon && <Icon className="input-icon" size={18} />}
+      <input
+        id={id}
+        type={inputType}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={`glass-input ${error && touched ? 'error' : ''}`}
+        placeholder=" "
+      />
+      <label htmlFor={id} className="glass-label">
+        {label}
+      </label>
+      {isPassword && (
+        <button
+          type="button"
+          className="password-toggle"
+          onClick={() => setShowPassword(!showPassword)}
+          aria-label={showPassword ? t('signup.hidePassword', 'Hide password') : t('signup.showPassword', 'Show password')}
+        >
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      )}
+      {error && touched && <span className="glass-field-error">{error}</span>}
+    </div>
+  );
 };
 
-const GoogleIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="su-social-icon">
-    <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
-    <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.22 13.48 18.58 12 18.58C9.11 18.58 6.67 16.67 5.76 14.09H2.07V16.94C3.87 20.45 7.62 23 12 23Z" fill="#34A853"/>
-    <path d="M5.76 14.09C5.54 13.47 5.42 12.79 5.42 12.09C5.42 11.39 5.54 10.71 5.76 10.09V7.24H2.07C1.39 8.69 1 10.35 1 12.09C1 13.83 1.39 15.49 2.07 16.94L5.76 14.09Z" fill="#FBBC05"/>
-    <path d="M12 5.58C13.62 5.58 15.06 6.15 16.21 7.24L19.36 4.09C17.45 2.32 14.97 1.3 12 1.3C7.62 1.3 3.87 3.85 2.07 7.36L5.76 10.21C6.67 7.63 9.11 5.58 12 5.58Z" fill="#EA4335"/>
-  </svg>
-);
+// Vivid selection card (for interests/goals) – each item carries its own
+// accent color + short description so the grid feels alive, not clinical.
+const OptionCard = ({ id, label, desc, icon: Icon, color, selected, onToggle, index = 0 }) => {
+  return (
+    <button
+      type="button"
+      className={`option-card ${selected ? 'selected' : ''}`}
+      onClick={() => onToggle(id)}
+      style={{ '--c': color, '--i': index }}
+    >
+      <div className="option-card-glow" />
+      <div className="option-card-icon-wrap">
+        <Icon size={22} />
+      </div>
+      <span className="option-card-label">{label}</span>
+      {desc && <span className="option-card-desc">{desc}</span>}
+      <div className="option-card-check">
+        <Check size={13} strokeWidth={3} />
+      </div>
+    </button>
+  );
+};
 
-const SignUpScreen = ({ onNext, onBack, navigateToScreen }) => {
-  const { signup, login, signInWithGoogle } = useAuth();
-  const { isDarkMode, toggleTheme } = useTheme();
-  
-  // Step management - FIXED: Only for sign-up mode
+const SignUpScreen = ({ onNext, onBack, initialMode = 'signup' }) => {
+  const { t } = useTranslation('auth');
+  const { signup, login, signInWithGoogle, resetPassword } = useAuth();
+
+  // Mode: false = sign up, true = sign in. Explicitly driven by initialMode
+  // so callers (e.g. the "Start Journey" CTA) always land on Create Account.
+  const [isSignIn, setIsSignIn] = useState(initialMode === 'signin');
+  const [isModeSwitching, setIsModeSwitching] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideDirection, setSlideDirection] = useState('right');
-  
-  // Form data
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Form state – reduced to essentials
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
-    age: 25,
-    gender: '',
-    city: '',
     interests: [],
     journalingGoals: [],
-    preferredTheme: isDarkMode ? 'dark' : 'light'
   });
-  
-  // UI state
-  const [isSignIn, setIsSignIn] = useState(false); // FIXED: This now properly controls the entire flow
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isNavigatingFrom, setIsNavigatingFrom] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [touchedFields, setTouchedFields] = useState({});
-  
-  // Google Places
-  const [autocompleteInitialized, setAutocompleteInitialized] = useState(false);
-  const cityInputRef = useRef(null);
-  const stepRefs = useRef([]);
-  const containerRef = useRef(null);
-  
-  // 🤖 ANDROID FIX: Use refs for input fields
-  const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-  const nameInputRef = useRef(null);
-  
-  // 🤖 ANDROID FIX: Track composition state for IME
+  const [resetMessage, setResetMessage] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+
+  // For composition (IME) support
   const [isComposing, setIsComposing] = useState(false);
 
-  // Available interests and goals
+  // Available options – each gets its own accent color + short description
+  // for a more vivid, less clinical selection grid.
   const availableInterests = [
-    { id: 'self-discovery', label: 'Self-Discovery', icon: User },
-    { id: 'mindfulness', label: 'Mindfulness', icon: Leaf },
-    { id: 'creativity', label: 'Creative Expression', icon: PenTool },
-    { id: 'personal-growth', label: 'Personal Growth', icon: Target },
-    { id: 'emotional-health', label: 'Emotional Health', icon: Heart },
-    { id: 'goal-setting', label: 'Goal Setting', icon: Target },
-    { id: 'gratitude', label: 'Gratitude Practice', icon: Sparkles },
-    { id: 'memory-keeping', label: 'Memory Keeping', icon: Camera }
+    { id: 'self-discovery', label: t('signup.interests.selfDiscovery.label', 'Self-Discovery'), desc: t('signup.interests.selfDiscovery.desc', 'Uncover who you really are'), icon: User, color: '85, 139, 110' },
+    { id: 'mindfulness', label: t('signup.interests.mindfulness.label', 'Mindfulness'), desc: t('signup.interests.mindfulness.desc', 'Stay present, breathe easy'), icon: Leaf, color: '59, 130, 246' },
+    { id: 'creativity', label: t('signup.interests.creativity.label', 'Creative Expression'), desc: t('signup.interests.creativity.desc', 'Turn thoughts into art'), icon: PenTool, color: '139, 92, 246' },
+    { id: 'personal-growth', label: t('signup.interests.personalGrowth.label', 'Personal Growth'), desc: t('signup.interests.personalGrowth.desc', 'Level up, one page at a time'), icon: Target, color: '249, 115, 22' },
+    { id: 'emotional-health', label: t('signup.interests.emotionalHealth.label', 'Emotional Health'), desc: t('signup.interests.emotionalHealth.desc', 'Understand what you feel'), icon: Heart, color: '239, 68, 68' },
+    { id: 'gratitude', label: t('signup.interests.gratitude.label', 'Gratitude Practice'), desc: t('signup.interests.gratitude.desc', 'Notice the good, daily'), icon: Sparkles, color: '216, 178, 63' },
   ];
 
   const availableGoals = [
-    { id: 'stress-reduction', label: 'Reduce Stress & Anxiety', icon: Leaf },
-    { id: 'self-awareness', label: 'Increase Self-Awareness', icon: Brain },
-    { id: 'emotional-processing', label: 'Process Emotions', icon: Heart },
-    { id: 'personal-growth', label: 'Personal Development', icon: Target },
-    { id: 'creativity', label: 'Boost Creativity', icon: PenTool },
-    { id: 'habit-tracking', label: 'Track Habits & Goals', icon: Check },
-    { id: 'gratitude', label: 'Practice Gratitude', icon: Sparkles },
-    { id: 'memory-preservation', label: 'Preserve Memories', icon: BookOpen }
+    { id: 'stress-reduction', label: t('signup.goals.stressReduction.label', 'Reduce Stress'), desc: t('signup.goals.stressReduction.desc', 'Find your calm'), icon: Leaf, color: '59, 130, 246' },
+    { id: 'self-awareness', label: t('signup.goals.selfAwareness.label', 'Self-Awareness'), desc: t('signup.goals.selfAwareness.desc', 'See yourself clearly'), icon: Brain, color: '139, 92, 246' },
+    { id: 'emotional-processing', label: t('signup.goals.emotionalProcessing.label', 'Process Emotions'), desc: t('signup.goals.emotionalProcessing.desc', "Work through what's hard"), icon: Heart, color: '239, 68, 68' },
+    { id: 'personal-growth', label: t('signup.goals.personalGrowth.label', 'Personal Growth'), desc: t('signup.goals.personalGrowth.desc', 'Build the life you want'), icon: Target, color: '249, 115, 22' },
+    { id: 'habit-tracking', label: t('signup.goals.habitTracking.label', 'Track Habits'), desc: t('signup.goals.habitTracking.desc', 'Build streaks that stick'), icon: Check, color: '85, 139, 110' },
+    { id: 'memory-preservation', label: t('signup.goals.memoryPreservation.label', 'Preserve Memories'), desc: t('signup.goals.memoryPreservation.desc', 'Keep moments that matter'), icon: BookOpen, color: '216, 178, 63' },
   ];
 
-  // FIXED: Separate step configurations for sign-up vs sign-in
-  const signUpSteps = [
-    {
-      id: 'account',
-      title: 'Create Account',
-      subtitle: 'Begin your journaling journey',
-      fields: ['email', 'password', 'name']
-    },
-    {
-      id: 'personal',
-      title: 'Tell Us About You',
-      subtitle: 'Help us personalize your experience',
-      fields: ['age', 'gender']
-    },
-    {
-      id: 'interests',
-      title: 'Your Interests',
-      subtitle: 'What areas would you like to explore?',
-      fields: ['interests']
-    },
-    {
-      id: 'goals',
-      title: 'Journaling Goals',
-      subtitle: 'What do you hope to achieve?',
-      fields: ['journalingGoals']
-    },
-    {
-      id: 'location',
-      title: 'Your Location',
-      subtitle: 'For personalized weather and insights',
-      fields: ['city']
-    },
-    {
-      id: 'theme',
-      title: 'Choose Your Theme',
-      subtitle: 'Select your preferred app appearance',
-      fields: ['preferredTheme']
-    },
-    {
-      id: 'welcome',
-      title: 'Welcome to Καιρός!',
-      subtitle: 'You\'re all set to begin your journaling journey',
-      fields: []
-    }
-  ];
+  // Step definitions
+  const steps = isSignIn
+    ? [{ id: 'signin', title: t('signup.steps.signin.title', 'Welcome Back'), subtitle: t('signup.steps.signin.subtitle', 'Sign in to continue') }]
+    : [
+        { id: 'account', title: t('signup.steps.account.title', 'Create Account'), subtitle: t('signup.steps.account.subtitle', 'Begin your journaling journey') },
+        { id: 'interests', title: t('signup.steps.interests.title', 'Your Interests'), subtitle: t('signup.steps.interests.subtitle', 'What would you like to explore?') },
+        { id: 'goals', title: t('signup.steps.goals.title', 'Your Goals'), subtitle: t('signup.steps.goals.subtitle', 'What brings you to journaling?') },
+        { id: 'welcome', title: t('signup.steps.welcome.title', 'Welcome to Καιρός'), subtitle: t('signup.steps.welcome.subtitle', "You're all set") },
+      ];
 
-  // FIXED: Get the appropriate steps based on mode
-  const getCurrentSteps = () => {
-    if (isSignIn) {
-      return [{
-        id: 'signin',
-        title: 'Welcome Back',
-        subtitle: 'Sign in to continue your journey',
-        fields: ['email', 'password']
-      }];
-    }
-    return signUpSteps;
-  };
-
-  const steps = getCurrentSteps();
-
-  // Google Maps setup with better error handling
-  useEffect(() => {
-    if (!isSignIn && currentStep === 4) { // Location step - only for sign-up
-      // Only load if we have a valid API key
-      if (GOOGLE_MAPS_API_KEY && GOOGLE_MAPS_API_KEY !== 'YOUR_API_KEY_HERE') {
-        loadGoogleMapsScript(() => {
-          console.log('Google Maps API loaded successfully');
-          setAutocompleteInitialized(false);
-        });
-      } else {
-        console.warn('Google Maps API key not configured - using basic text input');
-      }
-    }
-  }, [isSignIn, currentStep]);
-  
-  useEffect(() => {
-    if (!autocompleteInitialized && !isSignIn && currentStep === 4 && cityInputRef.current) {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        try {
-          const autocomplete = new window.google.maps.places.Autocomplete(cityInputRef.current, {
-            types: ['(cities)'],
-            fields: ['address_components', 'formatted_address', 'geometry', 'name']
-          });
-          
-          autocomplete.addListener('place_changed', () => {
-            const place = autocomplete.getPlace();
-            if (place.address_components) {
-              const cityComponent = place.address_components.find(
-                component => component.types.includes('locality')
-              );
-              
-              if (cityComponent) {
-                handleFieldChange('city', cityComponent.long_name);
-              } else {
-                handleFieldChange('city', place.formatted_address || place.name);
-              }
-            }
-          });
-          
-          setAutocompleteInitialized(true);
-          console.log('Google Places autocomplete initialized');
-        } catch (error) {
-          console.error('Error initializing Google Places:', error);
-          console.log('Falling back to basic text input');
-        }
-      } else {
-        console.log('Google Places not available, using basic text input');
-      }
-    }
-  }, [cityInputRef, autocompleteInitialized, isSignIn, currentStep]);
-
-  // FIXED: Reset to first step when toggling between modes
-  useEffect(() => {
-    setCurrentStep(0);
-    setError('');
-    setFieldErrors({});
-    setTouchedFields({});
-    
-    // Scroll to top when switching between sign-up and sign-in
-    // Use setTimeout to ensure DOM is updated before scrolling
-    setTimeout(() => {
-      if (containerRef.current) {
-        // Try scrolling the container itself
-        containerRef.current.scrollTop = 0;
-        
-        // Also use scrollIntoView which finds the scrollable ancestor
-        containerRef.current.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'nearest'
-        });
-      }
-      
-      // Fallback: scroll window and document
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    }, 0);
-  }, [isSignIn]);
-
-  // Field validation
-  const validateField = (fieldName, value) => {
-    let error = '';
-    
-    switch (fieldName) {
+  // Validation
+  const validateField = (name, value) => {
+    let errorMsg = '';
+    switch (name) {
       case 'email':
-        if (!value) {
-          error = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(value)) {
-          error = 'Please enter a valid email';
-        }
+        if (!value) errorMsg = t('signup.validation.emailRequired', 'Email is required');
+        else if (!/\S+@\S+\.\S+/.test(value)) errorMsg = t('signup.validation.emailInvalid', 'Enter a valid email');
         break;
       case 'password':
-        if (!value) {
-          error = 'Password is required';
-        } else if (value.length < 6) {
-          error = 'Password must be at least 6 characters';
-        }
+        if (!value) errorMsg = t('signup.validation.passwordRequired', 'Password is required');
+        else if (value.length < 6) errorMsg = t('signup.validation.passwordMinLength', 'At least 6 characters');
         break;
       case 'name':
-        if (!isSignIn && !value) {
-          error = 'Name is required';
-        }
+        if (!isSignIn && !value) errorMsg = t('signup.validation.nameRequired', 'Name is required');
         break;
-      case 'age':
-        if (!isSignIn && (!value || value < 13 || value > 120)) {
-          error = 'Please select a valid age (13-120)';
-        }
-        break;
-      case 'gender':
-        if (!isSignIn && !value) {
-          error = 'Please select your gender';
-        }
-        break;
-      case 'city':
-        if (!isSignIn && !value) {
-          error = 'City is required';
-        }
+      default:
         break;
     }
-    
-    setFieldErrors(prev => ({
-      ...prev,
-      [fieldName]: error
-    }));
-    
-    return error === '';
+    setFieldErrors((prev) => ({ ...prev, [name]: errorMsg }));
+    return !errorMsg;
   };
 
-  const handleFieldChange = (fieldName, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-
-    // Clear general error when user starts typing
-    if (error) {
-      setError('');
-    }
-
-    // Validate field if it has been touched
-    if (touchedFields[fieldName]) {
-      validateField(fieldName, value);
-    }
+  const handleFieldChange = (name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError('');
+    if (touchedFields[name]) validateField(name, value);
   };
 
-  // 🤖 ANDROID FIX: Handle input changes properly for IME
-  const handleInputChange = (fieldName) => (e) => {
-    // Don't update during composition (IME)
+  const handleInputChange = (name) => (e) => {
     if (isComposing) return;
-    
-    const value = e.target.value;
-    
-    // Update state immediately
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-    
-    // Clear errors
-    if (error) setError('');
-    
-    // Validate if touched
-    if (touchedFields[fieldName]) {
-      validateField(fieldName, value);
-    }
-  };
-  
-  // 🤖 ANDROID FIX: Handle IME composition events
-  const handleCompositionStart = () => {
-    setIsComposing(true);
-  };
-  
-  const handleCompositionEnd = (fieldName) => (e) => {
-    setIsComposing(false);
-    // Update with final value after composition ends
-    const value = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-    if (error) setError('');
-    if (touchedFields[fieldName]) {
-      validateField(fieldName, value);
-    }
+    handleFieldChange(name, e.target.value);
   };
 
-  const handleFieldBlur = (fieldName, value) => {
-    setTouchedFields(prev => ({
-      ...prev,
-      [fieldName]: true
-    }));
-    validateField(fieldName, value);
+  const handleBlur = (name) => (e) => {
+    setTouchedFields((prev) => ({ ...prev, [name]: true }));
+    validateField(name, e.target.value);
   };
 
-  // Handle array field changes (interests, goals)
-  const handleArrayFieldToggle = (fieldName, value) => {
-    const currentArray = formData[fieldName] || [];
-    const newArray = currentArray.includes(value)
-      ? currentArray.filter(item => item !== value)
-      : [...currentArray, value];
-    
-    handleFieldChange(fieldName, newArray);
+  const handleArrayToggle = (fieldName, id) => {
+    const current = formData[fieldName];
+    const updated = current.includes(id)
+      ? current.filter((i) => i !== id)
+      : [...current, id];
+    handleFieldChange(fieldName, updated);
   };
 
-  // FIXED: Handle sign-in directly without steps
-  const handleSignIn = async () => {
-    if (isNavigatingFrom) return;
+  // Step transition with GPU-friendly animation
+  const transitionToStep = async (newStep, direction) => {
+    setIsTransitioning(true);
+    setSlideDirection(direction);
+    await new Promise((r) => setTimeout(r, 160));
+    setCurrentStep(newStep);
+    await new Promise((r) => setTimeout(r, 160));
+    setIsTransitioning(false);
+  };
 
-    // Validate email and password
-    const emailValid = validateField('email', formData.email);
-    const passwordValid = validateField('password', formData.password);
-    
-    setTouchedFields({
-      email: true,
-      password: true
-    });
+  const goNext = async () => {
+    if (isSignIn) return handleSignIn();
 
-    if (!emailValid || !passwordValid) {
-      return;
-    }
-
-    try {
-      console.log('🔄 Starting sign-in process...');
-      setIsLoading(true);
-      setIsNavigatingFrom(true);
-      
-      const result = await login(formData.email, formData.password);
-      console.log('✅ Login successful, user:', result.user.email);
-      onNext();
-    } catch (error) {
-      console.error('❌ Sign-in error:', error);
-      setIsNavigatingFrom(false);
-      
-      switch (error.code) {
-        case 'auth/wrong-password':
-          setError('Incorrect password. Please try again.');
-          break;
-        case 'auth/user-not-found':
-          setError('No account found with this email. Please sign up instead.');
-          setIsSignIn(false);
-          break;
-        case 'auth/invalid-credential':
-          setError('Invalid email or password. Please try again.');
-          break;
-        case 'auth/too-many-requests':
-          setError('Too many failed attempts. Please try again later.');
-          break;
-        default:
-          setError(`Sign-in failed: ${error.message}`);
-      }
-    } finally {
-      setIsLoading(false);
+    const current = steps[currentStep];
+    if (current.id === 'account') {
+      const emailValid = validateField('email', formData.email);
+      const passValid = validateField('password', formData.password);
+      const nameValid = validateField('name', formData.name);
+      setTouchedFields({ email: true, password: true, name: true });
+      if (!emailValid || !passValid || !nameValid) return;
+      await transitionToStep(1, 'right');
+    } else if (current.id === 'interests') {
+      await transitionToStep(2, 'right');
+    } else if (current.id === 'goals') {
+      await handleFinalSignUp();
+      await transitionToStep(3, 'right');
     }
   };
 
-  // FIXED: Step navigation - only for sign-up mode
-  const goToNextStep = async () => {
-    // FIXED: Handle sign-in mode directly
-    if (isSignIn) {
-      await handleSignIn();
-      return;
-    }
-
-    // Validate current step for sign-up
-    const currentStepConfig = steps[currentStep];
-    const fieldsToValidate = currentStepConfig.fields;
-    
-    let hasErrors = false;
-    
-    // Skip validation for welcome step
-    if (currentStepConfig.id !== 'welcome') {
-      fieldsToValidate.forEach(field => {
-        if (!validateField(field, formData[field])) {
-          hasErrors = true;
-        }
-      });
-
-      // Mark fields as touched
-      const newTouched = {};
-      fieldsToValidate.forEach(field => {
-        newTouched[field] = true;
-      });
-      setTouchedFields(prev => ({ ...prev, ...newTouched }));
-
-      if (hasErrors) {
-        return;
-      }
-    }
-
-    // Handle final step (create account) for sign-up
-    if (currentStep === steps.length - 1) {
-      await handleFinalSubmit();
-      return;
-    }
-
-    // Navigate to next step for sign-up
-    if (currentStep < steps.length - 1) {
-      await transitionToStep(currentStep + 1, 'right');
-    }
-  };
-
-  const goToPreviousStep = async () => {
+  const goBack = async () => {
     if (currentStep > 0) {
       await transitionToStep(currentStep - 1, 'left');
     }
   };
 
-  const transitionToStep = async (newStep, direction) => {
-    setIsTransitioning(true);
-    setSlideDirection(direction);
-    
-    // Wait for slide-out animation
-    await new Promise(resolve => setTimeout(resolve, 150));
-    
-    setCurrentStep(newStep);
-    
-    // Wait for slide-in animation
-    await new Promise(resolve => setTimeout(resolve, 150));
-    
-    setIsTransitioning(false);
+  // Mode switching with flip transition
+  const switchToSignIn = () => {
+    setIsModeSwitching(true);
+    setTimeout(() => {
+      setIsSignIn(true);
+      setIsModeSwitching(false);
+    }, 200);
   };
 
-  // Handle final account creation for sign-up
-  const handleFinalSubmit = async () => {
-    if (isNavigatingFrom) return;
+  const switchToSignUp = () => {
+    setIsModeSwitching(true);
+    setTimeout(() => {
+      setIsSignIn(false);
+      setIsModeSwitching(false);
+    }, 200);
+  };
 
+  // Sign In logic
+  const handleSignIn = async () => {
+    const emailValid = validateField('email', formData.email);
+    const passValid = validateField('password', formData.password);
+    setTouchedFields({ email: true, password: true });
+    if (!emailValid || !passValid) return;
+
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      setIsNavigatingFrom(true);
-      
-      // Apply theme preference before creating account
-      if (formData.preferredTheme !== (isDarkMode ? 'dark' : 'light')) {
-        toggleTheme();
-      }
-      
-      await signup(
-        formData.email, 
-        formData.password, 
-        formData.name, 
-        formData.age,
-        formData.gender,
-        formData.city,
-        {
-          interests: formData.interests,
-          journalingGoals: formData.journalingGoals,
-          preferredTheme: formData.preferredTheme
-        }
-      );
-      
-      onNext();
-    } catch (error) {
-      console.error('Sign-up error:', error);
-      setIsNavigatingFrom(false);
-      
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          setError('An account with this email already exists. Please sign in instead.');
-          setIsSignIn(true);
-          break;
-        case 'auth/invalid-email':
-          setError('Please enter a valid email address.');
-          break;
-        case 'auth/weak-password':
-          setError('Password should be at least 6 characters.');
-          break;
-        default:
-          setError(`Registration failed: ${error.message}`);
-      }
+      await login(formData.email, formData.password);
+      onNext(); // proceed to main app
+    } catch (err) {
+      setError(err.message || t('signup.errors.signInFailed', 'Sign in failed'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleAuth = async () => {
+  // Final Sign Up – creates account
+  const handleFinalSignUp = async () => {
+    setIsLoading(true);
     try {
-      if (isNavigatingFrom) return;
-      
-      setIsLoading(true);
-      setIsNavigatingFrom(true);
-      
+      await signup(formData.email, formData.password, formData.name, {
+        interests: formData.interests,
+        journalingGoals: formData.journalingGoals,
+      });
+    } catch (err) {
+      setError(err.message || t('signup.errors.accountCreationFailed', 'Account creation failed'));
+      if (err.code === 'auth/email-already-in-use') {
+        switchToSignIn();
+      }
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setIsGoogleLoading(true);
+    try {
       await signInWithGoogle();
-      onNext();
-    } catch (error) {
-      console.error('Google auth error:', error);
-      setError('Google authentication failed. Please try again.');
-      setIsNavigatingFrom(false);
+      onNext(); // proceed to main app
+    } catch (err) {
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        setError(err.message || t('signup.errors.googleSignInFailed', 'Google sign-in failed'));
+      }
     } finally {
-      setIsLoading(false);
-    }
-  };
-  const navigateToTerms = (e) => {
-    e.preventDefault();
-    if (navigateToScreen) {
-      navigateToScreen('terms-of-service');
-    }
-  };
-  
-  const navigateToPrivacy = (e) => {
-    e.preventDefault();
-    if (navigateToScreen) {
-      navigateToScreen('privacy-policy');
+      setIsGoogleLoading(false);
     }
   };
 
-  // Handle form submission (Enter key)
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    goToNextStep();
+  const handleForgotPassword = async () => {
+    setError('');
+    setResetMessage('');
+    const emailValid = validateField('email', formData.email);
+    setTouchedFields((prev) => ({ ...prev, email: true }));
+    if (!emailValid) return;
+
+    setIsResetting(true);
+    try {
+      await resetPassword(formData.email);
+      setResetMessage(t('signup.resetLinkSent', 'Password reset link sent to {{email}}.', { email: formData.email }));
+    } catch (err) {
+      setError(err.message || t('signup.errors.resetEmailFailed', 'Could not send reset email'));
+    } finally {
+      setIsResetting(false);
+    }
   };
 
-  // FIXED: Render step content with proper sign-in handling
+  // Render step content
   const renderStepContent = () => {
-    const stepConfig = steps[currentStep];
+    const step = steps[currentStep];
 
-    // FIXED: Handle sign-in mode
-    if (isSignIn) {
+    if (step.id === 'signin' || step.id === 'account') {
       return (
-        <div className="step-content">
-          {/* Social Sign-In Button */}
-          <div className="su-social-section">
-            <button 
-              onClick={handleGoogleAuth}
-              disabled={isLoading}
-              className="su-social-button su-social-button-google"
-              aria-label="Continue with Google"
-            >
-              <GoogleIcon />
-              <span>Continue with Google</span>
-              {isLoading && (
-                <div className="su-button-spinner">
-                  <div className="su-spinner-ring"></div>
-                </div>
-              )}
-            </button>
+        <div className="step-content account-step">
+          <button
+            type="button"
+            className="glass-social-btn google-btn"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading || isGoogleLoading}
+          >
+            {isGoogleLoading ? (
+              <div className="glass-spinner-small glass-spinner-dark"></div>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.65-2.23 1.03-3.71 1.03-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335"
+                />
+              </svg>
+            )}
+            <span>{isGoogleLoading ? t('signup.connecting', 'Connecting...') : t('signup.continueWithGoogle', 'Continue with Google')}</span>
+          </button>
+
+          <div className="glass-divider">
+            <div className="glass-divider-line"></div>
+            <div className="glass-divider-text">{t('signup.or', 'or')}</div>
           </div>
-          
-          {/* Divider */}
-          <div className="su-divider">
-            <div className="su-divider-line"></div>
-            <div className="su-divider-text">
-              <span className="su-divider-text-inner">or continue with email</span>
-            </div>
-          </div>
-          
-          <form id="sign-in-form" onSubmit={handleFormSubmit}>
-            <div className="su-floating-label-group">
-              <input
-                id="email"
-                type="email"
-                ref={emailInputRef}
-                value={formData.email}
-                onChange={handleInputChange('email')}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={handleCompositionEnd('email')}
-                onBlur={(e) => handleFieldBlur('email', e.target.value)}
-                className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="email"
-              />
-              <label htmlFor="email" className="su-floating-label">Email Address</label>
-              <Mail className="su-input-icon" />
-              {fieldErrors.email && touchedFields.email && (
-                <span className="su-field-error">{fieldErrors.email}</span>
-              )}
-            </div>
-            
-            <div className="su-floating-label-group">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                ref={passwordInputRef}
-                value={formData.password}
-                onChange={handleInputChange('password')}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={handleCompositionEnd('password')}
-                onBlur={(e) => handleFieldBlur('password', e.target.value)}
-                className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="current-password"
-              />
-              <label htmlFor="password" className="su-floating-label">Password</label>
-              <Lock className="su-input-icon" />
+
+          <GlassInput
+            id="email"
+            type="email"
+            icon={Mail}
+            label={t('signup.emailLabel', 'Email')}
+            value={formData.email}
+            onChange={handleInputChange('email')}
+            onBlur={handleBlur('email')}
+            error={fieldErrors.email}
+            touched={touchedFields.email}
+            autoComplete="email"
+            inputMode="email"
+          />
+
+          <GlassInput
+            id="password"
+            type="password"
+            icon={Lock}
+            label={t('signup.passwordLabel', 'Password')}
+            value={formData.password}
+            onChange={handleInputChange('password')}
+            onBlur={handleBlur('password')}
+            error={fieldErrors.password}
+            touched={touchedFields.password}
+            autoComplete={isSignIn ? 'current-password' : 'new-password'}
+          />
+
+          {isSignIn && (
+            <div className="forgot-password-row">
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="su-password-toggle"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="glass-link-btn forgot-password-link"
+                onClick={handleForgotPassword}
+                disabled={isResetting}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {isResetting ? t('signup.sendingLink', 'Sending link...') : t('signup.forgotPassword', 'Forgot password?')}
               </button>
-              {fieldErrors.password && touchedFields.password && (
-                <span className="su-field-error">{fieldErrors.password}</span>
-              )}
             </div>
-          </form>
+          )}
+
+          {resetMessage && (
+            <div className="glass-success-banner">
+              <Check size={16} />
+              <p>{resetMessage}</p>
+            </div>
+          )}
+
+          {!isSignIn && (
+            <GlassInput
+              id="name"
+              type="text"
+              icon={User}
+              label={t('signup.fullNameLabel', 'Full Name')}
+              value={formData.name}
+              onChange={handleInputChange('name')}
+              onBlur={handleBlur('name')}
+              error={fieldErrors.name}
+              touched={touchedFields.name}
+              autoComplete="name"
+            />
+          )}
         </div>
       );
     }
 
-    // Sign-up mode - existing multi-step logic
-    switch (stepConfig.id) {
-      case 'account':
-        return (
-          <div className="step-content">
-            {/* Social Sign-In Button */}
-            <div className="su-social-section">
-              <button 
-                onClick={handleGoogleAuth}
-                disabled={isLoading}
-                className="su-social-button su-social-button-google"
-                aria-label="Continue with Google"
-              >
-                <GoogleIcon />
-                <span>Continue with Google</span>
-                {isLoading && (
-                  <div className="su-button-spinner">
-                    <div className="su-spinner-ring"></div>
-                  </div>
-                )}
-              </button>
+    if (step.id === 'interests') {
+      return (
+        <div className="step-content preferences-step">
+          <div className="preferences-section">
+            <div className="preferences-heading">
+              <h4 className="preferences-title">{t('signup.interestsStep.title', 'What interests you?')}</h4>
+              <p className="preferences-hint">{t('signup.interestsStep.hint', 'Pick as many as resonate')}</p>
             </div>
-            
-            {/* Divider */}
-            <div className="su-divider">
-              <div className="su-divider-line"></div>
-              <div className="su-divider-text">
-                <span className="su-divider-text-inner">or continue with email</span>
+            {formData.interests.length > 0 && (
+              <div className="selection-count-badge">
+                <Sparkles size={13} />
+                <span>{t('signup.selectedCount', '{{count}} selected', { count: formData.interests.length })}</span>
               </div>
-            </div>
-
-            <form id="sign-up-form" onSubmit={handleFormSubmit}>
-              <div className="su-floating-label-group">
-                <input
-                  id="name"
-                  type="text"
-                  ref={nameInputRef}
-                  value={formData.name}
-                  onChange={handleInputChange('name')}
-                  onCompositionStart={handleCompositionStart}
-                  onCompositionEnd={handleCompositionEnd('name')}
-                  onBlur={(e) => handleFieldBlur('name', e.target.value)}
-                  className={`su-floating-input ${fieldErrors.name && touchedFields.name ? 'su-input-error' : ''}`}
-                  placeholder=" "
-                  autoComplete="given-name"
+            )}
+            <div className="option-grid">
+              {availableInterests.map((item, index) => (
+                <OptionCard
+                  key={item.id}
+                  id={item.id}
+                  label={item.label}
+                  desc={item.desc}
+                  icon={item.icon}
+                  color={item.color}
+                  index={index}
+                  selected={formData.interests.includes(item.id)}
+                  onToggle={() => handleArrayToggle('interests', item.id)}
                 />
-                <label htmlFor="name" className="su-floating-label">Full Name</label>
-                <User className="su-input-icon" />
-                {fieldErrors.name && touchedFields.name && (
-                  <span className="su-field-error">{fieldErrors.name}</span>
-                )}
-              </div>
-              
-              <div className="su-floating-label-group">
-                <input
-                  id="email"
-                  type="email"
-                  ref={emailInputRef}
-                  value={formData.email}
-                  onChange={handleInputChange('email')}
-                  onCompositionStart={handleCompositionStart}
-                  onCompositionEnd={handleCompositionEnd('email')}
-                  onBlur={(e) => handleFieldBlur('email', e.target.value)}
-                  className={`su-floating-input ${fieldErrors.email && touchedFields.email ? 'su-input-error' : ''}`}
-                  placeholder=" "
-                  autoComplete="email"
-                />
-                <label htmlFor="email" className="su-floating-label">Email Address</label>
-                <Mail className="su-input-icon" />
-                {fieldErrors.email && touchedFields.email && (
-                  <span className="su-field-error">{fieldErrors.email}</span>
-                )}
-              </div>
-              
-              <div className="su-floating-label-group">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  ref={passwordInputRef}
-                  value={formData.password}
-                  onChange={handleInputChange('password')}
-                  onCompositionStart={handleCompositionStart}
-                  onCompositionEnd={handleCompositionEnd('password')}
-                  onBlur={(e) => handleFieldBlur('password', e.target.value)}
-                  className={`su-floating-input su-password-input ${fieldErrors.password && touchedFields.password ? 'su-input-error' : ''}`}
-                  placeholder=" "
-                  autoComplete="new-password"
-                />
-                <label htmlFor="password" className="su-floating-label">Create Password</label>
-                <Lock className="su-input-icon" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="su-password-toggle"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-                {fieldErrors.password && touchedFields.password && (
-                  <span className="su-field-error">{fieldErrors.password}</span>
-                )}
-              </div>
-            </form>
-
-            {/* Toggle Sign In/Sign Up */}
-            <div className="su-toggle-section">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSignIn(true);
-                  setError('');
-                  setFieldErrors({});
-                  setTouchedFields({});
-                }}
-                className="su-toggle-button"
-              >
-                Already have an account? {' '}
-                <span className="su-toggle-action">Sign in</span>
-              </button>
+              ))}
             </div>
           </div>
-        );
-
-      case 'personal':
-        return (
-          <div className="step-content">
-            {/* Age Selector */}
-            <div className="age-selector-container">
-              <label className="age-selector-label">Your Age</label>
-              <div className="age-selector-wrapper">
-                <div className="age-selector">
-                  <select
-                    value={formData.age}
-                    onChange={(e) => handleFieldChange('age', parseInt(e.target.value))}
-                    onBlur={(e) => handleFieldBlur('age', parseInt(e.target.value))}
-                    className={`age-select ${fieldErrors.age && touchedFields.age ? 'error' : ''}`}
-                  >
-                    {Array.from({ length: 108 }, (_, i) => i + 13).map(age => (
-                      <option key={age} value={age}>{age} years old</option>
-                    ))}
-                  </select>
-                </div>
-                <span className="age-hint">
-                  This helps us provide age-appropriate insights
-                </span>
-                {fieldErrors.age && touchedFields.age && (
-                  <span className="su-field-error">{fieldErrors.age}</span>
-                )}
-              </div>
-            </div>
-
-            {/* Gender Selection */}
-            <div className="gender-selection-container">
-              <label className="gender-selection-label">Gender</label>
-              <div className="gender-options">
-                {[
-                  { id: 'female', label: 'Female', icon: '♀' },
-                  { id: 'male', label: 'Male', icon: '♂' },
-                  { id: 'non-binary', label: 'Non-binary', icon: '⚧' },
-                  { id: 'prefer-not-to-say', label: 'Prefer not to say', icon: '◦' }
-                ].map(option => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => handleFieldChange('gender', option.id)}
-                    className={`gender-option ${formData.gender === option.id ? 'selected' : ''}`}
-                  >
-                    <span className="gender-icon">{option.icon}</span>
-                    <span className="gender-label">{option.label}</span>
-                    {formData.gender === option.id && <Check className="gender-check" />}
-                  </button>
-                ))}
-              </div>
-              {fieldErrors.gender && touchedFields.gender && (
-                <span className="su-field-error">{fieldErrors.gender}</span>
-              )}
-            </div>
-          </div>
-        );
-
-      case 'interests':
-        return (
-          <div className="step-content">
-            <p className="step-description">Select the areas you're most interested in exploring through journaling:</p>
-            <div className="selection-grid">
-              {availableInterests.map(interest => {
-                const IconComponent = interest.icon;
-                const isSelected = formData.interests.includes(interest.id);
-                
-                return (
-                  <button
-                    key={interest.id}
-                    type="button"
-                    onClick={() => handleArrayFieldToggle('interests', interest.id)}
-                    className={`selection-item ${isSelected ? 'selected' : ''}`}
-                  >
-                    <IconComponent className="selection-icon" />
-                    <span className="selection-label">{interest.label}</span>
-                    {isSelected && <Check className="selection-check" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        );
-
-      case 'goals':
-        return (
-          <div className="step-content">
-            <p className="step-description">What do you hope to achieve through journaling?</p>
-            <div className="selection-grid">
-              {availableGoals.map(goal => {
-                const IconComponent = goal.icon;
-                const isSelected = formData.journalingGoals.includes(goal.id);
-                
-                return (
-                  <button
-                    key={goal.id}
-                    type="button"
-                    onClick={() => handleArrayFieldToggle('journalingGoals', goal.id)}
-                    className={`selection-item ${isSelected ? 'selected' : ''}`}
-                  >
-                    <IconComponent className="selection-icon" />
-                    <span className="selection-label">{goal.label}</span>
-                    {isSelected && <Check className="selection-check" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        );
-
-      case 'location':
-        return (
-          <div className="step-content">
-            <div className="su-floating-label-group">
-              <input
-                id="city"
-                type="text"
-                ref={cityInputRef}
-                value={formData.city}
-                onChange={handleInputChange('city')}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={handleCompositionEnd('city')}
-                onBlur={(e) => handleFieldBlur('city', e.target.value)}
-                className={`su-floating-input ${fieldErrors.city && touchedFields.city ? 'su-input-error' : ''}`}
-                placeholder=" "
-                autoComplete="address-level2"
-              />
-              <label htmlFor="city" className="su-floating-label">City</label>
-              <MapPin className="su-input-icon" />
-              <span className="su-form-hint">
-                {window.google && window.google.maps 
-                  ? "Start typing your city name for suggestions" 
-                  : "Enter your city name (e.g., Vienna, London, New York)"}
-              </span>
-              {fieldErrors.city && touchedFields.city && (
-                <span className="su-field-error">{fieldErrors.city}</span>
-              )}
-            </div>
-            
-            {/* Popular cities as fallback */}
-            <div className="popular-cities">
-              <p className="popular-cities-label">Popular cities:</p>
-              <div className="popular-cities-grid">
-                {['Vienna', 'London', 'New York', 'Paris', 'Tokyo', 'Sydney'].map(city => (
-                  <button
-                    key={city}
-                    type="button"
-                    onClick={() => handleFieldChange('city', city)}
-                    className="popular-city-button"
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'theme':
-        return (
-          <div className="step-content">
-            <p className="step-description">Choose your preferred app appearance:</p>
-            <div className="theme-selection">
-              <button
-                type="button"
-                onClick={() => handleFieldChange('preferredTheme', 'dark')}
-                className={`theme-option ${formData.preferredTheme === 'dark' ? 'selected' : ''}`}
-              >
-                <div className="theme-preview theme-preview-dark">
-                  <Moon className="theme-icon" />
-                  <div className="theme-mockup">
-                    <div className="theme-mockup-header"></div>
-                    <div className="theme-mockup-content">
-                      <div className="theme-mockup-line"></div>
-                      <div className="theme-mockup-line short"></div>
-                      <div className="theme-mockup-line"></div>
-                    </div>
-                  </div>
-                </div>
-                <span className="theme-label">Dark Theme</span>
-                <span className="theme-description">Easy on the eyes, perfect for evening journaling</span>
-                {formData.preferredTheme === 'dark' && <Check className="theme-check" />}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleFieldChange('preferredTheme', 'light')}
-                className={`theme-option ${formData.preferredTheme === 'light' ? 'selected' : ''}`}
-              >
-                <div className="theme-preview theme-preview-light">
-                  <Sun className="theme-icon" />
-                  <div className="theme-mockup">
-                    <div className="theme-mockup-header"></div>
-                    <div className="theme-mockup-content">
-                      <div className="theme-mockup-line"></div>
-                      <div className="theme-mockup-line short"></div>
-                      <div className="theme-mockup-line"></div>
-                    </div>
-                  </div>
-                </div>
-                <span className="theme-label">Light Theme</span>
-                <span className="theme-description">Clean and bright, ideal for daytime use</span>
-                {formData.preferredTheme === 'light' && <Check className="theme-check" />}
-              </button>
-            </div>
-          </div>
-        );
-
-      case 'welcome':
-        return (
-          <div className="step-content welcome-content">
-            <div className="welcome-animation">
-              <div className="success-circle">
-                <Check className="success-check" />
-              </div>
-            </div>
-            <p className="welcome-message">
-              Your account has been created successfully! You're ready to begin your journey of self-discovery with Καιρός.
-            </p>
-            <button
-              type="button"
-              onClick={onNext}
-              className="welcome-continue-button"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className="su-loading-indicator">
-                  <div className="su-spinner-ring"></div>
-                  <span>Setting up your account...</span>
-                </div>
-              ) : (
-                <>
-                  Start Your Journey
-                  <ChevronRight className="nav-icon" />
-                </>
-              )}
-            </button>
-          </div>
-        );
-
-      default:
-        return null;
+        </div>
+      );
     }
+
+    if (step.id === 'goals') {
+      return (
+        <div className="step-content preferences-step">
+          <div className="preferences-section">
+            <div className="preferences-heading">
+              <h4 className="preferences-title">{t('signup.goalsStep.title', 'Your journaling goals')}</h4>
+              <p className="preferences-hint">{t('signup.goalsStep.hint', 'What do you want to get out of it?')}</p>
+            </div>
+            {formData.journalingGoals.length > 0 && (
+              <div className="selection-count-badge">
+                <Sparkles size={13} />
+                <span>{t('signup.selectedCount', '{{count}} selected', { count: formData.journalingGoals.length })}</span>
+              </div>
+            )}
+            <div className="option-grid">
+              {availableGoals.map((item, index) => (
+                <OptionCard
+                  key={item.id}
+                  id={item.id}
+                  label={item.label}
+                  desc={item.desc}
+                  icon={item.icon}
+                  color={item.color}
+                  index={index}
+                  selected={formData.journalingGoals.includes(item.id)}
+                  onToggle={() => handleArrayToggle('journalingGoals', item.id)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (step.id === 'welcome') {
+      return (
+        <div className="step-content welcome-step">
+          <div className="welcome-icon-wrapper">
+            <div className="success-ring">
+              <Check size={40} strokeWidth={2.5} />
+            </div>
+          </div>
+          <h2 className="welcome-title">{t('signup.welcomeStep.title', 'Ready to begin?')}</h2>
+          <p className="welcome-text">
+            {t('signup.welcomeStep.text', 'Your journal is waiting. Start capturing moments, insights, and growth.')}
+          </p>
+          <button
+            type="button"
+            className="welcome-continue-btn"
+            onClick={onNext}
+            disabled={isLoading}
+          >
+            {isLoading ? t('signup.settingUp', 'Setting up...') : t('signup.startYourJourney', 'Start Your Journey')}
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      );
+    }
+
+    return null;
   };
 
-  // FIXED: Get proper button text based on mode and step
-  const getActionButtonText = () => {
-    if (isSignIn) {
-      return 'Sign In';
-    }
-    
-    if (currentStep === steps.length - 2) {
-      return 'Create Account';
-    }
-    
-    if (currentStep === steps.length - 1) {
-      return 'Start Your Journey';
-    }
-    
-    return 'Continue';
-  };
+  // Generated once: a field of drifting, twinkling sparks behind the glass card.
+  const sparks = useMemo(() => {
+    const palette = ['255, 255, 255', '85, 139, 110', '139, 92, 246', '59, 130, 246', '216, 178, 63'];
+    return Array.from({ length: 24 }, () => {
+      const size = 2 + Math.random() * 4;
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      return {
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        width: `${size}px`,
+        height: `${size}px`,
+        background: `rgb(${color})`,
+        boxShadow: `0 0 ${size * 2}px rgba(${color}, 0.9), 0 0 ${size * 5}px rgba(${color}, 0.4)`,
+        // two animations: slow drift + faster twinkle (durations/delays paired)
+        animationDuration: `${9 + Math.random() * 13}s, ${2 + Math.random() * 3}s`,
+        animationDelay: `${Math.random() * -22}s, ${Math.random() * -5}s`,
+        '--drift-x': `${(Math.random() - 0.5) * 140}px`,
+        '--drift-y': `${(Math.random() - 0.5) * 140}px`,
+      };
+    });
+  }, []);
+
+  // Reset step when toggling sign-in/up (already handled by useEffect with isSignIn)
+  useEffect(() => {
+    setCurrentStep(0);
+    setError('');
+    setResetMessage('');
+    setFieldErrors({});
+    setTouchedFields({});
+  }, [isSignIn]);
 
   return (
-    <div className="su-container" ref={containerRef}>
-      <div className="su-card-container">
-        {/* Back Button */}
-        {onBack && currentStep === 0 && (
-          <button 
-            onClick={onBack} 
-            className="su-back-button"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="su-back-icon" />
-            <span>Back</span>
+    <div className="glass-signup-container">
+      <div className="signup-bg">
+        <div className="signup-bg-gradient"></div>
+        <div className="signup-bg-orb orb-1"></div>
+        <div className="signup-bg-orb orb-2"></div>
+        {/* Drifting sparks — crisp & bright so the glass card blurs them into
+            soft glowing colour as they pass behind it (the "liquid glass" look) */}
+        <div className="signup-sparks" aria-hidden="true">
+          {sparks.map((s, i) => (
+            <span key={i} className="signup-spark" style={s} />
+          ))}
+        </div>
+      </div>
+
+      <div className="glass-signup-card">
+        {onBack && currentStep === 0 && !isSignIn && (
+          <button onClick={onBack} className="card-back-btn">
+            <ArrowLeft size={20} />
+            <span>{t('signup.back', 'Back')}</span>
           </button>
         )}
-        
-        <div className="su-card">
-          {/* FIXED: Progress Indicator - only show for sign-up mode */}
-          {!isSignIn && (
-            <div className="step-progress">
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-                />
-              </div>
-              <div className="progress-dots">
-                {steps.map((_, index) => (
+
+        <div className="glass-signup-inner">
+          <div className={`mode-transition ${isModeSwitching ? 'mode-switching' : ''}`}>
+            {/* Progress indicator (only for sign-up) */}
+            {!isSignIn && steps.length > 1 && (
+              <div className="step-indicator">
+                {steps.map((_, idx) => (
                   <div
-                    key={index}
-                    className={`progress-dot ${index <= currentStep ? 'active' : ''} ${index === currentStep ? 'current' : ''}`}
+                    key={idx}
+                    className={`step-dot ${idx === currentStep ? 'current' : ''} ${
+                      idx < currentStep ? 'completed' : ''
+                    }`}
                   />
                 ))}
               </div>
-              <div className="progress-text">
-                Step {currentStep + 1} of {steps.length}
-              </div>
-            </div>
-          )}
-
-          <div className="su-card-content">
-            {/* Step Header */}
-            <div className="su-header">
-              <h1 className="su-title">
-                {steps[currentStep].title}
-              </h1>
-              <p className="su-subtitle">
-                {steps[currentStep].subtitle}
-              </p>
-            </div>
-            
-            {/* Error Message */}
-            {error && (
-              <div className="su-error-message" role="alert">
-                <X className="su-error-icon" />
-                <span>{error}</span>
-              </div>
             )}
-            
-            {/* Step Content */}
-            <div className={`step-container ${isTransitioning ? `slide-${slideDirection}` : ''}`}>
-              {renderStepContent()}
+
+            <div className="step-slide-container">
+              <div
+                className={`step-slide ${isTransitioning ? `slide-${slideDirection}` : ''}`}
+                style={{ willChange: 'transform' }}
+              >
+                <div className="step-header">
+                  <h1 className="step-title">{steps[currentStep].title}</h1>
+                  <p className="step-subtitle">{steps[currentStep].subtitle}</p>
+                </div>
+
+                {error && (
+                  <div className="glass-error-banner">
+                    <div className="error-icon-wrap">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                    </div>
+                    <p>{error}</p>
+                    <button onClick={() => setError('')} className="error-dismiss">
+                      {t('signup.dismiss', 'Dismiss')}
+                    </button>
+                  </div>
+                )}
+
+                {renderStepContent()}
+              </div>
             </div>
-            
-            {/* FIXED: Navigation Buttons - different logic for sign-in vs sign-up */}
+
+            {/* Navigation buttons */}
             {steps[currentStep].id !== 'welcome' && (
-              <div className="step-navigation">
-                {/* FIXED: Back button only for sign-up mode and not first step */}
+              <div className="step-nav">
                 {!isSignIn && currentStep > 0 && (
                   <button
                     type="button"
-                    onClick={goToPreviousStep}
-                    className="nav-button nav-button-secondary"
-                    disabled={isLoading || isTransitioning}
+                    className="glass-nav-btn secondary"
+                    onClick={goBack}
+                    disabled={isTransitioning || isLoading}
                   >
-                    <ChevronLeft className="nav-icon" />
-                    Back
+                    <ChevronLeft size={18} />
+                    {t('signup.back', 'Back')}
                   </button>
                 )}
-                
-                {/* FIXED: Action button - submit type for sign-in/first sign-up step, button otherwise */}
                 <button
-                  type={(isSignIn || currentStep === 0) ? "submit" : "button"}
-                  onClick={(isSignIn || currentStep === 0) ? undefined : goToNextStep}
-                  form={isSignIn ? "sign-in-form" : (currentStep === 0 ? "sign-up-form" : undefined)}
-                  className="nav-button nav-button-primary"
-                  disabled={isLoading || isTransitioning}
+                  type="button"
+                  className="glass-nav-btn primary"
+                  onClick={goNext}
+                  disabled={isTransitioning || isLoading}
                 >
                   {isLoading ? (
-                    <div className="su-loading-indicator">
-                      <div className="su-spinner-ring"></div>
-                      <span>{isSignIn ? 'Signing in...' : 'Processing...'}</span>
-                    </div>
+                    <div className="glass-spinner-small"></div>
                   ) : (
                     <>
-                      {getActionButtonText()}
-                      {!isSignIn && currentStep < steps.length - 2 && <ChevronRight className="nav-icon" />}
+                      {isSignIn ? t('signup.signIn', 'Sign In') : steps[currentStep].id === 'goals' ? t('signup.createAccount', 'Create Account') : t('signup.continue', 'Continue')}
+                      {!isSignIn && steps[currentStep].id !== 'goals' && <ChevronRight size={18} />}
                     </>
                   )}
                 </button>
               </div>
             )}
 
-            {/* Toggle Section - shown after navigation button for sign-in */}
-            {isSignIn && (
-              <div className="su-toggle-section">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSignIn(false);
-                    setError('');
-                    setFieldErrors({});
-                    setTouchedFields({});
-                  }}
-                  className="su-toggle-button"
-                >
-                  Don't have an account? {' '}
-                  <span className="su-toggle-action">Sign up</span>
+            {/* Toggle between sign in / sign up */}
+            <div className="glass-toggle-section">
+              {isSignIn ? (
+                <button type="button" className="glass-link-btn" onClick={switchToSignUp}>
+                  {t('signup.noAccount', "Don't have an account?")} <span className="toggle-action">{t('signup.signUp', 'Sign up')}</span>
                 </button>
-              </div>
-            )}
+              ) : (
+                <button type="button" className="glass-link-btn" onClick={switchToSignIn}>
+                  {t('signup.haveAccount', 'Already have an account?')} <span className="toggle-action">{t('signup.signIn2', 'Sign in')}</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
-        
-        {/* Terms Text */}
-        <div className="su-terms-section">
-          <p className="su-terms-text">
-            By continuing, you agree to our{' '}
-            <button onClick={navigateToTerms} className="su-terms-link">
-              Terms of Service
-            </button>{' '}
-            and{' '}
-            <button onClick={navigateToPrivacy} className="su-terms-link">
-              Privacy Policy
-            </button>
+
+        <div className="glass-terms">
+          <p className="glass-terms-text">
+            {t('signup.termsPrefix', 'By continuing, you agree to our')}{' '}
+            <button className="term-link">{t('signup.termsOfService', 'Terms of Service')}</button> {t('signup.and', 'and')}{' '}
+            <button className="term-link">{t('signup.privacyPolicy', 'Privacy Policy')}</button>.
           </p>
         </div>
       </div>

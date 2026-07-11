@@ -1,0 +1,92 @@
+[
+  {
+    "id": "lifeChaptersTrilogy:1",
+    "title": "Past Chapter: Beginning",
+    "theme": "Origins",
+    "prompt": "Write about where you began. What were the foundational experiences, relationships, and moments that shaped your early life?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:2",
+    "title": "Past Chapter: Visual Memory",
+    "theme": "Remembrance",
+    "prompt": "Create art representing significant moments from your past. What images, colors, or symbols capture where you've been?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:3",
+    "title": "Past Chapter: Spoken Stories",
+    "theme": "Storytelling",
+    "prompt": "Tell the story of your past out loud. Narrate the journey from then to now. What stories need to be told?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:4",
+    "title": "Past Chapter: Lessons Learned",
+    "theme": "Wisdom",
+    "prompt": "Write about what your past has taught you. What wisdom have you gained? What would you tell your younger self?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:5",
+    "title": "Past Chapter: Gratitude & Release",
+    "theme": "Completion",
+    "prompt": "Speak words of gratitude for your past, then speak words of release. What are you thankful for? What are you ready to let go?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:6",
+    "title": "Present Chapter: Current Reality",
+    "theme": "Now",
+    "prompt": "Write about where you are right now. What defines this current chapter? What are you experiencing, feeling, becoming?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:7",
+    "title": "Present Chapter: Visual Snapshot",
+    "theme": "Current Expression",
+    "prompt": "Create art representing your life right now. What colors, shapes, or images capture this present moment?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:8",
+    "title": "Present Chapter: Speaking Now",
+    "theme": "Current Voice",
+    "prompt": "Speak about who you are today. What's true for you now? How have you changed? What's emerging?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:9",
+    "title": "Present Chapter: Current Challenges",
+    "theme": "Growth Edge",
+    "prompt": "Write about what's challenging you now. What are you working through? What growth is happening in this present chapter?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:10",
+    "title": "Present Chapter: Gifts of Now",
+    "theme": "Present Gratitude",
+    "prompt": "Speak about what this current chapter is giving you. What gifts exist in this moment? What's beautiful about now?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:11",
+    "title": "Future Chapter: Vision",
+    "theme": "Possibility",
+    "prompt": "Write about the future chapter you're creating. What do you envision? What are you moving toward? What's calling you forward?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:12",
+    "title": "Future Chapter: Visual Dreams",
+    "theme": "Imagination",
+    "prompt": "Create art representing your future vision. What does the next chapter look like? Use imagery that inspires and excites you."
+  },
+  {
+    "id": "lifeChaptersTrilogy:13",
+    "title": "Future Chapter: Speaking Dreams",
+    "theme": "Declaration",
+    "prompt": "Speak your future into existence. Declare what you're creating. Let your voice carry your vision forward with confidence."
+  },
+  {
+    "id": "lifeChaptersTrilogy:14",
+    "title": "Future Chapter: Bridge Building",
+    "theme": "Action",
+    "prompt": "Write about how you'll bridge from present to future. What actions will you take? What will help you move forward?"
+  },
+  {
+    "id": "lifeChaptersTrilogy:15",
+    "title": "Trilogy Integration",
+    "theme": "Complete Story",
+    "prompt": "Speak your complete story - past, present, and future. How do all three chapters connect? What's the through-line of your life story?"
+  }
+]

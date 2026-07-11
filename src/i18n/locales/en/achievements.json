@@ -1,0 +1,98 @@
+{
+  "achievements": {
+    "title": "Achievements",
+    "unlockedSummary": "{{earned}} of {{total}} unlocked · {{points}} points",
+    "close": "Close",
+    "percentComplete": "{{percentage}}% Complete",
+    "categoryAll": "All",
+    "categoryStreaks": "Streaks",
+    "categoryVolume": "Volume",
+    "categoryJourneys": "Journeys",
+    "categoryConsistency": "Consistency",
+    "pointsLabel": "{{count}} pts",
+    "rarity": {
+      "common": "common",
+      "rare": "rare",
+      "epic": "epic",
+      "legendary": "legendary"
+    },
+    "items": {
+      "firstWeek": {
+        "title": "Week Warrior",
+        "description": "7 day streak"
+      },
+      "twoWeeks": {
+        "title": "Fortnight Force",
+        "description": "14 day streak"
+      },
+      "monthMaster": {
+        "title": "Month Master",
+        "description": "30 day streak"
+      },
+      "streakLegend": {
+        "title": "Streak Legend",
+        "description": "100 day streak"
+      },
+      "firstEntry": {
+        "title": "First Steps",
+        "description": "First journal entry"
+      },
+      "tenEntries": {
+        "title": "Getting Started",
+        "description": "10 entries"
+      },
+      "fiftyEntries": {
+        "title": "Dedicated Writer",
+        "description": "50 entries"
+      },
+      "hundredEntries": {
+        "title": "Century Club",
+        "description": "100 entries"
+      },
+      "fiveHundredEntries": {
+        "title": "Master Chronicler",
+        "description": "500 entries"
+      },
+      "firstJourney": {
+        "title": "Path Finder",
+        "description": "Complete your first journey"
+      },
+      "threeJourneys": {
+        "title": "Journey Explorer",
+        "description": "Complete 3 journeys"
+      },
+      "allJourneys": {
+        "title": "Journey Master",
+        "description": "Complete all available journeys"
+      },
+      "weeklyConsistency": {
+        "title": "Weekly Warrior",
+        "description": "Journal 5+ days per week for 4 weeks"
+      },
+      "monthlyConsistency": {
+        "title": "Consistency King",
+        "description": "Journal 20+ days per month for 3 months"
+      },
+      "longFormWriter": {
+        "title": "Long Form Writer",
+        "description": "Write 10 entries with 500+ words"
+      },
+      "deepThinker": {
+        "title": "Deep Thinker",
+        "description": "Average 300+ words per entry over 30 entries"
+      },
+      "firstMonth": {
+        "title": "One Month Strong",
+        "description": "30 days as a member"
+      },
+      "sixMonths": {
+        "title": "Half Year Hero",
+        "description": "180 days as a member"
+      },
+      "oneYear": {
+        "title": "Annual Achievement",
+        "description": "365 days as a member"
+      }
+    }
+  }
+}

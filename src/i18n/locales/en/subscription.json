@@ -1,0 +1,77 @@
+{
+  "premiumPathCheck": {
+    "checkingAccess": "Checking access...",
+    "defaultPathName": "Premium Path"
+  },
+  "errors": {
+    "upgradeStart": "Error starting upgrade process. Please try again.",
+    "managementOpen": "Error opening subscription management. Please try again.",
+    "unableToLoad": "Unable to load subscription status"
+  },
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
+    "artisan": "Artisan",
+    "free": "Free",
+    "upgrade": "Upgrade",
+    "manage": "Manage",
+    "freePlan": "Free Plan",
+    "processing": "Processing...",
+    "freeJourneysIncluded": "Free journeys included",
+    "renews": "Renews {{date}}",
+    "opening": "Opening...",
+    "manageSubscription": "Manage Subscription",
+    "upgradeToArtisan": "Upgrade to Artisan",
+    "perMonth": "/month",
+    "cancelAnytime": "Cancel anytime"
+  },
+  "benefits": {
+    "allPaths": "All 33+ journey paths",
+    "freePaths": "9 Free Journey Paths (10 days)",
+    "advancedAI": "Advanced AI analysis",
+    "basicAI": "Basic AI Analysis",
+    "unlimitedExports": "Unlimited PDF exports",
+    "limitedExports": "Limited PDF Exports",
+    "premiumAnalytics": "Premium Analytics Dashboard",
+    "prioritySupport": "Priority Support",
+    "premiumAnalyticsShort": "Premium analytics",
+    "freePathsShort": "9 free journey paths"
+  },
+  "detailed": {
+    "yourBenefits": "Your Benefits",
+    "premiumPathsLocked": "Premium paths locked",
+    "limitedExports": "Limited exports",
+    "trialEnds": "Trial ends {{date}}"
+  },
+  "upgradePrompt": {
+    "title": "Artisan Access Required",
+    "messageSuffix": "is an Artisan journey that requires an active subscription.",
+    "includesTitle": "Artisan includes:",
+    "benefit1": "All 33+ premium journey paths",
+    "benefit2": "Advanced AI analysis & insights",
+    "benefit3": "Unlimited PDF exports",
+    "benefit4": "Extended analytics dashboard",
+    "benefit5": "Priority support",
+    "maybeLater": "Maybe Later"
+  },
+  "plans": {
+    "header": "Choose Your Καιρός Experience",
+    "subheader": "Start with free journeys or unlock your full potential with Artisan",
+    "freeFeature1": "9 guided 10-day journeys",
+    "freeFeature2": "Basic AI analysis",
+    "freeFeature3": "Standard analytics",
+    "freeFeature4": "PDF exports (limited)",
+    "freeFeature5": "Community support",
+    "currentPlan": "Current Plan",
+    "mostPopular": "Most Popular",
+    "artisanFeature1": "All 33+ journey paths",
+    "artisanFeature2": "Advanced AI insights",
+    "artisanFeature3": "Unlimited PDF exports",
+    "artisanFeature4": "Premium analytics dashboard",
+    "artisanFeature5": "Longer journeys (14-100 days)",
+    "artisanFeature6": "Visual journaling paths",
+    "artisanFeature7": "Priority support",
+    "footer1": "All plans include secure cloud sync and cross-device access",
+    "footer2": "Cancel anytime with full data export"
+  }
+}

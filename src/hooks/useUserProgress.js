@@ -129,7 +129,8 @@ export const useUserProgress = () => {
             isActive: isStarted && !isDefinitelyComplete,
             
             // Additional metadata
-            lastActivity: pathProgress?.lastActivity || null,
+            lastActive: pathProgress?.lastActive || null,
+            lastActivity: pathProgress?.lastActive || null,
             startedAt: pathProgress?.startedAt || null,
             completedAt: pathProgress?.completedAt || null
           };

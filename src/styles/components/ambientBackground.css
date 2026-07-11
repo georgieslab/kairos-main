@@ -1,0 +1,137 @@
+/* ==========================================================================
+   AMBIENT BACKGROUND SYSTEM (Fixed - Ultra Subtle)
+   Apple visionOS style - Should be BARELY visible, not a colored overlay
+   ========================================================================== */
+
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Base screen colors - almost black, just slightly off-black */
+.ambient-bg.dark {
+  background: #0d1117;
+}
+
+.ambient-bg.light {
+  background: #ffffff;
+}
+
+/* The gradient mesh - nearly invisible, just adds microscopic depth */
+.ambient-gradient {
+  position: absolute;
+  inset: 0;
+  background-size: 600% 600%;
+  background-position: 0% 50%;
+  opacity: 0.5; /* CRITICAL: Keep this low! */
+  animation: ambientShift 30s ease-in-out infinite;
+}
+
+@keyframes ambientShift {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+}
+
+/* The Floating Orbs - GHOST-LIKE, not colored circles */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  /* CRITICAL: Heavy blur to make them truly invisible */
+  -webkit-backdrop-filter: blur(120px);
+  backdrop-filter: blur(120px);
+  /* CRITICAL: Very low opacity */
+  opacity: 0.06;
+  /* CRITICAL: Transform optimization */
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.ambient-orb-1 {
+  width: 300px;
+  height: 300px;
+  top: -5%;
+  right: -5%;
+  animation: ambientFloat1 30s ease-in-out infinite;
+}
+
+.ambient-orb-2 {
+  width: 250px;
+  height: 250px;
+  bottom: -5%;
+  left: -5%;
+  animation: ambientFloat2 35s ease-in-out infinite;
+}
+
+.ambient-orb-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ambientFloat3 25s ease-in-out infinite;
+}
+
+/* 
+  CRITICAL FIX: Fallback solid background so if blur fails, 
+  you don't get a colored rectangle 
+*/
+.ambient-orb-1 {
+  background: #111827;
+}
+.ambient-orb-2 {
+  background: #111827;
+}
+.ambient-orb-3 {
+  background: #111827;
+}
+
+/* Light mode - even more invisible */
+.ambient-bg.light .ambient-gradient {
+  opacity: 0.3; /* Even lower opacity for light mode */
+}
+
+.ambient-bg.light {
+  background: #ffffff;
+}
+
+.ambient-bg.light .ambient-orb {
+  opacity: 0.03; /* Nearly invisible on white */
+  -webkit-backdrop-filter: blur(100px);
+  backdrop-filter: blur(100px);
+  background: #f8f9fa; /* Fallback white */
+}
+
+.ambient-bg.light .ambient-orb-1 { background: #f0f2f5; }
+.ambient-bg.light .ambient-orb-2 { background: #f0f2f5; }
+.ambient-bg.light .ambient-orb-3 { background: #f0f2f5; }
+
+
+/* Animations - SLOW to prevent visible movement */
+@keyframes ambientFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-20px, 30px) scale(1.05); }
+  66% { transform: translate(15px, -20px) scale(0.95); }
+}
+
+@keyframes ambientFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.03); }
+  66% { transform: translate(-15px, 20px) scale(0.97); }
+}
+
+@keyframes ambientFloat3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Reduced motion - Kill all animations if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-gradient { animation: none; }
+  .ambient-orb { animation: none; }
+  opacity: 0; /* Completely invisible */
+}

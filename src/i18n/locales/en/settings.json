@@ -1,0 +1,124 @@
+{
+  "theme": {
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "language": {
+    "title": "Language",
+    "description": "Choose your preferred app language",
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "subscriptionSection": {
+    "upgradeError": "Error starting upgrade. Please try again.",
+    "portalError": "Error opening management portal.",
+    "sectionTitle": "Subscription",
+    "loading": "Loading subscription…",
+    "artisanTitle": "Artisan Member",
+    "artisanDescription": "You have access to all premium features",
+    "manageButton": "Manage Subscription",
+    "freeTitle": "Free Plan",
+    "freeDescription": "Upgrade to Artisan for unlimited features",
+    "upgradeButton": "Upgrade to Artisan"
+  },
+  "profile": {
+    "avatarUpdateSuccess": "Avatar updated successfully!",
+    "avatarUpdateError": "Failed to update avatar.",
+    "saveSuccess": "Settings saved successfully!",
+    "saveError": "Failed to save settings.",
+    "sectionTitle": "Profile",
+    "displayNameLabel": "Display Name",
+    "displayNamePlaceholder": "Your name",
+    "emailLabel": "Email Address",
+    "emailHint": "Email cannot be changed",
+    "birthdayLabel": "Birthday",
+    "optional": "Optional",
+    "cityLabel": "City",
+    "cityPlaceholder": "Enter your city",
+    "saving": "Saving…",
+    "saveChanges": "Save Changes"
+  },
+  "dataPrivacy": {
+    "exportSuccess": "Data exported successfully!",
+    "exportError": "Failed to export data.",
+    "sectionTitle": "Data & Privacy",
+    "journalEntriesLabel": "Journal Entries",
+    "insightsGeneratedLabel": "Insights Generated",
+    "exportButton": "Export My Data",
+    "deleteAccountButton": "Delete Account"
+  },
+  "deleteAccount": {
+    "errorEnterPassword": "Please enter your password",
+    "errorTypeDelete": "Please type DELETE to confirm",
+    "progressVerifying": "Verifying your identity...",
+    "progressDeletingEntries": "Deleting journal entries...",
+    "progressRemovingFiles": "Removing uploaded files...",
+    "progressDeletingProfile": "Deleting your profile...",
+    "progressDone": "Account deleted successfully",
+    "errorGeneric": "Failed to delete account",
+    "errorUnexpected": "An unexpected error occurred. Please try again.",
+    "step1Title": "Delete Account",
+    "step1Subtitle": "This action cannot be undone",
+    "willDeleteTitle": "This will permanently delete:",
+    "calculating": "Calculating your data...",
+    "journalEntriesCount": "{{count}} journal entries",
+    "allPhotos": "All uploaded photos and images",
+    "allVoice": "All voice recordings",
+    "profileAndPrefs": "Your profile and preferences",
+    "aiInsights": "All AI-generated insights",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "step2Title": "Verify Your Identity",
+    "step2Subtitle": "Enter your password to continue",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "back": "Back",
+    "step3Title": "Final Confirmation",
+    "step3Subtitle": "This is your last chance to cancel",
+    "typeToConfirmPrefix": "To confirm deletion, type",
+    "typeToConfirmSuffix": "below:",
+    "confirmPlaceholder": "Type DELETE to confirm",
+    "deleteForever": "Delete My Account Forever",
+    "step4Title": "Deleting Account...",
+    "step4Subtitle": "Please don't close this window",
+    "step5Title": "Account Deleted",
+    "step5Subtitle": "Your data has been permanently removed",
+    "thankYou": "Thank you for using Καιρός.",
+    "redirecting": "Redirecting to welcome screen..."
+  },
+  "notifications": {
+    "updateSuccess": "Notification preferences updated!",
+    "updateError": "Failed to update preferences.",
+    "dailyReminderTitle": "Daily Journaling Reminder",
+    "dailyReminderDescription": "Get reminded to journal every day",
+    "weeklyInsightsTitle": "Weekly Insights Summary",
+    "weeklyInsightsDescription": "Receive AI insights every week",
+    "pathCompletionTitle": "Path Completion Alerts",
+    "pathCompletionDescription": "Celebrate when you complete a journey"
+  },
+  "account": {
+    "unknown": "Unknown",
+    "defaultName": "Journaler",
+    "loading": "Loading…",
+    "artisan": "Artisan",
+    "freePlan": "Free Plan",
+    "since": "Since {{date}}"
+  },
+  "header": {
+    "title": "Settings",
+    "subtitle": "Manage your account & preferences"
+  },
+  "preferences": {
+    "sectionTitle": "Preferences",
+    "themeTitle": "Theme",
+    "themeDescription": "Choose your preferred color scheme"
+  },
+  "helpAbout": {
+    "sectionTitle": "Help & About",
+    "contactSupport": "Contact Support",
+    "faqHelpCenter": "FAQ & Help Center",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "aboutKairos": "About Καιρός"
+  }
+}

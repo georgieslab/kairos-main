@@ -236,6 +236,56 @@ export const useUserStatistics = () => {
     );
     const activeDays = uniqueDates.size;
 
+    // Real day-streak from actual entry dates across ALL paths (incl. voice),
+    // rather than the per-path streak stored in journeyProgress. A user who
+    // journals on consecutive calendar days expects those days to count even
+    // if they switched paths or wrote multiple entries per day.
+    const { currentStreak: computedCurrentStreak, longestStreak: computedLongestStreak } = (() => {
+      const dayMs = 24 * 60 * 60 * 1000;
+      const days = [...uniqueDates]
+        .map(ds => {
+          const d = new Date(ds);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime();
+        })
+        .sort((a, b) => a - b); // ascending, one entry per unique calendar day
+
+      if (days.length === 0) return { currentStreak: 0, longestStreak: 0 };
+
+      // Longest run of consecutive calendar days
+      let longest = 1;
+      let run = 1;
+      for (let i = 1; i < days.length; i++) {
+        if (days[i] === days[i - 1] + dayMs) {
+          run += 1;
+        } else {
+          run = 1;
+        }
+        if (run > longest) longest = run;
+      }
+
+      // Current streak: consecutive days ending today (or yesterday, so the
+      // streak doesn't visually break until a full day has been missed)
+      const midnightToday = new Date();
+      midnightToday.setHours(0, 0, 0, 0);
+      const todayMs = midnightToday.getTime();
+      const mostRecent = days[days.length - 1];
+
+      let current = 0;
+      if (mostRecent === todayMs || mostRecent === todayMs - dayMs) {
+        current = 1;
+        for (let i = days.length - 2; i >= 0; i--) {
+          if (days[i] === days[i + 1] - dayMs) {
+            current += 1;
+          } else {
+            break;
+          }
+        }
+      }
+
+      return { currentStreak: current, longestStreak: longest };
+    })();
+
     // Calculate recent activity
     const now = new Date();
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -326,8 +376,8 @@ export const useUserStatistics = () => {
       totalWords,
       averageLength,
       activeDays,
-      currentStreak: progressStats.currentStreak || 0,
-      longestStreak: progressStats.longestStreak || 0,
+      currentStreak: computedCurrentStreak,
+      longestStreak: Math.max(computedLongestStreak, progressStats.longestStreak || 0),
       activePathsCount: inProgressPaths.length,
       completedPathsCount: completedPaths.length,
       totalPathsStarted: inProgressPaths.length + completedPaths.length,

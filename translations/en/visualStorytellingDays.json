@@ -1,0 +1,92 @@
+[
+  {
+    "id": "visualStorytellingDays:1",
+    "title": "Single Image Story",
+    "theme": "Moment",
+    "prompt": "Tell a complete story in just one image. Choose a significant moment from your life or imagination and capture it visually so that viewers can sense the larger narrative around this moment."
+  },
+  {
+    "id": "visualStorytellingDays:2",
+    "title": "Before & After",
+    "theme": "Change",
+    "prompt": "Create two images that show a before and after - this could be personal transformation, a day's progression, seasonal change, or any transition that interests you. How do you show change through visual comparison?"
+  },
+  {
+    "id": "visualStorytellingDays:3",
+    "title": "Character Creation",
+    "theme": "Personality",
+    "prompt": "Develop a character through visual art - this could be a version of yourself, someone you know, or an imaginary being. What visual elements (clothing, posture, environment, symbols) reveal personality and story?"
+  },
+  {
+    "id": "visualStorytellingDays:4",
+    "title": "Wordless Comic Strip",
+    "theme": "Sequence",
+    "prompt": "Create a 3-6 panel comic strip that tells a story without using any words. How do you convey action, emotion, and narrative progression through images alone? What story emerges through sequence?"
+  },
+  {
+    "id": "visualStorytellingDays:5",
+    "title": "Emotional Journey Map",
+    "theme": "Internal Narrative",
+    "prompt": "Create a visual map of an emotional journey - perhaps working through a challenge, falling in love, or processing grief. How do you make internal experiences visible through imagery and composition?"
+  },
+  {
+    "id": "visualStorytellingDays:6",
+    "title": "Myth & Legend",
+    "theme": "Archetypal Stories",
+    "prompt": "Illustrate a scene from a myth, legend, or fairy tale that resonates with you. How do you bring ancient stories into your contemporary artistic voice? What universal themes speak to you?"
+  },
+  {
+    "id": "visualStorytellingDays:7",
+    "title": "Family Stories",
+    "theme": "Heritage",
+    "prompt": "Tell a story from your family history or cultural background through visual art. This might be a specific event, a tradition, or the essence of your heritage expressed through imagery."
+  },
+  {
+    "id": "visualStorytellingDays:8",
+    "title": "Dream Narrative",
+    "theme": "Subconscious Story",
+    "prompt": "Create a visual narrative based on a dream - your own or imagined. How do you capture the illogical flow and symbolic nature of dreams while still telling a coherent visual story?"
+  },
+  {
+    "id": "visualStorytellingDays:9",
+    "title": "Environmental Story",
+    "theme": "Place Narrative",
+    "prompt": "Tell the story of a place - your neighborhood, a natural area, or somewhere meaningful to you. How has this place changed over time? What stories do the walls, trees, or landscape hold?"
+  },
+  {
+    "id": "visualStorytellingDays:10",
+    "title": "Symbolic Journey",
+    "theme": "Metaphor",
+    "prompt": "Create a visual story using symbols and metaphors rather than literal representation. How might you tell the story of personal growth through the metaphor of a plant, or the story of overcoming challenges through weather imagery?"
+  },
+  {
+    "id": "visualStorytellingDays:11",
+    "title": "Future Fiction",
+    "theme": "Imagination",
+    "prompt": "Create a visual story set in the future - either your personal future or a broader vision of what's to come. What story do you want to tell about possibility, hope, technology, or human evolution?"
+  },
+  {
+    "id": "visualStorytellingDays:12",
+    "title": "Collaborative Story",
+    "theme": "Multiple Perspectives",
+    "prompt": "Tell the same story from two different perspectives or create art that invites the viewer to participate in creating the narrative. How do you make your artwork a dialogue rather than a monologue?"
+  },
+  {
+    "id": "visualStorytellingDays:13",
+    "title": "Micro-Story",
+    "theme": "Compression",
+    "prompt": "Tell a powerful story in the smallest format possible - maybe a tiny sketch, a single panel, or minimal imagery that implies a vast narrative. How much story can you compress into minimal visual space?"
+  },
+  {
+    "id": "visualStorytellingDays:14",
+    "title": "Interactive Narrative",
+    "theme": "Engagement",
+    "prompt": "Create a visual story that changes based on how someone looks at it - perhaps with hidden elements, multiple reading paths, or imagery that reveals different stories depending on viewing angle or distance."
+  },
+  {
+    "id": "visualStorytellingDays:15",
+    "title": "Personal Mythology",
+    "theme": "Life Story",
+    "prompt": "Create a visual representation of your personal mythology - the key stories, themes, and narratives that define your life journey. How do you tell the ongoing story of who you are and who you're becoming?"
+  }
+]

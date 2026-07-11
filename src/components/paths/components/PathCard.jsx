@@ -1,5 +1,6 @@
 // src/components/paths/components/PathCard.jsx - Updated for direct approach
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, Check } from 'lucide-react';
 
 const PathCard = ({
@@ -16,6 +17,7 @@ const PathCard = ({
   currentDay,
   hasStarted
 }) => {
+  const { t } = useTranslation('paths');
   const [showDays, setShowDays] = useState(false);
   
   // Calculate completion percentage
@@ -81,7 +83,7 @@ const PathCard = ({
           ></div>
         </div>
         <div className="path-progress-text">
-          {completedDays.length} of 10 days completed
+          {t('pathCard.progressText', '{{count}} of 10 days completed', { count: completedDays.length })}
         </div>
       </div>
       
@@ -120,15 +122,15 @@ const PathCard = ({
           }}
           className="path-action-button secondary"
         >
-          Details
+          {t('pathCard.details', 'Details')}
         </button>
-        
+
         <button
           onClick={handleContinueClick}
           className="path-action-button primary"
           data-testid={`continue-${pathId}`}
         >
-          {hasStarted ? 'Continue Journey' : 'Start Journey'}
+          {hasStarted ? t('pathCard.continueJourney', 'Continue Journey') : t('pathCard.startJourney', 'Start Journey')}
         </button>
         
         <button

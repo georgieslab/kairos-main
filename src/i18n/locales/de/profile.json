@@ -1,0 +1,59 @@
+{
+  "editProfile": {
+    "validation": {
+      "nameRequired": "Name ist erforderlich",
+      "nameMinLength": "Der Name muss mindestens 2 Zeichen lang sein",
+      "nameMaxLength": "Der Name darf höchstens 50 Zeichen lang sein",
+      "cityTooLong": "Der Stadtname ist zu lang",
+      "saveFailed": "Profil konnte nicht gespeichert werden. Bitte versuche es erneut."
+    },
+    "title": "Profil bearbeiten",
+    "subtitle": "Aktualisiere deine persönlichen Daten",
+    "close": "Schließen",
+    "avatarLabel": "Profilavatar",
+    "changeAvatar": "Avatar ändern",
+    "avatarHint": "Klicke, um Stil, Muster und Schriftart deines Avatars anzupassen",
+    "displayNameLabel": "Anzeigename *",
+    "displayNamePlaceholder": "Gib deinen Namen ein",
+    "displayNameHint": "So wirst du in der ganzen App angesprochen",
+    "emailLabel": "E-Mail-Adresse",
+    "emailHint": "E-Mail kann hier nicht geändert werden. Kontaktiere bei Bedarf den Support.",
+    "cityLabel": "Stadt / Standort",
+    "cityPlaceholder": "z. B. Berlin",
+    "cityHint": "Wird für Wetterinformationen und Personalisierung verwendet",
+    "cancel": "Abbrechen",
+    "saving": "Wird gespeichert...",
+    "saveChanges": "Änderungen speichern"
+  },
+  "profileScreen": {
+    "defaultDisplayName": "Journaler",
+    "recently": "Kürzlich",
+    "artisan": "Artisan",
+    "since": "Seit {{date}}",
+    "editProfile": "Profil bearbeiten",
+    "stats": {
+      "entries": "Einträge",
+      "dayStreak": "Tage-Serie",
+      "active": "Aktiv",
+      "completed": "Abgeschlossen"
+    },
+    "activeJourneys": "Aktive Reisen",
+    "viewAll": "Alle anzeigen",
+    "dayOf": "Tag {{day}} von {{total}}",
+    "moodBoard": "Stimmungsbild",
+    "achievements": "Erfolge",
+    "pts": "{{score}} Pkt.",
+    "plusPts": "+{{points}} Pkt.",
+    "journalAndData": "Journal & Daten",
+    "myJournals": "Meine Journale",
+    "registerJournal": "Journal registrieren",
+    "new": "Neu",
+    "archive": "Archiv",
+    "settings": "Einstellungen",
+    "helpAndSupport": "Hilfe & Support",
+    "aboutKairos": "Über Καιρός",
+    "signOut": "Abmelden",
+    "signOutConfirm": "Möchtest du dich wirklich von Καιρός abmelden?",
+    "cancel": "Abbrechen"
+  }
+}

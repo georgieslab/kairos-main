@@ -1,8 +1,9 @@
-a// src/components/dashboard/UserDashboard.jsx
+// src/components/dashboard/UserDashboard.jsx
 
 import React, { useState, useEffect } from 'react';
-import { 
-  BarChart, 
+import { useTranslation } from 'react-i18next';
+import {
+  BarChart,
   PieChart, 
   Calendar, 
   Award, 
@@ -17,6 +18,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getPreviousEntries, generateProgressReport } from '../../services/claudeService';
 
 const UserDashboard = () => {
+  const { t } = useTranslation('dashboard');
   const { currentUser, userProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [journalEntries, setJournalEntries] = useState([]);
@@ -170,9 +172,9 @@ const UserDashboard = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Your Journal Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('header.title', 'Your Journal Dashboard')}</h1>
           <p className="text-gray-400">
-            Track your journaling progress and insights
+            {t('header.subtitle', 'Track your journaling progress and insights')}
           </p>
         </div>
         
@@ -182,49 +184,49 @@ const UserDashboard = () => {
           <div className="glass-card p-4 flex flex-col">
             <div className="flex items-center mb-2">
               <BookOpen className="w-5 h-5 text-emerald-500 mr-2" />
-              <span className="text-sm text-gray-400">Total Entries</span>
+              <span className="text-sm text-gray-400">{t('stats.totalEntries', 'Total Entries')}</span>
             </div>
             <span className="text-3xl font-bold">{stats.totalEntries}</span>
             <span className="text-xs text-gray-500 mt-2">
-              {stats.totalEntries === 10 ? 'Journey Completed!' : `${stats.completionRate}% of journey complete`}
+              {stats.totalEntries === 10 ? t('stats.journeyCompleted', 'Journey Completed!') : t('stats.percentComplete', '{{percent}}% of journey complete', { percent: stats.completionRate })}
             </span>
           </div>
-          
+
           {/* Current Streak */}
           <div className="glass-card p-4 flex flex-col">
             <div className="flex items-center mb-2">
               <Award className="w-5 h-5 text-emerald-500 mr-2" />
-              <span className="text-sm text-gray-400">Current Streak</span>
+              <span className="text-sm text-gray-400">{t('stats.currentStreak', 'Current Streak')}</span>
             </div>
             <span className="text-3xl font-bold">{stats.streakDays}</span>
             <span className="text-xs text-gray-500 mt-2">
-              {stats.streakDays > 1 ? `${stats.streakDays} days in a row` : 'days in a row'}
+              {stats.streakDays > 1 ? t('stats.daysInARowCount', '{{count}} days in a row', { count: stats.streakDays }) : t('stats.daysInARow', 'days in a row')}
             </span>
           </div>
-          
+
           {/* Most Common Theme */}
           <div className="glass-card p-4 flex flex-col">
             <div className="flex items-center mb-2">
               <TrendingUp className="w-5 h-5 text-emerald-500 mr-2" />
-              <span className="text-sm text-gray-400">Top Theme</span>
+              <span className="text-sm text-gray-400">{t('stats.topTheme', 'Top Theme')}</span>
             </div>
             <span className="text-lg font-bold truncate">
-              {stats.mostCommonThemes[0] || 'None yet'}
+              {stats.mostCommonThemes[0] || t('stats.noneYet', 'None yet')}
             </span>
             <span className="text-xs text-gray-500 mt-2">
-              Based on your journal content
+              {t('stats.basedOnJournalContent', 'Based on your journal content')}
             </span>
           </div>
-          
+
           {/* Most Productive Day */}
           <div className="glass-card p-4 flex flex-col">
             <div className="flex items-center mb-2">
               <Calendar className="w-5 h-5 text-emerald-500 mr-2" />
-              <span className="text-sm text-gray-400">Best Journaling Day</span>
+              <span className="text-sm text-gray-400">{t('stats.bestJournalingDay', 'Best Journaling Day')}</span>
             </div>
-            <span className="text-lg font-bold">{stats.mostProductiveDay}</span>
+            <span className="text-lg font-bold">{t(`days.${stats.mostProductiveDay}`, stats.mostProductiveDay)}</span>
             <span className="text-xs text-gray-500 mt-2">
-              You journal most frequently on this day
+              {t('stats.mostFrequentDay', 'You journal most frequently on this day')}
             </span>
           </div>
         </div>
@@ -240,9 +242,9 @@ const UserDashboard = () => {
             }`}
           >
             <BarChart className="w-4 h-4 mr-2" />
-            Overview
+            {t('tabs.overview', 'Overview')}
           </button>
-          
+
           <button
             onClick={() => setActiveTab('insights')}
             className={`px-4 py-3 font-medium text-sm flex items-center whitespace-nowrap ${
@@ -252,9 +254,9 @@ const UserDashboard = () => {
             }`}
           >
             <PieChart className="w-4 h-4 mr-2" />
-            Key Insights
+            {t('tabs.keyInsights', 'Key Insights')}
           </button>
-          
+
           <button
             onClick={() => setActiveTab('entries')}
             className={`px-4 py-3 font-medium text-sm flex items-center whitespace-nowrap ${
@@ -264,7 +266,7 @@ const UserDashboard = () => {
             }`}
           >
             <BookOpen className="w-4 h-4 mr-2" />
-            Past Entries
+            {t('tabs.pastEntries', 'Past Entries')}
           </button>
         </div>
         

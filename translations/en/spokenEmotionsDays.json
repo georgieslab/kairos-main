@@ -1,0 +1,86 @@
+[
+  {
+    "id": "spokenEmotionsDays:1",
+    "title": "The Language of Feelings",
+    "theme": "Emotional Vocabulary",
+    "prompt": "Speak about your current emotional state using rich, descriptive language. Go beyond 'good' or 'bad' - what nuanced emotions are you experiencing?"
+  },
+  {
+    "id": "spokenEmotionsDays:2",
+    "title": "Joy in Your Voice",
+    "theme": "Vocal Joy",
+    "prompt": "Think of something that brings you pure joy and speak about it. Notice how happiness changes your vocal tone, pace, and energy."
+  },
+  {
+    "id": "spokenEmotionsDays:3",
+    "title": "Speaking Through Sadness",
+    "theme": "Vocal Sadness",
+    "prompt": "Allow yourself to speak about something that makes you sad. How does your voice carry grief? What healing happens through vocal expression?"
+  },
+  {
+    "id": "spokenEmotionsDays:4",
+    "title": "The Sound of Anger",
+    "theme": "Vocal Anger",
+    "prompt": "Speak about something that frustrates or angers you. Notice how you can express anger in your voice while maintaining respect and clarity."
+  },
+  {
+    "id": "spokenEmotionsDays:5",
+    "title": "Fear's Whisper",
+    "theme": "Vocal Fear",
+    "prompt": "Talk about a fear you have. How does fear affect your voice? What happens when you speak your fears aloud instead of keeping them inside?"
+  },
+  {
+    "id": "spokenEmotionsDays:6",
+    "title": "Excitement and Anticipation",
+    "theme": "Vocal Excitement",
+    "prompt": "Speak about something you're looking forward to. Let your voice bubble with excitement and anticipation. How does hope sound in your voice?"
+  },
+  {
+    "id": "spokenEmotionsDays:7",
+    "title": "The Calm Within",
+    "theme": "Vocal Peace",
+    "prompt": "Find a moment of inner peace and speak from that place. What does serenity sound like in your voice? How can you access this calm through speech?"
+  },
+  {
+    "id": "spokenEmotionsDays:8",
+    "title": "Surprise and Wonder",
+    "theme": "Vocal Wonder",
+    "prompt": "Speak about something that amazes or surprises you. Let wonder and curiosity color your voice. How does awe change your vocal expression?"
+  },
+  {
+    "id": "spokenEmotionsDays:9",
+    "title": "Love's Many Voices",
+    "theme": "Vocal Love",
+    "prompt": "Talk about different types of love in your life - romantic, familial, friendship, self-love. How does your voice express different forms of love?"
+  },
+  {
+    "id": "spokenEmotionsDays:10",
+    "title": "Confusion and Clarity",
+    "theme": "Vocal Uncertainty",
+    "prompt": "Speak about something you're uncertain about. Notice how your voice can hold both confusion and the search for clarity."
+  },
+  {
+    "id": "spokenEmotionsDays:11",
+    "title": "Pride and Accomplishment",
+    "theme": "Vocal Pride",
+    "prompt": "Talk about something you're proud of. How does your voice carry confidence and self-appreciation? What achievements deserve vocal celebration?"
+  },
+  {
+    "id": "spokenEmotionsDays:12",
+    "title": "Shame and Forgiveness",
+    "theme": "Vocal Healing",
+    "prompt": "Gently speak about something you're working to forgive yourself for. How can your voice offer yourself compassion and healing?"
+  },
+  {
+    "id": "spokenEmotionsDays:13",
+    "title": "Emotional Complexity",
+    "theme": "Vocal Nuance",
+    "prompt": "Speak about a situation where you felt multiple emotions at once. How can your voice hold complexity and contradiction?"
+  },
+  {
+    "id": "spokenEmotionsDays:14",
+    "title": "Your Emotional Voice",
+    "theme": "Vocal Integration",
+    "prompt": "Reflect on how your voice has become a tool for emotional expression and healing. What have you learned about the relationship between voice and feeling?"
+  }
+]

@@ -1,0 +1,124 @@
+{
+  "theme": {
+    "dark": "Dunkel",
+    "light": "Hell"
+  },
+  "language": {
+    "title": "Sprache",
+    "description": "Wähle deine bevorzugte App-Sprache",
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "subscriptionSection": {
+    "upgradeError": "Fehler beim Starten des Upgrades. Bitte versuche es erneut.",
+    "portalError": "Fehler beim Öffnen der Verwaltung.",
+    "sectionTitle": "Abonnement",
+    "loading": "Abonnement wird geladen…",
+    "artisanTitle": "Artisan-Mitglied",
+    "artisanDescription": "Du hast Zugriff auf alle Premium-Funktionen",
+    "manageButton": "Abo verwalten",
+    "freeTitle": "Kostenloser Plan",
+    "freeDescription": "Upgrade auf Artisan für unbegrenzte Funktionen",
+    "upgradeButton": "Auf Artisan upgraden"
+  },
+  "profile": {
+    "avatarUpdateSuccess": "Avatar erfolgreich aktualisiert!",
+    "avatarUpdateError": "Avatar konnte nicht aktualisiert werden.",
+    "saveSuccess": "Einstellungen erfolgreich gespeichert!",
+    "saveError": "Einstellungen konnten nicht gespeichert werden.",
+    "sectionTitle": "Profil",
+    "displayNameLabel": "Anzeigename",
+    "displayNamePlaceholder": "Dein Name",
+    "emailLabel": "E-Mail-Adresse",
+    "emailHint": "E-Mail kann nicht geändert werden",
+    "birthdayLabel": "Geburtstag",
+    "optional": "Optional",
+    "cityLabel": "Stadt",
+    "cityPlaceholder": "Gib deine Stadt ein",
+    "saving": "Wird gespeichert…",
+    "saveChanges": "Änderungen speichern"
+  },
+  "dataPrivacy": {
+    "exportSuccess": "Daten erfolgreich exportiert!",
+    "exportError": "Daten konnten nicht exportiert werden.",
+    "sectionTitle": "Daten & Datenschutz",
+    "journalEntriesLabel": "Journaleinträge",
+    "insightsGeneratedLabel": "Erstellte Einblicke",
+    "exportButton": "Meine Daten exportieren",
+    "deleteAccountButton": "Konto löschen"
+  },
+  "deleteAccount": {
+    "errorEnterPassword": "Bitte gib dein Passwort ein",
+    "errorTypeDelete": "Bitte gib DELETE ein, um zu bestätigen",
+    "progressVerifying": "Deine Identität wird überprüft...",
+    "progressDeletingEntries": "Journaleinträge werden gelöscht...",
+    "progressRemovingFiles": "Hochgeladene Dateien werden entfernt...",
+    "progressDeletingProfile": "Dein Profil wird gelöscht...",
+    "progressDone": "Konto erfolgreich gelöscht",
+    "errorGeneric": "Konto konnte nicht gelöscht werden",
+    "errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "step1Title": "Konto löschen",
+    "step1Subtitle": "Diese Aktion kann nicht rückgängig gemacht werden",
+    "willDeleteTitle": "Dies wird dauerhaft gelöscht:",
+    "calculating": "Deine Daten werden berechnet...",
+    "journalEntriesCount": "{{count}} Journaleinträge",
+    "allPhotos": "Alle hochgeladenen Fotos und Bilder",
+    "allVoice": "Alle Sprachaufnahmen",
+    "profileAndPrefs": "Dein Profil und deine Einstellungen",
+    "aiInsights": "Alle KI-generierten Einblicke",
+    "cancel": "Abbrechen",
+    "continue": "Weiter",
+    "step2Title": "Identität bestätigen",
+    "step2Subtitle": "Gib dein Passwort ein, um fortzufahren",
+    "passwordLabel": "Passwort",
+    "passwordPlaceholder": "Gib dein Passwort ein",
+    "back": "Zurück",
+    "step3Title": "Letzte Bestätigung",
+    "step3Subtitle": "Dies ist deine letzte Chance zum Abbrechen",
+    "typeToConfirmPrefix": "Um die Löschung zu bestätigen, gib",
+    "typeToConfirmSuffix": "unten ein:",
+    "confirmPlaceholder": "Gib DELETE ein, um zu bestätigen",
+    "deleteForever": "Mein Konto endgültig löschen",
+    "step4Title": "Konto wird gelöscht...",
+    "step4Subtitle": "Bitte schließe dieses Fenster nicht",
+    "step5Title": "Konto gelöscht",
+    "step5Subtitle": "Deine Daten wurden dauerhaft entfernt",
+    "thankYou": "Danke, dass du Καιρός genutzt hast.",
+    "redirecting": "Weiterleitung zum Willkommensbildschirm..."
+  },
+  "notifications": {
+    "updateSuccess": "Benachrichtigungseinstellungen aktualisiert!",
+    "updateError": "Einstellungen konnten nicht aktualisiert werden.",
+    "dailyReminderTitle": "Tägliche Journaling-Erinnerung",
+    "dailyReminderDescription": "Lass dich jeden Tag ans Journaling erinnern",
+    "weeklyInsightsTitle": "Wöchentliche Einblick-Zusammenfassung",
+    "weeklyInsightsDescription": "Erhalte jede Woche KI-Einblicke",
+    "pathCompletionTitle": "Pfad-Abschluss-Benachrichtigungen",
+    "pathCompletionDescription": "Feiere, wenn du eine Reise abschließt"
+  },
+  "account": {
+    "unknown": "Unbekannt",
+    "defaultName": "Journaler",
+    "loading": "Wird geladen…",
+    "artisan": "Artisan",
+    "freePlan": "Kostenloser Plan",
+    "since": "Seit {{date}}"
+  },
+  "header": {
+    "title": "Einstellungen",
+    "subtitle": "Verwalte dein Konto & deine Einstellungen"
+  },
+  "preferences": {
+    "sectionTitle": "Präferenzen",
+    "themeTitle": "Design",
+    "themeDescription": "Wähle dein bevorzugtes Farbschema"
+  },
+  "helpAbout": {
+    "sectionTitle": "Hilfe & Über",
+    "contactSupport": "Support kontaktieren",
+    "faqHelpCenter": "FAQ & Hilfe-Center",
+    "termsOfService": "Nutzungsbedingungen",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "aboutKairos": "Über Καιρός"
+  }
+}

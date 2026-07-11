@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
 const PathDaysList = ({ days, completedDays = [], currentDay, onSelectDay, pathId }) => {
+  const { t } = useTranslation('paths');
   const isDayCompleted = (day) => {
     return (completedDays || []).includes(day);
   };
@@ -18,7 +20,7 @@ const PathDaysList = ({ days, completedDays = [], currentDay, onSelectDay, pathI
             {isDayCompleted(day.day) && (
               <CheckCircle className="day-completed-icon" />
             )}
-            Day {day.day}
+            {t('pathDaysList.dayLabel', 'Day {{day}}', { day: day.day })}
           </div>
           <div className="day-content">
             <div className="day-title">{day.title}</div>

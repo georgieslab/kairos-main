@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   User, 
@@ -24,7 +25,9 @@ import { db } from '../../config/firebase';
 import { callClaudeApi, safeJsonParse } from '../../utils/apiUtils';
 
 const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
+  const { t, i18n } = useTranslation('analytics');
   const { currentUser, userProfile } = useAuth();
+  const autoRegenLangRef = useRef(null);
   const [personDescription, setPersonDescription] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastGenerated, setLastGenerated] = useState(null);
@@ -194,6 +197,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
         totalEntriesAtTime: totalEntries,
         currentStreakAtTime: progressStats?.currentStreak || 0,
         pathsAnalyzed: [...new Set(entries.map(e => e.pathId).filter(Boolean))],
+        language: i18n.language, // language this description was generated in
         timestamp: Date.now()
       };
 
@@ -215,11 +219,23 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
 
     } catch (error) {
       console.error('Error generating person description:', error);
-      setError('Failed to generate personality description. Please try again.');
+      setError(t('aiPersonDescription.generateError', 'Failed to generate personality description. Please try again.'));
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Regenerate the personality description in the current app language when the
+  // stored one was generated in a different language (e.g. user switched to
+  // German). Older descriptions have no `language` field — treat them as English.
+  useEffect(() => {
+    if (!personDescription || isLoading) return;
+    const generatedLang = personDescription.language || 'en';
+    if (generatedLang === i18n.language) return;
+    if (autoRegenLangRef.current === i18n.language) return; // already handled this switch
+    autoRegenLangRef.current = i18n.language;
+    generatePersonDescription();
+  }, [personDescription, i18n.language, isLoading]);
 
   // Don't show if user has less than 5 entries
   if (totalEntries < 5) {
@@ -244,9 +260,9 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
             <Sparkles className="person-sparkle-icon" />
           </div>
           <div className="person-header-content">
-            <h3 className="person-title">AI Personality Insight</h3>
+            <h3 className="person-title">{t('aiPersonDescription.title', 'AI Personality Insight')}</h3>
             <p className="person-subtitle">
-              Comprehensive personality analysis based on your journaling journey
+              {t('aiPersonDescription.subtitle', 'Comprehensive personality analysis based on your journaling journey')}
             </p>
           </div>
           <div className="person-actions">
@@ -256,11 +272,11 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
               disabled={isLoading}
               className={`regenerate-button ${suggestRegeneration ? 'suggest-update' : ''}`}
               title={
-                suggestRegeneration 
-                  ? `${entryDifference} new entries available - click to update analysis` 
-                  : suggestTimeRegeneration 
-                  ? 'Weekly refresh available' 
-                  : 'Regenerate personality analysis'
+                suggestRegeneration
+                  ? t('aiPersonDescription.newEntriesAvailable', '{{count}} new entries available - click to update analysis', { count: entryDifference })
+                  : suggestTimeRegeneration
+                  ? t('aiPersonDescription.weeklyRefreshAvailable', 'Weekly refresh available')
+                  : t('aiPersonDescription.regenerateTitle', 'Regenerate personality analysis')
               }
             >
               {suggestRegeneration && <Zap size={14} />}
@@ -276,8 +292,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
             <div className="update-notification-content">
               <Zap size={16} className="update-icon" />
               <span className="update-text">
-                <strong>{entryDifference} new entries</strong> available since your last personality analysis. 
-                Click refresh for updated insights!
+                <strong>{t('aiPersonDescription.newEntriesCount', '{{count}} new entries', { count: entryDifference })}</strong> {t('aiPersonDescription.availableSinceLastAnalysis', 'available since your last personality analysis. Click refresh for updated insights!')}
               </span>
             </div>
           </div>
@@ -290,10 +305,9 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
               <div className="prompt-icon">
                 <Brain size={32} />
               </div>
-              <h4 className="prompt-title">Discover Your Personality Profile</h4>
+              <h4 className="prompt-title">{t('aiPersonDescription.discoverTitle', 'Discover Your Personality Profile')}</h4>
               <p className="prompt-description">
-                Get a comprehensive AI analysis of your personality based on {totalEntries} journal entries. 
-                This insight reveals your strengths, values, communication style, and unique qualities.
+                {t('aiPersonDescription.discoverDescription', 'Get a comprehensive AI analysis of your personality based on {{count}} journal entries. This insight reveals your strengths, values, communication style, and unique qualities.', { count: totalEntries })}
               </p>
               <button
                 onClick={generatePersonDescription}
@@ -301,7 +315,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 className="generate-button"
               >
                 <Sparkles size={18} />
-                Generate My Profile
+                {t('aiPersonDescription.generateButton', 'Generate My Profile')}
               </button>
             </div>
           </div>
@@ -311,9 +325,9 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
           <div className="loading-state">
             <div className="loading-content">
               <Loader className="loading-spinner-large" />
-              <h4 className="loading-title">Analyzing Your Personality</h4>
+              <h4 className="loading-title">{t('aiPersonDescription.analyzingTitle', 'Analyzing Your Personality')}</h4>
               <p className="loading-description">
-                Reading through your {totalEntries} journal entries to understand who you are...
+                {t('aiPersonDescription.analyzingDescription', 'Reading through your {{count}} journal entries to understand who you are...', { count: totalEntries })}
               </p>
             </div>
           </div>
@@ -323,7 +337,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
           <div className="error-state">
             <p className="error-message">{error}</p>
             <button onClick={generatePersonDescription} className="retry-button">
-              Try Again
+              {t('aiPersonDescription.tryAgain', 'Try Again')}
             </button>
           </div>
         )}
@@ -336,7 +350,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 <Star size={20} />
               </div>
               <div className="summary-content">
-                <h4 className="section-title">Who You Are</h4>
+                <h4 className="section-title">{t('aiPersonDescription.whoYouAre', 'Who You Are')}</h4>
                 <p className="summary-text">{personDescription.overallSummary}</p>
               </div>
             </div>
@@ -347,7 +361,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 <Heart size={20} />
               </div>
               <div className="section-content">
-                <h4 className="section-title">Core Personality</h4>
+                <h4 className="section-title">{t('aiPersonDescription.corePersonality', 'Core Personality')}</h4>
                 <p className="section-text">{personDescription.corePersonality}</p>
               </div>
             </div>
@@ -358,7 +372,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 <Shield size={20} />
               </div>
               <div className="section-content">
-                <h4 className="section-title">Your Key Strengths</h4>
+                <h4 className="section-title">{t('aiPersonDescription.keyStrengths', 'Your Key Strengths')}</h4>
                 <div className="strengths-grid">
                   {personDescription.strengths?.map((strength, index) => (
                     <div key={index} className="strength-item">
@@ -377,7 +391,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 className="expand-toggle"
               >
                 <Eye size={18} />
-                {isExpanded ? 'Show Less' : 'Show Full Analysis'}
+                {isExpanded ? t('aiPersonDescription.showLess', 'Show Less') : t('aiPersonDescription.showFullAnalysis', 'Show Full Analysis')}
               </button>
 
               {isExpanded && (
@@ -386,7 +400,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Target size={18} />
-                        <h5>Values & Motivations</h5>
+                        <h5>{t('aiPersonDescription.valuesAndMotivations', 'Values & Motivations')}</h5>
                       </div>
                       <p>{personDescription.valuesAndMotivations}</p>
                     </div>
@@ -394,7 +408,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Palette size={18} />
-                        <h5>Communication Style</h5>
+                        <h5>{t('aiPersonDescription.communicationStyle', 'Communication Style')}</h5>
                       </div>
                       <p>{personDescription.communicationStyle}</p>
                     </div>
@@ -402,7 +416,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Mountain size={18} />
-                        <h5>Growth Mindset</h5>
+                        <h5>{t('aiPersonDescription.growthMindset', 'Growth Mindset')}</h5>
                       </div>
                       <p>{personDescription.growthMindset}</p>
                     </div>
@@ -410,7 +424,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Heart size={18} />
-                        <h5>Emotional Intelligence</h5>
+                        <h5>{t('aiPersonDescription.emotionalIntelligence', 'Emotional Intelligence')}</h5>
                       </div>
                       <p>{personDescription.emotionalIntelligence}</p>
                     </div>
@@ -418,7 +432,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Compass size={18} />
-                        <h5>Life Philosophy</h5>
+                        <h5>{t('aiPersonDescription.lifePhilosophy', 'Life Philosophy')}</h5>
                       </div>
                       <p>{personDescription.lifePhilosophy}</p>
                     </div>
@@ -426,7 +440,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                     <div className="analysis-item">
                       <div className="analysis-header">
                         <Star size={18} />
-                        <h5>Unique Qualities</h5>
+                        <h5>{t('aiPersonDescription.uniqueQualities', 'Unique Qualities')}</h5>
                       </div>
                       <p>{personDescription.uniqueQualities}</p>
                     </div>
@@ -443,15 +457,15 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                   {/* ✅ NEW: Show current vs cached entry count intelligently */}
                   {suggestRegeneration ? (
                     <>
-                      Based on {personDescription.basedOnEntries || 0} entries 
+                      {t('aiPersonDescription.basedOnEntries', 'Based on {{count}} entries', { count: personDescription.basedOnEntries || 0 })}
                       <span className="entries-update-available">
-                        ({totalEntries} total • {entryDifference} new)
+                        {t('aiPersonDescription.totalAndNew', '({{total}} total • {{new}} new)', { total: totalEntries, new: entryDifference })}
                       </span>
                     </>
                   ) : (
-                    <>Based on {totalEntries} entries</>
+                    <>{t('aiPersonDescription.basedOnEntries', 'Based on {{count}} entries', { count: totalEntries })}</>
                   )}
-                  {lastGenerated && ` • Generated ${lastGenerated.toLocaleDateString()}`}
+                  {lastGenerated && ` • ${t('aiPersonDescription.generatedOn', 'Generated {{date}}', { date: lastGenerated.toLocaleDateString() })}`}
                 </span>
               </div>
               
@@ -460,7 +474,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
                 <div className="metadata-item regenerate-hint active">
                   <Zap size={14} />
                   <span>
-                    <strong>Update recommended:</strong> {entryDifference} new entries since last analysis
+                    <strong>{t('aiPersonDescription.updateRecommended', 'Update recommended:')}</strong> {t('aiPersonDescription.newEntriesSinceLastAnalysis', '{{count}} new entries since last analysis', { count: entryDifference })}
                   </span>
                 </div>
               )}
@@ -468,7 +482,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
               {suggestTimeRegeneration && !suggestRegeneration && (
                 <div className="metadata-item regenerate-hint">
                   <RefreshCw size={14} />
-                  <span>Weekly refresh available for updated insights</span>
+                  <span>{t('aiPersonDescription.weeklyRefreshHint', 'Weekly refresh available for updated insights')}</span>
                 </div>
               )}
             </div>

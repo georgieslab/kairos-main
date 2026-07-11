@@ -1,9 +1,12 @@
 // src/components/auth/AuthButton.jsx
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, Github, Chrome } from 'lucide-react';
 
 const AuthButton = ({ provider, onClick, isLoading }) => {
+  const { t } = useTranslation('auth');
+
   const getProviderIcon = () => {
     switch (provider) {
       case 'email':
@@ -19,18 +22,18 @@ const AuthButton = ({ provider, onClick, isLoading }) => {
 
   const getButtonText = () => {
     if (isLoading) {
-      return 'Loading...';
+      return t('authButton.loading', 'Loading...');
     }
 
     switch (provider) {
       case 'email':
-        return 'Continue with Email';
+        return t('authButton.continueWithEmail', 'Continue with Email');
       case 'google':
-        return 'Continue with Google';
+        return t('authButton.continueWithGoogle', 'Continue with Google');
       case 'github':
-        return 'Continue with GitHub';
+        return t('authButton.continueWithGithub', 'Continue with GitHub');
       default:
-        return 'Continue';
+        return t('authButton.continue', 'Continue');
     }
   };
 

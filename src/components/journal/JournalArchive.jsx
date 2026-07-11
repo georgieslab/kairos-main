@@ -1,54 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  BookOpen, 
-  ChevronRight, 
-  ArrowRight, 
-  Calendar, 
-  Eye, 
-  Search, 
-  Filter, 
-  Calendar as CalendarIcon,
-  SortDesc, 
-  Hash,
+// src/components/journal/JournalArchive.jsx
+// Apple Spatial Glass design – no hard shadows, RGB theming, GPU animations
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  BookOpen,
+  ChevronRight,
+  Calendar,
+  Search,
+  Filter,
+  SortDesc,
   X,
-  Heart,
-  ArrowLeft,
-  Map,
-  Layers3,
+  Layers,
   Clock,
   Star,
-  Bookmark,
-  Plus,
   Mic,
-  Archive
+  TrendingUp,
+  Flame,
+  BookMarked,
+  Sparkles,
+  ChevronDown,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getPreviousEntries } from '../../services/claudeService';
 import { getJourneyPath } from '../../data/JourneyData';
 import { useTheme } from '../../contexts/ThemeContext';
 import TopBar from '../common/TopBar';
-
 import '../../styles/components/journal-archive.css';
 
 const JournalArchive = ({ onBack, onSelectDay }) => {
+  const { t } = useTranslation('journal');
   const { currentUser } = useAuth();
   const { isDarkMode } = useTheme();
+
   const [entries, setEntries] = useState([]);
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Simplified state management
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Filter state
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'recent', 'favorites'
+  const [activeFilter, setActiveFilter] = useState('all');
   const [selectedPath, setSelectedPath] = useState('all');
   const [sortOrder, setSortOrder] = useState('newest');
   const [showFilterModal, setShowFilterModal] = useState(false);
-  
-  // Quick filters
+
   const quickFilters = [
-    { id: 'all', label: 'All', icon: Layers3 },
-    { id: 'recent', label: 'Recent', icon: Clock },
-    { id: 'favorites', label: 'Favorites', icon: Star }
+    { id: 'all', label: t('archive.filters.all', 'All Entries'), icon: Layers },
+    { id: 'recent', label: t('archive.filters.recent', 'This Week'), icon: Clock },
+    { id: 'favorites', label: t('archive.filters.favorites', 'Favorites'), icon: Star },
   ];
 
   const [uniquePaths, setUniquePaths] = useState([]);
@@ -56,308 +56,224 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
     totalEntries: 0,
     currentStreak: 0,
     totalPaths: 0,
-    thisWeek: 0
+    thisWeek: 0,
   });
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      if (!currentUser) return;
-      
-      try {
-        setIsLoading(true);
-        const journalEntries = await getPreviousEntries(currentUser.uid);
-        
-        const processedEntries = journalEntries.map(entry => ({
-          ...entry,
-          pathId: entry.pathId || 'self-discovery',
-          isFavorite: entry.isFavorite || false // Add favorite status
-        }));
-        
-        const sortedEntries = processedEntries.sort((a, b) => b.day - a.day);
-        
-        setEntries(sortedEntries);
-        setFilteredEntries(sortedEntries);
-        
-        // Extract unique paths
-        const paths = [...new Set(processedEntries.map(entry => entry.pathId).filter(Boolean))];
-        setUniquePaths(paths);
-        
-        // Calculate stats
-        const now = new Date();
-        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        const thisWeekEntries = processedEntries.filter(entry => {
-          const entryDate = entry.timestamp?.toDate ? entry.timestamp.toDate() : new Date(entry.timestamp);
-          return entryDate >= oneWeekAgo;
-        });
-        
-        setStats({
-          totalEntries: processedEntries.length,
-          currentStreak: calculateStreak(processedEntries),
-          totalPaths: paths.length,
-          thisWeek: thisWeekEntries.length
-        });
-        
-      } catch (error) {
-        console.error('Error fetching entries:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchEntries();
-  }, [currentUser]);
-
-  // Calculate current streak
-  const calculateStreak = (entries) => {
-    if (entries.length === 0) return 0;
-    
-    const sortedByDate = entries.sort((a, b) => {
-      const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-      const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
-      return dateB - dateA;
+  // Helper: calculate streak
+  const calculateStreak = (entriesArray) => {
+    if (entriesArray.length === 0) return 0;
+    const sorted = [...entriesArray].sort((a, b) => {
+      const da = a.timestamp?.toDate?.() || new Date(a.timestamp);
+      const db = b.timestamp?.toDate?.() || new Date(b.timestamp);
+      return db - da;
     });
-    
     let streak = 0;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
-    for (let i = 0; i < sortedByDate.length; i++) {
-      const entryDate = sortedByDate[i].timestamp?.toDate ? 
-        sortedByDate[i].timestamp.toDate() : new Date(sortedByDate[i].timestamp);
+    for (let i = 0; i < sorted.length; i++) {
+      const entryDate = sorted[i].timestamp?.toDate?.() || new Date(sorted[i].timestamp);
       entryDate.setHours(0, 0, 0, 0);
-      
-      const expectedDate = new Date(today.getTime() - (i * 24 * 60 * 60 * 1000));
-      
-      if (entryDate.getTime() === expectedDate.getTime()) {
-        streak++;
-      } else {
-        break;
-      }
+      const expected = new Date(today.getTime() - i * 86400000);
+      if (entryDate.getTime() === expected.getTime()) streak++;
+      else break;
     }
-    
     return streak;
   };
 
-  // Filter entries based on active filters
+  // Fetch entries
+  useEffect(() => {
+    const fetchEntries = async () => {
+      if (!currentUser) return;
+      try {
+        setIsLoading(true);
+        const journalEntries = await getPreviousEntries(currentUser.uid);
+        const processed = journalEntries.map(entry => ({
+          ...entry,
+          pathId: entry.pathId || 'self-discovery',
+          isFavorite: entry.isFavorite || false,
+        }));
+        const sorted = processed.sort((a, b) => b.day - a.day);
+        setEntries(sorted);
+        setFilteredEntries(sorted);
+
+        const paths = [...new Set(processed.map(e => e.pathId).filter(Boolean))];
+        setUniquePaths(paths);
+
+        const oneWeekAgo = new Date(Date.now() - 7 * 86400000);
+        const thisWeekEntries = processed.filter(entry => {
+          const d = entry.timestamp?.toDate?.() || new Date(entry.timestamp);
+          return d >= oneWeekAgo;
+        });
+
+        setStats({
+          totalEntries: processed.length,
+          currentStreak: calculateStreak(processed),
+          totalPaths: paths.length,
+          thisWeek: thisWeekEntries.length,
+        });
+      } catch (err) {
+        console.error('Error fetching entries:', err);
+      } finally {
+        setIsLoading(false);
+        setTimeout(() => setIsLoaded(true), 100);
+      }
+    };
+    fetchEntries();
+  }, [currentUser]);
+
+  // Filter & sort logic
   useEffect(() => {
     let result = [...entries];
-    
-    // Apply quick filters
     if (activeFilter === 'recent') {
-      const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      result = result.filter(entry => {
-        const entryDate = entry.timestamp?.toDate ? entry.timestamp.toDate() : new Date(entry.timestamp);
-        return entryDate >= oneWeekAgo;
+      const weekAgo = new Date(Date.now() - 7 * 86400000);
+      result = result.filter(e => {
+        const d = e.timestamp?.toDate?.() || new Date(e.timestamp);
+        return d >= weekAgo;
       });
     } else if (activeFilter === 'favorites') {
-      result = result.filter(entry => entry.isFavorite);
+      result = result.filter(e => e.isFavorite);
     }
-    
-    // Apply path filter
     if (selectedPath !== 'all') {
-      result = result.filter(entry => entry.pathId === selectedPath);
+      result = result.filter(e => e.pathId === selectedPath);
     }
-    
-    // Apply search
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(entry => 
-        (entry.theme && entry.theme.toLowerCase().includes(term)) ||
-        (entry.prompt && entry.prompt.toLowerCase().includes(term)) ||
-        (entry.analysis && entry.analysis.summary && entry.analysis.summary.toLowerCase().includes(term)) ||
-        (entry.transcription && entry.transcription.toLowerCase().includes(term)) // Include voice transcriptions
+      result = result.filter(e =>
+        (e.theme && e.theme.toLowerCase().includes(term)) ||
+        (e.prompt && e.prompt.toLowerCase().includes(term)) ||
+        (e.analysis?.summary && e.analysis.summary.toLowerCase().includes(term)) ||
+        (e.transcription && e.transcription.toLowerCase().includes(term))
       );
     }
-    
-    // Apply sorting
-    if (sortOrder === 'newest') {
-      result.sort((a, b) => {
-        const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-        const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
-        return dateB - dateA;
-      });
-    } else if (sortOrder === 'oldest') {
-      result.sort((a, b) => {
-        const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-        const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
-        return dateA - dateB;
-      });
-    }
-    
+    result.sort((a, b) => {
+      const da = a.timestamp?.toDate?.() || new Date(a.timestamp);
+      const db = b.timestamp?.toDate?.() || new Date(b.timestamp);
+      return sortOrder === 'newest' ? db - da : da - db;
+    });
     setFilteredEntries(result);
   }, [entries, activeFilter, selectedPath, searchTerm, sortOrder]);
 
   const formatDate = (timestamp) => {
     if (!timestamp) return 'No date';
-    
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+    const diffDays = Math.floor((now - date) / 86400000);
+    if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays <= 7) return `${diffDays} days ago`;
-    
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
     }).format(date);
   };
 
   const getPathInfo = (pathId) => {
     try {
-      const pathData = getJourneyPath(pathId);
-      return pathData || { 
-        title: 'Unknown Path', 
-        color: '43, 70, 60',
-        iconName: 'Book'
-      };
-    } catch (error) {
-      return { 
-        title: 'Unknown Path', 
-        color: '43, 70, 60',
-        iconName: 'Book'
-      };
+      const data = getJourneyPath(pathId);
+      return data || { title: 'Unknown Path', color: '168,85,247', iconName: 'Book' };
+    } catch {
+      return { title: 'Unknown Path', color: '168,85,247', iconName: 'Book' };
     }
   };
 
-  const getSentimentIcon = (entry) => {
-    if (!entry.analysis) return null;
-    
-    const summary = entry.analysis.summary?.toLowerCase() || '';
-    
-    if (summary.includes('gratitude') || summary.includes('happy') || summary.includes('positive')) {
-      return <Heart className="ja-sentiment-positive" />;
-    }
-    
-    return null;
+  const toggleFavorite = async (entryId) => {
+    setEntries(prev =>
+      prev.map(entry =>
+        entry.id === entryId ? { ...entry, isFavorite: !entry.isFavorite } : entry
+      )
+    );
+    // Optionally persist to backend here
   };
 
-  const toggleFavorite = (entryId) => {
-    // This would update the favorite status in the database
-    setEntries(prev => prev.map(entry => 
-      entry.id === entryId ? { ...entry, isFavorite: !entry.isFavorite } : entry
-    ));
-  };
-
+  // Loading skeleton
   if (isLoading) {
     return (
-      <div className={`ja-container ${isDarkMode ? 'ja-dark' : 'ja-light'}`}>
-        <div className="ja-header">
-          <button className="ja-back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="ja-title">Your Journal</h1>
-          <div className="ja-header-placeholder"></div>
-        </div>
-        
-        <div className="ja-loading-container">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="ja-entry-card ja-skeleton">
-              <div className="ja-card-header">
-                <div className="ja-skeleton-circle"></div>
-                <div className="ja-skeleton-content">
-                  <div className="ja-skeleton-line"></div>
-                  <div className="ja-skeleton-line ja-short"></div>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className={`ja-container glass ${isDarkMode ? 'dark' : 'light'}`}>
+        <div className="glass-loading">
+          <div className="glass-spinner" />
+          <p>{t('archive.loading', 'Loading your journal archive…')}</p>
         </div>
       </div>
     );
   }
 
+  // Empty state
   if (entries.length === 0) {
     return (
-      <div className={`ja-container ${isDarkMode ? 'ja-dark' : 'ja-light'}`}>
-        <div className="ja-header">
-          <button className="ja-back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="ja-title">Your Journal</h1>
-          <div className="ja-header-placeholder"></div>
-        </div>
-        
-        <div className="ja-empty-state">
-          <div className="ja-empty-icon">
-            <BookOpen size={48} />
-          </div>
-          <h2 className="ja-empty-title">No Entries Yet</h2>
-          <p className="ja-empty-message">
-            Start journaling to see your entries here
-          </p>
-          <button className="ja-start-btn" onClick={onBack}>
-            <Plus size={16} />
-            Start Writing
+      <div className={`ja-container glass ${isDarkMode ? 'dark' : 'light'}`}>
+        <TopBar title={t('archive.title', 'Journal Archive')} onBack={onBack} showBack />
+        <div className="glass-empty-state">
+          <BookOpen size={48} className="empty-icon" />
+          <h2>{t('archive.emptyState.title', 'No Entries Yet')}</h2>
+          <p>{t('archive.emptyState.description', 'Start your journaling journey – your entries will appear here.')}</p>
+          <button className="glass-button primary" onClick={onBack}>
+            <Sparkles size={18} /> {t('archive.emptyState.cta', 'Begin Writing')}
           </button>
         </div>
       </div>
     );
   }
 
+  // Main archive UI
   return (
-    <div className={`ja-container ${isDarkMode ? 'ja-dark' : 'ja-light'}`}>
-      {/* Top Bar */}
-      <TopBar 
-        title="Journal Archive"
-        subtitle={`${stats.totalEntries} entries across ${stats.totalPaths} paths`}
-        icon={Archive}
-        actions={
-          <>
-            <button className="ja-back-btn" onClick={onBack}>
-              <ArrowLeft size={20} />
-            </button>
-            <button 
-              className="icon-button"
-              onClick={() => setShowFilterModal(true)}
-            >
-              <Filter size={18} />
-            </button>
-          </>
+    <div className={`ja-container glass ${isDarkMode ? 'dark' : 'light'} ${isLoaded ? 'loaded' : ''}`}>
+      <TopBar
+        title={t('archive.title', 'Journal Archive')}
+        onBack={onBack}
+        showBack
+        rightElement={
+          <button className="glass-icon-btn" onClick={() => setShowFilterModal(true)}>
+            <Filter size={18} />
+          </button>
         }
       />
 
-      {/* Header */}
-      <div className="ja-header">
-        {/* Stats Cards */}
-        <div className="ja-stats-grid">
-        <div className="ja-stat-card">
-          <div className="ja-stat-value">{stats.totalEntries}</div>
-          <div className="ja-stat-label">Total Entries</div>
+      {/* Stats Grid */}
+      <div className="stats-grid">
+        <div className="stat-card">
+          <BookMarked size={20} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">{stats.totalEntries}</span>
+            <span className="stat-label">{t('archive.stats.entries', 'Entries')}</span>
+          </div>
         </div>
-        <div className="ja-stat-card">
-          <div className="ja-stat-value">{stats.currentStreak}</div>
-          <div className="ja-stat-label">Day Streak</div>
+        <div className="stat-card">
+          <Flame size={20} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">{stats.currentStreak}</span>
+            <span className="stat-label">{t('archive.stats.dayStreak', 'Day Streak')}</span>
+          </div>
         </div>
-        <div className="ja-stat-card">
-          <div className="ja-stat-value">{stats.totalPaths}</div>
-          <div className="ja-stat-label">Paths</div>
+        <div className="stat-card">
+          <TrendingUp size={20} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">{stats.totalPaths}</span>
+            <span className="stat-label">{t('archive.stats.paths', 'Paths')}</span>
+          </div>
         </div>
-        <div className="ja-stat-card">
-          <div className="ja-stat-value">{stats.thisWeek}</div>
-          <div className="ja-stat-label">This Week</div>
+        <div className="stat-card">
+          <Calendar size={20} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">{stats.thisWeek}</span>
+            <span className="stat-label">{t('archive.stats.thisWeek', 'This Week')}</span>
+          </div>
         </div>
-      </div>
       </div>
 
-      {/* Search */}
-      <div className="ja-search-section">
-        <div className="ja-search-bar">
-          <Search size={18} className="ja-search-icon" />
+      {/* Search Bar */}
+      <div className="search-section">
+        <div className="glass-search">
+          <Search size={18} className="search-icon" />
           <input
             type="text"
-            placeholder="Search your entries..."
+            placeholder={t('archive.search.placeholder', 'Search entries…')}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="ja-search-input"
+            onChange={e => setSearchTerm(e.target.value)}
+            className="search-input"
           />
           {searchTerm && (
-            <button 
-              className="ja-clear-btn"
-              onClick={() => setSearchTerm('')}
-            >
+            <button className="clear-search" onClick={() => setSearchTerm('')}>
               <X size={16} />
             </button>
           )}
@@ -365,104 +281,123 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
       </div>
 
       {/* Quick Filters */}
-      <div className="ja-quick-filters">
-        {quickFilters.map(filter => {
-          const Icon = filter.icon;
-          return (
-            <button
-              key={filter.id}
-              className={`ja-filter-chip ${activeFilter === filter.id ? 'ja-active' : ''}`}
-              onClick={() => setActiveFilter(filter.id)}
-            >
-              <Icon size={16} />
-              <span>{filter.label}</span>
+      <div className="filters-section">
+        <div className="quick-filters">
+          {quickFilters.map(filter => {
+            const Icon = filter.icon;
+            const isActive = activeFilter === filter.id;
+            return (
+              <button
+                key={filter.id}
+                className={`filter-chip ${isActive ? 'active' : ''}`}
+                onClick={() => setActiveFilter(filter.id)}
+              >
+                <Icon size={16} />
+                <span>{filter.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        {selectedPath !== 'all' && (
+          <div className="active-path-filter">
+            <span>{t('archive.filters.pathFilter', 'Path: {{path}}', { path: getPathInfo(selectedPath).title })}</span>
+            <button onClick={() => setSelectedPath('all')}>
+              <X size={14} />
             </button>
-          );
-        })}
+          </div>
+        )}
+      </div>
+
+      {/* Results Info */}
+      <div className="results-info">
+        <span>
+          {t('archive.results.count', '{{count}} {{noun}}', {
+            count: filteredEntries.length,
+            noun: filteredEntries.length === 1
+              ? t('archive.results.entrySingular', 'entry')
+              : t('archive.results.entryPlural', 'entries'),
+          })}
+        </span>
+        {sortOrder === 'oldest' && <span> • {t('archive.results.oldestFirstNote', 'Oldest first')}</span>}
       </div>
 
       {/* Entries List */}
-      <div className="ja-entries-section">
+      <div className="entries-section">
         {filteredEntries.length === 0 ? (
-          <div className="ja-no-results">
-            <p>No entries match your search</p>
-            <button 
-              className="ja-clear-filters-btn"
+          <div className="no-results">
+            <Search size={32} />
+            <p>{t('archive.noResults.message', 'No entries match your search')}</p>
+            <button
+              className="glass-button secondary"
               onClick={() => {
                 setSearchTerm('');
                 setActiveFilter('all');
                 setSelectedPath('all');
               }}
             >
-              Clear Filters
+              {t('archive.noResults.clearFilters', 'Clear Filters')}
             </button>
           </div>
         ) : (
-          <div className="ja-entries-list">
-            {filteredEntries.map((entry) => {
+          <div className="entries-list">
+            {filteredEntries.map((entry, idx) => {
               const pathInfo = getPathInfo(entry.pathId);
+              const pathColor = pathInfo.color || '168,85,247';
               return (
-                <div 
-                  key={`${entry.pathId}-${entry.day}`} 
-                  className="ja-entry-card"
+                <div
+                  key={`${entry.pathId}-${entry.day}-${idx}`}
+                  className="entry-card"
                   onClick={() => onSelectDay(entry.day, entry.pathId)}
+                  style={{ '--entry-color': pathColor, animationDelay: `${idx * 0.03}s` }}
                 >
-                  <div className="ja-card-header">
-                    <div 
-                      className="ja-day-badge"
-                      style={{
-                        backgroundColor: `rgba(${pathInfo.color}, 0.2)`,
-                        color: `rgb(${pathInfo.color})`
-                      }}
-                    >
-                      {entry.day}
+                  <div className="entry-accent" style={{ backgroundColor: `rgb(${pathColor})` }} />
+                  <div className="entry-main">
+                    <div className="entry-day">
+                      <span className="day-number">{entry.day}</span>
+                      <span className="day-label">{t('archive.entry.day', 'Day')}</span>
                     </div>
-                    
-                    <div className="ja-entry-content">
-                      <div className="ja-entry-title-row">
-                        <h3 className="ja-entry-title">
-                          {entry.isVoiceEntry && <Mic size={14} style={{ marginRight: '4px', display: 'inline' }} />}
-                          {entry.theme || `Day ${entry.day}`}
+                    <div className="entry-content">
+                      <div className="entry-header">
+                        <h3 className="entry-title">
+                          {entry.isVoiceEntry && <Mic size={14} className="voice-icon" />}
+                          {entry.theme || t('archive.entry.dayFallback', 'Day {{day}}', { day: entry.day })}
                         </h3>
-                        <div className="ja-entry-actions">
-                          {getSentimentIcon(entry)}
-                          <button
-                            className={`ja-favorite-btn ${entry.isFavorite ? 'ja-active' : ''}`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleFavorite(entry.id);
-                            }}
-                          >
-                            <Star size={14} />
-                          </button>
-                        </div>
+                        <button
+                          className={`favorite-btn ${entry.isFavorite ? 'favorited' : ''}`}
+                          onClick={e => {
+                            e.stopPropagation();
+                            toggleFavorite(entry.id);
+                          }}
+                        >
+                          <Star size={16} />
+                        </button>
                       </div>
-                      
-                      <p className="ja-entry-preview">
-                        {entry.isVoiceEntry && entry.transcription ? 
-                          entry.transcription.substring(0, 80) + '...' :
-                          entry.analysis?.summary ? 
-                            entry.analysis.summary.substring(0, 80) + '...' :
-                            entry.prompt?.substring(0, 80) + '...'
-                        }
+                      <p className="entry-preview">
+                        {entry.isVoiceEntry && entry.transcription
+                          ? entry.transcription.substring(0, 100) + (entry.transcription.length > 100 ? '…' : '')
+                          : entry.analysis?.summary
+                          ? entry.analysis.summary.substring(0, 100) + (entry.analysis.summary.length > 100 ? '…' : '')
+                          : entry.prompt?.substring(0, 100) + (entry.prompt?.length > 100 ? '…' : '')}
                       </p>
-                      
-                      <div className="ja-entry-meta">
-                        <span className="ja-entry-path" style={{ color: `rgb(${pathInfo.color})` }}>
+                      <div className="entry-meta">
+                        <span
+                          className="entry-path"
+                          style={{
+                            color: `rgb(${pathColor})`,
+                            backgroundColor: `rgba(${pathColor}, 0.12)`,
+                          }}
+                        >
                           {pathInfo.title}
                         </span>
-                        <span className="ja-entry-date">
-                          {formatDate(entry.timestamp)}
-                        </span>
+                        <span className="entry-date">{formatDate(entry.timestamp)}</span>
                         {entry.isVoiceEntry && (
-                          <span className="ja-entry-type" style={{ color: `rgb(${pathInfo.color})` }}>
-                            🎤 Voice
+                          <span className="entry-type">
+                            <Mic size={12} /> {t('archive.entry.voice', 'Voice')}
                           </span>
                         )}
                       </div>
                     </div>
-                    
-                    <ChevronRight size={16} className="ja-entry-arrow" />
+                    <ChevronRight size={18} className="entry-arrow" />
                   </div>
                 </div>
               );
@@ -471,53 +406,49 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
         )}
       </div>
 
-      {/* Filter Modal */}
+      {/* Bottom Sheet Modal */}
       {showFilterModal && (
-        <div className="ja-modal-overlay" onClick={() => setShowFilterModal(false)}>
-          <div className="ja-filter-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="ja-modal-header">
-              <h3>Filter & Sort</h3>
-              <button onClick={() => setShowFilterModal(false)}>
+        <div className="modal-overlay" onClick={() => setShowFilterModal(false)}>
+          <div className="glass-bottom-sheet" onClick={e => e.stopPropagation()}>
+            <div className="sheet-handle" />
+            <div className="sheet-header">
+              <h3>{t('archive.filters.filterAndSort', 'Filter & Sort')}</h3>
+              <button className="sheet-close" onClick={() => setShowFilterModal(false)}>
                 <X size={20} />
               </button>
             </div>
-            
-            <div className="ja-modal-content">
-              <div className="ja-filter-section">
-                <label className="ja-section-label">Journey Path</label>
-                <select 
-                  value={selectedPath}
-                  onChange={(e) => setSelectedPath(e.target.value)}
-                  className="ja-select-input"
-                >
-                  <option value="all">All Paths</option>
-                  {uniquePaths.map(pathId => {
-                    const pathInfo = getPathInfo(pathId);
-                    return (
-                      <option key={pathId} value={pathId}>
-                        {pathInfo.title}
-                      </option>
-                    );
-                  })}
-                </select>
+            <div className="sheet-content">
+              <div className="filter-group">
+                <label className="filter-label">{t('archive.filters.journeyPath', 'Journey Path')}</label>
+                <div className="select-wrapper">
+                  <select value={selectedPath} onChange={e => setSelectedPath(e.target.value)}>
+                    <option value="all">{t('archive.filters.allPaths', 'All Paths')}</option>
+                    {uniquePaths.map(pathId => {
+                      const info = getPathInfo(pathId);
+                      return (
+                        <option key={pathId} value={pathId}>
+                          {info.title}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <ChevronDown size={18} className="select-arrow" />
+                </div>
               </div>
-              
-              <div className="ja-filter-section">
-                <label className="ja-section-label">Sort Order</label>
-                <select 
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  className="ja-select-input"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                </select>
+              <div className="filter-group">
+                <label className="filter-label">{t('archive.filters.sortOrder', 'Sort Order')}</label>
+                <div className="select-wrapper">
+                  <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+                    <option value="newest">{t('archive.filters.newestFirst', 'Newest First')}</option>
+                    <option value="oldest">{t('archive.filters.oldestFirst', 'Oldest First')}</option>
+                  </select>
+                  <ChevronDown size={18} className="select-arrow" />
+                </div>
               </div>
             </div>
-            
-            <div className="ja-modal-footer">
-              <button 
-                className="ja-clear-btn-modal"
+            <div className="sheet-footer">
+              <button
+                className="glass-button secondary"
                 onClick={() => {
                   setSelectedPath('all');
                   setSortOrder('newest');
@@ -525,13 +456,10 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
                   setSearchTerm('');
                 }}
               >
-                Clear All
+                {t('archive.filters.resetAll', 'Reset All')}
               </button>
-              <button 
-                className="ja-apply-btn"
-                onClick={() => setShowFilterModal(false)}
-              >
-                Apply
+              <button className="glass-button primary" onClick={() => setShowFilterModal(false)}>
+                {t('archive.filters.applyFilters', 'Apply Filters')}
               </button>
             </div>
           </div>

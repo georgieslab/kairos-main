@@ -1,6 +1,7 @@
 // src/components/profile/EditProfile.jsx
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Save, User, MapPin, Camera, Mail, AlertCircle } from 'lucide-react';
 import Avatar from '../common/Avatar';
 import { AvatarPicker } from '../common/Avatar';
@@ -10,8 +11,9 @@ const EditProfile = ({
   isOpen, 
   onClose, 
   currentProfile, 
-  onSave 
+  onSave
 }) => {
+  const { t } = useTranslation('profile');
   const [formData, setFormData] = useState({
     displayName: currentProfile?.displayName || '',
     city: currentProfile?.city || '',
@@ -50,15 +52,15 @@ const EditProfile = ({
     const newErrors = {};
 
     if (!formData.displayName.trim()) {
-      newErrors.displayName = 'Name is required';
+      newErrors.displayName = t('editProfile.validation.nameRequired', 'Name is required');
     } else if (formData.displayName.trim().length < 2) {
-      newErrors.displayName = 'Name must be at least 2 characters';
+      newErrors.displayName = t('editProfile.validation.nameMinLength', 'Name must be at least 2 characters');
     } else if (formData.displayName.trim().length > 50) {
-      newErrors.displayName = 'Name must be less than 50 characters';
+      newErrors.displayName = t('editProfile.validation.nameMaxLength', 'Name must be less than 50 characters');
     }
 
     if (formData.city && formData.city.length > 100) {
-      newErrors.city = 'City name is too long';
+      newErrors.city = t('editProfile.validation.cityTooLong', 'City name is too long');
     }
 
     setErrors(newErrors);
@@ -76,7 +78,7 @@ const EditProfile = ({
       onClose();
     } catch (error) {
       console.error('Error saving profile:', error);
-      setErrors({ general: 'Failed to save profile. Please try again.' });
+      setErrors({ general: t('editProfile.validation.saveFailed', 'Failed to save profile. Please try again.') });
     } finally {
       setIsSaving(false);
     }
@@ -97,13 +99,13 @@ const EditProfile = ({
         {/* Header */}
         <div className="ep-header">
           <div className="ep-header-content">
-            <h2 className="ep-title">Edit Profile</h2>
-            <p className="ep-subtitle">Update your personal information</p>
+            <h2 className="ep-title">{t('editProfile.title', 'Edit Profile')}</h2>
+            <p className="ep-subtitle">{t('editProfile.subtitle', 'Update your personal information')}</p>
           </div>
-          <button 
+          <button
             className="ep-close-btn"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('editProfile.close', 'Close')}
           >
             <X size={24} />
           </button>
@@ -115,26 +117,26 @@ const EditProfile = ({
           <div className="ep-section">
             <label className="ep-section-label">
               <Camera size={16} />
-              Profile Avatar
+              {t('editProfile.avatarLabel', 'Profile Avatar')}
             </label>
             <div className="ep-avatar-container">
-              <Avatar 
+              <Avatar
                 style={formData.avatarStyle}
                 pattern={formData.avatarPattern}
                 font={formData.avatarFont}
                 initials={initials}
                 size={100}
               />
-              <button 
+              <button
                 className="ep-avatar-change-btn"
                 onClick={() => setShowAvatarPicker(true)}
               >
                 <Camera size={16} />
-                Change Avatar
+                {t('editProfile.changeAvatar', 'Change Avatar')}
               </button>
             </div>
             <p className="ep-avatar-hint">
-              Click to customize your avatar style, pattern, and font
+              {t('editProfile.avatarHint', 'Click to customize your avatar style, pattern, and font')}
             </p>
           </div>
 
@@ -142,7 +144,7 @@ const EditProfile = ({
           <div className="ep-section">
             <label className="ep-label" htmlFor="displayName">
               <User size={16} />
-              Display Name *
+              {t('editProfile.displayNameLabel', 'Display Name *')}
             </label>
             <input
               id="displayName"
@@ -151,7 +153,7 @@ const EditProfile = ({
               value={formData.displayName}
               onChange={(e) => handleInputChange('displayName', e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter your name"
+              placeholder={t('editProfile.displayNamePlaceholder', 'Enter your name')}
               maxLength={50}
               autoFocus
             />
@@ -162,7 +164,7 @@ const EditProfile = ({
               </div>
             )}
             <p className="ep-hint">
-              This is how you'll be addressed throughout the app
+              {t('editProfile.displayNameHint', "This is how you'll be addressed throughout the app")}
             </p>
           </div>
 
@@ -170,7 +172,7 @@ const EditProfile = ({
           <div className="ep-section">
             <label className="ep-label">
               <Mail size={16} />
-              Email Address
+              {t('editProfile.emailLabel', 'Email Address')}
             </label>
             <input
               type="email"
@@ -180,7 +182,7 @@ const EditProfile = ({
               disabled
             />
             <p className="ep-hint">
-              Email cannot be changed here. Contact support if needed.
+              {t('editProfile.emailHint', 'Email cannot be changed here. Contact support if needed.')}
             </p>
           </div>
 
@@ -188,7 +190,7 @@ const EditProfile = ({
           <div className="ep-section">
             <label className="ep-label" htmlFor="city">
               <MapPin size={16} />
-              City / Location
+              {t('editProfile.cityLabel', 'City / Location')}
             </label>
             <input
               id="city"
@@ -197,7 +199,7 @@ const EditProfile = ({
               value={formData.city}
               onChange={(e) => handleInputChange('city', e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="e.g., San Francisco, CA"
+              placeholder={t('editProfile.cityPlaceholder', 'e.g., San Francisco, CA')}
               maxLength={100}
             />
             {errors.city && (
@@ -207,7 +209,7 @@ const EditProfile = ({
               </div>
             )}
             <p className="ep-hint">
-              Used for weather information and personalization
+              {t('editProfile.cityHint', 'Used for weather information and personalization')}
             </p>
           </div>
 
@@ -222,20 +224,20 @@ const EditProfile = ({
 
         {/* Footer */}
         <div className="ep-footer">
-          <button 
+          <button
             className="ep-btn ep-btn-cancel"
             onClick={onClose}
             disabled={isSaving}
           >
-            Cancel
+            {t('editProfile.cancel', 'Cancel')}
           </button>
-          <button 
+          <button
             className="ep-btn ep-btn-save"
             onClick={handleSave}
             disabled={isSaving}
           >
             <Save size={18} />
-            {isSaving ? 'Saving...' : 'Save Changes'}
+            {isSaving ? t('editProfile.saving', 'Saving...') : t('editProfile.saveChanges', 'Save Changes')}
           </button>
         </div>
 

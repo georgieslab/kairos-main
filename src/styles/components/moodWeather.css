@@ -1,0 +1,347 @@
+/* src/styles/components/moodWeather.css – Inner-aura mood check-in (Apple Spatial Glass) */
+
+.mood-weather {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: moodWeatherEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@keyframes moodWeatherEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mood-weather-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mood-weather-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.mood-weather-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mood-weather-options {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.mood-weather-option {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* Required for the aura to stay in place */
+  position: relative;
+}
+
+.mood-weather-option:active {
+  transform: scale(0.9);
+}
+
+.mood-weather-option.is-selected {
+  background: rgba(var(--mood-color), 0.15);
+  border-color: rgba(var(--mood-color), 0.4);
+  color: rgb(var(--mood-color));
+
+  /* Soft, steady outer glow */
+  box-shadow: 0 0 12px rgba(var(--mood-color), 0.25);
+  animation: moodPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 1. The Soft Expanding Aura (Ripple) */
+.mood-weather-option.is-selected::before {
+  content: '';
+  position: absolute;
+  inset: -2px; /* Slightly larger than the button */
+  border-radius: 50%;
+  border: 1px solid rgba(var(--mood-color), 0.5);
+  opacity: 0;
+  z-index: 0;
+
+  /* This creates the slow, soft expanding ripple */
+  animation: softRipple 2.5s ease-out infinite;
+}
+
+/* 2. The Inner Breathing Light */
+.mood-weather-option.is-selected::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--mood-color), 0.35) 0%, transparent 70%);
+  opacity: 0;
+  z-index: 0;
+
+  /* This makes the light inside slowly breathe */
+  animation: softBreathe 2.5s ease-in-out infinite;
+}
+
+/* Ensure the icon stays above the glows */
+.mood-weather-option.is-selected > * {
+  position: relative;
+  z-index: 1;
+
+  /* Gentle float for the icon itself */
+  animation: iconFloat 2.5s ease-in-out infinite;
+}
+
+/* === Keyframes === */
+
+@keyframes softRipple {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+    filter: blur(2px); /* Keeps the edge soft */
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+@keyframes softBreathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes moodPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Loading: non-interactive shimmer */
+.mood-weather.is-loading .mood-weather-option {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ===== Light mode =====
+   Two selector conventions coexist in this app: some screens (Home, Insights)
+   apply a local .hs-light/.light-mode class to their own root; others rely
+   solely on the global .light-theme class ThemeContext puts on <html>. We
+   match both so these mood components render correctly regardless of which
+   screen they're dropped into. */
+.hs-light .mood-weather,
+.light-theme .mood-weather {
+  background: rgba(245, 245, 247, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hs-light .mood-weather-title,
+.light-theme .mood-weather-title {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.hs-light .mood-weather-subtitle,
+.light-theme .mood-weather-subtitle {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* :not(.is-selected) matters here: this rule and .mood-weather-option.is-selected
+   have equal specificity (two classes each), so without the exclusion this one
+   would win on source order alone and the selected mood would never visibly
+   "light up" in light theme. */
+.hs-light .mood-weather-option:not(.is-selected),
+.light-theme .mood-weather-option:not(.is-selected) {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* Selected state colors work in both themes via --mood-color */
+
+@media (max-width: 380px) {
+  .mood-weather {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .mood-weather-option {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mood-weather,
+  .mood-weather-option.is-selected,
+  .mood-weather-option.is-selected::before,
+  .mood-weather-option.is-selected::after,
+  .mood-weather-option.is-selected > * {
+    animation: none !important;
+  }
+
+  .mood-weather-option.is-selected::after {
+    opacity: 0.5; /* Keep a static glow if motion is disabled */
+  }
+}
+
+/* ===== MOOD TRENDS (14-day strip on the Insights dashboard) ===== */
+.mood-trends {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mood-trends-strip {
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+}
+
+.mood-trends-day {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 6px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mood-trends-day.has-mood {
+  color: rgb(var(--mood-color));
+  background: rgba(var(--mood-color), 0.12);
+}
+
+.mood-trends-day.is-today {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.mood-trends-day-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.mood-trends-day.has-mood .mood-trends-day-label {
+  color: rgba(var(--mood-color), 0.8);
+}
+
+.mood-trends-summary {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.mood-trends-empty {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Loading shimmer */
+.mood-trends-loading {
+  display: flex;
+  gap: 4px;
+}
+
+.mood-trends-skeleton-dot {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 37%,
+    rgba(255, 255, 255, 0.05) 63%
+  );
+  background-size: 400% 100%;
+  animation: mood-trends-shimmer 1.4s ease infinite;
+}
+
+@keyframes mood-trends-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* Light mode — matches .hs-light/.light-mode (screen-local) and .light-theme
+   (global <html> class), same reasoning as the mood-weather rules above.
+   :not(.has-mood) avoids the same equal-specificity trap: without it, a
+   checked-in day's --mood-color tint would be overridden by this rule in
+   light theme since both have two-class specificity and this one is later. */
+.hs-light .mood-trends-day:not(.has-mood),
+.light-mode .mood-trends-day:not(.has-mood),
+.light-theme .mood-trends-day:not(.has-mood) {
+  background: rgba(0, 0, 0, 0.04);
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.hs-light .mood-trends-day-label,
+.light-mode .mood-trends-day-label,
+.light-theme .mood-trends-day-label {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.hs-light .mood-trends-summary,
+.light-mode .mood-trends-summary,
+.light-theme .mood-trends-summary,
+.hs-light .mood-trends-empty,
+.light-mode .mood-trends-empty,
+.light-theme .mood-trends-empty {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.hs-light .mood-trends-skeleton-dot,
+.light-mode .mood-trends-skeleton-dot,
+.light-theme .mood-trends-skeleton-dot {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.08) 37%,
+    rgba(0, 0, 0, 0.04) 63%
+  );
+  background-size: 400% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mood-trends-skeleton-dot {
+    animation: none;
+  }
+}

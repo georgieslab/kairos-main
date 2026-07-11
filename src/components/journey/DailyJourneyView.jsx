@@ -1,6 +1,7 @@
 // src/components/journey/DailyJourneyView.jsx - Mobile-first, no image display
 import React, { useState, useEffect, useRef } from 'react';
-import { 
+import { useTranslation } from 'react-i18next';
+import {
   Camera, 
   ArrowLeft, 
   ArrowRight, 
@@ -12,7 +13,8 @@ import {
   Target,
   Lightbulb,
   Heart,
-  AlertCircle
+  AlertCircle,
+  Mic
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '../../contexts/NavigationContext';
@@ -24,6 +26,7 @@ import { isDayCompleted } from '../../utils/userProgress';
 import { Book, Compass, Brain, Droplet, Palette, RotateCcw, Map, ArrowUpRight } from 'lucide-react';
 
 const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onNavigate, onBack }) => {
+  const { t } = useTranslation('journey');
   const { currentUser, userProfile } = useAuth();
   const { screenData, navigateToScreen } = useNavigation();
   const [journeyData, setJourneyData] = useState(null);
@@ -68,29 +71,35 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
         setJourneyData(dayData);
 
         try {
-          const journalRef = collection(db, 'users', currentUser.uid, 'journal');
-          const q = query(journalRef, where("pathId", "==", pathId));
-          const journalSnap = await getDocs(q);
-
           const completedDaysArray = [];
-          journalSnap.forEach((doc) => {
-            const data = doc.data();
-            if (data.day && typeof data.day === 'number') {
-              if (!completedDaysArray.includes(data.day)) {
-                completedDaysArray.push(data.day);
+          const collectEntryDays = (snap) => {
+            snap.forEach((docSnap) => {
+              const data = docSnap.data();
+              if (data.day && typeof data.day === 'number') {
+                if (!completedDaysArray.includes(data.day)) {
+                  completedDaysArray.push(data.day);
+                }
+                return;
               }
-              return;
-            }
 
-            const dayId = doc.id;
-            const matches = dayId.match(/day-(\d+)$/);
-            if (matches && matches[1]) {
-              const dayNumber = parseInt(matches[1]);
-              if (!isNaN(dayNumber) && !completedDaysArray.includes(dayNumber)) {
-                completedDaysArray.push(dayNumber);
+              const matches = docSnap.id.match(/day-(\d+)$/);
+              if (matches && matches[1]) {
+                const dayNumber = parseInt(matches[1]);
+                if (!isNaN(dayNumber) && !completedDaysArray.includes(dayNumber)) {
+                  completedDaysArray.push(dayNumber);
+                }
               }
-            }
-          });
+            });
+          };
+
+          // Written/painted entries live in `journal`; voice entries live in
+          // `voice_journal`. Merge both so voice-only days count as completed.
+          const [writtenSnap, voiceSnap] = await Promise.all([
+            getDocs(query(collection(db, 'users', currentUser.uid, 'journal'), where("pathId", "==", pathId))),
+            getDocs(query(collection(db, 'users', currentUser.uid, 'voice_journal'), where("pathId", "==", pathId)))
+          ]);
+          collectEntryDays(writtenSnap);
+          collectEntryDays(voiceSnap);
 
           setCompletedDays(completedDaysArray);
         } catch (error) {
@@ -112,49 +121,35 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
       if (!currentUser || !pathId || !currentDay) return;
 
       try {
-        console.log('=== FETCHING JOURNAL ENTRY ===');
-        console.log('Path ID:', pathId);
-        console.log('Day:', currentDay);
-        console.log('User ID:', currentUser.uid);
+        // Look up a day's entry in a given collection: field query first,
+        // then fall back to the known document-id formats.
+        const findInCollection = async (collectionName) => {
+          const ref = collection(db, 'users', currentUser.uid, collectionName);
+          const q = query(ref, where("pathId", "==", pathId), where("day", "==", currentDay));
+          const snap = await getDocs(q);
+          if (!snap.empty) return snap.docs[0].data();
 
-        const journalRef = collection(db, 'users', currentUser.uid, 'journal');
-        const q = query(
-          journalRef,
-          where("pathId", "==", pathId),
-          where("day", "==", currentDay)
-        );
+          const candidateIds = [`${pathId}_day-${currentDay}`, `${pathId}-day-${currentDay}`];
+          for (const id of candidateIds) {
+            const docSnap = await getDoc(doc(db, 'users', currentUser.uid, collectionName, id));
+            if (docSnap.exists()) return docSnap.data();
+          }
+          return null;
+        };
 
-        const journalSnap = await getDocs(q);
+        // Written/painted entries take priority; otherwise show the voice entry
+        // (voice docs carry isVoiceEntry / transcription / audioUrl).
+        const writtenEntry = await findInCollection('journal');
+        const voiceEntry = writtenEntry ? null : await findInCollection('voice_journal');
+        const entryData = writtenEntry || voiceEntry;
 
-        if (!journalSnap.empty) {
-          const entryData = journalSnap.docs[0].data();
-          console.log('=== FOUND ENTRY DATA ===');
-          console.log('Entry data:', entryData);
-          
+        if (entryData) {
           setJournalEntry(entryData);
           setEntryFetchError(null);
-          return;
+        } else {
+          setJournalEntry(null);
+          setEntryFetchError('Entry not found');
         }
-
-        // Fallback to old document ID format
-        const docId = `${pathId}-day-${currentDay}`;
-        console.log('Trying fallback document ID:', docId);
-        const docRef = doc(db, 'users', currentUser.uid, 'journal', docId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const entryData = docSnap.data();
-          console.log('=== FOUND FALLBACK ENTRY DATA ===');
-          console.log('Entry data:', entryData);
-          
-          setJournalEntry(entryData);
-          setEntryFetchError(null);
-          return;
-        }
-
-        console.log('=== NO ENTRY FOUND ===');
-        setJournalEntry(null);
-        setEntryFetchError('Entry not found');
       } catch (error) {
         console.error('Error fetching journal entry:', error);
         setEntryFetchError(`Error: ${error.message}`);
@@ -207,7 +202,7 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
         <div className="djv-progress-text">
           <span className="djv-progress-completed">{completedDays.length}</span>
           <span className="djv-progress-separator">/</span>
-          <span className="djv-progress-total">{pathData.duration} days</span>
+          <span className="djv-progress-total">{t('dailyJourney.daysCount', '{{count}} days', { count: pathData.duration })}</span>
           <span className="djv-progress-percentage">({progressPercentage}%)</span>
         </div>
       </div>
@@ -314,8 +309,8 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
       <div className="djv-container">
         <div className="djv-loading">
           <div className="djv-loading-spinner"></div>
-          <h3 className="djv-loading-title">Loading Journey</h3>
-          <p className="djv-loading-subtitle">Preparing your reflection space...</p>
+          <h3 className="djv-loading-title">{t('dailyJourney.loadingTitle', 'Loading Journey')}</h3>
+          <p className="djv-loading-subtitle">{t('dailyJourney.loadingSubtitle', 'Preparing your reflection space...')}</p>
         </div>
       </div>
     );
@@ -338,7 +333,7 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
           </div>
           
           <div className="djv-day-info">
-            <h1 className="djv-day-title">Day {currentDay}</h1>
+            <h1 className="djv-day-title">{t('dailyJourney.dayLabel', 'Day {{day}}', { day: currentDay })}</h1>
             <h2 className="djv-day-subtitle">{journeyData.title}</h2>
           </div>
         </div>
@@ -375,7 +370,7 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
             <div className="djv-card-icon" style={{ backgroundColor: `${pathColor}20` }}>
               <Edit3 size={18} style={{ color: pathColor }} />
             </div>
-            <h3 className="djv-card-title">Today's Prompt</h3>
+            <h3 className="djv-card-title">{t('dailyJourney.todaysPrompt', "Today's Prompt")}</h3>
           </div>
           
           <div className="djv-prompt-content">
@@ -388,29 +383,52 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
           <div className="djv-card djv-entry-card">
             <div className="djv-card-header">
               <div className="djv-card-icon" style={{ backgroundColor: `${pathColor}20` }}>
-                <BookOpen size={18} style={{ color: pathColor }} />
+                {journalEntry.isVoiceEntry
+                  ? <Mic size={18} style={{ color: pathColor }} />
+                  : <BookOpen size={18} style={{ color: pathColor }} />}
               </div>
-              <h3 className="djv-card-title">Your Entry</h3>
+              <h3 className="djv-card-title">
+                {journalEntry.isVoiceEntry
+                  ? t('dailyJourney.yourVoiceEntry', 'Your Voice Entry')
+                  : t('dailyJourney.yourEntry', 'Your Entry')}
+              </h3>
               {isCurrentDayCompleted && (
                 <div className="djv-completed-badge">
                   <CheckCircle size={16} />
-                  <span>Complete</span>
+                  <span>{t('dailyJourney.complete', 'Complete')}</span>
                 </div>
               )}
             </div>
 
             <div className="djv-entry-content">
+              {/* Voice entry: audio playback + transcription */}
+              {journalEntry.isVoiceEntry && (journalEntry.audioUrl || journalEntry.transcription) && (
+                <div className="djv-entry-text djv-voice-entry">
+                  {journalEntry.audioUrl && (
+                    <audio
+                      className="djv-voice-audio"
+                      src={journalEntry.audioUrl}
+                      controls
+                      preload="metadata"
+                    />
+                  )}
+                  {journalEntry.transcription && (
+                    <p className="djv-voice-transcription">{journalEntry.transcription}</p>
+                  )}
+                </div>
+              )}
+
               {/* Text Content Only */}
-              {journalEntry.extractedText && (
+              {!journalEntry.isVoiceEntry && journalEntry.extractedText && (
                 <div className="djv-entry-text">
                   <p>{journalEntry.extractedText}</p>
                 </div>
               )}
 
               {/* Show message if entry has image but we don't display it */}
-              {journalEntry.imageUrl && !journalEntry.extractedText && (
+              {!journalEntry.isVoiceEntry && journalEntry.imageUrl && !journalEntry.extractedText && (
                 <div className="djv-entry-text">
-                  <p className="djv-image-note">📝 You uploaded a journal entry for this day.</p>
+                  <p className="djv-image-note">📝 {t('dailyJourney.uploadedNoText', 'You uploaded a journal entry for this day.')}</p>
                 </div>
               )}
 
@@ -419,19 +437,19 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
                 <div className="djv-analysis-section">
                   <div className="djv-analysis-header">
                     <Lightbulb size={18} style={{ color: pathColor }} />
-                    <h4>Insights & Analysis</h4>
+                    <h4>{t('dailyJourney.insightsAndAnalysis', 'Insights & Analysis')}</h4>
                   </div>
 
                   {journalEntry.analysis.summary && (
                     <div className="djv-analysis-item">
-                      <h5>Summary</h5>
+                      <h5>{t('dailyJourney.summary', 'Summary')}</h5>
                       <p>{journalEntry.analysis.summary}</p>
                     </div>
                   )}
 
                   {journalEntry.analysis.insights && journalEntry.analysis.insights.length > 0 && (
                     <div className="djv-analysis-item">
-                      <h5>Key Insights</h5>
+                      <h5>{t('dailyJourney.keyInsights', 'Key Insights')}</h5>
                       <ul className="djv-insights-list">
                         {journalEntry.analysis.insights.map((insight, index) => (
                           <li key={index}>{insight}</li>
@@ -442,7 +460,7 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
 
                   {journalEntry.analysis.practicalAction && (
                     <div className="djv-analysis-item djv-action-item">
-                      <h5>Suggested Action</h5>
+                      <h5>{t('dailyJourney.suggestedAction', 'Suggested Action')}</h5>
                       <p>{journalEntry.analysis.practicalAction}</p>
                     </div>
                   )}
@@ -459,8 +477,8 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
               <div className="djv-empty-icon">
                 <Edit3 size={32} />
               </div>
-              <h3>Ready to reflect?</h3>
-              <p>Take a moment to explore today's prompt and share your thoughts.</p>
+              <h3>{t('dailyJourney.readyToReflect', 'Ready to reflect?')}</h3>
+              <p>{t('dailyJourney.readyToReflectSubtitle', "Take a moment to explore today's prompt and share your thoughts.")}</p>
             </div>
           </div>
         )}
@@ -470,8 +488,8 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
           <div className="djv-card djv-error-card">
             <div className="djv-error-content">
               <AlertCircle size={32} />
-              <h3>Entry not found</h3>
-              <p>We couldn't load this journal entry. Please try returning to the archive.</p>
+              <h3>{t('dailyJourney.entryNotFoundTitle', 'Entry not found')}</h3>
+              <p>{t('dailyJourney.entryNotFoundSubtitle', "We couldn't load this journal entry. Please try returning to the archive.")}</p>
             </div>
           </div>
         )}
@@ -482,41 +500,55 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
         {screenData?.fromArchive ? (
           <button onClick={handleBack} className="djv-action-btn djv-secondary">
             <ArrowLeft size={18} />
-            Back to Archive
+            {t('dailyJourney.backToArchive', 'Back to Archive')}
           </button>
         ) : journalEntry ? (
-          <button
-            onClick={() => {
-              const nextDay = currentDay + 1;
-              if (nextDay <= pathData.duration) {
-                onNavigate(pathId, nextDay);
-              } else {
-                navigateToScreen('journey-complete', { pathId });
-              }
-            }}
-            className="djv-action-btn djv-primary"
-            style={{ backgroundColor: pathColor }}
-          >
-            {currentDay < pathData.duration ? (
-              <>
-                Continue to Day {currentDay + 1}
-                <ChevronRight size={18} />
-              </>
-            ) : (
-              <>
-                Complete Journey
-                <ArrowUpRight size={18} />
-              </>
-            )}
-          </button>
+          (() => {
+            // Total days is authoritative from the path's day catalog, and the
+            // next day must actually exist — guards against offering a
+            // non-existent "Day N+1" if duration/day ever disagree.
+            const totalDays = pathData.days?.length || pathData.duration || 0;
+            const nextDay = currentDay + 1;
+            const hasNextDay =
+              nextDay <= totalDays &&
+              (!pathData.days || pathData.days.some(d => d.day === nextDay));
+
+            return (
+              <button
+                onClick={() => {
+                  if (hasNextDay) {
+                    onNavigate(pathId, nextDay);
+                  } else {
+                    navigateToScreen('journey-complete', { pathId });
+                  }
+                }}
+                className="djv-action-btn djv-primary"
+                style={{ backgroundColor: pathColor }}
+              >
+                {hasNextDay ? (
+                  <>
+                    {t('dailyJourney.continueToDay', 'Continue to Day {{day}}', { day: nextDay })}
+                    <ChevronRight size={18} />
+                  </>
+                ) : (
+                  <>
+                    {t('dailyJourney.completeJourney', 'Complete Journey')}
+                    <ArrowUpRight size={18} />
+                  </>
+                )}
+              </button>
+            );
+          })()
         ) : (
           <button
             onClick={() => onUpload(pathId)}
             className="djv-action-btn djv-primary"
             style={{ backgroundColor: pathColor }}
           >
-            <Camera size={18} />
-            Start Writing
+            {pathData.isVoiceJourney ? <Mic size={18} /> : <Camera size={18} />}
+            {pathData.isVoiceJourney
+              ? t('dailyJourney.startRecording', 'Start Recording')
+              : t('dailyJourney.startWriting', 'Start Writing')}
           </button>
         )}
       </div>

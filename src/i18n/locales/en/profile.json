@@ -1,0 +1,59 @@
+{
+  "editProfile": {
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "nameMaxLength": "Name must be less than 50 characters",
+      "cityTooLong": "City name is too long",
+      "saveFailed": "Failed to save profile. Please try again."
+    },
+    "title": "Edit Profile",
+    "subtitle": "Update your personal information",
+    "close": "Close",
+    "avatarLabel": "Profile Avatar",
+    "changeAvatar": "Change Avatar",
+    "avatarHint": "Click to customize your avatar style, pattern, and font",
+    "displayNameLabel": "Display Name *",
+    "displayNamePlaceholder": "Enter your name",
+    "displayNameHint": "This is how you'll be addressed throughout the app",
+    "emailLabel": "Email Address",
+    "emailHint": "Email cannot be changed here. Contact support if needed.",
+    "cityLabel": "City / Location",
+    "cityPlaceholder": "e.g., San Francisco, CA",
+    "cityHint": "Used for weather information and personalization",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
+  },
+  "profileScreen": {
+    "defaultDisplayName": "Journaler",
+    "recently": "Recently",
+    "artisan": "Artisan",
+    "since": "Since {{date}}",
+    "editProfile": "Edit Profile",
+    "stats": {
+      "entries": "Entries",
+      "dayStreak": "Day Streak",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "activeJourneys": "Active Journeys",
+    "viewAll": "View All",
+    "dayOf": "Day {{day}} of {{total}}",
+    "moodBoard": "Mood Board",
+    "achievements": "Achievements",
+    "pts": "{{score}} pts",
+    "plusPts": "+{{points}} pts",
+    "journalAndData": "Journal & Data",
+    "myJournals": "My Journals",
+    "registerJournal": "Register Journal",
+    "new": "New",
+    "archive": "Archive",
+    "settings": "Settings",
+    "helpAndSupport": "Help & Support",
+    "aboutKairos": "About Καιρός",
+    "signOut": "Sign Out",
+    "signOutConfirm": "Are you sure you want to sign out of Καιρός?",
+    "cancel": "Cancel"
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "mindfulnessAwarenessDays:1",
+    "title": "Present Moment",
+    "theme": "Awareness",
+    "prompt": "Pause and notice five things you can see, four things you can feel, three things you can hear, two things you can smell, and one thing you can taste. How does this deliberate attention shift your experience of the moment?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:2",
+    "title": "Mindful Activity",
+    "theme": "Engaged Presence",
+    "prompt": "Choose a routine activity (like washing dishes, walking, or eating) and do it with complete attention. Describe the experience—what did you notice that you typically miss?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:3",
+    "title": "Thought Patterns",
+    "theme": "Mental Habits",
+    "prompt": "Spend five minutes observing your thoughts without judgment. What patterns do you notice? Are they mostly past-focused, future-focused, positive, negative, or neutral?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:4",
+    "title": "Body Awareness",
+    "theme": "Physical Presence",
+    "prompt": "Conduct a slow body scan from head to toe. Where do you hold tension? What sensations arise? How does your body respond as you bring attention to different areas?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:5",
+    "title": "Mindful Listening",
+    "theme": "Receptive Awareness",
+    "prompt": "Reflect on how you listen to others. Do you listen to respond or to understand? Describe a recent conversation and how your level of presence may have affected the interaction."
+  },
+  {
+    "id": "mindfulnessAwarenessDays:6",
+    "title": "Mindfulness in Challenges",
+    "theme": "Equanimity",
+    "prompt": "Recall a recent challenging situation. How might approaching it with mindful awareness have changed your experience? What mindful response might you try next time?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:7",
+    "title": "Inner Dialogue",
+    "theme": "Self-Talk",
+    "prompt": "Notice the tone and content of your inner voice today. Is it kind, critical, encouraging, or anxious? How might you bring more mindful awareness to this internal conversation?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:8",
+    "title": "Gratitude Practice",
+    "theme": "Appreciation",
+    "prompt": "With full attention, notice and describe five things you're grateful for today. Include small, ordinary things that you might typically overlook."
+  },
+  {
+    "id": "mindfulnessAwarenessDays:9",
+    "title": "Compassion Meditation",
+    "theme": "Loving-Kindness",
+    "prompt": "Write a message of compassion to yourself, a loved one, an acquaintance, someone you find difficult, and finally to all beings. How does this practice affect your emotional state?"
+  },
+  {
+    "id": "mindfulnessAwarenessDays:10",
+    "title": "Mindfulness Integration",
+    "theme": "Conscious Living",
+    "prompt": "Reflect on your mindfulness journey. What have you learned about being present? How might you incorporate mindful awareness more fully into your daily life?"
+  }
+]

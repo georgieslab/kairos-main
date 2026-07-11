@@ -1,0 +1,62 @@
+[
+  {
+    "id": "natureConnectionDays:1",
+    "title": "Natural Awareness",
+    "theme": "Presence",
+    "prompt": "Spend at least 10 minutes outside today observing the natural world with full attention. What elements of nature do you notice that you typically overlook? How does being in nature affect your state of mind?"
+  },
+  {
+    "id": "natureConnectionDays:2",
+    "title": "Sensory Immersion",
+    "theme": "Experience",
+    "prompt": "Explore nature through each of your senses. What do you see, hear, smell, feel, and perhaps taste? Which sensory experience feels most vivid or meaningful to you? Describe it in detail."
+  },
+  {
+    "id": "natureConnectionDays:3",
+    "title": "Childhood Nature",
+    "theme": "Memory",
+    "prompt": "What are your earliest or most significant memories of connecting with nature as a child? How did these experiences shape your relationship with the natural world? What elements still resonate with you today?"
+  },
+  {
+    "id": "natureConnectionDays:4",
+    "title": "Earth as Teacher",
+    "theme": "Wisdom",
+    "prompt": "What lessons or wisdom can you learn from observing natural processes? Choose one element of nature (water, trees, animals, weather, etc.) and reflect on what it might teach you about your own life."
+  },
+  {
+    "id": "natureConnectionDays:5",
+    "title": "Local Ecosystem",
+    "theme": "Interdependence",
+    "prompt": "Research or observe the local ecosystem where you live. What species share your habitat? How do they interact and depend on each other? How are you connected to this web of relationships?"
+  },
+  {
+    "id": "natureConnectionDays:6",
+    "title": "Seasonal Awareness",
+    "theme": "Cycles",
+    "prompt": "What season are you currently experiencing? How does this season manifest in your environment and in your body? What wisdom might this particular season have to offer you right now?"
+  },
+  {
+    "id": "natureConnectionDays:7",
+    "title": "Nature Relationship",
+    "theme": "Connection",
+    "prompt": "If your relationship with nature were a human relationship, how would you describe it? Is it intimate, distant, reverent, fearful, curious? How might you deepen this relationship in meaningful ways?"
+  },
+  {
+    "id": "natureConnectionDays:8",
+    "title": "Urban Nature",
+    "theme": "Discovery",
+    "prompt": "Even in the most urban environments, nature finds a way. Seek out and document evidence of nature in unexpected places today. How does recognizing these connections shift your perspective?"
+  },
+  {
+    "id": "natureConnectionDays:9",
+    "title": "Environmental Impact",
+    "theme": "Stewardship",
+    "prompt": "Reflect on your personal impact on the natural world. What actions do you take that support environmental health? What small, sustainable change might you implement to deepen your role as an earth steward?"
+  },
+  {
+    "id": "natureConnectionDays:10",
+    "title": "Nature Integration",
+    "theme": "Belonging",
+    "prompt": "How has your sense of connection to nature evolved over this journey? What practices might you continue to nurture this relationship? How might a deeper nature connection enhance your overall wellbeing?"
+  }
+]

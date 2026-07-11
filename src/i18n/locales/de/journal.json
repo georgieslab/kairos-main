@@ -1,0 +1,211 @@
+{
+  "archive": {
+    "title": "Journal-Archiv",
+    "loading": "Dein Journal-Archiv wird geladen…",
+    "emptyState": {
+      "title": "Noch keine Einträge",
+      "description": "Beginne deine Journaling-Reise – deine Einträge erscheinen hier.",
+      "cta": "Schreiben beginnen"
+    },
+    "filters": {
+      "all": "Alle Einträge",
+      "recent": "Diese Woche",
+      "favorites": "Favoriten",
+      "pathFilter": "Pfad: {{path}}",
+      "journeyPath": "Reisepfad",
+      "allPaths": "Alle Pfade",
+      "sortOrder": "Sortierreihenfolge",
+      "newestFirst": "Neueste zuerst",
+      "oldestFirst": "Älteste zuerst",
+      "resetAll": "Alles zurücksetzen",
+      "applyFilters": "Filter anwenden",
+      "filterAndSort": "Filtern & Sortieren"
+    },
+    "stats": {
+      "entries": "Einträge",
+      "dayStreak": "Tage-Serie",
+      "paths": "Pfade",
+      "thisWeek": "Diese Woche"
+    },
+    "search": {
+      "placeholder": "Einträge durchsuchen…"
+    },
+    "results": {
+      "count": "{{count}} {{noun}}",
+      "entrySingular": "Eintrag",
+      "entryPlural": "Einträge",
+      "oldestFirstNote": "Älteste zuerst"
+    },
+    "noResults": {
+      "message": "Keine Einträge entsprechen deiner Suche",
+      "clearFilters": "Filter löschen"
+    },
+    "entry": {
+      "day": "Tag",
+      "dayFallback": "Tag {{day}}",
+      "voice": "Sprache"
+    }
+  },
+  "registration": {
+    "tiers": {
+      "essential": {
+        "name": "Essential",
+        "features": [
+          "200 Seiten cremefarbenes Papier",
+          "Dunkelgrüner Ledereinband (Kunstleder)",
+          "Ein Lesebändchen",
+          "3 Monate digitales Abonnement"
+        ]
+      },
+      "insight": {
+        "name": "Insight",
+        "features": [
+          "250 Seiten Premiumpapier",
+          "Echtleder mit goldenen Akzenten",
+          "Zwei Lesebändchen",
+          "6 Monate digitales Abonnement"
+        ]
+      },
+      "legacy": {
+        "name": "Legacy",
+        "features": [
+          "300 Seiten Archivpapier",
+          "Handgebundenes Leder mit Prägung",
+          "Drei Seiden-Lesebändchen",
+          "12 Monate digitales Abonnement"
+        ]
+      }
+    },
+    "errors": {
+      "alreadyOwned": "Dieses Journal ist bereits mit deinem Konto verknüpft!",
+      "alreadyRegistered": "Dieses Journal ist bereits mit einem anderen Konto verknüpft. Kontaktiere den Support, falls es dein Journal ist.",
+      "scanError": "Fehler bei der Verarbeitung des Journals. Bitte versuche es erneut.",
+      "registrationFailed": "Journal konnte nicht registriert werden. Bitte versuche es erneut."
+    },
+    "welcome": {
+      "title": "Registriere dein Καιρός-Journal",
+      "subtitle": "Verbinde dein physisches Journal mit der digitalen App für nahtloses Journaling",
+      "maybeLater": "Vielleicht später",
+      "getStarted": "Loslegen",
+      "features": {
+        "nfcTitle": "NFC-Schnellupload",
+        "nfcDescription": "Tippe dein Journal an, um sofort die Kamera zu öffnen und Einträge zu erfassen",
+        "progressTitle": "Fortschrittsverfolgung",
+        "progressDescription": "Sieh deine Journaling-Reise, Eintragszahlen und Muster über die Zeit",
+        "aiTitle": "KI-Analyse",
+        "aiDescription": "Erhalte personalisierte Einblicke und emotionale Mustererkennung"
+      }
+    },
+    "selectTier": {
+      "title": "Wähle deine Journal-Stufe",
+      "subtitle": "Wähle die Stufe, die zu deinem physischen Journal passt"
+    },
+    "scan": {
+      "title": "Scanne dein Journal",
+      "subtitle": "Halte dein Handy in die Nähe des NFC-Chips auf deinem Journal-Einband",
+      "waiting": "Warten auf Journal...",
+      "holdSteady": "Halte dein Handy ruhig in die Nähe des Journal-Einbands",
+      "howToScanTitle": "So scannst du:",
+      "steps": {
+        "openCover": "Öffne dein Journal auf der Vorderseite",
+        "placePhone": "Lege dein Handy auf den NFC-Chip-Bereich (meist Mitte oder oben)",
+        "holdSteady": "Halte es 2-3 Sekunden ruhig",
+        "waitConfirmation": "Warte auf die Bestätigung"
+      },
+      "notAvailable": "NFC ist auf diesem Gerät nicht verfügbar. Du kannst dich trotzdem manuell registrieren.",
+      "disabled": "NFC ist deaktiviert.",
+      "enableInSettings": "In den Einstellungen aktivieren",
+      "alertMessage": "Handy in die Nähe des Journal-NFC-Chips halten",
+      "startScanning": "Scan starten",
+      "cancelScan": "Scan abbrechen",
+      "registerManually": "Manuell registrieren"
+    },
+    "confirm": {
+      "title": "Registrierung bestätigen",
+      "subtitle": "Überprüfe die Details deines Journals vor der Registrierung",
+      "journalTier": "Journal-Stufe",
+      "journalId": "Journal-ID",
+      "serialNumber": "Seriennummer",
+      "owner": "Besitzer",
+      "registering": "Wird registriert...",
+      "registerJournal": "Journal registrieren"
+    },
+    "success": {
+      "title": "Journal registriert!",
+      "subtitle": "Dein {{tier}}-Journal ist jetzt mit deinem Konto verbunden",
+      "subscriptionActivated": "Artisan-Abonnement aktiviert!",
+      "monthsCount": "{{months}} Monate",
+      "premiumAccessIncluded": "Premium-Zugang inklusive",
+      "validUntil": "Gültig bis: {{date}}",
+      "whatsNextTitle": "Was kommt als Nächstes?",
+      "nextSteps": {
+        "tapToUpload": "Tippe dein Journal an, um sofort Einträge hochzuladen",
+        "startPath": "Starte deinen ersten Reisepfad",
+        "aiInsights": "Erhalte personalisierte KI-Einblicke zu deinem Schreiben",
+        "trackPatterns": "Verfolge deine emotionalen Muster über die Zeit"
+      },
+      "startJournaling": "Journaling starten"
+    },
+    "actions": {
+      "back": "Zurück",
+      "continue": "Weiter"
+    },
+    "progress": {
+      "stepOf": "Schritt {{stepNumber}} von {{totalSteps}}"
+    }
+  },
+  "myJournals": {
+    "title": "Meine Journale",
+    "closeAriaLabel": "Schließen",
+    "loading": "Journale werden geladen...",
+    "journalNumber": "Journal #{{number}}",
+    "tierLabel": "{{tier}}-Stufe",
+    "deleteJournal": "Journal löschen",
+    "serial": "Seriennummer: {{serialNumber}}",
+    "primary": "Primär",
+    "emptyState": {
+      "title": "Noch keine Journale registriert",
+      "hint": "Registriere dein erstes physisches Journal, um loszulegen"
+    },
+    "close": "Schließen",
+    "registerAnother": "Weiteres Journal registrieren",
+    "confirmDelete": "Möchtest du dieses Journal wirklich löschen?\\n\\nJournal-ID: {{journalId}}\\n\\nDiese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteSuccess": "Journal erfolgreich gelöscht!",
+    "deleteFailed": "Journal konnte nicht gelöscht werden. Bitte versuche es erneut."
+  },
+  "nfcStatus": {
+    "badge": {
+      "not_available": "NFC nicht verfügbar",
+      "disabled": "NFC deaktiviert",
+      "ready": "NFC bereit",
+      "scanning": "Scannen...",
+      "clickToOpenSettings": "Klicken, um NFC-Einstellungen zu öffnen"
+    },
+    "card": {
+      "notSupported": {
+        "title": "NFC nicht unterstützt",
+        "message": "Dein Gerät unterstützt kein NFC. Du kannst Καιρός trotzdem nutzen, indem du Journalfotos manuell hochlädst."
+      },
+      "enableNfc": {
+        "title": "NFC aktivieren",
+        "message": "NFC ist verfügbar, aber auf deinem Gerät deaktiviert. Aktiviere es, um Journaleinträge schnell zu scannen und hochzuladen.",
+        "action": "Einstellungen öffnen"
+      },
+      "readyToScan": {
+        "title": "Bereit zum Scannen",
+        "message": "Halte dein Handy in die Nähe des NFC-Chips auf deinem Journal-Einband, um sofort mit dem Hochladen zu beginnen.",
+        "action": "Scan stoppen"
+      },
+      "ready": {
+        "title": "NFC bereit",
+        "message": "Dein Gerät ist bereit, Καιρός-Journale zu scannen. Tippe dein Journal an, um sofort Einträge hochzuladen."
+      }
+    },
+    "inline": {
+      "tapToScan": "Journal zum Scannen antippen",
+      "enableToScan": "NFC aktivieren, um Journale zu scannen",
+      "startScan": "Scan starten",
+      "enable": "Aktivieren"
+    }
+  }
+}

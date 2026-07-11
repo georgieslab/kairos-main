@@ -1,5 +1,6 @@
 // src/components/journey/JourneyPreview.jsx
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Compass, Heart, Brain, ArrowRight, Check, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '../../contexts/NavigationContext';
@@ -11,6 +12,7 @@ import {
 } from '../../utils/userProgress';
 
 const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
+  const { t } = useTranslation('journey');
   const { userProfile } = useAuth();
   const { navigateToScreen } = useNavigation();
   const { canAccessPremiumPath } = useSubscription();
@@ -108,14 +110,14 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
   const getPathInfo = () => {
     const path = getJourneyPath(pathId);
     const defaultInfo = {
-      name: path.title || 'Self-Discovery Journey',
-      description: path.description || 'Explore your core values, beliefs, and aspirations through guided reflection prompts designed to deepen your self-understanding.',
+      name: path.title || t('journeyPreview.selfDiscovery.name', 'Self-Discovery Journey'),
+      description: path.description || t('journeyPreview.selfDiscovery.description', 'Explore your core values, beliefs, and aspirations through guided reflection prompts designed to deepen your self-understanding.'),
       icon: Compass,
       benefits: [
-        'Gain clarity on personal values and priorities',
-        'Develop greater self-awareness',
-        'Identify patterns in your thoughts and behaviors',
-        'Build a consistent journaling practice'
+        t('journeyPreview.selfDiscovery.benefit1', 'Gain clarity on personal values and priorities'),
+        t('journeyPreview.selfDiscovery.benefit2', 'Develop greater self-awareness'),
+        t('journeyPreview.selfDiscovery.benefit3', 'Identify patterns in your thoughts and behaviors'),
+        t('journeyPreview.selfDiscovery.benefit4', 'Build a consistent journaling practice')
       ],
       days: path.duration || 10
     };
@@ -124,56 +126,56 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
       case 'transformation-journey':
         return {
           ...defaultInfo,
-          name: 'Transformation Journey: Breaking Patterns',
-          description: 'This extended journey helps you understand, address, and transform challenging patterns in your life through awareness, strategy-building, and sustainable change practices.',
+          name: t('journeyPreview.transformation.name', 'Transformation Journey: Breaking Patterns'),
+          description: t('journeyPreview.transformation.description', 'This extended journey helps you understand, address, and transform challenging patterns in your life through awareness, strategy-building, and sustainable change practices.'),
           icon: Brain,
           benefits: [
-            'Identify and understand deep-rooted patterns',
-            'Develop strategies for lasting change',
-            'Create healthier habits and responses',
-            'Transform limiting beliefs and behaviors'
+            t('journeyPreview.transformation.benefit1', 'Identify and understand deep-rooted patterns'),
+            t('journeyPreview.transformation.benefit2', 'Develop strategies for lasting change'),
+            t('journeyPreview.transformation.benefit3', 'Create healthier habits and responses'),
+            t('journeyPreview.transformation.benefit4', 'Transform limiting beliefs and behaviors')
           ],
           days: 21
         };
       case 'emotional-intelligence':
         return {
           ...defaultInfo,
-          name: 'Emotional Intelligence Expedition',
-          description: 'Develop greater awareness and mastery of your emotional landscape through structured journaling exercises.',
+          name: t('journeyPreview.emotionalIntelligence.name', 'Emotional Intelligence Expedition'),
+          description: t('journeyPreview.emotionalIntelligence.description', 'Develop greater awareness and mastery of your emotional landscape through structured journaling exercises.'),
           icon: Heart,
           benefits: [
-            'Recognize and name complex emotions',
-            'Understand emotional triggers and patterns',
-            'Develop healthier emotional responses',
-            'Improve relationships through emotional awareness'
+            t('journeyPreview.emotionalIntelligence.benefit1', 'Recognize and name complex emotions'),
+            t('journeyPreview.emotionalIntelligence.benefit2', 'Understand emotional triggers and patterns'),
+            t('journeyPreview.emotionalIntelligence.benefit3', 'Develop healthier emotional responses'),
+            t('journeyPreview.emotionalIntelligence.benefit4', 'Improve relationships through emotional awareness')
           ],
           days: 10
         };
       case 'mindfulness-awareness':
         return {
           ...defaultInfo,
-          name: 'Mindfulness & Present Awareness',
-          description: 'Learn to be more present and mindful through daily journaling practices focused on sensory awareness and thought observation.',
+          name: t('journeyPreview.mindfulness.name', 'Mindfulness & Present Awareness'),
+          description: t('journeyPreview.mindfulness.description', 'Learn to be more present and mindful through daily journaling practices focused on sensory awareness and thought observation.'),
           icon: Brain,
           benefits: [
-            'Reduce anxiety about the past and future',
-            'Enhance sensory awareness',
-            'Develop focused attention',
-            'Find peace in the present moment'
+            t('journeyPreview.mindfulness.benefit1', 'Reduce anxiety about the past and future'),
+            t('journeyPreview.mindfulness.benefit2', 'Enhance sensory awareness'),
+            t('journeyPreview.mindfulness.benefit3', 'Develop focused attention'),
+            t('journeyPreview.mindfulness.benefit4', 'Find peace in the present moment')
           ],
           days: 10
         };
       case 'life-vision':
         return {
           ...defaultInfo,
-          name: 'Life Vision',
-          description: 'Craft a clear vision for your future through guided reflections on your goals, values, and aspirations.',
+          name: t('journeyPreview.lifeVision.name', 'Life Vision'),
+          description: t('journeyPreview.lifeVision.description', 'Craft a clear vision for your future through guided reflections on your goals, values, and aspirations.'),
           icon: Compass,
           benefits: [
-            'Define long-term goals and aspirations',
-            'Align actions with core values',
-            'Create a roadmap for personal growth',
-            'Enhance motivation and purpose'
+            t('journeyPreview.lifeVision.benefit1', 'Define long-term goals and aspirations'),
+            t('journeyPreview.lifeVision.benefit2', 'Align actions with core values'),
+            t('journeyPreview.lifeVision.benefit3', 'Create a roadmap for personal growth'),
+            t('journeyPreview.lifeVision.benefit4', 'Enhance motivation and purpose')
           ],
           days: 100
         };
@@ -223,7 +225,7 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
   const totalDays = pathInfo.days || 10;
 
   if (isChecking) {
-    return <div>Loading...</div>;
+    return <div>{t('journeyPreview.loading', 'Loading...')}</div>;
   }
 
   return (
@@ -250,16 +252,16 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
           {getIconComponent()}
         </div>
         <h1 className="journey-title">{pathInfo.name}</h1>
-        <p className="journey-subtitle">{totalDays}-day guided journaling experience</p>
+        <p className="journey-subtitle">{t('journeyPreview.dayExperience', '{{days}}-day guided journaling experience', { days: totalDays })}</p>
       </div>
 
       <div className="journey-description">
-        <h2 className="section-title">What to Expect</h2>
+        <h2 className="section-title">{t('journeyPreview.whatToExpect', 'What to Expect')}</h2>
         <p className="description-text">{pathInfo.description}</p>
       </div>
 
       <div className="journey-benefits">
-        <h2 className="section-title">Benefits</h2>
+        <h2 className="section-title">{t('journeyPreview.benefits', 'Benefits')}</h2>
         <ul className="benefits-list">
           {pathInfo.benefits.map((benefit, index) => (
             <li key={index} className="benefit-item">
@@ -271,7 +273,7 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
       </div>
 
       <div className="journey-days">
-        <h2 className="section-title">Your {totalDays}-Day Journey</h2>
+        <h2 className="section-title">{t('journeyPreview.yourDayJourney', 'Your {{days}}-Day Journey', { days: totalDays })}</h2>
         <div className="days-preview">
           {[...Array(Math.min(totalDays, 10))].map((_, i) => {
             const day = i + 1;
@@ -288,13 +290,13 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
         </div>
         <p className="days-explanation">
           {hasStarted
-            ? `You're on day ${nextDay} of your ${pathInfo.name}. Continue your journey!`
-            : `Each day builds upon the previous, guiding you through a structured ${totalDays}-day reflection experience.`}
+            ? t('journeyPreview.onDayContinue', "You're on day {{day}} of your {{name}}. Continue your journey!", { day: nextDay, name: pathInfo.name })
+            : t('journeyPreview.eachDayBuilds', 'Each day builds upon the previous, guiding you through a structured {{days}}-day reflection experience.', { days: totalDays })}
         </p>
       </div>
 
       <button className="start-button" onClick={handleStartJourney}>
-        {hasStarted ? `Continue to Day ${nextDay}` : 'Begin Your Journey'}
+        {hasStarted ? t('journeyPreview.continueToDay', 'Continue to Day {{day}}', { day: nextDay }) : t('journeyPreview.beginYourJourney', 'Begin Your Journey')}
         <ArrowRight className="start-icon" />
       </button>
 
@@ -303,24 +305,23 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
           <div className="confirmation-dialog">
             <div className="confirmation-header">
               <AlertCircle className="confirmation-icon" />
-              <h2 className="confirmation-title">Before You Begin</h2>
+              <h2 className="confirmation-title">{t('journeyPreview.beforeYouBegin', 'Before You Begin')}</h2>
             </div>
 
             <div className="confirmation-content">
               <p>
-                The Transformation Journey is designed to help you break challenging patterns
-                in your life. This is a more intensive 21-day experience that works best with:
+                {t('journeyPreview.transformationIntro', 'The Transformation Journey is designed to help you break challenging patterns in your life. This is a more intensive 21-day experience that works best with:')}
               </p>
 
               <ul className="confirmation-list">
-                <li>Consistent daily practice</li>
-                <li>Honest self-reflection</li>
-                <li>Willingness to examine difficult patterns</li>
-                <li>Commitment to the full 21-day process</li>
+                <li>{t('journeyPreview.confirmItem1', 'Consistent daily practice')}</li>
+                <li>{t('journeyPreview.confirmItem2', 'Honest self-reflection')}</li>
+                <li>{t('journeyPreview.confirmItem3', 'Willingness to examine difficult patterns')}</li>
+                <li>{t('journeyPreview.confirmItem4', 'Commitment to the full 21-day process')}</li>
               </ul>
 
               <p>
-                Are you ready to commit to this transformation journey?
+                {t('journeyPreview.readyToCommit', 'Are you ready to commit to this transformation journey?')}
               </p>
             </div>
 
@@ -329,7 +330,7 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
                 className="confirmation-button cancel"
                 onClick={handleCancelConfirmation}
               >
-                Not Now
+                {t('journeyPreview.notNow', 'Not Now')}
               </button>
 
               <button
@@ -337,7 +338,7 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
                 onClick={handleConfirmation}
                 id="transformation-journey-confirm-button"
               >
-                I Understand
+                {t('journeyPreview.iUnderstand', 'I Understand')}
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@
 // Shows current NFC availability status
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Radio, WifiOff, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import useNFC from '../../hooks/useNFC';
 
@@ -58,12 +59,13 @@ const STATUS_CONFIG = {
   }
 };
 
-function NFCStatusBadge({ 
+function NFCStatusBadge({
   size = 'md',
   showLabel = true,
   onClick = null,
   className = ''
 }) {
+  const { t } = useTranslation('journal');
   const nfc = useNFC();
 
   /**
@@ -78,6 +80,7 @@ function NFCStatusBadge({
 
   const status = getStatus();
   const config = STATUS_CONFIG[status];
+  const statusText = t(`nfcStatus.badge.${status}`, config.text);
   const sizeConfig = SIZES[size];
   const StatusIcon = config.icon;
 
@@ -105,13 +108,13 @@ function NFCStatusBadge({
         ${className}
       `}
       onClick={handleClick}
-      title={status === 'disabled' ? 'Click to open NFC settings' : config.text}
+      title={status === 'disabled' ? t('nfcStatus.badge.clickToOpenSettings', 'Click to open NFC settings') : statusText}
     >
-      <StatusIcon 
+      <StatusIcon
         size={sizeConfig.icon}
         className={config.animated ? 'animate-pulse' : ''}
       />
-      {showLabel && <span className="font-medium">{config.text}</span>}
+      {showLabel && <span className="font-medium">{statusText}</span>}
     </div>
   );
 }
@@ -121,6 +124,7 @@ function NFCStatusBadge({
  * More comprehensive status display with actions
  */
 export function NFCStatusCard({ className = '' }) {
+  const { t } = useTranslation('journal');
   const nfc = useNFC();
 
   /**
@@ -129,18 +133,18 @@ export function NFCStatusCard({ className = '' }) {
   const getDetailedMessage = () => {
     if (!nfc.isAvailable) {
       return {
-        title: 'NFC Not Supported',
-        message: 'Your device doesn\'t support NFC. You can still use Καιρός by manually uploading journal photos.',
+        title: t('nfcStatus.card.notSupported.title', 'NFC Not Supported'),
+        message: t('nfcStatus.card.notSupported.message', 'Your device doesn\'t support NFC. You can still use Καιρός by manually uploading journal photos.'),
         action: null
       };
     }
 
     if (!nfc.isEnabled) {
       return {
-        title: 'Enable NFC',
-        message: 'NFC is available but disabled on your device. Enable it to quickly scan and upload journal entries.',
+        title: t('nfcStatus.card.enableNfc.title', 'Enable NFC'),
+        message: t('nfcStatus.card.enableNfc.message', 'NFC is available but disabled on your device. Enable it to quickly scan and upload journal entries.'),
         action: {
-          text: 'Open Settings',
+          text: t('nfcStatus.card.enableNfc.action', 'Open Settings'),
           onClick: nfc.openSettings
         }
       };
@@ -148,18 +152,18 @@ export function NFCStatusCard({ className = '' }) {
 
     if (nfc.isReading) {
       return {
-        title: 'Ready to Scan',
-        message: 'Hold your phone near the NFC chip on your journal cover to instantly start uploading.',
+        title: t('nfcStatus.card.readyToScan.title', 'Ready to Scan'),
+        message: t('nfcStatus.card.readyToScan.message', 'Hold your phone near the NFC chip on your journal cover to instantly start uploading.'),
         action: {
-          text: 'Stop Scanning',
+          text: t('nfcStatus.card.readyToScan.action', 'Stop Scanning'),
           onClick: nfc.stopReading
         }
       };
     }
 
     return {
-      title: 'NFC Ready',
-      message: 'Your device is ready to scan Καιρός journals. Tap your journal to instantly upload entries.',
+      title: t('nfcStatus.card.ready.title', 'NFC Ready'),
+      message: t('nfcStatus.card.ready.message', 'Your device is ready to scan Καιρός journals. Tap your journal to instantly upload entries.'),
       action: null
     };
   };
@@ -218,10 +222,11 @@ export function NFCStatusCard({ className = '' }) {
  * Inline NFC Status with Action Button
  * Compact version with optional action
  */
-export function NFCStatusInline({ 
+export function NFCStatusInline({
   onScanClick = null,
-  className = '' 
+  className = ''
 }) {
+  const { t } = useTranslation('journal');
   const nfc = useNFC();
 
   if (!nfc.isAvailable) {
@@ -239,7 +244,7 @@ export function NFCStatusInline({
       <div className="flex items-center gap-2">
         <NFCStatusBadge size="sm" />
         <span className="text-sm text-gray-600 dark:text-gray-400">
-          {nfc.isEnabled ? 'Tap journal to scan' : 'Enable NFC to scan journals'}
+          {nfc.isEnabled ? t('nfcStatus.inline.tapToScan', 'Tap journal to scan') : t('nfcStatus.inline.enableToScan', 'Enable NFC to scan journals')}
         </span>
       </div>
 
@@ -254,7 +259,7 @@ export function NFCStatusInline({
             transition-colors duration-200
           "
         >
-          Start Scan
+          {t('nfcStatus.inline.startScan', 'Start Scan')}
         </button>
       )}
 
@@ -269,7 +274,7 @@ export function NFCStatusInline({
             transition-colors duration-200
           "
         >
-          Enable
+          {t('nfcStatus.inline.enable', 'Enable')}
         </button>
       )}
     </div>

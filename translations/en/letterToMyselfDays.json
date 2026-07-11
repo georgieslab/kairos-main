@@ -1,0 +1,44 @@
+[
+  {
+    "id": "letterToMyselfDays:1",
+    "title": "A Letter to Your Past Self",
+    "theme": "Reflection",
+    "prompt": "Write a letter to yourself from one year ago. What would you want them to know? What wisdom, encouragement, or gentle advice would you offer to who you were then? Share what you've learned and how you've grown."
+  },
+  {
+    "id": "letterToMyselfDays:2",
+    "title": "Letter from Your Inner Child",
+    "theme": "Playfulness",
+    "prompt": "Imagine your inner child writing you a letter. What would they want to tell you? What do they miss about life? What dreams and joys do they want to remind you about? Let your playful, innocent self speak to you."
+  },
+  {
+    "id": "letterToMyselfDays:3",
+    "title": "A Letter of Forgiveness",
+    "theme": "Compassion",
+    "prompt": "Write a letter of forgiveness to yourself. What mistakes, regrets, or harsh self-judgments are you ready to release? Offer yourself the same compassion you would give a dear friend. What do you need to hear to truly forgive yourself?"
+  },
+  {
+    "id": "letterToMyselfDays:4",
+    "title": "Letter to Your Future Self",
+    "theme": "Vision",
+    "prompt": "Write a letter to yourself one year from now. What hopes and dreams do you want to share? What are you working toward? What encouragement and love do you want your future self to remember? Paint a picture of who you're becoming."
+  },
+  {
+    "id": "letterToMyselfDays:5",
+    "title": "Letter of Gratitude to Yourself",
+    "theme": "Appreciation",
+    "prompt": "Write a letter thanking yourself for everything you've done, survived, and accomplished. Acknowledge your strength, resilience, and all the ways you've shown up for yourself and others. What are you most grateful to yourself for?"
+  },
+  {
+    "id": "letterToMyselfDays:6",
+    "title": "Letter from Your Wisest Self",
+    "theme": "Wisdom",
+    "prompt": "Imagine the wisest version of yourself - aged, experienced, and deeply knowing - writing you a letter. What profound truths would they share? What perspective on your current challenges would they offer? What do they want you to remember?"
+  },
+  {
+    "id": "letterToMyselfDays:7",
+    "title": "A Love Letter to Yourself",
+    "theme": "Self-Love",
+    "prompt": "Write yourself the most loving, appreciative letter you can imagine. Celebrate who you are - your quirks, your journey, your heart. What do you love about yourself? How can you speak to yourself with the tenderness you deserve? End this journey with pure self-love."
+  }
+]

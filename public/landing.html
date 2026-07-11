@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Καιρός Smart Journal — Where Ancient Wisdom Meets Modern AI</title>
+    <meta name="description" content="NFC-enabled physical journals meet Claude AI reflection. 50 guided journey paths across text, voice, and visual journaling. Privacy-first. Built in Austria.">
+    <link rel="canonical" href="https://reflection-writer.web.app/landing.html">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0a0f1c">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Καιρός Smart Journal">
+    <meta property="og:title" content="Καιρός Smart Journal — Where Ancient Wisdom Meets Modern AI">
+    <meta property="og:description" content="Write by hand, reflect with AI. 50 guided journey paths across text, voice, and visual journaling.">
+    <meta property="og:url" content="https://reflection-writer.web.app/landing.html">
+    <meta property="og:image" content="https://reflection-writer.web.app/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="de_DE">
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Καιρός Smart Journal">
+    <meta name="twitter:description" content="Write by hand, reflect with AI. 50 guided journey paths.">
+    <meta name="twitter:image" content="https://reflection-writer.web.app/og-image.jpg">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://reflection-writer.web.app/#org",
+          "name": "Καιρός Smart Journal",
+          "url": "https://reflection-writer.web.app/",
+          "logo": "https://reflection-writer.web.app/og-image.jpg",
+          "description": "Hybrid physical-digital journaling: NFC-enabled handwritten journals with AI-powered reflection. Built in Austria.",
+          "email": "contact@kairos-journal.com"
+        },
+        {
+          "@type": "WebSite",
+          "name": "Καιρός Smart Journal",
+          "url": "https://reflection-writer.web.app/",
+          "publisher": { "@id": "https://reflection-writer.web.app/#org" },
+          "inLanguage": ["en", "de"]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10B981;
+            --primary-dark: #059669;
+            --secondary-color: #8B5CF6;
+            --accent-color: #06B6D4;
+            --accent-pink: #EC4899;
+            --accent-purple: #A855F7;
+            --accent-amber: #F59E0B;
+            --accent-orange: #F97316;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --text-light: rgba(255, 255, 255, 0.65);
+            --bg-primary: #0a0f1c;
+            --bg-secondary: #1a2742;
+            --bg-tertiary: #243152;
+            --bg-accent: rgba(16, 185, 129, 0.1);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+            --gradient-purple: linear-gradient(135deg, #A855F7 0%, #8B5CF6 100%);
+            --gradient-sunset: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
+            --gradient-hero: linear-gradient(135deg, #1a2742 0%, #0a0f1c 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           LOADING SCREEN
+           ============================================ */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0f1c 0%, #1a2742 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .simple-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-loader {
+            width: 12rem;
+            height: 3rem;
+            opacity: 0;
+            animation: logoReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+        }
+
+        .logo-loader img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 50%;
+            animation: dotWave 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.15s; }
+        .dot:nth-child(3) { animation-delay: 0.3s; }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes logoReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+                filter: blur(10px) drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0) drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+            }
+        }
+
+        @keyframes dotWave {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-15px) scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 15, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 15, 28, 0.95);
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo img {
+            height: 44px;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* ================================================================
+           TRY THE APP — premium micro-interactions
+           Sheen sweep on hover, sliding arrow, press feedback, and a slow
+           idle glow breathe so the button feels alive even at rest.
+           ================================================================ */
+        .nav-cta-try {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: navCtaBreathe 3.2s ease-in-out infinite;
+        }
+
+        .nav-cta-arrow {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            transform: translateX(-2px);
+            opacity: 0.85;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+        }
+
+        /* Diagonal light sheen, swept in from the left on hover */
+        .nav-cta-try::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(
+                115deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.35) 50%,
+                transparent 100%
+            );
+            transform: skewX(-20deg);
+            transition: left 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nav-cta-try:hover::before {
+            left: 130%;
+        }
+
+        .nav-cta-try:hover .nav-cta-arrow {
+            transform: translateX(2px);
+            opacity: 1;
+        }
+
+        .nav-cta-try:active {
+            transform: translateY(0) scale(0.96);
+            transition: transform 0.12s ease;
+        }
+
+        .nav-cta-try:focus-visible {
+            outline: 2px solid rgba(16, 185, 129, 0.7);
+            outline-offset: 3px;
+        }
+
+        /* Very slow, subtle breathing glow at rest — draws the eye without nagging */
+        @keyframes navCtaBreathe {
+            0%, 100% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+            50%      { box-shadow: 0 4px 22px rgba(16, 185, 129, 0.55); }
+        }
+
+        /* Hovering hands control back to the explicit hover shadow above */
+        .nav-cta-try:hover {
+            animation-play-state: paused;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .nav-cta-try { animation: none; }
+            .nav-cta-try::before { transition: none; display: none; }
+            .nav-cta-arrow { transition: none; }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            z-index: 1001;
+            transform-origin: left;
+            transition: transform 0.1s ease-out;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--text-primary);
+            stroke-width: 2;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 73px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 28, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .mobile-nav-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.05) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.05) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 1.2s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ============================================
+           FEATURES SECTION
+           ============================================ */
+        .features {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .feature-highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .feature-highlight svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ============================================
+           JOURNEY PATHS SECTION
+           ============================================ */
+        .journey-paths {
+            background: var(--gradient-hero);
+        }
+
+        .paths-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .path-category {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .path-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .path-category:hover::before {
+            left: 100%;
+        }
+
+        .path-category:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .path-icon-large {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .path-icon-large.text {
+            background: var(--gradient-primary);
+        }
+
+        .path-icon-large.voice {
+            background: var(--gradient-purple);
+        }
+
+        .path-icon-large.visual {
+            background: var(--gradient-sunset);
+        }
+
+        .path-icon-large.multimodal {
+            background: var(--gradient-purple);
+        }
+
+        .path-icon-large svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .path-category h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .path-count {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-count.text { color: var(--primary-color); }
+        .path-count.voice { color: var(--secondary-color); }
+        .path-count.visual { color: var(--accent-pink); }
+        .path-count.multimodal { color: var(--accent-purple); }
+
+        .path-category p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .path-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ============================================
+           HOW IT WORKS SECTION
+           ============================================ */
+        .how-it-works {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .step-card {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .step-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            color: white;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            position: relative;
+        }
+
+        .step-number::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: ripple 2s ease-out infinite;
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* ============================================
+           CREATOR STORY SECTION
+           ============================================ */
+        .creator-story {
+            background: var(--gradient-hero);
+        }
+
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .story-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .story-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+        }
+
+        .story-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 15, 28, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .story-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .story-text p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-quote {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .story-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .story-highlight-item {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .story-highlight-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--primary-color);
+            stroke-width: 2;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .story-highlight-item span {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           TESTIMONIALS SECTION
+           ============================================ */
+        .testimonials {
+            background: var(--bg-primary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 5rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .testimonial-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-rating svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-amber);
+            stroke: none;
+        }
+
+        /* ============================================
+           PRICING SECTION
+           ============================================ */
+        .pricing {
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                var(--gradient-hero);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 3rem auto 0;
+        }
+
+        .pricing-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.4rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .pricing-tier {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .pricing-period {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--primary-color);
+            stroke-width: 2;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+        .cta-section {
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 70%),
+                var(--bg-primary);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-proof {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-proof-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .social-proof-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--primary-color);
+            stroke-width: 2;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .footer-section p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .social-link:hover {
+            background: var(--gradient-primary);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .social-link svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--text-primary);
+            stroke-width: 2;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .story-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .paths-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .story-highlights {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .section {
+                padding: 4rem 0;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* ================================================================
+           SPATIAL GLASS UPGRADE — journey thread, glass cards, aurora,
+           animated artworks. Appended last so overrides win the cascade.
+           ================================================================ */
+
+        /* --- Ambient aurora (fixed blobs behind everything) --- */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 65vmax;
+            height: 65vmax;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+            opacity: 0.45;
+        }
+        body::before {
+            top: -22vmax; left: -18vmax;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.35), transparent 65%);
+            animation: landAurora1 28s ease-in-out infinite alternate;
+        }
+        body::after {
+            bottom: -26vmax; right: -18vmax;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.32), transparent 65%);
+            animation: landAurora2 34s ease-in-out infinite alternate;
+        }
+        @keyframes landAurora1 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(8%, 10%) scale(1.12); }
+        }
+        @keyframes landAurora2 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-8%, -9%) scale(1.1); }
+        }
+
+        /* --- Journey thread --- */
+        .main-content { position: relative; z-index: 1; }
+        .journey-thread {
+            position: absolute;
+            top: 500px; /* clears the hero badge, H1, and pen-stroke flourish */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .journey-thread svg { width: 100%; height: 100%; display: block; }
+        .thread-base  { stroke: rgba(255, 255, 255, 0.05); stroke-width: 2px; }
+        .thread-color { stroke: url(#threadGrad); stroke-width: 2px; opacity: 0.35; }
+        .thread-pulse {
+            stroke: #10B981;
+            stroke-width: 3px;
+            stroke-linecap: round;
+            stroke-dasharray: 7 93;
+            animation: threadTravel 16s linear infinite;
+            filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.9))
+                    drop-shadow(0 0 16px rgba(16, 185, 129, 0.45));
+        }
+        @keyframes threadTravel {
+            from { stroke-dashoffset: 100; }
+            to   { stroke-dashoffset: 0; }
+        }
+        /* Content floats above the thread; glass blurs it into a glow */
+        .hero, .section, .footer { position: relative; z-index: 1; }
+
+        /* --- Real glass for every text container --- */
+        .feature-card,
+        .testimonial-card,
+        .pricing-card,
+        .step-card,
+        .path-category {
+            background: rgba(26, 39, 66, 0.45);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                        0 8px 32px rgba(0, 0, 0, 0.25);
+        }
+        .section-badge {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.18),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- Hero flourish (self-drawing pen stroke) --- */
+        .hero-flourish {
+            width: min(320px, 60vw);
+            height: 30px;
+            margin: 0.4rem auto 0.8rem;
+            display: block;
+        }
+        .flourish-path {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawFlourish 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
+            filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
+        }
+        @keyframes drawFlourish { to { stroke-dashoffset: 0; } }
+
+        /* --- NFC pulse rings --- */
+        .nfc-rings { width: 96px; height: 96px; margin: 1.6rem auto 0; display: block; }
+        .nfc-ring {
+            transform-box: fill-box;
+            transform-origin: center;
+            opacity: 0;
+            animation: nfcPing 3s ease-out infinite;
+        }
+        .nfc-ring.r2 { animation-delay: 1s; }
+        .nfc-ring.r3 { animation-delay: 2s; }
+        @keyframes nfcPing {
+            0%   { transform: scale(1);   opacity: 0.9; }
+            100% { transform: scale(3.2); opacity: 0; }
+        }
+
+        /* --- CTA sparkles --- */
+        .cta-content { position: relative; z-index: 1; }
+        .cta-sparkles {
+            position: absolute;
+            inset: -40px 0;
+            width: 100%;
+            height: calc(100% + 80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .cta-star {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: twinkle 4.5s ease-in-out infinite;
+        }
+        .cta-star.s2 { animation-delay: 0.8s; }
+        .cta-star.s3 { animation-delay: 1.6s; }
+        .cta-star.s4 { animation-delay: 2.4s; }
+        .cta-star.s5 { animation-delay: 3.2s; }
+        .cta-star.s6 { animation-delay: 4s; }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1;  }
+            50%      { opacity: 0.85; }
+        }
+
+        /* --- Reduced motion: keep the story, drop the movement --- */
+        @media (prefers-reduced-motion: reduce) {
+            body::before, body::after,
+            .nfc-ring, .cta-star { animation: none; }
+            .nfc-ring { opacity: 0.35; }
+            .cta-star { opacity: 0.3; }
+            .thread-pulse { display: none; }
+            .flourish-path { animation: none; stroke-dashoffset: 0; }
+        }
+
+        /* ================================================================
+           INFO ICONS — WelcomeScreen glass badge language:
+           translucent circle, backdrop blur, hairline border, inset
+           highlight, soft radial glow. Tooltip is a small glass popover.
+           ================================================================ */
+        .hero-stat-label-row,
+        .path-title-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .path-title-row { justify-content: center; margin-bottom: 0.4rem; }
+        .path-title-row h3 { margin-bottom: 0; }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .info-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.55);
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .info-icon svg { width: 12px; height: 12px; }
+
+        /* Soft green glow behind the icon, WelcomeScreen ws-modality-glow style */
+        .info-icon::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.35), transparent 70%);
+            filter: blur(6px);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: -1;
+        }
+
+        .info-icon:hover,
+        .info-icon:focus-visible,
+        .info-icon.is-active {
+            color: rgba(255, 255, 255, 0.95);
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.12);
+            transform: scale(1.08);
+        }
+        .info-icon:hover::before,
+        .info-icon:focus-visible::before,
+        .info-icon.is-active::before {
+            opacity: 1;
+        }
+        .info-icon:focus-visible { outline: 2px solid rgba(16, 185, 129, 0.6); outline-offset: 2px; }
+
+        .info-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            width: max-content;
+            max-width: 240px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: rgba(26, 39, 66, 0.85);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 28px rgba(0, 0, 0, 0.35);
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(26, 39, 66, 0.85);
+        }
+        .info-icon:hover .info-tooltip,
+        .info-icon:focus-visible .info-tooltip,
+        .info-icon.is-active .info-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Keep tooltips from clipping off the left/right edge on narrow cards */
+        .path-category { overflow: visible; }
+
+        @media (max-width: 480px) {
+            .info-tooltip { max-width: 200px; font-size: 0.75rem; }
+        }
+
+        .nav-cta-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: none;
+            margin-right: 0.75rem;
+        }
+        .nav-cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+        @media (max-width: 900px) {
+            .nav-cta-secondary { display: none; } /* keep the mobile menu as the single entry point below 900px */
+        }
+
+        .hero-path-descent {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .hero-path-descent svg { width: 100%; height: 100%; display: block; }
+        .hero-descent-path {
+            stroke: url(#heroDescentGrad);
+            stroke-width: 2.5px;
+            stroke-linecap: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            opacity: 0;
+            filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
+            animation: drawHeroDescent 2.2s cubic-bezier(0.4, 0, 0.2, 1) 1.1s forwards;
+        }
+        @keyframes drawHeroDescent {
+            0%   { stroke-dashoffset: 100; opacity: 0; }
+            8%   { opacity: 0.8; }
+            100% { stroke-dashoffset: 0; opacity: 0.8; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-descent-path {
+                animation: none;
+                stroke-dashoffset: 0;
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="simple-loader">
+            <div class="logo-loader">
+                <img src="https://i.imgur.com/07nIev9.png" alt="Καιρός Logo">
+            </div>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+
+        <!-- ===== JOURNEY THREAD: a glowing line weaving down the whole page, under the glass ===== -->
+        <div class="journey-thread" aria-hidden="true">
+            <svg viewBox="0 0 1000 9500" preserveAspectRatio="none" fill="none">
+                <defs>
+                    <linearGradient id="threadGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#10B981"/>
+                        <stop offset="0.33" stop-color="#8B5CF6"/>
+                        <stop offset="0.66" stop-color="#06B6D4"/>
+                        <stop offset="1" stop-color="#10B981"/>
+                    </linearGradient>
+                </defs>
+                <path class="thread-base"  d="M 500 -520 C 500 0, 210 400, 210 900 S 790 1800, 790 2400 S 200 3300, 200 3900 S 800 4800, 800 5400 S 210 6300, 210 6900 S 790 7800, 790 8400 S 500 9100, 500 9520" pathLength="100" vector-effect="non-scaling-stroke"/>
+                <path class="thread-color" d="M 500 -520 C 500 0, 210 400, 210 900 S 790 1800, 790 2400 S 200 3300, 200 3900 S 800 4800, 800 5400 S 210 6300, 210 6900 S 790 7800, 790 8400 S 500 9100, 500 9520" pathLength="100" vector-effect="non-scaling-stroke"/>
+                <path class="thread-pulse" d="M 500 -520 C 500 0, 210 400, 210 900 S 790 1800, 790 2400 S 200 3300, 200 3900 S 800 4800, 800 5400 S 210 6300, 210 6900 S 790 7800, 790 8400 S 500 9100, 500 9520" pathLength="100" vector-effect="non-scaling-stroke"/>
+            </svg>
+        </div>
+        <!-- Scroll Indicator -->
+        <div id="scrollIndicator" class="scroll-indicator"></div>
+
+        <!-- Navigation -->
+        <nav id="navbar" class="navbar">
+            <div class="navbar-content">
+                <a href="#" class="logo">
+                    <img src="https://i.imgur.com/07nIev9.png" alt="Καιρός">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#journeys">Journeys</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <a href="https://reflection-writer.web.app" target="_blank" rel="noopener" class="nav-cta nav-cta-try">
+                    <span class="nav-cta-label">Try the App</span>
+                    <svg class="nav-cta-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="mobile-nav-links">
+                <a href="#features">Features</a>
+                <a href="#journeys">Journeys</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#about">About</a>
+            </div>
+            <div class="mobile-nav-actions">
+                <a href="https://reflection-writer.web.app" target="_blank" rel="noopener" class="btn btn-primary nav-cta-try" style="width: 100%; justify-content: center;">
+                    <span class="nav-cta-label">Try the App</span>
+                    <svg class="nav-cta-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-path-descent" aria-hidden="true">
+                <svg viewBox="0 0 400 1000" preserveAspectRatio="none" fill="none">
+                    <defs>
+                        <linearGradient id="heroDescentGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#10B981"/>
+                            <stop offset="0.5" stop-color="#8B5CF6"/>
+                            <stop offset="1" stop-color="#06B6D4"/>
+                        </linearGradient>
+                    </defs>
+                    <path class="hero-descent-path" pathLength="100" vector-effect="non-scaling-stroke"
+                          d="M200 400 C 200 480, 130 520, 130 610 S 270 760, 270 880 S 200 960, 200 1000"/>
+                </svg>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Built with Claude AI • 100% AI-Native Development
+                </div>
+                <h1>Where Ancient Wisdom<br/>Meets Modern AI</h1>
+                <svg class="hero-flourish" viewBox="0 0 320 30" fill="none" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="flourishGrad" x1="0" y1="0" x2="320" y2="0" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#10B981"/>
+                            <stop offset="1" stop-color="#8B5CF6"/>
+                        </linearGradient>
+                    </defs>
+                    <path class="flourish-path" d="M8 22 C 60 8, 120 26, 170 14 S 270 10, 312 18" stroke="url(#flourishGrad)" stroke-width="3" stroke-linecap="round" pathLength="100"/>
+                </svg>
+                <p class="hero-subtitle">
+                    The smart journal inspired by Marcus Aurelius' Meditations.<br/>
+                    Transform handwriting into insights with Claude AI.
+                </p>
+                <p class="hero-description">
+                    Bridge the gap between physical journaling and digital wisdom. NFC-enabled journals meet Claude AI analysis for the deepest self-discovery experience ever created.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">50</span>
+                        <span class="hero-stat-label-row">
+                            <span class="hero-stat-label">Journey Paths</span>
+                            <button type="button" class="info-icon" aria-describedby="tip-paths">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-paths" role="tooltip">28 text &middot; 11 visual &middot; 5 voice &middot; 6 multi-modal &mdash; from 4-day sprints to 100-day odysseys.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">4</span>
+                        <span class="hero-stat-label-row">
+                            <span class="hero-stat-label">Modalities</span>
+                            <button type="button" class="info-icon" aria-describedby="tip-modalities">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-modalities" role="tooltip">Write by hand, speak aloud, paint or sketch &mdash; or blend all three in one multi-modal path.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">92%</span>
+                        <span class="hero-stat-label-row">
+                            <span class="hero-stat-label">AI Accuracy</span>
+                            <button type="button" class="info-icon" aria-describedby="tip-accuracy">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-accuracy" role="tooltip">Claude's handwriting transcription accuracy, measured against manual transcription during beta testing.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#cta" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Join Kickstarter Waitlist
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                        </svg>
+                        Watch Demo
+                    </a>
+                    <a href="https://reflection-writer.web.app" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 3h6v6M10 14 21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Visit the App
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section features">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">Revolutionary Technology</span>
+                    <h2 class="section-title">Why Καιρός is Different</h2>
+                    <p class="section-description">
+                        The world's first multi-modal journaling system powered by Claude AI. Write, speak, or create art—your journey, your way.
+                    </p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card fade-in stagger-1">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Claude AI Analysis</h3>
+                        <p>Powered by Anthropic's Claude Opus 4 for deep psychological insights and Claude Sonnet 4 for lightning-fast handwriting recognition. The smartest AI for the deepest self-understanding.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            92%+ accuracy on handwriting
+                        </div>
+                    </div>
+
+                    <div class="feature-card fade-in stagger-2">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Three Ways to Reflect</h3>
+                        <p>Express yourself through traditional handwriting (28 paths), spoken voice journaling (5 paths), or visual art (11 paths). Plus one revolutionary multi-modal path combining all three.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            50 unique journey paths
+                        </div>
+                    </div>
+
+                    <div class="feature-card fade-in stagger-3">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>Privacy First, Always</h3>
+                        <p>Four-tier privacy system: from complete local processing (Level 1) to selective mentor sharing (Level 4). Your thoughts, your control. GDPR compliant, zero-knowledge encryption.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            No cloud required option
+                        </div>
+                    </div>
+
+                    <div class="feature-card fade-in stagger-4">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>Voice Journaling</h3>
+                        <p>Speak your truth with live transcription and emotional tone analysis. Real-time recording with instant AI insights. More authentic than writing, faster than typing.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Live transcription & analysis
+                        </div>
+                    </div>
+
+                    <div class="feature-card fade-in stagger-5">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="7.5 4.21 12 6.81 16.5 4.21" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="7.5 19.79 7.5 14.6 3 12" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="21 12 16.5 14.6 16.5 19.79" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>NFC Magic</h3>
+                        <p>Tap your journal to your phone and instantly connect to your digital insights. No apps to open, no passwords to type. The future of journaling is frictionless.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            One-tap journal access
+                        </div>
+                    </div>
+
+                    <div class="feature-card fade-in stagger-6">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>Built with AI, for AI</h3>
+                        <p>The entire app was built using Claude AI as the primary developer. A product designer's vision translated directly into code. The future of software development, today.</p>
+                        <div class="feature-highlight">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            100% AI-native development
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey Paths Section -->
+        <section id="journeys" class="section journey-paths">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">50 Unique Paths</span>
+                    <h2 class="section-title">Your Journey, Your Way</h2>
+                    <p class="section-description">
+                        From 4-day intensive transformations to 100-day life-changing odysseys. Choose text, voice, or visual—or try our revolutionary multi-modal path.
+                    </p>
+                </div>
+                <div class="paths-showcase">
+                    <div class="path-category fade-in stagger-1">
+                        <div class="path-icon-large text">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="path-title-row"><h3>Text Journaling</h3><button type="button" class="info-icon" aria-describedby="tip-text-path">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-text-path" role="tooltip">Traditional handwriting, transcribed and analyzed by Claude. The widest duration range: 4 to 100 days.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button></div>
+                        <p class="path-count text">28</p>
+                        <p>Traditional handwriting meets AI analysis. From shadow work to gratitude practice, from 4-day breakthroughs to 100-day transformations.</p>
+                        <div class="path-examples">
+                            <span class="path-tag">Self-Discovery</span>
+                            <span class="path-tag">Shadow Work</span>
+                            <span class="path-tag">Emotional Intelligence</span>
+                            <span class="path-tag">Life Vision</span>
+                        </div>
+                    </div>
+
+                    <div class="path-category fade-in stagger-2">
+                        <div class="path-icon-large voice">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" stroke="currentColor"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="path-title-row"><h3>Voice Journaling</h3><button type="button" class="info-icon" aria-describedby="tip-voice-path">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-voice-path" role="tooltip">Live transcription plus emotional tone analysis. Durations run 10 to 21 days.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button></div>
+                        <p class="path-count voice">5</p>
+                        <p>Speak your truth with live transcription and emotional tone analysis. Build vocal confidence, tell your story, or practice meditation speaking.</p>
+                        <div class="path-examples">
+                            <span class="path-tag">Voice Discovery</span>
+                            <span class="path-tag">Vocal Confidence</span>
+                            <span class="path-tag">Storytelling</span>
+                            <span class="path-tag">Meditation</span>
+                        </div>
+                    </div>
+
+                    <div class="path-category fade-in stagger-3">
+                        <div class="path-icon-large visual">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor"/>
+                                <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor"/>
+                                <polyline points="21 15 16 10 5 21" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="path-title-row"><h3>Visual Journaling</h3><button type="button" class="info-icon" aria-describedby="tip-visual-path">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-visual-path" role="tooltip">No text required &mdash; Claude reads color, composition, and symbolism. Durations run 10 to 33 days.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button></div>
+                        <p class="path-count visual">11</p>
+                        <p>Express through art. Color psychology, sacred geometry, nature sketching, and emotional portraits. Claude AI analyzes colors, symbols, and artistic growth.</p>
+                        <div class="path-examples">
+                            <span class="path-tag">Color Psychology</span>
+                            <span class="path-tag">Sacred Geometry</span>
+                            <span class="path-tag">Ink Mastery</span>
+                            <span class="path-tag">Mindful Art</span>
+                        </div>
+                    </div>
+                    <div class="path-category fade-in stagger-4">
+                        <div class="path-icon-large multimodal">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2 L4 7 L4 17 L12 22 L20 17 L20 7 Z" stroke="currentColor"/>
+                                <path d="M12 2 L12 22 M4 7 L20 17 M20 7 L4 17" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="path-title-row"><h3>Multi-Modal</h3><button type="button" class="info-icon" aria-describedby="tip-multimodal-path">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="info-tooltip" id="tip-multimodal-path" role="tooltip">Text, voice, and visual in one journey. Includes Inner Elements, Shadow &amp; Light, and 4 more. Durations run 9 to 21 days.</span>
+                                <span class="visually-hidden">More info</span>
+                            </button></div>
+                        <p class="path-count multimodal">6</p>
+                        <p>The world's first multi-modal journaling paths &mdash; the same themes explored through writing, voice, and art within a single cohesive journey.</p>
+                        <div class="path-examples">
+                            <span class="path-tag">Inner Elements</span>
+                            <span class="path-tag">Shadow &amp; Light</span>
+                            <span class="path-tag">Life Chapters</span>
+                            <span class="path-tag">Sensory Spectrum</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 3rem;">
+                    <div class="fade-in stagger-5" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2rem; border-radius: 20px; max-width: 600px; margin: 0 auto;">
+                        <h4 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 0.5rem; font-weight: 700;">
+                            🌟 Flagship Multi-Modal: Inner Elements Journey
+                        </h4>
+                        <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6;">
+                            The path that started it all. Explore Earth, Water, and Fire through text, art, and voice &mdash; the same theme, three different lenses, in one 9-day journey.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="section how-it-works">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">Simple & Powerful</span>
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-description">
+                        From ancient wisdom to modern insights in just four simple steps.
+                    </p>
+                    <svg class="nfc-rings" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <circle class="nfc-ring r1" cx="60" cy="60" r="14" stroke="#10B981" stroke-width="2"/>
+                        <circle class="nfc-ring r2" cx="60" cy="60" r="14" stroke="#10B981" stroke-width="2"/>
+                        <circle class="nfc-ring r3" cx="60" cy="60" r="14" stroke="#10B981" stroke-width="2"/>
+                        <circle cx="60" cy="60" r="5" fill="#10B981"/>
+                    </svg>
+                </div>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Write, Speak, or Create</h3>
+                        <p>Open your beautiful handcrafted journal and write with ink, record a voice entry, or create visual art. Choose the modality that feels right today.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Tap to Connect</h3>
+                        <p>Tap your journal's NFC chip to your phone. Instant connection—no apps to open, no passwords to remember. Magic in motion.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Claude AI Analyzes</h3>
+                        <p>Claude extracts your handwriting, transcribes your voice, or analyzes your artwork. Then dives deep into emotional patterns, themes, and insights.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Discover & Grow</h3>
+                        <p>Receive personalized insights, track patterns over time, and watch your journey unfold. Your past self guides your future self.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creator Story Section -->
+        <section id="about" class="section creator-story">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">Built in Austria</span>
+                    <h2 class="section-title">From Coffee Shop to AI Innovation</h2>
+                    <p class="section-description">
+                        The story of how a philosophy student working at a bakery built the future of journaling with Claude AI.
+                    </p>
+                </div>
+                <div class="story-content">
+                    <div class="story-image fade-in stagger-1">
+                        <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80" alt="Developer working">
+                        <div class="story-badge">🇦🇹 Made in Austria</div>
+                    </div>
+                    <div class="story-text fade-in stagger-2">
+                        <h3>"Everyone should be able to write their own book"</h3>
+                        <p>
+                            At 30, I took a leave from university (High School Teachers' Education—Informatics & English) to pursue a dream. Working part-time at a local coffee shop in a small Austrian village to fund development, I read Marcus Aurelius' <em>Meditations</em> and watched my mother journal every day.
+                        </p>
+                        <p>
+                            I thought: what if everyone could write their own Meditations? What if AI could help us understand our patterns like Marcus understood his?
+                        </p>
+                        <div class="story-quote">
+                            "I had zero traditional coding skills. Just a clear vision and Claude AI as my development partner. Together, we built the entire app—50 journey paths, voice recording, NFC integration, everything. This is proof that you don't need to code to build technology. You need to understand people."
+                        </div>
+                        <p>
+                            From chemistry student in Georgia → car accident → moving to Austria at 26 → 2 years learning German → starting a new degree → taking the leap to build Καιρός. Every struggle taught me something: resilience, patience, vision over perfection.
+                        </p>
+                        <div class="story-highlights">
+                            <div class="story-highlight-item">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span><strong>Built 100% with Claude AI</strong> - No traditional developers</span>
+                            </div>
+                            <div class="story-highlight-item">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span><strong>5 active beta users</strong> - Building in public from day 1</span>
+                            </div>
+                            <div class="story-highlight-item">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span><strong>Philosophy-driven design</strong> - Stoic principles meet modern tech</span>
+                            </div>
+                            <div class="story-highlight-item">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span><strong>Daily testing</strong> - I journal 3x/day to perfect every feature</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="section testimonials">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">Real Feedback</span>
+                    <h2 class="section-title">What Beta Users Are Saying</h2>
+                    <p class="section-description">
+                        5 active testers helping shape the future of journaling.
+                    </p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card fade-in stagger-1">
+                        <div class="testimonial-rating">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "The AI analysis feels like having a wise friend who remembers everything I've shared and helps me see patterns I'd never notice on my own. The voice feature made me realize I'm more honest when speaking than writing."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">S</div>
+                            <div class="author-info">
+                                <h4>Sarah M.</h4>
+                                <p>Beta User, 32</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card fade-in stagger-2">
+                        <div class="testimonial-rating">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "I've tried every journaling app. They all felt soulless. Καιρός gives me the best of both worlds—the tactile joy of writing with ink, plus insights I could never generate myself. The NFC tap is pure magic."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">M</div>
+                            <div class="author-info">
+                                <h4>Marcus L.</h4>
+                                <p>Beta User, 28</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card fade-in stagger-3">
+                        <div class="testimonial-rating">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "The visual journaling paths opened up a whole new way for me to process emotions. The color psychology journey helped me understand my moods in ways words never could. This is revolutionary."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">E</div>
+                            <div class="author-info">
+                                <h4>Elena K.</h4>
+                                <p>Beta User, 35</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="section pricing">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge">Kickstarter Exclusive</span>
+                    <h2 class="section-title">Early Adopter Pricing</h2>
+                    <p class="section-description">
+                        Premium journals with NFC technology + AI-powered subscriptions. Lock in lifetime discounts by backing on Kickstarter.
+                    </p>
+                </div>
+                <div class="pricing-grid">
+                    <div class="pricing-card fade-in stagger-1">
+                        <div class="pricing-tier">Essential</div>
+                        <div class="pricing-price">€89<span>/one-time</span></div>
+                        <p class="pricing-period">+ €11.99/month after 3 months</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Leatherette journal with NFC chip
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                200 premium pages
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                3-month AI subscription included
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Basic handwriting extraction
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Emotional tone analysis
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                1GB cloud storage
+                            </li>
+                        </ul>
+                        <a href="#cta" class="btn btn-secondary pricing-cta">Select Essential</a>
+                    </div>
+
+                    <div class="pricing-card featured fade-in stagger-2">
+                        <div class="pricing-tier">Insight</div>
+                        <div class="pricing-price">€146<span>/one-time</span></div>
+                        <p class="pricing-period">+ €16.99/month after 6 months</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Genuine leather journal + gold accents
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                250 premium pages
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                6-month AI subscription included
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Advanced pattern recognition
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Voice journaling paths
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Visual journaling paths
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                5GB cloud storage
+                            </li>
+                        </ul>
+                        <a href="#cta" class="btn btn-primary pricing-cta">Select Insight</a>
+                    </div>
+
+                    <div class="pricing-card fade-in stagger-3">
+                        <div class="pricing-tier">Legacy</div>
+                        <div class="pricing-price">€225<span>/one-time</span></div>
+                        <p class="pricing-period">+ €21.99/month after 12 months</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Hand-bound leather + gold leaf edges
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                300 archival-quality pages
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                12-month AI subscription included
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Unlimited handwriting recognition
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                All 50 journey paths
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Multi-modal Inner Elements path
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Unlimited cloud storage
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Priority support
+                            </li>
+                        </ul>
+                        <a href="#cta" class="btn btn-primary pricing-cta">Select Legacy</a>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 3rem;">
+                    <p class="fade-in stagger-4" style="color: var(--text-light); font-size: 0.95rem;">
+                        🎁 <strong>Kickstarter Early Bird:</strong> Get 25% off + 3 extra subscription months + exclusive NFC tag
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="cta" class="section cta-section">
+            <div class="container">
+                <div class="cta-content fade-in">
+                    <svg class="cta-sparkles" viewBox="0 0 800 340" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+                        <path class="cta-star s1" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#10B981" transform="translate(90,60)"/>
+                        <path class="cta-star s2" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#8B5CF6" transform="translate(700,80) scale(0.8)"/>
+                        <path class="cta-star s3" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#06B6D4" transform="translate(160,260) scale(0.7)"/>
+                        <path class="cta-star s4" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#10B981" transform="translate(640,250) scale(0.9)"/>
+                        <path class="cta-star s5" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#8B5CF6" transform="translate(400,30) scale(0.6)"/>
+                        <path class="cta-star s6" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#06B6D4" transform="translate(50,170) scale(0.5)"/>
+                    </svg>
+                    <h2>Start Your Journey with Καιρός</h2>
+                    <p>
+                        Join the waitlist for our Kickstarter launch. Be among the first to experience the future of journaling—where ancient wisdom meets modern AI.
+                    </p>
+                    <div class="cta-actions">
+                        <a href="https://www.kickstarter.com" target="_blank" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Join Kickstarter Waitlist
+                        </a>
+                        <a href="mailto:contact@kairos-journal.com" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Get Updates via Email
+                        </a>
+                    </div>
+                    <div class="social-proof">
+                        <div class="social-proof-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor"/>
+                                <circle cx="9" cy="7" r="4" stroke="currentColor"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor"/>
+                            </svg>
+                            5 Active Beta Users
+                        </div>
+                        <div class="social-proof-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor"/>
+                            </svg>
+                            100% Positive Feedback
+                        </div>
+                        <div class="social-proof-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor"/>
+                            </svg>
+                            Privacy-First Design
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Καιρός</h4>
+                        <p>
+                            AI-powered journaling for personal growth and self-discovery. Built with Claude AI in Austria.
+                        </p>
+                        <div class="social-links">
+                            <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="currentColor"/>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor"/>
+                                </svg>
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" class="social-link" aria-label="LinkedIn">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" stroke="currentColor"/>
+                                    <circle cx="4" cy="4" r="2" stroke="currentColor"/>
+                                </svg>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" class="social-link" aria-label="Twitter">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" stroke="currentColor"/>
+                                </svg>
+                            </a>
+                            <a href="mailto:contact@kairos-journal.com" class="social-link" aria-label="Email">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor"/>
+                                    <polyline points="22,6 12,13 2,6" stroke="currentColor"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Product</h4>
+                        <a href="https://reflection-writer.web.app" target="_blank" rel="noopener">Try the App</a>
+                        <a href="#features">Features</a>
+                        <a href="#journeys">50 Journey Paths</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#how-it-works">How It Works</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Company</h4>
+                        <a href="#about">About Us</a>
+                        <a href="#about">Our Story</a>
+                        <a href="mailto:contact@kairos-journal.com">Contact</a>
+                        <a href="#">Press Kit</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">GDPR Compliance</a>
+                        <a href="#">Patent Pending</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Καιρός Smart Journal. All rights reserved.</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.7;">
+                        Built with ❤️ and Claude AI in a small village in Austria 🇦🇹
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Info icon tooltips — tap-to-toggle for touch devices (desktop gets :hover/:focus for free)
+        document.querySelectorAll('.info-icon').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wasActive = btn.classList.contains('is-active');
+                document.querySelectorAll('.info-icon.is-active').forEach((b) => b.classList.remove('is-active'));
+                if (!wasActive) btn.classList.add('is-active');
+            });
+        });
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.info-icon.is-active').forEach((b) => b.classList.remove('is-active'));
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.info-icon.is-active').forEach((b) => b.classList.remove('is-active'));
+            }
+        });
+
+        // Loading Screen
+        window.addEventListener('load', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const mainContent = document.getElementById('mainContent');
+            
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                mainContent.classList.add('visible');
+                initAnimations();
+            }, 500);
+        });
+
+        // Initialize animations
+        function initAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains('fade-in')) {
+                            entry.target.classList.add('animate');
+                        }
+                        if (entry.target.classList.contains('step-card')) {
+                            entry.target.classList.add('animate');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in, .step-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (currentScroll / maxScroll) * 100;
+
+            scrollIndicator.style.transform = `scaleX(${scrollPercent / 100})`;
+
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            
+            const icon = mobileMenuToggle.querySelector('svg');
+            if (mobileMenu.classList.contains('active')) {
+                icon.innerHTML = `
+                    <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/>
+                    <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+                `;
+            } else {
+                icon.innerHTML = `
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+                `;
+            }
+        });
+
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('.mobile-nav-links a, .mobile-nav-actions a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('svg');
+                icon.innerHTML = `
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+                `;
+            });
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero && window.innerWidth > 768) {
+                hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('svg');
+                icon.innerHTML = `
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+                `;
+            }
+        });
+
+        // Console Easter Egg
+        console.log('%cΚαιρός Smart Journal', 'font-size: 20px; font-weight: bold; color: #10B981;');
+        console.log('%cBuilt 100% with Claude AI by a student in Austria', 'font-size: 14px; color: #8B5CF6;');
+        console.log('%cWant to join the team? Email: contact@kairos-journal.com', 'font-size: 12px; color: #06B6D4;');
+    </script>
+</body>
+</html>

@@ -1,13 +1,21 @@
 /* src/styles/components/pageTransitions.css */
 /* Add this file to your project and import it in your App.jsx */
 
+/* iOS-style: clip the page only while it slides in/out, so the off-screen
+   page doesn't bleed. The rest of the time pages scroll freely (clipping the
+   container otherwise was capping vertical scroll on long screens). */
+.page-transition-container.transitioning {
+  overflow: hidden;
+}
+
 /* Page transition container */
 .page-transition-container {
     position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* iOS-style: only clip while a slide transition runs (see .transitioning) */
+    overflow: visible;
   }
   
   /* Page content wrapper */
@@ -125,7 +133,8 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* iOS-style: only clip while a slide transition runs (see .transitioning) */
+    overflow: visible;
   }
   
   /* Page content wrapper */

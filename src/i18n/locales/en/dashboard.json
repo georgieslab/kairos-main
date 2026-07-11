@@ -1,0 +1,24 @@
+{
+  "header": {
+    "title": "Your Journal Dashboard",
+    "subtitle": "Track your journaling progress and insights"
+  },
+  "stats": {
+    "totalEntries": "Total Entries",
+    "journeyCompleted": "Journey Completed!",
+    "percentComplete": "{{percent}}% of journey complete",
+    "currentStreak": "Current Streak",
+    "daysInARowCount": "{{count}} days in a row",
+    "daysInARow": "days in a row",
+    "topTheme": "Top Theme",
+    "noneYet": "None yet",
+    "basedOnJournalContent": "Based on your journal content",
+    "bestJournalingDay": "Best Journaling Day",
+    "mostFrequentDay": "You journal most frequently on this day"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "keyInsights": "Key Insights",
+    "pastEntries": "Past Entries"
+  }
+}

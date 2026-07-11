@@ -1,0 +1,128 @@
+[
+  {
+    "id": "colorPsychologyJourneyDays:1",
+    "title": "Color Intuition",
+    "theme": "Awareness",
+    "prompt": "Without thinking, choose 3 colors that represent how you feel today. Paint or draw with only these colors for 15 minutes. What emotions or memories do these colors evoke? How do they interact with each other?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:2",
+    "title": "Red Exploration",
+    "theme": "Energy",
+    "prompt": "Work exclusively with shades of red today - crimson, scarlet, burgundy, pink. How does this color affect your energy and mood as you create? What aspects of yourself does red represent or awaken?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:3",
+    "title": "Blue Depths",
+    "theme": "Calm",
+    "prompt": "Dive into the world of blues - navy, sky, cerulean, teal. Create something that explores the emotional range of blue. What feelings does blue evoke? How does it affect your breathing and mental state?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:4",
+    "title": "Yellow Sunshine",
+    "theme": "Joy",
+    "prompt": "Explore yellows in all their forms - lemon, gold, ochre, cream. Let yellow guide your creation today. What does yellow teach you about optimism, creativity, and inner light?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:5",
+    "title": "Green Growth",
+    "theme": "Nature",
+    "prompt": "Work with the full spectrum of greens - forest, lime, sage, olive. How does green connect you to growth, healing, and the natural world? What emerges when you let green lead?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:6",
+    "title": "Purple Royalty",
+    "theme": "Mystery",
+    "prompt": "Explore purples and violets - lavender, plum, indigo, magenta. What does purple reveal about mystery, spirituality, and transformation in your life? How does this color make you feel?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:7",
+    "title": "Orange Enthusiasm",
+    "theme": "Vitality",
+    "prompt": "Create with oranges - tangerine, peach, amber, coral. How does orange energy show up in your artwork? What does this color teach you about enthusiasm and creative fire?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:8",
+    "title": "Black & White Contrast",
+    "theme": "Drama",
+    "prompt": "Work only in black and white today. Explore contrast, shadows, and light. What emotions arise when color is removed? What do you discover about form, texture, and drama?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:9",
+    "title": "Warm Color Symphony",
+    "theme": "Heat",
+    "prompt": "Combine reds, oranges, and yellows. Create a warm color composition that explores passion, energy, and fire. How do warm colors interact? What feelings do they generate together?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:10",
+    "title": "Cool Color Harmony",
+    "theme": "Serenity",
+    "prompt": "Work with blues, greens, and purples. Create a cool color piece that explores peace, depth, and tranquility. How do cool colors support each other? What calm do they bring?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:11",
+    "title": "Monochromatic Study",
+    "theme": "Subtlety",
+    "prompt": "Choose one color and explore all its possible variations - tints, shades, and tones. How many different emotions can one color express? What subtleties emerge in monochromatic work?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:12",
+    "title": "Complementary Tension",
+    "theme": "Opposition",
+    "prompt": "Work with complementary colors - red/green, blue/orange, or yellow/purple. How do opposite colors create tension and vibrancy? What energy emerges from this color relationship?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:13",
+    "title": "Analogous Comfort",
+    "theme": "Harmony",
+    "prompt": "Use analogous colors (neighbors on the color wheel). Create something that explores the comfort and harmony of related colors. How do similar colors create unity and flow?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:14",
+    "title": "Triadic Balance",
+    "theme": "Vibrancy",
+    "prompt": "Work with three colors equally spaced on the color wheel. Explore how these colors balance and energize each other. What dynamic relationships emerge from triadic color schemes?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:15",
+    "title": "Emotional Color Mapping",
+    "theme": "Feelings",
+    "prompt": "Create a visual map of your current emotional landscape using color. What colors represent your different feelings? How do they relate to each other spatially and energetically?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:16",
+    "title": "Memory Colors",
+    "theme": "Past",
+    "prompt": "What colors are connected to your most precious memories? Create art that explores these memory-colors. How do certain hues transport you to specific times and places?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:17",
+    "title": "Seasonal Colors",
+    "theme": "Cycles",
+    "prompt": "Explore the colors of your current season or a season that calls to you. How do seasonal colors reflect natural rhythms and inner states? What season lives in your soul right now?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:18",
+    "title": "Cultural Color Stories",
+    "theme": "Heritage",
+    "prompt": "Explore colors that have cultural significance for you or that you're drawn to from other cultures. What stories do these colors tell? How do they connect you to larger human experiences?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:19",
+    "title": "Healing Colors",
+    "theme": "Wellness",
+    "prompt": "What colors feel healing or nurturing to you right now? Create art focused on colors that support your wellbeing. How might color be medicine for your soul?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:20",
+    "title": "Future Color Vision",
+    "theme": "Aspiration",
+    "prompt": "What colors represent your hopes and dreams for the future? Create a color composition that embodies your aspirations. How do these colors inspire and motivate you?"
+  },
+  {
+    "id": "colorPsychologyJourneyDays:21",
+    "title": "Personal Color Palette",
+    "theme": "Integration",
+    "prompt": "Based on your 21-day color journey, create your personal color palette - the colors that most authentically represent your emotional signature and artistic voice. What is your unique color language?"
+  }
+]

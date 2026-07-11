@@ -1,0 +1,200 @@
+[
+  {
+    "id": "mindfulVisualizationDays:1",
+    "title": "Visual Awareness",
+    "theme": "Present Observation",
+    "prompt": "Take a moment to observe your surroundings. Choose one object that catches your attention and create a simple sketch of it, focusing on its basic shapes and lines rather than perfection."
+  },
+  {
+    "id": "mindfulVisualizationDays:2",
+    "title": "Emotional Colors",
+    "theme": "Color Expression",
+    "prompt": "What emotion are you feeling most strongly today? Select colors that represent this emotion and create an abstract expression using only colors, shapes, and movement. No specific objects needed."
+  },
+  {
+    "id": "mindfulVisualizationDays:3",
+    "title": "Mindful Lines",
+    "theme": "Process Focus",
+    "prompt": "Draw a series of flowing lines without planning the outcome. Focus entirely on the sensation of the pen or pencil moving across the paper. Allow the lines to develop organically as you stay present with each stroke."
+  },
+  {
+    "id": "mindfulVisualizationDays:4",
+    "title": "Nature's Patterns",
+    "theme": "Natural Forms",
+    "prompt": "Spend time observing a natural element (a leaf, flower, cloud formations, or tree bark). Create a drawing that captures the patterns you observe, focusing on texture and repetition."
+  },
+  {
+    "id": "mindfulVisualizationDays:5",
+    "title": "Body Awareness",
+    "theme": "Physical Sensation",
+    "prompt": "Close your eyes and notice sensations in your body. Where do you feel tension, lightness, or energy? Create a visual representation of these physical sensations using colors, shapes, or symbols."
+  },
+  {
+    "id": "mindfulVisualizationDays:6",
+    "title": "Breath Visualization",
+    "theme": "Rhythmic Flow",
+    "prompt": "As you breathe deeply, draw a continuous line that follows your breath - perhaps rising with inhales and falling with exhales. Continue for at least 5 minutes, creating a visual record of your breathing pattern."
+  },
+  {
+    "id": "mindfulVisualizationDays:7",
+    "title": "Sound Translation",
+    "theme": "Sensory Integration",
+    "prompt": "Listen carefully to sounds in your environment (or play a piece of music). Translate these sounds into visual elements - perhaps dots for short sounds, waves for continuous ones, or colors for different tones."
+  },
+  {
+    "id": "mindfulVisualizationDays:8",
+    "title": "Memory Sketching",
+    "theme": "Present to Past",
+    "prompt": "Recall a calm, pleasant memory. Without overthinking, sketch elements from this memory. Focus on capturing the feeling rather than creating an accurate representation."
+  },
+  {
+    "id": "mindfulVisualizationDays:9",
+    "title": "Gratitude Symbols",
+    "theme": "Appreciation",
+    "prompt": "Create simple symbols or icons representing three things you're grateful for today. Arrange them in a composition that feels balanced and meaningful to you."
+  },
+  {
+    "id": "mindfulVisualizationDays:10",
+    "title": "Inner Weather",
+    "theme": "Emotional Landscape",
+    "prompt": "If your current emotional state were weather, what would it be? Create a visual representation of this internal weather system using colors, shapes, and textures that reflect your emotional climate."
+  },
+  {
+    "id": "mindfulVisualizationDays:11",
+    "title": "Intentional Mandalas",
+    "theme": "Centered Focus",
+    "prompt": "Create a simple mandala starting from the center and working outward. As you add each layer, set an intention or focus on a quality you wish to cultivate (patience, joy, calm, etc.)."
+  },
+  {
+    "id": "mindfulVisualizationDays:12",
+    "title": "Shadow Appreciation",
+    "theme": "Contrast & Balance",
+    "prompt": "Observe shadows and light around you. Create a drawing focusing on the contrast between light and dark, noticing how shadows define and reveal objects rather than simply obscuring them."
+  },
+  {
+    "id": "mindfulVisualizationDays:13",
+    "title": "Texture Exploration",
+    "theme": "Tactile Awareness",
+    "prompt": "Close your eyes and touch different textures around you. Create a visual composition of these textures, translating the tactile experience into visual patterns."
+  },
+  {
+    "id": "mindfulVisualizationDays:14",
+    "title": "Dream Fragment",
+    "theme": "Subconscious Expression",
+    "prompt": "Recall a recent dream or fragment of a dream. Create a drawing, doodle, or painting that captures the essence or feeling of this dream without trying to literally illustrate it."
+  },
+  {
+    "id": "mindfulVisualizationDays:15",
+    "title": "Mid-Journey Reflection",
+    "theme": "Integration",
+    "prompt": "Review your visual journal entries from the past two weeks. Create a new piece that integrates elements or techniques from your favorite previous entries, bringing them together in a new way."
+  },
+  {
+    "id": "mindfulVisualizationDays:16",
+    "title": "Body Mapping",
+    "theme": "Self-Connection",
+    "prompt": "Draw a simple outline of a human body. Using colors, patterns, or symbols, map your emotional and physical experiences onto this body outline. Where do you feel joy, tension, energy, or calm?"
+  },
+  {
+    "id": "mindfulVisualizationDays:17",
+    "title": "Releasing Visualization",
+    "theme": "Letting Go",
+    "prompt": "Think of something you'd like to release or let go of. Create a visual representation of this release - perhaps depicting the transformation from tension to freedom or from chaos to clarity."
+  },
+  {
+    "id": "mindfulVisualizationDays:18",
+    "title": "Sacred Space",
+    "theme": "Inner Sanctuary",
+    "prompt": "Visualize a space that represents safety, peace, and comfort to you. Create a drawing of this inner sanctuary, including elements that make you feel protected and nourished."
+  },
+  {
+    "id": "mindfulVisualizationDays:19",
+    "title": "Movement Traces",
+    "theme": "Dynamic Presence",
+    "prompt": "Attach your drawing tool to a longer stick or holder to create distance. Move your whole arm or body as you draw, tracing the natural movements of your body rather than controlling with just your hand."
+  },
+  {
+    "id": "mindfulVisualizationDays:20",
+    "title": "Intuitive Symbols",
+    "theme": "Personal Iconography",
+    "prompt": "Without overthinking, create 3-5 symbols that feel personally meaningful to you right now. These might represent current challenges, aspirations, or significant aspects of your life."
+  },
+  {
+    "id": "mindfulVisualizationDays:21",
+    "title": "Nature Connection",
+    "theme": "Ecological Awareness",
+    "prompt": "Spend time observing a natural element (tree, flower, sky, water). Create a drawing that explores your connection with this element, perhaps blending your human form with the natural world."
+  },
+  {
+    "id": "mindfulVisualizationDays:22",
+    "title": "Childhood Memory",
+    "theme": "Playful Expression",
+    "prompt": "Recall how you used to draw or create as a child. Using your non-dominant hand, create a drawing with the freedom and unselfconsciousness of childhood."
+  },
+  {
+    "id": "mindfulVisualizationDays:23",
+    "title": "Visual Meditation",
+    "theme": "Focused Awareness",
+    "prompt": "Begin with a single dot in the center of your page. For 10 minutes, add to your drawing while maintaining complete focus on the present moment, returning to mindful awareness whenever your mind wanders."
+  },
+  {
+    "id": "mindfulVisualizationDays:24",
+    "title": "Emotional Spectrum",
+    "theme": "Full Range Expression",
+    "prompt": "Create a visual representation of your emotional spectrum - from your most challenging emotions to your most uplifting ones. How do these emotions relate to each other in your inner landscape?"
+  },
+  {
+    "id": "mindfulVisualizationDays:25",
+    "title": "Word to Image",
+    "theme": "Linguistic Translation",
+    "prompt": "Choose a word that feels significant to you today. Without illustrating the word literally, create a visual expression of the essence or feeling of this word through color, shape, and texture."
+  },
+  {
+    "id": "mindfulVisualizationDays:26",
+    "title": "Energy Pathways",
+    "theme": "Vitality Awareness",
+    "prompt": "With your eyes closed, sense the movement of energy in your body. Open your eyes and create flowing lines that map these energy pathways, perhaps using different colors for different types of energy."
+  },
+  {
+    "id": "mindfulVisualizationDays:27",
+    "title": "Growth Visualization",
+    "theme": "Transformation",
+    "prompt": "Create a visual representation of your personal growth journey. How might you depict where you've been, where you are now, and the direction you're growing toward?"
+  },
+  {
+    "id": "mindfulVisualizationDays:28",
+    "title": "Boundary Exploration",
+    "theme": "Containment & Freedom",
+    "prompt": "Draw a boundary or container of some kind (circle, square, irregular shape). Fill the inside and outside differently, exploring the relationship between contained and uncontained space."
+  },
+  {
+    "id": "mindfulVisualizationDays:29",
+    "title": "Visual Storytelling",
+    "theme": "Narrative Flow",
+    "prompt": "Create a simple sequential drawing that tells a story in 3-4 panels. Focus on transition and flow rather than detail, allowing the story to emerge intuitively rather than planning it completely."
+  },
+  {
+    "id": "mindfulVisualizationDays:30",
+    "title": "Aspirational Vision",
+    "theme": "Future Self",
+    "prompt": "Create a visual representation of a quality you wish to develop more fully in yourself. How might this quality look and feel if it were expressed visually?"
+  },
+  {
+    "id": "mindfulVisualizationDays:31",
+    "title": "Integration Patterns",
+    "theme": "Wholeness",
+    "prompt": "Create a drawing that represents integration of different aspects of yourself. You might use different patterns in the same image, or find ways to visually harmonize contrasting elements."
+  },
+  {
+    "id": "mindfulVisualizationDays:32",
+    "title": "Gratitude Garden",
+    "theme": "Abundance",
+    "prompt": "Create a visual garden filled with elements that represent things you're grateful for. Each plant, flower, or feature can symbolize a different aspect of your life that nourishes you."
+  },
+  {
+    "id": "mindfulVisualizationDays:33",
+    "title": "Visual Journey Reflection",
+    "theme": "Creative Integration",
+    "prompt": "Look through all your visual journal entries from this journey. Create a final piece that incorporates elements that most resonated with you, celebrating your visual mindfulness practice and what you've discovered."
+  }
+]

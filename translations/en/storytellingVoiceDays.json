@@ -1,0 +1,92 @@
+[
+  {
+    "id": "storytellingVoiceDays:1",
+    "title": "Your Story Foundation",
+    "theme": "Personal Narrative",
+    "prompt": "Tell the story of who you are in 2-3 minutes, as if meeting someone for the first time. What elements make your personal story compelling? How does your voice carry your narrative?"
+  },
+  {
+    "id": "storytellingVoiceDays:2",
+    "title": "Childhood Story Time",
+    "theme": "Memory Narratives",
+    "prompt": "Share a favorite childhood memory as if telling it to a friend. Practice using your voice to bring the story to life with emotion, pacing, and descriptive language."
+  },
+  {
+    "id": "storytellingVoiceDays:3",
+    "title": "Character Voices",
+    "theme": "Voice Acting",
+    "prompt": "Tell a simple story using different voices for different characters. Experiment with how changing your voice can bring characters to life. What character voices feel natural to you?"
+  },
+  {
+    "id": "storytellingVoiceDays:4",
+    "title": "Emotional Storytelling",
+    "theme": "Feeling Through Voice",
+    "prompt": "Share a story that moved you emotionally, letting the feelings come through your voice. How does your voice change when telling happy versus sad stories? Practice emotional vocal expression."
+  },
+  {
+    "id": "storytellingVoiceDays:5",
+    "title": "Family Legends",
+    "theme": "Heritage Stories",
+    "prompt": "Tell a family story or legend that's been passed down. Practice being a keeper of family history through your voice. How do you honor the storytellers who came before you?"
+  },
+  {
+    "id": "storytellingVoiceDays:6",
+    "title": "Humor and Voice",
+    "theme": "Comedy",
+    "prompt": "Share a funny story or joke, focusing on timing, pacing, and vocal delivery. How does your voice contribute to humor? What makes a story funny in the telling?"
+  },
+  {
+    "id": "storytellingVoiceDays:7",
+    "title": "Descriptive Storytelling",
+    "theme": "Vivid Description",
+    "prompt": "Describe a beautiful place you've been as if painting a picture with words. Use your voice to help listeners see, feel, and experience the place through your description."
+  },
+  {
+    "id": "storytellingVoiceDays:8",
+    "title": "Adventure Tales",
+    "theme": "Exciting Narratives",
+    "prompt": "Tell an adventure story - real or imagined - with excitement and energy. Practice building suspense and excitement through vocal pacing, volume, and enthusiasm."
+  },
+  {
+    "id": "storytellingVoiceDays:9",
+    "title": "Teaching Through Stories",
+    "theme": "Educational Narrative",
+    "prompt": "Share a story that teaches a lesson or insight you've learned. How can storytelling be a powerful way to share wisdom? Practice using narrative to convey important messages."
+  },
+  {
+    "id": "storytellingVoiceDays:10",
+    "title": "Love Stories",
+    "theme": "Romance and Connection",
+    "prompt": "Tell a story about love - romantic, familial, or friendship. How does your voice convey different types of love and connection? Practice speaking about love with warmth and authenticity."
+  },
+  {
+    "id": "storytellingVoiceDays:11",
+    "title": "Dream and Fantasy",
+    "theme": "Imaginative Narratives",
+    "prompt": "Create and tell a fantasy or dream story. Let your imagination run free and practice using your voice to make impossible things feel real and magical."
+  },
+  {
+    "id": "storytellingVoiceDays:12",
+    "title": "Overcoming Challenges",
+    "theme": "Triumph Stories",
+    "prompt": "Tell a story about overcoming a personal challenge or obstacle. How does your voice convey struggle, growth, and triumph? Practice inspiring others through your narrative."
+  },
+  {
+    "id": "storytellingVoiceDays:13",
+    "title": "Cultural Stories",
+    "theme": "Heritage Narratives",
+    "prompt": "Share a story from your cultural background or a culture you admire. How do different cultural storytelling traditions influence vocal expression and narrative style?"
+  },
+  {
+    "id": "storytellingVoiceDays:14",
+    "title": "Future Stories",
+    "theme": "Visionary Narratives",
+    "prompt": "Tell the story of your future as you hope it will unfold. Use your voice to make your dreams and aspirations feel real and achievable through storytelling."
+  },
+  {
+    "id": "storytellingVoiceDays:15",
+    "title": "Your Storytelling Voice",
+    "theme": "Narrative Mastery",
+    "prompt": "Reflect on your storytelling journey. What have you discovered about your unique storytelling voice? How will you continue developing your ability to share stories that connect and inspire?"
+  }
+]

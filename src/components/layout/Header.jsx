@@ -1,113 +1,92 @@
 // src/components/layout/Header.jsx
-
 import React from 'react';
-import { ArrowLeft, User, Settings, Menu } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-
-// Import hooks
 import useNavigation from '../../hooks/useNavigation';
-
-// Import components
 import PathContextIndicator from '../common/PathContextIndicator';
 
+// Clean title mapping (English fallbacks)
+const screenTitles = {
+  'home': 'Καιρός',
+  'path-selection': 'Journaling Paths',
+  'daily': 'Daily Journal',
+  'upload': 'Journal Upload',
+  'analysis': 'Journal Analysis',
+  'analytics-dashboard': 'Journal Analytics',
+  'settings': 'Settings',
+  'profile': 'Your Profile',
+  'journal-archive': 'Journal Archive',
+  'feedback': 'Send Feedback',
+  'bug-report': 'Report a Bug',
+  'journey-complete': 'Journey Complete',
+};
+
+// Maps screen ids to translation keys under header.screenTitles
+const screenTitleKeys = {
+  'home': 'header.screenTitles.home',
+  'path-selection': 'header.screenTitles.pathSelection',
+  'daily': 'header.screenTitles.daily',
+  'upload': 'header.screenTitles.upload',
+  'analysis': 'header.screenTitles.analysis',
+  'analytics-dashboard': 'header.screenTitles.analyticsDashboard',
+  'settings': 'header.screenTitles.settings',
+  'profile': 'header.screenTitles.profile',
+  'journal-archive': 'header.screenTitles.journalArchive',
+  'feedback': 'header.screenTitles.feedback',
+  'bug-report': 'header.screenTitles.bugReport',
+  'journey-complete': 'header.screenTitles.journeyComplete',
+};
+
 const Header = () => {
+  const { t } = useTranslation('layout');
   const { currentUser } = useAuth();
-  const { 
-    currentScreen, 
-    navigateToScreen, 
-    navigateBack, 
-    shouldShowBackButton,
-    getBackButtonLabel,
-    currentPath
-  } = useNavigation();
-  
-  // Get appropriate header title based on current screen
-  const getHeaderTitle = () => {
-    switch (currentScreen) {
-      case 'home':
-        return 'Καιρός';
-      case 'path-selection':
-        return 'Journaling Paths';
-      case 'daily':
-        return 'Daily Journal';
-      case 'upload':
-        return 'Journal Upload';
-      case 'analysis':
-        return 'Journal Analysis';
-      case 'analytics-dashboard':
-        return 'Journal Analytics';
-      case 'settings':
-        return 'Settings';
-      case 'profile':
-        return 'Your Profile';
-      case 'journal-archive':
-        return 'Journal Archive';
-      case 'feedback':
-        return 'Send Feedback';
-      case 'bug-report':
-        return 'Report a Bug';
-      case 'journey-complete':
-        return 'Journey Complete';
-      default:
-        return 'Καιρός';
+  const { currentScreen, navigateBack, shouldShowBackButton, currentPath, screenData } = useNavigation();
+
+  // Dynamic title for daily view
+  const getTitle = () => {
+    if (currentScreen === 'daily' && screenData?.day) {
+      return t('header.dayTitle', 'Day {{day}}', { day: screenData.day });
     }
+    const key = screenTitleKeys[currentScreen] || screenTitleKeys['home'];
+    const fallback = screenTitles[currentScreen] || screenTitles['home'];
+    return t(key, fallback);
   };
-  
-  // Check if current screen should show path context
-  const shouldShowPathContext = () => {
-    const pathContextScreens = ['daily', 'upload', 'analysis'];
-    return pathContextScreens.includes(currentScreen) && currentPath;
-  };
-  
-  // Handle settings navigation
-  const handleSettingsClick = () => {
-    navigateToScreen('settings');
-  };
-  
-  // Only show header for authenticated users
+
   if (!currentUser) return null;
-  
-  // Don't show header on certain screens
   if (['welcome', 'signup', 'loading'].includes(currentScreen)) return null;
-  
+
+  const showPathContext = ['daily', 'upload', 'analysis'].includes(currentScreen) && currentPath;
+  const showBack = shouldShowBackButton();
+
   return (
-    <header className="app-header">
-      <div className="header-container">
-        {/* Back button - only show when appropriate */}
-        {shouldShowBackButton() ? (
-          <button 
-            onClick={navigateBack} 
-            className="header-back-button"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="header-icon" />
-            <span className="header-back-label">{getBackButtonLabel()}</span>
-          </button>
-        ) : (
-          <div className="header-logo">Καιρός</div>
-        )}
-        
-        {/* Title */}
-        <h1 className="header-title">
-          {getHeaderTitle()}
-        </h1>
-        
-        {/* Path context indicator - only show on relevant screens */}
-        {shouldShowPathContext() && (
-          <div className="header-path-context">
-            <PathContextIndicator />
-          </div>
-        )}
-        
-        {/* Right-side actions */}
-        <div className="header-actions">
+    <header className="spatial-header">
+      <div className="spatial-header-inner">
+        {/* Left Side: Back or Logo */}
+        <div className="spatial-header-left">
+          {showBack ? (
+            <button onClick={navigateBack} className="spatial-back-btn" aria-label={t('header.goBackAria', 'Go back')}>
+              <ArrowLeft size={20} strokeWidth={2} />
+            </button>
+          ) : (
+            <span className="spatial-logo">Κ</span>
+          )}
+          
+          {showPathContext && <PathContextIndicator />}
+        </div>
+
+        {/* Center: Title */}
+        <h1 className="spatial-header-title">{getTitle()}</h1>
+
+        {/* Right Side: Settings */}
+        <div className="spatial-header-right">
           {currentScreen !== 'settings' && (
             <button 
-              onClick={handleSettingsClick} 
-              className="header-action-button"
-              aria-label="Settings"
+              onClick={() => useNavigation().navigateToScreen('settings')}
+              className="spatial-icon-btn"
+              aria-label={t('header.settingsAria', 'Settings')}
             >
-              <Settings className="header-icon" />
+              <Settings size={18} strokeWidth={1.8} />
             </button>
           )}
         </div>

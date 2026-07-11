@@ -1,11 +1,13 @@
 // src/pages/Privacy.jsx
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, Mail, Shield, Eye, Lock, MapPin, Brain, Download, Trash2, Settings, ExternalLink, Users, AlertCircle, Clock, Globe, FileText, Database, Smartphone } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import '../styles/components/terms.css';
 
 const PrivacyPolicy = ({ onBack }) => {
+  const { t } = useTranslation('pages');
   const [expandedSections, setExpandedSections] = useState({
     'data-collection': true,
     'your-rights': true,
@@ -600,7 +602,7 @@ const PrivacyPolicy = ({ onBack }) => {
 
           <div className="gdpr-compliance">
             <h4 className="subsection-title">International Privacy Rights</h4>
-            <div class="info-box">
+            <div className="info-box">
               <h5 className="info-box-title">GDPR & International Compliance</h5>
               <p>
                 If you're located in the European Union, United Kingdom, or other regions with comprehensive 
@@ -914,7 +916,7 @@ const PrivacyPolicy = ({ onBack }) => {
                 <Users className="retention-icon" />
                 Account Information
               </h4>
-              <div class="retention-options">
+              <div className="retention-options">
                 <div className="retention-option">
                   <div className="retention-period">🔄 <strong>Active Account:</strong> Until deletion</div>
                   <div className="retention-description">
@@ -1079,7 +1081,7 @@ const PrivacyPolicy = ({ onBack }) => {
 
           <div className="parental-controls">
             <h4 className="subsection-title">For Parents & Guardians</h4>
-            <div class="info-box">
+            <div className="info-box">
               <h5 className="info-box-title">If You Believe Your Child Has Created an Account</h5>
               <p>
                 If you discover that your child under 13 has provided personal information to Καιρός, 
@@ -1203,7 +1205,7 @@ const PrivacyPolicy = ({ onBack }) => {
 
           <div className="your-options">
             <h4 className="subsection-title">Your Options When Policies Change</h4>
-            <div class="control-options">
+            <div className="control-options">
               <div className="control-option">
                 <div className="control-option-icon">✅</div>
                 <div>

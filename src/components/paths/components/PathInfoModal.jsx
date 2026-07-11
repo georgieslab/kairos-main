@@ -1,13 +1,15 @@
 // src/components/paths/components/PathInfoModal.jsx - Updated for direct approach
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, CheckCircle, ArrowRight } from 'lucide-react';
 
-const PathInfoModal = ({ 
-  content, 
-  onClose, 
+const PathInfoModal = ({
+  content,
+  onClose,
   onContinue,
   pathId // Explicitly passed pathId
 }) => {
+  const { t } = useTranslation('paths');
   const handleContinue = () => {
     if (!pathId) {
       // If pathId isn't explicitly provided, try to infer it from the title
@@ -46,7 +48,7 @@ const PathInfoModal = ({
           
           {content.benefits && content.benefits.length > 0 && (
             <div className="path-info-section">
-              <h3 className="path-info-section-title">Benefits</h3>
+              <h3 className="path-info-section-title">{t('pathInfoModal.benefits', 'Benefits')}</h3>
               <ul className="path-info-benefits">
                 {content.benefits.map((benefit, index) => (
                   <li key={index} className="path-info-benefit-item">
@@ -60,7 +62,7 @@ const PathInfoModal = ({
           
           {content.structure && (
             <div className="path-info-section">
-              <h3 className="path-info-section-title">Journey Structure</h3>
+              <h3 className="path-info-section-title">{t('pathInfoModal.journeyStructure', 'Journey Structure')}</h3>
               <p className="path-info-structure">{content.structure}</p>
             </div>
           )}
@@ -72,7 +74,7 @@ const PathInfoModal = ({
             className="path-info-button primary"
             onClick={handleContinue}
           >
-            Continue Journey
+            {t('pathInfoModal.continueJourney', 'Continue Journey')}
             <ArrowRight className="path-info-button-icon" />
           </button>
         </div>

@@ -3441,7 +3441,8 @@
   width: 100%;
   max-width: 100vw;
   box-sizing: border-box;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden; /* fallback */
+  overflow-x: clip; /* prevent horizontal scroll without creating a nested scroll container (mobile scroll trap) */
 }
 
 /* 🔧 CRITICAL CSS FIX: Add these styles to your pathSelection.css file */
@@ -6100,4 +6101,825 @@
 
 .path-selection-container {
   padding:0.25rem
+}
+
+/* ==========================================================================
+   PATH SELECTION - PREMIUM APPLE GLASS DESIGN
+   ========================================================================== */
+
+.paths-container {
+  min-height: 100vh;
+  padding: 16px 20px 120px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+}
+
+/* ==========================================================================
+   SEARCH BAR
+   ========================================================================== */
+
+.paths-search-bar {
+  position: relative;
+}
+
+.search-bar-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.search-bar-input {
+  width: 100%;
+  height: 50px;
+  padding: 0 44px 0 46px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-bar-input:focus {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.03);
+}
+
+.search-bar-input::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+.search-bar-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search-bar-clear:active { background: rgba(255, 255, 255, 0.15); }
+
+
+/* ==========================================================================
+   ACTIVE JOURNEYS CAROUSEL
+   ========================================================================== */
+
+.active-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.active-section-icon {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.active-section-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.active-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px; /* Space for shadow */
+  margin: 0 -20px; /* Extend to edges */
+  padding-left: 20px;
+  padding-right: 20px;
+  scrollbar-width: none;
+}
+
+.active-carousel::-webkit-scrollbar { display: none; }
+
+.glass-active-carousel-card {
+  flex: 0 0 260px; /* Fixed width for clean carousel */
+  scroll-snap-align: start;
+  background: rgba(var(--c), 0.06);
+  border: 1px solid rgba(var(--c), 0.12);
+  border-radius: 24px;
+  padding: 20px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.glass-active-carousel-card:active {
+  transform: scale(0.97);
+  background: rgba(var(--c), 0.1);
+}
+
+.carousel-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.carousel-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(var(--c), 0.2);
+  border: 1px solid rgba(var(--c), 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--c));
+  box-shadow: 0 4px 16px rgba(var(--c), 0.2);
+}
+
+.carousel-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.carousel-day { color: rgb(var(--c)); font-weight: 600; }
+.carousel-divider { opacity: 0.3; }
+
+.carousel-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carousel-progress-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.carousel-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(var(--c), 0.8), rgb(var(--c)));
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(var(--c), 0.4);
+}
+
+.carousel-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  background: rgba(var(--c), 0.15);
+  border: 1px solid rgba(var(--c), 0.25);
+  border-radius: 12px;
+  color: rgb(var(--c));
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.carousel-cta:active { background: rgba(var(--c), 0.25); }
+
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+
+.paths-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+.path-tab {
+  flex: 1;
+  height: 42px;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.path-tab.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.path-tab:active:not(.is-active) { background: rgba(255, 255, 255, 0.04); }
+
+.tab-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 7px;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+
+.tab-badge.completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+
+/* ==========================================================================
+   PATH GRID
+   ========================================================================== */
+
+.paths-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 500px) {
+  .paths-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ==========================================================================
+   PATH CARDS (The Star of the Show)
+   ========================================================================== */
+
+.glass-path-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.glass-path-card:active {
+  transform: scale(0.98);
+}
+
+/* Top Accent Line */
+.card-accent-line {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--c), 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-path-card:hover .card-accent-line {
+  opacity: 1;
+}
+
+.glass-path-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(var(--c), 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(var(--c), 0.1);
+}
+
+/* Main Content Row */
+.card-main-content {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.card-icon-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  background: rgba(var(--c), 0.12);
+  border: 1px solid rgba(var(--c), 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--c));
+  box-shadow: 0 4px 16px rgba(var(--c), 0.15);
+  transition: all 0.3s ease;
+}
+
+.glass-path-card:hover .card-icon-wrap {
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(var(--c), 0.25);
+}
+
+.active-pulse-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid rgba(15, 23, 42, 0.9);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.card-text-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta Pills */
+.card-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Progress Section */
+.card-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-progress-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.card-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(var(--c), 0.7), rgb(var(--c)));
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.card-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-progress-stats span {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.completed-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #34d399;
+}
+
+/* Tags */
+.card-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.card-tag {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Footer / CTA */
+.card-footer {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.card-cta-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.card-cta-btn.start {
+  background: rgba(var(--c), 0.12);
+  color: rgb(var(--c));
+  border: 1px solid rgba(var(--c), 0.15);
+}
+
+.card-cta-btn.start:active {
+  background: rgba(var(--c), 0.2);
+}
+
+.card-cta-btn.active {
+  background: rgba(var(--c), 0.18);
+  color: rgb(var(--c));
+  border: 1px solid rgba(var(--c), 0.25);
+  box-shadow: 0 4px 16px rgba(var(--c), 0.15);
+}
+
+.card-cta-btn.completed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.paths-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.paths-empty-state svg {
+  color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.paths-empty-state h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 8px 0;
+}
+
+.paths-empty-state p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.25);
+  margin: 0;
+}
+
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES
+   ========================================================================== */
+
+.light-theme .search-bar-input {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.14);
+  color: rgba(0, 0, 0, 0.85);
+}
+.light-theme .search-bar-input::placeholder { color: rgba(0, 0, 0, 0.35); }
+.light-theme .search-bar-input:focus { border-color: rgba(var(--as-primary, 85, 139, 110), 0.5); }
+.light-theme .search-bar-icon { color: rgba(0, 0, 0, 0.3); }
+.light-theme .search-bar-clear { background: rgba(0, 0, 0, 0.06); color: rgba(0, 0, 0, 0.5); }
+
+.light-theme .active-section-icon { color: rgba(0, 0, 0, 0.3); }
+.light-theme .active-section-header h3 { color: rgba(0, 0, 0, 0.4); }
+
+.light-theme .glass-active-carousel-card {
+  background: rgba(var(--c), 0.08);
+  border-color: rgba(var(--c), 0.28);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.light-theme .carousel-status { color: rgba(0, 0, 0, 0.35); }
+.light-theme .carousel-title { color: rgba(0, 0, 0, 0.85); }
+.light-theme .carousel-progress-track { background: rgba(0, 0, 0, 0.06); }
+
+.light-theme .paths-tabs {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.light-theme .path-tab { color: rgba(0, 0, 0, 0.35); }
+.light-theme .path-tab.is-active {
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.light-theme .tab-badge { background: rgba(0, 0, 0, 0.06); color: rgba(0, 0, 0, 0.5); }
+.light-theme .tab-badge.completed { background: rgba(16, 185, 129, 0.1); color: #059669; }
+
+.light-theme .glass-path-card {
+  background: rgba(255, 255, 255, 0.82);
+  /* Border tinted with the path's own colour */
+  border-color: rgba(var(--c), 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05), 0 0 0 0.5px rgba(var(--c), 0.1);
+}
+.light-theme .glass-path-card:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(var(--c), 0.5);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(var(--c), 0.2);
+}
+/* Reveal the path-colour accent line at rest in light mode */
+.light-theme .card-accent-line { opacity: 1; }
+.light-theme .card-title { color: rgba(0, 0, 0, 0.85); }
+.light-theme .card-subtitle { color: rgba(0, 0, 0, 0.4); }
+.light-theme .meta-pill { color: rgba(0, 0, 0, 0.35); background: rgba(0, 0, 0, 0.04); }
+.light-theme .card-progress-track { background: rgba(0, 0, 0, 0.06); }
+.light-theme .card-progress-stats span { color: rgba(0, 0, 0, 0.4); }
+.light-theme .card-tag { color: rgba(0, 0, 0, 0.4); background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.06); }
+.light-theme .completed-check { color: #059669; }
+
+.light-theme .paths-empty-state svg { color: rgba(0, 0, 0, 0.08); }
+.light-theme .paths-empty-state h3 { color: rgba(0, 0, 0, 0.5); }
+.light-theme .paths-empty-state p { color: rgba(0, 0, 0, 0.3); }
+
+/* ==========================================================================
+   LIGHT THEME – iOS Sparkle Edition
+   ========================================================================== */
+
+.light-theme .paths-search-bar .search-bar-input {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #1c1c1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.light-theme .paths-search-bar .search-bar-input:focus {
+  border-color: rgba(85, 139, 110, 0.5);
+  box-shadow: 0 2px 12px rgba(85, 139, 110, 0.12);
+}
+.light-theme .paths-search-bar .search-bar-input::placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+.light-theme .paths-search-bar .search-bar-icon {
+  color: rgba(0, 0, 0, 0.3);
+}
+.light-theme .paths-search-bar .search-bar-clear {
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.5);
+}
+.light-theme .paths-search-bar .search-bar-clear:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* Active journeys carousel */
+.light-theme .active-section-header .active-section-icon {
+  color: rgba(0, 0, 0, 0.3);
+}
+.light-theme .active-section-header h3 {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+}
+
+.light-theme .glass-active-carousel-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+.light-theme .glass-active-carousel-card:active {
+  background: rgba(255, 255, 255, 0.95);
+}
+.light-theme .glass-active-carousel-card .carousel-status {
+  color: rgba(0, 0, 0, 0.4);
+}
+.light-theme .glass-active-carousel-card .carousel-day {
+  color: rgb(var(--c));
+  font-weight: 700;
+}
+.light-theme .glass-active-carousel-card .carousel-title {
+  color: #1c1c1e;
+}
+.light-theme .glass-active-carousel-card .carousel-progress-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+.light-theme .glass-active-carousel-card .carousel-cta {
+  background: rgba(var(--c), 0.12);
+  border-color: rgba(var(--c), 0.25);
+  color: rgb(var(--c));
+}
+.light-theme .glass-active-carousel-card .carousel-cta:active {
+  background: rgba(var(--c), 0.2);
+}
+
+/* Tabs */
+.light-theme .paths-tabs {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.light-theme .path-tab {
+  color: rgba(0, 0, 0, 0.45);
+}
+.light-theme .path-tab.is-active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c1c1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.light-theme .path-tab:active:not(.is-active) {
+  background: rgba(0, 0, 0, 0.04);
+}
+.light-theme .tab-badge {
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.5);
+}
+.light-theme .tab-badge.completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+/* Path Cards – Glass + High Contrast */
+.light-theme .glass-path-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.light-theme .glass-path-card:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(var(--c), 0.4);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(var(--c), 0.15);
+  transform: translateY(-2px);
+}
+.light-theme .glass-path-card:active {
+  transform: scale(0.98);
+}
+/* Accent line always visible in light mode */
+.light-theme .glass-path-card .card-accent-line {
+  opacity: 1;
+  background: linear-gradient(90deg, transparent, rgba(var(--c), 0.5), transparent);
+}
+
+.light-theme .glass-path-card .card-icon-wrap {
+  background: rgba(var(--c), 0.12);
+  border-color: rgba(var(--c), 0.2);
+  color: rgb(var(--c));
+  box-shadow: 0 4px 12px rgba(var(--c), 0.1);
+}
+.light-theme .glass-path-card:hover .card-icon-wrap {
+  box-shadow: 0 6px 20px rgba(var(--c), 0.2);
+}
+
+.light-theme .glass-path-card .card-title {
+  color: #1c1c1e;
+  font-weight: 700;
+}
+.light-theme .glass-path-card .card-subtitle {
+  color: rgba(0, 0, 0, 0.55);
+}
+.light-theme .glass-path-card .meta-pill {
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.04);
+}
+.light-theme .glass-path-card .card-progress-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+.light-theme .glass-path-card .card-progress-stats span {
+  color: rgba(0, 0, 0, 0.45);
+}
+.light-theme .glass-path-card .card-progress-stats .completed-check {
+  color: #059669;
+}
+.light-theme .glass-path-card .card-tag {
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.light-theme .glass-path-card .card-cta-btn {
+  font-weight: 600;
+}
+.light-theme .glass-path-card .card-cta-btn.start {
+  background: rgba(var(--c), 0.1);
+  border-color: rgba(var(--c), 0.2);
+  color: rgb(var(--c));
+}
+.light-theme .glass-path-card .card-cta-btn.start:active {
+  background: rgba(var(--c), 0.2);
+}
+.light-theme .glass-path-card .card-cta-btn.active {
+  background: rgba(var(--c), 0.15);
+  border-color: rgba(var(--c), 0.3);
+  color: rgb(var(--c));
+  box-shadow: 0 4px 12px rgba(var(--c), 0.15);
+}
+.light-theme .glass-path-card .card-cta-btn.completed {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: #059669;
+}
+.light-theme .glass-path-card .card-cta-btn.completed:active {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+/* Active pulse dot in light mode */
+.light-theme .glass-path-card .active-pulse-dot {
+  border-color: #ffffff;
+  background: #10b981;
+}
+
+/* Empty state */
+.light-theme .paths-empty-state svg {
+  color: rgba(0, 0, 0, 0.08);
+}
+.light-theme .paths-empty-state h3 {
+  color: rgba(0, 0, 0, 0.6);
+}
+.light-theme .paths-empty-state p {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+/* Carousel icon background */
+.light-theme .carousel-icon {
+  background: rgba(var(--c), 0.15);
+  border-color: rgba(var(--c), 0.25);
+}
+
+.suggestion-content p {
+    font-size: 13px;
+    color: rgb(0 0 0);
+    margin: 0;
 }

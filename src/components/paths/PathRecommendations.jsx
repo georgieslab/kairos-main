@@ -1,5 +1,6 @@
 // src/components/paths/PathRecommendations.jsx
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, RefreshCw } from 'lucide-react';
 import PathRecommendationCard from './PathRecommendationCard';
 import { getAiRecommendations } from '../../services/pathRecommender';
@@ -9,6 +10,7 @@ import { db } from '../../config/firebase';
 import '../../styles/components/pathRecommendation.css';
 
 const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
+  const { t } = useTranslation('paths');
   const { currentUser, userProfile } = useAuth();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +54,7 @@ const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
       setLoading(false);
     } catch (err) {
       console.error('Error loading recommendations:', err);
-      setError(err.message || 'Failed to load recommendations');
+      setError(err.message || t('pathRecommendations.loadError', 'Failed to load recommendations'));
       setLoading(false);
     }
   };
@@ -67,8 +69,8 @@ const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
     return (
       <div className="path-recommendations-loading">
         <Sparkles size={48} className="path-rec-loading-icon" />
-        <p className="path-rec-loading-text">Finding your perfect next journey...</p>
-        <p className="path-rec-loading-subtext">Analyzing your interests and progress</p>
+        <p className="path-rec-loading-text">{t('pathRecommendations.loadingText', 'Finding your perfect next journey...')}</p>
+        <p className="path-rec-loading-subtext">{t('pathRecommendations.loadingSubtext', 'Analyzing your interests and progress')}</p>
       </div>
     );
   }
@@ -76,7 +78,7 @@ const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
   if (error) {
     return (
       <div className="path-recommendations-error">
-        <p>Unable to generate recommendations</p>
+        <p>{t('pathRecommendations.unableToGenerate', 'Unable to generate recommendations')}</p>
         <p style={{ marginTop: '0.5rem', fontSize: '0.75rem' }}>{error}</p>
       </div>
     );
@@ -85,9 +87,9 @@ const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
   if (!recommendations || recommendations.length === 0) {
     return (
       <div className="path-recommendations-error">
-        <p>No recommendations available</p>
+        <p>{t('pathRecommendations.noneAvailable', 'No recommendations available')}</p>
         <p style={{ marginTop: '0.5rem', fontSize: '0.75rem' }}>
-          Complete your first journey to get personalized suggestions
+          {t('pathRecommendations.completeFirstJourney', 'Complete your first journey to get personalized suggestions')}
         </p>
       </div>
     );
@@ -99,21 +101,21 @@ const PathRecommendations = ({ onPathSelect, maxRecommendations = 3 }) => {
         <div>
           <h2 className="path-recommendations-title">
             <Sparkles size={28} />
-            <span>Recommended For You</span>
+            <span>{t('pathRecommendations.title', 'Recommended For You')}</span>
           </h2>
           <p className="path-recommendations-subtitle">
-            AI-curated paths based on your journey
+            {t('pathRecommendations.subtitle', 'AI-curated paths based on your journey')}
           </p>
         </div>
-        
-        <button 
+
+        <button
           className="path-rec-refresh-btn"
           onClick={handleRefresh}
           disabled={refreshing}
-          aria-label="Refresh recommendations"
+          aria-label={t('pathRecommendations.refreshAriaLabel', 'Refresh recommendations')}
         >
           <RefreshCw size={16} className={refreshing ? 'path-rec-loading-icon' : ''} />
-          <span>Refresh</span>
+          <span>{t('pathRecommendations.refresh', 'Refresh')}</span>
         </button>
       </div>
 

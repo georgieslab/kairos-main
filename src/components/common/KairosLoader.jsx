@@ -1,9 +1,10 @@
 // src/components/common/KairosLoader.jsx - Enhanced Version
 
 import React, { useEffect, useState } from 'react';
+import LoadingQuote from './LoadingQuote';
 import '../../styles/components/loader.css';
 
-const KairosLoader = ({ 
+const KairosLoader = ({
   size = 'medium',
   fullScreen = false,
   message = '',
@@ -12,6 +13,7 @@ const KairosLoader = ({
   progress = 0,
   duration = null,
   isFading = false,
+  showQuote = false,
   variant = 'default' // 'default', 'minimal', 'detailed'
 }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -120,6 +122,8 @@ const KairosLoader = ({
             )}
           </div>
         )}
+
+        {showQuote && <LoadingQuote />}
       </div>
     </div>
   );

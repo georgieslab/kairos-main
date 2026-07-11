@@ -3,7 +3,8 @@
 // Multi-step flow to register physical journals with NFC
 
 import React, { useState, useEffect } from 'react';
-import { 
+import { useTranslation } from 'react-i18next';
+import {
   BookOpen, 
   Sparkles, 
   CheckCircle2, 
@@ -77,6 +78,7 @@ const STEPS = {
 };
 
 function JournalRegistration({ isOpen, onClose, onComplete }) {
+  const { t } = useTranslation('journal');
   const { currentUser, userProfile, updateUserProfile } = useAuth();
   const nfc = useNFC();
 
@@ -133,13 +135,13 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             // User is re-registering their own journal
             setError({
               type: 'already_owned',
-              message: 'This journal is already registered to your account!'
+              message: t('registration.errors.alreadyOwned', 'This journal is already registered to your account!')
             });
           } else {
             // Journal belongs to someone else
             setError({
               type: 'already_registered',
-              message: 'This journal is already registered to another account. Contact support if this is your journal.'
+              message: t('registration.errors.alreadyRegistered', 'This journal is already registered to another account. Contact support if this is your journal.')
             });
           }
           return;
@@ -171,7 +173,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
       console.error('Error handling NFC scan:', err);
       setError({
         type: 'scan_error',
-        message: 'Error processing journal. Please try again.'
+        message: t('registration.errors.scanError', 'Error processing journal. Please try again.')
       });
     }
   };
@@ -250,7 +252,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
       console.error('Error registering journal:', err);
       setError({
         type: 'registration_error',
-        message: err.message || 'Failed to register journal. Please try again.'
+        message: err.message || t('registration.errors.registrationFailed', 'Failed to register journal. Please try again.')
       });
       setIsProcessing(false);
     }
@@ -317,9 +319,9 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
         <div className="jr-icon-wrapper">
           <Sparkles className="jr-header-icon" size={32} />
         </div>
-        <h2 className="jr-title">Register Your Καιρός Journal</h2>
+        <h2 className="jr-title">{t('registration.welcome.title', 'Register Your Καιρός Journal')}</h2>
         <p className="jr-subtitle">
-          Connect your physical journal to the digital app for seamless journaling
+          {t('registration.welcome.subtitle', 'Connect your physical journal to the digital app for seamless journaling')}
         </p>
       </div>
 
@@ -327,24 +329,24 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
         <div className="jr-feature">
           <Smartphone className="jr-feature-icon" size={20} />
           <div>
-            <h4>NFC Quick Upload</h4>
-            <p>Tap your journal to instantly open the camera and capture entries</p>
+            <h4>{t('registration.welcome.features.nfcTitle', 'NFC Quick Upload')}</h4>
+            <p>{t('registration.welcome.features.nfcDescription', 'Tap your journal to instantly open the camera and capture entries')}</p>
           </div>
         </div>
 
         <div className="jr-feature">
           <Package className="jr-feature-icon" size={20} />
           <div>
-            <h4>Progress Tracking</h4>
-            <p>See your journaling journey, entry counts, and patterns over time</p>
+            <h4>{t('registration.welcome.features.progressTitle', 'Progress Tracking')}</h4>
+            <p>{t('registration.welcome.features.progressDescription', 'See your journaling journey, entry counts, and patterns over time')}</p>
           </div>
         </div>
 
         <div className="jr-feature">
           <CheckCircle2 className="jr-feature-icon" size={20} />
           <div>
-            <h4>AI Analysis</h4>
-            <p>Get personalized insights and emotional pattern recognition</p>
+            <h4>{t('registration.welcome.features.aiTitle', 'AI Analysis')}</h4>
+            <p>{t('registration.welcome.features.aiDescription', 'Get personalized insights and emotional pattern recognition')}</p>
           </div>
         </div>
       </div>
@@ -354,13 +356,13 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           className="jr-btn jr-btn-secondary"
           onClick={onClose}
         >
-          Maybe Later
+          {t('registration.welcome.maybeLater', 'Maybe Later')}
         </button>
         <button
           className="jr-btn jr-btn-primary"
           onClick={() => setCurrentStep(STEPS.SCAN_NFC)}
         >
-          Get Started
+          {t('registration.welcome.getStarted', 'Get Started')}
           <ChevronRight size={18} />
         </button>
       </div>
@@ -376,15 +378,19 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
         <div className="jr-icon-wrapper">
           <Gem className="jr-header-icon" size={28} />
         </div>
-        <h2 className="jr-title">Select Your Journal Tier</h2>
+        <h2 className="jr-title">{t('registration.selectTier.title', 'Select Your Journal Tier')}</h2>
         <p className="jr-subtitle">
-          Choose the tier that matches your physical journal
+          {t('registration.selectTier.subtitle', 'Choose the tier that matches your physical journal')}
         </p>
       </div>
 
       <div className="jr-tiers">
         {Object.entries(JOURNAL_TIERS).map(([tierId, tier]) => {
           const TierIcon = tier.icon;
+          const tierFeatures = t(`registration.tiers.${tierId}.features`, {
+            returnObjects: true,
+            defaultValue: tier.features,
+          });
           return (
             <div
               key={tierId}
@@ -399,11 +405,11 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
                 >
                   <TierIcon size={20} />
                 </div>
-                <h3 className="jr-tier-name">{tier.name}</h3>
+                <h3 className="jr-tier-name">{t(`registration.tiers.${tierId}.name`, tier.name)}</h3>
               </div>
 
               <ul className="jr-tier-features">
-                {tier.features.map((feature, idx) => (
+                {tierFeatures.map((feature, idx) => (
                   <li key={idx}>
                     <CheckCircle2 size={16} />
                     <span>{feature}</span>
@@ -428,14 +434,14 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           onClick={() => setCurrentStep(STEPS.SCAN_NFC)}
         >
           <ChevronLeft size={18} />
-          Back
+          {t('registration.actions.back', 'Back')}
         </button>
         <button
           className="jr-btn jr-btn-primary"
           onClick={() => setCurrentStep(STEPS.CONFIRM)}
           disabled={!selectedTier}
         >
-          Continue
+          {t('registration.actions.continue', 'Continue')}
           <ChevronRight size={18} />
         </button>
       </div>
@@ -451,9 +457,9 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
         <div className="jr-icon-wrapper">
           <Radio className="jr-header-icon" size={28} />
         </div>
-        <h2 className="jr-title">Scan Your Journal</h2>
+        <h2 className="jr-title">{t('registration.scan.title', 'Scan Your Journal')}</h2>
         <p className="jr-subtitle">
-          Hold your phone near the NFC chip on your journal cover
+          {t('registration.scan.subtitle', 'Hold your phone near the NFC chip on your journal cover')}
         </p>
       </div>
 
@@ -462,18 +468,18 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           <div className="jr-scanning-animation">
             <Radio size={48} />
           </div>
-          <p>Waiting for journal...</p>
-          <p className="jr-scanning-hint">Hold your phone steady near the journal cover</p>
+          <p>{t('registration.scan.waiting', 'Waiting for journal...')}</p>
+          <p className="jr-scanning-hint">{t('registration.scan.holdSteady', 'Hold your phone steady near the journal cover')}</p>
         </div>
       ) : (
         <>
           <div className="jr-nfc-instructions">
-            <h3>How to scan:</h3>
+            <h3>{t('registration.scan.howToScanTitle', 'How to scan:')}</h3>
             <ol>
-              <li>Open your journal to the front cover</li>
-              <li>Place your phone on the NFC chip area (usually center or top)</li>
-              <li>Hold steady for 2-3 seconds</li>
-              <li>Wait for the confirmation</li>
+              <li>{t('registration.scan.steps.openCover', 'Open your journal to the front cover')}</li>
+              <li>{t('registration.scan.steps.placePhone', 'Place your phone on the NFC chip area (usually center or top)')}</li>
+              <li>{t('registration.scan.steps.holdSteady', 'Hold steady for 2-3 seconds')}</li>
+              <li>{t('registration.scan.steps.waitConfirmation', 'Wait for the confirmation')}</li>
             </ol>
           </div>
 
@@ -481,7 +487,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             <div className="jr-error">
               <AlertCircle size={16} />
               <span>
-                NFC not available on this device. You can still register manually.
+                {t('registration.scan.notAvailable', 'NFC not available on this device. You can still register manually.')}
               </span>
             </div>
           )}
@@ -490,12 +496,12 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             <div className="jr-error">
               <AlertCircle size={16} />
               <span>
-                NFC is disabled. 
+                {t('registration.scan.disabled', 'NFC is disabled.')}{' '}
                 <button
                   onClick={nfc.openSettings}
                   style={{ textDecoration: 'underline', marginLeft: '4px' }}
                 >
-                  Enable it in settings
+                  {t('registration.scan.enableInSettings', 'Enable it in settings')}
                 </button>
               </span>
             </div>
@@ -526,16 +532,16 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           }}
         >
           <ChevronLeft size={18} />
-          Back
+          {t('registration.actions.back', 'Back')}
         </button>
-        
+
         {nfc.isReady && !nfc.isReading && (
           <button
             className="jr-btn jr-btn-primary"
             onClick={async () => {
               setError(null);
               const result = await nfc.readTag({
-                alertMessage: 'Hold phone near journal NFC chip'
+                alertMessage: t('registration.scan.alertMessage', 'Hold phone near journal NFC chip')
               });
               if (result.success && result.data) {
                 handleNFCScan(result.data);
@@ -543,7 +549,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             }}
           >
             <Radio size={18} />
-            Start Scanning
+            {t('registration.scan.startScanning', 'Start Scanning')}
           </button>
         )}
 
@@ -552,7 +558,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             className="jr-btn jr-btn-secondary"
             onClick={() => nfc.stopReading()}
           >
-            Cancel Scan
+            {t('registration.scan.cancelScan', 'Cancel Scan')}
           </button>
         )}
 
@@ -566,7 +572,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
               setCurrentStep(STEPS.CONFIRM);
             }}
           >
-            Register Manually
+            {t('registration.scan.registerManually', 'Register Manually')}
             <ChevronRight size={18} />
           </button>
         )}
@@ -586,6 +592,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
   const renderConfirmStep = () => {
     const tierInfo = JOURNAL_TIERS[selectedTier];
     const TierIcon = tierInfo?.icon;
+    const tierName = selectedTier ? t(`registration.tiers.${selectedTier}.name`, tierInfo?.name) : '';
 
     return (
       <div className="jr-step">
@@ -596,20 +603,20 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           >
             {TierIcon && <TierIcon className="jr-header-icon" size={28} />}
           </div>
-          <h2 className="jr-title">Confirm Registration</h2>
+          <h2 className="jr-title">{t('registration.confirm.title', 'Confirm Registration')}</h2>
           <p className="jr-subtitle">
-            Review your journal details before registering
+            {t('registration.confirm.subtitle', 'Review your journal details before registering')}
           </p>
         </div>
 
         <div className="jr-registration-info">
           <div className="jr-info-item">
-            <span>Journal Tier</span>
-            <strong>{tierInfo?.name}</strong>
+            <span>{t('registration.confirm.journalTier', 'Journal Tier')}</span>
+            <strong>{tierName}</strong>
           </div>
 
           <div className="jr-info-item">
-            <span>Journal ID</span>
+            <span>{t('registration.confirm.journalId', 'Journal ID')}</span>
             <strong style={{ fontFamily: 'monospace', fontSize: '0.875rem' }}>
               {journalId}
             </strong>
@@ -617,13 +624,13 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
 
           {serialNumber && (
             <div className="jr-info-item">
-              <span>Serial Number</span>
+              <span>{t('registration.confirm.serialNumber', 'Serial Number')}</span>
               <strong>{serialNumber}</strong>
             </div>
           )}
 
           <div className="jr-info-item">
-            <span>Owner</span>
+            <span>{t('registration.confirm.owner', 'Owner')}</span>
             <strong>{userProfile?.displayName || currentUser?.email}</strong>
           </div>
         </div>
@@ -642,7 +649,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             disabled={isProcessing}
           >
             <ChevronLeft size={18} />
-            Back
+            {t('registration.actions.back', 'Back')}
           </button>
           <button
             className="jr-btn jr-btn-primary"
@@ -652,12 +659,12 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             {isProcessing ? (
               <>
                 <Loader2 size={18} className="animate-spin" />
-                Registering...
+                {t('registration.confirm.registering', 'Registering...')}
               </>
             ) : (
               <>
                 <CheckCircle2 size={18} />
-                Register Journal
+                {t('registration.confirm.registerJournal', 'Register Journal')}
               </>
             )}
           </button>
@@ -671,6 +678,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
    */
   const renderSuccessStep = () => {
     const tierInfo = JOURNAL_TIERS[selectedTier];
+    const tierName = selectedTier ? t(`registration.tiers.${selectedTier}.name`, tierInfo?.name) : '';
 
     return (
       <div className="jr-step">
@@ -678,48 +686,50 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
           <div className="jr-icon-wrapper jr-success jr-celebration">
             <CheckCircle2 className="jr-header-icon" size={32} />
           </div>
-          <h2 className="jr-title">Journal Registered!</h2>
+          <h2 className="jr-title">{t('registration.success.title', 'Journal Registered!')}</h2>
           <p className="jr-subtitle">
-            Your {tierInfo?.name} journal is now connected to your account
+            {t('registration.success.subtitle', 'Your {{tier}} journal is now connected to your account', { tier: tierName })}
           </p>
         </div>
 
         <div className="jr-registration-success">
           <div className="jr-success-item">
-            <strong>Journal Tier</strong>
-            <code style={{ 
+            <strong>{t('registration.confirm.journalTier', 'Journal Tier')}</strong>
+            <code style={{
               background: `linear-gradient(135deg, ${tierInfo?.color}, ${tierInfo?.color}15)`,
               border: `1px solid ${tierInfo?.color}40`
             }}>
-              {tierInfo?.name}
+              {tierName}
             </code>
           </div>
 
           <div className="jr-success-item">
-            <strong>Journal ID</strong>
+            <strong>{t('registration.confirm.journalId', 'Journal ID')}</strong>
             <code>{journalId}</code>
           </div>
 
           {serialNumber && (
             <div className="jr-success-item">
-              <strong>Serial Number</strong>
+              <strong>{t('registration.confirm.serialNumber', 'Serial Number')}</strong>
               <code>{serialNumber}</code>
             </div>
           )}
 
           {subscriptionInfo && (
             <div className="jr-success-item jr-subscription-highlight">
-              <strong>🎁 Artisan Subscription Activated!</strong>
+              <strong>🎁 {t('registration.success.subscriptionActivated', 'Artisan Subscription Activated!')}</strong>
               <div className="jr-subscription-details">
                 <p>
                   <CheckCircle2 size={16} style={{ display: 'inline', marginRight: '6px' }} />
-                  <strong>{subscriptionInfo.months} months</strong> of premium access included
+                  <strong>{t('registration.success.monthsCount', '{{months}} months', { months: subscriptionInfo.months })}</strong> {t('registration.success.premiumAccessIncluded', 'of premium access included')}
                 </p>
                 <p className="jr-subscription-end">
-                  Valid until: {new Date(subscriptionInfo.currentPeriodEnd).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                  {t('registration.success.validUntil', 'Valid until: {{date}}', {
+                    date: new Date(subscriptionInfo.currentPeriodEnd).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
                   })}
                 </p>
               </div>
@@ -729,12 +739,12 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
 
         <div className="jr-completion-info">
           <div className="jr-next-steps">
-            <h3>What's Next?</h3>
+            <h3>{t('registration.success.whatsNextTitle', "What's Next?")}</h3>
             <ul>
-              <li>Tap your journal to instantly upload entries</li>
-              <li>Start your first journey path</li>
-              <li>Get personalized AI insights on your writing</li>
-              <li>Track your emotional patterns over time</li>
+              <li>{t('registration.success.nextSteps.tapToUpload', 'Tap your journal to instantly upload entries')}</li>
+              <li>{t('registration.success.nextSteps.startPath', 'Start your first journey path')}</li>
+              <li>{t('registration.success.nextSteps.aiInsights', 'Get personalized AI insights on your writing')}</li>
+              <li>{t('registration.success.nextSteps.trackPatterns', 'Track your emotional patterns over time')}</li>
             </ul>
           </div>
         </div>
@@ -750,7 +760,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             }}
           >
             <CheckCircle2 size={18} />
-            Start Journaling
+            {t('registration.success.startJournaling', 'Start Journaling')}
           </button>
         </div>
       </div>
@@ -780,7 +790,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
             />
           </div>
           <p className="jr-progress-text">
-            Step {stepNumber} of {totalSteps}
+            {t('registration.progress.stepOf', 'Step {{stepNumber}} of {{totalSteps}}', { stepNumber, totalSteps })}
           </p>
         </div>
       </div>

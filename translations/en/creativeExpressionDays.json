@@ -1,0 +1,86 @@
+[
+  {
+    "id": "creativeExpressionDays:1",
+    "title": "Creative Identity",
+    "theme": "Self-Perception",
+    "prompt": "How do you see yourself as a creative person? Write about your creative strengths, blocks, and aspirations without judgment."
+  },
+  {
+    "id": "creativeExpressionDays:2",
+    "title": "Childhood Creativity",
+    "theme": "Origins",
+    "prompt": "What creative activities did you enjoy as a child? What happened to those interests as you grew older? How might you reconnect with that childlike creative spirit?"
+  },
+  {
+    "id": "creativeExpressionDays:3",
+    "title": "Creative Inspiration",
+    "theme": "Sources",
+    "prompt": "What inspires you creatively? Write about people, places, works, or experiences that spark your imagination. How might you intentionally seek more inspiration?"
+  },
+  {
+    "id": "creativeExpressionDays:4",
+    "title": "Creative Fears",
+    "theme": "Resistance",
+    "prompt": "What fears hold back your creative expression? Explore concerns about judgment, failure, or inadequacy. What would creating feel like without these fears?"
+  },
+  {
+    "id": "creativeExpressionDays:5",
+    "title": "The Inner Critic",
+    "theme": "Self-Judgment",
+    "prompt": "Describe your inner critic's voice when you create. What does it say? Where did these messages come from? How might you respond to this voice with compassion?"
+  },
+  {
+    "id": "creativeExpressionDays:6",
+    "title": "Creative Space",
+    "theme": "Environment",
+    "prompt": "Describe your ideal creative environment. What physical elements, atmosphere, and conditions help you feel most inspired and productive? How might you cultivate more of these conditions?"
+  },
+  {
+    "id": "creativeExpressionDays:7",
+    "title": "Creative Routine",
+    "theme": "Practice",
+    "prompt": "What would a sustainable creative practice look like in your life? Design a realistic routine that honors both your creative needs and your other responsibilities."
+  },
+  {
+    "id": "creativeExpressionDays:8",
+    "title": "Beginner's Mind",
+    "theme": "Exploration",
+    "prompt": "Choose a creative medium you've never tried. What attracts you to it? What assumptions or expectations do you have? How might approaching it with beginner's mind feel liberating?"
+  },
+  {
+    "id": "creativeExpressionDays:9",
+    "title": "Creative Blocks",
+    "theme": "Obstacles",
+    "prompt": "Reflect on times when you've felt creatively blocked. What triggered these blocks? What helped you move through them? What strategies might you develop for future blocks?"
+  },
+  {
+    "id": "creativeExpressionDays:10",
+    "title": "Creative Collaboration",
+    "theme": "Connection",
+    "prompt": "How does creating with others affect your creative process? Reflect on past collaborations, challenges, and benefits of creative partnership. Who might you create with in the future?"
+  },
+  {
+    "id": "creativeExpressionDays:11",
+    "title": "Creative Risk-Taking",
+    "theme": "Courage",
+    "prompt": "What creative risks would you like to take? What holds you back? Describe a small creative risk you could take this week and what you might learn from it."
+  },
+  {
+    "id": "creativeExpressionDays:12",
+    "title": "Sharing Your Work",
+    "theme": "Vulnerability",
+    "prompt": "How do you feel about sharing your creative work with others? What would make sharing feel safer or more meaningful? How might your work impact others?"
+  },
+  {
+    "id": "creativeExpressionDays:13",
+    "title": "Creative Legacy",
+    "theme": "Purpose",
+    "prompt": "What do you hope your creative expression will contribute to the world? What themes, values, or experiences would you like your creative work to explore or embody?"
+  },
+  {
+    "id": "creativeExpressionDays:14",
+    "title": "Creative Integration",
+    "theme": "Commitment",
+    "prompt": "Looking back on this creative journey, what have you discovered about yourself? How will you continue to nurture your creative expression going forward?"
+  }
+]

@@ -112,17 +112,6 @@
   flex-shrink: 0;
 }
 
-/* Dark mode adjustments - Kairos Green gradient */
-.dark-theme .top-bar {
-  background: linear-gradient(135deg, 
-    #0fa678 0%,    /* Deeper green for dark mode */
-    #0fc189 50%,   /* Kairos green */
-    #38f9d7 100%   /* Aqua green */
-  );
-  border-bottom-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 12px rgba(15, 193, 137, 0.22);
-}
-
 .hs-dark .top-bar {
   background: linear-gradient(135deg, 
     #0fa678 0%,    /* Deeper green for dark mode */

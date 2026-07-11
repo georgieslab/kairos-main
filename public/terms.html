@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Καιρός Smart Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4ade80, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .last-updated {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(34, 211, 238, 0.1));
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .highlight-box h2 {
+            color: #4ade80;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .highlight-box p {
+            color: #ccc;
+            margin-bottom: 0;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .key-point {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #4ade80;
+        }
+        
+        .key-point h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        
+        .key-point p {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        
+        section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        section h2 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        section h3 {
+            color: #4ade80;
+            font-size: 1.1rem;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            color: #bbb;
+        }
+        
+        li strong {
+            color: #fff;
+        }
+        
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .warning-box p {
+            color: #ccc;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-box h4 {
+            color: #3b82f6;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .info-box p, .info-box ul {
+            color: #ccc;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+        
+        .prohibited-list {
+            background: rgba(239, 68, 68, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .prohibited-list li {
+            color: #f87171;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(34, 211, 238, 0.1));
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .contact-section h2 {
+            border: none;
+            margin-bottom: 15px;
+        }
+        
+        .contact-email {
+            display: inline-block;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-email:hover {
+            background: rgba(74, 222, 128, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 40px;
+        }
+        
+        footer a {
+            color: #4ade80;
+            text-decoration: none;
+        }
+        
+        .tier-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .tier-table th, .tier-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .tier-table th {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            font-weight: 600;
+        }
+        
+        .tier-table td {
+            color: #ccc;
+        }
+        
+        .tier-table tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            section {
+                padding: 20px 15px;
+            }
+            
+            .tier-table {
+                font-size: 0.85rem;
+            }
+            
+            .tier-table th, .tier-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Καιρός</div>
+            <h1>Terms of Service</h1>
+            <p class="last-updated">Last Updated: November 8, 2025</p>
+        </header>
+
+        <div class="highlight-box">
+            <h2>📋 Agreement Overview</h2>
+            <p>Welcome to Καιρός! These Terms of Service ("Terms") govern your use of the Καιρός Smart Journal application and services. By creating an account or using our services, you agree to these Terms.</p>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <h4>✅ What You Get</h4>
+                    <p>AI-powered journal analysis, 50 guided journey paths, voice & visual journaling</p>
+                </div>
+                <div class="key-point">
+                    <h4>📝 Your Content</h4>
+                    <p>You own your journal entries. We never sell or share your personal content.</p>
+                </div>
+                <div class="key-point">
+                    <h4>🔒 Your Privacy</h4>
+                    <p>Your data is encrypted and protected. See our Privacy Policy for details.</p>
+                </div>
+                <div class="key-point">
+                    <h4>⚖️ Fair Use</h4>
+                    <p>Use Καιρός responsibly. Don't abuse our services or harm others.</p>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using Καιρός ("the Service"), you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these Terms, you may not use the Service.</p>
+            <p>We may update these Terms from time to time. We will notify you of significant changes via email or in-app notification at least 30 days before they take effect. Your continued use of the Service after changes become effective constitutes acceptance of the updated Terms.</p>
+            
+            <div class="info-box">
+                <h4>ℹ️ Age Requirement</h4>
+                <p>You must be at least 13 years old to use Καιρός. If you are between 13 and 18, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Account Registration & Security</h2>
+            
+            <h3>Creating Your Account</h3>
+            <p>To use Καιρός, you must create an account by providing accurate and complete information. You agree to:</p>
+            <ul>
+                <li>Provide truthful, accurate, and current information</li>
+                <li>Maintain and promptly update your account information</li>
+                <li>Keep your password secure and confidential</li>
+                <li>Notify us immediately of any unauthorized access to your account</li>
+                <li>Accept responsibility for all activities that occur under your account</li>
+            </ul>
+            
+            <h3>Account Security</h3>
+            <p>You are responsible for maintaining the confidentiality of your account credentials. We recommend using a strong, unique password and enabling biometric authentication if available on your device.</p>
+            
+            <div class="warning-box">
+                <h4>⚠️ Important</h4>
+                <p>We will never ask for your password via email or support requests. If you receive such a request, please report it to security@kairos-journal.com.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Service Description</h2>
+            
+            <p>Καιρός is a multi-modal journaling platform that combines physical NFC-enabled journals with AI-powered digital analysis. Our services include:</p>
+            
+            <h3>Core Features</h3>
+            <ul>
+                <li><strong>Journal Entry Processing:</strong> Upload photos of handwritten entries, record voice journals, or create visual artwork</li>
+                <li><strong>AI-Powered Analysis:</strong> Receive personalized insights, emotional pattern recognition, and reflective questions powered by Claude AI</li>
+                <li><strong>Guided Journey Paths:</strong> Access 50 structured journaling programs ranging from 4 to 100 days</li>
+                <li><strong>NFC Integration:</strong> Connect physical journals to your digital account via embedded NFC chips</li>
+                <li><strong>Progress Tracking:</strong> Monitor your journaling journey, streaks, and personal growth over time</li>
+                <li><strong>Export & Backup:</strong> Download your journal entries in portable formats</li>
+            </ul>
+            
+            <h3>Service Availability</h3>
+            <p>We strive to maintain high availability but do not guarantee uninterrupted access. The Service may be temporarily unavailable for maintenance, updates, or circumstances beyond our control.</p>
+        </section>
+
+        <section>
+            <h2>4. User Content & Ownership</h2>
+            
+            <h3>Your Content</h3>
+            <p><strong>You retain full ownership of all journal entries, voice recordings, artwork, and other content you create using Καιρός.</strong> We do not claim any ownership rights to your personal content.</p>
+            
+            <h3>License to Operate</h3>
+            <p>By uploading content to Καιρός, you grant us a limited license to:</p>
+            <ul>
+                <li>Store and backup your content on our secure servers</li>
+                <li>Process your content through our AI analysis systems</li>
+                <li>Display your content back to you within the application</li>
+                <li>Generate insights and analytics based on your content</li>
+            </ul>
+            <p>This license is solely for the purpose of providing and improving our services. We will never sell, share, or publicly display your personal journal content.</p>
+            
+            <h3>Content Deletion</h3>
+            <p>You may delete individual entries or your entire account at any time. Deleted content is permanently removed from our active systems within 30 days and from backups within 90 days.</p>
+        </section>
+
+        <section>
+            <h2>5. AI Services & Limitations</h2>
+            
+            <h3>AI-Powered Features</h3>
+            <p>Καιρός uses Anthropic's Claude AI to provide journal analysis and insights. By using these features, you understand that:</p>
+            <ul>
+                <li>AI analysis is meant to support self-reflection, not replace professional advice</li>
+                <li>AI-generated insights are based on patterns and may not always be accurate</li>
+                <li>Your journal content is processed by third-party AI services (Anthropic)</li>
+                <li>AI responses may vary and are not deterministic</li>
+            </ul>
+            
+            <div class="warning-box">
+                <h4>⚠️ Not Professional Advice</h4>
+                <p>Καιρός and its AI features are not substitutes for professional mental health care, medical advice, legal counsel, or financial guidance. If you are experiencing a mental health crisis, please contact a qualified professional or emergency services immediately.</p>
+            </div>
+            
+            <h3>AI Availability</h3>
+            <p>AI features depend on third-party services and may be temporarily unavailable. We do not guarantee continuous availability of AI analysis features.</p>
+        </section>
+
+        <section>
+            <h2>6. Acceptable Use Policy</h2>
+            
+            <h3>Permitted Uses</h3>
+            <p>Καιρός is designed for personal journaling, self-reflection, and personal growth. You may use the Service for:</p>
+            <ul>
+                <li>Personal journaling and self-reflection</li>
+                <li>Tracking personal growth and emotional patterns</li>
+                <li>Following guided journey paths</li>
+                <li>Storing and organizing your personal writings and artwork</li>
+            </ul>
+            
+            <h3>Prohibited Activities</h3>
+            <p>You agree NOT to:</p>
+            <div class="prohibited-list">
+                <ul>
+                    <li>Use the Service for any illegal purpose or in violation of any laws</li>
+                    <li>Attempt to gain unauthorized access to our systems or other users' accounts</li>
+                    <li>Upload malicious code, viruses, or harmful content</li>
+                    <li>Use automated systems (bots, scrapers) to access the Service</li>
+                    <li>Reverse engineer, decompile, or attempt to extract source code</li>
+                    <li>Abuse, harass, or harm others through the Service</li>
+                    <li>Impersonate others or provide false information</li>
+                    <li>Circumvent usage limits or exploit the Service unfairly</li>
+                    <li>Use the Service to generate spam or unsolicited communications</li>
+                    <li>Resell or commercially exploit the Service without authorization</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>7. Subscription & Payments</h2>
+            
+            <h3>Free & Premium Tiers</h3>
+            <p>Καιρός offers both free and premium subscription options:</p>
+            
+            <table class="tier-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Free</th>
+                    <th>Premium</th>
+                </tr>
+                <tr>
+                    <td>Journal Entries</td>
+                    <td>Limited</td>
+                    <td>Unlimited</td>
+                </tr>
+                <tr>
+                    <td>AI Analysis</td>
+                    <td>Basic</td>
+                    <td>Advanced</td>
+                </tr>
+                <tr>
+                    <td>Journey Paths</td>
+                    <td>Selected</td>
+                    <td>All 50 paths</td>
+                </tr>
+                <tr>
+                    <td>Voice Journaling</td>
+                    <td>Limited</td>
+                    <td>Unlimited</td>
+                </tr>
+                <tr>
+                    <td>Storage</td>
+                    <td>1 GB</td>
+                    <td>Unlimited</td>
+                </tr>
+            </table>
+            
+            <h3>Payment Terms</h3>
+            <p>If you purchase a premium subscription:</p>
+            <ul>
+                <li>Subscriptions are billed in advance on a monthly or annual basis</li>
+                <li>Your subscription will automatically renew unless cancelled</li>
+                <li>You may cancel at any time; access continues until the end of the billing period</li>
+                <li>Refunds are handled according to the app store's refund policies</li>
+            </ul>
+            
+            <h3>Price Changes</h3>
+            <p>We may change subscription prices with 30 days' notice. Price changes will not affect your current billing period.</p>
+        </section>
+
+        <section>
+            <h2>8. Physical Products (NFC Journals)</h2>
+            
+            <p>If you purchase physical Καιρός journals with NFC technology:</p>
+            
+            <h3>Product Terms</h3>
+            <ul>
+                <li><strong>Shipping:</strong> Delivery times and costs vary by location. We are not responsible for delays caused by shipping carriers or customs.</li>
+                <li><strong>Returns:</strong> Unused journals may be returned within 30 days for a full refund. Used journals cannot be returned.</li>
+                <li><strong>Warranty:</strong> Physical journals are warranted against manufacturing defects for 1 year from purchase.</li>
+                <li><strong>NFC Functionality:</strong> NFC chips are warranted to function for at least 5 years under normal use.</li>
+            </ul>
+            
+            <h3>Journal Registration</h3>
+            <p>Each physical journal contains a unique NFC identifier. By registering a journal to your account, you confirm that you are the legitimate owner or authorized user of that journal.</p>
+        </section>
+
+        <section>
+            <h2>9. Intellectual Property</h2>
+            
+            <h3>Our Property</h3>
+            <p>Καιρός, including its name, logo, app design, journey content, prompts, and underlying technology, is protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works without our written permission.</p>
+            
+            <h3>Feedback</h3>
+            <p>If you provide suggestions, ideas, or feedback about Καιρός, you grant us a perpetual, royalty-free license to use that feedback to improve our services without compensation to you.</p>
+        </section>
+
+        <section>
+            <h2>10. Disclaimers & Limitations</h2>
+            
+            <h3>Service Provided "As Is"</h3>
+            <p>Καιρός is provided "as is" and "as available" without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+            
+            <h3>Limitation of Liability</h3>
+            <p>To the maximum extent permitted by law, Καιρός and its creators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:</p>
+            <ul>
+                <li>Loss of data or content</li>
+                <li>Loss of profits or revenue</li>
+                <li>Emotional distress</li>
+                <li>Service interruptions</li>
+                <li>Errors in AI analysis or insights</li>
+            </ul>
+            <p>Our total liability for any claim arising from your use of the Service shall not exceed the amount you paid to us in the 12 months preceding the claim.</p>
+            
+            <div class="warning-box">
+                <h4>⚠️ Mental Health Disclaimer</h4>
+                <p>Καιρός is a journaling tool, not a mental health service. If you are experiencing thoughts of self-harm, suicide, or a mental health emergency, please contact emergency services or a crisis helpline in your area immediately.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>11. Termination</h2>
+            
+            <h3>Termination by You</h3>
+            <p>You may delete your account at any time through the app settings. Upon deletion:</p>
+            <ul>
+                <li>Your access to the Service will end immediately</li>
+                <li>Your personal data will be deleted within 30 days</li>
+                <li>Backup copies will be deleted within 90 days</li>
+                <li>Any active subscriptions will be cancelled (no refund for partial periods)</li>
+            </ul>
+            
+            <h3>Termination by Us</h3>
+            <p>We may suspend or terminate your account if:</p>
+            <ul>
+                <li>You violate these Terms of Service</li>
+                <li>Your use of the Service poses a security risk</li>
+                <li>We are required to do so by law</li>
+                <li>We discontinue the Service (with reasonable notice)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>12. Dispute Resolution</h2>
+            
+            <h3>Governing Law</h3>
+            <p>These Terms are governed by the laws of Austria, without regard to conflict of law principles.</p>
+            
+            <h3>Informal Resolution</h3>
+            <p>Before filing any formal dispute, you agree to contact us at legal@kairos-journal.com and attempt to resolve the dispute informally for at least 30 days.</p>
+            
+            <h3>Jurisdiction</h3>
+            <p>Any disputes that cannot be resolved informally shall be subject to the exclusive jurisdiction of the courts in Vienna, Austria.</p>
+        </section>
+
+        <section>
+            <h2>13. General Provisions</h2>
+            
+            <ul>
+                <li><strong>Entire Agreement:</strong> These Terms, together with our Privacy Policy, constitute the entire agreement between you and Καιρός.</li>
+                <li><strong>Severability:</strong> If any provision is found unenforceable, the remaining provisions will continue in effect.</li>
+                <li><strong>No Waiver:</strong> Our failure to enforce any right or provision does not constitute a waiver of that right.</li>
+                <li><strong>Assignment:</strong> You may not assign your rights under these Terms. We may assign our rights to an affiliate or successor.</li>
+                <li><strong>Force Majeure:</strong> We are not liable for delays or failures due to circumstances beyond our reasonable control.</li>
+            </ul>
+        </section>
+
+        <div class="contact-section">
+            <h2>📬 Questions About These Terms?</h2>
+            <p>If you have any questions about these Terms of Service, please don't hesitate to contact us.</p>
+            <a href="mailto:legal@kairos-journal.com" class="contact-email">legal@kairos-journal.com</a>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #888;">
+                General Support: <a href="mailto:support@kairos-journal.com" style="color: #4ade80;">support@kairos-journal.com</a>
+            </p>
+        </div>
+
+        <footer>
+            <p>© 2025 Καιρός Smart Journal. All rights reserved.</p>
+            <p style="margin-top: 10px;">
+                <a href="/">Back to App</a> · 
+                <a href="/privacy.html">Privacy Policy</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

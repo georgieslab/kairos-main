@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gratitude Journal</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #000;
+      background: #fff;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      font-size: 16px;
+      padding: 6px 16px;
+    }
+    ul {
+      margin-top: 30px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gratitude Journal</h1>
+  <p>What are you grateful for today?</p>
+
+  <textarea id="entry"></textarea>
+  <button onclick="save()">Add</button>
+
+  <ul id="list"></ul>
+
+  <script>
+    function load() {
+      return JSON.parse(localStorage.getItem("gratitude") || "[]");
+    }
+
+    function render() {
+      var list = document.getElementById("list");
+      list.innerHTML = "";
+      load().forEach(function (text) {
+        var li = document.createElement("li");
+        li.textContent = text;
+        list.appendChild(li);
+      });
+    }
+
+    function save() {
+      var box = document.getElementById("entry");
+      var text = box.value.trim();
+      if (!text) return;
+      var entries = load();
+      entries.unshift(new Date().toLocaleDateString() + " — " + text);
+      localStorage.setItem("gratitude", JSON.stringify(entries));
+      box.value = "";
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>

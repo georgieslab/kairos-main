@@ -56,6 +56,7 @@ const MultiImageJournalUpload = ({
 
   // Handle camera capture using Capacitor Camera plugin
   const handleCameraCapture = async () => {
+    try {
       const image = await CapacitorCamera.getPhoto({
         quality: 90,
         allowEditing: false,
@@ -71,7 +72,7 @@ const MultiImageJournalUpload = ({
       addCapturedImage(file);
     } catch (error) {
       console.error('Camera capture error:', error);
-      if (error.message !== 'User cancelled photos app') {
+      if (error?.message !== 'User cancelled photos app') {
         setError('Failed to capture image. Please try again.');
       }
     }
@@ -99,6 +100,9 @@ const MultiImageJournalUpload = ({
   };
 
   // Handle file selection
+  const handleFileSelect = (e) => {
+    const selectedFiles = Array.from((e.target && e.target.files) || []);
+    if (selectedFiles.length === 0) return;
     addNewFiles(selectedFiles);
   };
 

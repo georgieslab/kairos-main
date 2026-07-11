@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import useLoader from './useLoader';
 import { PATHS, getUserPathProgress, getNextDayForPath } from '../utils/userProgress';
+import { getAllJourneyPaths } from '../data/JourneyData';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
@@ -57,64 +58,19 @@ const useNavigationState = (initialScreen = 'loading') => {
         console.log('Loading journey completion status...');
         const completedJourneysObj = {};
         
-        // Check all paths in user profile for completion status
+        // Check all registered paths in user profile for completion status
         if (userProfile.journeyProgress) {
-          // Check self-discovery path (10 days)
-          if (userProfile.journeyProgress.selfDiscoveryProgress?.completedDays?.length >= 10) {
-            completedJourneysObj['self-discovery'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_self-discovery') || null
-            };
-          }
-          
-          // Check emotional-intelligence path (10 days)
-          if (userProfile.journeyProgress.emotionalIntelligenceProgress?.completedDays?.length >= 10) {
-            completedJourneysObj['emotional-intelligence'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_emotional-intelligence') || null
-            };
-          }
-          
-          // Check mindfulness-awareness path (10 days)
-          if (userProfile.journeyProgress.mindfulnessAwarenessProgress?.completedDays?.length >= 10) {
-            completedJourneysObj['mindfulness-awareness'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_mindfulness-awareness') || null
-            };
-          }
-          
-          // Check transformation-journey path (21 days)
-          if (userProfile.journeyProgress.transformationJourneyProgress?.completedDays?.length >= 21) {
-            completedJourneysObj['transformation-journey'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_transformation-journey') || null
-            };
-          }
-          
-          // Check for other journeys based on durations from path registry
-          // Creative Expression (14 days)
-          if (userProfile.journeyProgress.creativeExpressionProgress?.completedDays?.length >= 14) {
-            completedJourneysObj['creative-expression'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_creative-expression') || null
-            };
-          }
-          
-          // Habit Formation (30 days)
-          if (userProfile.journeyProgress.habitFormationProgress?.completedDays?.length >= 30) {
-            completedJourneysObj['habit-formation'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_habit-formation') || null
-            };
-          }
-          
-          // Life Vision (100 days)
-          if (userProfile.journeyProgress.lifeVisionProgress?.completedDays?.length >= 100) {
-            completedJourneysObj['life-vision'] = {
-              isCompleted: true,
-              lastViewed: localStorage.getItem('completion_viewed_life-vision') || null
-            };
-          }
+          getAllJourneyPaths().forEach((path) => {
+            const progress = getUserPathProgress(userProfile, path.id);
+            const completedDays = progress?.completedDays || [];
+
+            if (completedDays.length >= path.duration) {
+              completedJourneysObj[path.id] = {
+                isCompleted: true,
+                lastViewed: localStorage.getItem(`completion_viewed_${path.id}`) || null
+              };
+            }
+          });
         }
         
         // Also check Firebase for stored completion preferences
@@ -188,12 +144,7 @@ const useNavigationState = (initialScreen = 'loading') => {
       
       try {
         // For each path, get the next day they should work on
-        const paths = [
-          PATHS.SELF_DISCOVERY, 
-          PATHS.EMOTIONAL_INTELLIGENCE, 
-          PATHS.MINDFULNESS_AWARENESS,
-          PATHS.TRANSFORMATION_JOURNEY
-        ];
+        const paths = getAllJourneyPaths().map(path => path.id);
         
         const pathProgress = {};
         
@@ -500,9 +451,10 @@ const useNavigationState = (initialScreen = 'loading') => {
     // NEW: Only show loader during navigation if not tab navigation
     if (!isTabNavigation) {
       // Show loader during navigation
-      await showLoader({ 
-        size: 'medium', 
-        duration: 200
+      await showLoader({
+        size: 'medium',
+        duration: 200,
+        showQuote: false // quote is exclusive to the analysis loader
       });
     }
     
@@ -591,9 +543,10 @@ const useNavigationState = (initialScreen = 'loading') => {
     isNavigating.current = true;
     
     // Show loader
-    await showLoader({ 
-      size: 'small', 
-      duration: 200
+    await showLoader({
+      size: 'small',
+      duration: 200,
+      showQuote: false // quote is exclusive to the analysis loader
     });
     
     if (navigationHistory.length > 0) {

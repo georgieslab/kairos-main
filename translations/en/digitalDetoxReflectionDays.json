@@ -1,0 +1,44 @@
+[
+  {
+    "id": "digitalDetoxReflectionDays:1",
+    "title": "Digital Awareness Audit",
+    "theme": "Assessment",
+    "prompt": "Honestly assess your relationship with technology and digital devices. How much time do you spend on phones, computers, social media, and streaming? When do you reach for devices unconsciously versus intentionally?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:2",
+    "title": "Digital Triggers and Habits",
+    "theme": "Patterns",
+    "prompt": "What triggers your digital consumption? Consider emotions (boredom, anxiety, loneliness), times of day, or situations that lead to mindless scrolling or device use. What automatic habits have you developed around technology?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:3",
+    "title": "Social Media Impact",
+    "theme": "Social Comparison",
+    "prompt": "How does social media affect your mood, self-image, and worldview? When does it connect you meaningfully versus when does it trigger comparison, envy, or negative feelings? What would change if you consumed less social content?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:4",
+    "title": "Information Overwhelm",
+    "theme": "Mental Clutter",
+    "prompt": "How does constant information consumption affect your ability to think clearly, be present, or access your own thoughts? What happens to your creativity and inner wisdom when your mind is constantly filled with external input?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:5",
+    "title": "Digital Boundaries Experiment",
+    "theme": "Limits",
+    "prompt": "Today, experiment with one digital boundary - perhaps phone-free meals, no devices before bed, or limited social media time. What do you notice about the quality of your attention, relationships, or inner state?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:6",
+    "title": "Analog Alternatives",
+    "theme": "Replacement",
+    "prompt": "What non-digital activities could replace some of your screen time? Consider reading physical books, having face-to-face conversations, spending time in nature, or creative pursuits. What would you do with freed-up time and attention?"
+  },
+  {
+    "id": "digitalDetoxReflectionDays:7",
+    "title": "Mindful Technology Use",
+    "theme": "Integration",
+    "prompt": "How can you use technology more intentionally going forward? What boundaries, practices, or awareness will help you use devices as tools rather than being used by them? What's your vision for a healthier relationship with technology?"
+  }
+]

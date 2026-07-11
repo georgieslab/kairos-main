@@ -1,5 +1,6 @@
 // src/components/journey/JourneyCompletion.jsx - CORRECT COMPLETION COMPONENT
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { 
@@ -43,9 +44,10 @@ const JourneyCompletion = ({
   onRestart, 
   onViewDay 
 }) => {
+  const { t } = useTranslation('journey');
   const { userProfile } = useAuth();
   const { isDarkMode } = useTheme();
-  
+
   // Get the completed path from props or fallback methods
   const [pathId, setPathId] = useState(propPathId || null);
   const [pathData, setPathData] = useState(null);
@@ -127,7 +129,7 @@ const JourneyCompletion = ({
       <div className={`journey-completion-container loading ${isDarkMode ? 'dark' : 'light'}`}>
         <div className="loading-content">
           <div className="loading-spinner"></div>
-          <p>Loading your journey completion...</p>
+          <p>{t('journeyCompletion.loading', 'Loading your journey completion...')}</p>
         </div>
       </div>
     );
@@ -179,7 +181,7 @@ const JourneyCompletion = ({
     
     return {
       title: pathData.title,
-      subtitle: `You've completed your ${totalDays}-day ${pathData.title}!`,
+      subtitle: t('journeyCompletion.subtitle', "You've completed your {{days}}-day {{title}}!", { days: totalDays, title: pathData.title }),
       color: color,
       iconName: pathData.iconName || 'Award',
       description: pathData.description,
@@ -260,8 +262,8 @@ const JourneyCompletion = ({
         <div className="achievement-notification">
           <Trophy className="achievement-icon" />
           <div className="achievement-text">
-            <h4>Achievement Unlocked!</h4>
-            <p>Journey Master - Complete 3 journeys</p>
+            <h4>{t('journeyCompletion.achievementUnlocked', 'Achievement Unlocked!')}</h4>
+            <p>{t('journeyCompletion.achievementDescription', 'Journey Master - Complete 3 journeys')}</p>
           </div>
         </div>
       )}
@@ -280,7 +282,7 @@ const JourneyCompletion = ({
           </div>
           
           <div className="completion-title-section">
-            <h1 className="completion-title">Journey Complete!</h1>
+            <h1 className="completion-title">{t('journeyCompletion.journeyComplete', 'Journey Complete!')}</h1>
             <h2 className="path-title">{pathInfo.title}</h2>
             <p className="completion-subtitle">{pathInfo.subtitle}</p>
           </div>
@@ -289,17 +291,17 @@ const JourneyCompletion = ({
             <div className="stat-item">
               <Calendar className="stat-icon" />
               <span className="stat-value">{stats.totalDays}</span>
-              <span className="stat-label">Days</span>
+              <span className="stat-label">{t('journeyCompletion.days', 'Days')}</span>
             </div>
             <div className="stat-item">
               <CheckCircle className="stat-icon" />
               <span className="stat-value">{completionPercentage}%</span>
-              <span className="stat-label">Complete</span>
+              <span className="stat-label">{t('journeyCompletion.complete', 'Complete')}</span>
             </div>
             <div className="stat-item">
               <Star className="stat-icon" />
-              <span className="stat-value">Done</span>
-              <span className="stat-label">Status</span>
+              <span className="stat-value">{t('journeyCompletion.done', 'Done')}</span>
+              <span className="stat-label">{t('journeyCompletion.status', 'Status')}</span>
             </div>
           </div>
         </header>
@@ -308,34 +310,34 @@ const JourneyCompletion = ({
         <section className="journey-summary">
           <h3>
             <Sparkles className="section-icon" />
-            Your Journey Summary
+            {t('journeyCompletion.yourJourneySummary', 'Your Journey Summary')}
           </h3>
-          
+
           <div className="summary-grid">
             <div className="summary-card">
               <Target className="summary-icon" />
-              <h4>Days Completed</h4>
-              <p className="summary-value">{completedDays.length} of {totalDays}</p>
+              <h4>{t('journeyCompletion.daysCompleted', 'Days Completed')}</h4>
+              <p className="summary-value">{t('journeyCompletion.daysOfTotal', '{{completed}} of {{total}}', { completed: completedDays.length, total: totalDays })}</p>
               <p className="summary-description">
-                You've successfully completed this entire journey!
+                {t('journeyCompletion.daysCompletedDescription', "You've successfully completed this entire journey!")}
               </p>
             </div>
 
             <div className="summary-card">
               <Heart className="summary-icon" />
-              <h4>Consistency</h4>
+              <h4>{t('journeyCompletion.consistency', 'Consistency')}</h4>
               <p className="summary-value">{stats.consistency}%</p>
               <p className="summary-description">
-                Amazing dedication to your personal growth
+                {t('journeyCompletion.consistencyDescription', 'Amazing dedication to your personal growth')}
               </p>
             </div>
 
             <div className="summary-card">
               <Trophy className="summary-icon" />
-              <h4>Achievement</h4>
-              <p className="summary-value">Journey Master</p>
+              <h4>{t('journeyCompletion.achievement', 'Achievement')}</h4>
+              <p className="summary-value">{t('journeyCompletion.journeyMaster', 'Journey Master')}</p>
               <p className="summary-description">
-                You've completed a full journaling journey
+                {t('journeyCompletion.achievementFullDescription', "You've completed a full journaling journey")}
               </p>
             </div>
           </div>
@@ -345,13 +347,13 @@ const JourneyCompletion = ({
         <section className="journey-timeline-preview">
           <h3>
             <Book className="section-icon" />
-            Your Journey Timeline
+            {t('journeyCompletion.yourJourneyTimeline', 'Your Journey Timeline')}
           </h3>
-          
+
           <div className="timeline-container">
             {pathData.days && pathData.days.slice(0, 5).map((day, index) => (
-              <div 
-                key={day.day} 
+              <div
+                key={day.day}
                 className="timeline-day completed"
                 onClick={() => handleViewDay(day.day)}
               >
@@ -359,19 +361,19 @@ const JourneyCompletion = ({
                   <CheckCircle className="timeline-check" />
                 </div>
                 <div className="timeline-content">
-                  <h5>Day {day.day}: {day.title}</h5>
+                  <h5>{t('journeyCompletion.dayColonTitle', 'Day {{day}}: {{title}}', { day: day.day, title: day.title })}</h5>
                   <p>{day.theme}</p>
                 </div>
               </div>
             ))}
-            
+
             {pathData.days && pathData.days.length > 5 && (
               <div className="timeline-more">
-                <button 
+                <button
                   className="view-all-days-btn"
                   onClick={handleViewJournal}
                 >
-                  <span>View All {totalDays} Days</span>
+                  <span>{t('journeyCompletion.viewAllDays', 'View All {{days}} Days', { days: totalDays })}</span>
                   <ChevronRight size={16} />
                 </button>
               </div>
@@ -381,53 +383,53 @@ const JourneyCompletion = ({
 
         {/* Action Buttons */}
         <section className="completion-actions">
-          <h3>What's Next?</h3>
-          
+          <h3>{t('journeyCompletion.whatsNext', "What's Next?")}</h3>
+
           <div className="actions-grid">
-            <button 
+            <button
               className="action-button primary"
               onClick={handleExploreMore}
             >
               <Compass className="action-icon" />
               <div className="action-content">
-                <h4>Explore More Journeys</h4>
-                <p>Discover new paths for continued growth</p>
+                <h4>{t('journeyCompletion.exploreMoreJourneys', 'Explore More Journeys')}</h4>
+                <p>{t('journeyCompletion.exploreMoreJourneysDescription', 'Discover new paths for continued growth')}</p>
               </div>
               <ArrowRight className="action-arrow" />
             </button>
 
-            <button 
+            <button
               className="action-button secondary"
               onClick={handleViewJournal}
             >
               <FileText className="action-icon" />
               <div className="action-content">
-                <h4>View Your Journal</h4>
-                <p>Revisit your entries and insights</p>
+                <h4>{t('journeyCompletion.viewYourJournal', 'View Your Journal')}</h4>
+                <p>{t('journeyCompletion.viewYourJournalDescription', 'Revisit your entries and insights')}</p>
               </div>
               <ArrowRight className="action-arrow" />
             </button>
 
-            <button 
+            <button
               className="action-button secondary"
               onClick={handleAnalytics}
             >
               <BarChart3 className="action-icon" />
               <div className="action-content">
-                <h4>View Analytics</h4>
-                <p>See patterns and progress over time</p>
+                <h4>{t('journeyCompletion.viewAnalytics', 'View Analytics')}</h4>
+                <p>{t('journeyCompletion.viewAnalyticsDescription', 'See patterns and progress over time')}</p>
               </div>
               <ArrowRight className="action-arrow" />
             </button>
 
-            <button 
+            <button
               className="action-button tertiary"
               onClick={handleRestartJourney}
             >
               <RotateCcw className="action-icon" />
               <div className="action-content">
-                <h4>Restart Journey</h4>
-                <p>Begin this path again</p>
+                <h4>{t('journeyCompletion.restartJourney', 'Restart Journey')}</h4>
+                <p>{t('journeyCompletion.restartJourneyDescription', 'Begin this path again')}</p>
               </div>
               <ArrowRight className="action-arrow" />
             </button>
@@ -438,9 +440,9 @@ const JourneyCompletion = ({
         <section className="completion-quote">
           <div className="quote-content">
             <blockquote>
-              "The journey of a thousand miles begins with a single step. You've taken {totalDays} steps on your path of self-discovery."
+              {t('journeyCompletion.motivationalQuote', "The journey of a thousand miles begins with a single step. You've taken {{days}} steps on your path of self-discovery.", { days: totalDays })}
             </blockquote>
-            <cite>— Inspired by Lao Tzu</cite>
+            <cite>{t('journeyCompletion.quoteAttribution', '— Inspired by Lao Tzu')}</cite>
           </div>
         </section>
       </div>

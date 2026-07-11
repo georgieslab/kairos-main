@@ -1,0 +1,128 @@
+[
+  {
+    "id": "sensorySpectrumDays:1",
+    "title": "Seeing: Visual Beauty",
+    "theme": "Sight Appreciation",
+    "prompt": "Write about what you see around you. What visual beauty captures your attention? Describe colors, shapes, light, and shadow in detail."
+  },
+  {
+    "id": "sensorySpectrumDays:2",
+    "title": "Seeing: Visual Expression",
+    "theme": "Sight Creation",
+    "prompt": "Create art celebrating the sense of sight itself. Paint what you love to look at. Express the joy of seeing."
+  },
+  {
+    "id": "sensorySpectrumDays:3",
+    "title": "Seeing: Describing Vision",
+    "theme": "Sight Voice",
+    "prompt": "Describe aloud what you see right now in vivid detail. Practice being present to visual experience through verbal description."
+  },
+  {
+    "id": "sensorySpectrumDays:4",
+    "title": "Seeing: Visual Memories",
+    "theme": "Sight Reflection",
+    "prompt": "Write about the most beautiful things you've ever seen. What visual memories stay with you? What has your sense of sight given you?"
+  },
+  {
+    "id": "sensorySpectrumDays:5",
+    "title": "Hearing: Sound Landscape",
+    "theme": "Sound Awareness",
+    "prompt": "Speak about what you hear around you. Describe sounds, rhythms, music, voices, and silence. What does your auditory world sound like?"
+  },
+  {
+    "id": "sensorySpectrumDays:6",
+    "title": "Hearing: Visual Sound",
+    "theme": "Sound Expression",
+    "prompt": "Create art representing sound. What do rhythms, music, or voices look like visually? Express the experience of hearing through imagery."
+  },
+  {
+    "id": "sensorySpectrumDays:7",
+    "title": "Hearing: Written Sounds",
+    "theme": "Sound Reflection",
+    "prompt": "Write about your relationship with sound. What sounds bring you peace? What sounds disturb you? What has listening taught you?"
+  },
+  {
+    "id": "sensorySpectrumDays:8",
+    "title": "Hearing: Sonic Memories",
+    "theme": "Sound Memory",
+    "prompt": "Speak about sounds you remember from your life. What voices, songs, or sounds are imprinted in your memory?"
+  },
+  {
+    "id": "sensorySpectrumDays:9",
+    "title": "Touching: Tactile World",
+    "theme": "Touch Awareness",
+    "prompt": "Write about what you can feel physically right now. Describe textures, temperatures, pressure. What does your sense of touch tell you?"
+  },
+  {
+    "id": "sensorySpectrumDays:10",
+    "title": "Touching: Texture Art",
+    "theme": "Touch Expression",
+    "prompt": "Create art with interesting textures. Use materials that feel good. Express the sense of touch through tactile creation."
+  },
+  {
+    "id": "sensorySpectrumDays:11",
+    "title": "Touching: Describing Sensation",
+    "theme": "Touch Voice",
+    "prompt": "Speak about physical sensations and touch. Describe what things feel like. What does your body sense through contact?"
+  },
+  {
+    "id": "sensorySpectrumDays:12",
+    "title": "Touching: Touch Memories",
+    "theme": "Touch Reflection",
+    "prompt": "Write about meaningful touch experiences. What physical sensations stay with you? What has touch taught you about connection?"
+  },
+  {
+    "id": "sensorySpectrumDays:13",
+    "title": "Smelling: Scent Awareness",
+    "theme": "Smell Recognition",
+    "prompt": "Speak about scents in your environment. What do you smell? How do scents affect your mood and memory?"
+  },
+  {
+    "id": "sensorySpectrumDays:14",
+    "title": "Smelling: Visual Scent",
+    "theme": "Smell Expression",
+    "prompt": "Create art representing your favorite scents. What would lavender, coffee, or rain look like as visual art?"
+  },
+  {
+    "id": "sensorySpectrumDays:15",
+    "title": "Smelling: Scent Stories",
+    "theme": "Smell Reflection",
+    "prompt": "Write about scents that trigger memories. What smells transport you? What has your sense of smell revealed to you?"
+  },
+  {
+    "id": "sensorySpectrumDays:16",
+    "title": "Smelling: Aromatic Memories",
+    "theme": "Smell Memory",
+    "prompt": "Speak about the scents of your life - childhood smells, favorite aromas, scents you associate with people or places."
+  },
+  {
+    "id": "sensorySpectrumDays:17",
+    "title": "Tasting: Flavor Awareness",
+    "theme": "Taste Appreciation",
+    "prompt": "Write about flavors you love. Describe taste experiences in detail. What does your sense of taste bring to your life?"
+  },
+  {
+    "id": "sensorySpectrumDays:18",
+    "title": "Tasting: Visual Flavor",
+    "theme": "Taste Expression",
+    "prompt": "Create art representing flavors. What would sweet, sour, bitter, or savory look like as colors and shapes?"
+  },
+  {
+    "id": "sensorySpectrumDays:19",
+    "title": "Tasting: Speaking Flavor",
+    "theme": "Taste Voice",
+    "prompt": "Describe your favorite foods and flavors aloud. Speak about taste experiences that bring you joy."
+  },
+  {
+    "id": "sensorySpectrumDays:20",
+    "title": "Tasting: Flavor Memories",
+    "theme": "Taste Reflection",
+    "prompt": "Write about tastes that connect to memories. What flavors are woven into your life story?"
+  },
+  {
+    "id": "sensorySpectrumDays:21",
+    "title": "Sensory Integration",
+    "theme": "Complete Spectrum",
+    "prompt": "Speak about your complete sensory experience. How do all five senses work together to create your experience of being alive? What has this sensory journey taught you?"
+  }
+]

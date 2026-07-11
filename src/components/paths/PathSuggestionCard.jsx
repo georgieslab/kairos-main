@@ -1,39 +1,35 @@
 // src/components/paths/PathSuggestionCard.jsx
 import React from 'react';
-import { Lightbulb, Sparkles, ArrowRight } from 'lucide-react';
-import '../../styles/components/pathSuggestionCard.css';
+import { useTranslation } from 'react-i18next';
+import { Sparkles, ArrowRight } from 'lucide-react';
 
 const PathSuggestionCard = ({ onStartQuestionnaire }) => {
+  const { t } = useTranslation('paths');
   return (
-    <div className="path-suggestion-card">
-      <div className="suggestion-icon-wrapper">
-        <Lightbulb className="suggestion-icon" />
-        <Sparkles className="sparkle-icon sparkle-1" />
-        <Sparkles className="sparkle-icon sparkle-2" />
+    <button
+      type="button"
+      className="glass-suggestion-card"
+      onClick={onStartQuestionnaire}
+    >
+      <div className="suggestion-glow" aria-hidden="true" />
+
+      <div className="suggestion-glass-icon">
+        <Sparkles size={20} />
       </div>
-      
+
       <div className="suggestion-content">
-        <h3 className="suggestion-title">Need help choosing?</h3>
-        <p className="suggestion-subtitle">
-          Answer 5 quick questions and our AI will find your perfect path
-        </p>
+        <span className="suggestion-tag">
+          <Sparkles size={11} />
+          {t('pathSuggestionCard.aiMatchedTag', 'AI-matched')}
+        </span>
+        <h3>{t('pathSuggestionCard.title', 'Not sure where to start?')}</h3>
+        <p>{t('pathSuggestionCard.description', "Answer a few quick questions and we'll find your perfect path.")}</p>
       </div>
 
-      <button 
-        className="suggestion-button"
-        onClick={onStartQuestionnaire}
-      >
-        <Sparkles className="button-icon" />
-        Get Personalized Suggestion
-        <ArrowRight className="button-arrow" />
-      </button>
-
-      <div className="suggestion-decorations">
-        <div className="decoration decoration-1"></div>
-        <div className="decoration decoration-2"></div>
-        <div className="decoration decoration-3"></div>
-      </div>
-    </div>
+      <span className="suggestion-cta" aria-hidden="true">
+        <ArrowRight size={16} />
+      </span>
+    </button>
   );
 };
 

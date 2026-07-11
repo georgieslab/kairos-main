@@ -1,0 +1,13 @@
+{
+  "weatherDialog": {
+    "feelsLike": "Gefühlt",
+    "humidity": "Luftfeuchtigkeit",
+    "wind": "Wind",
+    "visibility": "Sichtweite",
+    "sunrise": "Sonnenaufgang",
+    "sunset": "Sonnenuntergang"
+  },
+  "weatherWidget": {
+    "unavailable": "Wetter nicht verfügbar"
+  }
+}

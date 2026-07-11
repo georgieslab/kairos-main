@@ -1,0 +1,128 @@
+[
+  {
+    "id": "financialMindfulnessDays:1",
+    "title": "Money Story",
+    "theme": "Narrative",
+    "prompt": "Explore your earliest memories about money. What messages did you receive growing up? How have these shaped your current relationship with finances?"
+  },
+  {
+    "id": "financialMindfulnessDays:2",
+    "title": "Money Beliefs",
+    "theme": "Mindset",
+    "prompt": "What core beliefs do you hold about money? (Examples: 'There's never enough,' 'Money corrupts,' 'I'm bad with finances'). Which beliefs serve you, and which limit you?"
+  },
+  {
+    "id": "financialMindfulnessDays:3",
+    "title": "Financial Feelings",
+    "theme": "Emotions",
+    "prompt": "What emotions arise when you think about your finances? What specific money situations trigger anxiety, shame, pride, or security? How do these emotions influence your financial decisions?"
+  },
+  {
+    "id": "financialMindfulnessDays:4",
+    "title": "Money & Identity",
+    "theme": "Self-Concept",
+    "prompt": "How does money relate to your sense of self-worth and identity? In what ways have you tied your value as a person to your financial status? How might you separate the two?"
+  },
+  {
+    "id": "financialMindfulnessDays:5",
+    "title": "Financial Reality Check",
+    "theme": "Awareness",
+    "prompt": "Without judgment, take stock of your current financial situation. What's working well? What needs attention? What small step would create greater clarity about your finances?"
+  },
+  {
+    "id": "financialMindfulnessDays:6",
+    "title": "Spending Patterns",
+    "theme": "Consumption",
+    "prompt": "Review your recent purchases. What patterns do you notice? When do you spend mindfully vs. reactively? What values are reflected in your spending choices?"
+  },
+  {
+    "id": "financialMindfulnessDays:7",
+    "title": "Scarcity vs. Abundance",
+    "theme": "Perspective",
+    "prompt": "Do you operate from a scarcity mindset or an abundance mindset around money? How does this perspective affect your decisions? What would shift if you adopted a more balanced view?"
+  },
+  {
+    "id": "financialMindfulnessDays:8",
+    "title": "Money & Relationships",
+    "theme": "Social Dynamics",
+    "prompt": "How does money impact your relationships? Explore financial dynamics with partners, family, or friends. Where do tensions arise? How might you improve financial communication?"
+  },
+  {
+    "id": "financialMindfulnessDays:9",
+    "title": "Financial Values",
+    "theme": "Principles",
+    "prompt": "What values matter most to you regarding money? (Examples: security, generosity, freedom, or growth). How well do your current financial habits align with these values?"
+  },
+  {
+    "id": "financialMindfulnessDays:10",
+    "title": "Enough",
+    "theme": "Sufficiency",
+    "prompt": "What does 'enough' mean to you financially? How would you define true wealth beyond monetary measurements? What non-financial assets enrich your life?"
+  },
+  {
+    "id": "financialMindfulnessDays:11",
+    "title": "Money Triggers",
+    "theme": "Reactions",
+    "prompt": "What financial situations trigger stress or automatic reactions? (Examples: checking your balance, receiving bills, or discussing money). What would help you respond more mindfully?"
+  },
+  {
+    "id": "financialMindfulnessDays:12",
+    "title": "Financial Habits",
+    "theme": "Patterns",
+    "prompt": "Identify your helpful and unhelpful financial habits. Choose one habit to change. What small, concrete step could you take to begin shifting this pattern?"
+  },
+  {
+    "id": "financialMindfulnessDays:13",
+    "title": "Money & Time",
+    "theme": "Exchange",
+    "prompt": "Reflect on the relationship between your time and money. When does spending money save time wisely? When does pursuing money cost too much time? How might you create a healthier balance?"
+  },
+  {
+    "id": "financialMindfulnessDays:14",
+    "title": "Mid-Journey Financial Check",
+    "theme": "Progress",
+    "prompt": "How has your relationship with money shifted over the past two weeks? What insights have been most valuable? What remains challenging? What would you like to explore further?"
+  },
+  {
+    "id": "financialMindfulnessDays:15",
+    "title": "Financial Fears",
+    "theme": "Concerns",
+    "prompt": "What money fears keep you awake at night? Name your biggest financial worries. For each fear, consider: How likely is this scenario? What would help you feel more secure?"
+  },
+  {
+    "id": "financialMindfulnessDays:16",
+    "title": "Money & Purpose",
+    "theme": "Meaning",
+    "prompt": "How might money serve your deeper purpose? What meaningful goals could financial resources help you achieve? How could your finances better align with what matters most to you?"
+  },
+  {
+    "id": "financialMindfulnessDays:17",
+    "title": "Financial Decision-Making",
+    "theme": "Choices",
+    "prompt": "How do you make financial decisions? Are they reactive or deliberate? Create a simple framework for making money choices that align with your values and long-term wellbeing."
+  },
+  {
+    "id": "financialMindfulnessDays:18",
+    "title": "Gratitude & Generosity",
+    "theme": "Abundance",
+    "prompt": "Reflect on what you're grateful for financially. How does gratitude shift your money mindset? How does generosity play a role in your financial life? How might you cultivate both?"
+  },
+  {
+    "id": "financialMindfulnessDays:19",
+    "title": "Money Vision",
+    "theme": "Future",
+    "prompt": "Envision your ideal relationship with money three years from now. What's different? How do you feel about finances? What habits have you developed? What steps would move you toward this vision?"
+  },
+  {
+    "id": "financialMindfulnessDays:20",
+    "title": "Financial Action Plan",
+    "theme": "Implementation",
+    "prompt": "Based on your insights from this journey, what 2-3 specific actions would most improve your financial wellbeing? Create a concrete plan with timelines for these priority changes."
+  },
+  {
+    "id": "financialMindfulnessDays:21",
+    "title": "Financial Mindfulness Integration",
+    "theme": "Wisdom",
+    "prompt": "Looking back over the past three weeks, how has your relationship with money evolved? What key insights will you carry forward? How will you maintain financial mindfulness in your daily life?"
+  }
+]

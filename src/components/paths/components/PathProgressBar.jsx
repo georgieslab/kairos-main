@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const PathProgressBar = ({ completedCount, total = 10 }) => {
+  const { t } = useTranslation('paths');
   const percentage = (completedCount / total) * 100;
-  
+
   return (
     <div className="path-progress-container">
       <div className="path-progress-bar">
@@ -12,7 +14,7 @@ const PathProgressBar = ({ completedCount, total = 10 }) => {
         ></div>
       </div>
       <div className="path-progress-text">
-        {completedCount || 0} of {total} days completed
+        {t('pathProgressBar.progressText', '{{completed}} of {{total}} days completed', { completed: completedCount || 0, total })}
       </div>
     </div>
   );

@@ -2,7 +2,8 @@
 // Enhanced Achievements Display Component
 
 import React, { useState, useMemo } from 'react';
-import { 
+import { useTranslation } from 'react-i18next';
+import {
   X, 
   Trophy,
   Flame,
@@ -258,6 +259,7 @@ const ACHIEVEMENT_DEFINITIONS = {
 };
 
 function AchievementsModal({ isOpen, onClose, statistics }) {
+  const { t } = useTranslation('achievements');
   const { isDarkMode } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -333,16 +335,16 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
           <div className="am-title-wrapper">
             <Trophy className="am-title-icon" size={24} />
             <div>
-              <h2 className="am-title">Achievements</h2>
+              <h2 className="am-title">{t('achievements.title', 'Achievements')}</h2>
               <p className="am-subtitle">
-                {progress.earned} of {progress.total} unlocked · {totalPoints.toLocaleString()} points
+                {t('achievements.unlockedSummary', '{{earned}} of {{total}} unlocked · {{points}} points', { earned: progress.earned, total: progress.total, points: totalPoints.toLocaleString() })}
               </p>
             </div>
           </div>
-          <button 
+          <button
             className="am-close-btn"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('achievements.close', 'Close')}
           >
             <X size={20} />
           </button>
@@ -356,7 +358,7 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
               style={{ width: `${progress.percentage}%` }}
             />
           </div>
-          <p className="am-progress-text">{progress.percentage}% Complete</p>
+          <p className="am-progress-text">{t('achievements.percentComplete', '{{percentage}}% Complete', { percentage: progress.percentage })}</p>
         </div>
 
         {/* Category Filter */}
@@ -365,14 +367,14 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
             className={`am-category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
             onClick={() => setSelectedCategory('all')}
           >
-            All
+            {t('achievements.categoryAll', 'All')}
           </button>
           <button
             className={`am-category-btn ${selectedCategory === ACHIEVEMENT_CATEGORIES.STREAK ? 'active' : ''}`}
             onClick={() => setSelectedCategory(ACHIEVEMENT_CATEGORIES.STREAK)}
           >
             <Flame size={16} />
-            Streaks
+            {t('achievements.categoryStreaks', 'Streaks')}
             <span className="am-category-count">
               {categoryStats[ACHIEVEMENT_CATEGORIES.STREAK]?.earned}/{categoryStats[ACHIEVEMENT_CATEGORIES.STREAK]?.total}
             </span>
@@ -382,7 +384,7 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
             onClick={() => setSelectedCategory(ACHIEVEMENT_CATEGORIES.VOLUME)}
           >
             <BookOpen size={16} />
-            Volume
+            {t('achievements.categoryVolume', 'Volume')}
             <span className="am-category-count">
               {categoryStats[ACHIEVEMENT_CATEGORIES.VOLUME]?.earned}/{categoryStats[ACHIEVEMENT_CATEGORIES.VOLUME]?.total}
             </span>
@@ -392,7 +394,7 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
             onClick={() => setSelectedCategory(ACHIEVEMENT_CATEGORIES.JOURNEY)}
           >
             <Target size={16} />
-            Journeys
+            {t('achievements.categoryJourneys', 'Journeys')}
             <span className="am-category-count">
               {categoryStats[ACHIEVEMENT_CATEGORIES.JOURNEY]?.earned}/{categoryStats[ACHIEVEMENT_CATEGORIES.JOURNEY]?.total}
             </span>
@@ -402,7 +404,7 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
             onClick={() => setSelectedCategory(ACHIEVEMENT_CATEGORIES.CONSISTENCY)}
           >
             <Calendar size={16} />
-            Consistency
+            {t('achievements.categoryConsistency', 'Consistency')}
             <span className="am-category-count">
               {categoryStats[ACHIEVEMENT_CATEGORIES.CONSISTENCY]?.earned}/{categoryStats[ACHIEVEMENT_CATEGORIES.CONSISTENCY]?.total}
             </span>
@@ -430,14 +432,14 @@ function AchievementsModal({ isOpen, onClose, statistics }) {
                   </div>
                   
                   <div className="am-achievement-content">
-                    <h3 className="am-achievement-title">{achievement.title}</h3>
-                    <p className="am-achievement-description">{achievement.description}</p>
+                    <h3 className="am-achievement-title">{t(`achievements.items.${achievement.key}.title`, achievement.title)}</h3>
+                    <p className="am-achievement-description">{t(`achievements.items.${achievement.key}.description`, achievement.description)}</p>
                     <div className="am-achievement-footer">
                       <span className={`am-rarity-badge ${achievement.rarity}`}>
-                        {achievement.rarity}
+                        {t(`achievements.rarity.${achievement.rarity}`, achievement.rarity)}
                       </span>
                       <span className="am-points">
-                        {achievement.points} pts
+                        {t('achievements.pointsLabel', '{{count}} pts', { count: achievement.points })}
                       </span>
                     </div>
                   </div>

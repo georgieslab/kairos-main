@@ -1,0 +1,128 @@
+{
+  "disclaimerModal": {
+    "header": "Wichtige Informationen",
+    "aboutTitle": "Über diese Reise",
+    "aboutText": "Die \"Transformationsreise: Muster durchbrechen\" soll dich dabei unterstützen, herausfordernde Muster in deinem Leben anzugehen und zu verwandeln. Das kann Gewohnheiten im Zusammenhang mit Substanzen, Verhaltensweisen oder Denkmustern umfassen, die du verändern möchtest.",
+    "disclaimerTitle": "Wichtiger Hinweis",
+    "disclaimerText": "Journaling kann ein wirkungsvolles Werkzeug für persönliches Wachstum und Genesung sein, ersetzt aber keine professionelle Behandlung, Therapie oder medizinische Beratung. Wenn du mit Sucht oder anderen ernsten psychischen Problemen zu kämpfen hast, wende dich bitte an eine Fachperson im Gesundheitswesen.",
+    "privacyTitle": "Datenschutz & Personalisierung",
+    "privacyText1": "Die Impulse in dieser Reise beziehen sich auf \"[Substanz/Verhalten]\" - ersetze dies gedanklich durch das konkrete Muster, an dem du arbeitest. Deine Antworten sind privat und werden gemäß deinen Datenschutzeinstellungen verarbeitet.",
+    "privacyText2": "Für maximale Privatsphäre empfehlen wir, die lokale Verarbeitung in deinen Datenschutzeinstellungen zu aktivieren.",
+    "resourcesTitle": "Unterstützungsangebote",
+    "resourceSamhsa": "SAMHSA Nationale Hotline: 1-800-662-4357",
+    "resourceAA": "Anonyme Alkoholiker",
+    "resourceSmartRecovery": "SMART Recovery",
+    "resourceFindTherapist": "Therapeut:in finden",
+    "cancel": "Abbrechen",
+    "accept": "Ich verstehe & möchte beginnen"
+  },
+  "pathCard": {
+    "progressText": "{{count}} von 10 Tagen abgeschlossen",
+    "details": "Details",
+    "continueJourney": "Reise fortsetzen",
+    "startJourney": "Reise starten"
+  },
+  "pathDaysList": {
+    "dayLabel": "Tag {{day}}"
+  },
+  "pathInfoModal": {
+    "benefits": "Vorteile",
+    "journeyStructure": "Reisestruktur",
+    "continueJourney": "Reise fortsetzen"
+  },
+  "pathProgressBar": {
+    "progressText": "{{completed}} von {{total}} Tagen abgeschlossen"
+  },
+  "pathRecommendation": {
+    "title": "Beginne deine Reise",
+    "text": "Wir empfehlen, mit der Selbstfindungsreise zu beginnen, um eine solide Grundlage für deine Journaling-Praxis zu schaffen.",
+    "button": "Selbstfindung starten"
+  },
+  "premiumSection": {
+    "title": "Premium-Reisen",
+    "comingSoon": "(Demnächst)",
+    "premiumBadge": "Premium",
+    "durationDays": "{{count}} Tage",
+    "lockedText": "Verfügbar mit Premium-Abonnement"
+  },
+  "pathQuestionnaire": {
+    "loading": {
+      "message": "Dein perfekter Pfad wird gesucht",
+      "subMessage": "Deine Antworten werden analysiert..."
+    },
+    "brand": "Finde deinen Pfad",
+    "closeAriaLabel": "Schließen",
+    "stepLabel": "Frage {{current}} von {{total}}",
+    "back": "Zurück"
+  },
+  "pathQuestionnaireResults": {
+    "errorText": "Empfehlung konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "retakeButton": "Fragebogen wiederholen",
+    "closeAriaLabel": "Schließen",
+    "title": "Dein perfekter Pfad",
+    "subtitle": "Genau für dich ausgewählt, jetzt gerade",
+    "matchBadge": "{{score}}% Übereinstimmung",
+    "daysCount": "{{count}} Tage",
+    "showLess": "Weniger anzeigen",
+    "whyThisPath": "Warum dieser Pfad?",
+    "whatYoullGain": "Was du gewinnst",
+    "whyNow": "Warum jetzt?",
+    "startJourney": "Diese Reise starten",
+    "browseAll": "Alle Pfade durchsuchen"
+  },
+  "pathRecommendationCard": {
+    "category": {
+      "growth": "Auf Fortschritt aufbauen",
+      "exploration": "Neues Terrain",
+      "challenge": "Herausforderndes Ziel"
+    },
+    "matchBadge": "{{score}}% Übereinstimmung",
+    "duration": "Dauer",
+    "daysCount": "{{count}} Tage",
+    "difficulty": "Schwierigkeit",
+    "whyThisPath": "Warum dieser Pfad?",
+    "whatYoullGain": "Was du gewinnst",
+    "whyNow": "Warum jetzt?",
+    "startJourney": "Reise starten",
+    "expandHint": "Tippen, um zu sehen, warum das perfekt für dich ist"
+  },
+  "pathRecommendations": {
+    "loadError": "Empfehlungen konnten nicht geladen werden",
+    "loadingText": "Deine perfekte nächste Reise wird gesucht...",
+    "loadingSubtext": "Deine Interessen und Fortschritte werden analysiert",
+    "unableToGenerate": "Empfehlungen konnten nicht erstellt werden",
+    "noneAvailable": "Keine Empfehlungen verfügbar",
+    "completeFirstJourney": "Schließe deine erste Reise ab, um personalisierte Vorschläge zu erhalten",
+    "title": "Für dich empfohlen",
+    "subtitle": "KI-kuratierte Pfade basierend auf deiner Reise",
+    "refreshAriaLabel": "Empfehlungen aktualisieren",
+    "refresh": "Aktualisieren"
+  },
+  "pathSelection": {
+    "dayLabel": "Tag {{day}}",
+    "totalDaysAbbrev": "{{count}}T",
+    "continue": "Weiter",
+    "difficulty": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "durationDays": "{{count}} Tage",
+    "percentComplete": "{{pct}}% abgeschlossen",
+    "done": "Fertig",
+    "continueDay": "Weiter zu Tag {{day}}",
+    "reviewJourney": "Reise ansehen",
+    "startJourney": "Reise starten",
+    "searchPlaceholder": "Reisen durchsuchen...",
+    "currentJourneys": "Aktuelle Reisen",
+    "exploreTab": "Entdecken",
+    "completedTab": "Abgeschlossen",
+    "noPathsFound": "Keine Pfade gefunden",
+    "tryAdjusting": "Versuche deine Suche oder Filter anzupassen"
+  },
+  "pathSuggestionCard": {
+    "aiMatchedTag": "KI-abgestimmt",
+    "title": "Unsicher, wo du anfangen sollst?",
+    "description": "Beantworte ein paar kurze Fragen und wir finden deinen perfekten Pfad."
+  }
+}

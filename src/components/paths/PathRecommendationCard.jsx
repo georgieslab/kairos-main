@@ -1,25 +1,27 @@
 // src/components/paths/PathRecommendationCard.jsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, ArrowRight, Star, TrendingUp, Compass, Zap } from 'lucide-react';
 import DynamicIcon from '../common/DynamicIcon';
 import '../../styles/components/pathRecommendation.css';
 
 const PathRecommendationCard = ({ recommendation, index, onStart }) => {
+  const { t } = useTranslation('paths');
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   if (!recommendation || !recommendation.path) {
     return null;
   }
-  
+
   const { path, reason, benefit, timing, category, matchScore } = recommendation;
-  
+
   // Category icons and colors
   const categoryConfig = {
-    growth: { icon: TrendingUp, color: '#10b981', label: 'Build on Progress' },
-    exploration: { icon: Compass, color: '#6366f1', label: 'New Territory' },
-    challenge: { icon: Zap, color: '#f59e0b', label: 'Stretch Goal' }
+    growth: { icon: TrendingUp, color: '#10b981', label: t('pathRecommendationCard.category.growth', 'Build on Progress') },
+    exploration: { icon: Compass, color: '#6366f1', label: t('pathRecommendationCard.category.exploration', 'New Territory') },
+    challenge: { icon: Zap, color: '#f59e0b', label: t('pathRecommendationCard.category.challenge', 'Stretch Goal') }
   };
-  
+
   const config = categoryConfig[category] || categoryConfig.growth;
   const CategoryIcon = config.icon;
   
@@ -46,7 +48,7 @@ const PathRecommendationCard = ({ recommendation, index, onStart }) => {
       {/* Match Score Badge */}
       <div className="path-rec-match-badge">
         <Star size={14} />
-        <span>{matchScore}% Match</span>
+        <span>{t('pathRecommendationCard.matchBadge', '{{score}}% Match', { score: matchScore })}</span>
       </div>
       
       {/* Category Badge */}
@@ -72,12 +74,12 @@ const PathRecommendationCard = ({ recommendation, index, onStart }) => {
       {/* Meta Info */}
       <div className="path-rec-meta">
         <div className="path-rec-meta-item">
-          <span className="path-rec-meta-label">Duration</span>
-          <span className="path-rec-meta-value">{path.days} days</span>
+          <span className="path-rec-meta-label">{t('pathRecommendationCard.duration', 'Duration')}</span>
+          <span className="path-rec-meta-value">{t('pathRecommendationCard.daysCount', '{{count}} days', { count: path.days })}</span>
         </div>
         <div className="path-rec-meta-item">
-          <span className="path-rec-meta-label">Difficulty</span>
-          <span 
+          <span className="path-rec-meta-label">{t('pathRecommendationCard.difficulty', 'Difficulty')}</span>
+          <span
             className="path-rec-meta-badge"
             style={{ backgroundColor: difficultyColor }}
           >
@@ -91,20 +93,20 @@ const PathRecommendationCard = ({ recommendation, index, onStart }) => {
         <div className="path-rec-section">
           <div className="path-rec-section-header">
             <Sparkles size={16} className="path-rec-sparkle" />
-            <h4>Why This Path?</h4>
+            <h4>{t('pathRecommendationCard.whyThisPath', 'Why This Path?')}</h4>
           </div>
           <p className="path-rec-reason">{reason}</p>
         </div>
-        
+
         {isExpanded && (
           <>
             <div className="path-rec-section">
-              <h4>What You'll Gain</h4>
+              <h4>{t('pathRecommendationCard.whatYoullGain', "What You'll Gain")}</h4>
               <p className="path-rec-benefit">{benefit}</p>
             </div>
-            
+
             <div className="path-rec-section">
-              <h4>Why Now?</h4>
+              <h4>{t('pathRecommendationCard.whyNow', 'Why Now?')}</h4>
               <p className="path-rec-timing">{timing}</p>
             </div>
             
@@ -129,14 +131,14 @@ const PathRecommendationCard = ({ recommendation, index, onStart }) => {
           handleStartPath();
         }}
       >
-        <span>Start Journey</span>
+        <span>{t('pathRecommendationCard.startJourney', 'Start Journey')}</span>
         <ArrowRight size={18} />
       </button>
-      
+
       {/* Expand Indicator */}
       {!isExpanded && (
         <div className="path-rec-expand-hint">
-          <span>Tap to see why this is perfect for you</span>
+          <span>{t('pathRecommendationCard.expandHint', 'Tap to see why this is perfect for you')}</span>
         </div>
       )}
     </div>

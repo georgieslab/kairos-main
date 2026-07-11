@@ -1,7 +1,8 @@
 // src/components/analytics/EmotionTrends.jsx - Enhanced Pie Chart Only Version
 
 import React, { useState, useEffect } from 'react';
-import { 
+import { useTranslation } from 'react-i18next';
+import {
   PieChart,
   Pie,
   Cell,
@@ -22,8 +23,9 @@ const EmotionTrends = ({
   data = [], 
   simplified = false, 
   hideTitle = false,
-  isDarkMode = true 
+  isDarkMode = true
 }) => {
+  const { t } = useTranslation('analytics');
   const [processedData, setProcessedData] = useState([]);
   const [isDataValid, setIsDataValid] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -197,11 +199,11 @@ const EmotionTrends = ({
             </span>
           </div>
           <div className="emotion-tooltip-value">
-            {percentage}% intensity
+            {t('emotionTrends.intensityPercent', '{{percent}}% intensity', { percent: percentage })}
           </div>
           {data.isOthers && (
             <div className="emotion-tooltip-note">
-              Combined smaller emotions
+              {t('emotionTrends.combinedSmallerEmotions', 'Combined smaller emotions')}
             </div>
           )}
         </div>
@@ -267,8 +269,8 @@ const EmotionTrends = ({
             <div className="empty-circle"></div>
             <div className="empty-icon">📊</div>
           </div>
-          <p className="empty-message">Not enough emotional data to visualize</p>
-          <p className="empty-submessage">Complete more journal entries to see your emotional patterns</p>
+          <p className="empty-message">{t('emotionTrends.emptyMessage', 'Not enough emotional data to visualize')}</p>
+          <p className="empty-submessage">{t('emotionTrends.emptySubmessage', 'Complete more journal entries to see your emotional patterns')}</p>
         </div>
       </div>
     );
@@ -376,7 +378,7 @@ const EmotionTrends = ({
         {/* Animated center text for simplified view */}
         {simplified && animationComplete && (
           <div className="chart-center-text">
-            <div className="center-label">Emotions</div>
+            <div className="center-label">{t('emotionTrends.centerLabel', 'Emotions')}</div>
             <div className="center-count">{processedData.length}</div>
           </div>
         )}
@@ -386,20 +388,19 @@ const EmotionTrends = ({
       {!simplified && !hideTitle && (
         <div className="emotion-explainer">
           <div className="explainer-header">
-            <h4 className="explainer-title">Understanding Your Emotional Patterns</h4>
+            <h4 className="explainer-title">{t('emotionTrends.explainerTitle', 'Understanding Your Emotional Patterns')}</h4>
             <div className="explainer-stats">
               <span className="stat-item">
-                <strong>{processedData.length}</strong> emotions tracked
+                <strong>{processedData.length}</strong> {t('emotionTrends.emotionsTracked', 'emotions tracked')}
               </span>
               <span className="stat-divider">•</span>
               <span className="stat-item">
-                <strong>{Math.round(processedData.reduce((sum, item) => sum + item.value, 0) * 100)}%</strong> intensity
+                <strong>{Math.round(processedData.reduce((sum, item) => sum + item.value, 0) * 100)}%</strong> {t('emotionTrends.intensity', 'intensity')}
               </span>
             </div>
           </div>
           <p className="explainer-text">
-            This visualization shows the intensity of emotions detected in your journal entries.
-            The size of each segment represents how strongly that emotion appears in your writing.
+            {t('emotionTrends.explainerText', 'This visualization shows the intensity of emotions detected in your journal entries. The size of each segment represents how strongly that emotion appears in your writing.')}
           </p>
         </div>
       )}

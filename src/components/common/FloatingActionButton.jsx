@@ -1,12 +1,13 @@
 // src/components/common/FloatingActionButton.jsx
 
 import React, { useState } from 'react';
-import { 
-  MessageSquare, 
-  Bug, 
-  HelpCircle, 
-  MoreVertical, 
-  X 
+import { useTranslation } from 'react-i18next';
+import {
+  MessageSquare,
+  Bug,
+  HelpCircle,
+  MoreVertical,
+  X
 } from 'lucide-react';
 import '../../styles/components/floatingActionButton.css';
 
@@ -14,33 +15,34 @@ import '../../styles/components/floatingActionButton.css';
  * Floating action button with a menu for quick access to feedback and bug reporting
  */
 const FloatingActionButton = ({ navigateToScreen }) => {
+  const { t } = useTranslation('layout');
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  
+
   const handleItemClick = (screen) => {
     setIsOpen(false);
     navigateToScreen(screen);
   };
-  
+
   const menuItems = [
     {
       id: 'feedback',
-      label: 'Give Feedback',
+      label: t('fab.giveFeedback', 'Give Feedback'),
       icon: <MessageSquare size={18} />,
       action: () => handleItemClick('feedback')
     },
     {
       id: 'bug',
-      label: 'Report a Bug',
+      label: t('fab.reportBug', 'Report a Bug'),
       icon: <Bug size={18} />,
       action: () => handleItemClick('bug-report')
     },
     {
       id: 'help',
-      label: 'Help Center',
+      label: t('fab.helpCenter', 'Help Center'),
       icon: <HelpCircle size={18} />,
       action: () => handleItemClick('help')
     }
@@ -67,7 +69,7 @@ const FloatingActionButton = ({ navigateToScreen }) => {
       <button
         className={`floating-action-button ${isOpen ? 'active' : ''}`}
         onClick={toggleMenu}
-        aria-label={isOpen ? 'Close menu' : 'Open help menu'}
+        aria-label={isOpen ? t('fab.closeMenu', 'Close menu') : t('fab.openMenu', 'Open help menu')}
       >
         {isOpen ? (
           <X size={24} />

@@ -1,704 +1,452 @@
-// src/pages/ProfileScreen.jsx - Redesigned v3.0 (With Avatar)
-
-import React, { useState, useEffect } from 'react';
-import { 
-  Settings, 
-  HelpCircle, 
-  LogOut, 
-  BookOpen, 
-  ChevronRight, 
-  Info,
-  Trophy,
-  Flame,
-  Archive,
-  BarChart3,
-  Crown,
-  Compass,
-  MapPin,
-  Mail,
-  Award,
-  Zap,
-  Activity,
-  FileText,
-  LayoutGrid,
-  Calendar,
-  Radio,
-  Camera,
-  Sun,
-  Heart,
-  Sparkles,
-  Target,
-  User
+// src/pages/ProfileScreen.jsx - Apple Glass Edition
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  LogOut, ChevronRight, Mail, MapPin, Calendar,
+  Award, Crown, Compass, Camera, Settings, Info, HelpCircle,
+  BookOpen, Archive, Radio, Activity, CloudSun
 } from 'lucide-react';
-
+import MoodTrends from '../components/analytics/MoodTrends';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useUserStatistics } from '../hooks/useUserStatistics';
 import { useUserProgress } from '../hooks/useUserProgress';
-import { getSubscriptionStatus, hasArtisanAccess } from '../services/SubscriptionService';
-import { rebuildUserProgress } from '../utils/rebuildProgress';
-import KairosLoader from '../components/common/KairosLoader';
+import { hasArtisanAccess } from '../services/SubscriptionService';
+import { getSubscriptionStatus } from '../services/SubscriptionService';
 import VersionDisplay from '../components/common/VersionDisplay';
 import DynamicIcon from '../components/common/DynamicIcon';
+import ArtisanMonogram, { MonogramPicker } from '../components/common/ArtisanMonogram';
+import EditProfile from '../components/profile/EditProfile';
 import JournalRegistration from '../components/journal/JournalRegistration';
 import MyJournalsList from '../components/journal/MyJournalsList';
 import AchievementsModal, { ACHIEVEMENT_DEFINITIONS } from '../components/achievements/AchievementsModal';
-import Avatar, { AvatarPicker } from '../components/common/Avatar';
-import EditProfile from '../components/profile/EditProfile';
-import TopBar from '../components/common/TopBar';
+import { MOODS } from '../constants/moods'; // <-- NEW: shared moods
+import '../styles/components/appleGlassNav.css';
 import '../styles/components/profile.css';
-import '../styles/components/avatar.css';
-import '../styles/components/editProfile.css';
 
 const ProfileScreen = ({ handleSignOut }) => {
+  const { t } = useTranslation('profile');
   const { currentUser, userProfile, updateUserProfile } = useAuth();
-  const { isDarkMode } = useTheme();
   const navigation = useNavigation();
-  const { statistics, isLoading: statsLoading } = useUserStatistics();
-  const { inProgressPaths, hasActiveJourneys } = useUserProgress();
+  const { statistics } = useUserStatistics();
+  const { inProgressPaths, completedPaths } = useUserProgress();
 
   const [showSignOutDialog, setShowSignOutDialog] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [subscription, setSubscription] = useState(null);
-  const [loadingSubscription, setLoadingSubscription] = useState(true);
-  const [rebuildingProgress, setRebuildingProgress] = useState(false);
-  const [showRegistration, setShowRegistration] = useState(false);
-  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
-  const [showJournalsList, setShowJournalsList] = useState(false);
-  const [showAchievementsModal, setShowAchievementsModal] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [showJournalsList, setShowJournalsList] = useState(false);
+  const [subscription, setSubscription] = useState(null);
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
-  const displayName = userProfile?.displayName || 'Journaler';
-  const email = currentUser?.email || '';
-  const city = userProfile?.city || null;
-  const avatarStyle = userProfile?.avatarStyle || 'forest';
-  const avatarPattern = userProfile?.avatarPattern || 'dots';
-  const avatarFont = userProfile?.avatarFont || 'sans';
-  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'K';
-  const memberSince = currentUser?.metadata?.creationTime 
-    ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US', { 
-        month: 'short', 
-        year: 'numeric' 
-      })
-    : 'Recently';
-
-  useEffect(() => {
-    const loadSubscription = async () => {
-      try {
-        setLoadingSubscription(true);
-        const status = await getSubscriptionStatus(currentUser.uid, true);
-        console.log('🔍 ProfileScreen - Loaded subscription:', status);
-        setSubscription(status);
-      } catch (error) {
-        console.error('Error loading subscription:', error);
-        setSubscription({ status: 'free' });
-      } finally {
-        setLoadingSubscription(false);
-      }
-    };
-
+  // Load subscription
+  useState(() => {
     if (currentUser) {
-      loadSubscription();
+      getSubscriptionStatus(currentUser.uid, true)
+        .then(setSubscription)
+        .catch(() => setSubscription({ status: 'free' }));
     }
   }, [currentUser]);
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      setLoadingProgress(20);
-      await new Promise(resolve => setTimeout(resolve, 200));
-      
-      if (!statsLoading) {
-        setLoadingProgress(60);
-        await new Promise(resolve => setTimeout(resolve, 200));
-      }
-      
-      if (!loadingSubscription) {
-        setLoadingProgress(85);
-        await new Promise(resolve => setTimeout(resolve, 200));
-      }
-      
-      setLoadingProgress(100);
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setShowLoader(false);
-      setIsLoaded(true);
-    };
-    
-    if (currentUser && !statsLoading && !loadingSubscription) {
-      loadProfile();
-    }
-  }, [currentUser, statsLoading, loadingSubscription]);
-
-  useEffect(() => {
-    document.body.style.overflow = showSignOutDialog ? 'hidden' : 'unset';
-  }, [showSignOutDialog]);
+  const displayName = userProfile?.displayName || t('profileScreen.defaultDisplayName', 'Journaler');
+  const email = currentUser?.email || '';
+  const city = userProfile?.city || null;
+  const avatarTheme = userProfile?.avatarTheme || 'parchment';
+  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'K';
+  const memberSince = currentUser?.metadata?.creationTime
+    ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : t('profileScreen.recently', 'Recently');
 
   const isArtisan = hasArtisanAccess(subscription);
-  console.log('🔍 ProfileScreen - isArtisan:', isArtisan, 'subscription:', subscription);
-  
-  // Calculate earned achievements for preview
-  const achievements = Object.values(ACHIEVEMENT_DEFINITIONS).filter(achievement => 
-    achievement.requirement(statistics)
-  );
-  
-  const totalAchievementScore = achievements.reduce((sum, achievement) => sum + achievement.points, 0);
+  const achievements = Object.values(ACHIEVEMENT_DEFINITIONS).filter(a => a.requirement(statistics));
+  const totalScore = achievements.reduce((sum, a) => sum + a.points, 0);
+  const activePathColor = inProgressPaths?.[0]?.color || '85, 139, 110';
 
-  const handleSignOutClick = () => setShowSignOutDialog(true);
-  const handleConfirmSignOut = async () => {
-    setShowSignOutDialog(false);
-    if (handleSignOut) {
-      await handleSignOut();
-    }
+  const handleProfileSave = async (updated) => {
+    await updateUserProfile(updated);
   };
 
-  const goToSettings = () => navigation.navigateToScreen('settings');
-
-  const handleAvatarSave = async ({ style, pattern, font }) => {
+  const handleAvatarSave = async (themeKey) => {
     try {
-      await updateUserProfile({
-        avatarStyle: style,
-        avatarPattern: pattern,
-        avatarFont: font
-      });
-      setShowAvatarPicker(false);
+      await updateUserProfile({ avatarTheme: themeKey });
     } catch (error) {
-      console.error('Error saving avatar:', error);
-      alert('Failed to save avatar. Please try again.');
-    }
-  };
-
-  const handleProfileSave = async (updatedProfile) => {
-    try {
-      await updateUserProfile(updatedProfile);
-      console.log('✅ Profile updated successfully');
-    } catch (error) {
-      console.error('❌ Error updating profile:', error);
-      throw error; // Re-throw to let EditProfile handle the error
-    }
-  };
-
-  const handleRebuildProgress = async () => {
-    if (!currentUser?.uid) return;
-    
-    try {
-      setRebuildingProgress(true);
-      console.log('🔄 Starting progress rebuild...');
-      
-      const result = await rebuildUserProgress(currentUser.uid);
-      
-      console.log('✅ Rebuild complete:', result);
-      alert(`Progress rebuilt successfully!\n\nRebuilt ${result.pathsRebuilt} paths with ${result.totalEntries} total entries.\n\nPlease refresh the page to see your updated progress.`);
-      
-      // Reload the page to refresh all data
-      window.location.reload();
-    } catch (error) {
-      console.error('❌ Rebuild failed:', error);
-      alert('Failed to rebuild progress. Please try again or contact support.');
-    } finally {
-      setRebuildingProgress(false);
+      console.error("Failed to update avatar theme", error);
     }
   };
 
   return (
-    <>
-      {showLoader && (
-        <KairosLoader 
-          message="Loading your profile..."
-          progress={loadingProgress}
-        />
+    <div className="glass-profile">
+      {/* ===== HEADER ===== */}
+      <header className="profile-header">
+        <div className="profile-avatar-container" onClick={() => setShowAvatarPicker(true)}>
+          <ArtisanMonogram
+            source={currentUser?.photoURL}
+            initials={initials}
+            theme={avatarTheme}
+            pathColor={activePathColor}
+            size={96}
+          />
+          <div className="profile-avatar-edit-overlay">
+            <Camera size={16} />
+          </div>
+          {isArtisan && (
+            <div className="profile-artisan-pill">
+              <Crown size={12} />
+              <span>{t('profileScreen.artisan', 'Artisan')}</span>
+            </div>
+          )}
+        </div>
+
+        <h1 className="profile-name">{displayName}</h1>
+
+        <div className="profile-meta">
+          <span className="profile-meta-item">
+            <Mail size={13} />
+            {email}
+          </span>
+          {city && (
+            <span className="profile-meta-item">
+              <MapPin size={13} />
+              {city}
+            </span>
+          )}
+          <span className="profile-meta-item">
+            <Calendar size={13} />
+            {t('profileScreen.since', 'Since {{date}}', { date: memberSince })}
+          </span>
+        </div>
+
+        <button
+          className="profile-edit-main-btn"
+          onClick={() => setShowEditProfile(true)}
+        >
+          {t('profileScreen.editProfile', 'Edit Profile')}
+        </button>
+      </header>
+
+      {/* ===== STATS ===== */}
+      <section className="profile-stats-section">
+        <div className="glass-stats-row">
+          <button
+            className="glass-stat-item"
+            onClick={() => navigation.navigateToScreen('analytics-dashboard')}
+          >
+            <div className="glass-stat-icon stat-entries">
+              <Activity size={16} />
+            </div>
+            <div className="glass-stat-data">
+              <span className="glass-stat-value">{statistics.totalEntries}</span>
+              <span className="glass-stat-label">{t('profileScreen.stats.entries', 'Entries')}</span>
+            </div>
+          </button>
+
+          <button
+            className="glass-stat-item"
+            onClick={() => navigation.navigateToScreen('analytics-dashboard')}
+          >
+            <div className="glass-stat-icon stat-streak">
+              <Award size={16} />
+            </div>
+            <div className="glass-stat-data">
+              <span className="glass-stat-value">{statistics.currentStreak || 0}</span>
+              <span className="glass-stat-label">{t('profileScreen.stats.dayStreak', 'Day Streak')}</span>
+            </div>
+          </button>
+
+          <button
+            className="glass-stat-item"
+            onClick={() => navigation.navigateToScreen('path-selection')}
+          >
+            <div className="glass-stat-icon stat-active">
+              <Compass size={16} />
+            </div>
+            <div className="glass-stat-data">
+              <span className="glass-stat-value">{inProgressPaths.length}</span>
+              <span className="glass-stat-label">{t('profileScreen.stats.active', 'Active')}</span>
+            </div>
+          </button>
+
+          <button
+            className="glass-stat-item"
+            onClick={() => navigation.navigateToScreen('path-selection')}
+          >
+            <div className="glass-stat-icon stat-completed">
+              <Award size={16} />
+            </div>
+            <div className="glass-stat-data">
+              <span className="glass-stat-value">{completedPaths.length}</span>
+              <span className="glass-stat-label">{t('profileScreen.stats.completed', 'Completed')}</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {/* ===== ACTIVE JOURNEYS ===== */}
+      {inProgressPaths.length > 0 && (
+        <section className="profile-section">
+          <div className="glass-section-header">
+            <h3 className="glass-section-title">{t('profileScreen.activeJourneys', 'Active Journeys')}</h3>
+            {inProgressPaths.length > 2 && (
+              <button
+                className="glass-section-link"
+                onClick={() => navigation.navigateToScreen('path-selection')}
+              >
+                {t('profileScreen.viewAll', 'View All')}
+                <ChevronRight size={14} />
+              </button>
+            )}
+          </div>
+
+          <div className="glass-journeys-list">
+            {inProgressPaths.slice(0, 2).map((journey, index) => (
+              <React.Fragment key={journey.id}>
+                {index > 0 && <div className="glass-divider" />}
+                <button
+                  className="glass-journey-row"
+                  onClick={() => navigation.navigateToScreen('daily', {
+                    pathId: journey.id,
+                    day: journey.nextDay
+                  })}
+                >
+                  <div
+                    className="glass-journey-icon"
+                    style={{
+                      background: `rgba(${journey.color}, 0.12)`,
+                      color: `rgb(${journey.color})`
+                    }}
+                  >
+                    <DynamicIcon name={journey.iconName} size={18} />
+                  </div>
+                  <div className="glass-journey-info">
+                    <span className="glass-journey-title">{journey.title}</span>
+                    <div className="glass-journey-meta">
+                      <span>{t('profileScreen.dayOf', 'Day {{day}} of {{total}}', { day: journey.nextDay, total: journey.totalDays })}</span>
+                      <div className="glass-journey-progress-mini">
+                        <div
+                          className="glass-journey-fill"
+                          style={{ width: `${journey.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRight size={16} className="glass-journey-chevron" />
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+        </section>
       )}
 
-      <div className={`profile-container ${isLoaded ? 'profile-loaded' : ''} ${isDarkMode ? 'profile-dark' : 'profile-light'}`}>
-        {/* Top Bar */}
-        <TopBar 
-          title="Profile"
-          subtitle="Track your journaling journey"
-          colorClass="profile-color"
-        />
-
-        {/* Header */}
-        <header className="profile-header">
-          {/* User Info Card - Centered Layout */}
-          <div className="profile-header-card">
-            {/* Avatar - Centered on Top */}
-            <div className="profile-avatar-section-centered">
-              <div className="profile-avatar-wrapper">
-                <Avatar 
-                  style={avatarStyle} 
-                  pattern={avatarPattern}
-                  font={avatarFont}
-                  initials={initials}
-                  size={120}
-                  onClick={() => setShowEditProfile(true)}
-                />
-                <button 
-                  className="profile-avatar-edit-btn" 
-                  onClick={() => setShowEditProfile(true)}
-                  title="Edit profile"
-                >
-                  <Camera size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* Buttons Row - Artisan & Edit Profile */}
-            <div className="profile-header-buttons">
-              {isArtisan && (
-                <div className="profile-artisan-badge-header">
-                  <Crown size={18} />
-                  <span>Artisan</span>
-                </div>
-              )}
-              
-              <button 
-                className="profile-edit-btn-header"
-                onClick={() => setShowEditProfile(true)}
-              >
-                <User size={18} />
-                <span>Edit Profile</span>
-              </button>
-            </div>
-
-            {/* User Details */}
-            <div className="profile-user-details-centered">
-              <h2 className="profile-name-centered">{displayName}</h2>
-              
-              <div className="profile-details-list">
-                <div className="profile-detail-item-centered">
-                  <Mail size={16} />
-                  <span>{email}</span>
-                </div>
-                {city && (
-                  <div className="profile-detail-item-centered">
-                    <MapPin size={16} />
-                    <span>{city}</span>
-                  </div>
-                )}
-                <div className="profile-detail-item-centered">
-                  <Calendar size={16} />
-                  <span>Member since {memberSince}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Stats Section */}
-        <section className="profile-section profile-stats-section">
-          <div className="profile-section-header">
-            <h2 className="profile-section-title">
-              <Activity className="profile-section-icon" />
-              Journey Stats
-            </h2>
-            <button 
-              className="profile-view-all-btn"
-              onClick={() => navigation.navigateToScreen('analytics-dashboard')}
-            >
-              <span>View Analytics</span>
-              <ChevronRight size={16} />
-            </button>
-          </div>
-          
-          <div className="profile-stats-grid">
-            <div className="profile-stat-card">
-              <div className="profile-stat-header">
-                <FileText className="profile-stat-icon" />
-                <h4>Total Entries</h4>
-              </div>
-              <div className="profile-stat-value">{statistics.totalEntries}</div>
-              <div className="profile-stat-subtext">journal entries</div>
-            </div>
-            
-            <div className="profile-stat-card profile-stat-highlight">
-              <div className="profile-stat-header">
-                <Flame className="profile-stat-icon" />
-                <h4>Current Streak</h4>
-              </div>
-              <div className="profile-stat-value">{statistics.currentStreak}</div>
-              <div className="profile-stat-subtext">consecutive days</div>
-            </div>
-            
-            <div className="profile-stat-card">
-              <div className="profile-stat-header">
-                <Activity className="profile-stat-icon" />
-                <h4>Active Days</h4>
-              </div>
-              <div className="profile-stat-value">{statistics.activeDays}</div>
-              <div className="profile-stat-subtext">days journaling</div>
-            </div>
-            
-            <div className="profile-stat-card">
-              <div className="profile-stat-header">
-                <Award className="profile-stat-icon" />
-                <h4>Completed</h4>
-              </div>
-              <div className="profile-stat-value">{statistics.completedPathsCount}</div>
-              <div className="profile-stat-subtext">journeys finished</div>
-            </div>
-          </div>
-        </section>
-
-        {/* Active Journeys */}
-        {hasActiveJourneys && inProgressPaths.length > 0 && (
-          <section className="profile-section">
-            <div className="profile-section-header">
-              <h2 className="profile-section-title">
-                <Compass className="profile-section-icon" />
-                Active Journeys ({inProgressPaths.length})
-              </h2>
-              {inProgressPaths.length > 3 && (
-                <button 
-                  className="profile-view-all-btn"
-                  onClick={() => navigation.navigateToScreen('home')}
-                >
-                  <span>View All</span>
-                  <ChevronRight size={16} />
-                </button>
-              )}
-            </div>
-            
-            <div className="profile-journeys-list">
-              {inProgressPaths.slice(0, 3).map((path, index) => (
-                <div key={path.id}>
-                  <button 
-                    className="profile-journey-card"
-                    onClick={() => navigation.navigateToScreen('daily-view', { 
-                      path: path.id, 
-                      day: path.nextDay 
-                    })}
-                  >
-                    <div className="profile-journey-left">
-                      <div 
-                        className="profile-journey-icon"
-                        style={{ 
-                          backgroundColor: `rgba(${path.color}, 0.15)`,
-                          color: `rgb(${path.color})`
-                        }}
-                      >
-                        <DynamicIcon name={path.iconName} size={20} />
-                      </div>
-                      <div className="profile-journey-info">
-                        <h4 className="profile-journey-title">{path.title}</h4>
-                        <p className="profile-journey-progress">
-                          Day {path.nextDay} of {path.totalDays} • {path.percentage}% complete
-                        </p>
-                      </div>
-                    </div>
-                    <ChevronRight size={20} className="profile-journey-chevron" />
-                  </button>
-                  {index < inProgressPaths.slice(0, 3).length - 1 && (
-                    <div className="profile-separator" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Achievements */}
-        {achievements.length > 0 && (
-          <section className="profile-section">
-            <div className="profile-section-header">
-              <h2 className="profile-section-title">
-                <Award className="profile-section-icon" />
-                Achievements ({achievements.length})
-              </h2>
-              <div className="profile-achievement-score">
-                <Trophy size={16} />
-                <span>{totalAchievementScore} pts</span>
-              </div>
-            </div>
-            
-            {/* Achievement Preview Cards - First 3 */}
-            <div className="profile-achievements-grid">
-              {achievements.slice(0, 3).map(achievement => {
-                const IconComponent = achievement.icon;
-                return (
-                  <div key={achievement.id} className={`profile-achievement ${achievement.color}`}>
-                    <div className="profile-achievement-icon">
-                      <IconComponent size={20} />
-                    </div>
-                    <div className="profile-achievement-content">
-                      <h4 className="profile-achievement-title">{achievement.title}</h4>
-                      <p className="profile-achievement-description">{achievement.description}</p>
-                      <span className="profile-achievement-points">+{achievement.points} pts</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            
-            {/* View All Button */}
-            {achievements.length > 3 && (
-              <button 
-                className="profile-view-all-achievements-btn"
-                onClick={() => setShowAchievementsModal(true)}
-              >
-                <Award size={16} />
-                View All Achievements ({achievements.length})
-              </button>
-            )}
-            
-            {achievements.length <= 3 && (
-              <button 
-                className="profile-view-all-achievements-btn"
-                onClick={() => setShowAchievementsModal(true)}
-              >
-                <Award size={16} />
-                View Achievement Details
-              </button>
-            )}
-          </section>
-        )}
-        
-        {/* Show button even if no achievements yet */}
-        {achievements.length === 0 && (
-          <section className="profile-section">
-            <div className="profile-section-header">
-              <h2 className="profile-section-title">
-                <Award className="profile-section-icon" />
-                Achievements
-              </h2>
-            </div>
-            
-            <button 
-              className="profile-view-all-achievements-btn"
-              onClick={() => setShowAchievementsModal(true)}
-            >
-              <Award size={16} />
-              View All Achievements
-            </button>
-          </section>
-        )}
-
-        {/* Quick Actions */}
-        <section className="profile-section profile-actions-section">
-          <div className="profile-section-header">
-            <h2 className="profile-section-title">
-              <LayoutGrid className="profile-section-icon" />
-              Quick Actions
-            </h2>
-          </div>
-          
-          <div className="profile-actions-grid">
-            <button 
-              className="profile-action-card"
-              onClick={() => navigation.navigateToScreen('path-selection')}
-            >
-              <div className="profile-action-icon-wrapper">
-                <Compass className="profile-action-icon" />
-              </div>
-              <span className="profile-action-label">Journeys</span>
-              <ChevronRight className="profile-action-chevron" />
-            </button>
-            
-            {/* Show Register Journal only if user has no journals */}
-            {(!userProfile?.journals || userProfile.journals.length === 0) && (
-              <button 
-                className="profile-action-card profile-action-featured"
-                onClick={() => setShowRegistration(true)}
-              >
-                <div className="profile-action-icon-wrapper">
-                  <Radio className="profile-action-icon" />
-                </div>
-                <span className="profile-action-label">Register Journal</span>
-                <ChevronRight className="profile-action-chevron" />
-              </button>
-            )}
-            
-            {/* Show My Journals if user has registered journals */}
-            {userProfile?.journals && userProfile.journals.length > 0 && (
-              <button 
-                className="profile-action-card profile-action-featured"
-                onClick={() => setShowJournalsList(true)}
-              >
-                <div className="profile-action-icon-wrapper">
-                  <BookOpen className="profile-action-icon" />
-                </div>
-                <span className="profile-action-label">
-                  My Journals ({userProfile.journals.length})
-                </span>
-                <ChevronRight className="profile-action-chevron" />
-              </button>
-            )}
-            
-            <button 
-              className="profile-action-card"
-              onClick={() => navigation.navigateToScreen('journal-archive')}
-            >
-              <div className="profile-action-icon-wrapper">
-                <Archive className="profile-action-icon" />
-              </div>
-              <span className="profile-action-label">Archive</span>
-              <ChevronRight className="profile-action-chevron" />
-            </button>
-            
-            <button 
-              className="profile-action-card"
-              onClick={() => navigation.navigateToScreen('analytics-dashboard')}
-            >
-              <div className="profile-action-icon-wrapper">
-                <BarChart3 className="profile-action-icon" />
-              </div>
-              <span className="profile-action-label">Analytics</span>
-              <ChevronRight className="profile-action-chevron" />
-            </button>
-            
-            <button 
-              className="profile-action-card"
-              onClick={goToSettings}
-            >
-              <div className="profile-action-icon-wrapper">
-                <Settings className="profile-action-icon" />
-              </div>
-              <span className="profile-action-label">Settings</span>
-              <ChevronRight className="profile-action-chevron" />
-            </button>
-            
-            {/* Rebuild Progress Button - Only show if progress seems missing */}
-            {statistics.totalEntries > 0 && !hasActiveJourneys && (
-              <button 
-                className="profile-action-card profile-action-warning"
-                onClick={handleRebuildProgress}
-                disabled={rebuildingProgress}
-              >
-                <div className="profile-action-icon-wrapper">
-                  <Activity className="profile-action-icon" />
-                </div>
-                <span className="profile-action-label">
-                  {rebuildingProgress ? 'Rebuilding...' : 'Rebuild Progress'}
-                </span>
-                <ChevronRight className="profile-action-chevron" />
-              </button>
-            )}
-          </div>
-        </section>
-
-        {/* Settings Menu */}
-        <section className="profile-section">
-          <div className="profile-settings-card">
-            <button 
-              className="profile-list-item"
-              onClick={() => navigation.navigateToScreen('settings', { activeSection: 'help' })}
-            >
-              <div className="profile-list-icon profile-list-icon-orange">
-                <HelpCircle size={20} />
-              </div>
-              <span className="profile-list-title">Help & Support</span>
-              <ChevronRight size={20} className="profile-list-chevron" />
-            </button>
-            
-            <div className="profile-separator" />
-            
-            <button 
-              className="profile-list-item"
-              onClick={() => navigation.navigateToScreen('about')}
-            >
-              <div className="profile-list-icon profile-list-icon-gray">
-                <Info size={20} />
-              </div>
-              <span className="profile-list-title">About Καιρός</span>
-              <ChevronRight size={20} className="profile-list-chevron" />
-            </button>
-          </div>
-        </section>
-
-        {/* Sign Out */}
-        <section className="profile-section">
-          <div className="profile-signout-card">
-            <button 
-              className="profile-signout-button"
-              onClick={handleSignOutClick}
-            >
-              <LogOut size={20} />
-              <span>Sign Out</span>
-            </button>
-          </div>
-        </section>
-
-        {/* App Version */}
-        <div className="profile-version">
-          <VersionDisplay minimal={false} />
+      {/* ===== MOOD BOARD ===== */}
+      <section className="profile-section">
+        <div className="glass-section-header">
+          <h3 className="glass-section-title">
+            <CloudSun size={16} />
+            {t('profileScreen.moodBoard', 'Mood Board')}
+          </h3>
         </div>
+        <div className="glass-mood-board-card">
+          {/* Pass the shared MOODS to the trend component */}
+          <MoodTrends moods={MOODS} />
+        </div>
+      </section>
+
+      {/* ===== ACHIEVEMENTS PREVIEW ===== */}
+      {achievements.length > 0 && (
+        <section className="profile-section">
+          <div className="glass-section-header">
+            <h3 className="glass-section-title">
+              <span className="section-icon-glow">🏆</span>
+              {t('profileScreen.achievements', 'Achievements')}
+            </h3>
+            <button
+              className="glass-section-link"
+              onClick={() => setShowAchievements(true)}
+            >
+              {t('profileScreen.pts', '{{score}} pts', { score: totalScore })}
+              <ChevronRight size={14} />
+            </button>
+          </div>
+
+          <div className="glass-achievements-preview">
+            {achievements.slice(0, 2).map(achievement => (
+              <div
+                key={achievement.id}
+                className="glass-achievement-row"
+                style={{ '--achievement-color': achievement.colorRgb || '85, 139, 110' }}
+              >
+                <div className="achievement-preview-icon">
+                  <achievement.icon size={18} />
+                </div>
+                <div className="achievement-preview-info">
+                  <span className="achievement-preview-title">{achievement.title}</span>
+                  <span className="achievement-preview-pts">{t('profileScreen.plusPts', '+{{points}} pts', { points: achievement.points })}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ===== ACTIONS ===== */}
+      <section className="profile-section">
+        <div className="glass-section-header">
+          <h3 className="glass-section-title">{t('profileScreen.journalAndData', 'Journal & Data')}</h3>
+        </div>
+
+        <div className="glass-actions-grid">
+          {userProfile?.journals?.length > 0 ? (
+            <button
+              className="glass-action-card featured"
+              onClick={() => setShowJournalsList(true)}
+            >
+              <div className="glass-action-icon featured">
+                <BookOpen size={18} />
+              </div>
+              <div className="glass-action-content">
+                <span className="glass-action-label">{t('profileScreen.myJournals', 'My Journals')}</span>
+                <span className="glass-action-badge">{userProfile.journals.length}</span>
+              </div>
+            </button>
+          ) : (
+            <button
+              className="glass-action-card featured"
+              onClick={() => setShowRegistration(true)}
+            >
+              <div className="glass-action-icon featured">
+                <Radio size={18} />
+              </div>
+              <div className="glass-action-content">
+                <span className="glass-action-label">{t('profileScreen.registerJournal', 'Register Journal')}</span>
+                <span className="glass-action-badge new">{t('profileScreen.new', 'New')}</span>
+              </div>
+            </button>
+          )}
+
+          <button
+            className="glass-action-card"
+            onClick={() => navigation.navigateToScreen('journal-archive')}
+          >
+            <div className="glass-action-icon">
+              <Archive size={18} />
+            </div>
+            <span className="glass-action-label">{t('profileScreen.archive', 'Archive')}</span>
+          </button>
+
+          <button
+            className="glass-action-card"
+            onClick={() => navigation.navigateToScreen('settings')}
+          >
+            <div className="glass-action-icon">
+              <Settings size={18} />
+            </div>
+            <span className="glass-action-label">{t('profileScreen.settings', 'Settings')}</span>
+          </button>
+        </div>
+      </section>
+
+      {/* ===== SUPPORT LINKS ===== */}
+      <section className="profile-section">
+        <div className="glass-links-card">
+          <button
+            className="glass-link-row"
+            onClick={() => navigation.navigateToScreen('settings', { activeSection: 'help' })}
+          >
+            <div className="glass-link-icon" style={{ '--link-color': '245, 158, 11' }}>
+              <HelpCircle size={16} />
+            </div>
+            <span className="glass-link-label">{t('profileScreen.helpAndSupport', 'Help & Support')}</span>
+            <ChevronRight size={14} className="glass-link-chevron" />
+          </button>
+
+          <div className="glass-divider" />
+
+          <button
+            className="glass-link-row"
+            onClick={() => navigation.navigateToScreen('about')}
+          >
+            <div className="glass-link-icon">
+              <Info size={16} />
+            </div>
+            <span className="glass-link-label">{t('profileScreen.aboutKairos', 'About Καιρός')}</span>
+            <ChevronRight size={14} className="glass-link-chevron" />
+          </button>
+        </div>
+      </section>
+
+      {/* ===== SIGN OUT ===== */}
+      <section className="profile-section">
+        <button
+          className="glass-signout-btn"
+          onClick={() => setShowSignOutDialog(true)}
+        >
+          <LogOut size={16} />
+          {t('profileScreen.signOut', 'Sign Out')}
+        </button>
+      </section>
+
+      {/* Version */}
+      <div className="glass-version">
+        <VersionDisplay minimal />
       </div>
+
+      {/* ===== MODALS ===== */}
 
       {/* Sign Out Dialog */}
       {showSignOutDialog && (
-        <div className="profile-modal-overlay" onClick={() => setShowSignOutDialog(false)}>
-          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="profile-modal-header">
-              <h2 className="profile-modal-title">Sign Out</h2>
+        <div className="glass-modal-overlay" onClick={() => setShowSignOutDialog(false)}>
+          <div className="glass-modal" onClick={e => e.stopPropagation()}>
+            <div className="glass-modal-header">
+              <h3>{t('profileScreen.signOut', 'Sign Out')}</h3>
             </div>
-            
-            <div className="profile-modal-content">
-              <p className="profile-modal-message">
-                Are you sure you want to sign out of your account?
-              </p>
+            <div className="glass-modal-body">
+              <p>{t('profileScreen.signOutConfirm', 'Are you sure you want to sign out of Καιρός?')}</p>
             </div>
-            
-            <div className="profile-modal-actions">
-              <button 
-                className="profile-modal-button profile-modal-button-cancel"
+            <div className="glass-modal-footer">
+              <button
+                className="glass-modal-btn glass-modal-btn-secondary"
                 onClick={() => setShowSignOutDialog(false)}
               >
-                Cancel
+                {t('profileScreen.cancel', 'Cancel')}
               </button>
-              <button 
-                className="profile-modal-button profile-modal-button-destructive"
-                onClick={handleConfirmSignOut}
+              <button
+                className="glass-modal-btn glass-modal-btn-danger"
+                onClick={() => {
+                  setShowSignOutDialog(false);
+                  if (handleSignOut) handleSignOut();
+                }}
               >
-                Sign Out
+                {t('profileScreen.signOut', 'Sign Out')}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Journal Registration Modal */}
       <JournalRegistration
         isOpen={showRegistration}
         onClose={() => setShowRegistration(false)}
-        onComplete={(journalData) => {
-          console.log('✅ Journal registered:', journalData);
+        onComplete={(data) => {
           setShowRegistration(false);
-          // Show success message
-          alert(`Journal registered successfully!\n\nJournal ID: ${journalData.journalId}\nTier: ${journalData.tier}`);
+          window.location.reload();
         }}
       />
 
-      {/* Avatar Picker Modal */}
-      {showAvatarPicker && (
-        <div className="profile-modal-overlay" onClick={() => setShowAvatarPicker(false)}>
-          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
-            <AvatarPicker 
-              currentStyle={avatarStyle}
-              currentPattern={avatarPattern}
-              currentFont={avatarFont}
-              initials={initials}
-              onSelect={handleAvatarSave}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* My Journals List Modal */}
       <MyJournalsList
         isOpen={showJournalsList}
         onClose={() => setShowJournalsList(false)}
-        onRegisterAnother={() => setShowRegistration(true)}
+        onRegisterAnother={() => {
+          setShowJournalsList(false);
+          setTimeout(() => setShowRegistration(true), 300);
+        }}
       />
 
-      {/* Achievements Modal */}
       <AchievementsModal
-        isOpen={showAchievementsModal}
-        onClose={() => setShowAchievementsModal(false)}
+        isOpen={showAchievements}
+        onClose={() => setShowAchievements(false)}
         statistics={statistics}
       />
 
-      {/* Edit Profile Modal */}
       <EditProfile
         isOpen={showEditProfile}
         onClose={() => setShowEditProfile(false)}
@@ -706,13 +454,20 @@ const ProfileScreen = ({ handleSignOut }) => {
           displayName,
           email,
           city,
-          avatarStyle,
-          avatarPattern,
-          avatarFont
+          avatarTheme
         }}
         onSave={handleProfileSave}
       />
-    </>
+
+      {showAvatarPicker && (
+        <MonogramPicker 
+          currentTheme={avatarTheme}
+          initials={initials}
+          onSelect={handleAvatarSave}
+          onClose={() => setShowAvatarPicker(false)}
+        />
+      )}
+    </div>
   );
 };
 

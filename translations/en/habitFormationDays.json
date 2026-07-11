@@ -1,0 +1,182 @@
+[
+  {
+    "id": "habitFormationDays:1",
+    "title": "Habit Vision",
+    "theme": "Intention",
+    "prompt": "What habit do you want to develop over the next 30 days? Why is this important to you? How will this habit improve your life?"
+  },
+  {
+    "id": "habitFormationDays:2",
+    "title": "Current State",
+    "theme": "Awareness",
+    "prompt": "Describe your current behavior regarding this habit. What triggers your current actions? What barriers exist to your desired habit?"
+  },
+  {
+    "id": "habitFormationDays:3",
+    "title": "Science of Habits",
+    "theme": "Understanding",
+    "prompt": "Reflect on the habit loop: cue, craving, response, reward. How does this apply to your desired habit? What cues could trigger your new habit?"
+  },
+  {
+    "id": "habitFormationDays:4",
+    "title": "Micro-Habit Design",
+    "theme": "Small Steps",
+    "prompt": "What is the smallest version of your habit you could start with? How can you make it so easy you can't say no?"
+  },
+  {
+    "id": "habitFormationDays:5",
+    "title": "Environmental Design",
+    "theme": "Context",
+    "prompt": "How can you design your environment to make your habit easier? What can you change in your physical space to support this new behavior?"
+  },
+  {
+    "id": "habitFormationDays:6",
+    "title": "Habit Stacking",
+    "theme": "Integration",
+    "prompt": "What existing habit or routine could you connect your new habit to? Complete this sentence: 'After I [current habit], I will [new habit].'"
+  },
+  {
+    "id": "habitFormationDays:7",
+    "title": "Implementation Intentions",
+    "theme": "Planning",
+    "prompt": "Create specific plans for when and where you'll perform your habit. Fill in: 'I will [habit] at [time] in [location].'"
+  },
+  {
+    "id": "habitFormationDays:8",
+    "title": "Identifying Obstacles",
+    "theme": "Preparation",
+    "prompt": "What obstacles might prevent your habit formation? For each obstacle, develop a specific if-then plan: 'If [obstacle], then I will [solution].'"
+  },
+  {
+    "id": "habitFormationDays:9",
+    "title": "Habit Tracking System",
+    "theme": "Measurement",
+    "prompt": "Design a simple system to track your habit. How will you measure success? What will you track and how often?"
+  },
+  {
+    "id": "habitFormationDays:10",
+    "title": "First Week Reflection",
+    "theme": "Evaluation",
+    "prompt": "Reflect on your first week of habit formation. What's working? What's challenging? What adjustments could improve your consistency?"
+  },
+  {
+    "id": "habitFormationDays:11",
+    "title": "Reward System",
+    "theme": "Positive Reinforcement",
+    "prompt": "What immediate rewards could you pair with your habit? What meaningful rewards could you give yourself after a week of consistency?"
+  },
+  {
+    "id": "habitFormationDays:12",
+    "title": "Social Accountability",
+    "theme": "Support",
+    "prompt": "Who could support your habit formation? How might you involve others in your habit journey for accountability and encouragement?"
+  },
+  {
+    "id": "habitFormationDays:13",
+    "title": "Identity Shift",
+    "theme": "Self-Concept",
+    "prompt": "How might this habit change how you see yourself? Complete this sentence: 'I am becoming the kind of person who...'"
+  },
+  {
+    "id": "habitFormationDays:14",
+    "title": "Habit Recovery Plan",
+    "theme": "Resilience",
+    "prompt": "If you miss a day, what's your recovery plan? How will you avoid the 'all or nothing' mindset and return to your habit quickly?"
+  },
+  {
+    "id": "habitFormationDays:15",
+    "title": "Mid-Point Assessment",
+    "theme": "Progress",
+    "prompt": "You're halfway through! What progress have you made? What evidence do you see of your habit forming? What adjustments are needed?"
+  },
+  {
+    "id": "habitFormationDays:16",
+    "title": "Deepening Understanding",
+    "theme": "Motivation",
+    "prompt": "Reconnect with your deeper 'why' for this habit. How does this behavior connect to your core values and long-term goals?"
+  },
+  {
+    "id": "habitFormationDays:17",
+    "title": "Challenging Situations",
+    "theme": "Adaptation",
+    "prompt": "How might your habit need to adapt during travel, high-stress periods, or social events? Create specific plans for maintaining your habit in challenging contexts."
+  },
+  {
+    "id": "habitFormationDays:18",
+    "title": "Unexpected Benefits",
+    "theme": "Awareness",
+    "prompt": "What unexpected benefits have you noticed from your new habit? How is this habit affecting other areas of your life?"
+  },
+  {
+    "id": "habitFormationDays:19",
+    "title": "Habit Expansion",
+    "theme": "Growth",
+    "prompt": "Is your habit becoming easier? If so, how might you expand or enhance it slightly to create continued growth?"
+  },
+  {
+    "id": "habitFormationDays:20",
+    "title": "Intrinsic Motivation",
+    "theme": "Enjoyment",
+    "prompt": "How might you make your habit more enjoyable? What aspects of the habit give you satisfaction beyond external rewards?"
+  },
+  {
+    "id": "habitFormationDays:21",
+    "title": "Three-Week Milestone",
+    "theme": "Celebration",
+    "prompt": "Congratulate yourself on three weeks of habit formation! What have you learned about yourself through this process? What are you proud of?"
+  },
+  {
+    "id": "habitFormationDays:22",
+    "title": "Process vs. Outcome",
+    "theme": "Focus",
+    "prompt": "How are you balancing focus on the process (doing the habit) versus outcomes (results of the habit)? Which focus serves you better right now?"
+  },
+  {
+    "id": "habitFormationDays:23",
+    "title": "Deeper Habit Integration",
+    "theme": "Normalization",
+    "prompt": "How is this habit beginning to feel normal or automatic? When do you do it without thinking, and when does it still require conscious effort?"
+  },
+  {
+    "id": "habitFormationDays:24",
+    "title": "Handling Plateaus",
+    "theme": "Persistence",
+    "prompt": "If progress seems to have plateaued, how might you maintain motivation? What would help you persist through the flat spots in your habit journey?"
+  },
+  {
+    "id": "habitFormationDays:25",
+    "title": "Compound Effect",
+    "theme": "Long-Term Vision",
+    "prompt": "Imagine continuing this habit for a year. What compound effects might you experience? How might small daily actions create significant change over time?"
+  },
+  {
+    "id": "habitFormationDays:26",
+    "title": "Mindfulness in Habit",
+    "theme": "Presence",
+    "prompt": "How can you bring more mindfulness to your habit? What would change if you performed it with complete presence and attention?"
+  },
+  {
+    "id": "habitFormationDays:27",
+    "title": "Sharing Your Experience",
+    "theme": "Wisdom",
+    "prompt": "What have you learned about habit formation that might help others? What advice would you give someone just starting this process?"
+  },
+  {
+    "id": "habitFormationDays:28",
+    "title": "Preparing for Month Two",
+    "theme": "Continuity",
+    "prompt": "As you approach the end of your first month, how will you ensure this habit continues? What systems will support ongoing practice?"
+  },
+  {
+    "id": "habitFormationDays:29",
+    "title": "Habit Ecosystem",
+    "theme": "Integration",
+    "prompt": "How does this habit fit within your overall routine and other habits? What other habits might naturally evolve from or complement this one?"
+  },
+  {
+    "id": "habitFormationDays:30",
+    "title": "The Path Forward",
+    "theme": "Continuation",
+    "prompt": "Reflect on your 30-day habit journey. What has changed? What challenges remain? How will you maintain this habit going forward?"
+  }
+]

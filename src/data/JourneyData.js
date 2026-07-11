@@ -1,4 +1,5 @@
 // src/data/JourneyData.js - Enhanced with unified path registry
+import i18n from '../i18n/config';
 
 // Central registry for all journey paths
 export const JOURNEY_PATHS = {};
@@ -6911,7 +6912,7 @@ JOURNEY_PATHS['ink-essence'] = createJourneyPath({
   subtitle: "33-day intensive drawing journey",
   description: "Master the ancient art of black ink drawing through progressive skill building, combining Eastern brush techniques with Western pen mastery for profound artistic expression.",
   iconName: "PenTool",
-  color: "15, 23, 42", // Deep dark slate color
+  color: "148, 163, 184", // Silvery ink-wash slate – keeps the monochrome ink feel while staying visible on dark cards
   days: inkAndEssenceDays,
   difficulty: 'advanced',
   tags: ['ink-drawing', 'traditional-art', 'mastery', 'discipline', 'black-ink'],
@@ -7339,3 +7340,47 @@ export const getJourneyPath = (pathId) => {
   }
   return JOURNEY_PATHS[pathId];
 };
+
+// German translations of journey content (path title/subtitle/description + day title/theme/prompt).
+// Each file in journeyTranslations/de/ is optional and keyed by pathId — missing translations
+// simply fall back to English. We mutate JOURNEY_PATHS in place so every consumer that holds
+// a reference to it (including pathRecommender.js, which reads the registry directly) picks up
+// the active language without needing its own translation-lookup logic.
+const deTranslationModules = import.meta.glob('./journeyTranslations/de/*.js', { eager: true });
+const JOURNEY_PATHS_DE = {};
+for (const modPath in deTranslationModules) {
+  const pathId = modPath.match(/([^/]+)\.js$/)[1];
+  JOURNEY_PATHS_DE[pathId] = deTranslationModules[modPath].default;
+}
+
+const JOURNEY_PATHS_EN_SNAPSHOT = {};
+Object.entries(JOURNEY_PATHS).forEach(([pathId, pathObj]) => {
+  JOURNEY_PATHS_EN_SNAPSHOT[pathId] = {
+    title: pathObj.title,
+    subtitle: pathObj.subtitle,
+    description: pathObj.description,
+    days: pathObj.days.map(d => ({ day: d.day, title: d.title, theme: d.theme, prompt: d.prompt }))
+  };
+});
+
+const applyJourneyLanguage = (lng) => {
+  Object.entries(JOURNEY_PATHS).forEach(([pathId, pathObj]) => {
+    const enSnap = JOURNEY_PATHS_EN_SNAPSHOT[pathId];
+    const deTranslation = lng === 'de' ? JOURNEY_PATHS_DE[pathId] : null;
+
+    pathObj.title = deTranslation?.title || enSnap.title;
+    pathObj.subtitle = deTranslation?.subtitle || enSnap.subtitle;
+    pathObj.description = deTranslation?.description || enSnap.description;
+
+    pathObj.days.forEach((dayObj, idx) => {
+      const enDay = enSnap.days[idx];
+      const deDay = deTranslation?.days?.[dayObj.day];
+      dayObj.title = deDay?.title || enDay.title;
+      dayObj.theme = deDay?.theme || enDay.theme;
+      dayObj.prompt = deDay?.prompt || enDay.prompt;
+    });
+  });
+};
+
+applyJourneyLanguage(i18n.resolvedLanguage || i18n.language);
+i18n.on('languageChanged', applyJourneyLanguage);
