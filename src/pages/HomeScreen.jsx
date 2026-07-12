@@ -88,9 +88,8 @@ const HomeScreen = ({ navigateToScreen }) => {
         isToday: i === 6
       };
     });
-    // Mark the trailing run of consecutive active days ending today, so the
-    // strip can visually connect an in-progress streak instead of just
-    // lighting up isolated dots.
+    // Mark the trailing run of consecutive active days ending today — those
+    // dots carry the traveling streak-heartbeat animation (see homeScreen.css).
     for (let i = days.length - 1; i >= 0 && days[i].active; i--) {
       days[i].inStreak = true;
     }

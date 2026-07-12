@@ -121,7 +121,13 @@
     "tryAdjusting": "Versuche deine Suche oder Filter anzupassen",
     "new": "NEU",
     "newBadge": "Neuer Pfad",
-    "unlockFor": "Freischalten für {{price}}"
+    "unlockFor": "Freischalten für {{price}}",
+    "free": "Kostenlos",
+    "artisan": "Artisan",
+    "filterByTier": "Nach Stufe filtern",
+    "filterAll": "Alle",
+    "filterFree": "Kostenlos",
+    "filterArtisan": "Artisan"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "KI-abgestimmt",
@@ -131,7 +137,7 @@
   "unlockModal": {
     "close": "Schließen",
     "perkDays": "{{count}} sorgfältig gestaltete Tage",
-    "perkChoice": "Du wählst jeden Tag: sprich es aus oder zeichne es",
+    "perkChoice": "Du wählst jeden Tag: schreib es, sprich es aus oder zeichne es",
     "perkExclusive": "Exklusiver Pfad — für immer deiner, eine Zahlung",
     "buy": "Freischalten für {{price}}",
     "opening": "Sichere Kasse wird geöffnet...",

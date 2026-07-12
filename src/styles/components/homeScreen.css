@@ -139,32 +139,6 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Connects consecutive days of an in-progress streak with a traveling
-   light, so a run of active dots reads as one continuous streak rather
-   than isolated marks. */
-.home-week-day.in-streak:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  width: 100%;
-  height: 2px;
-  background-image: linear-gradient(
-    90deg,
-    rgba(var(--journey-color, 85, 139, 110), 0.25),
-    rgba(var(--journey-color, 85, 139, 110), 0.9),
-    rgba(var(--journey-color, 85, 139, 110), 0.25)
-  );
-  background-size: 250% 100%;
-  animation: streakFlow 2.8s linear infinite;
-  z-index: 0;
-}
-
-@keyframes streakFlow {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -150% 0; }
-}
-
 .home-week-dot {
   position: relative;
   z-index: 1;
@@ -182,6 +156,29 @@
   box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.5);
 }
 
+/* Streak heartbeat: each dot in the trailing streak run stays separate but
+   fires a quick pop of scale + glow, offset per day (via --d) so a single
+   beat travels visibly along the streak toward today. */
+.home-week-day.in-streak:not(.is-today) .home-week-dot {
+  animation: streakBeat 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--d, 0ms) * 3);
+}
+
+@keyframes streakBeat {
+  0%, 62%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.5);
+  }
+  70% {
+    transform: scale(1.22);
+    box-shadow: 0 0 24px rgba(var(--journey-color, 85, 139, 110), 0.95);
+  }
+  80% {
+    transform: scale(1);
+    box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.5);
+  }
+}
+
 .home-week-day.is-today .home-week-dot {
   border: 2px solid rgba(255, 255, 255, 0.55);
 }
@@ -189,12 +186,31 @@
 .home-week-day.is-today.is-active .home-week-dot {
   border: 2px solid #fff;
   transform: scale(1.08);
-  animation: todayStreakPulse 2.2s ease-in-out infinite;
+  animation: todayStreakPulse 2.4s ease-in-out infinite;
 }
 
+/* The beat arrives at today's dot as a stronger flare (delayed to land
+   right after the last streak dot fires)... */
 @keyframes todayStreakPulse {
-  0%, 100% { box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.5); }
-  50%      { box-shadow: 0 0 22px rgba(var(--journey-color, 85, 139, 110), 0.85); }
+  0%, 74%, 100% { box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.55); }
+  84%           { box-shadow: 0 0 30px rgba(var(--journey-color, 85, 139, 110), 1); }
+}
+
+/* ...and today also carries an orbiting spark — a small comet circling the
+   dot as long as the streak is alive. */
+.home-week-day.is-today.is-active .home-week-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgb(var(--journey-color, 85, 139, 110));
+  animation: streakOrbit 1.8s linear infinite;
+}
+
+@keyframes streakOrbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .home-week-day.is-future .home-week-dot {
@@ -688,6 +704,8 @@
 }
 
 .spark-glass-card {
+  position: relative;
+  overflow: hidden; /* clips the sheen + twinkles to the rounded card */
   background: rgba(28, 28, 30, 0.65);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -698,6 +716,51 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
               0 8px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.18s ease, border-color 0.2s ease;
+}
+
+/* Miniature aurora: a soft journey-colored light slowly wanders inside the
+   glass — the card's own echo of the page's aurora background. */
+.spark-glass-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(var(--journey-color, 85, 139, 110), 0.16), transparent 68%);
+  filter: blur(18px);
+  will-change: transform;
+  animation: sparkAurora 14s ease-in-out infinite alternate;
+}
+
+@keyframes sparkAurora {
+  0%   { transform: translate(0%, 0%) scale(1); }
+  35%  { transform: translate(160%, 45%) scale(1.3); }
+  65%  { transform: translate(60%, 85%) scale(0.85); }
+  100% { transform: translate(190%, 5%) scale(1.15); }
+}
+
+/* Two tiny glints twinkling at different corners on offset rhythms */
+.spark-glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 3px at 18% 26%, rgba(var(--journey-color, 85, 139, 110), 0.9), transparent 70%),
+    radial-gradient(circle 2px at 84% 68%, rgba(255, 255, 255, 0.8), transparent 70%);
+  opacity: 0;
+  animation: sparkTwinkle 4.6s ease-in-out infinite;
+}
+
+@keyframes sparkTwinkle {
+  0%, 100% { opacity: 0; }
+  12%      { opacity: 0.9; }
+  24%      { opacity: 0.15; }
+  58%      { opacity: 0.75; }
+  74%      { opacity: 0; }
 }
 
 @media (hover: hover) {
@@ -719,9 +782,22 @@
   }
 }
 
+/* Quote mark breathes and floats gently, tinted by the active journey */
 .spark-decoration {
   margin-bottom: 20px;
-  color: rgba(var(--c-green), 0.6);
+  color: rgba(var(--journey-color, 85, 139, 110), 0.65);
+  animation: sparkQuoteFloat 5s ease-in-out infinite;
+}
+
+@keyframes sparkQuoteFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 4px rgba(var(--journey-color, 85, 139, 110), 0.2));
+  }
+  50% {
+    transform: translateY(-4px) scale(1.06);
+    filter: drop-shadow(0 0 12px rgba(var(--journey-color, 85, 139, 110), 0.5));
+  }
 }
 
 .spark-content {
@@ -750,6 +826,7 @@
   margin: 0;
 }
 
+/* Tap hint breathes softly to invite interaction */
 .spark-interact-hint {
   display: inline-block;
   margin-top: 20px;
@@ -757,6 +834,12 @@
   color: rgba(255, 255, 255, 0.3);
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  animation: sparkHintBreath 3.4s ease-in-out infinite;
+}
+
+@keyframes sparkHintBreath {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
 }
 
 /* ===== RESPONSIVE ===== */
@@ -891,9 +974,20 @@
   background: rgba(0, 0, 0, 0.04);
 }
 
-/* Spark "tap for reflection" hint */
+/* Spark "tap for reflection" hint (the opacity breath works on any color) */
 .hs-light .spark-interact-hint {
   color: rgba(0, 0, 0, 0.4);
+}
+
+/* Aurora + twinkles read differently on light glass: slightly stronger tint */
+.hs-light .spark-glass-card::before {
+  background: radial-gradient(circle, rgba(var(--journey-color, 85, 139, 110), 0.14), transparent 68%);
+}
+
+.hs-light .spark-glass-card::after {
+  background:
+    radial-gradient(circle 3px at 18% 26%, rgba(var(--journey-color, 85, 139, 110), 0.9), transparent 70%),
+    radial-gradient(circle 2px at 84% 68%, rgba(var(--journey-color, 85, 139, 110), 0.6), transparent 70%);
 }
 
 /* Time-of-day tint on the hero card (light) */
@@ -956,8 +1050,9 @@
   .spark-section {
     animation: none;
   }
-  .home-week-day.in-streak::after,
+  .home-week-day.in-streak:not(.is-today) .home-week-dot,
   .home-week-day.is-today.is-active .home-week-dot,
+  .home-week-day.is-today.is-active .home-week-dot::after,
   .vital-streak.has-streak,
   .vital-streak.is-milestone,
   .vital-streak.is-milestone .flame-glow {
@@ -968,6 +1063,16 @@
   .hero-name {
     animation: none;
     background-position: 50% 0;
+  }
+  /* Quote card ambience off */
+  .spark-glass-card::before,
+  .spark-glass-card::after,
+  .spark-decoration,
+  .spark-interact-hint {
+    animation: none;
+  }
+  .spark-glass-card::after {
+    opacity: 0;
   }
   .spark-content {
     transition: opacity 0.2s ease;

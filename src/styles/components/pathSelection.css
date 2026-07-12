@@ -6367,6 +6367,74 @@
   color: #34d399;
 }
 
+/* ==========================================================================
+   TIER FILTER CHIPS (Free vs. paid)
+   ========================================================================== */
+
+.paths-tier-filters {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.tier-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tier-chip:active { transform: scale(0.96); }
+
+.tier-chip.is-active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Artisan chip leans gold, especially when active */
+.tier-chip-artisan svg { color: #e0a92e; }
+
+.tier-chip-artisan.is-active {
+  background: rgba(224, 169, 46, 0.16);
+  border-color: rgba(224, 169, 46, 0.4);
+  color: #ffd86b;
+}
+
+.tier-chip-artisan.is-active svg { color: #ffd86b; }
+
+/* Light theme */
+.light-theme .tier-chip {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.light-theme .tier-chip.is-active {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.light-theme .tier-chip-artisan.is-active {
+  background: rgba(224, 169, 46, 0.18);
+  border-color: rgba(224, 169, 46, 0.5);
+  color: #9a7318;
+}
+
+.light-theme .tier-chip-artisan.is-active svg { color: #9a7318; }
+
 
 /* ==========================================================================
    PATH GRID
@@ -6633,8 +6701,9 @@
 
 /* ==========================================================================
    EXCLUSIVE PATH (one-time purchase, e.g. Kairos Moments)
-   Static gold-tinted border + a periodic glass sheen that glints across the
-   card every few seconds — like light passing over polished glass.
+   Static gold-tinted border; the life comes from two thematic touches:
+   the hourglass icon flips over like a real sand timer, and tiny flecks
+   of gold dust drift up through the glass.
    ========================================================================== */
 .glass-path-card.is-exclusive {
   border-color: rgba(var(--c), 0.35);
@@ -6642,29 +6711,43 @@
     linear-gradient(160deg, rgba(var(--c), 0.07) 0%, rgba(255, 255, 255, 0.03) 45%);
 }
 
+/* The sand timer turns over every few seconds — time running, kairos style.
+   Two half-turns per cycle land back at 360° so the loop is seamless. */
+.glass-path-card.is-exclusive .card-icon-wrap svg {
+  animation: hourglassFlip 7s ease-in-out infinite;
+}
+
+@keyframes hourglassFlip {
+  0%, 40%  { transform: rotate(0deg); }
+  50%, 90% { transform: rotate(180deg); }
+  100%     { transform: rotate(360deg); }
+}
+
+/* Gold dust: three specks rise from below the card and exit the top on
+   different lanes and sizes. Both loop ends sit outside the card (clipped
+   by its overflow: hidden), so the restart is invisible. */
 .glass-path-card.is-exclusive::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(var(--c), 0.10) 47%,
-    rgba(255, 255, 255, 0.16) 50%,
-    rgba(var(--c), 0.10) 53%,
-    transparent 60%
-  );
-  background-size: 300% 100%;
-  background-position: 120% 0;
-  animation: exclusiveSheen 5s ease-in-out infinite;
+  background-image:
+    radial-gradient(circle, rgba(var(--c), 0.9) 30%, transparent 70%),
+    radial-gradient(circle, rgba(var(--c), 0.6) 30%, transparent 70%),
+    radial-gradient(circle, rgba(var(--c), 0.75) 30%, transparent 70%);
+  background-size: 5px 5px, 3px 3px, 4px 4px;
+  background-repeat: no-repeat;
+  animation: goldDustRise 9s linear infinite;
 }
 
-/* Sweep once, then rest until the next cycle */
-@keyframes exclusiveSheen {
-  0%        { background-position: 120% 0; }
-  45%, 100% { background-position: -80% 0; }
+@keyframes goldDustRise {
+  0% {
+    background-position: 18% 115%, 52% 135%, 84% 120%;
+  }
+  100% {
+    background-position: 22% -15%, 49% -35%, 80% -20%;
+  }
 }
 
 /* NEW badge — top right, gentle pulse */
@@ -6696,11 +6779,41 @@
   border: 1px solid rgba(var(--c), 0.25);
 }
 
+/* Free pill — quiet green "this one's on the house" marker */
+.meta-pill-free {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+/* Artisan pill — gold crown, marks subscription paths. Sits in the meta row
+   next to the Free pill so every card carries its tier in the same spot. */
+.meta-pill-artisan {
+  color: #e0a92e;
+  background: rgba(224, 169, 46, 0.12);
+  border: 1px solid rgba(224, 169, 46, 0.28);
+}
+
+.meta-pill-artisan svg {
+  flex-shrink: 0;
+  color: #e0a92e;
+}
+
+.light-theme .meta-pill-artisan {
+  color: #9a7318;
+  background: rgba(224, 169, 46, 0.14);
+  border-color: rgba(224, 169, 46, 0.35);
+}
+
+.light-theme .meta-pill-artisan svg { color: #9a7318; }
+
 @media (prefers-reduced-motion: reduce) {
   .glass-path-card.is-exclusive::after,
+  .glass-path-card.is-exclusive .card-icon-wrap svg,
   .card-new-badge {
     animation: none;
   }
+  /* Static mid-card dust specks would look stranded — hide them */
   .glass-path-card.is-exclusive::after {
     background: none;
   }

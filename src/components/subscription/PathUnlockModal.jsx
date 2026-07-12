@@ -94,7 +94,7 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
           </li>
           <li>
             <Mic size={16} />
-            <span>{t('unlockModal.perkChoice', 'You choose each day: speak it or draw it')}</span>
+            <span>{t('unlockModal.perkChoice', 'You choose each day: write it, speak it, or draw it')}</span>
           </li>
           <li>
             <Palette size={16} />

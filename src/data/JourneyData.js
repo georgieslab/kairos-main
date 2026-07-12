@@ -7303,55 +7303,55 @@ export const kairosMomentsDays = [
     day: 1,
     title: "The Doorway",
     theme: "Recognition",
-    prompt: "Every life has doorways — moments that split time into before and after. Revisit one of yours. Speak the story of that moment as if telling it to someone who loves you, or draw the doorway itself: what stood on each side, and what it felt like to cross."
+    prompt: "Every life has doorways — moments that split time into before and after. Revisit one of yours. Write the story down, speak it as if telling it to someone who loves you, or draw the doorway itself: what stood on each side, and what it felt like to cross."
   },
   {
     day: 2,
     title: "The Almost",
     theme: "Honesty",
-    prompt: "Somewhere behind you is a moment you saw coming and let pass — a word unsaid, a leap untaken. Without judging yourself, give that almost-moment a shape. Speak to it directly and tell it what you understand now, or draw what it looked like as it drifted by."
+    prompt: "Somewhere behind you is a moment you saw coming and let pass — a word unsaid, a leap untaken. Without judging yourself, give that almost-moment a shape. Write it a letter, speak to it directly and tell it what you understand now, or draw what it looked like as it drifted by."
   },
   {
     day: 3,
     title: "Ordinary Gold",
     theme: "Presence",
-    prompt: "Kairos hides inside ordinary days. Somewhere in the last 24 hours, a small opportune moment offered itself — a pause, a glance, an opening. Find it. Speak it back into existence with every detail you can recover, or draw the moment glowing inside the plain day that surrounded it."
+    prompt: "Kairos hides inside ordinary days. Somewhere in the last 24 hours, a small opportune moment offered itself — a pause, a glance, an opening. Find it. Write or speak it back into existence with every detail you can recover, or draw the moment glowing inside the plain day that surrounded it."
   },
   {
     day: 4,
     title: "The Signal",
     theme: "Discernment",
-    prompt: "Your body knows when it's time before your mind agrees — a quickening, a stillness, a pull. How does 'now' announce itself in you? Describe your signal aloud so you'll recognize it next time, or draw what the signal feels like from the inside."
+    prompt: "Your body knows when it's time before your mind agrees — a quickening, a stillness, a pull. How does 'now' announce itself in you? Describe your signal — on paper or aloud — so you'll recognize it next time, or draw what it feels like from the inside."
   },
   {
     day: 5,
     title: "The Waiting Room",
     theme: "Patience",
-    prompt: "Between moments there is waiting — and waiting is not nothing; it's where readiness is built. What are you waiting for right now, and who are you becoming while you wait? Speak about the season you're in, or draw the waiting room of your life and what's growing there quietly."
+    prompt: "Between moments there is waiting — and waiting is not nothing; it's where readiness is built. What are you waiting for right now, and who are you becoming while you wait? Write or speak about the season you're in, or draw the waiting room of your life and what's growing there quietly."
   },
   {
     day: 6,
     title: "Seized",
     theme: "Confidence",
-    prompt: "At least once, you moved at exactly the right moment — you said yes, walked out, held on, let go. Return to that day as evidence of what you're capable of. Retell it aloud with pride, or draw the instant of the leap itself, mid-air."
+    prompt: "At least once, you moved at exactly the right moment — you said yes, walked out, held on, let go. Return to that day as evidence of what you're capable of. Retell it with pride — written or aloud — or draw the instant of the leap itself, mid-air."
   },
   {
     day: 7,
     title: "The Knock",
     theme: "Courage",
-    prompt: "Something is knocking right now — an invitation you keep hearing at the edge of your days. Name it without flinching. Speak about what's asking to happen and what the knock sounds like, or draw the door as it looks today: how thick, how heavy, and how far it has already opened."
+    prompt: "Something is knocking right now — an invitation you keep hearing at the edge of your days. Name it without flinching. Write or speak about what's asking to happen and what the knock sounds like, or draw the door as it looks today: how thick, how heavy, and how far it has already opened."
   },
   {
     day: 8,
     title: "Making Room",
     theme: "Release",
-    prompt: "You can't catch the moment with full hands. Something — a habit, a fear, a grudge, a plan that expired — has to be set down first. Speak about what you're ready to release and what it has cost you to carry, or draw your open hands and what falls away from them."
+    prompt: "You can't catch the moment with full hands. Something — a habit, a fear, a grudge, a plan that expired — has to be set down first. Write or speak about what you're ready to release and what it has cost you to carry, or draw your open hands and what falls away from them."
   },
   {
     day: 9,
     title: "The Meeting",
     theme: "Commitment",
-    prompt: "Your next kairos moment is already on its way. Meet it ahead of time: make it a promise. Speak your vow aloud — what you will do when it arrives, in the exact words you want to remember — or draw the meeting itself: you, the moment, and the first step after."
+    prompt: "Your next kairos moment is already on its way. Meet it ahead of time: make it a promise. Write your vow down or speak it aloud — what you will do when it arrives, in the exact words you want to remember — or draw the meeting itself: you, the moment, and the first step after."
   }
 ];
 
@@ -7359,11 +7359,11 @@ JOURNEY_PATHS['kairos-moments'] = createJourneyPath({
   id: 'kairos-moments',
   title: "Kairos Moments",
   subtitle: "9 days on the art of the opportune moment",
-  description: "The path the app is named for. Kairos — the fleeting, opportune moment — can be recognized, waited for, and seized. Nine days of reflection where you choose your medium each day: speak your answer aloud or draw it. Recognition, honesty, patience, courage — and finally, a vow to meet your next moment ready.",
+  description: "The path the app is named for. Kairos — the fleeting, opportune moment — can be recognized, waited for, and seized. Nine days of reflection where you choose your medium each day: write it, speak it aloud, or draw it. Recognition, honesty, patience, courage — and finally, a vow to meet your next moment ready.",
   iconName: "Hourglass",
   days: kairosMomentsDays,
   color: "212, 175, 55", // Gold — the exclusive path
-  tags: ['kairos', 'timing', 'voice-or-draw', 'exclusive'],
+  tags: ['kairos', 'timing', 'multi-modal', 'exclusive'],
   duration: 9,
   difficulty: 'intermediate',
   recommendedFor: ['moment seekers', 'threshold dwellers', 'anyone sensing it might be time'],

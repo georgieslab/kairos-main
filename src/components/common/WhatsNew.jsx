@@ -65,7 +65,7 @@ const WhatsNew = ({ navigateToScreen }) => {
         <ul className="whats-new-perks">
           <li>
             <Mic size={15} />
-            <span>{t('whatsNew.perkChoice', 'You choose each day: speak it or draw it')}</span>
+            <span>{t('whatsNew.perkChoice', 'You choose each day: write it, speak it, or draw it')}</span>
           </li>
           <li>
             <Palette size={15} />

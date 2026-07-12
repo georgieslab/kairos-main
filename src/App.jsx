@@ -67,6 +67,7 @@ import {
   getMostRecentActivePathId,
   updateCurrentPath
 } from './utils/pathUtils';
+import { isFlexPath } from './utils/pathTypeUtils';
 
 // Styles
 import './styles/components/lazyLoading.css';
@@ -187,10 +188,22 @@ const App = () => {
     if (userProfile?.journals?.includes(journalData.journalId)) {
       // Journal is registered - navigate to upload screen
       console.log('✅ Journal registered, navigating to upload...');
-      navigateToScreen('upload', {
-        journalId: journalData.journalId,
-        fromNFC: true
-      });
+      // Flex paths (choose write/speak/draw per day) need the WriteTab picker
+      // first — jumping straight to 'upload' silently defaults to the draw
+      // flow and skips voice/write entirely.
+      if (isFlexPath(currentPath)) {
+        navigateToScreen('write', {
+          pathId: currentPath,
+          day: currentDay,
+          journalId: journalData.journalId,
+          fromNFC: true
+        });
+      } else {
+        navigateToScreen('upload', {
+          journalId: journalData.journalId,
+          fromNFC: true
+        });
+      }
     } else {
       // Journal not registered - show registration modal
       console.log('📝 Journal not registered, showing registration modal...');
@@ -708,16 +721,28 @@ const App = () => {
                     pathId={screenData?.pathId || currentPath}
                     onUpload={(pathId) => {
                       const targetPath = pathId || screenData?.pathId || currentPath;
+                      const targetDay = screenData?.day || currentDay;
                       const p = getJourneyPath(targetPath);
                       if (p?.isVoiceJourney) {
                         navigateToScreen('voice-upload', {
                           pathId: targetPath,
-                          day: screenData?.day || currentDay,
+                          day: targetDay,
                           prompt: getCurrentJourneyDay().prompt,
                           theme: getCurrentJourneyDay().theme
                         });
+                      } else if (isFlexPath(targetPath)) {
+                        // Flex paths need the WriteTab write/speak/draw picker —
+                        // going straight to 'upload' has no flexMode to pass and
+                        // silently defaults to the draw (visual) instructions.
+                        navigateToScreen('write', {
+                          pathId: targetPath,
+                          day: targetDay
+                        });
                       } else {
-                        navigateToScreen('upload');
+                        navigateToScreen('upload', {
+                          pathId: targetPath,
+                          day: targetDay
+                        });
                       }
                     }}
                     onNavigate={(pathId, day) => navigateToScreen('daily', { pathId, day })}
@@ -792,12 +817,13 @@ const App = () => {
 
                 {/* Upload Interface */}
                 {currentScreen === 'upload' && (
-                  <JournalUpload 
+                  <JournalUpload
                     dayNumber={currentDay}
                     pathId={currentPath}
                     onBack={navigateBack}
                     textOnly={screenData?.textOnly || false}
                     unifiedUpload={screenData?.unifiedUpload || false}
+                    flexMode={screenData?.flexMode || null}
                     onUploadComplete={(imageUrl, extractedText, pathId, isTextOnly, isMultiPage, additionalImages, imageFiles) => {
                       handleJournalUpload(
                         imageUrl, 
@@ -901,19 +927,18 @@ const App = () => {
                 const hideBottomNavScreens = [
                   'welcome',
                   'signup',
-                  'loading',
                   'privacy-policy',
                   'terms-of-service',
                   'contact-us',
                   'about',
                   'upload',        // Journal/Artwork upload — focused capture flow
                   'voice-upload',  // Voice journal — focused capture flow
-                  'analysis'       // Analysis (incl. its loading state) — has its own back/tab nav
+                  'analysis'       // Analysis — has its own back/tab nav
                 ];
 
-                // Hide the nav on the listed screens AND whenever a global
-                // loader is active — loading screens should never show the nav.
-                const shouldShowBottomNav = !hideBottomNavScreens.includes(currentScreen) && !isLoading;
+                // Nav stays visible during loading states so users can always
+                // jump elsewhere (changed by request; it was hidden before).
+                const shouldShowBottomNav = !hideBottomNavScreens.includes(currentScreen);
                 
                 return shouldShowBottomNav ? (
                   <BottomNavigation 
@@ -942,13 +967,25 @@ const App = () => {
                 onComplete={(journalData) => {
                   console.log('✅ Journal registration complete:', journalData);
                   setShowRegistration(false);
-                  
-                  // Navigate to upload screen with new journal
-                  navigateToScreen('upload', {
-                    journalId: journalData.journalId,
-                    fromNFC: true,
-                    newlyRegistered: true
-                  });
+
+                  // Flex paths need the WriteTab picker first (see NFC handler
+                  // above for why going straight to 'upload' is wrong here).
+                  if (isFlexPath(currentPath)) {
+                    navigateToScreen('write', {
+                      pathId: currentPath,
+                      day: currentDay,
+                      journalId: journalData.journalId,
+                      fromNFC: true,
+                      newlyRegistered: true
+                    });
+                  } else {
+                    // Navigate to upload screen with new journal
+                    navigateToScreen('upload', {
+                      journalId: journalData.journalId,
+                      fromNFC: true,
+                      newlyRegistered: true
+                    });
+                  }
                 }}
               />
             )}

@@ -4,7 +4,7 @@ import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp, updateDoc, i
 import { db } from '../config/firebase';
 import { callClaudeApi, safeJsonParse, formatApiError } from '../utils/apiUtils';
 import { getAuth } from 'firebase/auth';
-import { isVisualPath, isVoicePath } from '../utils/pathTypeUtils';
+import { isVisualPath, isVoicePath, isFlexPath } from '../utils/pathTypeUtils';
 import i18n from '../i18n/config';
 
 // Claude API configuration
@@ -835,10 +835,16 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
       const primaryFile = imageFiles[0];
       const { data: imageBase64, mediaType } = await fileToBase64(primaryFile);
       
-      let textInstruction = isVisual 
+      let textInstruction = isVisual
         ? `Analyze this visual creation with deep insight into their artistic expression and emotional landscape.`
         : `Analyze this handwritten journal entry, understanding both the content and the care taken in writing.`;
-      
+
+      // Flex paths (choose-your-medium, e.g. Kairos Moments): the upload may
+      // be handwritten pages OR a drawing — recognize first, then analyze.
+      if (isFlexPath(pathId)) {
+        textInstruction = `This entry comes from a journey where the journaler chooses their medium each day. What you see may be handwritten journal pages, a drawing or painting, or a mix of both. First recognize which it is, then analyze accordingly: if it is writing, read and reflect deeply on the written words; if it is visual art, interpret the artistic expression, colors, and composition; if both, weave them together.`;
+      }
+
       if (extractedText && isVisual) {
         textInstruction += `\n\nTheir notes about this creation: "${extractedText}"`;
       }

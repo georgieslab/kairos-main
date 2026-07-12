@@ -75,7 +75,7 @@ const ProfileScreen = ({ handleSignOut }) => {
   };
 
   return (
-    <div className="glass-profile">
+    <div className="glass-profile" style={{ '--path-color': activePathColor }}>
       {/* ===== HEADER ===== */}
       <header className="profile-header">
         <div className="profile-avatar-container" onClick={() => setShowAvatarPicker(true)}>

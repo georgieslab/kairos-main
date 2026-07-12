@@ -819,7 +819,6 @@
 }
 
 .ai-person-description-card:hover::before {
-  animation-duration: 3s;
   opacity: 1;
 }
 
@@ -847,29 +846,10 @@
   overflow: hidden;
 }
 
+/* Shine sweep removed — part of the repaint-heavy animation set that made
+   the card title flicker/disappear (see the ≤768px patch further down). */
 .person-icon-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.1) 40%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0.1) 60%,
-    transparent 80%
-  );
-  animation: personalityShine 4s infinite;
-  transform: rotate(45deg);
-}
-
-@keyframes personalityShine {
-  0% { transform: translateX(-200%) translateY(-200%) rotate(45deg); }
-  50% { transform: translateX(200%) translateY(200%) rotate(45deg); }
-  100% { transform: translateX(-200%) translateY(-200%) rotate(45deg); }
+  content: none;
 }
 
 .person-main-icon {
@@ -880,6 +860,8 @@
   position: relative;
 }
 
+/* Sparkle badge is static now — its rotate/scale loop was part of the
+   repaint-heavy set that made the card title flicker. */
 .person-sparkle-icon {
   position: absolute;
   top: -6px;
@@ -891,27 +873,7 @@
   border-radius: 50%;
   padding: 4px;
   z-index: 3;
-  animation: personalitySparkle 3s infinite ease-in-out;
   box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
-}
-
-@keyframes personalitySparkle {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg);
-    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
-  }
-  25% { 
-    transform: scale(1.15) rotate(90deg);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.5);
-  }
-  50% { 
-    transform: scale(1.2) rotate(180deg);
-    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.6);
-  }
-  75% { 
-    transform: scale(1.15) rotate(270deg);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.5);
-  }
 }
 
 .person-header-content {
@@ -3467,7 +3429,9 @@
   transition: all 0.4s ease;
 }
 
-/* Full animated border */
+/* Gradient border — STATIC. The animated version (personalityBorder) was
+   repaint-heavy and made the clip-text title intermittently paint
+   transparent (text visibly disappearing) while it cycled. */
 .ai-person-description-card::before {
   content: '';
   position: absolute;
@@ -3487,7 +3451,6 @@
   background-size: 600% 600%;
   border-radius: 1.5rem;
   z-index: -1;
-  animation: personalityBorder 5s ease-in-out infinite;
   opacity: 0.7;
 }
 
@@ -3503,28 +3466,6 @@
   z-index: -1;
 }
 
-@keyframes personalityBorder {
-  0%, 100% { 
-    background-position: 0% 50%;
-    opacity: 0.5;
-  }
-  20% {
-    background-position: 100% 0%;
-    opacity: 0.8;
-  }
-  40% { 
-    background-position: 100% 100%;
-    opacity: 1;
-  }
-  60% {
-    background-position: 0% 100%;
-    opacity: 0.8;
-  }
-  80% {
-    background-position: 0% 0%;
-    opacity: 0.6;
-  }
-}
 /* Enhanced EmotionTrends Component CSS - Tablet & Mobile Optimized */
 
 /* ==================== EMOTION TRENDS CONTAINER ==================== */

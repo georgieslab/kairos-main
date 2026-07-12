@@ -13,7 +13,9 @@
   background-color: rgba(30, 30, 30, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 1000;
+  /* Below the bottom nav (z-index 1000): the nav stays visible and tappable
+     during loading states, by request. Modals (also 1000+) still cover it. */
+  z-index: 990;
   transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
   animation: fadeIn 0.3s ease-in forwards;
   overflow: hidden;

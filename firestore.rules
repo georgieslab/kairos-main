@@ -1,8 +1,60 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+    // ─────────────────────────────────────────────────────────────────
+    // Previously this whole database was "any signed-in user can
+    // read/write any document" (a single `match /{document=**}` catch-all).
+    // That meant any user could read another user's private journal
+    // entries, or write their own `purchasedPaths` field directly (e.g.
+    // via devtools) to unlock paid paths like kairos-moments without
+    // paying or having a valid invite code. Firestore rules are OR'd
+    // together across every matching `match` block — a more specific
+    // rule does NOT override a broader one that also matches — so a
+    // catch-all like that can't coexist with per-collection restrictions.
+    // It has been replaced with explicit per-collection ownership rules
+    // covering every collection this app currently reads/writes from the
+    // client (verified via grep across src/ for db, 'collectionName').
+    // Anything not listed below is denied by default, which is the
+    // correct posture: Cloud Functions use the Admin SDK server-side and
+    // are unaffected by these rules, so the Stripe webhook and any other
+    // trusted backend writes still work regardless.
+    // ─────────────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      match /{subcollection=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // NFC-registered physical journals. Any signed-in user can look up a
+    // journal by ID (the scan-to-check-if-registered flow needs this
+    // before ownership is established); only the owner can modify or
+    // delete it, and a doc can only be created claiming yourself as owner.
+    match /journals/{journalId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Legacy top-level collections (superseded by users/{uid}/journal, but
+    // still queried/deleted by the account-deletion flow).
+    match /journalEntries/{entryId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /analysisResults/{resultId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // User-submitted feedback/bug reports — write-once, readable by the
+    // submitter only (no client-side edit/delete once sent).
+    match /userFeedback/{feedbackId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
   }
 }

@@ -239,12 +239,13 @@ const GlassNotesField = ({ value, onChange, placeholder }) => (
   </div>
 );
 
-const JournalUpload = ({ 
-  onBack, 
-  onUploadComplete, 
-  dayNumber, 
+const JournalUpload = ({
+  onBack,
+  onUploadComplete,
+  dayNumber,
   pathId,
-  pathColor = '85, 139, 110' // Default to self-discovery green
+  pathColor = '85, 139, 110', // Default to self-discovery green
+  flexMode = null // 'draw' | 'write' — per-day medium on choose-your-medium paths
 }) => {
   const { currentUser } = useAuth();
   const { t } = useTranslation('journey');
@@ -261,9 +262,10 @@ const JournalUpload = ({
   
   const fileInputRef = useRef(null);
   const isMobile = Capacitor.isNativePlatform();
-  const isVisualJourney = isVisualPath(pathId);
+  // On flex paths the day's chosen medium wins over the path-level type
+  const isVisualJourney = flexMode ? flexMode === 'draw' : isVisualPath(pathId);
   const maxPages = Math.min(getMaxPages(pathId), 5);
-  const instructions = getUploadInstructions(pathId);
+  const instructions = getUploadInstructions(pathId, flexMode ? (flexMode === 'draw' ? 'visual' : 'writing') : null);
 
   // Convert base64 to Blob
   const base64ToBlob = (base64String, mimeType = 'image/jpeg') => {

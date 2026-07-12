@@ -15,6 +15,7 @@ import {
   Mic,
   ChevronRight,
   Palette,
+  PenLine,
 } from 'lucide-react';
 import { getJourneyDay, getJourneyPath } from '../../data/JourneyData';
 import { useAuth } from '../../contexts/AuthContext';
@@ -121,8 +122,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
   const isFlex = isFlexPath(activePath);
   const isVoice = isVoicePath(activePath);
 
-  // `mode` matters only for flex paths (voice-or-draw): 'voice' | 'draw'.
-  // Everything else keeps its single path-type-derived flow.
+  // `mode` matters only for flex paths (choose-your-medium):
+  // 'voice' | 'draw' | 'write'. Everything else keeps its single
+  // path-type-derived flow.
   const handleStart = (mode) => {
     if (isNavigating.current) return;
 
@@ -139,6 +141,8 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
       day: activeDay,
       prompt: journeyData?.prompt,
       theme: journeyData?.theme,
+      // Tells JournalUpload which instruction set to show ('draw' | 'write')
+      ...(isFlex && !useVoice ? { flexMode: mode } : {}),
     });
   };
 
@@ -230,7 +234,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
 
         <h1 className="write-title">
           {isFlex
-            ? t('writeTab.flexJournal', 'Voice or Canvas')
+            ? t('writeTab.flexJournal', 'Your Medium')
             : isVoice ? t('writeTab.voiceJournal', 'Voice Journal') : t('writeTab.journalEntry', 'Journal Entry')}
         </h1>
         <p className="write-subtitle">{t('writeTab.dayOf', 'Day {{day}} of {{total}}', { day: activeDay, total: pathDetails.duration })}</p>
@@ -259,7 +263,7 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             <MessageSquare size={16} />
             <span>
               {isFlex
-                ? t('writeTab.flexPrompt', 'Speak or draw')
+                ? t('writeTab.flexPrompt', 'Write, speak, or draw')
                 : isVoice ? t('writeTab.voicePrompt', 'Voice prompt') : t('writeTab.writingPrompt', 'Writing prompt')}
             </span>
           </div>
@@ -282,6 +286,18 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
                 {t('writeTab.flexChoiceLabel', 'How do you want to answer today?')}
               </p>
               <div className="write-flex-choice-buttons">
+                <button
+                  className="write-action-primary write-flex-option"
+                  onClick={() => handleStart('write')}
+                  style={{
+                    backgroundColor: `rgba(${pathColorRgb}, 0.15)`,
+                    borderColor: `rgba(${pathColorRgb}, 0.25)`,
+                    color: `rgb(${pathColorRgb})`
+                  }}
+                >
+                  <PenLine size={20} />
+                  <span>{t('writeTab.flexWrite', 'Write It')}</span>
+                </button>
                 <button
                   className="write-action-primary write-flex-option"
                   onClick={() => handleStart('voice')}

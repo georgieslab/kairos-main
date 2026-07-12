@@ -467,26 +467,47 @@ export const hasArtisanAccess = (subscription) => {
 };
 
 /**
+ * The 9 curated free starter paths. Everything else (except one-time-purchase
+ * "exclusive" paths) is Artisan (paid subscription). Single source of truth for
+ * the free/paid split shown on the Paths screen.
+ */
+export const FREE_PATH_IDS = [
+  // Traditional 10-day journeys
+  'self-discovery',
+  'gratitude-practice',
+  'shadow-work',
+  'nature-connection',
+  'anxiety-alchemy',
+  // Visual/artistic 10-day journeys
+  'nature-sketching',
+  'abstract-emotions',
+  'mindful-visualization',
+  // Additional free path
+  'digital-detox'
+];
+
+/**
+ * Classify a path into one of three tiers for display/filtering:
+ *  - 'free'      → in FREE_PATH_IDS, available to everyone
+ *  - 'exclusive' → one-time purchase (path.isExclusive, e.g. Kairos Moments)
+ *  - 'artisan'   → everything else, requires the Artisan subscription
+ * @param {Object} path - A journey path object from JourneyData
+ * @returns {'free'|'artisan'|'exclusive'}
+ */
+export const getPathTier = (path) => {
+  if (!path) return 'free';
+  if (path.isExclusive) return 'exclusive';
+  return FREE_PATH_IDS.includes(path.id) ? 'free' : 'artisan';
+};
+
+/**
  * 🔧 FIXED: Get path access information with CORRECT path IDs matching JourneyData.js
  * @param {string} pathId - Journey path ID
  * @returns {Object} Path access info
  */
 export const getPathAccessInfo = (pathId) => {
   // ✅ CORRECTED: Free paths with EXACT IDs from JourneyData.js registry
-  const freePaths = [
-    // Traditional 10-day journeys
-    'self-discovery',
-    'gratitude-practice', 
-    'shadow-work',              // 🔧 FIXED: was 'shadow-work-exploration'
-    'nature-connection',
-    'anxiety-alchemy',
-    // Visual/artistic 10-day journeys  
-    'nature-sketching',         // 🔧 FIXED: was 'nature-sketching-sanctuary'
-    'abstract-emotions',
-    'mindful-visualization',
-    // Additional free paths
-    'digital-detox'             // 🔧 FIXED: was 'digital-detox-reflection'
-  ];
+  const freePaths = FREE_PATH_IDS;
   
   // All other paths are premium/artisan
   const artisanPaths = [

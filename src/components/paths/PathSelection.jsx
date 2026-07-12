@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import {
   Search, X, Play, ArrowRight, BookOpen, Clock, Target, Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
   Book, Droplet, Star, Zap, Archive, Lightbulb, Leaf, Coins, Brush, Feather,
-  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock
+  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock, Crown
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserProgress } from '../../hooks/useUserProgress';
 import { getAllJourneyPaths } from '../../data/JourneyData';
+import { getPathTier } from '../../services/SubscriptionService';
 import { getNextDayForPath } from '../../utils/userProgress';
 import PathSuggestionCard from './PathSuggestionCard';
 import PathQuestionnaire from './PathQuestionnaire';
@@ -30,6 +31,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
   const { inProgressPaths, completedPaths } = useUserProgress();
 
   const [activeTab, setActiveTab] = useState('explore');
+  const [tierFilter, setTierFilter] = useState('all'); // 'all' | 'free' | 'artisan'
   const [searchQuery, setSearchQuery] = useState('');
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -57,20 +59,28 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     let paths = allPaths;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      paths = paths.filter(p => 
-        p.title.toLowerCase().includes(q) || 
+      paths = paths.filter(p =>
+        p.title.toLowerCase().includes(q) ||
         p.subtitle?.toLowerCase().includes(q) ||
         p.tags?.some(t => t.toLowerCase().includes(q))
       );
     }
-    
+
+    // Tier filter: 'free' shows only free paths; 'artisan' shows all paid
+    // paths (Artisan subscription + one-time-purchase exclusives).
+    if (tierFilter === 'free') {
+      paths = paths.filter(p => getPathTier(p) === 'free');
+    } else if (tierFilter === 'artisan') {
+      paths = paths.filter(p => getPathTier(p) !== 'free');
+    }
+
     if (activeTab === 'completed') return paths.filter(p => completedPaths.some(cp => cp.id === p.id));
     // Explore: only paths not already shown in "Current Journeys" or "Completed"
     return paths.filter(p =>
       !inProgressPaths.some(ip => ip.id === p.id) &&
       !completedPaths.some(cp => cp.id === p.id)
     );
-  }, [allPaths, activeTab, searchQuery, inProgressPaths, completedPaths]);
+  }, [allPaths, activeTab, tierFilter, searchQuery, inProgressPaths, completedPaths]);
 
   const getIcon = (name) => {
     const Icon = ICON_MAP[name] || Compass;
@@ -132,6 +142,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     const isActive = !!progress;
     const completionPct = isActive ? path.percentage || 0 : (isCompleted ? 100 : 0);
     const isLocked = path.isExclusive && !isPathUnlocked(path);
+    const tier = getPathTier(path); // 'free' | 'artisan' | 'exclusive'
 
     const getDifficultyLabel = (diff) => {
       if (!diff) return null;
@@ -179,6 +190,17 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
                 <span className="meta-pill">
                   <Target size={12} />
                   {getDifficultyLabel(path.difficulty)}
+                </span>
+              )}
+              {tier === 'free' && (
+                <span className="meta-pill meta-pill-free">
+                  {t('pathSelection.free', 'Free')}
+                </span>
+              )}
+              {tier === 'artisan' && (
+                <span className="meta-pill meta-pill-artisan">
+                  <Crown size={12} />
+                  {t('pathSelection.artisan', 'Artisan')}
                 </span>
               )}
               {isLocked && path.price && (
@@ -296,6 +318,35 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
         >
           {t('pathSelection.completedTab', 'Completed')}
           {completedPaths.length > 0 && <span className="tab-badge completed">{completedPaths.length}</span>}
+        </button>
+      </div>
+
+      {/* Tier filter chips (Free vs. paid) */}
+      <div className="paths-tier-filters" role="tablist" aria-label={t('pathSelection.filterByTier', 'Filter by tier')}>
+        <button
+          className={`tier-chip ${tierFilter === 'all' ? 'is-active' : ''}`}
+          onClick={() => setTierFilter('all')}
+          role="tab"
+          aria-selected={tierFilter === 'all'}
+        >
+          {t('pathSelection.filterAll', 'All')}
+        </button>
+        <button
+          className={`tier-chip ${tierFilter === 'free' ? 'is-active' : ''}`}
+          onClick={() => setTierFilter('free')}
+          role="tab"
+          aria-selected={tierFilter === 'free'}
+        >
+          {t('pathSelection.filterFree', 'Free')}
+        </button>
+        <button
+          className={`tier-chip tier-chip-artisan ${tierFilter === 'artisan' ? 'is-active' : ''}`}
+          onClick={() => setTierFilter('artisan')}
+          role="tab"
+          aria-selected={tierFilter === 'artisan'}
+        >
+          <Crown size={13} />
+          {t('pathSelection.filterArtisan', 'Artisan')}
         </button>
       </div>
 

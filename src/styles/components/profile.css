@@ -3,6 +3,8 @@
    ========================================================================== */
 
 .glass-profile {
+  position: relative;
+  overflow-x: clip;
   min-height: 100vh;
   padding: 24px 20px 70px 20px;
   max-width: 600px;
@@ -10,6 +12,53 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
+}
+
+/* Ambient aurora: two soft blobs drift behind the content — purple up top,
+   the active path's color down below (via --path-color set in JSX). */
+.glass-profile::before,
+.glass-profile::after {
+  content: '';
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.glass-profile::before {
+  top: -60px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.16), transparent 65%);
+  animation: profileAurora1 24s ease-in-out infinite alternate;
+}
+
+.glass-profile::after {
+  bottom: 10%;
+  right: -120px;
+  background: radial-gradient(circle, rgba(var(--path-color, 85, 139, 110), 0.15), transparent 65%);
+  animation: profileAurora2 30s ease-in-out infinite alternate;
+}
+
+@keyframes profileAurora1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(60px, 40px) scale(1.15); }
+  100% { transform: translate(20px, 90px) scale(0.9); }
+}
+
+@keyframes profileAurora2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-70px, -50px) scale(1.2); }
+  100% { transform: translate(-20px, -100px) scale(0.95); }
+}
+
+/* Keep all content above the aurora */
+.glass-profile > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ==========================================================================
@@ -23,11 +72,35 @@
   text-align: center;
   gap: 16px;
   padding-bottom: 8px;
+  animation: profileFadeIn 0.5s ease both;
 }
 
 .profile-avatar-container {
   position: relative;
   margin-bottom: 8px;
+  animation: profileAvatarPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+@keyframes profileAvatarPop {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Breathing halo behind the avatar in the active path's color */
+.profile-avatar-container::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--path-color, 85, 139, 110), 0.35), transparent 70%);
+  filter: blur(12px);
+  z-index: -1;
+  animation: profileAvatarHalo 4.5s ease-in-out infinite;
+}
+
+@keyframes profileAvatarHalo {
+  0%, 100% { opacity: 0.45; transform: scale(0.96); }
+  50%      { opacity: 1;    transform: scale(1.08); }
 }
 
 .profile-avatar-container .avatar-wrapper {
@@ -73,6 +146,12 @@
   border: 1px solid rgba(255, 215, 0, 0.3);
   border-radius: 100px;
   backdrop-filter: blur(10px);
+  animation: artisanPillGlow 3.2s ease-in-out infinite;
+}
+
+@keyframes artisanPillGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.15); }
+  50%      { box-shadow: 0 0 14px rgba(255, 215, 0, 0.45); }
 }
 
 .profile-artisan-pill span {
@@ -82,12 +161,16 @@
   letter-spacing: 0.03em;
 }
 
+/* Name carries a quiet white→path-color gradient (static — no sheen) */
 .profile-name {
   font-size: 26px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
   margin: 0;
   letter-spacing: -0.02em;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 30%, rgba(var(--path-color, 85, 139, 110), 0.9));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .profile-meta {
@@ -164,6 +247,17 @@
   color: inherit;
   transition: transform 0.2s ease;
   border-radius: 12px;
+  animation: profileStatPop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.glass-stat-item:nth-child(1) { animation-delay: 0.15s; }
+.glass-stat-item:nth-child(2) { animation-delay: 0.22s; }
+.glass-stat-item:nth-child(3) { animation-delay: 0.29s; }
+.glass-stat-item:nth-child(4) { animation-delay: 0.36s; }
+
+@keyframes profileStatPop {
+  from { opacity: 0; transform: translateY(10px) scale(0.88); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .glass-stat-item:active {
@@ -185,6 +279,12 @@
 .glass-stat-icon.stat-streak {
   background: rgba(255, 107, 53, 0.1);
   color: rgba(255, 107, 53, 0.7);
+  animation: profileStreakEmber 4s ease-in-out infinite;
+}
+
+@keyframes profileStreakEmber {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); }
+  50%      { box-shadow: 0 0 14px rgba(255, 107, 53, 0.35); }
 }
 
 .glass-stat-icon.stat-active {
@@ -743,7 +843,14 @@
    LIGHT MODE
    ========================================================================== */
 
-.light-theme .profile-name { color: rgba(0, 0, 0, 0.85); }
+.light-theme .profile-name {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.88) 30%, rgba(var(--path-color, 85, 139, 110), 1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.light-theme .glass-profile::before,
+.light-theme .glass-profile::after { opacity: 0.7; }
 .light-theme .profile-meta-item { color: rgba(0, 0, 0, 0.4); background: rgba(0, 0, 0, 0.04); }
 .light-theme .profile-meta-item svg { color: rgba(85, 139, 110, 0.7); }
 .light-theme .profile-edit-main-btn { 
@@ -1125,9 +1232,20 @@
   .profile-section,
   .glass-card,
   .glass-modal-overlay,
-  .glass-modal {
+  .glass-modal,
+  .profile-header,
+  .profile-avatar-container,
+  .glass-stat-item {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+  /* Looping ambience off entirely */
+  .glass-profile::before,
+  .glass-profile::after,
+  .profile-avatar-container::before,
+  .profile-artisan-pill,
+  .glass-stat-icon.stat-streak {
+    animation: none !important;
   }
 }
 

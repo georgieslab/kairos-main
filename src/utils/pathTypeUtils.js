@@ -24,10 +24,18 @@ export const getDayType = (pathId, day) => {
   return getPathType(pathId);
 };
 
-// Flex paths: the user chooses voice OR drawing per day. Listed in
-// VISUAL_PATHS below so the artwork upload flow works out of the box
-// (no text extraction); the voice flow is reached by navigating straight
-// to the voice-upload screen, which doesn't consult path type.
+// Flex paths: the user chooses write, speak, or draw per day. Listed in
+// VISUAL_PATHS below so getPathType()/isVisualPath() resolve to something
+// sane by default (image upload, no text extraction) when no per-day
+// override is available; the voice flow is reached by navigating straight
+// to the voice-upload screen, which doesn't consult path type. Screens that
+// call getUploadInstructions() with an explicit typeOverride (JournalUpload)
+// correctly reflect the day's chosen medium — but getPathType() itself, and
+// anything built only on top of it (getPathTypeLabels, getPathTypeDescription,
+// requiresTextExtraction, getVisualAnalysisInstructions), has no override and
+// will always report 'visual' for a flex path regardless of what the user
+// picked that day. Nothing else in the app currently reads those for a flex
+// path, but wire up a typeOverride there too before using them for one.
 const FLEX_PATHS = [
   'kairos-moments'
 ];
@@ -187,10 +195,12 @@ export const getPathTypeCounts = (pathIds = []) => {
 };
 
 /**
- * Get the appropriate upload instructions for a path
+ * Get the appropriate upload instructions for a path.
+ * `typeOverride` ('voice' | 'visual' | 'writing') lets flex paths pick the
+ * instruction set per-day based on the user's chosen medium.
  */
-export const getUploadInstructions = (pathId) => {
-  if (isVoicePath(pathId)) {
+export const getUploadInstructions = (pathId, typeOverride = null) => {
+  if (typeOverride === 'voice' || (!typeOverride && isVoicePath(pathId))) {
     return {
       title: 'Record Your Voice Journal',
       dropText: 'Record your voice response to today\'s prompt',
@@ -203,7 +213,7 @@ export const getUploadInstructions = (pathId) => {
       notesTitle: 'Optional: Add notes about your voice entry',
       cameraButtonText: 'Start Voice Recording'
     };
-  } else if (isVisualPath(pathId)) {
+  } else if (typeOverride === 'visual' || (!typeOverride && isVisualPath(pathId))) {
     return {
       title: 'Upload Your Artwork',
       dropText: 'Drag and drop your artwork here, or click to select files',

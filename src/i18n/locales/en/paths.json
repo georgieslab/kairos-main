@@ -121,7 +121,13 @@
     "tryAdjusting": "Try adjusting your search or filters",
     "new": "NEW",
     "newBadge": "New path",
-    "unlockFor": "Unlock for {{price}}"
+    "unlockFor": "Unlock for {{price}}",
+    "free": "Free",
+    "artisan": "Artisan",
+    "filterByTier": "Filter by tier",
+    "filterAll": "All",
+    "filterFree": "Free",
+    "filterArtisan": "Artisan"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "AI-matched",
@@ -131,7 +137,7 @@
   "unlockModal": {
     "close": "Close",
     "perkDays": "{{count}} carefully crafted days",
-    "perkChoice": "You choose each day: speak it or draw it",
+    "perkChoice": "You choose each day: write it, speak it, or draw it",
     "perkExclusive": "Exclusive path — yours forever, one payment",
     "buy": "Unlock for {{price}}",
     "opening": "Opening secure checkout...",

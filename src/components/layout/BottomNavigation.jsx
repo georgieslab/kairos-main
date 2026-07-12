@@ -1,15 +1,15 @@
 // src/components/layout/BottomNavigation.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Home, BookOpen, PenTool, BarChart2, User } from 'lucide-react';
+import { Home, Route, PenTool, Telescope, User } from 'lucide-react';
 import '../../styles/components/bottomNavigation.css';
 
 
 const navItems = [
   { id: 'home', label: 'Home', labelKey: 'bottomNav.home', icon: Home, screen: 'home', color: '#558B6E', glow: '85, 139, 110' },
-  { id: 'paths', label: 'Paths', labelKey: 'bottomNav.paths', icon: BookOpen, screen: 'path-selection', color: '#E6B89C', glow: '230, 184, 156' },
+  { id: 'paths', label: 'Paths', labelKey: 'bottomNav.paths', icon: Route, screen: 'path-selection', color: '#E6B89C', glow: '230, 184, 156' },
   { id: 'write', label: 'Journal', labelKey: 'bottomNav.journal', icon: PenTool, screen: 'write', isCenter: true, color: '#558B6E', glow: '85, 139, 110' },
-  { id: 'analytics', label: 'Insights', labelKey: 'bottomNav.insights', icon: BarChart2, screen: 'analytics-dashboard', color: '#d8b23f', glow: '216, 178, 63' },
+  { id: 'analytics', label: 'Insights', labelKey: 'bottomNav.insights', icon: Telescope, screen: 'analytics-dashboard', color: '#d8b23f', glow: '216, 178, 63' },
   { id: 'profile', label: 'Profile', labelKey: 'bottomNav.profile', icon: User, screen: 'profile', color: '#9370DB', glow: '147, 112, 219' },
 ];
 

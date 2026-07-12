@@ -900,3 +900,75 @@
   .light-theme .glass-nav-item:not(.is-active):hover .glass-nav-icon { color: rgba(0, 0, 0, 0.7); }
   .light-theme .glass-nav-item:not(.is-active):hover .glass-nav-label { color: rgba(0, 0, 0, 0.6); }
 }
+/* ==========================================================================
+   HYBRID NAV — icons only, label appears on the active tab
+   Inactive tabs show a slightly bigger, centered icon; the label unfolds
+   beneath the icon only inside the active pill (and under the hovered tab
+   on desktop, so the label travels with the sliding glass).
+   ========================================================================== */
+
+/* Bigger icons across the board; icon-only (inactive) tabs get +2px more
+   presence, easing back as the label unfolds on the active tab */
+.glass-nav-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.glass-nav-item:not(.is-active) .glass-nav-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.glass-nav-item.is-center .glass-nav-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.glass-nav-item.is-center:not(.is-active) .glass-nav-icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Collapse the gap so icon-only tabs center perfectly */
+.glass-nav-item {
+  gap: 0;
+}
+
+/* Label folded away by default */
+.glass-nav-label {
+  font-size: 10.5px;
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.9);
+  overflow: hidden;
+  transition:
+    max-height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    margin-top 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Unfolds inside the active pill */
+.glass-nav-item.is-active .glass-nav-label {
+  max-height: 14px;
+  margin-top: 3px;
+  opacity: 0.95;
+  transform: translateY(0) scale(1);
+}
+
+/* Desktop: the label also follows the hover pill */
+@media (hover: hover) {
+  .glass-nav-item:hover .glass-nav-label {
+    max-height: 14px;
+    margin-top: 3px;
+    opacity: 0.7;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-nav-label {
+    transition: none;
+  }
+}
