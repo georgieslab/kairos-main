@@ -1,6 +1,6 @@
 // src/services/claudeService.js - Enhanced Voice & Analysis Support
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { callClaudeApi, safeJsonParse, formatApiError } from '../utils/apiUtils';
 import { getAuth } from 'firebase/auth';
@@ -1171,78 +1171,56 @@ export const saveAnalysisResult = async (
 
     await setDoc(entryRef, entryData);
 
-    // Update progress efficiently
+    // ── Update journey progress ──────────────────────────────────────────
+    // IMPORTANT: write ONLY this path's fields via dot-paths, and append the
+    // completed day with arrayUnion. The previous approach read the entire
+    // user doc, mutated the whole `journeyProgress` map, and wrote it back in
+    // one blob. That made the progress write fail (or clobber) whenever the
+    // blob contained a value Firestore rejected on write — e.g. a nested
+    // serverTimestamp deep inside, or bad data left by an unrelated path — so
+    // the journal entry saved but progress silently did NOT (Home color +
+    // "next day" stuck on day 1). Dot-path + arrayUnion sidesteps all of it:
+    // atomic, no read-modify-write race, and unaffected by other paths' data.
     const userRef = doc(db, 'users', userId);
-    const userDoc = await getDoc(userRef);
-    
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      const journeyProgress = userData.journeyProgress || {};
-      const progressField = getProgressFieldForPath(pathId);
-      
-      let pathProgress = journeyProgress[progressField] || {
-        completedDays: [], currentDay: 1, lastActive: null, currentStreak: 0, bestStreak: 0
-      };
+    const progressField = getProgressFieldForPath(pathId);
+    const base = `journeyProgress.${progressField}`;
 
-      const completedDays = Array.isArray(pathProgress.completedDays) ? pathProgress.completedDays : [];
-
-      if (!completedDays.includes(day)) {
-        completedDays.push(day);
-        completedDays.sort((a, b) => a - b);
-      }
-
-      // Calculate streak
-      // NOTE: previously written under the key `streak` (readers expect
-      // `currentStreak`/`bestStreak`), so fall back to it for existing users.
-      let streak = pathProgress.currentStreak ?? pathProgress.streak ?? 0;
-      const bestStreakSoFar = pathProgress.bestStreak ?? pathProgress.streak ?? 0;
-      const lastActiveDate = pathProgress.lastActive ? new Date(pathProgress.lastActive.toDate()) : null;
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
+    // Streak needs the prior progress; read it defensively so a read failure
+    // can never block the progress write itself.
+    let streak = 1;
+    let bestStreakSoFar = 0;
+    let priorCompleted = [];
+    try {
+      const userSnap = await getDoc(userRef);
+      const prior = userSnap.exists() ? (userSnap.data()?.journeyProgress?.[progressField] || {}) : {};
+      priorCompleted = Array.isArray(prior.completedDays) ? prior.completedDays : [];
+      bestStreakSoFar = prior.bestStreak ?? prior.streak ?? 0;
+      const prevStreak = prior.currentStreak ?? prior.streak ?? 0;
+      const lastActiveDate = prior.lastActive?.toDate ? prior.lastActive.toDate() : null;
       if (lastActiveDate) {
-        const lastActive = new Date(lastActiveDate);
-        lastActive.setHours(0, 0, 0, 0);
+        const lastActive = new Date(lastActiveDate); lastActive.setHours(0, 0, 0, 0);
+        const today = new Date(); today.setHours(0, 0, 0, 0);
         const daysDiff = Math.floor((today.getTime() - lastActive.getTime()) / (1000 * 3600 * 24));
-
-        if (daysDiff === 0) {
-          // Same day - keep streak
-        } else if (daysDiff === 1) {
-          streak += 1;
-        } else {
-          streak = 1; // Reset streak
-        }
-      } else {
-        streak = 1; // First entry
+        streak = daysDiff === 0 ? (prevStreak || 1) : daysDiff === 1 ? prevStreak + 1 : 1;
       }
-
-      pathProgress = {
-        completedDays,
-        currentDay: Math.max(...completedDays, 1),
-        lastActive: serverTimestamp(),
-        currentStreak: streak,
-        bestStreak: Math.max(bestStreakSoFar, streak),
-        totalEntries: completedDays.length
-      };
-      
-      journeyProgress[progressField] = pathProgress;
-      
-      await updateDoc(userRef, {
-        journeyProgress,
-        lastActiveDate: serverTimestamp()
-      });
-      
-      // Update statistics
-      const statsUpdate = isVoiceEntry ? {
-        totalVoiceEntries: increment(1),
-        [`voiceEntries.${pathId}`]: increment(1)
-      } : {
-        totalJournalEntries: increment(1),
-        [`journalEntries.${pathId}`]: increment(1)
-      };
-      
-      await updateDoc(userRef, statsUpdate);
+    } catch (readErr) {
+      console.warn('Could not read prior progress for streak (non-fatal):', readErr);
     }
+
+    const completedCount = priorCompleted.includes(day) ? priorCompleted.length : priorCompleted.length + 1;
+
+    await updateDoc(userRef, {
+      [`${base}.completedDays`]: arrayUnion(day),
+      [`${base}.currentDay`]: Math.max(day, ...priorCompleted, 1),
+      [`${base}.lastActive`]: serverTimestamp(),
+      [`${base}.currentStreak`]: streak,
+      [`${base}.bestStreak`]: Math.max(bestStreakSoFar, streak),
+      [`${base}.totalEntries`]: completedCount,
+      lastActiveDate: serverTimestamp(),
+      ...(isVoiceEntry
+        ? { totalVoiceEntries: increment(1), [`voiceEntries.${pathId}`]: increment(1) }
+        : { totalJournalEntries: increment(1), [`journalEntries.${pathId}`]: increment(1) })
+    });
     
     logAnalyticsEvent('analysis_saved', {
       day, pathId, isVoiceEntry,

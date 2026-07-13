@@ -13,7 +13,7 @@ import '../../styles/components/pathUnlockModal.css';
 
 const PathUnlockModal = ({ path, userId, onClose }) => {
   const { t } = useTranslation('paths');
-  const { userProfile, updateUserProfile } = useAuth();
+  const { userProfile, updateUserProfile, refreshUserProfile } = useAuth();
   const [isBuying, setIsBuying] = useState(false);
   const [error, setError] = useState(null);
   const [showCodeInput, setShowCodeInput] = useState(false);
@@ -29,9 +29,22 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
     setError(null);
     setIsBuying(true);
     try {
-      await startPathPurchase(userId, path.id);
+      const result = await startPathPurchase(userId, path.id);
       // Checkout continues in the popup/new tab; keep the modal open so the
-      // user lands back on a stable screen after paying.
+      // user lands back on a stable screen after paying. The webhook grants
+      // access server-side, but this tab's in-memory userProfile won't know
+      // that happened on its own — poll for the popup closing (the signal
+      // that the user is done, either paid or canceled) and refresh so the
+      // path shows unlocked without requiring a manual app reload.
+      if (result?.popupWindow) {
+        const popup = result.popupWindow;
+        const poll = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(poll);
+            refreshUserProfile();
+          }
+        }, 1000);
+      }
     } catch (err) {
       setError(t('unlockModal.error', 'Could not start the payment. Please try again.'));
     } finally {

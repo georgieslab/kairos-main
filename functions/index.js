@@ -8,6 +8,15 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const { defineSecret } = require("firebase-functions/params");
 const anthropicApiKey = defineSecret("ANTHROPIC_API_KEY");
+// Stripe secrets for the exclusive one-time-purchase paths (e.g. kairos-moments).
+// Set with:
+//   firebase functions:secrets:set STRIPE_SECRET_KEY
+//   firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
+// functions.config() (used elsewhere in this file) is deprecated and being
+// retired — new/updated Stripe functions use Secret Manager instead, same
+// pattern as callClaude below.
+const stripeSecretKey = defineSecret("STRIPE_SECRET_KEY");
+const stripeWebhookSecret = defineSecret("STRIPE_WEBHOOK_SECRET");
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
@@ -195,19 +204,22 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
 });
 
 // 💎 ONE-TIME PATH PURCHASE (exclusive paths outside the Artisan subscription)
-// Prices are defined inline (price_data) so no Stripe Dashboard product setup
-// is needed — deploy and it works. Grant happens in the webhook via
-// users/{uid}.purchasedPaths arrayUnion.
+// `productId` ties the line item to the real Product created in the Stripe
+// Dashboard (so revenue/reporting shows up against it there); the price
+// itself is still created inline per-session via price_data, so there's no
+// separate Price ID to keep in sync — just the amount below. Grant happens
+// in the webhook via users/{uid}.purchasedPaths arrayUnion.
 const EXCLUSIVE_PATH_PRODUCTS = {
   'kairos-moments': {
-    name: 'Kairos Moments — 9-day exclusive journey',
-    description: 'One-time unlock of the Kairos Moments path in Καιρός Smart Journal',
+    productId: 'prod_Us7OkREsJYUvmTjqwert',
     currency: 'eur',
     unitAmount: 299 // €2.99
   }
 };
 
-exports.createPathCheckoutSession = functions.https.onCall(async (data, context) => {
+exports.createPathCheckoutSession = functions
+  .runWith({ secrets: [stripeSecretKey] })
+  .https.onCall(async (data, context) => {
   try {
     console.log("💎 createPathCheckoutSession called:", JSON.stringify(data));
 
@@ -219,18 +231,20 @@ exports.createPathCheckoutSession = functions.https.onCall(async (data, context)
     if (!userId || !pathId) {
       throw new functions.https.HttpsError('invalid-argument', 'User ID and path ID are required');
     }
+    if (userId !== context.auth.uid) {
+      throw new functions.https.HttpsError('permission-denied', 'userId must match the authenticated user');
+    }
 
     const product = EXCLUSIVE_PATH_PRODUCTS[pathId];
     if (!product) {
       throw new functions.https.HttpsError('invalid-argument', `Unknown exclusive path: ${pathId}`);
     }
 
-    const config = functions.config();
-    const stripeSecretKey = config.stripe && config.stripe.secret_key;
-    if (!stripeSecretKey) {
+    const secretKey = stripeSecretKey.value();
+    if (!secretKey) {
       throw new functions.https.HttpsError('failed-precondition', 'Payment system configuration error');
     }
-    const stripeClient = stripe(stripeSecretKey);
+    const stripeClient = stripe(secretKey);
 
     // Reuse the existing Stripe customer if there is one
     let customerId;
@@ -259,15 +273,12 @@ exports.createPathCheckoutSession = functions.https.onCall(async (data, context)
         price_data: {
           currency: product.currency,
           unit_amount: product.unitAmount,
-          product_data: {
-            name: product.name,
-            description: product.description
-          }
+          product: product.productId
         },
         quantity: 1
       }],
-      success_url: `https://reflection-writer.web.app/success?type=path&path=${pathId}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://reflection-writer.web.app/cancel`,
+      success_url: `https://reflection-writer.web.app/?checkout=success&path=${pathId}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://reflection-writer.web.app/?checkout=cancel&path=${pathId}`,
       metadata: {
         firebaseUID: userId,
         pathId: pathId,

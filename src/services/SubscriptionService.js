@@ -158,13 +158,19 @@ export const startPathPurchase = async (userId, pathId) => {
     const url = result.data?.url;
     if (!url) throw new Error('No checkout URL returned');
 
+    let usedPopup = false;
     if (popupWindow && !popupWindow.closed) {
       popupWindow.location.href = url;
+      usedPopup = true;
     } else {
       // Popup blocked — same-tab fallback
       window.location.href = url;
     }
-    return result.data;
+    // Return the popup reference (when we actually used one) so callers can
+    // detect when the user closes it and refresh purchase state — the main
+    // tab has no other way to know payment finished, since it's the popup
+    // that lands on the Stripe success/cancel redirect, not this tab.
+    return { ...result.data, popupWindow: usedPopup ? popupWindow : null };
   } catch (error) {
     if (popupWindow && !popupWindow.closed) popupWindow.close();
     console.error('❌ Error starting path purchase:', error);
