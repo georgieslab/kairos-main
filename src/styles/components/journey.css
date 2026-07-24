@@ -7,7 +7,8 @@
 .djv-container {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+  /* Transparent so the app-wide AmbientBackground shows through (spatial glass) */
+  background: transparent;
   color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   display: flex;
@@ -23,9 +24,10 @@
   display: flex;
   align-items: center;
   padding: 0.75rem;
-  background: rgba(15, 15, 15, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #2a2a2a;
+  background: rgba(18, 18, 22, 0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -144,8 +146,10 @@
 /* Progress Bar - Mobile First */
 .djv-progress-container {
   padding: 0.75rem;
-  background: #1a1a1a;
-  border-bottom: 1px solid #2a2a2a;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   width: 100%;
 }
 
@@ -308,10 +312,12 @@
 
 /* Cards - Mobile First */
 .djv-card {
-  background: linear-gradient(145deg, #1f1f21, #191919);
+  background: rgba(30, 30, 36, 0.5);
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
@@ -793,7 +799,8 @@
    Sage accent (#558B6E / 85,139,110) is kept in both themes.
    ============================================================================= */
 .light-theme .djv-container {
-  background: linear-gradient(180deg, #f7f7f5 0%, #eef0ee 100%);
+  /* Transparent so the light AmbientBackground shows through */
+  background: transparent;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -940,12 +947,161 @@
   border-color: rgba(0, 0, 0, 0.18);
 }
 
-djv-action-container {
+.djv-action-container {
     padding: 0.75rem 1.75rem 5.75rem 1.75rem;
-    background: linear-gradient(180deg, transparent, rgba(10, 10, 10, 0.9));
-    border-top: 1px solid #2a2a2a;
+    background: linear-gradient(180deg, transparent, rgba(12, 12, 16, 0.75));
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     position: sticky;
     bottom: 0;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     width: 100%;
+}
+
+/* =============================================================================
+   JOURNEY MAP — every day laid out with its prompt (the "View Details" list)
+   ============================================================================= */
+.djv-journey-map .djv-card-header {
+  align-items: center;
+}
+
+.djv-map-count {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.djv-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 0.875rem 1rem;
+}
+
+.djv-day-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.djv-day-row:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.djv-day-row:disabled {
+  cursor: default;
+}
+
+.djv-day-row.is-locked {
+  opacity: 0.55;
+}
+
+.djv-day-row.is-current {
+  background: rgba(var(--row-color), 0.14);
+  border-color: rgba(var(--row-color), 0.4);
+  box-shadow: 0 0 0 1px rgba(var(--row-color), 0.15), 0 0 18px rgba(var(--row-color), 0.15);
+}
+
+.djv-day-row-badge {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.djv-day-row.is-completed .djv-day-row-badge {
+  background: rgba(var(--row-color), 0.18);
+  color: rgb(var(--row-color));
+}
+
+.djv-day-row.is-current .djv-day-row-badge {
+  background: rgb(var(--row-color));
+  color: #fff;
+}
+
+.djv-day-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.djv-day-row-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.djv-day-row-theme {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.djv-day-row-prompt {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.djv-day-row-chevron {
+  flex-shrink: 0;
+  align-self: center;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Journey map — light theme */
+.light-theme .djv-map-count {
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.05);
+}
+.light-theme .djv-day-row {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.light-theme .djv-day-row:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.06);
+}
+.light-theme .djv-day-row-badge {
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.6);
+}
+.light-theme .djv-day-row-title {
+  color: rgba(0, 0, 0, 0.85);
+}
+.light-theme .djv-day-row-theme {
+  color: rgba(0, 0, 0, 0.5);
+}
+.light-theme .djv-day-row-prompt {
+  color: rgba(0, 0, 0, 0.6);
+}
+.light-theme .djv-day-row-chevron {
+  color: rgba(0, 0, 0, 0.3);
 }

@@ -1,5 +1,6 @@
 // src/pages/HomeScreen.jsx - Apple Spatial Glass Dashboard (Fixed Layout)
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress } from '../hooks/useUserProgress';
@@ -11,7 +12,7 @@ import ThemeSwitcher from '../components/common/ThemeSwitcher';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
 import WhatsNew from '../components/common/WhatsNew';
 import MoodWeather from '../components/common/MoodWeather';
-import { Sparkles, ArrowRight, Flame, FileText, Target, Quote } from 'lucide-react';
+import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight } from 'lucide-react';
 import '../styles/components/homeScreen.css';
 import '../styles/pages/analyticsScreen.css';
 import { useTheme } from '../contexts/ThemeContext';
@@ -27,6 +28,7 @@ const HomeScreen = ({ navigateToScreen }) => {
   const [quote, setQuote] = useState(quotes[0]);
   const [isQuoteChanging, setIsQuoteChanging] = useState(false);
   const [timeGradient, setTimeGradient] = useState('');
+  const [showJourneys, setShowJourneys] = useState(false);
 
   useEffect(() => {
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -259,7 +261,7 @@ const HomeScreen = ({ navigateToScreen }) => {
           </button>
 
           {currentPath && (
-            <button className="vital-card vital-progress" onClick={() => navigateToScreen('path-selection')}>
+            <button className="vital-card vital-progress" onClick={() => setShowJourneys(true)}>
               <div className="vital-icon-wrap progress-glow" style={{ color: `rgb(${currentPath.color})` }}>
                 <Target size={18} />
               </div>
@@ -287,6 +289,66 @@ const HomeScreen = ({ navigateToScreen }) => {
           <span className="spark-interact-hint">{t('home.tapForReflection', 'Tap for reflection')}</span>
         </div>
       </section>
+
+      {/* Current-journeys popup — opened from the "% Complete" card. Lists every
+          started journey with its progress; the most recent one is featured.
+          Portaled to <body> so it isn't clipped by the home layout. */}
+      {showJourneys && createPortal(
+        <div className="hj-overlay" onClick={() => setShowJourneys(false)}>
+          <div className="hj-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <div className="hj-modal-header">
+              <h3 className="hj-modal-title">{t('home.yourJourneys', 'Your Journeys')}</h3>
+              <button
+                className="hj-close"
+                onClick={() => setShowJourneys(false)}
+                aria-label={t('home.close', 'Close')}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="hj-list">
+              {(inProgressPaths || []).map((p) => (
+                <button
+                  key={p.id}
+                  className={`hj-row${p.id === currentPath?.id ? ' is-current' : ''}`}
+                  style={{ '--c': p.color }}
+                  onClick={() => {
+                    setShowJourneys(false);
+                    navigateToScreen('write', { pathId: p.id, day: p.nextDay });
+                  }}
+                >
+                  <div className="hj-row-icon">
+                    <DynamicIcon name={p.iconName} size={18} />
+                  </div>
+                  <div className="hj-row-body">
+                    <div className="hj-row-top">
+                      <span className="hj-row-title">{p.title}</span>
+                      <span className="hj-row-pct">{p.percentage}%</span>
+                    </div>
+                    <div className="hj-row-bar">
+                      <div className="hj-row-fill" style={{ width: `${p.percentage}%` }} />
+                    </div>
+                    <span className="hj-row-meta">
+                      {t('home.dayOfTotal', 'Day {{day}} of {{total}}', { day: p.nextDay, total: p.totalDays })}
+                    </span>
+                  </div>
+                  <ChevronRight size={16} className="hj-row-chevron" />
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="hj-footer-btn"
+              onClick={() => { setShowJourneys(false); navigateToScreen('path-selection'); }}
+            >
+              {t('home.viewAllPaths', 'View all paths')}
+              <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
     </div>
   );

@@ -23,7 +23,7 @@ import { db } from '../../config/firebase';
 import '../../styles/components/journey.css';
 import { getJourneyDay, getJourneyPath } from '../../data/JourneyData';
 import { isDayCompleted } from '../../utils/userProgress';
-import { Book, Compass, Brain, Droplet, Palette, RotateCcw, Map, ArrowUpRight } from 'lucide-react';
+import { Book, Compass, Brain, Droplet, Palette, RotateCcw, Map, ArrowUpRight, Lock } from 'lucide-react';
 
 const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onNavigate, onBack }) => {
   const { t } = useTranslation('journey');
@@ -209,71 +209,64 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
     );
   };
 
-  const renderCompactDayIndicators = () => {
-    if (!pathData) return null;
+  // The journey "map": every day laid out with its prompt, so View Details
+  // actually shows the details. Completed / current / upcoming are visually
+  // distinct; unlocked days are tappable to jump straight there.
+  const renderJourneyDays = () => {
+    if (!pathData?.days?.length) return null;
 
-    const totalDays = pathData.duration;
-    const maxVisible = 7;
-    
-    // Calculate which days to show around current day
-    let startDay = Math.max(1, currentDay - Math.floor(maxVisible / 2));
-    let endDay = Math.min(totalDays, startDay + maxVisible - 1);
-    
-    // Adjust if we're near the end
-    if (endDay - startDay + 1 < maxVisible) {
-      startDay = Math.max(1, endDay - maxVisible + 1);
-    }
-
-    const visibleDays = [];
-    for (let day = startDay; day <= endDay; day++) {
-      visibleDays.push(day);
-    }
+    const days = [...pathData.days].sort((a, b) => a.day - b.day);
+    const rgb = pathData.color || '85, 139, 110';
 
     return (
-      <div className="djv-day-indicators">
-        {startDay > 1 && (
-          <button
-            onClick={() => onNavigate(pathId, 1)}
-            className="djv-day-nav djv-day-first"
-          >
-            1
-          </button>
-        )}
-        
-        {startDay > 2 && <div className="djv-day-ellipsis">•••</div>}
-        
-        {visibleDays.map((day) => {
-          const isCompleted = completedDays.includes(day);
-          const isUnlocked = isDayUnlocked(day);
-          const isCurrent = day === currentDay;
+      <div className="djv-card djv-journey-map">
+        <div className="djv-card-header">
+          <div className="djv-card-icon" style={{ backgroundColor: `${pathColor}20` }}>
+            <Map size={18} style={{ color: pathColor }} />
+          </div>
+          <h3 className="djv-card-title">{t('dailyJourney.allPrompts', 'All Prompts')}</h3>
+          <span className="djv-map-count">
+            {t('dailyJourney.daysCount', '{{count}} days', { count: pathData.duration })}
+          </span>
+        </div>
 
-          return (
-            <button
-              key={day}
-              onClick={() => isUnlocked ? onNavigate(pathId, day) : null}
-              className={`djv-day-indicator ${isCurrent ? 'djv-current' : ''} ${isCompleted ? 'djv-completed' : ''} ${!isUnlocked ? 'djv-locked' : ''}`}
-              disabled={!isUnlocked}
-              style={pathData.color && isCurrent ? { backgroundColor: `rgb(${pathData.color})` } : {}}
-            >
-              {isCompleted ? (
-                <CheckCircle className="djv-check-icon" />
-              ) : (
-                day
-              )}
-            </button>
-          );
-        })}
-        
-        {endDay < totalDays - 1 && <div className="djv-day-ellipsis">•••</div>}
-        
-        {endDay < totalDays && (
-          <button
-            onClick={() => onNavigate(pathId, totalDays)}
-            className="djv-day-nav djv-day-last"
-          >
-            {totalDays}
-          </button>
-        )}
+        <div className="djv-days-list">
+          {days.map((d) => {
+            const isCompleted = completedDays.includes(d.day);
+            const isCurrent = d.day === currentDay;
+            const isUnlocked = isDayUnlocked(d.day);
+            const canOpen = isUnlocked || isCompleted;
+
+            return (
+              <button
+                key={d.day}
+                className={`djv-day-row${isCurrent ? ' is-current' : ''}${isCompleted ? ' is-completed' : ''}${!isUnlocked ? ' is-locked' : ''}`}
+                style={{ '--row-color': rgb }}
+                onClick={() => canOpen && onNavigate(pathId, d.day)}
+                disabled={!canOpen}
+                aria-current={isCurrent ? 'true' : undefined}
+              >
+                <span className="djv-day-row-badge">
+                  {isCompleted
+                    ? <CheckCircle size={16} />
+                    : !isUnlocked
+                      ? <Lock size={13} />
+                      : d.day}
+                </span>
+
+                <span className="djv-day-row-body">
+                  <span className="djv-day-row-title">
+                    {t('dailyJourney.dayLabel', 'Day {{day}}', { day: d.day })}
+                    {d.theme ? <span className="djv-day-row-theme"> · {d.theme}</span> : null}
+                  </span>
+                  {d.prompt && <span className="djv-day-row-prompt">{d.prompt}</span>}
+                </span>
+
+                {canOpen && <ChevronRight size={16} className="djv-day-row-chevron" />}
+              </button>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -358,9 +351,6 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
 
       {/* Progress */}
       {renderProgressBar()}
-
-      {/* Day Navigation */}
-      {renderCompactDayIndicators()}
 
       {/* Content */}
       <div className="djv-content">
@@ -493,6 +483,9 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
             </div>
           </div>
         )}
+
+        {/* Journey map — every day's prompt */}
+        {renderJourneyDays()}
       </div>
 
       {/* Action Button */}

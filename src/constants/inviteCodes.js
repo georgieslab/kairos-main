@@ -4,8 +4,11 @@
 // webhook writes, so code-unlocked and paid paths behave identically.
 // Codes are matched case-insensitively with surrounding whitespace ignored.
 
+import { KAIROS_MOMENTS_PACKAGE } from './pathBundles';
+
 export const INVITE_CODES = {
-  HALFBOYHALFGIRL: ['kairos-moments']
+  // Unlocks the whole Kairos Moments package (Kairos Moments + Kairos Cards).
+  HALFBOYHALFGIRL: KAIROS_MOMENTS_PACKAGE
 };
 
 /** Normalize user input and return the path ids the code unlocks, or null. */

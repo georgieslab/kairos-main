@@ -110,6 +110,7 @@
     "durationDays": "{{count}} Days",
     "percentComplete": "{{pct}}% complete",
     "done": "Done",
+    "inProgress": "In Progress",
     "continueDay": "Continue Day {{day}}",
     "reviewJourney": "Review Journey",
     "startJourney": "Start Journey",
@@ -124,10 +125,12 @@
     "unlockFor": "Unlock for {{price}}",
     "free": "Free",
     "artisan": "Artisan",
+    "kairos": "Kairos",
     "filterByTier": "Filter by tier",
     "filterAll": "All",
     "filterFree": "Free",
-    "filterArtisan": "Artisan"
+    "filterArtisan": "Artisan",
+    "filterKairos": "Kairos"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "AI-matched",
@@ -139,6 +142,7 @@
     "perkDays": "{{count}} carefully crafted days",
     "perkChoice": "You choose each day: write it, speak it, or draw it",
     "perkExclusive": "Exclusive path — yours forever, one payment",
+    "perkBundle": "One payment unlocks the whole Kairos Moments package — all three paths",
     "buy": "Unlock for {{price}}",
     "opening": "Opening secure checkout...",
     "error": "Could not start the payment. Please try again.",

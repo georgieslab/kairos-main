@@ -5,9 +5,10 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Hourglass, Mic, Palette, Sparkles, Lock, Loader2, Ticket, CheckCircle2 } from 'lucide-react';
+import { X, Hourglass, Mic, Palette, Sparkles, Lock, Loader2, Ticket, CheckCircle2, Package } from 'lucide-react';
 import { startPathPurchase } from '../../services/SubscriptionService';
 import { resolveInviteCode } from '../../constants/inviteCodes';
+import { getPurchaseAnchorId, isKairosMomentsPackage } from '../../constants/pathBundles';
 import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/components/pathUnlockModal.css';
 
@@ -29,7 +30,9 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
     setError(null);
     setIsBuying(true);
     try {
-      const result = await startPathPurchase(userId, path.id);
+      // Bundle members buy the single Kairos Moments package product — see
+      // constants/pathBundles.js. One payment unlocks every path in the bundle.
+      const result = await startPathPurchase(userId, getPurchaseAnchorId(path.id));
       // Checkout continues in the popup/new tab; keep the modal open so the
       // user lands back on a stable screen after paying. The webhook grants
       // access server-side, but this tab's in-memory userProfile won't know
@@ -113,6 +116,12 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
             <Palette size={16} />
             <span>{t('unlockModal.perkExclusive', 'Exclusive path — yours forever, one payment')}</span>
           </li>
+          {isKairosMomentsPackage(path.id) && (
+            <li>
+              <Package size={16} />
+              <span>{t('unlockModal.perkBundle', 'One payment unlocks the whole Kairos Moments package — both paths')}</span>
+            </li>
+          )}
         </ul>
 
         {error && <p className="pum-error">{error}</p>}

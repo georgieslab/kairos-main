@@ -6,7 +6,7 @@ import '../../styles/components/bottomNavigation.css';
 
 
 const navItems = [
-  { id: 'home', label: 'Home', labelKey: 'bottomNav.home', icon: Home, screen: 'home', color: '#558B6E', glow: '85, 139, 110' },
+  { id: 'home', label: 'Home', labelKey: 'bottomNav.home', icon: Home, screen: 'home', color: '#5B9FD4', glow: '91, 159, 212' },
   { id: 'paths', label: 'Paths', labelKey: 'bottomNav.paths', icon: Route, screen: 'path-selection', color: '#E6B89C', glow: '230, 184, 156' },
   { id: 'write', label: 'Journal', labelKey: 'bottomNav.journal', icon: PenTool, screen: 'write', isCenter: true, color: '#558B6E', glow: '85, 139, 110' },
   { id: 'analytics', label: 'Insights', labelKey: 'bottomNav.insights', icon: Telescope, screen: 'analytics-dashboard', color: '#d8b23f', glow: '216, 178, 63' },

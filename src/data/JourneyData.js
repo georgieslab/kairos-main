@@ -6598,6 +6598,10 @@ export const createJourneyPath = (options) => {
     // Flex paths: the user picks voice OR drawing per day (vs. isMultiModal,
     // where each day prescribes its modality)
     isFlexModal: options.isFlexModal || false,
+    // Interactive paths: each day carries a `prompts` array the user can
+    // shuffle through (e.g. Kairos Cards). The shuffle UI itself keys off the
+    // presence of `day.prompts`; this flag is metadata for badges/filtering.
+    isInteractive: options.isInteractive || false,
     // Any other metadata you might want to store
   };
 };
@@ -7368,6 +7372,359 @@ JOURNEY_PATHS['kairos-moments'] = createJourneyPath({
   difficulty: 'intermediate',
   recommendedFor: ['moment seekers', 'threshold dwellers', 'anyone sensing it might be time'],
   isFlexModal: true,
+  isExclusive: true,
+  isNew: false,
+  price: '€2.99'
+});
+
+// ===========================================================================
+// KAIROS CARDS — the first INTERACTIVE path. Each day deals a themed hand of
+// prompts; the user taps Shuffle to draw the next card until one fits, then
+// answers it in any medium (write / speak / draw). `prompts` is the hand;
+// `prompt` mirrors the first card so every reader that expects a single
+// prompt string (Home hero, PDF export, archive) keeps working unchanged.
+// Bundled into the Kairos Moments package — see constants/pathBundles.js.
+// ===========================================================================
+export const kairosCardsDays = [
+  // ---- WEEK 1: ARRIVING (Days 1-7) — showing up, noticing, the present ----
+  {
+    day: 1,
+    title: "Arriving",
+    theme: "Checking In",
+    prompts: [
+      "What's the first honest thing you'd say if someone asked how you actually are today?",
+      "Capture this exact moment — the room, the light, the sound, the feeling in your chest right now.",
+      "What made you open this today? Follow that thread wherever it wants to go.",
+      "If today were a color, which one — and why that shade?",
+      "Finish it, in any medium: 'Right now, I just need to say…'"
+    ]
+  },
+  {
+    day: 2,
+    title: "What's Here",
+    theme: "The Senses",
+    prompts: [
+      "Right now, what can you hear? Start there and let it lead you somewhere.",
+      "Give shape to the most vivid thing your senses are picking up this minute.",
+      "What's the texture of today — rough, soft, sharp, still? Show it however you like.",
+      "Close your eyes for ten seconds. What's the first thing you notice when you open them?",
+      "Describe today as a smell or a taste. What does this day actually feel like from the inside?"
+    ]
+  },
+  {
+    day: 3,
+    title: "The Overlooked",
+    theme: "Small Things",
+    prompts: [
+      "Name one small thing from today that you'd normally walk right past.",
+      "What tiny good thing happened in the last 24 hours that you didn't stop to notice?",
+      "Give attention to something ordinary near you — really look at it, then capture what you see.",
+      "What small comfort are you grateful for that you usually take completely for granted?",
+      "Find the most beautiful unremarkable thing in your day and make it remarkable."
+    ]
+  },
+  {
+    day: 4,
+    title: "Inner Weather",
+    theme: "Today's Mood",
+    prompts: [
+      "If your inside were weather right now, what's the forecast — and what's driving it?",
+      "What's the emotional temperature of your day so far? Show it however feels right.",
+      "Name the feeling that's been quietly running underneath everything today.",
+      "What's taking up the most room in your head right now? Give it some air.",
+      "Is today a light day or a heavy one? Capture the weight of it."
+    ]
+  },
+  {
+    day: 5,
+    title: "In the Body",
+    theme: "The Physical",
+    prompts: [
+      "Where does today live in your body — the tension, the ease, the tiredness? Locate it.",
+      "Scan from head to toe. What's the loudest thing your body is telling you right now?",
+      "What does your body need today that you've been ignoring? Give it a voice.",
+      "Show the difference between how your body felt this morning and how it feels now.",
+      "If the tightest or heaviest part of you could speak, what would it say?"
+    ]
+  },
+  {
+    day: 6,
+    title: "A Single Moment",
+    theme: "Presence",
+    prompts: [
+      "Pick one moment from today and slow it all the way down. What was actually in it?",
+      "What's a moment from the last day you'd want to keep? Capture it before it fades.",
+      "Freeze a single ordinary instant from today and give it the attention of a photograph.",
+      "When did time feel different today — faster or slower? Return to that moment.",
+      "What's one moment you were fully present for — and one you wish you'd been present for?"
+    ]
+  },
+  {
+    day: 7,
+    title: "Seven Days In",
+    theme: "First Week",
+    prompts: [
+      "A week of showing up. What surprised you about doing this every day?",
+      "Look back over your first seven cards. What theme keeps quietly reappearing?",
+      "What's different about how you're paying attention now versus day one?",
+      "Which day this week landed hardest — and why that one?",
+      "Finish it: 'After one week of this, I've noticed that I…'"
+    ]
+  },
+
+  // ---- WEEK 2: GOING DEEPER (Days 8-14) — feelings, memory, people, honesty ----
+  {
+    day: 8,
+    title: "Naming It",
+    theme: "A Feeling",
+    prompts: [
+      "What's a feeling you've had this week that you never quite found the word for?",
+      "Pick an emotion that's been visiting a lot lately and give it your full attention.",
+      "What are you feeling right now that's more complicated than 'fine'? Untangle it a little.",
+      "Where did today's strongest feeling come from? Trace it back to its start.",
+      "If a feeling you've been avoiding could speak to you, what would it want to say?"
+    ]
+  },
+  {
+    day: 9,
+    title: "The Keeping",
+    theme: "A Memory",
+    prompts: [
+      "What memory has drifted up lately, unasked? Follow it and see where it goes.",
+      "Capture a memory you'd hate to lose — in enough detail that it stays.",
+      "What's a small moment from years ago that somehow still lives in you? Revisit it.",
+      "Return to a place from your past that felt safe. What was it, and where did it go?",
+      "What memory makes you smile every single time? Deal yourself back into it for a minute."
+    ]
+  },
+  {
+    day: 10,
+    title: "Someone",
+    theme: "A Person",
+    prompts: [
+      "Who's been on your mind lately? Say what you'd say to them if they were here.",
+      "Capture someone you love the way only you see them — the details others miss.",
+      "Who shaped you more than they'll ever know? Give them their due today.",
+      "Is there someone you miss right now? Let yourself miss them out loud.",
+      "Who made your life a little better recently, and did you ever tell them? Tell them here."
+    ]
+  },
+  {
+    day: 11,
+    title: "Unsaid",
+    theme: "The Honest Thing",
+    prompts: [
+      "What's something true you've been carrying around unsaid? The page keeps secrets.",
+      "If you could say one honest thing with no consequences, what would it be?",
+      "What have you been telling yourself is fine that isn't quite fine?",
+      "Finish it without flinching: 'What I'm not saying out loud is…'",
+      "What's the thing you'd only admit to a journal? This is the journal. Admit it."
+    ]
+  },
+  {
+    day: 12,
+    title: "Wanting",
+    theme: "Desire",
+    prompts: [
+      "What do you actually want right now — under the sensible answer, the real one?",
+      "If nothing were in the way, what would you reach for first? Let yourself want it.",
+      "What have you been quietly longing for and not letting yourself say?",
+      "Name one small want you could actually give yourself this week.",
+      "What did you want badly once that you've stopped letting yourself want? Is it still there?"
+    ]
+  },
+  {
+    day: 13,
+    title: "The Hard Thing",
+    theme: "A Difficulty",
+    prompts: [
+      "What's the hardest thing you're carrying right now? Set some of it down here.",
+      "What's been weighing on you that you keep pushing to tomorrow? Face it for a few minutes.",
+      "Give shape to a worry that's been circling — sometimes naming it shrinks it.",
+      "What's a challenge you're in the middle of, and what would help even a little?",
+      "What would you tell a friend carrying exactly what you're carrying right now?"
+    ]
+  },
+  {
+    day: 14,
+    title: "Gentle",
+    theme: "Self-Kindness",
+    prompts: [
+      "Say something to yourself today in the voice you'd use for someone you love.",
+      "What do you need to forgive yourself for, even a little? Begin it here.",
+      "Where have you been too hard on yourself lately? Ease up, out loud.",
+      "What's one kind, true thing about you that you rarely let yourself hear?",
+      "If you could give the tired part of you exactly what it needs, what would that be?"
+    ]
+  },
+
+  // ---- WEEK 3: LOOKING OUTWARD (Days 15-21) — gratitude, joy, hopes, forward ----
+  {
+    day: 15,
+    title: "Thanks",
+    theme: "Gratitude",
+    prompts: [
+      "What are you genuinely grateful for today — beyond the obvious, the real one?",
+      "Who or what quietly held you up this week? Give thanks for it here.",
+      "Capture one thing you'd miss terribly if it were suddenly gone.",
+      "What small mercy of an ordinary day deserves a proper thank-you?",
+      "Finish it: 'I don't say it enough, but I'm grateful for…'"
+    ]
+  },
+  {
+    day: 16,
+    title: "What Lights You",
+    theme: "Joy",
+    prompts: [
+      "What made you feel most alive recently? Return to it and relive it a little.",
+      "What reliably lights you up — and when did you last let it?",
+      "Capture something that brought you pure, uncomplicated delight.",
+      "When did you last lose track of time in a good way? What were you doing?",
+      "What's a small joy you could give yourself more of, starting this week?"
+    ]
+  },
+  {
+    day: 17,
+    title: "Ahead",
+    theme: "A Hope",
+    prompts: [
+      "What are you quietly looking forward to? Let yourself get excited about it.",
+      "What do you hope is true a year from now? Say it as if it already is.",
+      "Capture a small hope you've been almost afraid to name.",
+      "What's one thing you want to be different, and what's the first tiny step?",
+      "Finish it: 'The version of me I'm moving toward is someone who…'"
+    ]
+  },
+  {
+    day: 18,
+    title: "What Matters",
+    theme: "Values",
+    prompts: [
+      "What matters most to you — really — and does your week reflect it?",
+      "When did you feel most like yourself recently? What were you honoring in that moment?",
+      "Name something you'd never trade away, no matter what. Why that one?",
+      "What do you want your life to stand for, in the simplest words you've got?",
+      "What's a value you were raised with that you'd keep — and one you're ready to leave behind?"
+    ]
+  },
+  {
+    day: 19,
+    title: "Becoming",
+    theme: "The Emerging You",
+    prompts: [
+      "Who are you becoming lately? Capture the version of you that's still forming.",
+      "What's shifted in you over the last few weeks, even quietly?",
+      "What old story about yourself are you starting to outgrow?",
+      "What would the you of a year ago be surprised to see about you now?",
+      "Finish it: 'I'm not who I was, and I'm learning that I…'"
+    ]
+  },
+  {
+    day: 20,
+    title: "Forward",
+    theme: "A Small Promise",
+    prompts: [
+      "What's one small promise you want to make to yourself as this deck winds down?",
+      "What have these days shown you that you want to keep doing?",
+      "Name one thing you'll carry forward from this — and how you'll actually hold onto it.",
+      "What would 'keeping this going' look like in your real, ordinary week?",
+      "Finish it and mean it: 'From here, I want to…'"
+    ]
+  },
+  {
+    day: 21,
+    title: "What the Cards Knew",
+    theme: "The Whole Deck",
+    prompts: [
+      "Twenty-one days of shuffling and showing up. What did the deck end up teaching you?",
+      "Look back through everything you've made here. What does this person keep circling?",
+      "What surprised you most about yourself across these three weeks?",
+      "Which card, on which day, still echoes? Return to it one last time.",
+      "Finish it: 'When I started, I thought this was about ____. It turned out to be about…'"
+    ]
+  }
+];
+
+// Mirror the first card into `prompt` on every day, so any reader that expects
+// a single prompt string (Home hero, PDF export, archive) has a sensible
+// default without knowing about the shuffle mechanic.
+kairosCardsDays.forEach((d) => { d.prompt = d.prompts[0]; });
+
+JOURNEY_PATHS['kairos-cards'] = createJourneyPath({
+  id: 'kairos-cards',
+  title: "Kairos Cards",
+  subtitle: "21 days you shuffle — deal yourself the prompt that fits",
+  description: "The first interactive path. Each day deals you a hand of prompts — if the card doesn't fit your day, shuffle for another until one lands. Then answer it however you like: write it, speak it, or draw it. No wrong card, no pressure — a gentle, agency-first way to start (or restart) the journaling habit. Part of the Kairos Moments package.",
+  iconName: "Shuffle",
+  days: kairosCardsDays,
+  color: "230, 145, 90", // Warm amber — sibling to Kairos Moments' gold
+  tags: ['kairos', 'interactive', 'shuffle', 'multi-modal', 'exclusive'],
+  duration: 21,
+  difficulty: 'beginner',
+  recommendedFor: ['new journalers', 'anyone restarting the habit', 'the pressure-averse'],
+  isFlexModal: true,
+  isInteractive: true,
+  isExclusive: true,
+  isNew: true,
+  price: '€2.99'
+});
+
+// ===========================================================================
+// KAIROS SPARKS — the blank-canvas member of the Kairos trilogy. Each day gives
+// a single evocative "spark" (a word, an image) and nothing else — no prompt,
+// no scaffolding. Shuffle for a different spark if one doesn't catch. Reuses
+// the same interactive `prompts` hand + shuffle mechanic as Kairos Cards.
+// Bundled into the Kairos Moments package — see constants/pathBundles.js.
+// ===========================================================================
+export const kairosSparksDays = [
+  { day: 1, title: "First Spark", theme: "Beginnings",
+    prompts: ["threshold", "the blank page", "almost", "first light", "what you came here to say", "begin"] },
+  { day: 2, title: "Light & Shadow", theme: "Light",
+    prompts: ["dusk", "a flicker", "the last light of the day", "glare", "the shadow you cast", "dawn"] },
+  { day: 3, title: "What You Carry", theme: "Weight",
+    prompts: ["anchor", "feather-light", "the thing you carry", "ballast", "what you'd set down", "the load"] },
+  { day: 4, title: "The Water", theme: "Flow",
+    prompts: ["undertow", "still water", "the flood", "the deep end", "a single ripple", "the tide going out"] },
+  { day: 5, title: "The People", theme: "Connection",
+    prompts: ["a face you miss", "the stranger", "the one who left", "your hands", "home", "a name unsaid for years"] },
+  { day: 6, title: "The Hours", theme: "Time",
+    prompts: ["later", "the long way round", "too soon", "the waiting", "again", "someday"] },
+  { day: 7, title: "Small Things", theme: "The Overlooked",
+    prompts: ["a crumb", "dust in a sunbeam", "the overlooked", "one degree warmer", "a whisper", "the smallest good thing"] },
+  { day: 8, title: "The Fire", theme: "Heat",
+    prompts: ["a spark", "ember", "ash", "the struck match", "warmth", "what's still burning"] },
+  { day: 9, title: "The Distance", theme: "Nearness",
+    prompts: ["the space between", "arm's length", "the horizon", "far", "within reach", "the gap"] },
+  { day: 10, title: "Wanting", theme: "Desire",
+    prompts: ["hunger", "enough", "the itch", "thirst", "restless", "the pull"] },
+  { day: 11, title: "The Roots", theme: "Origins",
+    prompts: ["where you're from", "the ground beneath", "buried", "deep", "home soil", "the oldest branch"] },
+  { day: 12, title: "The Rooms", theme: "Spaces",
+    prompts: ["the empty chair", "a light left on", "the window", "the hallway", "the room you avoid", "the kitchen table"] },
+  { day: 13, title: "In Motion", theme: "Movement",
+    prompts: ["leap", "drift", "the turn", "the pause", "forward", "held still"] },
+  { day: 14, title: "Openings", theme: "Endings & Beginnings",
+    prompts: ["the last page", "goodbye", "the blank page again", "what's next", "begin again", "the opening door"] }
+];
+
+// Mirror the first spark into `prompt` on every day, so any reader that expects
+// a single prompt string (Home hero, PDF export, archive) has a sensible default.
+kairosSparksDays.forEach((d) => { d.prompt = d.prompts[0]; });
+
+JOURNEY_PATHS['kairos-sparks'] = createJourneyPath({
+  id: 'kairos-sparks',
+  title: "Kairos Sparks",
+  subtitle: "14 days, one spark each — you supply the rest",
+  description: "The most open path. Each day gives you a single evocative spark — a word, an image — and nothing more. No prompt, no scaffolding: you decide what it means and where it goes. Shuffle for a different spark if one doesn't catch, then write it, speak it, or draw it. The blank-canvas member of the Kairos Collection.",
+  iconName: "Sparkles",
+  days: kairosSparksDays,
+  color: "244, 197, 102", // Bright candle-gold — completes the Kairos warm trio
+  tags: ['kairos', 'interactive', 'minimalist', 'multi-modal', 'exclusive'],
+  duration: 14,
+  difficulty: 'beginner',
+  recommendedFor: ['free spirits', 'the over-prompted', 'anyone who wants room'],
+  isFlexModal: true,
+  isInteractive: true,
   isExclusive: true,
   isNew: true,
   price: '€2.99'
