@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2267,6 +2267,32 @@ export const VERSION_HISTORY = [
   notes: [
     'Καιρός 1.0 — the first stable release. Thank you to every beta tester who journaled along the way.',
     'Kairos Moments is the first exclusive path: a one-time purchase outside the subscription, with invite codes for friends of the app.',
+    'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+
+{
+  version: '1.1.0',
+  releaseDate: '2026-07-24',
+  codename: 'The Kairos Collection',
+  features: [
+    'Two new exclusive paths join Kairos Moments to complete the Kairos Collection: "Kairos Cards" (21 days — each day deals you a hand of prompts; if a card doesn\'t fit, shuffle for another until one lands) and "Kairos Sparks" (14 days — a single word to spark each entry, and a blank page for the rest)',
+    'The whole Collection unlocks together: own any one path and all three are yours — €2.99 once, or an invite code',
+    'Every day across the Collection, you choose your medium: write it, speak it, or draw it',
+    'New "Listen" screen featuring "Ink & Intention" — a short podcast on handwriting and journaling, for the moments between entries, reachable from the Home screen and your Profile',
+    'A new "Kairos" path category joins Free and Artisan, with its own badge and filter on the Paths screen'
+  ],
+  improvements: [
+    'Choosing your Inner Aura now bathes the whole daily check-in card in that mood\'s color glow',
+    'The Home "% Complete" now reflects your overall progress across every active journey, weighted by length, instead of a single path',
+    'Journeys you\'ve started now also appear in the All Paths grid with their progress and an "In Progress" label',
+    'The Home "What\'s New" now unveils the full three-path Kairos Collection'
+  ],
+  bugFixes: [
+    'Fixed entries on the new Kairos paths being filed under the wrong journey, which left their progress and the Home screen color stuck on another path'
+  ],
+  notes: [
+    'This release completes the trilogy the app is named for: Moments to recognize the opportune moment, Cards to deal yourself the prompt, and Sparks for a blank canvas.',
     'All changes are fully backward compatible with existing user data and progress.'
   ]
 }

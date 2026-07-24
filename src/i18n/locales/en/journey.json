@@ -344,10 +344,27 @@
     "entries": "Entries",
     "complete": "Complete",
     "tapForReflection": "Tap for reflection",
+    "listenEyebrow": "New · Podcast",
+    "listenTitle": "Ink & Intention",
+    "listenSubtitle": "Handwriting & journaling, unhurried",
     "yourJourneys": "Your Journeys",
     "dayOfTotal": "Day {{day}} of {{total}}",
     "viewAllPaths": "View all paths",
     "close": "Close"
+  },
+  "listen": {
+    "title": "Listen",
+    "eyebrow": "Podcast",
+    "back": "Back",
+    "topic": "Handwriting & journaling",
+    "about": "About journaling",
+    "close": "Close",
+    "play": "Play",
+    "pause": "Pause",
+    "minutes": "{{count}} min",
+    "noAudio": "Your browser does not support audio playback.",
+    "listenExternal": "Listen",
+    "poweredBy": "Crafted with Microsoft Copilot"
   },
   "whatsNew": {
     "title": "What's New",

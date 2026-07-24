@@ -78,6 +78,31 @@ export const getMostRecentActivePathId = (userProfile) => {
 };
 
 /**
+ * Overall completion across ALL active (in-progress) journeys combined.
+ *
+ * Weighted by days rather than a flat average of percentages, so it reflects
+ * true total progress: a 9-day path finished + a 100-day path barely started
+ * reads as "how much of everything I'm working on is done", not 50%.
+ * Formula: sum(completedDays) / sum(totalDays) * 100.
+ *
+ * @param {Array} inProgressPaths - path objects from useUserProgress, each with
+ *   `completedDays` (count) and `totalDays` (duration).
+ * @returns {{ percentage:number, completedDays:number, totalDays:number, count:number }}
+ */
+export const getActiveJourneysCompletion = (inProgressPaths = []) => {
+  const active = Array.isArray(inProgressPaths) ? inProgressPaths : [];
+  if (active.length === 0) {
+    return { percentage: 0, completedDays: 0, totalDays: 0, count: 0 };
+  }
+
+  const completedDays = active.reduce((sum, p) => sum + (p.completedDays || 0), 0);
+  const totalDays = active.reduce((sum, p) => sum + (p.totalDays || p.duration || 0), 0);
+  const percentage = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
+
+  return { percentage, completedDays, totalDays, count: active.length };
+};
+
+/**
  * Updates the current path in user's profile
  * @param {Object} userProfile - User profile object
  * @param {string} pathId - Path to set as current

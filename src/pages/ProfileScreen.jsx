@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   LogOut, ChevronRight, Mail, MapPin, Calendar,
   Award, Crown, Compass, Camera, Settings, Info, HelpCircle,
-  BookOpen, Archive, Radio, Activity, CloudSun
+  BookOpen, Archive, Radio, Activity, CloudSun, Headphones
 } from 'lucide-react';
 import MoodTrends from '../components/analytics/MoodTrends';
 import { useAuth } from '../contexts/AuthContext';
@@ -331,6 +331,16 @@ const ProfileScreen = ({ handleSignOut }) => {
               <Archive size={18} />
             </div>
             <span className="glass-action-label">{t('profileScreen.archive', 'Archive')}</span>
+          </button>
+
+          <button
+            className="glass-action-card"
+            onClick={() => navigation.navigateToScreen('listen')}
+          >
+            <div className="glass-action-icon">
+              <Headphones size={18} />
+            </div>
+            <span className="glass-action-label">{t('profileScreen.listen', 'Listen')}</span>
           </button>
 
           <button

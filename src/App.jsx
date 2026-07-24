@@ -49,6 +49,7 @@ import PrivacyPolicy from './pages/Privacy';
 import TermsOfService from './pages/Terms';
 import ContactUs from './pages/Contact';
 import About from './pages/About';
+import ListenScreen from './pages/ListenScreen';
 
 // Lazy Loaded Components
 const PathSelection = lazy(() => import('./components/paths/PathSelection'));
@@ -855,6 +856,10 @@ const App = () => {
 
                 {currentScreen === 'about' && (
                   <About onBack={navigateBack} />
+                )}
+
+                {currentScreen === 'listen' && (
+                  <ListenScreen onBack={navigateBack} />
                 )}
                         
                 {/* Analysis Results */}

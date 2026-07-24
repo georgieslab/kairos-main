@@ -6,13 +6,13 @@ import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress } from '../hooks/useUserProgress';
 import { useUserStatistics } from '../hooks/useUserStatistics';
 import { getJourneyDay } from '../data/JourneyData';
-import { getMostRecentActivePathId } from '../utils/pathUtils';
+import { getMostRecentActivePathId, getActiveJourneysCompletion } from '../utils/pathUtils';
 import DynamicIcon from '../components/common/DynamicIcon';
 import ThemeSwitcher from '../components/common/ThemeSwitcher';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
 import WhatsNew from '../components/common/WhatsNew';
 import MoodWeather from '../components/common/MoodWeather';
-import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones } from 'lucide-react';
 import '../styles/components/homeScreen.css';
 import '../styles/pages/analyticsScreen.css';
 import { useTheme } from '../contexts/ThemeContext';
@@ -56,6 +56,10 @@ const HomeScreen = ({ navigateToScreen }) => {
     (lastActivePathId && inProgressPaths?.find((p) => p.id === lastActivePathId)) ||
     inProgressPaths?.[0];
   const currentPrompt = currentPath ? getJourneyDay(currentPath.nextDay, currentPath.id) : null;
+
+  // Overall completion across every active journey (weighted by days), shown on
+  // the "% Complete" vital — which opens the full journeys list on tap.
+  const activeCompletion = getActiveJourneysCompletion(inProgressPaths);
 
   // Rolling last-7-days journaling activity (oldest → today), for the activity
   // strip — a fixed Mon-Sun window meant today's progress was invisible until
@@ -266,7 +270,7 @@ const HomeScreen = ({ navigateToScreen }) => {
                 <Target size={18} />
               </div>
               <div className="vital-data">
-                <span className="vital-number">{currentPath.percentage}%</span>
+                <span className="vital-number">{activeCompletion.percentage}%</span>
                 <span className="vital-label">{t('home.complete', 'Complete')}</span>
               </div>
             </button>
@@ -274,7 +278,23 @@ const HomeScreen = ({ navigateToScreen }) => {
         </section>
       )}
 
-      {/* ========== 5. SPARK (Ambient Quote) ========== */}
+      {/* ========== 5. LISTEN (Podcast entry point → Listen screen) ========== */}
+      <button className="home-listen-card" onClick={() => navigateToScreen('listen')}>
+        <div className="home-listen-icon">
+          <Headphones size={22} />
+          <span className="home-listen-pulse" aria-hidden="true" />
+        </div>
+        <div className="home-listen-text">
+          <span className="home-listen-eyebrow">{t('home.listenEyebrow', 'New · Podcast')}</span>
+          <span className="home-listen-title">{t('home.listenTitle', 'Listen')}</span>
+          <span className="home-listen-sub">{t('home.listenSubtitle', 'Episodes on handwriting & journaling')}</span>
+        </div>
+        <div className="home-listen-eq" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </button>
+
+      {/* ========== 6. SPARK (Ambient Quote) ========== */}
       <section className={`spark-section ${timeGradient}`} onClick={changeQuote}>
         <div className="spark-glass-card">
           <div className="spark-decoration">
