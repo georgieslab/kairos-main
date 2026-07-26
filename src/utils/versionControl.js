@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.1';
 
 export const VERSION_HISTORY = [
   {
@@ -2268,6 +2268,43 @@ export const VERSION_HISTORY = [
     'Καιρός 1.0 — the first stable release. Thank you to every beta tester who journaled along the way.',
     'Kairos Moments is the first exclusive path: a one-time purchase outside the subscription, with invite codes for friends of the app.',
     'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+
+{
+  version: '1.1.0',
+  releaseDate: '2026-07-25',
+  codename: 'Fresh Prompts & Safer Foundations',
+  features: [
+    'All 49 non-exclusive journey paths — nearly 1,000 daily prompts — rewritten with sharper, more specific guided questions and a clear closing action for each day',
+    'Free vs. Artisan tier badges and a tier filter on the Paths screen, so it\'s clear at a glance which journeys are included and which require Artisan',
+    'Invite-code redemption for unlocking exclusive paths like Kairos Moments'
+  ],
+  bugFixes: [
+    'Fixed the Home screen streak color and "next day" indicator getting stuck on day 1 after completing an entry — journey progress now saves as a single atomic update instead of a fragile rebuild-and-rewrite that could silently fail',
+    'Fixed NFC tap-to-journal on flex paths (choose write, speak, or draw per day) jumping straight to the draw/upload screen instead of the medium picker'
+  ],
+  improvements: [
+    'Hardened Firestore data access rules with explicit per-user ownership checks across every collection the app reads or writes',
+    'Refined visual polish throughout the Write tab'
+  ],
+  notes: [
+    'This release focuses on trust and quality: the guided prompts across nearly every journey have been substantially rewritten for depth and specificity, journey progress tracking is more reliable, and data access rules have been tightened.',
+    'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+
+{
+  version: '1.1.1',
+  releaseDate: '2026-07-26',
+  codename: 'Sign In With Google, Fixed',
+  bugFixes: [
+    'Fixed "Sign in with Google" hanging forever on "Connecting…" in the Android app — it opened a browser tab that closed immediately and never signed you in. Google sign-in now runs natively through Google Play Services and completes without ever leaving the app.',
+    'Fixed being unable to switch Google accounts after signing out on Android — the previously chosen account was silently reused instead of showing the account picker'
+  ],
+  notes: [
+    'This patch only affects Google sign-in in the Android app. Sign-in on the web was unaffected and is unchanged.',
+    'Email and password sign-in was never affected on either platform.'
   ]
 }
 
