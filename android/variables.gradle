@@ -13,4 +13,10 @@ ext {
     androidxJunitVersion = '1.2.1'
     androidxEspressoCoreVersion = '3.6.1'
     cordovaAndroidVersion = '10.1.1'
+
+    // @capacitor-firebase/authentication gates its Google Sign-In dependencies
+    // (play-services-auth, androidx.credentials, googleid) behind this flag,
+    // which defaults to false. Without it the plugin compiles but Google
+    // sign-in fails at runtime on device.
+    rgcfaIncludeGoogle = true
 }

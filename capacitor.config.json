@@ -1,5 +1,11 @@
 {
   "appId": "com.kairos.journal",
   "appName": "Kairos",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": true,
+      "providers": ["google.com"]
+    }
+  }
 }
