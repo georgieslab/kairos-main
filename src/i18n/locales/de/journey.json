@@ -1,12 +1,22 @@
 {
   "innerAura": {
     "title": "Deine innere Aura heute",
-    "prompt": "Wie fühlt sich deine Magie heute an?",
+    "prompt": "Wie fühlt sich heute an?",
     "lunar": "Lunar",
     "ethereal": "Ätherisch",
     "sparkle": "Funkelnd",
     "radiant": "Strahlend",
-    "ember": "Glühend"
+    "ember": "Glühend",
+    "lunarShort": "Ruhig",
+    "etherealShort": "Leicht",
+    "sparkleShort": "Verspielt",
+    "radiantShort": "Fröhlich",
+    "emberShort": "Feurig",
+    "lunarFeeling": "Ruhig & nachdenklich",
+    "etherealFeeling": "Leicht & entspannt",
+    "sparkleFeeling": "Verspielt & neugierig",
+    "radiantFeeling": "Hell & fröhlich",
+    "emberFeeling": "Intensiv & voller Energie"
   },
   "analysisLoading": {
     "title": "Persönliche Einblicke werden erstellt",
@@ -124,6 +134,7 @@
     "loadingSubtitle": "Dein Reflexionsraum wird vorbereitet...",
     "dayLabel": "Tag {{day}}",
     "todaysPrompt": "Heutiger Impuls",
+    "allPrompts": "Alle Impulse",
     "yourEntry": "Dein Eintrag",
     "complete": "Abgeschlossen",
     "uploadedNoText": "Du hast für diesen Tag einen Journaleintrag hochgeladen.",
@@ -293,6 +304,8 @@
     "dayLabel": "Tag {{day}}",
     "voicePrompt": "Sprachimpuls",
     "writingPrompt": "Schreibimpuls",
+    "shuffle": "Mischen",
+    "shuffleAria": "Zum nächsten Impuls mischen",
     "promptFallback": "Was beschäftigt dich heute?",
     "themeFallback": "Reflexion",
     "recordAgain": "Erneut aufnehmen",
@@ -330,17 +343,40 @@
     "dayStreak": "Tage-Serie",
     "entries": "Einträge",
     "complete": "Abgeschlossen",
-    "tapForReflection": "Tippen zum Reflektieren"
+    "tapForReflection": "Tippen zum Reflektieren",
+    "listenEyebrow": "Neu · Podcast",
+    "listenTitle": "Ink & Intention",
+    "listenSubtitle": "Handschrift & Journaling, ohne Eile",
+    "yourJourneys": "Deine Reisen",
+    "dayOfTotal": "Tag {{day}} von {{total}}",
+    "viewAllPaths": "Alle Pfade ansehen",
+    "close": "Schließen"
+  },
+  "listen": {
+    "title": "Hören",
+    "eyebrow": "Podcast",
+    "back": "Zurück",
+    "topic": "Handschrift & Journaling",
+    "about": "Über Journaling",
+    "close": "Schließen",
+    "play": "Abspielen",
+    "pause": "Pause",
+    "minutes": "{{count}} Min.",
+    "noAudio": "Dein Browser unterstützt keine Audiowiedergabe.",
+    "listenExternal": "Anhören",
+    "poweredBy": "Erstellt mit Microsoft Copilot"
   },
   "whatsNew": {
     "title": "Was ist neu",
     "close": "Schließen",
-    "eyebrow": "Neuer exklusiver Pfad",
-    "pathTitle": "Kairos-Momente",
-    "pathText": "Der Pfad, nach dem die App benannt ist — 9 Tage über die Kunst des richtigen Augenblicks: ihn erkennen, auf ihn warten, ihn ergreifen.",
-    "perkChoice": "Du wählst jeden Tag: schreib es, sprich es aus oder zeichne es",
-    "perkPrompts": "Neun sorgfältig gestaltete Impulse, ein Bogen",
-    "perkPrice": "Einmalig freischalten für 2,99 € — oder mit Einladungscode",
-    "cta": "Zum Pfad"
+    "eyebrow": "Die Kairos-Kollektion",
+    "collectionTitle": "Drei Pfade, ein Augenblick",
+    "collectionText": "Drei Wege, dem Augenblick zu begegnen — die Sammlung ist vollständig.",
+    "momentsDesc": "Den richtigen Augenblick erkennen",
+    "cardsDesc": "Teil dir den Impuls selbst aus, misch bis er passt",
+    "sparksDesc": "Ein Funke — wohin er dich auch trägt",
+    "priceMain": "2,99 €",
+    "priceNote": "einmalig — alle drei Pfade, für immer deine. Oder per Promo-Code.",
+    "ctaCollection": "Zur Kollektion"
   }
 }

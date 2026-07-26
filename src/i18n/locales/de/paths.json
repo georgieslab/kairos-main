@@ -110,6 +110,7 @@
     "durationDays": "{{count}} Tage",
     "percentComplete": "{{pct}}% abgeschlossen",
     "done": "Fertig",
+    "inProgress": "In Bearbeitung",
     "continueDay": "Weiter zu Tag {{day}}",
     "reviewJourney": "Reise ansehen",
     "startJourney": "Reise starten",
@@ -124,10 +125,12 @@
     "unlockFor": "Freischalten für {{price}}",
     "free": "Kostenlos",
     "artisan": "Artisan",
+    "kairos": "Kairos",
     "filterByTier": "Nach Stufe filtern",
     "filterAll": "Alle",
     "filterFree": "Kostenlos",
-    "filterArtisan": "Artisan"
+    "filterArtisan": "Artisan",
+    "filterKairos": "Kairos"
   },
   "pathSuggestionCard": {
     "aiMatchedTag": "KI-abgestimmt",
@@ -139,6 +142,7 @@
     "perkDays": "{{count}} sorgfältig gestaltete Tage",
     "perkChoice": "Du wählst jeden Tag: schreib es, sprich es aus oder zeichne es",
     "perkExclusive": "Exklusiver Pfad — für immer deiner, eine Zahlung",
+    "perkBundle": "Eine Zahlung schaltet das ganze Kairos-Momente-Paket frei — alle drei Pfade",
     "buy": "Freischalten für {{price}}",
     "opening": "Sichere Kasse wird geöffnet...",
     "error": "Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.",

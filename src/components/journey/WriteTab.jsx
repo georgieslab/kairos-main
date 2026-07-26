@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Palette,
   PenLine,
+  Shuffle,
 } from 'lucide-react';
 import { getJourneyDay, getJourneyPath } from '../../data/JourneyData';
 import { useAuth } from '../../contexts/AuthContext';
@@ -37,6 +38,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
   const [loadError, setLoadError] = useState(null);
   const [showTip, setShowTip] = useState(true);
   const [completionStatus, setCompletionStatus] = useState('active');
+  // Interactive paths (Kairos Cards): the day carries a `prompts` hand the
+  // user shuffles through. cardIndex tracks which card is showing.
+  const [cardIndex, setCardIndex] = useState(0);
 
   const isNavigating = useRef(false);
   const initRef = useRef(false);
@@ -115,12 +119,23 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
     }
   }, [currentPath, currentDay, activePath, activeDay, isLoading, isJourneyCompleted, isDayCompleted]);
 
-  const pathDetails = getJourneyPath(activePath) || { 
-    title: 'Self-Discovery', iconName: 'Compass', color: '85,139,110', duration: 10 
+  // Re-deal to the first card whenever the day or path changes.
+  useEffect(() => { setCardIndex(0); }, [activeDay, activePath]);
+
+  const pathDetails = getJourneyPath(activePath) || {
+    title: 'Self-Discovery', iconName: 'Compass', color: '85,139,110', duration: 10
   };
   const pathColorRgb = pathDetails.color || '85,139,110';
   const isFlex = isFlexPath(activePath);
   const isVoice = isVoicePath(activePath);
+
+  // Shuffle: when the day carries a hand of prompts, the user can deal the next
+  // card. currentPrompt is what shows and what gets saved with the entry.
+  const promptHand = Array.isArray(journeyData?.prompts) ? journeyData.prompts : null;
+  const handLength = promptHand?.length || 0;
+  const currentPrompt = promptHand ? promptHand[cardIndex % handLength] : journeyData?.prompt;
+  const canShuffle = handLength > 1;
+  const shuffleCard = () => { if (canShuffle) setCardIndex((i) => (i + 1) % handLength); };
 
   // `mode` matters only for flex paths (choose-your-medium):
   // 'voice' | 'draw' | 'write'. Everything else keeps its single
@@ -139,7 +154,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
     navigateToScreen(useVoice ? 'voice-upload' : 'upload', {
       pathId: activePath,
       day: activeDay,
-      prompt: journeyData?.prompt,
+      // Save the card the user landed on after shuffling (falls back to the
+      // day's single prompt on non-interactive paths).
+      prompt: currentPrompt,
       theme: journeyData?.theme,
       // Tells JournalUpload which instruction set to show ('draw' | 'write')
       ...(isFlex && !useVoice ? { flexMode: mode } : {}),
@@ -268,9 +285,27 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
             </span>
           </div>
 
-          <p className="write-prompt-text">
-            "{journeyData?.prompt || t('writeTab.promptFallback', 'What is present for you today?')}"
+          <p className="write-prompt-text" key={cardIndex}>
+            "{currentPrompt || t('writeTab.promptFallback', 'What is present for you today?')}"
           </p>
+
+          {canShuffle && (
+            <button
+              type="button"
+              className="write-shuffle-btn"
+              onClick={shuffleCard}
+              style={{
+                backgroundColor: `rgba(${pathColorRgb}, 0.12)`,
+                borderColor: `rgba(${pathColorRgb}, 0.25)`,
+                color: `rgb(${pathColorRgb})`,
+              }}
+              aria-label={t('writeTab.shuffleAria', 'Shuffle to the next prompt')}
+            >
+              <Shuffle size={15} />
+              <span>{t('writeTab.shuffle', 'Shuffle')}</span>
+              <span className="write-shuffle-count">{(cardIndex % handLength) + 1}/{handLength}</span>
+            </button>
+          )}
 
           <div className="write-theme-chip">
             <Tag size={12} />

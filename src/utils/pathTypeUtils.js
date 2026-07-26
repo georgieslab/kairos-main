@@ -37,7 +37,9 @@ export const getDayType = (pathId, day) => {
 // picked that day. Nothing else in the app currently reads those for a flex
 // path, but wire up a typeOverride there too before using them for one.
 const FLEX_PATHS = [
-  'kairos-moments'
+  'kairos-moments',
+  'kairos-cards',
+  'kairos-sparks'
 ];
 
 export const isFlexPath = (pathId) => {
@@ -53,7 +55,9 @@ const VISUAL_PATHS = [
   'abstract-emotions',
   'visual-storytelling',
   'ink-essence',
-  'kairos-moments' // flex: drawing branch of the voice-or-draw choice
+  'kairos-moments', // flex: drawing branch of the voice-or-draw choice
+  'kairos-cards', // flex: drawing branch of the write-speak-or-draw choice
+  'kairos-sparks' // flex: drawing branch of the write-speak-or-draw choice
 ];
 
 // Traditional Text-Based Journaling Paths - handwritten reflection

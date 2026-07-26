@@ -8,7 +8,7 @@ An AI-powered journaling companion that turns handwritten pages, spoken reflecti
 
 [**✦ Live App**](https://reflection-writer.web.app) · [Landing Page](https://reflection-writer.web.app/landing.html)
 
-![Version](https://img.shields.io/badge/version-1.0.0-d4af37?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.1.0-d4af37?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Android-558B6E?style=flat-square)
 ![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-Hosting%20%7C%20Functions-ffca28?style=flat-square&logo=firebase&logoColor=black)
@@ -26,11 +26,15 @@ It ships as a responsive web app (PWA, installable) and a native Android app bui
 
 ## 🌟 Feature Highlights
 
-### 🗺️ 51 Guided Journey Paths
+### 🗺️ 53 Guided Journey Paths
 Multi-day programs (7–100 days) across self-discovery, emotional intelligence, mindfulness, habit formation, shadow work, creative expression, voice confidence, and more — each with professionally crafted daily prompts, its own color theme, and difficulty level.
 
-### ⏳ Kairos Moments — the exclusive path
-The path the app is named for: **9 days on the art of the opportune moment** — recognizing it, waiting for it, seizing it. Every day *you* choose your medium: **write it, speak it, or draw it.** Unlocked once for €2.99 via Stripe (no subscription), or instantly with an invite code. Its gold card sits at the top of the Paths screen with a flipping hourglass and rising gold dust.
+### ✨ The Kairos Collection — three exclusive paths
+The trilogy the app is named for, sharing one warm-gold identity and one **€2.99** unlock (no subscription) — or an invite code. Owning any one unlocks all three; every path lets *you* choose your medium each day: **write it, speak it, or draw it.**
+
+- **⏳ Kairos Moments** — *9 days* on the art of the opportune moment: recognizing it, waiting for it, seizing it. Its gold card tops the Paths screen with a flipping hourglass and rising gold dust.
+- **🔀 Kairos Cards** — *21 days*, the interactive path. Each day deals you a hand of prompts; if a card doesn't fit, **shuffle** for another until one lands.
+- **✨ Kairos Sparks** — *14 days*, the most open path. One single-word spark per day (shuffleable) and a blank canvas — you supply the rest.
 
 ### 🎙️ 🖌️ ✍️ Truly Multi-Modal Journaling
 - **Handwritten** — photograph up to 5 journal pages; text is extracted and analyzed
@@ -39,7 +43,10 @@ The path the app is named for: **9 days on the art of the opportune moment** —
 - **Flex paths** — pick a different medium every day; the AI recognizes what you gave it and responds accordingly
 
 ### 🔮 Inner Aura
-A one-tap daily mood check-in on the Home screen — lunar, ethereal, sparkle, radiant, or ember. Your aura history flows into the Insights dashboard, the Profile mood board, the AI's empathy context, and even your PDF exports.
+A one-tap daily mood check-in on the Home screen — lunar, ethereal, sparkle, radiant, or ember. Choosing an aura bathes the whole check-in card in that mood's colour glow. Your aura history flows into the Insights dashboard, the Profile mood board, the AI's empathy context, and even your PDF exports.
+
+### 🎧 Listen
+A dedicated episode page for **Ink & Intention** — a short podcast on handwriting and journaling, for the moments between entries. Animated cover art, an "In this episode" rundown, and an inline player, reached from a live-equalizer card on the Home screen (and in Profile). English-only, crafted with Microsoft Copilot.
 
 ### 🧠 AI Insights
 Streaks, emotion trends, recurring themes, a journaling calendar, AI personality analysis, and a daily AI question — all generated from your actual entries via Claude, proxied server-side so no API key ever touches the client.
@@ -79,7 +86,7 @@ Frosted-glass surfaces, drifting aurora backgrounds, a sliding glass tab pill wi
 | `callClaude` | Server-side proxy for all AI analysis (API key never leaves the server) |
 | `transcribeAudio` / `transcribeAudioHttp` | Whisper transcription for Android voice journals |
 | `createCheckoutSession` | Artisan subscription checkout |
-| `createPathCheckoutSession` | One-time exclusive path purchase (inline €2.99 price) |
+| `createPathCheckoutSession` | One-time exclusive path purchase (inline €2.99 price) — buying any Kairos path unlocks the whole Collection |
 | `stripeWebhook` | Activates subscriptions & grants purchased paths (`purchasedPaths`) |
 | `getCustomerPortalUrl` · `cancelSubscription` · `getSubscriptionStatus` | Subscription lifecycle |
 
@@ -96,10 +103,11 @@ src/
 ├── hooks/               # useUserProgress, useUserStatistics, useNFC, ...
 ├── services/            # claudeService, exportService, SubscriptionService, ...
 ├── data/
-│   ├── JourneyData.js           # All 51 paths + daily prompts (EN)
+│   ├── JourneyData.js           # All 53 paths + daily prompts (EN)
+│   ├── podcasts.js              # Listen-screen episodes (handwriting & journaling)
 │   └── journeyTranslations/de/  # German prompt translations (auto-discovered)
 ├── i18n/                # react-i18next config + locales/{en,de}/*.json
-├── constants/           # moods.js (Inner Aura), inviteCodes.js
+├── constants/           # moods.js (Inner Aura), inviteCodes.js, pathBundles.js (Kairos Collection)
 ├── utils/               # pathTypeUtils, versionControl (changelog), ...
 └── styles/              # Per-component CSS (Apple Spatial Glass)
 

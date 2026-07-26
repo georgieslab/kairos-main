@@ -1,12 +1,22 @@
 {
   "innerAura": {
     "title": "Today's inner aura",
-    "prompt": "What is your magic like today?",
+    "prompt": "How does today feel?",
     "lunar": "Lunar",
     "ethereal": "Ethereal",
     "sparkle": "Sparkle",
     "radiant": "Radiant",
-    "ember": "Ember"
+    "ember": "Ember",
+    "lunarShort": "Calm",
+    "etherealShort": "Light",
+    "sparkleShort": "Playful",
+    "radiantShort": "Bright",
+    "emberShort": "Fiery",
+    "lunarFeeling": "Calm & reflective",
+    "etherealFeeling": "Light & at ease",
+    "sparkleFeeling": "Playful & curious",
+    "radiantFeeling": "Bright & joyful",
+    "emberFeeling": "Intense & fired up"
   },
   "analysisLoading": {
     "title": "Generating Personalized Insights",
@@ -124,6 +134,7 @@
     "loadingSubtitle": "Preparing your reflection space...",
     "dayLabel": "Day {{day}}",
     "todaysPrompt": "Today's Prompt",
+    "allPrompts": "All Prompts",
     "yourEntry": "Your Entry",
     "complete": "Complete",
     "uploadedNoText": "You uploaded a journal entry for this day.",
@@ -293,6 +304,8 @@
     "dayLabel": "Day {{day}}",
     "voicePrompt": "Voice prompt",
     "writingPrompt": "Writing prompt",
+    "shuffle": "Shuffle",
+    "shuffleAria": "Shuffle to the next prompt",
     "promptFallback": "What is present for you today?",
     "themeFallback": "Reflection",
     "recordAgain": "Record Again",
@@ -330,17 +343,40 @@
     "dayStreak": "Day Streak",
     "entries": "Entries",
     "complete": "Complete",
-    "tapForReflection": "Tap for reflection"
+    "tapForReflection": "Tap for reflection",
+    "listenEyebrow": "New · Podcast",
+    "listenTitle": "Ink & Intention",
+    "listenSubtitle": "Handwriting & journaling, unhurried",
+    "yourJourneys": "Your Journeys",
+    "dayOfTotal": "Day {{day}} of {{total}}",
+    "viewAllPaths": "View all paths",
+    "close": "Close"
+  },
+  "listen": {
+    "title": "Listen",
+    "eyebrow": "Podcast",
+    "back": "Back",
+    "topic": "Handwriting & journaling",
+    "about": "About journaling",
+    "close": "Close",
+    "play": "Play",
+    "pause": "Pause",
+    "minutes": "{{count}} min",
+    "noAudio": "Your browser does not support audio playback.",
+    "listenExternal": "Listen",
+    "poweredBy": "Crafted with Microsoft Copilot"
   },
   "whatsNew": {
     "title": "What's New",
     "close": "Close",
-    "eyebrow": "New exclusive path",
-    "pathTitle": "Kairos Moments",
-    "pathText": "The path the app is named for — 9 days on the art of the opportune moment: recognizing it, waiting for it, seizing it.",
-    "perkChoice": "You choose each day: write it, speak it, or draw it",
-    "perkPrompts": "Nine carefully crafted prompts, one arc",
-    "perkPrice": "One-time unlock for €2.99 — or an invite code",
-    "cta": "See the path"
+    "eyebrow": "The Kairos Collection",
+    "collectionTitle": "Three paths, one moment",
+    "collectionText": "Three ways to meet the moment — the collection is complete.",
+    "momentsDesc": "Recognize the opportune moment",
+    "cardsDesc": "Deal yourself the prompt, shuffle till it fits",
+    "sparksDesc": "One spark — wherever it takes you",
+    "priceMain": "€2.99",
+    "priceNote": "once — all three paths, yours forever. Or unlock with a promo code.",
+    "ctaCollection": "Explore the collection"
   }
 }

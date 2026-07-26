@@ -6414,6 +6414,17 @@
 
 .tier-chip-artisan.is-active svg { color: #ffd86b; }
 
+/* Kairos chip — violet, marks the exclusive one-time Kairos paths */
+.tier-chip-kairos svg { color: #a78bfa; }
+
+.tier-chip-kairos.is-active {
+  background: rgba(167, 139, 250, 0.16);
+  border-color: rgba(167, 139, 250, 0.4);
+  color: #c4b5fd;
+}
+
+.tier-chip-kairos.is-active svg { color: #c4b5fd; }
+
 /* Light theme */
 .light-theme .tier-chip {
   background: rgba(0, 0, 0, 0.03);
@@ -6626,6 +6637,34 @@
   color: #34d399;
 }
 
+/* In Progress label — shown on active path cards in the grid, tinted to the
+   path's own colour with a soft pulsing dot. Higher specificity than
+   `.card-progress-stats span` so the colour wins. */
+.card-progress-stats .in-progress-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgb(var(--c));
+}
+
+.in-progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(var(--c));
+  flex-shrink: 0;
+  animation: inProgressPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes inProgressPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .in-progress-dot { animation: none; }
+}
+
 /* Tags */
 .card-tags-row {
   display: flex;
@@ -6806,6 +6845,27 @@
 }
 
 .light-theme .meta-pill-artisan svg { color: #9a7318; }
+
+/* Kairos pill — violet ✨, marks the exclusive one-time Kairos paths. Sits in
+   the meta row like Free/Artisan so every card carries its tier in one spot. */
+.meta-pill-kairos {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.28);
+}
+
+.meta-pill-kairos svg {
+  flex-shrink: 0;
+  color: #a78bfa;
+}
+
+.light-theme .meta-pill-kairos {
+  color: #7c5cd6;
+  background: rgba(167, 139, 250, 0.14);
+  border-color: rgba(167, 139, 250, 0.38);
+}
+
+.light-theme .meta-pill-kairos svg { color: #7c5cd6; }
 
 @media (prefers-reduced-motion: reduce) {
   .glass-path-card.is-exclusive::after,

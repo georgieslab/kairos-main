@@ -377,7 +377,7 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
                 ) : (
                   <>
                     <Send size={18} />
-                    <span>{t('dailyAIQuestion.askAI', 'Ask AI')}</span>
+                    <span>{t('dailyAIQuestion.askAI', 'Ask Kairos')}</span>
                   </>
                 )}
               </button>

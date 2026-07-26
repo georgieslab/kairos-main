@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 import {
   Search, X, Play, ArrowRight, BookOpen, Clock, Target, Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
   Book, Droplet, Star, Zap, Archive, Lightbulb, Leaf, Coins, Brush, Feather,
-  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock, Crown
+  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock, Crown, Shuffle
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserProgress } from '../../hooks/useUserProgress';
 import { getAllJourneyPaths } from '../../data/JourneyData';
 import { getPathTier } from '../../services/SubscriptionService';
+import { isExclusivePathUnlocked } from '../../constants/pathBundles';
 import { getNextDayForPath } from '../../utils/userProgress';
 import PathSuggestionCard from './PathSuggestionCard';
 import PathQuestionnaire from './PathQuestionnaire';
@@ -22,7 +23,7 @@ import '../../styles/components/appleGlassNav.css';
 const ICON_MAP = {
   Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
   Book, Droplet, Star, Zap, Clock, Archive, Target, Lightbulb, Leaf,
-  Coins, Brush, Sparkles, Feather, Hourglass
+  Coins, Brush, Sparkles, Feather, Hourglass, Shuffle, Layers
 };
 
 const PathSelection = ({ navigateToScreen, currentPath }) => {
@@ -31,7 +32,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
   const { inProgressPaths, completedPaths } = useUserProgress();
 
   const [activeTab, setActiveTab] = useState('explore');
-  const [tierFilter, setTierFilter] = useState('all'); // 'all' | 'free' | 'artisan'
+  const [tierFilter, setTierFilter] = useState('all'); // 'all' | 'free' | 'artisan' | 'exclusive'
   const [searchQuery, setSearchQuery] = useState('');
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -39,9 +40,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
   const [unlockPath, setUnlockPath] = useState(null);
 
   // Exclusive paths are one-time purchases stored on the user doc
+  // Exclusive paths are one-time purchases stored on the user doc. Bundle
+  // members (e.g. Kairos Cards) also unlock when the user owns the package
+  // anchor (kairos-moments) — see constants/pathBundles.js.
   const isPathUnlocked = useCallback((path) => {
     if (!path?.isExclusive) return true;
-    return (userProfile?.purchasedPaths || []).includes(path.id);
+    return isExclusivePathUnlocked(path.id, userProfile?.purchasedPaths || []);
   }, [userProfile?.purchasedPaths]);
 
   // Exclusive and new paths surface at the top of the grid (stable sort keeps
@@ -66,21 +70,19 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
       );
     }
 
-    // Tier filter: 'free' shows only free paths; 'artisan' shows all paid
-    // paths (Artisan subscription + one-time-purchase exclusives).
-    if (tierFilter === 'free') {
-      paths = paths.filter(p => getPathTier(p) === 'free');
-    } else if (tierFilter === 'artisan') {
-      paths = paths.filter(p => getPathTier(p) !== 'free');
+    // Tier filter — each chip shows exactly its own tier:
+    // 'free', 'artisan' (subscription), 'exclusive' (Kairos one-time paths).
+    if (tierFilter !== 'all') {
+      paths = paths.filter(p => getPathTier(p) === tierFilter);
     }
 
     if (activeTab === 'completed') return paths.filter(p => completedPaths.some(cp => cp.id === p.id));
-    // Explore: only paths not already shown in "Current Journeys" or "Completed"
-    return paths.filter(p =>
-      !inProgressPaths.some(ip => ip.id === p.id) &&
-      !completedPaths.some(cp => cp.id === p.id)
-    );
-  }, [allPaths, activeTab, tierFilter, searchQuery, inProgressPaths, completedPaths]);
+    // Explore: every path except completed ones (which have their own tab).
+    // In-progress paths ARE included so the grid is comprehensive — their cards
+    // show a progress bar and an "In Progress" label (they also appear in the
+    // Current Journeys carousel above for quick continue).
+    return paths.filter(p => !completedPaths.some(cp => cp.id === p.id));
+  }, [allPaths, activeTab, tierFilter, searchQuery, completedPaths]);
 
   const getIcon = (name) => {
     const Icon = ICON_MAP[name] || Compass;
@@ -140,7 +142,7 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     const progress = inProgressPaths.find(p => p.id === path.id);
     const isCompleted = completedPaths.some(p => p.id === path.id);
     const isActive = !!progress;
-    const completionPct = isActive ? path.percentage || 0 : (isCompleted ? 100 : 0);
+    const completionPct = isActive ? (progress?.percentage || 0) : (isCompleted ? 100 : 0);
     const isLocked = path.isExclusive && !isPathUnlocked(path);
     const tier = getPathTier(path); // 'free' | 'artisan' | 'exclusive'
 
@@ -203,6 +205,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
                   {t('pathSelection.artisan', 'Artisan')}
                 </span>
               )}
+              {tier === 'exclusive' && (
+                <span className="meta-pill meta-pill-kairos">
+                  <Sparkles size={12} />
+                  {t('pathSelection.kairos', 'Kairos')}
+                </span>
+              )}
               {isLocked && path.price && (
                 <span className="meta-pill meta-pill-price">
                   <Lock size={12} />
@@ -221,6 +229,12 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
             </div>
             <div className="card-progress-stats">
               <span>{t('pathSelection.percentComplete', '{{pct}}% complete', { pct: completionPct })}</span>
+              {isActive && (
+                <span className="in-progress-label">
+                  <span className="in-progress-dot" aria-hidden="true" />
+                  {t('pathSelection.inProgress', 'In Progress')}
+                </span>
+              )}
               {isCompleted && <span className="completed-check"><CheckCircle size={12} /> {t('pathSelection.done', 'Done')}</span>}
             </div>
           </div>
@@ -347,6 +361,15 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
         >
           <Crown size={13} />
           {t('pathSelection.filterArtisan', 'Artisan')}
+        </button>
+        <button
+          className={`tier-chip tier-chip-kairos ${tierFilter === 'exclusive' ? 'is-active' : ''}`}
+          onClick={() => setTierFilter('exclusive')}
+          role="tab"
+          aria-selected={tierFilter === 'exclusive'}
+        >
+          <Sparkles size={13} />
+          {t('pathSelection.filterKairos', 'Kairos')}
         </button>
       </div>
 

@@ -2328,37 +2328,28 @@ function extractDominantThemes(entries) {
     .map(([theme]) => theme);
 }
 
+// Derive the journeyProgress field name for any path id, algorithmically:
+// kebab/space id -> camelCase + "Progress" (e.g. 'kairos-sparks' ->
+// 'kairosSparksProgress'). This MUST match pathUtils.getProgressFieldForPath
+// so writes here land where the rest of the app reads. It previously used a
+// hardcoded lookup that silently fell back to 'selfDiscoveryProgress' for any
+// unmapped id — which misfiled every Kairos-path entry (Moments/Cards/Sparks)
+// into self-discovery, leaving those journeys' progress and the Home glow stuck.
 function getProgressFieldForPath(pathId) {
-  const fieldMap = {
-    'self-discovery': 'selfDiscoveryProgress',
-    'emotional-intelligence': 'emotionalIntelligenceProgress',
-    'mindfulness-awareness': 'mindfulnessAwarenessProgress',
-    'transformation-journey': 'transformationJourneyProgress',
-    'creative-expression': 'creativeExpressionProgress',
-    'habit-formation': 'habitFormationProgress',
-    'life-vision': 'lifeVisionProgress',
-    'mindful-visualization': 'mindfulVisualizationProgress',
-    'life-values': 'lifeValuesProgress',
-    'relationship-mastery': 'relationshipMasteryProgress',
-    'financial-mindfulness': 'financialMindfulnessProgress',
-    'gratitude-practice': 'gratitudePracticeProgress',
-    'shadow-work': 'shadowWorkProgress',
-    'nature-connection': 'natureConnectionProgress',
-    'holistic-transformation': 'holisticTransformationProgress',
-    'voice-discovery': 'voiceDiscoveryProgress',
-    'spoken-emotions': 'spokenEmotionsProgress',
-    'vocal-confidence': 'vocalConfidenceProgress',
-    'storytelling-voice': 'storytellingVoiceProgress',
-    'meditation-speaking': 'meditationSpeakingProgress',
-    'artistic-soul-expression': 'artisticSoulExpressionProgress',
-    'color-psychology': 'colorPsychologyProgress',
-    'sacred-geometry': 'sacredGeometryProgress',
-    'nature-sketching': 'natureSketchingProgress',
-    'abstract-emotions': 'abstractEmotionsProgress',
-    'visual-storytelling': 'visualStorytellingProgress',
-    'ink-essence': 'inkEssenceProgress'
-  };
-  return fieldMap[pathId] || 'selfDiscoveryProgress';
+  if (!pathId) return 'selfDiscoveryProgress';
+
+  const camelId = pathId
+    .replace(/[^a-zA-Z0-9]/g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .map((word, index) =>
+      index === 0
+        ? word.toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join('');
+
+  return `${camelId}Progress`;
 }
 
 function logAnalyticsEvent(eventName, eventParams = {}) {
