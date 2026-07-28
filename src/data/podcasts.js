@@ -4,8 +4,8 @@
 // English-only content by design (only the screen chrome is localized).
 //
 // To publish audio: drop the file in `public/podcasts/` and point `audioUrl` at it
-// (e.g. '/podcasts/ink-and-intention.mp3'), OR omit audioUrl and set an external
-// `link` to open in a new tab.
+// (e.g. '/podcasts/ink-and-intention.m4a' — .m4a/AAC and .mp3 both play natively),
+// OR omit audioUrl and set an external `link` to open in a new tab.
 
 export const PODCAST = {
   title: 'Ink & Intention',
@@ -13,7 +13,7 @@ export const PODCAST = {
   description:
     "A quiet conversation about writing by hand in a world of keyboards and voice notes — why the slow act of forming letters sharpens memory and focus, how a blank page becomes a daily ritual, and small, forgiving ways to make journaling a habit that lasts.",
   durationMin: 20,
-  audioUrl: '/podcasts/ink-and-intention.mp3',
+  audioUrl: '/podcasts/ink-and-intention.aac',
   // link: 'https://…', // used instead of the inline player when there's no audioUrl
 };
 

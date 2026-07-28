@@ -1,0 +1,24 @@
+{
+  "header": {
+    "title": "შენი დღიურის დაფა",
+    "subtitle": "თვალი ადევნე შენს პროგრესსა და ინსაითებს"
+  },
+  "stats": {
+    "totalEntries": "სულ ჩანაწერი",
+    "journeyCompleted": "მოგზაურობა დასრულდა!",
+    "percentComplete": "მოგზაურობის {{percent}}% დასრულებულია",
+    "currentStreak": "მიმდინარე სერია",
+    "daysInARowCount": "{{count}} დღე ზედიზედ",
+    "daysInARow": "დღე ზედიზედ",
+    "topTheme": "მთავარი თემა",
+    "noneYet": "ჯერ არაფერი",
+    "basedOnJournalContent": "შენი ჩანაწერების შინაარსზე დაყრდნობით",
+    "bestJournalingDay": "საუკეთესო დღე წერისთვის",
+    "mostFrequentDay": "ამ დღეს ყველაზე ხშირად წერ"
+  },
+  "tabs": {
+    "overview": "მიმოხილვა",
+    "keyInsights": "მთავარი ინსაითები",
+    "pastEntries": "წინა ჩანაწერები"
+  }
+}

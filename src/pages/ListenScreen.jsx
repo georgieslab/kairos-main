@@ -3,7 +3,7 @@
 // journaling. Reached from the Home card and Profile → Listen. Episode content
 // is English-only (see src/data/podcasts.js); only the chrome is localized.
 //
-// A big glowing Play/Pause button is the centrepiece, driving a hidden <audio>
+// A big glowing Blob Play/Pause button is the centrepiece, driving a hidden <audio>
 // element with a seekable progress bar. A glassy pop-up (portaled to <body>)
 // carries the "About journaling" info.
 
@@ -63,7 +63,7 @@ const ListenScreen = ({ onBack }) => {
         <span className="listen-eyebrow">{t('listen.eyebrow', 'Podcast')}</span>
       </div>
 
-      {/* Stage — the glowing Play button is the centrepiece */}
+      {/* Stage — the glowing Blob Play button is the centrepiece */}
       <div className="listen-stage">
         <div className="listen-stage-glow" aria-hidden="true" />
         <button
@@ -147,7 +147,6 @@ const ListenScreen = ({ onBack }) => {
 
       {/* Attribution */}
       <p className="listen-powered">
-        <Sparkles size={12} />
         {t('listen.poweredBy', 'Crafted with Microsoft Copilot')}
       </p>
 

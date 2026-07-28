@@ -1,0 +1,13 @@
+{
+  "weatherDialog": {
+    "feelsLike": "იგრძნობა როგორც",
+    "humidity": "ტენიანობა",
+    "wind": "ქარი",
+    "visibility": "ხილვადობა",
+    "sunrise": "მზის ამოსვლა",
+    "sunset": "მზის ჩასვლა"
+  },
+  "weatherWidget": {
+    "unavailable": "ამინდი მიუწვდომელია"
+  }
+}

@@ -74,7 +74,7 @@
 .spatial-avatar__initials {
   color: rgba(255, 255, 255, 0.95);
   font-weight: 700;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Noto Sans Georgian', sans-serif;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   z-index: 2;
   letter-spacing: -0.5px;

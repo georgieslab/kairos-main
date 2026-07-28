@@ -11,7 +11,7 @@
 /* ===== GLOBAL CONTAINER ===== */
 .spatial-home {
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   padding: 20px 16px 40px;
   position: relative;
   /* clip, not hidden: hidden would force overflow-y:auto and make this a

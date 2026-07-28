@@ -7,7 +7,8 @@
     "title": "Language",
     "description": "Choose your preferred app language",
     "english": "English",
-    "german": "Deutsch"
+    "german": "Deutsch",
+    "georgian": "ქართული"
   },
   "subscriptionSection": {
     "upgradeError": "Error starting upgrade. Please try again.",

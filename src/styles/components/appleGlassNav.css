@@ -1376,7 +1376,7 @@
 .analytics-container *,
 .analytics-container *::before,
 .analytics-container *::after {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   box-sizing: border-box;
 }
 

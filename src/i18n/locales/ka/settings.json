@@ -1,0 +1,125 @@
+{
+  "theme": {
+    "dark": "მუქი",
+    "light": "ღია"
+  },
+  "language": {
+    "title": "ენა",
+    "description": "აირჩიე აპლიკაციის სასურველი ენა",
+    "english": "English",
+    "german": "Deutsch",
+    "georgian": "ქართული"
+  },
+  "subscriptionSection": {
+    "upgradeError": "განახლების დაწყებისას მოხდა შეცდომა. გთხოვთ, სცადოთ ხელახლა.",
+    "portalError": "მართვის პორტალის გახსნისას მოხდა შეცდომა.",
+    "sectionTitle": "გამოწერა",
+    "loading": "იტვირთება გამოწერა…",
+    "artisanTitle": "Artisan-წევრი",
+    "artisanDescription": "შენ გაქვს წვდომა ყველა პრემიუმ ფუნქციაზე",
+    "manageButton": "გამოწერის მართვა",
+    "freeTitle": "უფასო გეგმა",
+    "freeDescription": "გადადი Artisan-ზე შეუზღუდავი ფუნქციებისთვის",
+    "upgradeButton": "გადადი Artisan-ზე"
+  },
+  "profile": {
+    "avatarUpdateSuccess": "ავატარი წარმატებით განახლდა!",
+    "avatarUpdateError": "ავატარის განახლება ვერ მოხერხდა.",
+    "saveSuccess": "პარამეტრები წარმატებით შეინახა!",
+    "saveError": "პარამეტრების შენახვა ვერ მოხერხდა.",
+    "sectionTitle": "პროფილი",
+    "displayNameLabel": "სახელი",
+    "displayNamePlaceholder": "შენი სახელი",
+    "emailLabel": "ელფოსტის მისამართი",
+    "emailHint": "ელფოსტის შეცვლა შეუძლებელია",
+    "birthdayLabel": "დაბადების დღე",
+    "optional": "არასავალდებულო",
+    "cityLabel": "ქალაქი",
+    "cityPlaceholder": "შეიყვანე შენი ქალაქი",
+    "saving": "ინახება…",
+    "saveChanges": "ცვლილებების შენახვა"
+  },
+  "dataPrivacy": {
+    "exportSuccess": "მონაცემები წარმატებით გატანილია!",
+    "exportError": "მონაცემების გატანა ვერ მოხერხდა.",
+    "sectionTitle": "მონაცემები და კონფიდენციალურობა",
+    "journalEntriesLabel": "დღიურის ჩანაწერები",
+    "insightsGeneratedLabel": "შექმნილი ინსაითები",
+    "exportButton": "ჩემი მონაცემების გატანა",
+    "deleteAccountButton": "ანგარიშის წაშლა"
+  },
+  "deleteAccount": {
+    "errorEnterPassword": "გთხოვთ, შეიყვანოთ პაროლი",
+    "errorTypeDelete": "დასადასტურებლად აკრიფე DELETE",
+    "progressVerifying": "მოწმდება შენი ვინაობა...",
+    "progressDeletingEntries": "იშლება დღიურის ჩანაწერები...",
+    "progressRemovingFiles": "იშლება ატვირთული ფაილები...",
+    "progressDeletingProfile": "იშლება შენი პროფილი...",
+    "progressDone": "ანგარიში წარმატებით წაიშალა",
+    "errorGeneric": "ანგარიშის წაშლა ვერ მოხერხდა",
+    "errorUnexpected": "მოხდა მოულოდნელი შეცდომა. გთხოვთ, სცადოთ ხელახლა.",
+    "step1Title": "ანგარიშის წაშლა",
+    "step1Subtitle": "ამ მოქმედების გაუქმება შეუძლებელია",
+    "willDeleteTitle": "სამუდამოდ წაიშლება:",
+    "calculating": "მიმდინარეობს შენი მონაცემების დათვლა...",
+    "journalEntriesCount": "{{count}} ჩანაწერი დღიურში",
+    "allPhotos": "ყველა ატვირთული ფოტო და სურათი",
+    "allVoice": "ყველა ხმოვანი ჩანაწერი",
+    "profileAndPrefs": "შენი პროფილი და პარამეტრები",
+    "aiInsights": "ყველა AI-ის შექმნილი ინსაითი",
+    "cancel": "გაუქმება",
+    "continue": "გაგრძელება",
+    "step2Title": "დაადასტურე შენი ვინაობა",
+    "step2Subtitle": "გასაგრძელებლად შეიყვანე პაროლი",
+    "passwordLabel": "პაროლი",
+    "passwordPlaceholder": "შეიყვანე შენი პაროლი",
+    "back": "უკან",
+    "step3Title": "საბოლოო დადასტურება",
+    "step3Subtitle": "ეს არის გაუქმების ბოლო შანსი",
+    "typeToConfirmPrefix": "წაშლის დასადასტურებლად აკრიფე",
+    "typeToConfirmSuffix": "ქვემოთ:",
+    "confirmPlaceholder": "დასადასტურებლად აკრიფე DELETE",
+    "deleteForever": "სამუდამოდ წაშალე ჩემი ანგარიში",
+    "step4Title": "იშლება ანგარიში...",
+    "step4Subtitle": "გთხოვთ, არ დახუროთ ეს ფანჯარა",
+    "step5Title": "ანგარიში წაშლილია",
+    "step5Subtitle": "შენი მონაცემები სამუდამოდ წაიშალა",
+    "thankYou": "მადლობა, რომ იყენებდი Καιρός-ს.",
+    "redirecting": "მიმდინარეობს გადამისამართება მისალმების ეკრანზე..."
+  },
+  "notifications": {
+    "updateSuccess": "შეტყობინებების პარამეტრები განახლდა!",
+    "updateError": "პარამეტრების განახლება ვერ მოხერხდა.",
+    "dailyReminderTitle": "ყოველდღიური შეხსენება",
+    "dailyReminderDescription": "მიიღე ყოველდღიური შეხსენება წერის შესახებ",
+    "weeklyInsightsTitle": "კვირეული ინსაითების შეჯამება",
+    "weeklyInsightsDescription": "მიიღე AI-ინსაითები ყოველ კვირას",
+    "pathCompletionTitle": "ბილიკის დასრულების შეტყობინებები",
+    "pathCompletionDescription": "აღნიშნე მოგზაურობის დასრულება"
+  },
+  "account": {
+    "unknown": "უცნობი",
+    "defaultName": "დღიურის ავტორი",
+    "loading": "იტვირთება…",
+    "artisan": "Artisan",
+    "freePlan": "უფასო გეგმა",
+    "since": "{{date}}-დან"
+  },
+  "header": {
+    "title": "პარამეტრები",
+    "subtitle": "მართე შენი ანგარიში და პარამეტრები"
+  },
+  "preferences": {
+    "sectionTitle": "პარამეტრები",
+    "themeTitle": "თემა",
+    "themeDescription": "აირჩიე სასურველი ფერთა სქემა"
+  },
+  "helpAbout": {
+    "sectionTitle": "დახმარება და ინფორმაცია",
+    "contactSupport": "დაუკავშირდი მხარდაჭერას",
+    "faqHelpCenter": "FAQ და დახმარების ცენტრი",
+    "termsOfService": "მომსახურების პირობები",
+    "privacyPolicy": "კონფიდენციალურობის პოლიტიკა",
+    "aboutKairos": "Καιρός-ის შესახებ"
+  }
+}

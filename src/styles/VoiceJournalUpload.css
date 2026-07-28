@@ -17,7 +17,7 @@
 .glass-voice-container {
   min-height: 100vh;
   padding: 20px 16px 40px;
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Noto Sans Georgian', sans-serif;
   position: relative;
   overflow-x: hidden; /* fallback */
   overflow-x: clip; /* avoid becoming a nested scroll container (mobile scroll trap) */

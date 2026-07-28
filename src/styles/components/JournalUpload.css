@@ -6,7 +6,7 @@
   padding: 20px 16px;
   padding-bottom: 40px;
   background: #000;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -842,7 +842,7 @@
     padding: 20px 16px;
     padding-bottom: 40px;
     background: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
     -webkit-font-smoothing: antialiased;
     display: flex;
     flex-direction: column;

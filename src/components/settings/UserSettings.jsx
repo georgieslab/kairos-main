@@ -17,6 +17,7 @@ import {
 import { deleteUserAccount, getDataDeletionSummary } from '../../services/deleteAccountService';
 
 import VersionDisplay from '../common/VersionDisplay';
+import { SUPPORTED_LANGUAGES } from '../../i18n/config';
 import ArtisanMonogram, { MonogramPicker } from '../common/ArtisanMonogram';
 import '../../styles/components/settings.css';
 
@@ -32,6 +33,13 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
   const { currentUser, userProfile, updateUserProfile, logout } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const { statistics } = useUserStatistics();
+
+  // Language row cycles through the supported list, mirroring the theme toggle.
+  const languageIndex = Math.max(0, SUPPORTED_LANGUAGES.findIndex(
+    (l) => l.code === (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0]
+  ));
+  const activeLanguage = SUPPORTED_LANGUAGES[languageIndex];
+  const nextLanguage = SUPPORTED_LANGUAGES[(languageIndex + 1) % SUPPORTED_LANGUAGES.length];
 
   const [displayName, setDisplayName] = useState('');
   const [birthday, setBirthday] = useState('');
@@ -605,12 +613,15 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
             </div>
             <button
               className="settings-theme-btn"
-              onClick={() => i18n.changeLanguage(i18n.resolvedLanguage === 'de' ? 'en' : 'de')}
+              onClick={() => i18n.changeLanguage(nextLanguage.code)}
+              aria-label={`Switch to ${nextLanguage.label}`}
             >
-              <div className={`settings-theme-btn-track ${i18n.resolvedLanguage === 'de' ? 'active' : ''}`}>
-                <div className="settings-theme-btn-thumb">{i18n.resolvedLanguage === 'de' ? 'DE' : 'EN'}</div>
+              <div className="settings-theme-btn-track">
+                <div className={`settings-theme-btn-thumb settings-lang-thumb settings-lang-thumb--${languageIndex}`}>
+                  {activeLanguage.short}
+                </div>
               </div>
-              <span>{i18n.resolvedLanguage === 'de' ? t('language.german', 'Deutsch') : t('language.english', 'English')}</span>
+              <span>{activeLanguage.label}</span>
             </button>
           </div>
 

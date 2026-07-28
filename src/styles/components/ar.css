@@ -11,7 +11,7 @@
 .glass-container {
   min-height: 100vh;
   background: #000;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   padding: 20px;
   position: relative;
   overflow-x: hidden; /* fallback */

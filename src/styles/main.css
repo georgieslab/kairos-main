@@ -48,7 +48,7 @@
 body {
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Noto Sans Georgian', sans-serif;
 }
 
 /* Container Classes */

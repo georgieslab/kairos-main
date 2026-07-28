@@ -68,7 +68,7 @@
 .artisan-monogram__initials {
   color: var(--mono-text);
   font-weight: 600;
-  font-family: ui-rounded, 'SF Pro Rounded', 'Helvetica Neue', sans-serif;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   letter-spacing: -0.5px;
   z-index: 2;
   text-transform: uppercase;

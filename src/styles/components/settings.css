@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
 }
 
 .settings-container * { box-sizing: border-box; }
@@ -475,6 +475,17 @@
 }
 .settings-theme-btn-track.active { background: rgba(99, 102, 241, 0.9); }
 .settings-theme-btn-track.active .settings-theme-btn-thumb { transform: translateX(20px); color: #6366f1; }
+
+/* Language row reuses the theme track. Thumb carries a 2-letter code instead of
+   an icon and steps through three stops across the same 20px of travel. */
+.settings-lang-thumb {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.settings-lang-thumb--0 { transform: translateX(0); }
+.settings-lang-thumb--1 { transform: translateX(10px); }
+.settings-lang-thumb--2 { transform: translateX(20px); }
 
 /* ============================================================
    DATA STATS

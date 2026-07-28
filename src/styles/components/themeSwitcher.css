@@ -112,3 +112,11 @@
 .hs-light .lang-thumb {
   color: rgba(0, 0, 0, 0.65);
 }
+
+/* Three language stops inside the shared 56px pill. The thumb is 26px and the
+   track is 54px of content, so the stops sit at 0 / 13 / 26 — the same 26px
+   total travel as the light↔dark thumb above, keeping the two toggles' motion
+   identical. Scoped to .lang-switch so they outrank `.dark`/`.active`. */
+.lang-switch .lang-thumb--0 { transform: translateX(0); }
+.lang-switch .lang-thumb--1 { transform: translateX(13px); }
+.lang-switch .lang-thumb--2 { transform: translateX(26px); }

@@ -20,7 +20,7 @@
   padding: 0 1rem 1.5rem;
   min-height: calc(100vh - 2rem);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   /* No opacity animation – always visible */
   opacity: 1;
 }

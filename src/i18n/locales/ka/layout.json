@@ -1,0 +1,78 @@
+{
+  "header": {
+    "goBackAria": "უკან დაბრუნება",
+    "settingsAria": "პარამეტრები",
+    "dayTitle": "დღე {{day}}",
+    "screenTitles": {
+      "home": "Καιρός",
+      "pathSelection": "დღიურის ბილიკები",
+      "daily": "დღიური ჩანაწერი",
+      "upload": "ჩანაწერის ატვირთვა",
+      "analysis": "ჩანაწერის ანალიზი",
+      "analyticsDashboard": "დღიურის ანალიტიკა",
+      "settings": "პარამეტრები",
+      "profile": "შენი პროფილი",
+      "journalArchive": "დღიურის არქივი",
+      "feedback": "გამოხმაურების გაგზავნა",
+      "bugReport": "ხარვეზის შეტყობინება",
+      "journeyComplete": "მოგზაურობა დასრულდა"
+    }
+  },
+  "bottomNav": {
+    "navAriaLabel": "მთავარი ნავიგაცია",
+    "home": "მთავარი",
+    "paths": "ბილიკები",
+    "journal": "დღიური",
+    "insights": "ინსაითები",
+    "profile": "პროფილი"
+  },
+  "fab": {
+    "giveFeedback": "გამოხმაურება",
+    "reportBug": "ხარვეზის შეტყობინება",
+    "helpCenter": "დახმარების ცენტრი",
+    "closeMenu": "მენიუს დახურვა",
+    "openMenu": "დახმარების მენიუს გახსნა"
+  },
+  "installPrompt": {
+    "title": "დააინსტალირე Kairos Journal",
+    "iconAlt": "Kairos",
+    "iosSubtitle": "დააინსტალირე ეს აპი შენს iPhone-ზე საუკეთესო გამოცდილებისთვის",
+    "androidSubtitle": "დააინსტალირე ჩვენი აპი სწრაფი წვდომისა და ოფლაინ წერისთვის",
+    "benefitOffline": "მუშაობს ოფლაინ რეჟიმში",
+    "benefitQuickAccess": "სწრაფი წვდომა მთავარი ეკრანიდან",
+    "benefitFullScreen": "სრულეკრანიანი გამოცდილება",
+    "installButton": "აპის ინსტალაცია",
+    "laterButton": "შესაძლოა მოგვიანებით",
+    "ios": {
+      "step1": "შეეხე გაზიარების ღილაკს",
+      "step1Suffix": "Safari-ში",
+      "step2": "ჩამოწიე და შეეხე „Add to Home Screen“-ს",
+      "step3": "ინსტალაციისთვის შეეხე „Add“-ს"
+    }
+  },
+  "errorBoundary": {
+    "title": "რაღაც შეცდომა მოხდა",
+    "message": "ვწუხვართ, ამ კონტენტის ჩატვირთვისას პრობლემა წარმოიშვა.",
+    "retry": "ხელახლა ცდა"
+  },
+  "pathContext": {
+    "dayCompact": "{{name}} • დღე {{day}}",
+    "dayProgress": "დღე {{day}}/10",
+    "names": {
+      "emotionalIntelligence": "ემოციური ინტელექტი",
+      "decidingToDoing": "გადაწყვეტილებასა და მოქმედებას შორის",
+      "mindfulness": "გააზრებულობა",
+      "selfDiscovery": "თვითშემეცნება"
+    }
+  },
+  "versionDisplay": {
+    "viewChangelogAria": "ცვლილებების ისტორიის ნახვა",
+    "closeChangelogAria": "ცვლილებების ისტორიის დახურვა",
+    "changelog": "ცვლილებების ისტორია",
+    "current": "მიმდინარე",
+    "newFeatures": "ახალი ფუნქციები",
+    "bugFixes": "ხარვეზების გასწორება",
+    "improvements": "გაუმჯობესებები",
+    "notes": "შენიშვნები"
+  }
+}

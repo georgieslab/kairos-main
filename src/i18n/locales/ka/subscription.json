@@ -1,0 +1,77 @@
+{
+  "premiumPathCheck": {
+    "checkingAccess": "მოწმდება წვდომა...",
+    "defaultPathName": "პრემიუმ ბილიკი"
+  },
+  "errors": {
+    "upgradeStart": "განახლების პროცესის დაწყებისას მოხდა შეცდომა. გთხოვთ, სცადოთ ხელახლა.",
+    "managementOpen": "გამოწერის მართვის გახსნისას მოხდა შეცდომა. გთხოვთ, სცადოთ ხელახლა.",
+    "unableToLoad": "გამოწერის სტატუსის ჩატვირთვა ვერ მოხერხდა"
+  },
+  "common": {
+    "loading": "იტვირთება...",
+    "retry": "ხელახლა ცდა",
+    "artisan": "Artisan",
+    "free": "უფასო",
+    "upgrade": "განახლება",
+    "manage": "მართვა",
+    "freePlan": "უფასო გეგმა",
+    "processing": "მუშავდება...",
+    "freeJourneysIncluded": "უფასო მოგზაურობები შედის",
+    "renews": "განახლდება {{date}}",
+    "opening": "იხსნება...",
+    "manageSubscription": "გამოწერის მართვა",
+    "upgradeToArtisan": "გადადი Artisan-ზე",
+    "perMonth": "/თვეში",
+    "cancelAnytime": "გააუქმე ნებისმიერ დროს"
+  },
+  "benefits": {
+    "allPaths": "ყველა 33+ მოგზაურობის ბილიკი",
+    "freePaths": "9 უფასო მოგზაურობის ბილიკი (10 დღე)",
+    "advancedAI": "გაფართოებული AI-ანალიზი",
+    "basicAI": "ბაზისური AI-ანალიზი",
+    "unlimitedExports": "შეუზღუდავი PDF-ექსპორტი",
+    "limitedExports": "შეზღუდული PDF-ექსპორტი",
+    "premiumAnalytics": "პრემიუმ ანალიტიკის დაფა",
+    "prioritySupport": "პრიორიტეტული მხარდაჭერა",
+    "premiumAnalyticsShort": "პრემიუმ ანალიტიკა",
+    "freePathsShort": "9 უფასო მოგზაურობის ბილიკი"
+  },
+  "detailed": {
+    "yourBenefits": "შენი უპირატესობები",
+    "premiumPathsLocked": "პრემიუმ ბილიკები დაბლოკილია",
+    "limitedExports": "შეზღუდული ექსპორტი",
+    "trialEnds": "საცდელი პერიოდი მთავრდება {{date}}"
+  },
+  "upgradePrompt": {
+    "title": "საჭიროა Artisan-წვდომა",
+    "messageSuffix": "არის Artisan-მოგზაურობა, რომელიც აქტიურ გამოწერას მოითხოვს.",
+    "includesTitle": "Artisan მოიცავს:",
+    "benefit1": "ყველა 33+ პრემიუმ მოგზაურობის ბილიკი",
+    "benefit2": "გაფართოებული AI-ანალიზი და ინსაითები",
+    "benefit3": "შეუზღუდავი PDF-ექსპორტი",
+    "benefit4": "გაფართოებული ანალიტიკის დაფა",
+    "benefit5": "პრიორიტეტული მხარდაჭერა",
+    "maybeLater": "შესაძლოა მოგვიანებით"
+  },
+  "plans": {
+    "header": "აირჩიე შენი Καιρός-გამოცდილება",
+    "subheader": "დაიწყე უფასო მოგზაურობებით ან გახსენი შენი სრული პოტენციალი Artisan-ით",
+    "freeFeature1": "9 მართული 10-დღიანი მოგზაურობა",
+    "freeFeature2": "ბაზისური AI-ანალიზი",
+    "freeFeature3": "სტანდარტული ანალიტიკა",
+    "freeFeature4": "PDF-ექსპორტი (შეზღუდული)",
+    "freeFeature5": "სათემო მხარდაჭერა",
+    "currentPlan": "მიმდინარე გეგმა",
+    "mostPopular": "ყველაზე პოპულარული",
+    "artisanFeature1": "ყველა 33+ მოგზაურობის ბილიკი",
+    "artisanFeature2": "გაფართოებული AI-ინსაითები",
+    "artisanFeature3": "შეუზღუდავი PDF-ექსპორტი",
+    "artisanFeature4": "პრემიუმ ანალიტიკის დაფა",
+    "artisanFeature5": "უფრო გრძელი მოგზაურობები (14-100 დღე)",
+    "artisanFeature6": "ვიზუალური დღიურის ბილიკები",
+    "artisanFeature7": "პრიორიტეტული მხარდაჭერა",
+    "footer1": "ყველა გეგმა მოიცავს უსაფრთხო ღრუბლოვან სინქრონიზაციასა და მოწყობილობებს შორის წვდომას",
+    "footer2": "გააუქმე ნებისმიერ დროს მონაცემების სრული ექსპორტით"
+  }
+}

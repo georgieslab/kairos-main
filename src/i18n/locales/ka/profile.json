@@ -1,0 +1,60 @@
+{
+  "editProfile": {
+    "validation": {
+      "nameRequired": "სახელის მითითება აუცილებელია",
+      "nameMinLength": "სახელი უნდა შეიცავდეს მინიმუმ 2 სიმბოლოს",
+      "nameMaxLength": "სახელი უნდა შეიცავდეს 50 სიმბოლოზე ნაკლებს",
+      "cityTooLong": "ქალაქის სახელი ძალიან გრძელია",
+      "saveFailed": "პროფილის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."
+    },
+    "title": "პროფილის რედაქტირება",
+    "subtitle": "განაახლე შენი პირადი ინფორმაცია",
+    "close": "დახურვა",
+    "avatarLabel": "პროფილის ავატარი",
+    "changeAvatar": "ავატარის შეცვლა",
+    "avatarHint": "დააჭირე ავატარის სტილის, ნიმუშისა და შრიფტის მოსარგებად",
+    "displayNameLabel": "სახელი *",
+    "displayNamePlaceholder": "შეიყვანე შენი სახელი",
+    "displayNameHint": "ასე მოგმართავს აპლიკაცია",
+    "emailLabel": "ელფოსტის მისამართი",
+    "emailHint": "ელფოსტის შეცვლა აქ შეუძლებელია. საჭიროების შემთხვევაში დაუკავშირდი მხარდაჭერას.",
+    "cityLabel": "ქალაქი / მდებარეობა",
+    "cityPlaceholder": "მაგ., თბილისი",
+    "cityHint": "გამოიყენება ამინდის ინფორმაციისა და პერსონალიზაციისთვის",
+    "cancel": "გაუქმება",
+    "saving": "ინახება...",
+    "saveChanges": "ცვლილებების შენახვა"
+  },
+  "profileScreen": {
+    "defaultDisplayName": "დღიურის ავტორი",
+    "recently": "ცოტა ხნის წინ",
+    "artisan": "Artisan",
+    "since": "{{date}}-დან",
+    "editProfile": "პროფილის რედაქტირება",
+    "stats": {
+      "entries": "ჩანაწერი",
+      "dayStreak": "დღიანი სერია",
+      "active": "აქტიური",
+      "completed": "დასრულებული"
+    },
+    "activeJourneys": "აქტიური მოგზაურობები",
+    "viewAll": "ყველას ნახვა",
+    "dayOf": "დღე {{day}} / {{total}}",
+    "moodBoard": "განწყობის დაფა",
+    "achievements": "მიღწევები",
+    "pts": "{{score}} ქულა",
+    "plusPts": "+{{points}} ქულა",
+    "journalAndData": "დღიური და მონაცემები",
+    "myJournals": "ჩემი დღიურები",
+    "registerJournal": "დღიურის რეგისტრაცია",
+    "new": "ახალი",
+    "archive": "არქივი",
+    "listen": "მოსმენა",
+    "settings": "პარამეტრები",
+    "helpAndSupport": "დახმარება და მხარდაჭერა",
+    "aboutKairos": "Καιρός-ის შესახებ",
+    "signOut": "გასვლა",
+    "signOutConfirm": "ნამდვილად გსურს Καιρός-იდან გასვლა?",
+    "cancel": "გაუქმება"
+  }
+}

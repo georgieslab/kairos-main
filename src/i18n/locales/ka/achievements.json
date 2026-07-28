@@ -1,0 +1,98 @@
+{
+  "achievements": {
+    "title": "მიღწევები",
+    "unlockedSummary": "{{earned}} / {{total}} გახსნილი · {{points}} ქულა",
+    "close": "დახურვა",
+    "percentComplete": "{{percentage}}% დასრულებული",
+    "categoryAll": "ყველა",
+    "categoryStreaks": "სერიები",
+    "categoryVolume": "მოცულობა",
+    "categoryJourneys": "მოგზაურობები",
+    "categoryConsistency": "თანმიმდევრულობა",
+    "pointsLabel": "{{count}} ქულა",
+    "rarity": {
+      "common": "ჩვეულებრივი",
+      "rare": "იშვიათი",
+      "epic": "ეპიკური",
+      "legendary": "ლეგენდარული"
+    },
+    "items": {
+      "firstWeek": {
+        "title": "კვირის მებრძოლი",
+        "description": "7-დღიანი სერია"
+      },
+      "twoWeeks": {
+        "title": "ორკვირიანი ძალა",
+        "description": "14-დღიანი სერია"
+      },
+      "monthMaster": {
+        "title": "თვის ოსტატი",
+        "description": "30-დღიანი სერია"
+      },
+      "streakLegend": {
+        "title": "სერიის ლეგენდა",
+        "description": "100-დღიანი სერია"
+      },
+      "firstEntry": {
+        "title": "პირველი ნაბიჯები",
+        "description": "პირველი ჩანაწერი დღიურში"
+      },
+      "tenEntries": {
+        "title": "დასაწყისი",
+        "description": "10 ჩანაწერი"
+      },
+      "fiftyEntries": {
+        "title": "თავდადებული ავტორი",
+        "description": "50 ჩანაწერი"
+      },
+      "hundredEntries": {
+        "title": "ასეულის კლუბი",
+        "description": "100 ჩანაწერი"
+      },
+      "fiveHundredEntries": {
+        "title": "მთავარი მემატიანე",
+        "description": "500 ჩანაწერი"
+      },
+      "firstJourney": {
+        "title": "ბილიკის მპოვნელი",
+        "description": "დაასრულე პირველი მოგზაურობა"
+      },
+      "threeJourneys": {
+        "title": "მოგზაურობის მკვლევარი",
+        "description": "დაასრულე 3 მოგზაურობა"
+      },
+      "allJourneys": {
+        "title": "მოგზაურობის ოსტატი",
+        "description": "დაასრულე ყველა ხელმისაწვდომი მოგზაურობა"
+      },
+      "weeklyConsistency": {
+        "title": "კვირეული მებრძოლი",
+        "description": "წერე კვირაში 5+ დღე, 4 კვირის განმავლობაში"
+      },
+      "monthlyConsistency": {
+        "title": "თანმიმდევრულობის მეფე",
+        "description": "წერე თვეში 20+ დღე, 3 თვის განმავლობაში"
+      },
+      "longFormWriter": {
+        "title": "ვრცელი ტექსტის ავტორი",
+        "description": "დაწერე 10 ჩანაწერი 500+ სიტყვით"
+      },
+      "deepThinker": {
+        "title": "ღრმად მოაზროვნე",
+        "description": "საშუალოდ 300+ სიტყვა ჩანაწერზე, 30 ჩანაწერის განმავლობაში"
+      },
+      "firstMonth": {
+        "title": "ერთი თვე ძლიერად",
+        "description": "30 დღე წევრობისა"
+      },
+      "sixMonths": {
+        "title": "ნახევარი წლის გმირი",
+        "description": "180 დღე წევრობისა"
+      },
+      "oneYear": {
+        "title": "წლიური მიღწევა",
+        "description": "365 დღე წევრობისა"
+      }
+    }
+  }
+}

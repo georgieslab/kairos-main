@@ -20,7 +20,8 @@ const CLAUDE_ANALYSIS_MODEL = 'claude-haiku-4-5-20251001';     // Updated july 2
 // English (the whole app reads them); only the string *values* are translated.
 
 const AI_LANGUAGE_NAMES = {
-  de: 'German (Deutsch), using the informal "du" form'
+  de: 'German (Deutsch), using the informal "du" form',
+  ka: 'Georgian (ქართული), written in the Mkhedruli script'
 };
 
 /**

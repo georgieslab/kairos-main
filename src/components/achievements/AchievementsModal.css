@@ -30,7 +30,7 @@
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
 }
 
 /* Glass modal */
