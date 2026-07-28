@@ -12,7 +12,6 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
-import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import {
   doc,
   getDoc,
@@ -123,10 +122,19 @@ export function AuthProvider({ children }) {
   // credentials rather than holding its own separate native session; signing in
   // through the JS SDK here is what keeps onAuthStateChanged and every existing
   // Firestore call working unchanged.
+  //
+  // The plugin is imported lazily, and deliberately so. This module is on the
+  // app's startup path: main.jsx renders AuthProvider, and AuthProvider gates
+  // the entire tree behind {!loading && children}. A static top-level import
+  // means any failure loading the plugin takes down module evaluation, React
+  // never mounts, and the app shows a blank screen with no error and no loader.
+  // Importing it at the point of use confines any such failure to the sign-in
+  // button, and keeps the plugin out of the web bundle entirely.
   async function signInWithGoogle() {
     let user;
 
     if (Capacitor.isNativePlatform()) {
+      const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
       const { credential } = await FirebaseAuthentication.signInWithGoogle();
 
       if (!credential?.idToken) {
@@ -175,6 +183,7 @@ export function AuthProvider({ children }) {
     // out. Best-effort: a failure here shouldn't block the actual sign-out.
     if (Capacitor.isNativePlatform()) {
       try {
+        const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
         await FirebaseAuthentication.signOut();
       } catch (error) {
         console.warn('Native Google sign-out failed (continuing):', error);
