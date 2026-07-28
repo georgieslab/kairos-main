@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2272,27 +2272,35 @@ export const VERSION_HISTORY = [
 },
 
 {
-  version: '1.1.0',
-  releaseDate: '2026-07-24',
+  version: '1.2.0',
+  releaseDate: '2026-07-26',
   codename: 'The Kairos Collection',
   features: [
     'Two new exclusive paths join Kairos Moments to complete the Kairos Collection: "Kairos Cards" (21 days — each day deals you a hand of prompts; if a card doesn\'t fit, shuffle for another until one lands) and "Kairos Sparks" (14 days — a single word to spark each entry, and a blank page for the rest)',
     'The whole Collection unlocks together: own any one path and all three are yours — €2.99 once, or an invite code',
     'Every day across the Collection, you choose your medium: write it, speak it, or draw it',
     'New "Listen" screen featuring "Ink & Intention" — a short podcast on handwriting and journaling, for the moments between entries, reachable from the Home screen and your Profile',
-    'A new "Kairos" path category joins Free and Artisan, with its own badge and filter on the Paths screen'
+    'All 49 guided journey paths — nearly 1,000 daily prompts — rewritten with sharper, more specific questions and a clear closing action for each day',
+    'Paths are now labelled by category — Free, Artisan, and the new Kairos tier — each with its own badge and filter on the Paths screen'
   ],
   improvements: [
     'Choosing your Inner Aura now bathes the whole daily check-in card in that mood\'s color glow',
     'The Home "% Complete" now reflects your overall progress across every active journey, weighted by length, instead of a single path',
     'Journeys you\'ve started now also appear in the All Paths grid with their progress and an "In Progress" label',
-    'The Home "What\'s New" now unveils the full three-path Kairos Collection'
+    'The Home "What\'s New" now unveils the full three-path Kairos Collection',
+    'Hardened Firestore data access rules with explicit per-user ownership checks across every collection the app reads or writes',
+    'Refined visual polish throughout the Write tab'
   ],
   bugFixes: [
-    'Fixed entries on the new Kairos paths being filed under the wrong journey, which left their progress and the Home screen color stuck on another path'
+    'Fixed "Sign in with Google" hanging forever on "Connecting…" in the Android app — it opened a browser tab that closed immediately and never signed you in. Google sign-in now runs natively through Google Play Services and completes without ever leaving the app.',
+    'Fixed being unable to switch Google accounts after signing out on Android — the previously chosen account was silently reused instead of showing the account picker',
+    'Fixed the Home screen streak color and "next day" indicator getting stuck on day 1 after completing an entry — journey progress now saves as a single atomic update instead of a fragile rebuild-and-rewrite that could silently fail',
+    'Fixed entries on the new Kairos paths being filed under the wrong journey, which left their progress and the Home screen color stuck on another path',
+    'Fixed NFC tap-to-journal on flex paths (choose write, speak, or draw per day) jumping straight to the draw/upload screen instead of the medium picker'
   ],
   notes: [
     'This release completes the trilogy the app is named for: Moments to recognize the opportune moment, Cards to deal yourself the prompt, and Sparks for a blank canvas.',
+    'It also brings the largest content update yet — the guided prompts across nearly every journey have been substantially rewritten for depth and specificity — alongside more reliable progress tracking and tightened data access rules.',
     'All changes are fully backward compatible with existing user data and progress.'
   ]
 }

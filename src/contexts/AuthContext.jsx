@@ -8,8 +8,11 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
   sendPasswordResetEmail
 } from 'firebase/auth';
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import {
   doc,
   getDoc,
@@ -102,10 +105,45 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Google sign-in has to take two different routes.
+  //
+  // On the web, signInWithPopup works: the popup shares an origin with the
+  // parent page, so Firebase can hand the credential back via postMessage.
+  //
+  // In the Capacitor WebView it cannot. The app is served from localhost and a
+  // WebView can't open a real popup, so Firebase falls back to launching the
+  // system browser at <authDomain>/__/auth/handler. OAuth then completes in the
+  // browser's process — separate storage, no window handle, no postMessage
+  // channel back to us — so the credential is stranded there and the promise
+  // never settles (the UI hangs on "Connecting..." forever).
+  //
+  // Natively we therefore go through Google Play Services via the plugin, which
+  // never opens a browser, and exchange the returned idToken for a JS SDK
+  // session. The plugin is configured with skipNativeAuth so it only returns
+  // credentials rather than holding its own separate native session; signing in
+  // through the JS SDK here is what keeps onAuthStateChanged and every existing
+  // Firestore call working unchanged.
   async function signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+    let user;
+
+    if (Capacitor.isNativePlatform()) {
+      const { credential } = await FirebaseAuthentication.signInWithGoogle();
+
+      if (!credential?.idToken) {
+        throw new Error('Google sign-in did not return an ID token.');
+      }
+
+      const googleCredential = GoogleAuthProvider.credential(
+        credential.idToken,
+        credential.accessToken
+      );
+      const result = await signInWithCredential(auth, googleCredential);
+      user = result.user;
+    } else {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      user = result.user;
+    }
 
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (!userDoc.exists()) {
@@ -130,6 +168,19 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     await signOut(auth);
+
+    // Google Play Services caches the account chosen at sign-in. Without also
+    // clearing it natively, the next sign-in silently reuses that account and
+    // never shows the picker, so a user can't switch accounts after logging
+    // out. Best-effort: a failure here shouldn't block the actual sign-out.
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await FirebaseAuthentication.signOut();
+      } catch (error) {
+        console.warn('Native Google sign-out failed (continuing):', error);
+      }
+    }
+
     setCurrentUser(null);
     setUserProfile(null);
   }
