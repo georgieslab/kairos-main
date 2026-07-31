@@ -5,6 +5,11 @@ import { MessageCircle, Send, Sparkles, Clock, CheckCircle, AlertCircle, Brain, 
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { callClaudeApi, safeJsonParse } from '../../utils/apiUtils';
+// This component builds its own prompt rather than calling
+// claudeService.answerDailyQuestion (which is exported but unused). Until that
+// duplication is resolved, it must pull in the same two directives so the
+// honesty rules and the AI output language apply here too.
+import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 
 const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
   const { t } = useTranslation('analytics');
@@ -139,28 +144,31 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
         
         The user's question is: "${question}"
         
-        Provide a thoughtful, personalized response that:
-        1. Directly addresses their specific question using evidence from their ${totalEntries} total journal entries
-        2. References specific patterns, themes, or insights from their actual writing
-        3. Is encouraging and constructive while being authentic
-        4. Uses concrete examples from their journal content when relevant
-        5. Acknowledges their journaling commitment (${totalEntries} entries, ${progressStats?.currentStreak || 0} day streak)
-        6. Is written in a warm, supportive tone addressing them directly as "you"
-        7. Provides actionable insights they can apply to future journaling
-        
-        Keep your response between 150-300 words. Be specific and personal - avoid generic advice.
-        Make sure to ground your response in their actual journal content and journaling journey.
-        
+        Provide a response that:
+        1. Answers the specific question they asked, in the first sentence, using evidence from their entries
+        2. Cites specific entries by day — anything you can't ground in their writing, don't say
+        3. Gives the honest answer even when it isn't the one they're hoping for. If their
+           entries contradict the premise of the question, say so directly
+        4. Says plainly when their entries simply don't contain enough to answer, rather than
+           improvising something that merely sounds insightful
+        5. Does NOT praise their streak, their entry count, or their commitment to journaling.
+           They can see those numbers. Praise that arrives regardless of the question is noise
+        6. Addresses them directly as "you", in plain language — no inspirational register
+        7. Ends with something they can actually act on
+
+        Keep your response between 150-300 words. If it would read the same under any other
+        user's question, rewrite it.
+
         Format your response as a JSON object with:
         {
-          "answer": "Your detailed, personalized response here",
-          "keyInsights": ["insight 1", "insight 2", "insight 3"],
-          "personalObservation": "A specific observation about their journaling patterns or personality based on their ${totalEntries} entries"
+          "answer": "Direct answer first, then the evidence from specific entries. No preamble, no compliment before the substance.",
+          "keyInsights": ["insight grounded in a specific entry", "a pattern — including an unwelcome one if that's what's there", "the thing relevant to their question they haven't said out loud"],
+          "personalObservation": "An observation about their journaling patterns they'd be unlikely to make themselves. Accurate over flattering — this field is worthless if it's a compliment."
         }
-      `;
+      ${HONESTY_DIRECTIVE}${getLanguageDirective()}`;
 
       const requestBody = {
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6', // was the deprecated claude-sonnet-4-20250514 (silently remapped by apiUtils)
         messages: [
           {
             role: 'user',
@@ -178,13 +186,15 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
 
       const content = data.content[0].text;
       const result = safeJsonParse(content, {
-        answer: `Thank you for your thoughtful question about your ${totalEntries}-entry journaling journey. Based on your writing, I can see you're engaged in meaningful self-reflection and committed to personal growth. Your ${progressStats?.currentStreak || 0}-day streak shows dedication to this practice. Continue exploring these themes in your future writing.`,
+        // Fallback for a failed JSON parse — it has no access to their entries,
+        // so it says so rather than answering with generic encouragement.
+        answer: `Your question was saved, but the answer didn't generate this time — that's a failure on our side, not a reflection of what you asked. Nothing in your journal was affected. Try asking again in a moment; if it fails twice, report it from Settings.`,
         keyInsights: [
-          "You show commitment to personal growth through consistent journaling", 
-          "Your writing demonstrates increasing self-awareness over time", 
-          "You're building valuable habits through regular reflection"
+          "No analysis available — the response failed to generate",
+          "Your entries and your question are stored and unchanged",
+          "Worth reporting as a bug if it happens repeatedly"
         ],
-        personalObservation: `Your dedication to maintaining ${totalEntries} journal entries shows a strong commitment to understanding yourself better and growing through reflection.`
+        personalObservation: `Not available for this question.`
       });
 
       // ✅ ENHANCED: Save with more comprehensive metadata

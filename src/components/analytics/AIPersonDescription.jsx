@@ -23,6 +23,11 @@ import {
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { callClaudeApi, safeJsonParse } from '../../utils/apiUtils';
+// This component builds its own prompt rather than calling
+// claudeService.generatePersonalityDescription (which is exported but unused).
+// Until that duplication is resolved, it must pull in the same two directives so
+// the honesty rules and the AI output language apply here too.
+import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 
 const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
   const { t, i18n } = useTranslation('analytics');
@@ -131,30 +136,34 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
         8. **Unique Qualities**: What makes them distinctive as a person
         
         Important guidelines:
-        - Write in third person but be warm and respectful
-        - Base everything on evidence from their actual journal entries
-        - Be specific and reference patterns you observe
-        - Avoid generic statements - make it deeply personal
-        - Be encouraging while being authentic
-        - Focus on positive qualities while acknowledging growth areas
-        - Make it feel like a thoughtful friend who really knows them
-        
+        - Write in third person, level and observant — a portrait, not a tribute
+        - Base every sentence on evidence from their actual entries, and cite it
+        - A portrait made only of strengths is a portrait of nobody. Include the
+          tensions, the recurring blind spot, the thing they do that costs them
+        - Do not euphemize. If their entries show avoidance, call it avoidance;
+          do not relabel it as "seeking clarity"
+        - Describe patterns in what they wrote, not fixed verdicts about who they are
+        - No astrological register, no LinkedIn-summary register, no flattery
+        - The test: would they recognize themselves, including the parts they'd
+          wince at? If not, rewrite it
+        - This is drawn from journal entries, not a clinical assessment. Do not diagnose
+
         Format as JSON with these exact keys:
         {
-          "corePersonality": "string",
-          "strengths": ["strength1", "strength2", "strength3", "strength4", "strength5"],
-          "valuesAndMotivations": "string",
-          "communicationStyle": "string", 
-          "growthMindset": "string",
-          "emotionalIntelligence": "string",
-          "lifePhilosophy": "string",
-          "uniqueQualities": "string",
-          "overallSummary": "A warm, encouraging 2-3 sentence summary of who they are"
+          "corePersonality": "Their essential nature as the entries actually show it, including the contradiction that runs through them",
+          "strengths": ["a strength with the specific evidence for it", "another", "a third", "a fourth", "a fifth — drop items rather than inventing them"],
+          "valuesAndMotivations": "What actually drives them, judged by what they return to and protect — which may differ from what they say they value. If it does, say so",
+          "communicationStyle": "How they express themselves, including their characteristic evasions: where they go abstract, intellectualize, joke, or trail off",
+          "growthMindset": "How they actually meet challenges, based on what they describe doing rather than what they resolve to do",
+          "emotionalIntelligence": "Which emotions they name easily, which they route around, which they only reach through other subjects",
+          "lifePhilosophy": "Beliefs and worldview visible in their entries, stated plainly",
+          "uniqueQualities": "What genuinely distinguishes them. If a trait would apply to most people, it does not belong here",
+          "overallSummary": "2-3 sentences. Accurate before flattering — they should finish it thinking 'that's right', not 'that's nice'"
         }
-      `;
+      ${HONESTY_DIRECTIVE}${getLanguageDirective()}`;
 
       const requestBody = {
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6', // was the deprecated claude-sonnet-4-20250514 (silently remapped by apiUtils)
         messages: [
           {
             role: 'user',
@@ -172,21 +181,19 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
 
       const content = data.content[0].text;
       const result = safeJsonParse(content, {
-        corePersonality: "This person demonstrates thoughtful self-reflection and genuine commitment to personal growth through their journaling practice.",
-        strengths: [
-          "Self-awareness and introspection",
-          "Commitment to personal development", 
-          "Authentic self-expression",
-          "Willingness to explore emotions",
-          "Consistency in self-care practices"
-        ],
-        valuesAndMotivations: "Values personal growth, authentic relationships, and meaningful self-reflection.",
-        communicationStyle: "Expresses themselves thoughtfully and honestly in their writing.",
-        growthMindset: "Shows openness to learning and developing through reflective practices.",
-        emotionalIntelligence: "Demonstrates awareness of emotions and willingness to explore feelings.",
-        lifePhilosophy: "Believes in the value of self-understanding and intentional living.",
-        uniqueQualities: "Brings dedication and authenticity to their journaling practice.",
-        overallSummary: "A thoughtful individual committed to understanding themselves better through consistent reflection and genuine engagement with their inner world."
+        // Fallback for a failed JSON parse. The old version here described a
+        // generic "thoughtful individual committed to growth" — text that fits
+        // any human alive, which is precisely the failure mode we're removing.
+        // If we can't describe this person, we say we can't.
+        corePersonality: "Your description couldn't be generated this time. This is a technical failure on our side — nothing in your entries was affected.",
+        strengths: [],
+        valuesAndMotivations: "Not available — generation failed.",
+        communicationStyle: "Not available — generation failed.",
+        growthMindset: "Not available — generation failed.",
+        emotionalIntelligence: "Not available — generation failed.",
+        lifePhilosophy: "Not available — generation failed.",
+        uniqueQualities: "Not available — generation failed.",
+        overallSummary: "No description available for this run. Try regenerating in a moment; if it keeps failing, report it from Settings."
       });
 
       // ✅ FIXED: Save with current entry count and timestamp

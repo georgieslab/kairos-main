@@ -5,7 +5,9 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 // Claude API configuration for recommendations
-const CLAUDE_RECOMMENDATION_MODEL = 'claude-sonnet-4-20250514';
+// Was the deprecated 'claude-sonnet-4-20250514', which apiUtils was silently
+// remapping to this anyway — naming it directly, no behaviour change.
+const CLAUDE_RECOMMENDATION_MODEL = 'claude-sonnet-4-6';
 
 /**
  * Get AI-powered personalized path recommendations
