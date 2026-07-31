@@ -4,6 +4,8 @@
 
 When adding a new journey path to the Καιρός Smart Journal application, you will need to update these files:
 - **src/data/JourneyData.js** (primary location for defining path data)
+- **src/data/journeyTranslations/de/&lt;path-id&gt;.js** (German translation of the path) **[CRITICAL]**
+- **src/data/journeyTranslations/ka/&lt;path-id&gt;.js** (Georgian translation of the path) **[CRITICAL]**
 - **src/utils/pathTypeUtils.js** (**NEW** - for visual vs text path categorization) **[CRITICAL]**
 - **src/pages/HomeScreen.jsx** (to display correct path information on home screen)
 - **src/styles/pathSelection.css** (for visual theming and styling) **[CRITICAL]**
@@ -230,11 +232,90 @@ You must add CSS for ALL of these sections. Missing any will cause visual issues
 
 **⚠️ Missing any of these CSS sections will result in the path appearing unstyled or with default colors.**
 
-## 4. Update Home Screen Component
+## 4. Translations: German and Georgian **[CRITICAL STEP]**
+
+The app ships in **English, German (`de`), and Georgian (`ka`)**. A path's English text lives in `JourneyData.js`; the other two languages live in separate per-path files. **A new path is not finished until all three exist.**
+
+**Why this is easy to miss:** translation fallback is per-key. A missing file, a missing day, or a missing field silently falls back to English. Nothing errors, nothing warns — the path just quietly becomes the one untranslated item in a German or Georgian user's list.
+
+### 4.1 Create one file per language
+
+```
+src/data/journeyTranslations/de/<path-id>.js
+src/data/journeyTranslations/ka/<path-id>.js
+```
+
+The filename **must exactly match** the path id you registered in `JOURNEY_PATHS`. That's how the two are linked — there is no mapping table.
+
+```javascript
+// src/data/journeyTranslations/ka/new-journey-id.js
+export default {
+  title: "...",
+  subtitle: "...",
+  description: "...",
+  days: {
+    1: { title: "...", theme: "...", prompt: `...` },
+    2: { title: "...", theme: "...", prompt: `...` },
+    // ...one entry per day
+  }
+};
+```
+
+**⚠️ `days` is an object keyed by day number — not an array.** The keys must match the `day` values in your English days array. This is the single most common mistake, because the English side *is* an array.
+
+### 4.2 You do not need to edit JourneyData.js
+
+`JourneyData.js` globs `journeyTranslations/de/*.js` and `journeyTranslations/ka/*.js`, then overlays them onto `JOURNEY_PATHS` in place on every `languageChanged` event. Every consumer — path selection, home screen, `pathRecommender.js`, PDF export — picks up the active language with no lookup logic of its own.
+
+The glob finds new files automatically. You only touch `JOURNEY_TRANSLATION_MODULES` when adding a whole new **language**, not a new path.
+
+### 4.3 Match the English prompt structure exactly
+
+Current prompts follow: **hook line → blank line → `•` bullets → blank line → closer line.** A translation must preserve:
+
+- the **same number of bullets**
+- the **same blank-line block structure**
+- **identical `{{placeholders}}`** (`{{count}}`, `{{day}}`, …)
+
+A dropped bullet or an extra blank line breaks the rendered prompt even though the file parses fine.
+
+### 4.4 What stays untranslated
+
+- Brand names: `Kairos Moments`, `Kairos Cards`, `Kairos Sparks`, `Artisan`, `Καιρός`
+- **Literal tokens the code compares against** — e.g. the confirmation word `DELETE`, which `UserSettings.jsx` checks with `!== 'DELETE'`. Translating it locks the user out of the action.
+- Technical terms with no settled equivalent in the target language
+
+### 4.5 Verify before you call it done
+
+Check every day number is present and that bullet counts and blank-line block counts match English, for both languages. Then:
+
+```bash
+npx vite build
+```
+
+The build will not catch a missing translation — only a syntax error. The structural check is what actually protects you.
+
+### 4.6 If you later edit an English prompt
+
+Translations **do not** auto-update. Editing English leaves `de` and `ka` holding the old text, and nothing flags it. This has already happened at scale: 49 of 51 German files went stale after an English prompt rewrite, and had to be redone. **Change all three languages in the same commit.**
+
+### 4.7 Translation Checklist
+
+- [ ] `journeyTranslations/de/<path-id>.js` created, filename matches the path id exactly
+- [ ] `journeyTranslations/ka/<path-id>.js` created, filename matches the path id exactly
+- [ ] `days` is an **object keyed by day number**, not an array
+- [ ] Every day from the English array is present in both files
+- [ ] Bullet count and blank-line blocks match English for every prompt
+- [ ] `{{placeholders}}` identical to English
+- [ ] Brand names and code-compared literals left untranslated
+- [ ] `npx vite build` passes
+- [ ] Switched the app to DE and to KA and confirmed the path renders translated
+
+## 5. Update Home Screen Component
 
 The home screen needs to display the correct path information for new paths. Update the `getPathProgress` function in `src/pages/HomeScreen.jsx`.
 
-### 4.1 Add Your Path to the HomeScreen's getPathProgress Function
+### 5.1 Add Your Path to the HomeScreen's getPathProgress Function
 
 ```javascript
 // In src/pages/HomeScreen.jsx
@@ -262,11 +343,11 @@ const getPathProgress = () => {
 };
 ```
 
-## 5. Update Progress Tracking
+## 6. Update Progress Tracking
 
 For consistent progress tracking across the app, ensure the path ID is handled correctly in progress-related utilities.
 
-### 5.1 Update userProgress.js (Optional)
+### 6.1 Update userProgress.js (Optional)
 
 This step is optional as the code now dynamically generates progress field names, but adding explicit constants can improve code readability:
 
@@ -278,11 +359,11 @@ export const PATHS = {
 };
 ```
 
-## 6. Update Export Service for PDF Generation
+## 7. Update Export Service for PDF Generation
 
 The PDF export service should automatically detect new paths through the central registry, but you should check for any hardcoded path information.
 
-### 6.1 Check Path Information in exportService.js
+### 7.1 Check Path Information in exportService.js
 
 Make sure the `getPathInfo` function in `src/services/exportService.js` will properly handle your new path:
 
@@ -317,7 +398,7 @@ const getPathInfo = (pathId) => {
 };
 ```
 
-### 6.2 Add Fallback Values (Optional)
+### 7.2 Add Fallback Values (Optional)
 
 For additional robustness, you can add fallback values to the default functions:
 
@@ -350,11 +431,11 @@ const getDefaultPathDescription = (pathId) => {
 };
 ```
 
-## 7. Update Journey Completion Component
+## 8. Update Journey Completion Component
 
 The journey completion screen might have path-specific styling that needs to be updated.
 
-### 7.1 Update JourneyCompletion.jsx Path Information
+### 8.1 Update JourneyCompletion.jsx Path Information
 
 ```javascript
 // In src/components/journey/JourneyCompletion.jsx
@@ -379,11 +460,11 @@ const getPathInfo = () => {
 };
 ```
 
-## 8. Update Analytics Integration (Optional)
+## 9. Update Analytics Integration (Optional)
 
 If you've added specialized analytics for specific paths, make sure to incorporate your new path:
 
-### 8.1 JournalAnalyticsDashboard.jsx Path Filtering
+### 9.1 JournalAnalyticsDashboard.jsx Path Filtering
 
 Check if there's path-specific analytics logic:
 
@@ -392,18 +473,18 @@ Check if there's path-specific analytics logic:
 // Look for path-specific filtering or processing logic
 ```
 
-## 9. Testing Your New Path
+## 10. Testing Your New Path
 
 After adding a new path, test these key areas:
 
-### 9.1 **NEW** Path Type Testing **[CRITICAL]**
+### 10.1 **NEW** Path Type Testing **[CRITICAL]**
 - [ ] **Visual Path Upload**: If visual, shows "Upload Artwork" interface
 - [ ] **Text Path Upload**: If text, shows "Upload Journal" interface
 - [ ] **Text Extraction**: Visual paths skip mandatory extraction, text paths require it
 - [ ] **Analysis Flow**: Appropriate analysis type for path category
 - [ ] **User Instructions**: Correct tips and guidance for path type
 
-### 9.2 Visual Styling Tests **[CRITICAL]**
+### 10.2 Visual Styling Tests **[CRITICAL]**
 - [ ] **Path Selection Screen**: New path appears with correct color theme
 - [ ] **Path Card**: Shows colored left/right borders matching the theme
 - [ ] **Hover Effects**: Card glows with appropriate color when hovered
@@ -413,7 +494,7 @@ After adding a new path, test these key areas:
 - [ ] **Buttons**: Primary buttons use colored gradient
 - [ ] **Mobile View**: All styling works correctly on mobile devices
 
-### 9.3 Functionality Tests
+### 10.3 Functionality Tests
 - [ ] **Path Metadata**: Verify correct title, subtitle, description, duration, difficulty
 - [ ] **Home Screen**: Path name, description, and progress display correctly
 - [ ] **Journey Progress**: Day completion tracking works correctly
@@ -422,13 +503,13 @@ After adding a new path, test these key areas:
 - [ ] **Analytics**: Journal entries for new path appear in analytics
 - [ ] **Navigation**: Navigation between different paths works smoothly
 
-### 9.4 Cross-Device Tests
+### 10.4 Cross-Device Tests
 - [ ] **Desktop**: Full functionality and styling
 - [ ] **Tablet**: Responsive design works correctly
 - [ ] **Mobile**: Touch interactions and mobile-specific styling
 - [ ] **Dark/Light Theme**: Path styling works in both themes
 
-## 10. Best Practices
+## 11. Best Practices
 
 1. **Use Kebab Case for IDs**: All path IDs should use kebab-case (e.g., 'new-journey-id')
 2. **Complete Metadata**: Always provide all relevant metadata when creating a path
@@ -442,22 +523,22 @@ After adding a new path, test these key areas:
 10. **Check Mobile View**: Ensure the path displays correctly on smaller screens
 11. **Color Accessibility**: Choose colors that work well in both light and dark themes
 
-## 11. Troubleshooting Common Issues
+## 12. Troubleshooting Common Issues
 
 If you encounter issues when implementing a new path:
 
-### 11.1 Path Not Appearing Issues
+### 12.1 Path Not Appearing Issues
 1. **Path not showing up**: Ensure it's properly registered in JOURNEY_PATHS
 2. **Progress not tracking**: Verify that progressField matches what's expected in userProfile
 3. **Home screen shows incorrect info**: Check that you've added your path to the getPathProgress function
 
-### 11.2 **NEW** Path Type Issues **[MOST COMMON]**
+### 12.2 **NEW** Path Type Issues **[MOST COMMON]**
 4. **Wrong upload interface**: Check that path is correctly categorized in pathTypeUtils.js
 5. **Text extraction not working**: Verify visual paths are in VISUAL_PATHS array
 6. **Wrong analysis approach**: Ensure path type matches expected behavior
 7. **Incorrect user instructions**: Verify path categorization affects UI text properly
 
-### 11.3 Visual Styling Issues **[MOST COMMON]**
+### 12.3 Visual Styling Issues **[MOST COMMON]**
 8. **Path appears with default/no colors**: Check that CSS color variable is added to `:root`
 9. **No colored borders**: Verify `.path-card.your-path-id` CSS is added
 10. **No hover glow effect**: Check that hover CSS with `box-shadow` is added
@@ -466,20 +547,20 @@ If you encounter issues when implementing a new path:
 13. **Modal lacks colored header**: Verify `.path-details-modal.your-path-id .modal-header` CSS is added
 14. **Buttons are default color**: Check `.primary-button.your-path-id` CSS is added
 
-### 11.4 Technical Issues
+### 12.4 Technical Issues
 15. **Completion not detected**: Ensure pathMaxDays in HomeScreen matches your path's actual days count
 16. **Icons not displaying**: Check that iconName exactly matches a Lucide icon name
 17. **UI not adapting to path length**: Make sure components are using the path registry data
 18. **Color format errors**: Verify color values are in correct RGB format without commas in CSS
 
-### 11.5 Export and Integration Issues
+### 12.5 Export and Integration Issues
 19. **PDF export problems**: Confirm fallback values in exportService.js
 20. **Analytics not working**: Check path-specific filtering if implemented
 21. **Cross-device issues**: Test responsive design with the new path colors
 
-## 12. **NEW** Path Type Reference Guide
+## 13. **NEW** Path Type Reference Guide
 
-### 12.1 Visual/Artistic Paths
+### 13.1 Visual/Artistic Paths
 **Use for paths involving:**
 - Drawing, painting, sketching
 - Digital art creation
@@ -495,7 +576,7 @@ If you encounter issues when implementing a new path:
 - Focus on visual analysis (colors, composition, artistic elements)
 - Provide creative-focused tips and instructions
 
-### 12.2 Text-Based Journaling Paths
+### 13.2 Text-Based Journaling Paths
 **Use for paths involving:**
 - Traditional handwritten reflection
 - Goal setting and planning
@@ -510,7 +591,7 @@ If you encounter issues when implementing a new path:
 - Focus on text content analysis
 - Provide traditional journaling tips and instructions
 
-## 13. CSS Color Reference
+## 14. CSS Color Reference
 
 Common RGB color values for inspiration:
 - **Purple**: `192, 38, 211` (vibrant), `124, 58, 237` (deep), `147, 51, 234` (medium)
@@ -520,7 +601,7 @@ Common RGB color values for inspiration:
 - **Orange**: `234, 88, 12` (vibrant), `245, 158, 11` (amber)
 - **Red**: `220, 38, 38` (vibrant), `239, 68, 68` (softer)
 
-## 14. Future Improvements
+## 15. Future Improvements
 
 For developers working on enhancing the path system further:
 
@@ -563,7 +644,7 @@ const getPathProgress = () => {
 5. **Color Theme Validation**: Add tools to ensure color accessibility and consistency
 6. **Dynamic Path Type Detection**: Automatically detect path type based on prompt content or metadata
 
-## 15. Complete Implementation Checklist
+## 16. Complete Implementation Checklist
 
 Use this checklist to ensure you haven't missed any steps:
 
@@ -571,6 +652,13 @@ Use this checklist to ensure you haven't missed any steps:
 - [ ] Journey days array created in JourneyData.js
 - [ ] Path registered in JOURNEY_PATHS registry
 - [ ] All required properties provided (id, title, subtitle, description, iconName, days, duration, color)
+
+### Translations (see Section 4) **[CRITICAL]**
+- [ ] `journeyTranslations/de/<path-id>.js` created (filename == path id)
+- [ ] `journeyTranslations/ka/<path-id>.js` created (filename == path id)
+- [ ] `days` is an object keyed by day number in both files
+- [ ] Every day present; bullet counts and blank-line blocks match English
+- [ ] Verified by switching the app to DE and KA
 
 ### **NEW** Path Type Classification
 - [ ] Path categorized as visual or text in pathTypeUtils.js VISUAL_PATHS or TEXT_EXTRACTION_PATHS
