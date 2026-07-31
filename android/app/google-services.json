@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "772954995257",
+    "project_id": "reflection-writer",
+    "storage_bucket": "reflection-writer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772954995257:android:8e582fe15e7ab7eeb7abe8",
+        "android_client_info": {
+          "package_name": "com.kairos.journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772954995257-fkbv82gvshr9jsi6r61orkk6sf7t43tn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kairos.journal",
+            "certificate_hash": "65ab42fce1a7b3188073b233f7db436c6d359a58"
+          }
+        },
+        {
+          "client_id": "772954995257-l8b9sla3hehejpb2qs99tmlr3etdgsrf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kairos.journal",
+            "certificate_hash": "3e6fb65a588d91c2e7b2c458d2b1d524a0e21d73"
+          }
+        },
+        {
+          "client_id": "772954995257-t6ul35hds46c0afq9r022tg9ofnlgk9b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYi0_GDZUPkZKECUlHJrdl_XkrP9K42zI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772954995257-t6ul35hds46c0afq9r022tg9ofnlgk9b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
