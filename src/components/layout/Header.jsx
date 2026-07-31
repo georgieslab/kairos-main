@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import useNavigation from '../../hooks/useNavigation';
+import { useNavigation } from '../../contexts/NavigationContext';
 import PathContextIndicator from '../common/PathContextIndicator';
 
 // Clean title mapping (English fallbacks)
@@ -41,7 +41,7 @@ const screenTitleKeys = {
 const Header = () => {
   const { t } = useTranslation('layout');
   const { currentUser } = useAuth();
-  const { currentScreen, navigateBack, shouldShowBackButton, currentPath, screenData } = useNavigation();
+  const { currentScreen, navigateBack, navigateToScreen, isRootTabScreen, currentPath, screenData } = useNavigation();
 
   // Dynamic title for daily view
   const getTitle = () => {
@@ -54,10 +54,18 @@ const Header = () => {
   };
 
   if (!currentUser) return null;
-  if (['welcome', 'signup', 'loading'].includes(currentScreen)) return null;
+
+  // Allowlist, not blocklist: every screen builds its own header, so this app
+  // header is only wanted on journal-archive, which has none of its own and
+  // needs a back button. Adding a screen here puts a second bar on top of
+  // whatever header that screen already draws — so don't, unless asked.
+  const SCREENS_WITH_APP_HEADER = ['journal-archive'];
+  if (!SCREENS_WITH_APP_HEADER.includes(currentScreen)) return null;
 
   const showPathContext = ['daily', 'upload', 'analysis'].includes(currentScreen) && currentPath;
-  const showBack = shouldShowBackButton();
+  // Root tab screens (home, paths, write, analytics, profile) get the logo;
+  // everything else — including journal-archive — gets a back button.
+  const showBack = !isRootTabScreen(currentScreen);
 
   return (
     <header className="spatial-header">
@@ -82,7 +90,7 @@ const Header = () => {
         <div className="spatial-header-right">
           {currentScreen !== 'settings' && (
             <button 
-              onClick={() => useNavigation().navigateToScreen('settings')}
+              onClick={() => navigateToScreen('settings')}
               className="spatial-icon-btn"
               aria-label={t('header.settingsAria', 'Settings')}
             >

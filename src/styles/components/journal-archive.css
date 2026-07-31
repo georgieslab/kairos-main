@@ -1,8 +1,11 @@
 /* journal-archive.css – Apple Spatial Glass (clean, no conflicts) */
 
-/* Base Glass Container */
+/* Screen root — transparent, like .analytics-screen and the cp-* screens.
+   The glass belongs to the cards inside; the screen itself floats over the
+   app's ambient gradient. A background/border/radius here would render the
+   whole archive as one opaque slab, which is not the spatial-glass pattern. */
 .ja-container.glass {
-  --glass-bg: rgba(28, 28, 30, 0.85);        /* fallback + blur base */
+  --glass-bg: rgba(28, 28, 30, 0.85);        /* used by child surfaces */
   --glass-border: rgba(255, 255, 255, 0.08);
   --text-primary: rgba(255, 255, 255, 0.92);
   --text-secondary: rgba(255, 255, 255, 0.65);
@@ -10,22 +13,18 @@
   --card-bg: rgba(28, 28, 30, 0.55);
   --c: 85, 139, 110;  /* default path colour */
 
-  /* Solid fallback (no blur) – ensures text is always readable */
-  background: #1c1c1e;
-  background: var(--glass-bg);
-  backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-radius: 2rem;
-  margin: 1rem;
-  padding: 0 1rem 1.5rem;
-  min-height: calc(100vh - 2rem);
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 1rem calc(7rem + env(safe-area-inset-bottom, 0px));
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
-  /* No opacity animation – always visible */
   opacity: 1;
 }
 
-/* Light theme */
+/* Light theme — variables only; the root stays transparent in both themes. */
 .ja-container.glass.light {
   --glass-bg: rgba(245, 245, 247, 0.85);
   --glass-border: rgba(0, 0, 0, 0.08);
@@ -33,7 +32,6 @@
   --text-secondary: rgba(0, 0, 0, 0.6);
   --text-muted: rgba(0, 0, 0, 0.4);
   --card-bg: rgba(245, 245, 247, 0.6);
-  background: #f5f5f7;
 }
 
 /* Inner light catch for every glass surface */
@@ -95,8 +93,20 @@
 }
 
 /* ===== Search Bar ===== */
+/* Search sits beside the filter trigger; the filter button used to live in a
+   TopBar that silently dropped it (TopBar takes `actions`, not `rightElement`). */
 .search-section {
   margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.search-section .glass-search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.search-section .glass-icon-btn {
+  flex: 0 0 auto;
 }
 .glass-search {
   background: rgba(255, 255, 255, 0.06);

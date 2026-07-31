@@ -25,7 +25,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getPreviousEntries } from '../../services/claudeService';
 import { getJourneyPath } from '../../data/JourneyData';
 import { useTheme } from '../../contexts/ThemeContext';
-import TopBar from '../common/TopBar';
 import '../../styles/components/journal-archive.css';
 
 const JournalArchive = ({ onBack, onSelectDay }) => {
@@ -202,7 +201,6 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
   if (entries.length === 0) {
     return (
       <div className={`ja-container glass ${isDarkMode ? 'dark' : 'light'}`}>
-        <TopBar title={t('archive.title', 'Journal Archive')} onBack={onBack} showBack />
         <div className="glass-empty-state">
           <BookOpen size={48} className="empty-icon" />
           <h2>{t('archive.emptyState.title', 'No Entries Yet')}</h2>
@@ -218,16 +216,6 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
   // Main archive UI
   return (
     <div className={`ja-container glass ${isDarkMode ? 'dark' : 'light'} ${isLoaded ? 'loaded' : ''}`}>
-      <TopBar
-        title={t('archive.title', 'Journal Archive')}
-        onBack={onBack}
-        showBack
-        rightElement={
-          <button className="glass-icon-btn" onClick={() => setShowFilterModal(true)}>
-            <Filter size={18} />
-          </button>
-        }
-      />
 
       {/* Stats Grid */}
       <div className="stats-grid">
@@ -278,6 +266,13 @@ const JournalArchive = ({ onBack, onSelectDay }) => {
             </button>
           )}
         </div>
+        <button
+          className="glass-icon-btn"
+          onClick={() => setShowFilterModal(true)}
+          aria-label={t('archive.filters.filterAndSort', 'Filter & Sort')}
+        >
+          <Filter size={18} />
+        </button>
       </div>
 
       {/* Quick Filters */}

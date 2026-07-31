@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Compass, Heart, Brain } from 'lucide-react';
-import useNavigation from '../../hooks/useNavigation';
+import { useNavigation } from '../../contexts/NavigationContext';
 import { getJourneyPath } from '../../data/JourneyData';
 
 /**
