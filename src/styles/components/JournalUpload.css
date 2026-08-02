@@ -1,13 +1,19 @@
 /* JournalUpload.css - Apple Spatial Glass Design System */
 
 /* ===== CONTAINER ===== */
+/* ===== PAGE CONTAINER =====
+   The backdrop (mesh gradient, noise, drifting aurora) comes from
+   `.spatial-surface` in spatialSurface.css, shared with the voice screen.
+   Do NOT reintroduce `background: #000` here — it was defined twice in this
+   file, and it is why the glass cards below rendered as flat grey panels:
+   backdrop-filter can only frost what is actually behind it. */
 .upload-glass-container {
-  min-height: 100vh;
-  padding: 20px 16px;
-  padding-bottom: 40px;
-  background: #000;
+  padding: 20px 16px 40px;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
   -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* ===== HEADER ===== */
@@ -45,15 +51,49 @@
   pointer-events: none;
 }
 
-/* ===== MAIN GLASS CARD ===== */
+/* ===== MAIN GLASS CARD =====
+   Matched to .hero-card (homeScreen.css) and .glass-card (voice) so all three
+   capture surfaces read as the same material: 40px radius, the depth shadow,
+   and a hairline top highlight. */
 .upload-glass-card {
   background: rgba(28, 28, 30, 0.65);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.05),
+              0 8px 32px rgba(0, 0, 0, 0.25);
+  border-radius: 40px;
   padding: 32px 24px;
+  position: relative;
+}
+
+/* Catches the light so the card doesn't read as a flat rectangle. */
+.upload-glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 76%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  pointer-events: none;
+}
+
+/* ===== ENTRANCE =====
+   Same cascade as the voice screen (keyframes live in spatialSurface.css), so
+   moving between capture flows feels continuous rather than like a page load. */
+.upload-glass-container .upload-glass-header {
+  animation: spatialEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+}
+.upload-glass-container .upload-glass-card {
+  animation: spatialEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-glass-container .upload-glass-header,
+  .upload-glass-container .upload-glass-card {
+    animation: none;
+  }
 }
 
 
@@ -837,18 +877,6 @@
   }
 }
 
-.upload-glass-container {
-    min-height: 100vh;
-    padding: 20px 16px;
-    padding-bottom: 40px;
-    background: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 /* ===== Glass Upload SVG Icon ===== */
 .glass-upload-icon-wrapper {
   display: flex;
@@ -1097,9 +1125,9 @@
    and the container is hardcoded #000; the older .hs-light / .light / mis-named
    (.glass-upload-*) overrides never matched. These target the real classes.
    ========================================================================== */
-.light-theme .upload-glass-container {
-  background: linear-gradient(180deg, #f5f6f8 0%, #eef0f4 100%);
-}
+/* Light-mode backdrop is handled by `.light-theme .spatial-surface` in
+   spatialSurface.css, which also flips the aurora blend mode. Repainting the
+   background here would win on source order and silently drop the aurora. */
 
 .light-theme .upload-glass-back {
   background: rgba(255, 255, 255, 0.7);

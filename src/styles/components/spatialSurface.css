@@ -1,0 +1,153 @@
+/* src/styles/components/spatialSurface.css
+   ============================================================================
+   SHARED SPATIAL GLASS PAGE SURFACE
+   ============================================================================
+
+   The backdrop every full-screen capture flow sits on: voice recording, photo
+   upload, artwork upload. Mirrors `.spatial-home` in homeScreen.css so moving
+   between screens feels like one continuous space rather than several apps.
+
+   WHY THIS EXISTS AS A SHARED FILE, AND WHY IT MATTERS MORE THAN IT LOOKS:
+
+   `backdrop-filter` can only frost what is actually behind it. Each of these
+   pages previously painted an opaque `background: #000` under its cards, so a
+   perfectly correct `blur(40px) saturate(180%)` had nothing but flat black to
+   work with and rendered as grey plastic. The cards were never the problem —
+   the surface under them was. Giving them a gradient to sit on is what turns
+   the same CSS into glass.
+
+   Add `spatial-surface` alongside a page's own container class:
+
+       <div className="spatial-surface upload-glass-container">
+
+   The page keeps its own layout and card rules; this file owns the backdrop.
+
+   Pages may set `--c` inline (an "R, G, B" triplet) to tint the right-hand
+   aurora with the active journey colour. It falls back to Kairos green.
+   ========================================================================== */
+
+.spatial-surface {
+  min-height: 100vh;
+  position: relative;
+  /* clip, not hidden: `hidden` forces overflow-y:auto, which turns this into a
+     nested scroll container and traps touch scrolling on mobile. */
+  overflow-x: hidden; /* fallback for browsers without `clip` */
+  overflow-x: clip;
+
+  /* Deep space base with static mesh gradients */
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(var(--c-purple, 139, 92, 246), 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--c-blue, 59, 130, 246), 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--c-green, 85, 139, 110), 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #050507 0%, #0a0a0c 100%);
+
+  /* Noise overlay — the tactile grain that keeps large dark areas from
+     banding on OLED and cheap panels alike. */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 10% 20%, rgba(var(--c-purple, 139, 92, 246), 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--c-blue, 59, 130, 246), 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--c-green, 85, 139, 110), 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #050507 0%, #0a0a0c 100%);
+
+  z-index: 0;
+}
+
+/* Content sits above the aurora blobs. Without this, the blurred blobs paint
+   over the cards instead of behind them. */
+.spatial-surface > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== AMBIENT AURORA BLOBS =====
+   Left blob is purple; right blob follows the active journey via --c. Same
+   geometry and 20s/25s timings as .spatial-home, deliberately — matching the
+   drift rate is what makes two screens read as the same room. */
+.spatial-surface::before,
+.spatial-surface::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  width: 150%;
+  height: 150%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+
+.spatial-surface::before {
+  left: -20%;
+  background: radial-gradient(circle, rgba(var(--c-purple, 139, 92, 246), 0.3), transparent 65%);
+  animation: spatialAuroraDrift1 20s ease-in-out infinite alternate;
+}
+
+.spatial-surface::after {
+  right: -20%;
+  bottom: -40%;
+  background: radial-gradient(circle, rgba(var(--c, 85, 139, 110), 0.25), transparent 65%);
+  animation: spatialAuroraDrift2 25s ease-in-out infinite alternate;
+}
+
+@keyframes spatialAuroraDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(10%, 5%) scale(1.1); }
+  100% { transform: translate(-5%, 10%) scale(0.95); }
+}
+
+@keyframes spatialAuroraDrift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-10%, -5%) scale(1.15); }
+  100% { transform: translate(5%, -10%) scale(1); }
+}
+
+/* ===== LIGHT MODE =====
+   Same structure inverted. The blend mode has to change: `screen` brightens
+   toward white, so on a light backdrop it washes the blobs out completely.
+   `multiply` keeps them readable as soft colour instead.
+
+   Two selectors because the app has two light-mode mechanisms in play: the
+   voice screen puts a `.light` class on its own container (from ThemeContext),
+   while the upload screens rely on the global `.light-theme` on <html>. Both
+   are supported here so a page works whichever one it uses. */
+.light-theme .spatial-surface,
+.spatial-surface.light {
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(var(--c-purple, 139, 92, 246), 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--c-blue, 59, 130, 246), 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--c-green, 85, 139, 110), 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(var(--c-purple, 139, 92, 246), 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--c-blue, 59, 130, 246), 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--c-green, 85, 139, 110), 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+}
+
+.light-theme .spatial-surface::before,
+.light-theme .spatial-surface::after,
+.spatial-surface.light::before,
+.spatial-surface.light::after {
+  mix-blend-mode: multiply;
+  opacity: 0.28;
+  filter: blur(90px);
+}
+
+/* ===== ENTRANCE CHOREOGRAPHY =====
+   Shared keyframes; each page picks which of its own elements cascade in and
+   with what delays. `both` fill keeps an element hidden through its delay. */
+@keyframes spatialEnter {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spatial-surface::before,
+  .spatial-surface::after {
+    animation: none;
+  }
+}

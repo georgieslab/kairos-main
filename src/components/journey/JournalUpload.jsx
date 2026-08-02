@@ -487,7 +487,7 @@ const JournalUpload = ({
   }
 
   return (
-    <div className="upload-glass-container" style={{ '--c': pathColor }}>
+    <div className="spatial-surface upload-glass-container" style={{ '--c': pathColor }}>
       {/* Header */}
       <div className="upload-glass-header">
         <button className="upload-glass-back" onClick={onBack} disabled={isUploading}>

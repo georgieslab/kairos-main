@@ -20,6 +20,8 @@ import {
   Edit3,
   Smartphone,
   Shield,
+  Sparkles,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -698,15 +700,19 @@ const VoiceJournalUpload = ({
   // ========== RENDER (Glass UI) ==========
   if (isUploading) {
     return (
-      <div className={`glass-voice-container ${themeClass}`}>
+      <div className={`spatial-surface glass-voice-container ${themeClass}`}>
         <div className="glass-loading-state">
           <div className="glass-spinner" />
           <h3>{t('voiceUpload.processingTitle', 'Processing Voice Entry')}</h3>
           <p>{t('voiceUpload.processingSubtitle', 'Uploading and analyzing your voice journal...')}</p>
+          {/* Icons are lucide SVGs rather than emoji: emoji render as a
+              different typeface per platform, carry their own colour, and sit
+              off the text baseline — which is most of what makes them look
+              cheap. These inherit currentColor and the stroke weight. */}
           <div className="glass-stats">
-            <span>{t('voiceUpload.claudeAnalysis', '✨ Claude AI analysis')}</span>
-            <span>{t('voiceUpload.wordsStat', '📝 {{count}} words', { count: transcription.split(/\s+/).filter(Boolean).length })}</span>
-            <span>{t('voiceUpload.timeStat', '⏱️ {{time}}', { time: formatTime(recordingTime) })}</span>
+            <span><Sparkles size={13} strokeWidth={1.8} />{t('voiceUpload.claudeAnalysis', 'Claude AI analysis')}</span>
+            <span><FileText size={13} strokeWidth={1.8} />{t('voiceUpload.wordsStat', '{{count}} words', { count: transcription.split(/\s+/).filter(Boolean).length })}</span>
+            <span><Clock size={13} strokeWidth={1.8} />{t('voiceUpload.timeStat', '{{time}}', { time: formatTime(recordingTime) })}</span>
           </div>
         </div>
       </div>
@@ -714,7 +720,13 @@ const VoiceJournalUpload = ({
   }
 
   return (
-    <div className={`glass-voice-container ${themeClass}`} style={{ '--c': pathColorRgb }}>
+    // is-recording tints the ambient aurora red and gives it a slow breath, so
+    // the room itself reports the state. Paused deliberately doesn't qualify —
+    // a still room reads as stopped, which is what paused means.
+    <div
+      className={`spatial-surface glass-voice-container ${themeClass}${isRecording && !isPaused ? ' is-recording' : ''}`}
+      style={{ '--c': pathColorRgb }}
+    >
       {/* Header */}
       <div className="glass-header-row">
         <button className="glass-icon-btn" onClick={onBack}>
@@ -741,27 +753,6 @@ const VoiceJournalUpload = ({
         </div>
       )}
 
-      {/* How-it-works guide (all platforms — record, then auto-transcribe) */}
-      {hasPermission === true && !isRecording && !audioUrl && (
-        <div className="glass-card voice-howto-card">
-          <h3>{t('voiceUpload.howItWorksTitle', 'How it works')}</h3>
-          <ol className="voice-steps">
-            <li className="voice-step">
-              <span className="voice-step-num">1</span>
-              <span>{t('voiceUpload.step1', 'Tap the microphone and speak naturally.')}</span>
-            </li>
-            <li className="voice-step">
-              <span className="voice-step-num">2</span>
-              <span>{t('voiceUpload.step2', "Tap the stop button when you're finished.")}</span>
-            </li>
-            <li className="voice-step">
-              <span className="voice-step-num">3</span>
-              <span>{t('voiceUpload.step3', 'Your words turn into text automatically — review and edit before saving.')}</span>
-            </li>
-          </ol>
-        </div>
-      )}
-
       {/* Today's Prompt */}
       {prompt && hasPermission === true && (
         <div className="glass-card prompt-card">
@@ -774,7 +765,7 @@ const VoiceJournalUpload = ({
       {isRecording && (
         <div className="glass-status active">
           <Mic size={16} />
-          <span>{t('voiceUpload.recordingStatus', "🎙️ Recording — speak naturally. We'll write it down when you stop.")}</span>
+          <span>{t('voiceUpload.recordingStatus', "Recording — speak naturally. We'll write it down when you stop.")}</span>
         </div>
       )}
 
@@ -808,7 +799,7 @@ const VoiceJournalUpload = ({
                     <span>{isPaused ? t('voiceUpload.paused', 'Paused') : t('voiceUpload.recording', 'Recording')}</span>
                     <Clock size={14} />
                     <span>{formatTime(recordingTime)}</span>
-                    {isMobileDevice && <span className="device-badge">{t('voiceUpload.mobileBadge', '📱 Mobile')}</span>}
+                    {isMobileDevice && <span className="device-badge"><Smartphone size={11} strokeWidth={1.8} />{t('voiceUpload.mobileBadge', 'Mobile')}</span>}
                   </div>
                   {!isMobileDevice && (
                     <div className="level-meter">
@@ -841,21 +832,42 @@ const VoiceJournalUpload = ({
         </div>
       )}
 
+      {/* How-it-works guide (all platforms — record, then auto-transcribe) */}
+      {hasPermission === true && !isRecording && !audioUrl && (
+        <div className="glass-card voice-howto-card">
+          <h3>{t('voiceUpload.howItWorksTitle', 'How it works')}</h3>
+          <ol className="voice-steps">
+            <li className="voice-step">
+              <span className="voice-step-num">1</span>
+              <span>{t('voiceUpload.step1', 'Tap the microphone and speak naturally.')}</span>
+            </li>
+            <li className="voice-step">
+              <span className="voice-step-num">2</span>
+              <span>{t('voiceUpload.step2', "Tap the stop button when you're finished.")}</span>
+            </li>
+            <li className="voice-step">
+              <span className="voice-step-num">3</span>
+              <span>{t('voiceUpload.step3', 'Your words turn into text automatically — review and edit before saving.')}</span>
+            </li>
+          </ol>
+        </div>
+      )}
+
       {/* Transcription Progress (Whisper, all platforms) */}
       {isTranscribing && (
         <div className="glass-card transcription-card">
           <div className="transcription-header">
             <Volume2 size={16} />
-            <span>{t('voiceUpload.writingDown', '✍️ Writing down your entry…')}</span>
+            <span>{t('voiceUpload.writingDown', 'Writing down your entry…')}</span>
           </div>
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${transcriptionProgress}%` }} />
           </div>
           <p className="progress-text">
-            {transcriptionProgress < 30 && t('voiceUpload.uploadingRecording', '📤 Uploading your recording…')}
-            {transcriptionProgress >= 30 && transcriptionProgress < 70 && t('voiceUpload.convertingSpeech', '✨ Converting speech to text…')}
-            {transcriptionProgress >= 70 && transcriptionProgress < 100 && t('voiceUpload.almostThere', '🪄 Almost there…')}
-            {transcriptionProgress === 100 && t('voiceUpload.done', '✅ Done!')}
+            {transcriptionProgress < 30 && t('voiceUpload.uploadingRecording', 'Uploading your recording…')}
+            {transcriptionProgress >= 30 && transcriptionProgress < 70 && t('voiceUpload.convertingSpeech', 'Converting speech to text…')}
+            {transcriptionProgress >= 70 && transcriptionProgress < 100 && t('voiceUpload.almostThere', 'Almost there…')}
+            {transcriptionProgress === 100 && t('voiceUpload.done', 'Done!')}
           </p>
         </div>
       )}
