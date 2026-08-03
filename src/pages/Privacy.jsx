@@ -2,7 +2,60 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, Mail, Shield, Eye, Lock, MapPin, Brain, Download, Trash2, Settings, ExternalLink, Users, AlertCircle, Clock, Globe, FileText, Database, Smartphone } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  Mail,
+  Shield,
+  Eye,
+  Lock,
+  MapPin,
+  Brain,
+  Download,
+  Trash2,
+  Settings,
+  ExternalLink,
+  Users,
+  AlertCircle,
+  Clock,
+  Globe,
+  FileText,
+  Database,
+  Smartphone,
+  AlertOctagon,
+  AlertTriangle,
+  Ban,
+  BarChart3,
+  BookOpen,
+  Bot,
+  Bug,
+  Building2,
+  Cake,
+  CalendarDays,
+  CheckCircle2,
+  ClipboardList,
+  Code2,
+  Eraser,
+  FileImage,
+  HardDrive,
+  Image,
+  KeyRound,
+  Landmark,
+  LifeBuoy,
+  Lightbulb,
+  Mic,
+  Palette,
+  PenLine,
+  Pencil,
+  RefreshCw,
+  Search,
+  SlidersHorizontal,
+  Tag,
+  Target,
+  Timer,
+  User,
+  XCircle
+} from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import '../styles/components/terms.css';
 
@@ -136,12 +189,12 @@ const PrivacyPolicy = ({ onBack }) => {
               Account & Profile Information
             </h4>
             <div className="data-items">
-              <div className="data-item">📧 <strong>Email address</strong> - For account creation, login, and important notifications</div>
-              <div className="data-item">👤 <strong>Full name</strong> - To personalize your experience and communications</div>
-              <div className="data-item">🎂 <strong>Date of birth</strong> - To provide age-appropriate content and insights</div>
-              <div className="data-item">🖼️ <strong>Profile picture</strong> - Optional, only if you choose to upload one</div>
-              <div className="data-item">🔐 <strong>Password (encrypted)</strong> - Securely hashed, never stored in plain text</div>
-              <div className="data-item">⚙️ <strong>App preferences</strong> - Your settings, theme choices, and notification preferences</div>
+              <div className="data-item"><Mail size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Email address</strong> - For account creation, login, and important notifications</div>
+              <div className="data-item"><User size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Full name</strong> - To personalize your experience and communications</div>
+              <div className="data-item"><Cake size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Date of birth</strong> - To provide age-appropriate content and insights</div>
+              <div className="data-item"><Image size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Profile picture</strong> - Optional, only if you choose to upload one</div>
+              <div className="data-item"><KeyRound size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Password (encrypted)</strong> - Securely hashed, never stored in plain text</div>
+              <div className="data-item"><Settings size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>App preferences</strong> - Your settings, theme choices, and notification preferences</div>
             </div>
           </div>
 
@@ -151,7 +204,7 @@ const PrivacyPolicy = ({ onBack }) => {
               Location Information (Optional)
             </h4>
             <div className="info-box">
-              <h5 className="info-box-title">🎯 What We Actually Store</h5>
+              <h5 className="info-box-title"><Target size={16} strokeWidth={1.7} aria-hidden="true" /> What We Actually Store</h5>
               <ul className="styled-list">
                 <li><strong>City Name Only:</strong> We store just the city you provide (e.g., "Vienna"), not precise GPS coordinates</li>
                 <li><strong>Completely Optional:</strong> You can skip this during signup or leave it blank</li>
@@ -168,13 +221,13 @@ const PrivacyPolicy = ({ onBack }) => {
               Multi-Modal Journal Content
             </h4>
             <div className="data-items">
-              <div className="data-item">✍️ <strong>Text entries</strong> - Written journal entries you create in the app</div>
-              <div className="data-item">🎤 <strong>Voice recordings</strong> - Audio recordings and AI-generated transcriptions</div>
-              <div className="data-item">🎨 <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
-              <div className="data-item">�️ <strong>Image descriptions</strong> - AI-generated descriptions of your visual content</div>
-              <div className="data-item">💡 <strong>AI insights</strong> - Cross-modal analysis and patterns from all entry types</div>
-              <div className="data-item">📊 <strong>Progress tracking</strong> - Streaks, completion rates, and journey milestones</div>
-              <div className="data-item">🏷️ <strong>Organization data</strong> - Tags, categories, and labels you apply</div>
+              <div className="data-item"><PenLine size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Text entries</strong> - Written journal entries you create in the app</div>
+              <div className="data-item"><Mic size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Voice recordings</strong> - Audio recordings and AI-generated transcriptions</div>
+              <div className="data-item"><Palette size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
+              <div className="data-item"><FileImage size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Image descriptions</strong> - AI-generated descriptions of your visual content</div>
+              <div className="data-item"><Lightbulb size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>AI insights</strong> - Cross-modal analysis and patterns from all entry types</div>
+              <div className="data-item"><BarChart3 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Progress tracking</strong> - Streaks, completion rates, and journey milestones</div>
+              <div className="data-item"><Tag size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Organization data</strong> - Tags, categories, and labels you apply</div>
             </div>
             
             <div className="warning-box">
@@ -192,11 +245,11 @@ const PrivacyPolicy = ({ onBack }) => {
               Technical & Usage Information
             </h4>
             <div className="data-items">
-              <div className="data-item">📱 <strong>Device information</strong> - Device type, OS version, app version</div>
-              <div className="data-item">📊 <strong>Usage analytics</strong> - How you use the app (anonymized and aggregated)</div>
-              <div className="data-item">🐛 <strong>Error logs</strong> - Technical information to help us fix bugs and improve performance</div>
-              <div className="data-item">⏰ <strong>Session data</strong> - When you use the app and for how long (to improve features)</div>
-              <div className="data-item">🌐 <strong>IP address</strong> - For security and to prevent abuse (not linked to your identity)</div>
+              <div className="data-item"><Smartphone size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Device information</strong> - Device type, OS version, app version</div>
+              <div className="data-item"><BarChart3 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Usage analytics</strong> - How you use the app (anonymized and aggregated)</div>
+              <div className="data-item"><Bug size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Error logs</strong> - Technical information to help us fix bugs and improve performance</div>
+              <div className="data-item"><Clock size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Session data</strong> - When you use the app and for how long (to improve features)</div>
+              <div className="data-item"><Globe size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>IP address</strong> - For security and to prevent abuse (not linked to your identity)</div>
             </div>
           </div>
 
@@ -333,15 +386,15 @@ const PrivacyPolicy = ({ onBack }) => {
           <div className="security-measures">
             <h4 className="subsection-title">Technical Security Measures</h4>
             <div className="security-grid">
-              <div className="security-item">🔐 <strong>End-to-end encryption</strong> for journal content during transmission</div>
-              <div className="security-item">🏦 <strong>AES-256 encryption</strong> for data storage at rest</div>
-              <div className="security-item">🔒 <strong>HTTPS/TLS 1.3</strong> for all data transmission</div>
-              <div className="security-item">🛡️ <strong>Password hashing</strong> using bcrypt with salt</div>
-              <div className="security-item">🔍 <strong>Regular security audits</strong> by third-party experts</div>
-              <div className="security-item">👥 <strong>Strict access controls</strong> - limited team access on need-to-know basis</div>
-              <div className="security-item">📊 <strong>Real-time monitoring</strong> for suspicious activity</div>
-              <div className="security-item">💾 <strong>Secure backups</strong> with redundant storage</div>
-              <div className="security-item">🏢 <strong>SOC 2 compliant</strong> data centers</div>
+              <div className="security-item"><KeyRound size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>End-to-end encryption</strong> for journal content during transmission</div>
+              <div className="security-item"><Landmark size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>AES-256 encryption</strong> for data storage at rest</div>
+              <div className="security-item"><Lock size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>HTTPS/TLS 1.3</strong> for all data transmission</div>
+              <div className="security-item"><Shield size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Password hashing</strong> using bcrypt with salt</div>
+              <div className="security-item"><Search size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Regular security audits</strong> by third-party experts</div>
+              <div className="security-item"><Users size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Strict access controls</strong> - limited team access on need-to-know basis</div>
+              <div className="security-item"><BarChart3 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Real-time monitoring</strong> for suspicious activity</div>
+              <div className="security-item"><HardDrive size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Secure backups</strong> with redundant storage</div>
+              <div className="security-item"><Building2 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>SOC 2 compliant</strong> data centers</div>
             </div>
           </div>
 
@@ -349,25 +402,25 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">Operational Security</h4>
             <div className="control-options">
               <div className="control-option">
-                <div className="control-option-icon">👨‍💻</div>
+                <div className="control-option-icon"><Code2 size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Team Training:</strong> All team members receive regular security and privacy training
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">📋</div>
+                <div className="control-option-icon"><ClipboardList size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Privacy by Design:</strong> Security and privacy considerations built into every feature
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">🔒</div>
+                <div className="control-option-icon"><Lock size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Access Logging:</strong> All data access is logged and monitored for unusual activity
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">⚠️</div>
+                <div className="control-option-icon"><AlertTriangle size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Incident Response:</strong> Established procedures for handling any security incidents
                 </div>
@@ -413,25 +466,25 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">👁️</div>
+                  <div className="control-option-icon"><Eye size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>View All Data:</strong> See exactly what personal information we have about you
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">📥</div>
+                  <div className="control-option-icon"><Download size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Download Everything:</strong> Export all your data in multiple formats (JSON, TXT, CSV, PDF)
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">📋</div>
+                  <div className="control-option-icon"><ClipboardList size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Data Report:</strong> Get a comprehensive report of how your data is being used
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🔄</div>
+                  <div className="control-option-icon"><RefreshCw size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Transfer Data:</strong> Move your data to another service (data portability)
                   </div>
@@ -446,19 +499,19 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">✏️</div>
+                  <div className="control-option-icon"><Pencil size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Update Information:</strong> Correct or update any personal information anytime
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🏷️</div>
+                  <div className="control-option-icon"><Tag size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Edit Entries:</strong> Modify, update, or enhance any of your journal entries
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">⚙️</div>
+                  <div className="control-option-icon"><Settings size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Privacy Settings:</strong> Adjust all privacy and data processing preferences
                   </div>
@@ -473,25 +526,25 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">🎯</div>
+                  <div className="control-option-icon"><Target size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Skip During Setup:</strong> Choose not to provide location information during account creation
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🌍</div>
+                  <div className="control-option-icon"><Globe size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Change Anytime:</strong> Update your city or location information whenever you move
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🚫</div>
+                  <div className="control-option-icon"><Ban size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Remove Completely:</strong> Delete all location data to disable weather features
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🔒</div>
+                  <div className="control-option-icon"><Lock size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>No Tracking:</strong> We never track your precise location or movement history
                   </div>
@@ -506,25 +559,25 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">🤖</div>
+                  <div className="control-option-icon"><Bot size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Enable/Disable AI:</strong> Turn AI analysis on or off for all modalities in privacy settings
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🎚️</div>
+                  <div className="control-option-icon"><SlidersHorizontal size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Modality Selection:</strong> Choose which types (text, voice, visual) AI can analyze
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">💡</div>
+                  <div className="control-option-icon"><Lightbulb size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Insight Control:</strong> Delete previous insights or exclude specific entries from analysis
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🔒</div>
+                  <div className="control-option-icon"><Lock size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Processing Level:</strong> Choose basic, standard, or advanced AI analysis depth
                   </div>
@@ -539,19 +592,19 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">⏱️</div>
+                  <div className="control-option-icon"><Timer size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Retention Periods:</strong> Choose how long we keep your data (1 month to indefinite)
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🗑️</div>
+                  <div className="control-option-icon"><Trash2 size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Auto-Delete:</strong> Set automatic deletion of old entries after specified time periods
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">💾</div>
+                  <div className="control-option-icon"><HardDrive size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Backup Control:</strong> Choose whether your data is included in our backup systems
                   </div>
@@ -573,25 +626,25 @@ const PrivacyPolicy = ({ onBack }) => {
               </div>
               <div className="control-options">
                 <div className="control-option">
-                  <div className="control-option-icon">🗑️</div>
+                  <div className="control-option-icon"><Trash2 size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Delete Individual Entries:</strong> Remove specific journal entries permanently
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">🧹</div>
+                  <div className="control-option-icon"><Eraser size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Selective Deletion:</strong> Remove specific types of data (location, photos, insights)
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">💣</div>
+                  <div className="control-option-icon"><AlertOctagon size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>Account Deletion:</strong> Permanently delete everything and close your account
                   </div>
                 </div>
                 <div className="control-option">
-                  <div className="control-option-icon">⏰</div>
+                  <div className="control-option-icon"><Clock size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                   <div>
                     <strong>30-Day Grace Period:</strong> Recover your account within 30 days of deletion request
                   </div>
@@ -896,14 +949,14 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
-                  <div className="retention-period">📅 <strong>Default:</strong> Indefinite</div>
+                  <div className="retention-period"><CalendarDays size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Default:</strong> Indefinite</div>
                   <div className="retention-description">
                     All journal entries (text, voice, visual) are kept until you delete them or close your account, 
                     allowing you to build a comprehensive multi-modal archive.
                   </div>
                 </div>
                 <div className="retention-option">
-                  <div className="retention-period">⚙️ <strong>Customizable:</strong> 1 month to 10 years</div>
+                  <div className="retention-period"><Settings size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Customizable:</strong> 1 month to 10 years</div>
                   <div className="retention-description">
                     Set automatic deletion rules separately for each modality or apply globally to all content types.
                   </div>
@@ -918,13 +971,13 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
-                  <div className="retention-period">🔄 <strong>Active Account:</strong> Until deletion</div>
+                  <div className="retention-period"><RefreshCw size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Active Account:</strong> Until deletion</div>
                   <div className="retention-description">
                     Profile information is kept as long as your account is active and for service provision.
                   </div>
                 </div>
                 <div className="retention-option">
-                  <div className="retention-period">🗑️ <strong>After Deletion:</strong> 30 days maximum</div>
+                  <div className="retention-period"><Trash2 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>After Deletion:</strong> 30 days maximum</div>
                   <div className="retention-description">
                     Account recovery period, then permanently deleted from all systems including backups.
                   </div>
@@ -939,13 +992,13 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
-                  <div className="retention-period">🤖 <strong>Linked to Entries:</strong> Same as source content</div>
+                  <div className="retention-period"><Bot size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Linked to Entries:</strong> Same as source content</div>
                   <div className="retention-description">
                     AI insights are deleted when the corresponding journal entries (text, voice, or visual) are deleted.
                   </div>
                 </div>
                 <div className="retention-option">
-                  <div className="retention-period">📊 <strong>Aggregated Patterns:</strong> Anonymized indefinitely</div>
+                  <div className="retention-period"><BarChart3 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Aggregated Patterns:</strong> Anonymized indefinitely</div>
                   <div className="retention-description">
                     Anonymous, aggregated multi-modal insights help improve AI for all users (no personal data retained).
                   </div>
@@ -960,13 +1013,13 @@ const PrivacyPolicy = ({ onBack }) => {
               </h4>
               <div className="retention-options">
                 <div className="retention-option">
-                  <div className="retention-period">📊 <strong>Analytics:</strong> 2 years maximum</div>
+                  <div className="retention-period"><BarChart3 size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Analytics:</strong> 2 years maximum</div>
                   <div className="retention-description">
                     Anonymized usage data for app improvement, automatically deleted after 2 years.
                   </div>
                 </div>
                 <div className="retention-option">
-                  <div className="retention-period">🐛 <strong>Error Logs:</strong> 90 days</div>
+                  <div className="retention-period"><Bug size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Error Logs:</strong> 90 days</div>
                   <div className="retention-description">
                     Technical logs for debugging and performance optimization, automatically deleted quarterly.
                   </div>
@@ -1000,15 +1053,15 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">Where Your Data May Be Processed</h4>
             <div className="transfer-locations">
               <div className="transfer-location">
-                <h5 className="location-title">🇪🇺 European Union</h5>
+                <h5 className="location-title">European Union</h5>
                 <p>Primary data processing for EU residents, full GDPR compliance and protection.</p>
               </div>
               <div className="transfer-location">
-                <h5 className="location-title">🇺🇸 United States</h5>
+                <h5 className="location-title">United States</h5>
                 <p>Infrastructure services with EU-US Data Privacy Framework compliance for EU data.</p>
               </div>
               <div className="transfer-location">
-                <h5 className="location-title">🌍 Other Regions</h5>
+                <h5 className="location-title"><Globe size={16} strokeWidth={1.7} aria-hidden="true" /> Other Regions</h5>
                 <p>Limited processing only with adequate protection measures and your explicit consent.</p>
               </div>
             </div>
@@ -1033,19 +1086,19 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">Your Location Preferences</h4>
             <div className="control-options">
               <div className="control-option">
-                <div className="control-option-icon">📍</div>
+                <div className="control-option-icon"><MapPin size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Data Residency:</strong> Choose your preferred data processing region in account settings
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">🚫</div>
+                <div className="control-option-icon"><Ban size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Transfer Restrictions:</strong> Opt out of international transfers where technically possible
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">📧</div>
+                <div className="control-option-icon"><Mail size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Transfer Notifications:</strong> Receive notifications about any new international processing
                 </div>
@@ -1104,25 +1157,25 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">Special Considerations for Teens (13-17)</h4>
             <div className="control-options">
               <div className="control-option">
-                <div className="control-option-icon">🛡️</div>
+                <div className="control-option-icon"><Shield size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Enhanced Privacy:</strong> Additional privacy protections and simplified settings
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">📚</div>
+                <div className="control-option-icon"><BookOpen size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Educational Content:</strong> Age-appropriate journaling guidance and mental health resources
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">👥</div>
+                <div className="control-option-icon"><Users size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Limited Sharing:</strong> Reduced data sharing and additional consent requirements
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">🆘</div>
+                <div className="control-option-icon"><LifeBuoy size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Crisis Resources:</strong> Immediate access to mental health support when needed
                 </div>
@@ -1141,15 +1194,15 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">How We Notify You of Changes</h4>
             <div className="notification-methods">
               <div className="notification-method">
-                <h5 className="method-title">📧 Email Notification</h5>
+                <h5 className="method-title"><Mail size={16} strokeWidth={1.7} aria-hidden="true" /> Email Notification</h5>
                 <p>We'll send you an email about significant changes at least 30 days before they take effect.</p>
               </div>
               <div className="notification-method">
-                <h5 className="method-title">📱 In-App Notice</h5>
+                <h5 className="method-title"><Smartphone size={16} strokeWidth={1.7} aria-hidden="true" /> In-App Notice</h5>
                 <p>Important changes will be highlighted when you next open the app.</p>
               </div>
               <div className="notification-method">
-                <h5 className="method-title">🌐 Website Banner</h5>
+                <h5 className="method-title"><Globe size={16} strokeWidth={1.7} aria-hidden="true" /> Website Banner</h5>
                 <p>Major policy updates will be announced on our website and support pages.</p>
               </div>
             </div>
@@ -1158,7 +1211,7 @@ const PrivacyPolicy = ({ onBack }) => {
           <div className="change-types">
             <h4 className="subsection-title">Types of Changes</h4>
             <div className="change-category">
-              <h5 className="change-title">⚠️ Material Changes</h5>
+              <h5 className="change-title"><AlertTriangle size={16} strokeWidth={1.7} aria-hidden="true" /> Material Changes</h5>
               <p>Significant changes that affect your rights or how we use your data:</p>
               <ul className="styled-list">
                 <li>New data collection practices</li>
@@ -1207,25 +1260,25 @@ const PrivacyPolicy = ({ onBack }) => {
             <h4 className="subsection-title">Your Options When Policies Change</h4>
             <div className="control-options">
               <div className="control-option">
-                <div className="control-option-icon">✅</div>
+                <div className="control-option-icon"><CheckCircle2 size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Accept Changes:</strong> Continue using Καιρός under the new policy
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">❌</div>
+                <div className="control-option-icon"><XCircle size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Object to Changes:</strong> Contact us to discuss specific concerns
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">📥</div>
+                <div className="control-option-icon"><Download size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Export Your Data:</strong> Download all your information before changes take effect
                 </div>
               </div>
               <div className="control-option">
-                <div className="control-option-icon">🗑️</div>
+                <div className="control-option-icon"><Trash2 size={20} strokeWidth={1.7} aria-hidden="true" /></div>
                 <div>
                   <strong>Delete Your Account:</strong> Permanently remove all data before new policy applies
                 </div>

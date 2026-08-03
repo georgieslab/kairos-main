@@ -4,19 +4,26 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ChevronDown,
-  ChevronUp, 
-  Mail, 
-  ExternalLink, 
-  Shield, 
-  Users, 
-  Globe, 
+  ChevronUp,
+  Mail,
+  ExternalLink,
+  Shield,
+  Users,
+  Globe,
   AlertCircle,
   Brain,
   MapPin,
   Settings,
   Eye,
   Lock,
-  Ban
+  Ban,
+  PenLine,
+  Mic,
+  Palette,
+  Sparkles,
+  TrendingUp,
+  Compass,
+  CloudSun
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import '../styles/components/terms.css';
@@ -117,7 +124,7 @@ const TermsOfService = ({ onBack }) => {
           </p>
 
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s1BoxTitle', '💡 What This Means')}</h4>
+            <h4 className="info-box-title">{t('terms.s1BoxTitle', 'What This Means')}</h4>
             <p>
               {t('terms.s1BoxText', 'Simply using our app means you accept these terms. If you have questions about any part, please contact us before using the service.')}
             </p>
@@ -131,18 +138,18 @@ const TermsOfService = ({ onBack }) => {
 
           <h4 className="subsection-title">{t('terms.s2FeaturesTitle', 'Core Features')}</h4>
           <div className="feature-grid">
-            <div className="feature-item">{t('terms.s2Feature1', '✍️ Text journaling with 50+ guided paths')}</div>
-            <div className="feature-item">{t('terms.s2Feature2', '🎤 Voice journaling with AI transcription')}</div>
-            <div className="feature-item">{t('terms.s2Feature3', '🎨 Visual journaling through artwork creation')}</div>
-            <div className="feature-item">{t('terms.s2Feature4', '🤖 Claude AI-powered insights & analysis')}</div>
-            <div className="feature-item">{t('terms.s2Feature5', '📊 Track your growth across all modalities')}</div>
-            <div className="feature-item">{t('terms.s2Feature6', '🌟 Personalized journey recommendations')}</div>
-            <div className="feature-item">{t('terms.s2Feature7', '🌤️ Optional weather context for entries')}</div>
-            <div className="feature-item">{t('terms.s2Feature8', '🔒 Private, secure, encrypted storage')}</div>
+            <div className="feature-item"><PenLine size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature1', 'Text journaling with 50+ guided paths')}</div>
+            <div className="feature-item"><Mic size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature2', 'Voice journaling with AI transcription')}</div>
+            <div className="feature-item"><Palette size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature3', 'Visual journaling through artwork creation')}</div>
+            <div className="feature-item"><Sparkles size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature4', 'Claude AI-powered insights & analysis')}</div>
+            <div className="feature-item"><TrendingUp size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature5', 'Track your growth across all modalities')}</div>
+            <div className="feature-item"><Compass size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature6', 'Personalized journey recommendations')}</div>
+            <div className="feature-item"><CloudSun size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature7', 'Optional weather context for entries')}</div>
+            <div className="feature-item"><Lock size={18} strokeWidth={1.7} aria-hidden="true" />{t('terms.s2Feature8', 'Private, secure, encrypted storage')}</div>
           </div>
 
           <div className="highlight-box">
-            <h4 className="highlight-title">{t('terms.s2MissionTitle', '🎯 Our Mission')}</h4>
+            <h4 className="highlight-title">{t('terms.s2MissionTitle', 'Our Mission')}</h4>
             <p>
               {t('terms.s2MissionText', 'We believe everyone expresses themselves differently. Καιρός empowers your self-discovery journey by letting you journal in whatever way feels right—write, speak, or create—all in one unified platform.')}
             </p>
@@ -177,7 +184,7 @@ const TermsOfService = ({ onBack }) => {
 
         <ExpandableSection id="location-weather" title={t('terms.s4Title', '4. Location & Weather Features')} icon={MapPin} isImportant>
           <div className="highlight-box">
-            <h4 className="highlight-title">{t('terms.s4OptionalTitle', '🎯 Completely Optional')}</h4>
+            <h4 className="highlight-title">{t('terms.s4OptionalTitle', 'Completely Optional')}</h4>
             <p>
               {t('terms.s4OptionalText', 'All location features are entirely voluntary. You can skip them during setup, disable them anytime, or use the app without any location sharing.')}
             </p>
@@ -186,25 +193,25 @@ const TermsOfService = ({ onBack }) => {
           <h4 className="subsection-title">{t('terms.s4HowTitle', 'How Location Features Work')}</h4>
           <div className="control-options">
             <div className="control-option">
-              <div className="control-option-icon">📍</div>
+              <div className="control-option-icon"><MapPin size={20} strokeWidth={1.7} aria-hidden="true" /></div>
               <div>
                 <strong>{t('terms.s4CityLabel', 'City Name Only:')}</strong> {t('terms.s4CityText', 'We only collect the city you provide, not precise GPS coordinates')}
               </div>
             </div>
             <div className="control-option">
-              <div className="control-option-icon">🌤️</div>
+              <div className="control-option-icon"><CloudSun size={20} strokeWidth={1.7} aria-hidden="true" /></div>
               <div>
                 <strong>{t('terms.s4WeatherLabel', 'Weather Service:')}</strong> {t('terms.s4WeatherText', 'Your city name is shared with OpenWeatherMap to get weather data')}
               </div>
             </div>
             <div className="control-option">
-              <div className="control-option-icon">⚙️</div>
+              <div className="control-option-icon"><Settings size={20} strokeWidth={1.7} aria-hidden="true" /></div>
               <div>
                 <strong>{t('terms.s4ControlLabel', 'Full Control:')}</strong> {t('terms.s4ControlText', 'Update or remove your location information anytime in settings')}
               </div>
             </div>
             <div className="control-option">
-              <div className="control-option-icon">🚫</div>
+              <div className="control-option-icon"><Ban size={20} strokeWidth={1.7} aria-hidden="true" /></div>
               <div>
                 <strong>{t('terms.s4TrackingLabel', 'No Tracking:')}</strong> {t('terms.s4TrackingText', 'We never track your movements or precise location')}
               </div>
@@ -221,7 +228,7 @@ const TermsOfService = ({ onBack }) => {
 
         <ExpandableSection id="user-content" title={t('terms.s5Title', '5. Your Journal Content')} icon={Users} isImportant>
           <div className="highlight-box">
-            <h4 className="highlight-title">{t('terms.s5OwnTitle', '🎯 You Own Your Content')}</h4>
+            <h4 className="highlight-title">{t('terms.s5OwnTitle', 'You Own Your Content')}</h4>
             <p>
               {t('terms.s5OwnText', "Your journal entries, photos, and personal content belong to you. We only process them to provide the app's features.")}
             </p>
@@ -280,7 +287,7 @@ const TermsOfService = ({ onBack }) => {
           </ul>
 
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s6DoubtTitle', '💡 When in Doubt')}</h4>
+            <h4 className="info-box-title">{t('terms.s6DoubtTitle', 'When in Doubt')}</h4>
             <p>
               {t('terms.s6DoubtText', "If you're unsure whether something is allowed, please contact us. We're happy to clarify our policies.")}
             </p>
@@ -371,7 +378,7 @@ const TermsOfService = ({ onBack }) => {
 
         <ExpandableSection id="ai-technology" title={t('terms.s9Title', '9. AI Analysis & Insights')} icon={Brain}>
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s9HowTitle', '🤖 How AI Empowers Your Journey')}</h4>
+            <h4 className="info-box-title">{t('terms.s9HowTitle', 'How AI Empowers Your Journey')}</h4>
             <p>
               {t('terms.s9HowText', 'Claude AI analyzes your multi-modal entries—text, voice transcriptions, and visual descriptions—to identify patterns, themes, and insights that support your personal growth and self-understanding across all forms of expression.')}
             </p>
@@ -395,7 +402,7 @@ const TermsOfService = ({ onBack }) => {
           </ul>
 
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s9ImproveTitle', '💡 Continuous Improvement')}</h4>
+            <h4 className="info-box-title">{t('terms.s9ImproveTitle', 'Continuous Improvement')}</h4>
             <p>
               {t('terms.s9ImproveText', 'We continually enhance our AI to better understand your unique expression across different modalities, ensuring more meaningful insights over time.')}
             </p>
@@ -442,7 +449,7 @@ const TermsOfService = ({ onBack }) => {
 
           <h4 className="subsection-title">{t('terms.s11LeaveTitle', 'If You Want to Leave')}</h4>
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s11DeleteTitle', '💡 Easy Account Deletion')}</h4>
+            <h4 className="info-box-title">{t('terms.s11DeleteTitle', 'Easy Account Deletion')}</h4>
             <p>
               {t('terms.s11DeleteText', 'You can delete your account anytime through your settings. All your data will be permanently removed within 30 days.')}
             </p>
@@ -498,7 +505,7 @@ const TermsOfService = ({ onBack }) => {
           </p>
 
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s14DisputeTitle', '💡 Dispute Resolution')}</h4>
+            <h4 className="info-box-title">{t('terms.s14DisputeTitle', 'Dispute Resolution')}</h4>
             <p>
               {t('terms.s14DisputeText', 'If you have a dispute with us, we encourage you to contact us directly first. Most issues can be resolved through friendly communication.')}
             </p>
@@ -519,7 +526,7 @@ const TermsOfService = ({ onBack }) => {
           </ul>
 
           <div className="info-box">
-            <h4 className="info-box-title">{t('terms.s15InformedTitle', '💡 Stay Informed')}</h4>
+            <h4 className="info-box-title">{t('terms.s15InformedTitle', 'Stay Informed')}</h4>
             <p>
               {t('terms.s15InformedText', "We recommend checking these terms periodically. If you don't agree to new terms, you can stop using the app.")}
             </p>

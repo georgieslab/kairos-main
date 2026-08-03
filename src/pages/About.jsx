@@ -55,7 +55,7 @@ const About = ({ onBack }) => {
 
         <div className="info-card" style={{ marginBottom: '2rem' }}>
           <p className="text-lg" style={{ textAlign: 'center', margin: 0 }}>
-            <strong>{t('about.uniqueBanner', "🌟 World's First Multi-Modal Journaling Platform 🌟")}</strong>
+            <strong>{t('about.uniqueBanner', "World's First Multi-Modal Journaling Platform")}</strong>
           </p>
           <p className="about-text" style={{ textAlign: 'center', marginTop: '0.75rem', marginBottom: 0 }}>
             {t('about.uniqueBannerText', "We're pioneering a new era of self-expression where you can write, speak, or create art—all analyzed by the same AI to provide comprehensive insights into your inner world.")}

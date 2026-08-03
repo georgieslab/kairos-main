@@ -433,8 +433,50 @@
 }
 
 .control-option-icon {
-  font-size: 1.5rem;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(85, 139, 110, 0.12);
+  border: 1px solid rgba(85, 139, 110, 0.22);
+  color: rgb(122, 176, 146);
+}
+
+/* These rows previously led with an emoji, which is text and therefore sat on
+   the baseline for free. They had no CSS at all. An inline <svg> has no
+   baseline, so without this the icon hangs below the label and the wrapped
+   description no longer indents past it. flex-start (not center) because these
+   rows wrap to several lines and the icon belongs beside the FIRST one. */
+.data-item,
+.security-item,
+.retention-period {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.data-item > svg,
+.security-item > svg,
+.retention-period > svg {
+  flex-shrink: 0;
+  color: rgb(122, 176, 146);
+  /* optical nudge so the icon centres on the cap height of the first line
+     rather than on its ascender */
+  margin-top: 0.2em;
+}
+
+/* Same treatment for the emoji that led the h5 section titles */
+.method-title > svg,
+.change-title > svg,
+.info-box-title > svg,
+.location-title > svg,
+.highlight-title > svg {
+  flex-shrink: 0;
+  color: rgb(122, 176, 146);
+  vertical-align: -0.15em;
+  margin-right: 0.15rem;
 }
 
 .control-option strong {
