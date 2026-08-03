@@ -2294,7 +2294,16 @@
            translucent circle, backdrop blur, hairline border, inset
            highlight, soft radial glow. Tooltip is a small glass popover.
            ================================================================ */
-        .hero-stat-label-row,
+        /* This selector used to be grouped with .path-title-row. When that rule
+           was removed in the card redesign, the trailing comma was left behind
+           and silently joined .hero-stat-label-row to .visually-hidden below —
+           which clips it to 1x1px off-screen. The hero showed three bare
+           numbers with no labels. Keep this rule standalone. */
+        .hero-stat-label-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         .visually-hidden {
             position: absolute;
@@ -2527,9 +2536,9 @@
                         </span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-number">4</span>
+                        <span class="hero-stat-number">3</span>
                         <span class="hero-stat-label-row">
-                            <span class="hero-stat-label">Modalities</span>
+                            <span class="hero-stat-label">Ways to Write</span>
                             <button type="button" class="info-icon" aria-describedby="tip-modalities">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <span class="info-tooltip" id="tip-modalities" role="tooltip">Write by hand, speak aloud, paint or sketch &mdash; or blend all three in one multi-modal path.</span>
@@ -3753,8 +3762,6 @@
 
         // Console Easter Egg
         console.log('%cΚαιρός Smart Journal', 'font-size: 20px; font-weight: bold; color: #558B6E;');
-        console.log('%cBuilt 100% with Claude AI by a student in Austria', 'font-size: 14px; color: #8B5CF6;');
-        console.log('%cWant to join the team? Email: contact@kairos-journal.com', 'font-size: 12px; color: #3B82F6;');
     </script>
 </body>
 </html>
