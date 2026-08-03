@@ -253,9 +253,38 @@
   box-shadow: 0 10px 32px rgba(139, 92, 246, 0.32);
 }
 
-.option-emoji {
-  font-size: 2.25rem;
-  line-height: 1;
+/* Was .option-emoji at font-size: 2.25rem. The icons are lucide SVGs now, so
+   they can do what emoji never could: inherit the card's colour and shift with
+   its state. Muted at rest, and they take the accent when a card is selected —
+   the whole card responds as one object rather than a coloured glyph sitting
+   inertly next to a border that changes without it. */
+.option-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(241, 245, 249, 0.72);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .option-card:hover .option-icon {
+    color: rgb(196, 181, 253);
+    background: rgba(167, 139, 250, 0.14);
+  }
+}
+
+.option-card.selected .option-icon {
+  color: rgb(196, 181, 253);
+  background: rgba(139, 92, 246, 0.24);
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option-icon { transition: none; }
+  .option-card.selected .option-icon { transform: none; }
 }
 
 .option-label {
@@ -347,8 +376,10 @@
     padding: 1.25rem 0.875rem;
   }
 
-  .option-emoji {
-    font-size: 2rem;
+  .option-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
   }
 
   .option-label {

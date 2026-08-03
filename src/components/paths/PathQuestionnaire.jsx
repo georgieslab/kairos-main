@@ -3,7 +3,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { getQuestionnaireRecommendation } from '../../services/pathRecommender';
-import { Sparkles, ArrowRight, ArrowLeft, X } from 'lucide-react';
+import {
+  Sparkles, ArrowRight, ArrowLeft, X,
+  // Option icons. These replaced emoji: emoji render in a per-platform system
+  // font, carry their own baked-in colour, and sit off the text baseline, so a
+  // grid of them never quite aligns and never matches the palette. These
+  // inherit currentColor and stroke weight, so a selected card can tint its
+  // icon along with its border.
+  Waves, Activity, Zap, HelpCircle, CloudRain, Flame,
+  Target, Sprout, Heart, Compass, Feather, Palette,
+  Timer, Clock, Hourglass,
+  Star, GraduationCap,
+  Briefcase, Users, Search, Brain, Moon
+} from 'lucide-react';
 import KairosLoader from '../common/KairosLoader';
 import '../../styles/components/pathQuestionnaire.css';
 
@@ -15,12 +27,12 @@ const QUESTIONS = [
     subtitleKey: 'pathQuestionnaire.questions.mood.subtitle',
     subtitle: 'Your current emotional state',
     options: [
-      { value: 'calm', labelKey: 'pathQuestionnaire.questions.mood.options.calm', label: 'Calm & Peaceful', emoji: '😌' },
-      { value: 'anxious', labelKey: 'pathQuestionnaire.questions.mood.options.anxious', label: 'Anxious or Worried', emoji: '😰' },
-      { value: 'excited', labelKey: 'pathQuestionnaire.questions.mood.options.excited', label: 'Excited & Energized', emoji: '🤩' },
-      { value: 'confused', labelKey: 'pathQuestionnaire.questions.mood.options.confused', label: 'Confused or Lost', emoji: '😕' },
-      { value: 'sad', labelKey: 'pathQuestionnaire.questions.mood.options.sad', label: 'Sad or Down', emoji: '😔' },
-      { value: 'motivated', labelKey: 'pathQuestionnaire.questions.mood.options.motivated', label: 'Motivated & Ready', emoji: '💪' }
+      { value: 'calm', labelKey: 'pathQuestionnaire.questions.mood.options.calm', label: 'Calm & Peaceful', Icon: Waves },
+      { value: 'anxious', labelKey: 'pathQuestionnaire.questions.mood.options.anxious', label: 'Anxious or Worried', Icon: Activity },
+      { value: 'excited', labelKey: 'pathQuestionnaire.questions.mood.options.excited', label: 'Excited & Energized', Icon: Zap },
+      { value: 'confused', labelKey: 'pathQuestionnaire.questions.mood.options.confused', label: 'Confused or Lost', Icon: HelpCircle },
+      { value: 'sad', labelKey: 'pathQuestionnaire.questions.mood.options.sad', label: 'Sad or Down', Icon: CloudRain },
+      { value: 'motivated', labelKey: 'pathQuestionnaire.questions.mood.options.motivated', label: 'Motivated & Ready', Icon: Flame }
     ]
   },
   {
@@ -30,12 +42,12 @@ const QUESTIONS = [
     subtitleKey: 'pathQuestionnaire.questions.needs.subtitle',
     subtitle: 'Your primary intention',
     options: [
-      { value: 'clarity', labelKey: 'pathQuestionnaire.questions.needs.options.clarity', label: 'Clarity & Direction', emoji: '🎯' },
-      { value: 'growth', labelKey: 'pathQuestionnaire.questions.needs.options.growth', label: 'Personal Growth', emoji: '🌱' },
-      { value: 'healing', labelKey: 'pathQuestionnaire.questions.needs.options.healing', label: 'Healing & Processing', emoji: '💚' },
-      { value: 'adventure', labelKey: 'pathQuestionnaire.questions.needs.options.adventure', label: 'Adventure & Discovery', emoji: '🗺️' },
-      { value: 'peace', labelKey: 'pathQuestionnaire.questions.needs.options.peace', label: 'Peace & Calm', emoji: '🕊️' },
-      { value: 'creativity', labelKey: 'pathQuestionnaire.questions.needs.options.creativity', label: 'Creative Expression', emoji: '🎨' }
+      { value: 'clarity', labelKey: 'pathQuestionnaire.questions.needs.options.clarity', label: 'Clarity & Direction', Icon: Target },
+      { value: 'growth', labelKey: 'pathQuestionnaire.questions.needs.options.growth', label: 'Personal Growth', Icon: Sprout },
+      { value: 'healing', labelKey: 'pathQuestionnaire.questions.needs.options.healing', label: 'Healing & Processing', Icon: Heart },
+      { value: 'adventure', labelKey: 'pathQuestionnaire.questions.needs.options.adventure', label: 'Adventure & Discovery', Icon: Compass },
+      { value: 'peace', labelKey: 'pathQuestionnaire.questions.needs.options.peace', label: 'Peace & Calm', Icon: Feather },
+      { value: 'creativity', labelKey: 'pathQuestionnaire.questions.needs.options.creativity', label: 'Creative Expression', Icon: Palette }
     ]
   },
   {
@@ -45,9 +57,9 @@ const QUESTIONS = [
     subtitleKey: 'pathQuestionnaire.questions.timeAvailable.subtitle',
     subtitle: 'For this journaling journey',
     options: [
-      { value: '5-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.5mins', label: '5-10 minutes', emoji: '⚡' },
-      { value: '15-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.15mins', label: '15-20 minutes', emoji: '⏰' },
-      { value: '30-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.30mins', label: '30+ minutes', emoji: '🕐' }
+      { value: '5-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.5mins', label: '5-10 minutes', Icon: Timer },
+      { value: '15-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.15mins', label: '15-20 minutes', Icon: Clock },
+      { value: '30-mins', labelKey: 'pathQuestionnaire.questions.timeAvailable.options.30mins', label: '30+ minutes', Icon: Hourglass }
     ]
   },
   {
@@ -57,9 +69,9 @@ const QUESTIONS = [
     subtitleKey: 'pathQuestionnaire.questions.experience.subtitle',
     subtitle: 'Be honest - we\'ll match you perfectly',
     options: [
-      { value: 'first-time', labelKey: 'pathQuestionnaire.questions.experience.options.firstTime', label: 'First time journaling', emoji: '🌟' },
-      { value: 'beginner', labelKey: 'pathQuestionnaire.questions.experience.options.beginner', label: 'Some experience', emoji: '🌱' },
-      { value: 'experienced', labelKey: 'pathQuestionnaire.questions.experience.options.experienced', label: 'Regular journaler', emoji: '🎓' }
+      { value: 'first-time', labelKey: 'pathQuestionnaire.questions.experience.options.firstTime', label: 'First time journaling', Icon: Star },
+      { value: 'beginner', labelKey: 'pathQuestionnaire.questions.experience.options.beginner', label: 'Some experience', Icon: Sprout },
+      { value: 'experienced', labelKey: 'pathQuestionnaire.questions.experience.options.experienced', label: 'Regular journaler', Icon: GraduationCap }
     ]
   },
   {
@@ -69,12 +81,12 @@ const QUESTIONS = [
     subtitleKey: 'pathQuestionnaire.questions.focus.subtitle',
     subtitle: 'What matters most right now',
     options: [
-      { value: 'career', labelKey: 'pathQuestionnaire.questions.focus.options.career', label: 'Career & Purpose', emoji: '💼' },
-      { value: 'relationships', labelKey: 'pathQuestionnaire.questions.focus.options.relationships', label: 'Relationships', emoji: '❤️' },
-      { value: 'self-discovery', labelKey: 'pathQuestionnaire.questions.focus.options.selfDiscovery', label: 'Self-Discovery', emoji: '🔍' },
-      { value: 'mental-health', labelKey: 'pathQuestionnaire.questions.focus.options.mentalHealth', label: 'Mental Health', emoji: '🧠' },
-      { value: 'creativity', labelKey: 'pathQuestionnaire.questions.focus.options.creativity', label: 'Creativity & Expression', emoji: '🎨' },
-      { value: 'spirituality', labelKey: 'pathQuestionnaire.questions.focus.options.spirituality', label: 'Spirituality', emoji: '✨' }
+      { value: 'career', labelKey: 'pathQuestionnaire.questions.focus.options.career', label: 'Career & Purpose', Icon: Briefcase },
+      { value: 'relationships', labelKey: 'pathQuestionnaire.questions.focus.options.relationships', label: 'Relationships', Icon: Users },
+      { value: 'self-discovery', labelKey: 'pathQuestionnaire.questions.focus.options.selfDiscovery', label: 'Self-Discovery', Icon: Search },
+      { value: 'mental-health', labelKey: 'pathQuestionnaire.questions.focus.options.mentalHealth', label: 'Mental Health', Icon: Brain },
+      { value: 'creativity', labelKey: 'pathQuestionnaire.questions.focus.options.creativity', label: 'Creativity & Expression', Icon: Palette },
+      { value: 'spirituality', labelKey: 'pathQuestionnaire.questions.focus.options.spirituality', label: 'Spirituality', Icon: Moon }
     ]
   }
 ];
@@ -211,7 +223,7 @@ const PathQuestionnaire = ({ onComplete, onCancel }) => {
               className={`option-card ${selectedOption === option.value ? 'selected' : ''}`}
               onClick={() => handleOptionSelect(option.value)}
             >
-              <span className="option-emoji">{option.emoji}</span>
+              <span className="option-icon"><option.Icon size={26} strokeWidth={1.6} aria-hidden="true" /></span>
               <span className="option-label">{t(option.labelKey, option.label)}</span>
               {selectedOption === option.value && (
                 <ArrowRight className="option-arrow" />
