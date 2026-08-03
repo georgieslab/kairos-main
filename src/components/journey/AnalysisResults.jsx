@@ -342,7 +342,8 @@ const AnalysisResults = ({ dayNumber, pathId, prompt, theme, imageUrl, extracted
         progressCaption: t('analysisResults.pdfProgressCaption', '{{percent}}% of journey')
       };
 
-      const blob = exportSingleEntryToPDF({
+      // now async: it lazily fetches the Unicode PDF font before drawing
+      const blob = await exportSingleEntryToPDF({
         dayNumber,
         pathName,
         pathColor,

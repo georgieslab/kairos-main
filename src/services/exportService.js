@@ -9,20 +9,29 @@ import { generateJourneyCompletion } from './claudeService';
 import { getJourneyPath } from '../data/JourneyData';
 
 // Simple Unicode icons that work reliably
+// jsPDF's built-in Helvetica is WinAnsi-encoded: Latin-1 and a handful of
+// typographic extras, nothing more. Every glyph in the previous version of
+// this map except the bullet was outside that range, and jsPDF does not fail
+// on an unmappable character — it writes the raw UTF-16 code units as single
+// bytes, so '★' became two garbage characters in the finished PDF. Verified
+// against jsPDF 3.0.3 by inspecting the emitted content stream.
+//
+// Everything here is checked WinAnsi-safe. Do not reintroduce emoji,
+// dingbats, or arrows without testing what actually lands in the file.
 const ICONS = {
-  star: '★',
-  heart: '♥',
-  check: '✓',
+  star: '•',      // was ★
+  heart: '•',     // was ♥
+  check: '•',     // was ✓
   bullet: '•',
-  arrow: '→',
-  sparkle: '✨',
-  trophy: '🏆',
-  book: '📖',
-  pen: '✍️',
-  light: '💡',
-  target: '🎯',
-  growth: '🌱',
-  complete: '✅'
+  arrow: '»',     // was → ; » is WinAnsi
+  sparkle: '•',   // was ✨
+  trophy: '•',    // was 🏆
+  book: '•',      // was 📖
+  pen: '•',       // was ✍️
+  light: '•',     // was 💡
+  target: '•',    // was 🎯
+  growth: '•',    // was 🌱
+  complete: '•'   // was ✅
 };
 
 /**
@@ -38,27 +47,26 @@ const addKairosLogo = (pdf, x, y, width = 30, height = 10, useCoverLogo = false)
   try {
     // Create a simple text-based logo with styling that looks professional
     pdf.setTextColor(85, 139, 110); // Settings primary color
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     
     if (useCoverLogo) {
       // For cover page - larger and more prominent
       pdf.setFontSize(24);
-      pdf.text('ΚΑΙΡΌΣ', x + width/2, y + height/2, { align: 'center' });
+      pdf.text('KAIROS', x + width/2, y + height/2, { align: 'center' });  // romanised: Greek is not WinAnsi
       
       // Add sparkle icons
       pdf.setFontSize(20);
-      pdf.text('✨', x + width/2 - 35, y + height/2);
-      pdf.text('✨', x + width/2 + 35, y + height/2);
+      // (decorative sparkles removed - emoji cannot render in WinAnsi Helvetica)
       
       // Add subtitle
       pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       pdf.setTextColor(230, 184, 156); // Terracotta color
       pdf.text('Smart Journal', x + width/2, y + height/2 + 8, { align: 'center' });
     } else {
       // For headers and smaller applications
       pdf.setFontSize(14);
-      pdf.text('ΚΑΙΡΌΣ', x, y + height/2);
+      pdf.text('KAIROS', x, y + height/2);  // romanised: Greek is not WinAnsi
     }
     
     // Add a decorative underline for the cover logo
@@ -74,17 +82,91 @@ const addKairosLogo = (pdf, x, y, width = 30, height = 10, useCoverLogo = false)
     // Ultimate fallback - simple text
     pdf.setTextColor(85, 139, 110);
     pdf.setFontSize(useCoverLogo ? 20 : 12);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.text('Kairos', x + (useCoverLogo ? width/2 : 0), y + height/2, useCoverLogo ? { align: 'center' } : null);
   }
 };
 
+// =============================================================================
+// UNICODE FONT FOR PDF EXPORT
+// =============================================================================
+// jsPDF's built-in Helvetica is WinAnsi-encoded — Latin-1 only. It does not
+// fail on characters outside that range; it writes their raw UTF-16 code units
+// as single bytes. So a Georgian journal entry came out as pure garbage, and a
+// line mixing Latin and Georgian came out EMPTY (jsPDF emits `<> Tj`).
+// Since the export contains the user's own writing, that made the feature
+// worthless for every Georgian user.
+//
+// Noto Sans Georgian covers Latin, Latin-1 (German umlauts, ß) and Mkhedruli
+// in one 63 KB file, and it is the same family the app already uses on screen.
+// Greek is NOT in it — which is why the Καιρός branding in this file is
+// romanised to "KAIROS" rather than relying on the font.
+//
+// Loaded on demand rather than bundled: exporting is already a slow async
+// operation, so the fetch is invisible there, whereas bundling would tax every
+// page load. The base64 payload is cached for the session.
+
+const PDF_FONT_NAME = 'NotoSansGeorgian';
+const PDF_FONT_FALLBACK = 'helvetica';
+
+/** Font to draw with. Instance-scoped so a failed load can't leak between exports. */
+const FONT = (pdf) => pdf.__kairosFont || PDF_FONT_FALLBACK;
+
+let fontPayloadPromise = null;
+
+const arrayBufferToBase64 = (buffer) => {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  // chunked: String.fromCharCode(...) on a 60k array overflows the call stack
+  const CHUNK = 0x8000;
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(binary);
+};
+
+const loadFontPayload = () => {
+  if (!fontPayloadPromise) {
+    fontPayloadPromise = Promise.all([
+      fetch('/fonts/NotoSansGeorgian-Regular.ttf').then((r) => {
+        if (!r.ok) throw new Error(`font ${r.status}`);
+        return r.arrayBuffer();
+      }),
+      fetch('/fonts/NotoSansGeorgian-Bold.ttf').then((r) => {
+        if (!r.ok) throw new Error(`font ${r.status}`);
+        return r.arrayBuffer();
+      })
+    ])
+      .then(([reg, bold]) => ({
+        regular: arrayBufferToBase64(reg),
+        bold: arrayBufferToBase64(bold)
+      }))
+      .catch((err) => {
+        // Let a later export retry rather than caching the failure forever
+        fontPayloadPromise = null;
+        throw err;
+      });
+  }
+  return fontPayloadPromise;
+};
+
 /**
- * Sets up PDF with basic configuration, avoiding external font loading
+ * Registers the Unicode font on this PDF instance. Falls back to Helvetica if
+ * the font can't be fetched — an ASCII-only PDF beats no PDF at all.
  */
-const setupPDF = (pdf) => {
-  // Use default fonts only
-  pdf.setFont('helvetica');
+const setupPDF = async (pdf) => {
+  try {
+    const { regular, bold } = await loadFontPayload();
+    pdf.addFileToVFS('NotoSansGeorgian-Regular.ttf', regular);
+    pdf.addFont('NotoSansGeorgian-Regular.ttf', PDF_FONT_NAME, 'normal');
+    pdf.addFileToVFS('NotoSansGeorgian-Bold.ttf', bold);
+    pdf.addFont('NotoSansGeorgian-Bold.ttf', PDF_FONT_NAME, 'bold');
+    pdf.__kairosFont = PDF_FONT_NAME;
+  } catch (err) {
+    console.warn('PDF: Unicode font unavailable, falling back to Helvetica. Non-Latin text will not render.', err);
+    pdf.__kairosFont = PDF_FONT_FALLBACK;
+  }
+  pdf.setFont(FONT(pdf));
 };
 
 // =============================================================================
@@ -325,8 +407,8 @@ export const exportJourneyToPDF = async (
         compress: true
       });
       
-      // Setup PDF with default fonts
-      setupPDF(pdf);
+      // Registers the Unicode font (see setupPDF) before anything is drawn
+      await setupPDF(pdf);
       
     } catch (pdfError) {
       console.error('Error creating PDF document:', pdfError);
@@ -693,7 +775,7 @@ const addJourneyOverview = (pdf, pathName, completionAnalysis, userProfile, head
   // Add title with icon
   pdf.setTextColor(43, 70, 60); // Dark green for headers
   pdf.setFontSize(headerSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.book} ${pathName}: Journey Overview`, 15, 20); // Reduced margin
   
   // Add horizontal line
@@ -704,7 +786,7 @@ const addJourneyOverview = (pdf, pathName, completionAnalysis, userProfile, head
   // Set text color for body
   pdf.setTextColor(0, 0, 0); // Black for body text
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   let yPos = 35;
   
@@ -729,14 +811,14 @@ const addJourneyOverview = (pdf, pathName, completionAnalysis, userProfile, head
   if (completionAnalysis && completionAnalysis.journeyOverview) {
     yPos += 10;
     pdf.setFontSize(subHeaderSize);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.setTextColor(43, 70, 60);
     pdf.text(`${ICONS.sparkle} Your Journey Summary`, 15, yPos);
     yPos += 8;
     
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(fontSize);
-    pdf.setFont('helvetica', 'normal');
+    pdf.setFont(FONT(pdf), 'normal');
     
     const overviewLines = pdf.splitTextToSize(completionAnalysis.journeyOverview, 180);
     pdf.text(overviewLines, 15, yPos);
@@ -777,7 +859,7 @@ const addJournalEntries = async (pdf, entries, options, userId, headerSize, subH
     // Add entry header with icon
     pdf.setTextColor(43, 70, 60); // Dark green for headers
     pdf.setFontSize(headerSize);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.text(`${ICONS.pen} Day ${entry.day}: ${entry.theme || 'Reflection'}`, 15, 20);
     
     // Add horizontal line
@@ -791,7 +873,7 @@ const addJournalEntries = async (pdf, entries, options, userId, headerSize, subH
     if (entry.prompt) {
       pdf.setTextColor(230, 184, 156); // Terracotta for prompt
       pdf.setFontSize(fontSize);
-      pdf.setFont('helvetica', 'italic');
+      pdf.setFont(FONT(pdf), 'italic');
       
       const promptLines = pdf.splitTextToSize(`${ICONS.target} Prompt: ${entry.prompt}`, 180);
       pdf.text(promptLines, 15, yPos);
@@ -803,7 +885,7 @@ const addJournalEntries = async (pdf, entries, options, userId, headerSize, subH
       yPos += 10;
       pdf.setTextColor(0, 0, 0); // Black for entry text
       pdf.setFontSize(fontSize);
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       
       const textLines = pdf.splitTextToSize(entry.extractedText, 180);
       
@@ -875,13 +957,13 @@ const addJournalEntries = async (pdf, entries, options, userId, headerSize, subH
       
       pdf.setTextColor(43, 70, 60);
       pdf.setFontSize(subHeaderSize);
-      pdf.setFont('helvetica', 'bold');
+      pdf.setFont(FONT(pdf), 'bold');
       pdf.text(`${ICONS.light} Insights`, 15, yPos);
       yPos += 8;
       
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(fontSize);
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       
       // Add summary
       if (entry.analysis.summary) {
@@ -925,7 +1007,7 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   // Set the title with trophy icon
   pdf.setTextColor(43, 70, 60); // Dark green for headers
   pdf.setFontSize(headerSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.trophy} Journey Completion Insights`, 15, 20);
   
   // Add horizontal line
@@ -959,13 +1041,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   // Add journey overview
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.book} Journey Overview`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   const overviewLines = pdf.splitTextToSize(safeAnalysis.journeyOverview, 180);
   pdf.text(overviewLines, 15, yPos);
@@ -981,13 +1063,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   yPos += 10;
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.growth} Your Growth Narrative`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   const narrativeLines = pdf.splitTextToSize(safeAnalysis.growthNarrative, 180);
   pdf.text(narrativeLines, 15, yPos);
@@ -1003,13 +1085,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   yPos += 15;
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.target} Key Themes`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   // Add themes as bullet points
   for (const theme of safeAnalysis.keyThemes) {
@@ -1027,13 +1109,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   yPos += 15;
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.star} Your Personal Strengths`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   // Add strengths as bullet points
   for (const strength of safeAnalysis.personalStrengths) {
@@ -1051,13 +1133,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   yPos += 15;
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.growth} Growth Opportunities`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   // Add opportunities as bullet points
   for (const opportunity of safeAnalysis.growthOpportunities) {
@@ -1073,7 +1155,7 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   // Add meaningful affirmation
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.sparkle} Your Affirmation`, 15, yPos);
   yPos += 15;
   
@@ -1095,7 +1177,7 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   // Affirmation text
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(fontSize + 2); // Slightly larger font for emphasis
-  pdf.setFont('helvetica', 'italic');
+  pdf.setFont(FONT(pdf), 'italic');
   
   const affirmationLines = pdf.splitTextToSize(`"${safeAnalysis.meaningfulAffirmation}"`, 165);
   pdf.text(affirmationLines, 105, yPos + 10, { align: 'center' });
@@ -1105,13 +1187,13 @@ const addCompletionInsights = (pdf, completionAnalysis, headerSize, subHeaderSiz
   // Add next steps
   pdf.setTextColor(43, 70, 60);
   pdf.setFontSize(subHeaderSize);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.text(`${ICONS.arrow} Next Steps`, 15, yPos);
   yPos += 10;
   
   pdf.setTextColor(0, 0, 0);
   pdf.setFontSize(fontSize);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   
   const nextStepsLines = pdf.splitTextToSize(safeAnalysis.nextSteps, 180);
   pdf.text(nextStepsLines, 15, yPos);
@@ -1147,20 +1229,20 @@ const addFinalPage = (pdf, pathName) => {
       // Fallback text if logo fails
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('ΚΑΙΡΟΣ', 105, 25, { align: 'center' });
+      pdf.setFont(FONT(pdf), 'bold');
+      pdf.text('KAIROS', 105, 25, { align: 'center' });
     }
     
     // Add title with heart icon
     pdf.setTextColor(43, 70, 60); // Dark green
     pdf.setFontSize(24);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.text(`${ICONS.heart} Thank You`, 105, 70, { align: 'center' });
     
     // Add text
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
+    pdf.setFont(FONT(pdf), 'normal');
     
     const text = `Thank you for completing your ${pathName} with Καιρός Smart Journal. This document serves as a record of your journey and the insights you've gained along the way.
 
@@ -1174,7 +1256,7 @@ Remember that journaling is a practice, not a destination. We encourage you to c
     // Add quote
     pdf.setTextColor(43, 70, 60);
     pdf.setFontSize(14);
-    pdf.setFont('helvetica', 'italic');
+    pdf.setFont(FONT(pdf), 'italic');
     pdf.text('"The journey of a thousand miles begins with one step."', 105, 170, { align: 'center' });
     pdf.text('- Lao Tzu', 105, 180, { align: 'center' });
     
@@ -1196,7 +1278,7 @@ Remember that journaling is a practice, not a destination. We encourage you to c
     
     // Add tagline
     pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
+    pdf.setFont(FONT(pdf), 'normal');
     pdf.text('Bridging the gap between handwritten journaling and digital insights', 105, 220, { align: 'center' });
     
     // Add website
@@ -1207,7 +1289,7 @@ Remember that journaling is a practice, not a destination. We encourage you to c
     // Add copyright in white on the bottom green bar
     pdf.setFontSize(9);
     pdf.setTextColor(255, 255, 255);
-    pdf.text('© 2025 Καιρός Smart Journal. All rights reserved.', 105, 275, { align: 'center' });
+    pdf.text('© 2025 Kairos Smart Journal. All rights reserved.', 105, 275, { align: 'center' });
     
     // Add app version with fallback if APP_VERSION is undefined
     const versionString = typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.0.0';
@@ -1226,7 +1308,7 @@ Remember that journaling is a practice, not a destination. We encourage you to c
     // Create a simple final page as fallback
     pdf.addPage();
     pdf.setFontSize(14);
-    pdf.text('Thank you for using Καιρός Smart Journal', 105, 140, { align: 'center' });
+    pdf.text('Thank you for using Kairos Smart Journal', 105, 140, { align: 'center' });
   }
 };
 
@@ -1317,7 +1399,7 @@ export const exportJourneyToText = async (userId, pathId) => {
  * @param {Object} data.strings         - localized labels (see AnalysisResults handleExport)
  * @returns {Blob} PDF as a Blob
  */
-export const exportSingleEntryToPDF = ({
+export const exportSingleEntryToPDF = async ({
   dayNumber,
   pathName,
   pathColor,
@@ -1331,7 +1413,7 @@ export const exportSingleEntryToPDF = ({
   strings = {}
 }) => {
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
-  setupPDF(pdf);
+  await setupPDF(pdf);
 
   // Layout constants (mm)
   const PAGE_W = 210;
@@ -1364,7 +1446,7 @@ export const exportSingleEntryToPDF = ({
   // Wrapped body text with automatic page breaks (used outside cards, e.g. the entry text)
   const addWrapped = (text, { size = 10.5, style = 'normal', color = INK, x = MARGIN, w = CONTENT_W, lh = 5.3, gapAfter = 3 } = {}) => {
     if (!text) return;
-    pdf.setFont('helvetica', style);
+    pdf.setFont(FONT(pdf), style);
     pdf.setFontSize(size);
     pdf.setTextColor(...color);
     const lines = pdf.splitTextToSize(String(text), w);
@@ -1384,7 +1466,7 @@ export const exportSingleEntryToPDF = ({
     y += 4;
     pdf.setFillColor(...color);
     pdf.roundedRect(MARGIN, y - 3.4, 2.4, 4.6, 1, 1, 'F');
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.setFontSize(12);
     pdf.setTextColor(...color);
     pdf.text(String(label), MARGIN + 5.5, y);
@@ -1397,7 +1479,7 @@ export const exportSingleEntryToPDF = ({
   // short; the one unbounded section (entry text) intentionally isn't carded.
   const textSectionCard = (label, color, text, { style = 'normal', fontSize = 10.5, lh = 5.4 } = {}) => {
     if (!text) return;
-    pdf.setFont('helvetica', style);
+    pdf.setFont(FONT(pdf), style);
     pdf.setFontSize(fontSize);
     const lines = pdf.splitTextToSize(String(text), CONTENT_W - 16);
     const headingH = 11;
@@ -1409,11 +1491,11 @@ export const exportSingleEntryToPDF = ({
     pdf.roundedRect(MARGIN, top, CONTENT_W, cardH, 3, 3, 'F');
     pdf.setFillColor(...color);
     pdf.roundedRect(MARGIN, top, 2.4, cardH, 1, 1, 'F');
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont(FONT(pdf), 'bold');
     pdf.setFontSize(11.5);
     pdf.setTextColor(...color);
     pdf.text(String(label), MARGIN + 8, top + 8);
-    pdf.setFont('helvetica', style);
+    pdf.setFont(FONT(pdf), style);
     pdf.setFontSize(fontSize);
     pdf.setTextColor(...INK);
     let ty = top + headingH + 4;
@@ -1429,23 +1511,23 @@ export const exportSingleEntryToPDF = ({
   pdf.rect(0, HEADER_H, PAGE_W, 1.4, 'F');
 
   pdf.setTextColor(255, 255, 255);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.setFontSize(19);
   pdf.text('Kairos', MARGIN, 19);
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   pdf.setFontSize(9);
   pdf.setTextColor(206, 220, 211);
   pdf.text(strings.tagline || 'Smart Journal', MARGIN, 25);
 
   pdf.setTextColor(255, 255, 255);
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont(FONT(pdf), 'bold');
   pdf.setFontSize(15);
   const dayHeading = strings.dayHeading || `Day ${dayNumber}`;
   const headerTextW = mood ? CONTENT_W - 26 : CONTENT_W; // leave room for the mood badge
   const themeLines = theme ? pdf.splitTextToSize(`${dayHeading}  ·  ${theme}`, headerTextW) : [dayHeading];
   pdf.text(themeLines[0], MARGIN, 38);
 
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont(FONT(pdf), 'normal');
   pdf.setFontSize(9.5);
   pdf.setTextColor(206, 220, 211);
   const metaLine = [pathName, strings.generatedOn].filter(Boolean).join('   ·   ');
@@ -1459,7 +1541,7 @@ export const exportSingleEntryToPDF = ({
     pdf.circle(bcx, bcy, 10, 'F');
     drawMoodGlyph(pdf, mood.id, bcx, bcy, 6, MOOD_META[mood.id].color);
     if (mood.label) {
-      pdf.setFont('helvetica', 'bold');
+      pdf.setFont(FONT(pdf), 'bold');
       pdf.setFontSize(7.5);
       pdf.setTextColor(255, 255, 255);
       pdf.text(String(mood.label), bcx, bcy + 15, { align: 'center' });
@@ -1494,11 +1576,11 @@ export const exportSingleEntryToPDF = ({
       const cx = MARGIN + i * (chipW + gap);
       pdf.setFillColor(...tintColor(GREEN, 0.1));
       pdf.roundedRect(cx, y, chipW, chipH, 3, 3, 'F');
-      pdf.setFont('helvetica', 'bold');
+      pdf.setFont(FONT(pdf), 'bold');
       pdf.setFontSize(13);
       pdf.setTextColor(...GREEN);
       pdf.text(chip.big, cx + chipW / 2, y + 9, { align: 'center' });
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       pdf.setFontSize(7.5);
       pdf.setTextColor(...MUTE);
       pdf.text(String(chip.label).toUpperCase(), cx + chipW / 2, y + 15, { align: 'center' });
@@ -1506,7 +1588,7 @@ export const exportSingleEntryToPDF = ({
     y += chipH + 6;
 
     if (hasProgress) {
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       pdf.setFontSize(8);
       pdf.setTextColor(...MUTE);
       const progressCaption = strings.progressCaption
@@ -1551,7 +1633,7 @@ export const exportSingleEntryToPDF = ({
 
     // ===== Key insights (numbered, inside one tinted card) =====
     if (Array.isArray(analysis.insights) && analysis.insights.length > 0) {
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont(FONT(pdf), 'normal');
       pdf.setFontSize(10.5);
       const itemLineGroups = analysis.insights.map((insight) => pdf.splitTextToSize(String(insight), CONTENT_W - 24));
       const headingH = 11;
@@ -1564,7 +1646,7 @@ export const exportSingleEntryToPDF = ({
       pdf.roundedRect(MARGIN, top, CONTENT_W, cardH, 3, 3, 'F');
       pdf.setFillColor(...GOLD);
       pdf.roundedRect(MARGIN, top, 2.4, cardH, 1, 1, 'F');
-      pdf.setFont('helvetica', 'bold');
+      pdf.setFont(FONT(pdf), 'bold');
       pdf.setFontSize(11.5);
       pdf.setTextColor(...GOLD);
       pdf.text(strings.insightsLabel || 'Key Insights', MARGIN + 8, top + 8);
@@ -1574,11 +1656,11 @@ export const exportSingleEntryToPDF = ({
         pdf.setFillColor(...GOLD);
         pdf.circle(MARGIN + 11, iy - 1.4, 2.3, 'F');
         pdf.setTextColor(255, 255, 255);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont(FONT(pdf), 'bold');
         pdf.setFontSize(8);
         pdf.text(String(i + 1), MARGIN + 11, iy - 0.2, { align: 'center' });
 
-        pdf.setFont('helvetica', 'normal');
+        pdf.setFont(FONT(pdf), 'normal');
         pdf.setFontSize(10.5);
         pdf.setTextColor(...INK);
         lines.forEach((line) => { pdf.text(line, MARGIN + 17, iy); iy += 5.3; });
@@ -1599,7 +1681,7 @@ export const exportSingleEntryToPDF = ({
 
     // ===== Affirmation (highlighted card) =====
     if (analysis.affirmation) {
-      pdf.setFont('helvetica', 'italic');
+      pdf.setFont(FONT(pdf), 'italic');
       pdf.setFontSize(11);
       const quote = `"${analysis.affirmation}"`;
       const lines = pdf.splitTextToSize(quote, CONTENT_W - 12);
@@ -1612,12 +1694,12 @@ export const exportSingleEntryToPDF = ({
       pdf.setFillColor(...PURPLE);
       pdf.roundedRect(MARGIN, y, 2.4, cardH, 1, 1, 'F'); // accent edge
       // label
-      pdf.setFont('helvetica', 'bold');
+      pdf.setFont(FONT(pdf), 'bold');
       pdf.setFontSize(9);
       pdf.setTextColor(...PURPLE);
       pdf.text((strings.affirmationLabel || 'Affirmation').toUpperCase(), MARGIN + 8, y + 8);
       // quote
-      pdf.setFont('helvetica', 'italic');
+      pdf.setFont(FONT(pdf), 'italic');
       pdf.setFontSize(11);
       pdf.setTextColor(60, 45, 90);
       let qy = y + 15;
@@ -1636,7 +1718,7 @@ export const exportSingleEntryToPDF = ({
     pdf.setDrawColor(220, 220, 224);
     pdf.setLineWidth(0.3);
     pdf.line(MARGIN, FOOTER_Y - 4, PAGE_W - MARGIN, FOOTER_Y - 4);
-    pdf.setFont('helvetica', 'normal');
+    pdf.setFont(FONT(pdf), 'normal');
     pdf.setFontSize(8);
     pdf.setTextColor(...MUTE);
     pdf.text('Kairos Smart Journal', MARGIN, FOOTER_Y);
