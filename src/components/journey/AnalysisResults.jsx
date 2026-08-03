@@ -382,7 +382,7 @@ const AnalysisResults = ({ dayNumber, pathId, prompt, theme, imageUrl, extracted
 
   const handleShare = () => {
     const entryType = isVoiceEntry ? 'voice journal' : 'journal';
-    const shareText = `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with a ${entryType} entry using Καιρός Smart Journal! 🎤✨`;
+    const shareText = `I just completed Day ${dayNumber} of my ${getPathName(pathId)} with a ${entryType} entry using Καιρός Smart Journal!`;
     if (navigator.share) {
       navigator.share({ title: `Day ${dayNumber}: ${theme}`, text: shareText, url: window.location.href })
         .catch(() => handleFallbackShare(shareText));

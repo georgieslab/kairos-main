@@ -124,7 +124,7 @@ export const createCheckoutSession = async (userId, popupWindow = null) => {
               </style>
             </head>
             <body>
-              <div class="error-icon">⚠️</div>
+              <div class="error-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
               <h2>Payment Setup Failed</h2>
               <p>We encountered an error setting up your payment.<br>Please try again or contact support.</p>
               <button onclick="window.close()">Close Window</button>
@@ -222,7 +222,7 @@ export const startUpgradeProcess = async (userId) => {
       
       // Final fallback: same-tab navigation with user confirmation
       const confirmed = confirm(`
-🚫 Popup Blocked
+Popup Blocked
 
 Your browser is blocking popups. 
 
@@ -378,7 +378,7 @@ export const openCustomerPortal = async (userId) => {
       
       // Final fallback: same-tab navigation with user confirmation
       const confirmed = confirm(`
-🚫 Popup Blocked
+Popup Blocked
 
 Your browser is blocking popups. 
 

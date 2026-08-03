@@ -200,7 +200,7 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
       const descriptionData = {
         ...result,
         generatedAt: serverTimestamp(),
-        basedOnEntries: totalEntries, // ✅ Use current total entries
+        basedOnEntries: totalEntries, // Use current total entries
         totalEntriesAtTime: totalEntries,
         currentStreakAtTime: progressStats?.currentStreak || 0,
         pathsAnalyzed: [...new Set(entries.map(e => e.pathId).filter(Boolean))],

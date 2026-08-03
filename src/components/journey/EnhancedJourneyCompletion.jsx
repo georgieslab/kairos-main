@@ -14,42 +14,7 @@ import {
 } from '../../services/exportService';
 import DynamicIcon from '../common/DynamicIcon';
 import KairosLoader from '../common/KairosLoader';
-import {
-  Award,
-  Calendar,
-  CheckCircle,
-  Star,
-  Trophy,
-  Share2,
-  Download,
-  Copy,
-  Twitter,
-  Facebook,
-  Instagram,
-  Linkedin,
-  ArrowRight,
-  Sparkles,
-  Heart,
-  Eye,
-  RotateCcw,
-  BookOpen,
-  TrendingUp,
-  Target,
-  Crown,
-  Zap,
-  Quote,
-  ExternalLink,
-  ChevronRight,
-  Gift,
-  Lightbulb,
-  Compass,
-  MessageCircle,
-  Link2,
-  FileText,
-  Loader2,
-  AlertCircle,
-  CheckSquare
-} from 'lucide-react';
+import { Award, Calendar, CheckCircle, Star, Trophy, Share2, Download, Copy, Twitter, Facebook, Instagram, Linkedin, ArrowRight, Sparkles, Heart, Eye, RotateCcw, BookOpen, TrendingUp, Target, Crown, Zap, Quote, ExternalLink, ChevronRight, Gift, Lightbulb, Compass, MessageCircle, Link2, FileText, Loader2, AlertCircle, CheckSquare } from 'lucide-react';
 
 // Import components
 import PathRecommendations from '../paths/PathRecommendations';
@@ -259,7 +224,7 @@ const EnhancedJourneyCompletion = ({
     const userName = userProfile?.displayName || t('enhancedCompletion.defaultUserName', 'I');
     const dayCount = allEntries.length;
 
-    return t('enhancedCompletion.shareText', '🎉 {{userName}} just completed the {{pathName}}! {{dayCount}} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos', { userName, pathName, dayCount });
+    return t('enhancedCompletion.shareText', '{{userName}} just completed the {{pathName}}! {{dayCount}} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos', { userName, pathName, dayCount });
   };
 
   const handleShare = (platform) => {
@@ -372,7 +337,7 @@ const EnhancedJourneyCompletion = ({
                 <div className="themes-container">
                   {aiSummary.keyThemes.map((theme, index) => (
                     <span key={index} className="theme-tag glass">
-                      ✨ {theme}
+                      <Sparkles size={12} strokeWidth={1.8} aria-hidden="true" /> {theme}
                     </span>
                   ))}
                 </div>

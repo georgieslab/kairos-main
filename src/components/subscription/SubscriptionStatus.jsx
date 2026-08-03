@@ -2,19 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Crown,
-  CreditCard, 
-  Calendar, 
-  AlertCircle, 
-  CheckCircle, 
-  X, 
-  ExternalLink,
-  Gift,
-  Sparkles,
-  User,
-  Zap
-} from 'lucide-react';
+import { Crown, CreditCard, Calendar, AlertCircle, CheckCircle, X, ExternalLink, Gift, Sparkles, User, Zap, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   getSubscriptionStatus, 
@@ -414,8 +402,8 @@ export const SubscriptionPlans = ({ onSelectPlan, currentSubscription }) => {
       </div>
 
       <div className="plans-footer">
-        <p>✨ {t('plans.footer1', 'All plans include secure cloud sync and cross-device access')}</p>
-        <p>🔒 {t('plans.footer2', 'Cancel anytime with full data export')}</p>
+        <p><Sparkles size={14} strokeWidth={1.7} aria-hidden="true" /> {t('plans.footer1', 'All plans include secure cloud sync and cross-device access')}</p>
+        <p><Lock size={14} strokeWidth={1.7} aria-hidden="true" /> {t('plans.footer2', 'Cancel anytime with full data export')}</p>
       </div>
     </div>
   );

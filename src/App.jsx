@@ -29,7 +29,6 @@ import useNFCQuickAccess from './hooks/useNFCQuickAccess';
 // Core Components
 import WelcomeScreen from './pages/WelcomeScreen';
 import SignUpScreen from './components/auth/SignUpScreen';
-import UserProfile from './components/auth/UserProfile';
 import JourneyPreview from './components/journey/JourneyPreview';
 import DailyJourneyView from './components/journey/DailyJourneyView';
 import VoiceJournalUpload from './components/voice/VoiceJournalUpload';

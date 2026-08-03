@@ -165,7 +165,7 @@
     "exportMissingData": "ექსპორტი შეუძლებელია: აკლია საჭირო მონაცემები",
     "defaultPathName": "პიროვნული ზრდის მოგზაურობა",
     "defaultUserName": "მე",
-    "shareText": "🎉 {{userName}}-მა ახლახან დაასრულა {{pathName}}! {{dayCount}} დღე თვითრეფლექსიისა და ზრდისა. მზად ხარ საკუთარი აღმოჩენების მოგზაურობისთვის? #JournalingJourney #PersonalGrowth #Kairos",
+    "shareText": "{{userName}}-მა ახლახან დაასრულა {{pathName}}! {{dayCount}} დღე თვითრეფლექსიისა და ზრდისა. მზად ხარ საკუთარი აღმოჩენების მოგზაურობისთვის? #JournalingJourney #PersonalGrowth #Kairos",
     "analyzingJourney": "ანალიზდება შენი გარდაქმნის მოგზაურობა...",
     "creatingInsights": "იქმნება შენი პერსონალიზებული ინსაითები",
     "unableToLoad": "მოგზაურობის ჩატვირთვა ვერ მოხერხდა",

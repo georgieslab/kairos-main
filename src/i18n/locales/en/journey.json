@@ -165,7 +165,7 @@
     "exportMissingData": "Cannot export: Missing required data",
     "defaultPathName": "Personal Growth Journey",
     "defaultUserName": "I",
-    "shareText": "🎉 {{userName}} just completed the {{pathName}}! {{dayCount}} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos",
+    "shareText": "{{userName}} just completed the {{pathName}}! {{dayCount}} days of self-reflection and growth. Ready to start your own journey of discovery? #JournalingJourney #PersonalGrowth #Kairos",
     "analyzingJourney": "Analyzing your transformation journey...",
     "creatingInsights": "Creating your personalized insights",
     "unableToLoad": "Unable to Load Journey",

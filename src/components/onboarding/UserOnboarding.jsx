@@ -1,26 +1,7 @@
 // src/components/onboarding/UserOnboarding.jsx
 
 import React, { useState, useEffect } from 'react';
-import { 
-  BookOpen, 
-  Camera, 
-  Sparkles, 
-  Calendar, 
-  Bell, 
-  Settings, 
-  ChevronLeft, 
-  ChevronRight,
-  Check,
-  Mic,
-  Palette,
-  Smartphone,
-  User,
-  Compass,
-  PenTool,
-  Heart,
-  Brain,
-  Zap
-} from 'lucide-react';
+import { BookOpen, Camera, Sparkles, Calendar, Bell, Settings, ChevronLeft, ChevronRight, Check, Mic, Palette, Smartphone, User, Compass, PenTool, Heart, Brain, Zap, BookMarked, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import claudeLogo from '../../icons/claude.png';
 import '../../styles/components/onboarding.css';
@@ -304,13 +285,13 @@ const UserOnboarding = ({ onComplete }) => {
             {steps[currentStep].hasNFC && (
               <div className="onboarding-nfc-showcase">
                 <div className="onboarding-nfc-demo">
-                  <div className="nfc-phone">📱</div>
+                  <div className="nfc-phone"><Smartphone size={30} strokeWidth={1.6} aria-hidden="true" /></div>
                   <div className="nfc-signal">
                     <span></span>
                     <span></span>
                     <span></span>
                   </div>
-                  <div className="nfc-journal">📓</div>
+                  <div className="nfc-journal"><BookMarked size={30} strokeWidth={1.6} aria-hidden="true" /></div>
                 </div>
                 <p className="onboarding-nfc-text">Tap to Connect • Write to Reflect • AI to Understand</p>
               </div>
@@ -435,7 +416,7 @@ const UserOnboarding = ({ onComplete }) => {
                   autoFocus
                 />
                 <p className="onboarding-privacy-note">
-                  🔒 Your privacy matters. This is only for personalization.
+                  <Lock size={14} strokeWidth={1.7} aria-hidden="true" /> Your privacy matters. This is only for personalization.
                 </p>
               </div>
             )}
@@ -510,7 +491,7 @@ const UserOnboarding = ({ onComplete }) => {
                 
                 {preferences.journalingGoals.length > 0 && (
                   <div className="onboarding-recommendation-note">
-                    ✨ We'll recommend specific paths based on your selections
+                    <Sparkles size={14} strokeWidth={1.7} aria-hidden="true" /> We'll recommend specific paths based on your selections
                   </div>
                 )}
               </div>

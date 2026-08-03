@@ -1836,11 +1836,11 @@ export const VERSION_HISTORY = [
     'Enhanced ProfileScreen with achievement score calculation and display'
   ],
   secretAchievements: [
-    '🎭 Night & Day (RARE, 150 pts): Journal both early morning (5-9 AM) and late night (10 PM-5 AM) on the same day',
-    '🌈 Mood Master (EPIC, 300 pts): Experience and journal about all 8 emotion categories',
-    '⚡ Power User (RARE, 250 pts): Maintain a 7-day journaling streak without missing a day',
-    '✨ Random Explorer (UNCOMMON, 200 pts): Complete a random/recommended journey path',
-    '🎯 Fortune Teller (EPIC, 350 pts): Set and achieve 3 personal goals tracked through journaling'
+    'Night & Day (RARE, 150 pts): Journal both early morning (5-9 AM) and late night (10 PM-5 AM) on the same day',
+    'Mood Master (EPIC, 300 pts): Experience and journal about all 8 emotion categories',
+    'Power User (RARE, 250 pts): Maintain a 7-day journaling streak without missing a day',
+    'Random Explorer (UNCOMMON, 200 pts): Complete a random/recommended journey path',
+    'Fortune Teller (EPIC, 350 pts): Set and achieve 3 personal goals tracked through journaling'
   ],
   trackingAlgorithms: [
     'Night & Day: Groups entries by toDateString(), tracks morning/night flags per day, counts days with BOTH flags true',

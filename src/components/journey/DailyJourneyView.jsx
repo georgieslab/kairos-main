@@ -1,21 +1,7 @@
 // src/components/journey/DailyJourneyView.jsx - Mobile-first, no image display
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Camera, 
-  ArrowLeft, 
-  ArrowRight, 
-  BookOpen, 
-  CheckCircle, 
-  Bookmark, 
-  ChevronRight,
-  Edit3,
-  Target,
-  Lightbulb,
-  Heart,
-  AlertCircle,
-  Mic
-} from 'lucide-react';
+import { Camera, ArrowLeft, ArrowRight, BookOpen, CheckCircle, Bookmark, ChevronRight, Edit3, Target, Lightbulb, Heart, AlertCircle, Mic, FileText } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
@@ -418,7 +404,7 @@ const DailyJourneyView = ({ currentDay, pathId = 'self-discovery', onUpload, onN
               {/* Show message if entry has image but we don't display it */}
               {!journalEntry.isVoiceEntry && journalEntry.imageUrl && !journalEntry.extractedText && (
                 <div className="djv-entry-text">
-                  <p className="djv-image-note">📝 {t('dailyJourney.uploadedNoText', 'You uploaded a journal entry for this day.')}</p>
+                  <p className="djv-image-note"><FileText size={14} strokeWidth={1.7} aria-hidden="true" /> {t('dailyJourney.uploadedNoText', 'You uploaded a journal entry for this day.')}</p>
                 </div>
               )}
 

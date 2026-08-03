@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Download, Smartphone } from 'lucide-react';
+import { X, Download, Smartphone, Check } from 'lucide-react';
 import '../../styles/components/InstallPrompt.css';
 
 const InstallPrompt = () => {
@@ -143,9 +143,9 @@ const InstallPrompt = () => {
         <p>{t('installPrompt.androidSubtitle', 'Install our app for quick access and offline journaling')}</p>
 
         <div className="install-benefits">
-          <div className="benefit">✓ {t('installPrompt.benefitOffline', 'Works offline')}</div>
-          <div className="benefit">✓ {t('installPrompt.benefitQuickAccess', 'Quick access from home screen')}</div>
-          <div className="benefit">✓ {t('installPrompt.benefitFullScreen', 'Full screen experience')}</div>
+          <div className="benefit"><Check size={14} strokeWidth={2.2} aria-hidden="true" /> {t('installPrompt.benefitOffline', 'Works offline')}</div>
+          <div className="benefit"><Check size={14} strokeWidth={2.2} aria-hidden="true" /> {t('installPrompt.benefitQuickAccess', 'Quick access from home screen')}</div>
+          <div className="benefit"><Check size={14} strokeWidth={2.2} aria-hidden="true" /> {t('installPrompt.benefitFullScreen', 'Full screen experience')}</div>
         </div>
 
         <div className="install-actions">

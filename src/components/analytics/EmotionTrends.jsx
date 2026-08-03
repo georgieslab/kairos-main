@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BarChart3 } from 'lucide-react';
 import {
   PieChart,
   Pie,
@@ -267,7 +268,7 @@ const EmotionTrends = ({
         <div className="emotion-trends-empty">
           <div className="empty-chart-placeholder">
             <div className="empty-circle"></div>
-            <div className="empty-icon">📊</div>
+            <div className="empty-icon"><BarChart3 size={28} strokeWidth={1.6} aria-hidden="true" /></div>
           </div>
           <p className="empty-message">{t('emotionTrends.emptyMessage', 'Not enough emotional data to visualize')}</p>
           <p className="empty-submessage">{t('emotionTrends.emptySubmessage', 'Complete more journal entries to see your emotional patterns')}</p>

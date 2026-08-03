@@ -1,11 +1,7 @@
 // src/pages/ProfileScreen.jsx - Apple Glass Edition
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  LogOut, ChevronRight, Mail, MapPin, Calendar,
-  Award, Crown, Compass, Camera, Settings, Info, HelpCircle,
-  BookOpen, Archive, Radio, Activity, CloudSun, Headphones
-} from 'lucide-react';
+import { LogOut, ChevronRight, Mail, MapPin, Calendar, Award, Crown, Compass, Camera, Settings, Info, HelpCircle, BookOpen, Archive, Radio, Activity, CloudSun, Headphones, Trophy } from 'lucide-react';
 import MoodTrends from '../components/analytics/MoodTrends';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -256,7 +252,7 @@ const ProfileScreen = ({ handleSignOut }) => {
         <section className="profile-section">
           <div className="glass-section-header">
             <h3 className="glass-section-title">
-              <span className="section-icon-glow">🏆</span>
+              <span className="section-icon-glow"><Trophy size={18} strokeWidth={1.8} aria-hidden="true" /></span>
               {t('profileScreen.achievements', 'Achievements')}
             </h3>
             <button

@@ -4,22 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  BookOpen, 
-  Sparkles, 
-  CheckCircle2, 
-  AlertCircle, 
-  Loader2,
-  Radio,
-  Smartphone,
-  Package,
-  Crown,
-  Gem,
-  Star,
-  X,
-  ChevronRight,
-  ChevronLeft
-} from 'lucide-react';
+import { BookOpen, Sparkles, CheckCircle2, AlertCircle, Loader2, Radio, Smartphone, Package, Crown, Gem, Star, X, ChevronRight, ChevronLeft, Gift } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -717,7 +702,7 @@ function JournalRegistration({ isOpen, onClose, onComplete }) {
 
           {subscriptionInfo && (
             <div className="jr-success-item jr-subscription-highlight">
-              <strong>🎁 {t('registration.success.subscriptionActivated', 'Artisan Subscription Activated!')}</strong>
+              <strong><Gift size={16} strokeWidth={1.8} aria-hidden="true" /> {t('registration.success.subscriptionActivated', 'Artisan Subscription Activated!')}</strong>
               <div className="jr-subscription-details">
                 <p>
                   <CheckCircle2 size={16} style={{ display: 'inline', marginRight: '6px' }} />

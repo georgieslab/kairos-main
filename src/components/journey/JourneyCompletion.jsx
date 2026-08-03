@@ -40,7 +40,7 @@ import '../../styles/components/journeyCompletion.css';
 
 const JourneyCompletion = ({ 
   navigateToScreen,
-  pathId: propPathId, // ✅ NEW: Accept pathId as prop
+  pathId: propPathId, // NEW: Accept pathId as prop
   onRestart, 
   onViewDay 
 }) => {
@@ -92,7 +92,7 @@ const JourneyCompletion = ({
         navigateToScreen('home');
       }, 100);
     }
-  }, [propPathId, markJourneyAsViewed, navigateToScreen]); // ✅ NEW: Include propPathId in dependencies
+  }, [propPathId, markJourneyAsViewed, navigateToScreen]); // NEW: Include propPathId in dependencies
 
   // Load path data and user progress
   useEffect(() => {
