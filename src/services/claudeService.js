@@ -6,6 +6,7 @@ import { callClaudeApi, safeJsonParse, formatApiError } from '../utils/apiUtils'
 import { getAuth } from 'firebase/auth';
 import { isVisualPath, isVoicePath, isFlexPath } from '../utils/pathTypeUtils';
 import i18n from '../i18n/config';
+import apiCacheService from './apiCacheService';
 
 // Claude API configuration
 const CLAUDE_EXTRACTION_MODEL = 'claude-sonnet-4-6';            // Updated july 2026
@@ -269,7 +270,27 @@ export const analyzeVoiceJournalEntry = async (
   voiceMetadata = {}
 ) => {
   try {
-    console.log(`🎤 Analyzing voice journal entry using ${CLAUDE_ANALYSIS_MODEL}...`);
+    console.log(`Analyzing voice journal entry using ${CLAUDE_ANALYSIS_MODEL}...`);
+
+    // Voice analysis had no cache anywhere — unlike the written path, which
+    // AnalysisResults.jsx wraps. Re-opening a voice entry re-ran the whole
+    // analysis. The transcription is what the model actually reads, so it
+    // keys the entry; language is in the key because the same recording
+    // yields a different analysis per UI language, and model because a model
+    // change should invalidate.
+    const voiceCacheKey = apiCacheService.generateCacheKey('voiceAnalysis', {
+      uid: userProfile?.uid || 'anon',
+      pathId,
+      day,
+      lang: (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0],
+      model: CLAUDE_ANALYSIS_MODEL,
+      len: (transcription || '').length
+    });
+    const cachedVoice = apiCacheService.getFromCache(voiceCacheKey);
+    if (cachedVoice) {
+      console.log('Using cached voice analysis for day', day);
+      return cachedVoice;
+    }
     
     if (!transcription || !transcription.trim()) {
       throw new Error('No transcription provided for voice analysis');
@@ -457,6 +478,13 @@ VOICE ANALYSIS MASTERY:
       model: CLAUDE_ANALYSIS_MODEL,
       wordCount: analysisResult.wordCount
     });
+
+    // Don't cache the safeJsonParse fallback — that object says the analysis
+    // failed, and pinning it here would make the failure permanent for this
+    // entry. `summary` is only absent on the fallback path.
+    if (analysisResult && analysisResult.summary) {
+      apiCacheService.storeInCache(voiceCacheKey, analysisResult);
+    }
 
     return analysisResult;
   } catch (error) {
@@ -1340,8 +1368,27 @@ export const extractTextFromImage = async (file, options = {}) => {
   try {
     if (!file) throw new Error('No image file provided');
     
-    console.log('📝 Extracting text from:', file.name);
-    
+    console.log('Extracting text from:', file.name);
+
+    // OCR is the costliest call in the app — a whole image goes up every time,
+    // and re-reading the same page returns the same text. Re-analysing an
+    // entry, or bouncing off the screen and back, previously paid for it
+    // again. Keyed on the file's own identity rather than its bytes: name,
+    // size and mtime already distinguish two different photographs, and
+    // hashing megabytes on the main thread to save a cache lookup is a poor
+    // trade. Model is in the key so a model change invalidates naturally.
+    const ocrCacheKey = apiCacheService.generateCacheKey('ocr', {
+      n: file.name,
+      s: file.size,
+      m: file.lastModified,
+      model: CLAUDE_EXTRACTION_MODEL
+    });
+    const cachedText = apiCacheService.getFromCache(ocrCacheKey);
+    if (cachedText) {
+      console.log('Using cached OCR result for', file.name);
+      return cachedText;
+    }
+
     const { data: imageBase64, mediaType } = await fileToBase64(file);
     
     const systemPrompt = `You are an expert at extracting handwritten text from journal images with perfect accuracy.
@@ -1406,13 +1453,22 @@ Return JSON with this exact format:
       model: CLAUDE_EXTRACTION_MODEL
     });
     
-    return {
+    const result = {
       text: extractionResult.text,
       wordCount,
       confidence: extractionResult.confidence,
       warnings: extractionResult.warnings,
       metadata: extractionResult.metadata
     };
+
+    // Only cache a real read. Caching an empty or failed extraction would
+    // pin the failure to that file for good, and the user's retry — the one
+    // thing that might fix it — would never reach the API.
+    if (result.text && result.text.trim()) {
+      apiCacheService.storeInCache(ocrCacheKey, result);
+    }
+
+    return result;
   } catch (error) {
     console.error('Error extracting text:', error);
     logAnalyticsEvent('text_extraction_error', {
