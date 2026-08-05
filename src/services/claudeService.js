@@ -1593,7 +1593,17 @@ export const generateProgressReport = async (userId, pathId = 'all') => {
       };
     }
     
-    // Prepare compact entries data to avoid token overflow
+    // COST-BEARING CAP — do not remove, and do not "improve" it into sending
+    // the full history.
+    //
+    // This reads like a token-overflow guard, and it is one, but it is also
+    // what makes the Insight tier's no-subscription Premium financially safe.
+    // Because the slice and the per-field truncation are fixed, a user in
+    // year 8 sends the same payload size as a user in week 1 — per-user cost
+    // is flat over time rather than compounding with tenure. Lift the cap and
+    // an open-ended Premium promise turns into an open-ended liability.
+    // The same applies to the slices in generateJourneyCompletion and
+    // generatePersonalityDescription.
     const entriesContent = allEntries.slice(0, 20).map(entry => ({
       day: entry.day,
       pathId: entry.pathId || 'self-discovery',
@@ -1711,6 +1721,9 @@ export const generateJourneyCompletion = async (userId, allEntries, pathId = 'se
   try {
     console.log(`🏆 Generating enhanced journey completion using ${CLAUDE_ANALYSIS_MODEL}...`);
     
+    // COST-BEARING CAP — do not remove. See the note on the slice in
+    // generateProgressReport: the Insight tier sells Premium with no
+    // subscription, which is only safe because per-call input is bounded.
     const entriesData = allEntries.slice(0, 15).map(entry => ({
       day: entry.day,
       summary: (entry.analysis?.summary || '').substring(0, 200),
@@ -2051,7 +2064,9 @@ export const generatePersonalityDescription = async (userId, entries, userProfil
       }
     }))].sort((a, b) => a.day - b.day);
     
-    // Create comprehensive journal data
+    // COST-BEARING CAP — do not remove. See the note on the slice in
+    // generateProgressReport. "Comprehensive" here means the most recent 25
+    // entries, not the whole history, and that bound is deliberate.
     const journalData = allEntries.slice(0, 25).map(entry => ({
       day: entry.day,
       pathId: entry.pathId || 'self-discovery',

@@ -69,7 +69,7 @@
           "@type": "Product",
           "@id": "https://reflection-writer.web.app/landing.html#insight",
           "name": "Καιρός Insight Journal",
-          "description": "The complete Kairos kit: the Insight journal plus the ritual kit — premium pen, ink, bell and bookmark — mood cards, lifetime Kairos Premium, early access and a discount on future journals.",
+          "description": "The complete Kairos kit: the Insight journal plus the ritual kit — premium pen, ink, bell and bookmark — mood cards, Kairos Premium for the life of the service, early access and a discount on future journals.",
           "brand": { "@id": "https://reflection-writer.web.app/#org" },
           "image": "https://reflection-writer.web.app/images/journals-lineup.jpg",
           "material": "Premium leather",
@@ -2006,6 +2006,23 @@
             margin-top: 1.5rem;
         }
 
+        /* "Lifetime" is an undated, uncapped promise unless it is defined, so
+           the bullet carries a marker and the definition sits directly under
+           the grid rather than only in the terms. */
+        .pricing-fn {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .pricing-footnote {
+            max-width: 62ch;
+            margin: 1.25rem auto 0;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            text-align: left;
+        }
+
         /* ============================================
            CTA SECTION
            ============================================ */
@@ -3432,7 +3449,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Lifetime Kairos Premium
+                                Kairos Premium for the life of the service<sup class="pricing-fn">*</sup>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3455,6 +3472,12 @@
                 <div style="text-align: center; margin-top: 3rem;">
                     <p class="fade-in stagger-4" style="color: var(--text-light); font-size: 0.95rem;">
                         <strong>Kickstarter Early Bird:</strong> 25% off and an exclusive NFC tag for backers.
+                    </p>
+                    <p class="fade-in stagger-4 pricing-footnote">
+                        <span class="pricing-fn">*</span> Premium access for as long as Kairos operates — no
+                        subscription, no renewal, no expiry date. It covers Premium as described above and any
+                        improvements to it, not separately sold future products. If Kairos ever shuts down, you
+                        get at least 90 days' notice and a full export of everything you've written.
                     </p>
                 </div>
             </div>
