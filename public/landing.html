@@ -258,8 +258,8 @@
         }
 
         .logo-loader {
-            width: 12rem;
-            height: 3rem;
+            width: 9rem;
+            height: 9rem;
             opacity: 0;
             animation: logoReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
         }
@@ -2494,8 +2494,11 @@
     <div id="loadingOverlay" class="loading-overlay">
         <div class="simple-loader">
             <div class="logo-loader">
-                <img src="/images/kairos-logo.png" alt="Καιρός" width="120" height="120"
-                     fetchpriority="high" decoding="async">
+                <picture>
+                    <source srcset="/images/kairos-wordmark.webp" type="image/webp">
+                    <img src="/images/kairos-wordmark.png" alt="Καιρός" width="512" height="510"
+                         fetchpriority="high" decoding="async">
+                </picture>
             </div>
             <div class="loading-dots">
                 <div class="dot"></div>
@@ -3108,7 +3111,7 @@
                                     <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
                                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
                                 </svg>
-                                <span><strong>5 active beta users</strong> - Building in public from day 1</span>
+                                <span><strong>Building in the open</strong> - every path, prompt and commit written by hand</span>
                             </div>
                             <div class="story-highlight-item">
                                 <svg viewBox="0 0 24 24" fill="none">
