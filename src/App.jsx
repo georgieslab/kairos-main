@@ -55,6 +55,7 @@ const PathSelection = lazy(() => import('./components/paths/PathSelection'));
 const JournalAnalyticsDashboard = lazy(() => import('./pages/JournalAnalyticsDashboard'));
 const JournalArchive = lazy(() => import('./components/journal/JournalArchive'));
 const AnalysisResults = lazy(() => import('./components/journey/AnalysisResults'));
+const SubscriptionSuccess = lazy(() => import('./pages/SubscriptionSuccess'));
 const UserSettings = lazy(() => import('./components/settings/UserSettings'));
 const CompletedPathsScreen = lazy(() => import('./pages/CompletedPathsScreen'));
 
@@ -217,6 +218,44 @@ const App = () => {
       localStorage.setItem('devPremium', 'false');
     }
   }, []);
+
+  // Stripe checkout return.
+  //
+  // functions/index.js sends subscribers to /success?session_id=... and path
+  // buyers to /?checkout=success&path=... Firebase's catch-all rewrite serves
+  // index.html for both, so the app booted and simply showed the default
+  // screen: the purchase had gone through and the customer was never told.
+  //
+  // Activation itself is the webhook's job (checkout.session.completed), so
+  // this only routes to a confirmation and re-reads the profile the webhook
+  // just changed. Runs once the user is known, because the confirmation screen
+  // needs an authenticated session to show anything meaningful.
+  const handledCheckoutReturn = useRef(false);
+  useEffect(() => {
+    if (!currentUser || handledCheckoutReturn.current) return;
+
+    const { pathname, search } = window.location;
+    const params = new URLSearchParams(search);
+    const isSubscriptionReturn = pathname === '/success' || pathname === '/success/';
+    const isPathPurchaseReturn = params.get('checkout') === 'success';
+    if (!isSubscriptionReturn && !isPathPurchaseReturn) return;
+
+    handledCheckoutReturn.current = true;
+
+    if (isSubscriptionReturn) {
+      navigateToScreen('subscription-success');
+      // Drop the Stripe params so a reload doesn't replay the confirmation,
+      // and so the session id isn't left sitting in the address bar.
+      window.history.replaceState({}, '', '/');
+    } else {
+      // Path purchases already land inside the app and the webhook has granted
+      // access, so there is nothing to route to — just re-read the profile so
+      // the newly unlocked path appears without a manual refresh.
+      refreshUserProfile?.().catch(() => {});
+      const cleaned = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, '', cleaned);
+    }
+  }, [currentUser, navigateToScreen, refreshUserProfile]);
 
   // NFC Quick Upload Listener - Start when user is logged in
   useEffect(() => {
@@ -918,6 +957,16 @@ const App = () => {
                       initialSection={settingsData.activeSection}
                       navigateToScreen={navigateToScreen}
                     />
+                  </Suspense>
+                )}
+
+                {/* Reached only via the Stripe redirect handled above. Until
+                    now /success had no screen behind it, so a customer who had
+                    just paid was dropped on the default view with no
+                    acknowledgement that anything had happened. */}
+                {currentScreen === 'subscription-success' && (
+                  <Suspense fallback={<LazyLoadingScreen />}>
+                    <SubscriptionSuccess navigateToScreen={navigateToScreen} />
                   </Suspense>
                 )}
               </div>

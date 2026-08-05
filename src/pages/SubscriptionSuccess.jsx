@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { handleSubscriptionSuccess } from '../services/stripeService';
 import {
   CheckCircle,
   ArrowRight,
@@ -14,7 +13,7 @@ import '../styles/components/subscription.css';
 
 const SubscriptionSuccess = ({ navigateToScreen }) => {
   const { t } = useTranslation('pages');
-  const { currentUser, refreshUserProfile } = useAuth();
+  const { currentUser, userProfile, refreshUserProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [subscription, setSubscription] = useState(null);
@@ -42,13 +41,24 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
           throw new Error(t('subscriptionSuccess.errorNoUser', 'No user logged in'));
         }
 
-        // Process the subscription
-        const result = await handleSubscriptionSuccess(sessionId);
-
-        // Refresh user profile to get updated subscription status
+        // Activation happens server-side: the Stripe webhook handles
+        // checkout.session.completed and writes the subscription onto the user
+        // document. There is nothing for the client to "process" — this page
+        // previously awaited a handleSubscriptionSuccess() from a
+        // services/stripeService module that does not exist in this codebase,
+        // so importing it alone would have broken the build the moment anything
+        // rendered this screen. Its return value was stored in state and never
+        // read by the render, which is why nobody noticed.
+        //
+        // What the client genuinely has to do is re-read the profile, because
+        // the webhook changed it out from under the open session.
         await refreshUserProfile();
 
-        setSubscription(result);
+        // The webhook can land a beat after the redirect. Re-read once more
+        // shortly after so a user who arrives first doesn't see stale state.
+        setTimeout(() => { refreshUserProfile().catch(() => {}); }, 4000);
+
+        setSubscription({ sessionId });
       } catch (error) {
         console.error('Error processing subscription:', error);
         setError(error.message || t('subscriptionSuccess.errorGeneric', 'An error occurred while processing your subscription'));
@@ -60,6 +70,12 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
     processSubscription();
   }, [currentUser, refreshUserProfile]);
   
+  // The webhook writes subscription.* onto the user document; read from there
+  // rather than from anything this component computed. Firestore Timestamps
+  // arrive as objects with .toDate().
+  const sub = userProfile?.subscription;
+  const toDate = (v) => (v?.toDate ? v.toDate() : (v ? new Date(v) : null));
+
   // Format date for display
   const formatDate = (timestamp) => {
     if (!timestamp) return t('subscriptionSuccess.unknownDate', 'Unknown');
@@ -121,7 +137,7 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
         <div className="subscription-details-card">
           <div className="detail-item">
             <span className="detail-label">{t('subscriptionSuccess.planLabel', 'Subscription Plan:')}</span>
-            <span className="detail-value">{subscription?.plan || t('subscriptionSuccess.planDefault', 'Premium')}</span>
+            <span className="detail-value">{userProfile?.subscriptionTier === 'artisan' ? 'Artisan' : t('subscriptionSuccess.planDefault', 'Premium')}</span>
           </div>
 
           <div className="detail-item">
@@ -131,13 +147,18 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
 
           <div className="detail-item">
             <span className="detail-label">{t('subscriptionSuccess.startDateLabel', 'Start Date:')}</span>
-            <span className="detail-value">{formatDate(subscription?.startDate || new Date())}</span>
+            <span className="detail-value">{formatDate(toDate(sub?.currentPeriodStart) || toDate(sub?.activatedAt))}</span>
           </div>
 
-          <div className="detail-item">
-            <span className="detail-label">{t('subscriptionSuccess.nextBillingLabel', 'Next Billing Date:')}</span>
-            <span className="detail-value">{formatDate(subscription?.renewalDate || new Date())}</span>
-          </div>
+          {/* Only shown once the webhook has landed. It used to default to
+              new Date(), which told a customer who had just paid that they
+              would be billed again today. */}
+          {toDate(sub?.currentPeriodEnd) && (
+            <div className="detail-item">
+              <span className="detail-label">{t('subscriptionSuccess.nextBillingLabel', 'Next Billing Date:')}</span>
+              <span className="detail-value">{formatDate(toDate(sub?.currentPeriodEnd))}</span>
+            </div>
+          )}
         </div>
 
         <div className="success-actions">
@@ -151,7 +172,7 @@ const SubscriptionSuccess = ({ navigateToScreen }) => {
 
           <button
             className="secondary-button"
-            onClick={() => navigateToScreen('account-settings')}
+            onClick={() => navigateToScreen('settings')}
           >
             {t('subscriptionSuccess.manageSubscription', 'Manage Subscription')}
           </button>
