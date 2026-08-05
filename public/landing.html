@@ -2494,11 +2494,13 @@
     <div id="loadingOverlay" class="loading-overlay">
         <div class="simple-loader">
             <div class="logo-loader">
-                <picture>
-                    <source srcset="/images/kairos-wordmark.webp" type="image/webp">
-                    <img src="/images/kairos-wordmark.png" alt="Καιρός" width="512" height="510"
-                         fetchpriority="high" decoding="async">
-                </picture>
+                <!-- No <picture>/WebP here: this mark palettises unusually well, so the
+                     PNG lands at 145 KB against WebP's 174 KB. A <source> also selects
+                     on TYPE support rather than file existence, so a missing WebP is a
+                     hard 404 with no fallback — which is exactly what happened when the
+                     asset was replaced. One file, no trap. -->
+                <img src="/images/kairos-wordmark.png" alt="Καιρός" width="794" height="792"
+                     fetchpriority="high" decoding="async">
             </div>
             <div class="loading-dots">
                 <div class="dot"></div>
