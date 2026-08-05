@@ -92,7 +92,7 @@ const Help = ({ onBack }) => {
           <div className="faq-item">
             <div className="faq-question">{t('help.faq2Question', 'Is my journal data private and secure?')}</div>
             <div className="faq-answer">
-              {t('help.faq2Answer', 'Yes! Your privacy is our top priority. All journal entries are encrypted and stored securely. We implement strict data protection measures, and you can enable additional privacy features like private mode and biometric authentication in the settings.')}
+              {t('help.faq2Answer', 'Yes. Entries are encrypted in transit and at rest, are never used to train AI models, and journal photos are deleted from storage once the text has been read. You can delete your account and all its data at any time from Settings.')}
             </div>
           </div>
 
@@ -179,7 +179,7 @@ const Help = ({ onBack }) => {
           <li className="feature-item">
             <Shield className="feature-icon" />
             <div className="feature-text">
-              <strong>{t('help.pref4Title', 'Privacy')}</strong> - {t('help.pref4Text', 'Manage privacy settings and enable biometric authentication.')}
+              <strong>{t('help.pref4Title', 'Privacy')}</strong> - {t('help.pref4Text', 'Manage your privacy settings.')}
             </div>
           </li>
           <li className="feature-item">

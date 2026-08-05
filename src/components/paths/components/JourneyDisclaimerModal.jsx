@@ -43,7 +43,7 @@ const JourneyDisclaimerModal = ({ onAccept, onCancel }) => {
               {t('disclaimerModal.privacyText1', 'The prompts in this journey will refer to "[substance/behavior]" - mentally replace this with the specific pattern you\'re working to transform. Your responses are private and processed according to your privacy settings.')}
             </p>
             <p>
-              {t('disclaimerModal.privacyText2', 'For maximum privacy, we recommend enabling local processing in your privacy settings.')}
+              {t('disclaimerModal.privacyText2', 'Your entries are processed to generate your reflections and are never used to train AI models.')}
             </p>
           </div>
 

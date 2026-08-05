@@ -386,7 +386,7 @@ const PrivacyPolicy = ({ onBack }) => {
           <div className="security-measures">
             <h4 className="subsection-title">Technical Security Measures</h4>
             <div className="security-grid">
-              <div className="security-item"><KeyRound size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>End-to-end encryption</strong> for journal content during transmission</div>
+              <div className="security-item"><KeyRound size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Server-side API proxying</strong> &mdash; your AI provider key is never exposed to the browser</div>
               <div className="security-item"><Landmark size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>AES-256 encryption</strong> for data storage at rest</div>
               <div className="security-item"><Lock size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>HTTPS/TLS 1.3</strong> for all data transmission</div>
               <div className="security-item"><Shield size={16} strokeWidth={1.7} aria-hidden="true" /> <strong>Password hashing</strong> using bcrypt with salt</div>
@@ -794,7 +794,7 @@ const PrivacyPolicy = ({ onBack }) => {
                 <ul className="styled-list">
                   <li><strong>What's Shared:</strong> Encrypted journal content (text, voice transcriptions, image descriptions)</li>
                   <li><strong>When:</strong> Only when you enable AI analysis features</li>
-                  <li><strong>Protection:</strong> End-to-end encryption, no data retention by Claude</li>
+                  <li><strong>Protection:</strong> encrypted in transit; Anthropic does not retain API inputs or train on them</li>
                   <li><strong>Control:</strong> Disable AI analysis anytime in privacy settings</li>
                 </ul>
               </div>
