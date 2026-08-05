@@ -3215,10 +3215,59 @@
   margin: 1rem 0;
 }
 
+/* The component renders an <h2>; this rule previously targeted only h3, so
+   the heading never picked up the error colour. */
+.error-boundary h2,
 .error-boundary h3 {
   color: var(--error-color);
   margin: 0 0 1rem 0;
   font-size: 1.25rem;
+}
+
+/* Root-level variant. The base style is an inline, dashed-border panel meant
+   to sit inside a page; when the boundary at the top of the tree fires there
+   is no page left around it, so it has to stand on its own. */
+.error-boundary--full {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 2rem;
+  background: #050507;
+  z-index: 99999;
+}
+
+.error-boundary--full h2 { font-size: 1.5rem; }
+
+.error-boundary--full p {
+  max-width: 30rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.error-boundary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* Reload is the more reliable recovery at the root, so it reads as primary
+   and "try again" steps back to a quieter outline. */
+.error-boundary__reload {
+  background: rgb(85, 139, 110) !important;
+}
+
+.error-boundary--full .error-boundary__actions button:not(.error-boundary__reload) {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .error-boundary p {

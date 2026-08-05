@@ -53,7 +53,8 @@
   "errorBoundary": {
     "title": "Something went wrong",
     "message": "We're sorry, but there was a problem loading this content.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "reload": "Reload the app"
   },
   "pathContext": {
     "dayCompact": "{{name}} • Day {{day}}",

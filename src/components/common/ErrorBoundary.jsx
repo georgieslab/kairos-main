@@ -38,15 +38,29 @@ class ErrorBoundaryBase extends React.Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { t, fullScreen } = this.props;
     if (this.state.hasError) {
       return this.props.fallback || (
-        <div className="error-boundary">
+        <div className={`error-boundary${fullScreen ? ' error-boundary--full' : ''}`}>
           <h2>{t('errorBoundary.title', 'Something went wrong')}</h2>
           <p>{t('errorBoundary.message', "We're sorry, but there was a problem loading this content.")}</p>
-          <button onClick={() => this.setState({ hasError: false, error: null })}>
-            {t('errorBoundary.retry', 'Try again')}
-          </button>
+          <div className="error-boundary__actions">
+            <button onClick={() => this.setState({ hasError: false, error: null })}>
+              {t('errorBoundary.retry', 'Try again')}
+            </button>
+            {/* At the root, "try again" re-renders the same broken tree and
+                usually throws straight back. A reload is the honest recovery
+                there, so it's offered alongside — but only when this boundary
+                is the last line of defence. */}
+            {fullScreen && (
+              <button
+                className="error-boundary__reload"
+                onClick={() => window.location.reload()}
+              >
+                {t('errorBoundary.reload', 'Reload the app')}
+              </button>
+            )}
+          </div>
         </div>
       );
     }

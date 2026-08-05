@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import { setupNetworkMonitoring } from './utils/networkUtils';
 // Add this import for our new navigation context
 import { NavigationProvider } from './contexts/NavigationContext'
+import { ErrorBoundary } from './components/common/ErrorBoundary'
 
 // Import and initialize the API cache service BEFORE any components render
 import apiCacheService from './services/apiCacheService.js'
@@ -24,11 +25,17 @@ console.log('API cache service initialized:', !!window.apiCacheService);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider>
-      {/* Add NavigationProvider between AuthProvider and App */}
-      <NavigationProvider>
-        <App />
-      </NavigationProvider>
-    </AuthProvider>
+    {/* Outermost so it also catches a throw from the providers themselves.
+        Until now nothing in the tree caught render errors at all: one bad
+        component took the whole app to a blank white page, taking whatever
+        the person was in the middle of writing with it. */}
+    <ErrorBoundary fullScreen>
+      <AuthProvider>
+        {/* Add NavigationProvider between AuthProvider and App */}
+        <NavigationProvider>
+          <App />
+        </NavigationProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </React.StrictMode>,
 )

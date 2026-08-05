@@ -5,6 +5,7 @@ import { Compass, Heart, Brain, ArrowRight, Check, AlertCircle, Sparkles } from 
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { getJourneyPath } from '../../data/JourneyData';
+import JourneyDisclaimerModal from '../paths/components/JourneyDisclaimerModal';
 import {
   PATHS,
   getUserPathProgress,
@@ -300,49 +301,19 @@ const JourneyPreview = ({ pathId = 'self-discovery', onStart }) => {
         <ArrowRight className="start-icon" />
       </button>
 
+      {/* The Transformation Journey is explicitly about substance and
+          behavioural patterns. This used to show a generic commitment dialog
+          ("are you ready to commit to 21 days?") while JourneyDisclaimerModal
+          — which carries the actual safety language and the SAMHSA, AA and
+          SMART Recovery contacts — existed, was translated into all three
+          languages, and was rendered by nothing. The disclaimer is the gate
+          now; it already asks for the same commitment via its
+          "I Understand & Want to Begin" action. */}
       {showConfirmation && (
-        <div className="confirmation-overlay">
-          <div className="confirmation-dialog">
-            <div className="confirmation-header">
-              <AlertCircle className="confirmation-icon" />
-              <h2 className="confirmation-title">{t('journeyPreview.beforeYouBegin', 'Before You Begin')}</h2>
-            </div>
-
-            <div className="confirmation-content">
-              <p>
-                {t('journeyPreview.transformationIntro', 'The Transformation Journey is designed to help you break challenging patterns in your life. This is a more intensive 21-day experience that works best with:')}
-              </p>
-
-              <ul className="confirmation-list">
-                <li>{t('journeyPreview.confirmItem1', 'Consistent daily practice')}</li>
-                <li>{t('journeyPreview.confirmItem2', 'Honest self-reflection')}</li>
-                <li>{t('journeyPreview.confirmItem3', 'Willingness to examine difficult patterns')}</li>
-                <li>{t('journeyPreview.confirmItem4', 'Commitment to the full 21-day process')}</li>
-              </ul>
-
-              <p>
-                {t('journeyPreview.readyToCommit', 'Are you ready to commit to this transformation journey?')}
-              </p>
-            </div>
-
-            <div className="confirmation-actions">
-              <button
-                className="confirmation-button cancel"
-                onClick={handleCancelConfirmation}
-              >
-                {t('journeyPreview.notNow', 'Not Now')}
-              </button>
-
-              <button
-                className="confirmation-button confirm"
-                onClick={handleConfirmation}
-                id="transformation-journey-confirm-button"
-              >
-                {t('journeyPreview.iUnderstand', 'I Understand')}
-              </button>
-            </div>
-          </div>
-        </div>
+        <JourneyDisclaimerModal
+          onAccept={handleConfirmation}
+          onCancel={handleCancelConfirmation}
+        />
       )}
 
       {/* TEST MODAL (SIMPLE VERSION) */}
