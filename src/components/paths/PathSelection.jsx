@@ -102,8 +102,16 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
 
     if (isCompleted) {
       navigateToScreen('daily', { pathId, day: 1, fromArchive: true });
+    } else if (isActive) {
+      // Already underway — go straight to the next day. The preview is an
+      // introduction, not a gate you pass through every morning.
+      navigateToScreen('write', { pathId, day: nextDay });
     } else {
-      navigateToScreen('write', { pathId, day: isActive ? nextDay : 1 });
+      // Starting fresh: show what the journey actually is first. This used to
+      // jump straight to day 1, which is why the preview screen was
+      // unreachable from here — App.jsx passes an onSelectPath prop that
+      // routes to it, but this component's signature never accepted one.
+      navigateToScreen('journey-preview', { pathId });
     }
   }, [userProfile, navigateToScreen, inProgressPaths, completedPaths, allPaths, isPathUnlocked]);
 

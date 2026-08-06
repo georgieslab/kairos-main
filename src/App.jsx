@@ -690,56 +690,34 @@ const App = () => {
                 )}
                 
                 {currentScreen === 'journey-preview' && (
-                  <JourneyPreview 
+                  <JourneyPreview
                     pathId={currentPath}
                     onStart={() => {
-                      const pathProgressField = currentPath === 'emotional-intelligence' 
-                        ? 'emotionalIntelligenceProgress' 
-                        : currentPath === 'mindfulness-awareness' 
-                          ? 'mindfulnessAwarenessProgress' 
-                          : 'selfDiscoveryProgress';
-                          
-                      const pathProgress = userProfile?.journeyProgress?.[pathProgressField];
-                      let dayToView = 1;
-
-                      if (pathProgress) {
-                        const completedDays = pathProgress.completedDays || [];
-                        
-                        if (completedDays.length > 0) {
-                          const maxCompletedDay = Math.max(...completedDays);
-                          const maxDays = currentPath === 'transformation-journey' ? 21 : 
-                                        currentPath === 'creative-expression' ? 14 :
-                                        currentPath === 'habit-formation' ? 30 :
-                                        currentPath === 'life-vision' ? 100 : 10;
-                                        
-                          dayToView = Math.min(maxCompletedDay + 1, maxDays);
-                        }
-                      }
-                      
-                      navigateToScreen('daily', { day: dayToView, pathId: currentPath });
-                    }} 
+                      // Was a hand-rolled version of getNextDayForPath that
+                      // resolved progressField for 2 of 53 paths and journey
+                      // length for 4, defaulting everyone else to
+                      // selfDiscoveryProgress and 10 days. JourneyData carries
+                      // progressField and duration per path, and the helper
+                      // already reads them.
+                      navigateToScreen('write', {
+                        pathId: currentPath,
+                        day: getNextDayForPath(userProfile, currentPath)
+                      });
+                    }}
                   />
                 )}
 
                 {/* Path Selection */}
                 {currentScreen === 'path-selection' && (
                   <Suspense fallback={<LazyLoadingScreen />}>
-                    <PathSelection 
-                      onSelectPath={(pathId) => {
-                        navigateToScreen('journey-preview', { pathId });
-                      }}
-                      onSelectDay={(pathId, day) => {
-                        navigateToScreen('daily', { 
-                          pathId, 
-                          day,
-                          fromPathSelection: true
-                        }, {
-                          skipCompletionCheck: true
-                        });
-                      }}
+                    {/* PathSelection's signature is ({ navigateToScreen,
+                        currentPath }) — it routes internally through
+                        handleAction. The onSelectPath/onSelectDay callbacks
+                        passed here were silently dropped, which is how the
+                        journey-preview route they pointed at went dead. */}
+                    <PathSelection
                       navigateToScreen={navigateToScreen}
                       currentPath={currentPath}
-                      currentDay={currentDay}
                     />
                   </Suspense>
                 )}
