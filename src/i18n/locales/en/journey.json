@@ -219,64 +219,21 @@
     "quoteAttribution": "— Inspired by Lao Tzu"
   },
   "journeyPreview": {
-    "selfDiscovery": {
-      "name": "Self-Discovery Journey",
-      "description": "Explore your core values, beliefs, and aspirations through guided reflection prompts designed to deepen your self-understanding.",
-      "benefit1": "Gain clarity on personal values and priorities",
-      "benefit2": "Develop greater self-awareness",
-      "benefit3": "Identify patterns in your thoughts and behaviors",
-      "benefit4": "Build a consistent journaling practice"
-    },
-    "transformation": {
-      "name": "Transformation Journey: Breaking Patterns",
-      "description": "This extended journey helps you understand, address, and transform challenging patterns in your life through awareness, strategy-building, and sustainable change practices.",
-      "benefit1": "Identify and understand deep-rooted patterns",
-      "benefit2": "Develop strategies for lasting change",
-      "benefit3": "Create healthier habits and responses",
-      "benefit4": "Transform limiting beliefs and behaviors"
-    },
-    "emotionalIntelligence": {
-      "name": "Emotional Intelligence Expedition",
-      "description": "Develop greater awareness and mastery of your emotional landscape through structured journaling exercises.",
-      "benefit1": "Recognize and name complex emotions",
-      "benefit2": "Understand emotional triggers and patterns",
-      "benefit3": "Develop healthier emotional responses",
-      "benefit4": "Improve relationships through emotional awareness"
-    },
-    "mindfulness": {
-      "name": "Mindfulness & Present Awareness",
-      "description": "Learn to be more present and mindful through daily journaling practices focused on sensory awareness and thought observation.",
-      "benefit1": "Reduce anxiety about the past and future",
-      "benefit2": "Enhance sensory awareness",
-      "benefit3": "Develop focused attention",
-      "benefit4": "Find peace in the present moment"
-    },
-    "lifeVision": {
-      "name": "Life Vision",
-      "description": "Craft a clear vision for your future through guided reflections on your goals, values, and aspirations.",
-      "benefit1": "Define long-term goals and aspirations",
-      "benefit2": "Align actions with core values",
-      "benefit3": "Create a roadmap for personal growth",
-      "benefit4": "Enhance motivation and purpose"
-    },
-    "loading": "Loading...",
-    "dayExperience": "{{days}}-day guided journaling experience",
     "whatToExpect": "What to Expect",
-    "benefits": "Benefits",
     "yourDayJourney": "Your {{days}}-Day Journey",
     "onDayContinue": "You're on day {{day}} of your {{name}}. Continue your journey!",
     "eachDayBuilds": "Each day builds upon the previous, guiding you through a structured {{days}}-day reflection experience.",
     "continueToDay": "Continue to Day {{day}}",
     "beginYourJourney": "Begin Your Journey",
-    "beforeYouBegin": "Before You Begin",
-    "transformationIntro": "The Transformation Journey is designed to help you break challenging patterns in your life. This is a more intensive 21-day experience that works best with:",
-    "confirmItem1": "Consistent daily practice",
-    "confirmItem2": "Honest self-reflection",
-    "confirmItem3": "Willingness to examine difficult patterns",
-    "confirmItem4": "Commitment to the full 21-day process",
-    "readyToCommit": "Are you ready to commit to this transformation journey?",
-    "notNow": "Not Now",
-    "iUnderstand": "I Understand"
+    "recommendedFor": "Recommended for",
+    "themes": "Themes",
+    "daysLabel": "Days",
+    "difficultyLabel": "Difficulty",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
   },
   "writeTab": {
     "dayFallback": {
@@ -327,7 +284,15 @@
     "tip3Write": "Aim for 10+ minutes of uninterrupted, honest writing."
   },
   "home": {
-    "weekdayInitials": ["M", "T", "W", "T", "F", "S", "S"],
+    "weekdayInitials": [
+      "M",
+      "T",
+      "W",
+      "T",
+      "F",
+      "S",
+      "S"
+    ],
     "greetingMorning": "Good morning",
     "greetingAfternoon": "Good afternoon",
     "greetingEvening": "Good evening",

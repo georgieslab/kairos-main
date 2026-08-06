@@ -1,505 +1,338 @@
 /* src/styles/components/journeyPreview.css */
 
+/* Accent handling: this file used to hardcode emerald everywhere and then
+   override it with a rule per path — but only three paths ever got one
+   (self-discovery, emotional-intelligence, mindfulness-awareness), so the
+   other ~50 all rendered emerald. JourneyData carries a per-path `color` as
+   an "r, g, b" string, which JourneyPreview now passes down as --path-accent.
+   The fallback keeps the original emerald for anything missing a colour. */
+
 .journey-preview-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-  
-  .journey-preview-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
-  .icon-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 5rem;
-    height: 5rem;
-    background-color: rgba(16, 185, 129, 0.15); /* emerald-500 with low opacity */
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-  }
-  
-  /* Path-specific icon backgrounds */
-  .self-discovery .icon-container {
-    background-color: rgba(16, 185, 129, 0.15); /* emerald for self-discovery */
-  }
-  
-  .emotional-intelligence .icon-container {
-    background-color: rgba(244, 63, 94, 0.15); /* rose for emotional intelligence */
-  }
-  
-  .mindfulness-awareness .icon-container {
-    background-color: rgba(59, 130, 246, 0.15); /* blue for mindfulness */
-  }
-  
-  .journey-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    color: #10B981; /* emerald-500 */
-  }
-  
-  /* Path-specific icon colors */
-  .self-discovery .journey-icon {
-    color: #10B981; /* emerald for self-discovery */
-  }
-  
-  .emotional-intelligence .journey-icon {
-    color: #F43F5E; /* rose for emotional intelligence */
-  }
-  
-  .mindfulness-awareness .journey-icon {
-    color: #3B82F6; /* blue for mindfulness */
-  }
-  
-  /* Path-specific title gradients */
-  .self-discovery .journey-title {
-    background: linear-gradient(to right, #10B981, #34D399); /* emerald gradient */
-  }
-  
-  .emotional-intelligence .journey-title {
-    background: linear-gradient(to right, #F43F5E, #FB7185); /* rose gradient */
-  }
-  
-  .mindfulness-awareness .journey-title {
-    background: linear-gradient(to right, #3B82F6, #60A5FA); /* blue gradient */
-  }
-  
-  .journey-subtitle {
-    font-size: 1.25rem;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  .journey-content {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .journey-card {
-    background-color: rgba(17, 24, 39, 0.6);
-    border-radius: 1rem;
-    overflow: hidden;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    max-width: 800px;
-    width: 100%;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-  
-  .card-section {
-    padding: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .card-section:last-child {
-    border-bottom: none;
-  }
-  
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-  }
-  
-  .section-title::after {
-    content: '';
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
-    flex-grow: 1;
-    margin-left: 1rem;
-  }
-  
-  .journey-description {
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-  
-  .benefits-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .benefit-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-  
-  .benefit-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .benefit-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #10B981; /* emerald-500 */
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-    margin-top: 0.125rem;
-  }
-  
-  /* Path-specific benefit icon colors */
-  .self-discovery .benefit-icon {
-    color: #10B981; /* emerald for self-discovery */
-  }
-  
-  .emotional-intelligence .benefit-icon {
-    color: #F43F5E; /* rose for emotional intelligence */
-  }
-  
-  .mindfulness-awareness .benefit-icon {
-    color: #3B82F6; /* blue for mindfulness */
-  }
-  
-  .journey-details {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .journey-detail-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-    padding-left: 0.5rem;
-  }
-  
-  .journey-detail-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .detail-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #10B981; /* emerald-500 */
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-    margin-top: 0.125rem;
-  }
-  
-  /* Path-specific detail icon colors */
-  .self-discovery .detail-icon {
-    color: #10B981; /* emerald for self-discovery */
-  }
-  
-  .emotional-intelligence .detail-icon {
-    color: #F43F5E; /* rose for emotional intelligence */
-  }
-  
-  .mindfulness-awareness .detail-icon {
-    color: #3B82F6; /* blue for mindfulness */
-  }
-  
-  .commitment-info {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-  
-  .commitment-item {
-    display: flex;
-    align-items: center;
-  }
-  
-  .commitment-icon {
-    width: 2rem;
-    height: 2rem;
-    color: #10B981; /* emerald-500 */
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-  
-  /* Path-specific commitment icon colors */
-  .self-discovery .commitment-icon {
-    color: #10B981; /* emerald for self-discovery */
-  }
-  
-  .emotional-intelligence .commitment-icon {
-    color: #F43F5E; /* rose for emotional intelligence */
-  }
-  
-  .mindfulness-awareness .commitment-icon {
-    color: #3B82F6; /* blue for mindfulness */
-  }
-  
-  .commitment-details {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .commitment-value {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: white;
-  }
-  
-  .commitment-label {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.5);
-  }
-  
-  .cta-section {
-    text-align: center;
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.6), rgba(16, 185, 129, 0.05));
-  }
-  
-  /* Path-specific cta section gradients */
-  .self-discovery .cta-section {
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.6), rgba(16, 185, 129, 0.05));
-  }
-  
-  .emotional-intelligence .cta-section {
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.6), rgba(244, 63, 94, 0.05));
-  }
-  
-  .mindfulness-awareness .cta-section {
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.6), rgba(59, 130, 246, 0.05));
-  }
-  
-  .start-journey-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background-color: #10B981; /* emerald-500 */
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  /* Path-specific button colors */
-  .self-discovery .start-journey-button {
-    background-color: #10B981; /* emerald for self-discovery */
-  }
-  
-  .self-discovery .start-journey-button:hover {
-    background-color: #059669; /* emerald-600 */
-  }
-  
-  .emotional-intelligence .start-journey-button {
-    background-color: #F43F5E; /* rose for emotional intelligence */
-  }
-  
-  .emotional-intelligence .start-journey-button:hover {
-    background-color: #E11D48; /* rose-600 */
-  }
-  
-  .mindfulness-awareness .start-journey-button {
-    background-color: #3B82F6; /* blue for mindfulness */
-  }
-  
-  .mindfulness-awareness .start-journey-button:hover {
-    background-color: #2563EB; /* blue-600 */
-  }
-  
-  .start-journey-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-  
-  .button-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-left: 0.5rem;
-  }
-  
-  .journey-note {
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
-  }
-  
-  /* Mobile Responsiveness */
-  @media (max-width: 640px) {
-    .journey-preview-header {
-      margin-bottom: 2rem;
-    }
-    
-    .icon-container {
-      width: 4rem;
-      height: 4rem;
-      margin-bottom: 1rem;
-    }
-    
-    .journey-icon {
-      width: 2rem;
-      height: 2rem;
-    }
-    
-    .journey-title {
-      font-size: 1.875rem;
-    }
-    
-    .journey-subtitle {
-      font-size: 1rem;
-    }
-    
-    .card-section {
-      padding: 1.5rem;
-    }
-    
-    .commitment-info {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-    }
-  }
-  
-  /* Animation for entry */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .journey-preview-container {
-    animation: fadeInUp 0.5s ease-out;
-  }
+  --path-accent: #10B981;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeInUp 0.5s ease-out;
+}
 
-  /* Add this to your journeyPreview.css file */
+.journey-preview-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
 
-.confirmation-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  background-color: color-mix(in srgb, var(--path-accent) 15%, transparent);
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+}
+
+.journey-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--path-accent);
+}
+
+/* There was no base rule for this at all — only per-path `background`
+   gradients with no background-clip, which would have painted a coloured
+   block behind the text rather than tinting it. */
+.journey-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+  background: linear-gradient(
+    to right,
+    var(--path-accent),
+    color-mix(in srgb, var(--path-accent) 55%, white)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.journey-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.journey-content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.confirmation-dialog {
-  background-color: #1f1f23;
+.journey-card {
+  background-color: rgba(17, 24, 39, 0.6);
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  width: 90%;
-  max-width: 500px;
-  padding: 1.5rem;
-  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.card-section {
+  padding: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.confirmation-header {
+.card-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
-  color: #f97316; /* Orange for warning */
 }
 
-.confirmation-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 0.75rem;
-  color: #f97316;
+.section-title::after {
+  content: '';
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  flex-grow: 1;
+  margin-left: 1rem;
 }
 
-.confirmation-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  color: #f4f4f5;
-}
-
-.confirmation-content {
-  margin-bottom: 1.5rem;
-  color: #d4d4d8;
-}
-
-.confirmation-content p {
-  margin-bottom: 1rem;
+.journey-description {
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
+  margin-bottom: 0;
 }
 
-.confirmation-list {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+.benefits-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-.confirmation-list li {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-}
-
-.confirmation-actions {
+.benefit-item {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.confirmation-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  font-size: 0.9rem;
+.benefit-item:last-child {
+  margin-bottom: 0;
 }
 
-.confirmation-button.cancel {
-  background-color: transparent;
-  border: 1px solid #52525b;
-  color: #d4d4d8;
+.benefit-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--path-accent);
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
-.confirmation-button.cancel:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+/* Themes render as chips rather than a stacked list — tags are short and
+   there can be five or six of them. */
+.journey-details {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-.confirmation-button.confirm {
-  background-color: #f97316;
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--path-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--path-accent) 30%, transparent);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+}
+
+.detail-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: var(--path-accent);
+  margin-right: 0.4rem;
+  flex-shrink: 0;
+}
+
+.commitment-info {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.commitment-item {
+  display: flex;
+  align-items: center;
+}
+
+.commitment-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--path-accent);
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.commitment-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.commitment-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+}
+
+.commitment-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Day markers. These previously borrowed .day-circle from completion.css,
+   which is a different screen's stylesheet; they are defined here so this
+   screen stands on its own. */
+.days-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.day-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.day-circle.completed {
+  background-color: color-mix(in srgb, var(--path-accent) 22%, transparent);
+  border-color: var(--path-accent);
   color: white;
 }
 
-.confirmation-button.confirm:hover {
-  background-color: #ea580c;
+.day-circle.next {
+  border-color: var(--path-accent);
+  color: white;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--path-accent) 20%, transparent);
 }
 
-/* Ensure the modal is properly placed on small screens */
+.day-ellipsis {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  padding-left: 0.25rem;
+}
+
+.cta-section {
+  text-align: center;
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 24, 39, 0.6),
+    color-mix(in srgb, var(--path-accent) 5%, transparent)
+  );
+}
+
+.start-journey-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--path-accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.start-journey-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.5rem;
+}
+
+.journey-note {
+  margin-top: 0;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 640px) {
-  .confirmation-dialog {
-    width: 95%;
-    padding: 1.25rem;
+  .journey-preview-header {
+    margin-bottom: 2rem;
   }
-  
-  .confirmation-actions {
-    flex-direction: column-reverse;
-    gap: 0.5rem;
+
+  .icon-container {
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
   }
-  
-  .confirmation-button {
-    width: 100%;
+
+  .journey-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .journey-title {
+    font-size: 1.875rem;
+  }
+
+  .journey-subtitle {
+    font-size: 1rem;
+  }
+
+  .card-section {
+    padding: 1.5rem;
+  }
+
+  .commitment-info {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+/* Animation for entry */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

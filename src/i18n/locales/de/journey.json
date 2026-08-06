@@ -219,64 +219,21 @@
     "quoteAttribution": "— Inspiriert von Laotse"
   },
   "journeyPreview": {
-    "selfDiscovery": {
-      "name": "Reise der Selbstfindung",
-      "description": "Erkunde deine Grundwerte, Überzeugungen und Wünsche durch geführte Reflexionsimpulse, die dein Selbstverständnis vertiefen.",
-      "benefit1": "Gewinne Klarheit über persönliche Werte und Prioritäten",
-      "benefit2": "Entwickle größere Selbstwahrnehmung",
-      "benefit3": "Erkenne Muster in deinen Gedanken und Verhaltensweisen",
-      "benefit4": "Baue eine beständige Journaling-Praxis auf"
-    },
-    "transformation": {
-      "name": "Transformationsreise: Muster durchbrechen",
-      "description": "Diese ausgedehnte Reise hilft dir, herausfordernde Muster in deinem Leben zu verstehen, anzugehen und zu verwandeln – durch Bewusstsein, Strategieentwicklung und nachhaltige Veränderungspraktiken.",
-      "benefit1": "Erkenne und verstehe tief verwurzelte Muster",
-      "benefit2": "Entwickle Strategien für dauerhafte Veränderung",
-      "benefit3": "Schaffe gesündere Gewohnheiten und Reaktionen",
-      "benefit4": "Verwandle einschränkende Überzeugungen und Verhaltensweisen"
-    },
-    "emotionalIntelligence": {
-      "name": "Expedition der emotionalen Intelligenz",
-      "description": "Entwickle größeres Bewusstsein und mehr Beherrschung deiner emotionalen Landschaft durch strukturierte Journaling-Übungen.",
-      "benefit1": "Erkenne und benenne komplexe Gefühle",
-      "benefit2": "Verstehe emotionale Auslöser und Muster",
-      "benefit3": "Entwickle gesündere emotionale Reaktionen",
-      "benefit4": "Verbessere Beziehungen durch emotionales Bewusstsein"
-    },
-    "mindfulness": {
-      "name": "Achtsamkeit & gegenwärtiges Bewusstsein",
-      "description": "Lerne, präsenter und achtsamer zu sein, durch tägliche Journaling-Praktiken mit Fokus auf Sinneswahrnehmung und Gedankenbeobachtung.",
-      "benefit1": "Verringere Ängste über Vergangenheit und Zukunft",
-      "benefit2": "Verbessere die Sinneswahrnehmung",
-      "benefit3": "Entwickle fokussierte Aufmerksamkeit",
-      "benefit4": "Finde Frieden im gegenwärtigen Moment"
-    },
-    "lifeVision": {
-      "name": "Lebensvision",
-      "description": "Entwirf eine klare Vision für deine Zukunft durch geführte Reflexionen über deine Ziele, Werte und Wünsche.",
-      "benefit1": "Definiere langfristige Ziele und Wünsche",
-      "benefit2": "Bringe dein Handeln mit deinen Grundwerten in Einklang",
-      "benefit3": "Erstelle einen Fahrplan für persönliches Wachstum",
-      "benefit4": "Steigere Motivation und Sinn"
-    },
-    "loading": "Wird geladen...",
-    "dayExperience": "{{days}}-tägiges geführtes Journaling-Erlebnis",
     "whatToExpect": "Was dich erwartet",
-    "benefits": "Vorteile",
     "yourDayJourney": "Deine {{days}}-tägige Reise",
     "onDayContinue": "Du bist an Tag {{day}} deiner {{name}}. Setze deine Reise fort!",
     "eachDayBuilds": "Jeder Tag baut auf dem vorherigen auf und führt dich durch ein strukturiertes {{days}}-tägiges Reflexionserlebnis.",
     "continueToDay": "Weiter zu Tag {{day}}",
     "beginYourJourney": "Beginne deine Reise",
-    "beforeYouBegin": "Bevor du beginnst",
-    "transformationIntro": "Die Transformationsreise soll dir helfen, herausfordernde Muster in deinem Leben zu durchbrechen. Dies ist ein intensiveres 21-tägiges Erlebnis, das am besten funktioniert mit:",
-    "confirmItem1": "Beständiger täglicher Praxis",
-    "confirmItem2": "Ehrlicher Selbstreflexion",
-    "confirmItem3": "Bereitschaft, schwierige Muster zu untersuchen",
-    "confirmItem4": "Engagement für den vollständigen 21-Tage-Prozess",
-    "readyToCommit": "Bist du bereit, dich dieser Transformationsreise zu widmen?",
-    "notNow": "Jetzt nicht",
-    "iUnderstand": "Ich verstehe"
+    "recommendedFor": "Empfohlen für",
+    "themes": "Themen",
+    "daysLabel": "Tage",
+    "difficultyLabel": "Schwierigkeit",
+    "difficulty": {
+      "beginner": "Einsteiger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Erfahren"
+    }
   },
   "writeTab": {
     "dayFallback": {
@@ -327,7 +284,15 @@
     "tip3Write": "Strebe mindestens 10 Minuten ununterbrochenes, ehrliches Schreiben an."
   },
   "home": {
-    "weekdayInitials": ["M", "D", "M", "D", "F", "S", "S"],
+    "weekdayInitials": [
+      "M",
+      "D",
+      "M",
+      "D",
+      "F",
+      "S",
+      "S"
+    ],
     "greetingMorning": "Guten Morgen",
     "greetingAfternoon": "Guten Tag",
     "greetingEvening": "Guten Abend",
