@@ -6,13 +6,21 @@
    CTA are pinned; only the middle scrolls, so a 100-day path with a long
    description never pushes the primary action off screen. */
 
+/* BottomNavigation is position:fixed at z-index 1000 and renders after the
+   screen content, so it wins any tie and paints over a sheet sharing that
+   layer. The scrim has to sit above it — both so the CTA is reachable and so
+   the nav is visibly dimmed and non-tappable while the sheet is open, which
+   is what tells you that you are in a modal context. */
 .jpm-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1200;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  /* Gutter on every side so the scrim shows around the sheet. Edge-to-edge
+     with only the top corners rounded reads as a new screen, not a popup. */
+  padding: 24px 14px calc(16px + env(safe-area-inset-bottom, 0px));
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -29,17 +37,17 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 88vh;
-  border-radius: 28px 28px 0 0;
+  max-width: 460px;
+  max-height: 80vh;
+  border-radius: 28px;
   background:
-    linear-gradient(170deg, rgba(var(--c), 0.16) 0%, rgba(24, 24, 27, 0.96) 42%),
-    rgba(24, 24, 27, 0.96);
+    linear-gradient(170deg, rgba(var(--c), 0.16) 0%, rgba(24, 24, 27, 0.97) 42%),
+    rgba(24, 24, 27, 0.97);
   border: 1px solid rgba(var(--c), 0.28);
-  border-bottom: none;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 -8px 60px rgba(var(--c), 0.12),
-    0 -20px 60px rgba(0, 0, 0, 0.5);
+    0 0 60px rgba(var(--c), 0.14),
+    0 20px 60px rgba(0, 0, 0, 0.55);
   animation: jpmSheetUp 0.42s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
 }
@@ -263,10 +271,11 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
-/* Footer — pinned, sits above the home indicator on iOS */
+/* Footer — pinned. The overlay's padding already clears the home indicator,
+   so this must not add env(safe-area-inset-bottom) again. */
 .jpm-footer {
   flex-shrink: 0;
-  padding: 14px 24px calc(18px + env(safe-area-inset-bottom, 0px));
+  padding: 14px 20px 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(18, 18, 20, 0.6);
   backdrop-filter: blur(12px);
@@ -311,12 +320,6 @@
   .jpm-sheet {
     max-width: 520px;
     max-height: 86vh;
-    border-radius: 28px;
-    border-bottom: 1px solid rgba(var(--c), 0.28);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 0 60px rgba(var(--c), 0.14),
-      0 28px 70px rgba(0, 0, 0, 0.5);
     animation: jpmDialogIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -326,10 +329,6 @@
 
   .jpm-hero {
     padding-top: 30px;
-  }
-
-  .jpm-footer {
-    padding-bottom: 20px;
   }
 }
 
