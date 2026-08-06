@@ -7,6 +7,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap');
 
 :root {
+  /* ── Stacking order ──────────────────────────────────────────────────────
+     Overlays used to hardcode 1000, the same layer as BottomNavigation, which
+     renders after the screen content and so won every tie — it covered dialog
+     buttons, and stayed lit and tappable behind scrims that were supposed to
+     block it.
+
+     Worse for `.modal-overlay`, which four stylesheets each redefine with a
+     different z-index: the winner was whichever CSS chunk loaded last, so the
+     value changed as the user moved around the app. Naming the layers here
+     makes that harmless — every definition resolves to the same number no
+     matter the order.
+
+     Use these rather than a literal. Anything that must sit above a sheet
+     already on screen (a confirmation raised from within one) takes
+     --z-overlay-nested. */
+  --z-bottom-nav: 1000;
+  --z-overlay: 1200;
+  --z-overlay-nested: 1300;
+
   /* Primary Brand Colors */
   --color-brand: #558B6E;          /* Main Green */
   --color-brand-light: #88A38F;    /* Lighter variation of Main Green */

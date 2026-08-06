@@ -8,7 +8,7 @@
   /* Above BottomNavigation (fixed, z-index 1000, rendered after the screen
      so it wins ties). At 1000 the nav stayed lit and tappable over the
      purchase sheet, and could cover the buy button outright. */
-  z-index: 1200;
+  z-index: var(--z-overlay);
   display: flex;
   align-items: center;
   justify-content: center;

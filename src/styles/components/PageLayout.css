@@ -968,7 +968,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  z-index: 9999;
+  z-index: var(--z-overlay-nested);
   overflow-y: auto; /* Allow scrolling if modal is too tall */
   backdrop-filter: blur(2px);
   animation: modalOverlayFadeIn 0.3s ease-out;
