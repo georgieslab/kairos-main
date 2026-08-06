@@ -16,7 +16,7 @@
   inset: 0;
   z-index: 1200;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   /* Gutter on every side so the scrim shows around the sheet. Edge-to-edge
      with only the top corners rounded reads as a new screen, not a popup. */
@@ -97,7 +97,14 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* The halo is the only element already tinted per-path, so it carries the
+   entrance. Three layers: an aura that blooms outward and then settles into a
+   slow breath, a light that travels the border once, and the icon itself
+   arriving on a slight overshoot. Everything is keyed off --c, so each of the
+   53 paths opens in its own colour. */
 .jpm-icon-halo {
+  position: relative;
+  isolation: isolate;
   width: 64px;
   height: 64px;
   margin: 0 auto 14px;
@@ -108,7 +115,93 @@
   background: rgba(var(--c), 0.14);
   border: 1px solid rgba(var(--c), 0.22);
   color: rgb(var(--c));
+  /* Matches jpmHaloGlow's 0% so the handover when the loop starts at 1s is
+     invisible; without it the halo sits shadowless for that first second. */
   box-shadow: 0 8px 28px rgba(var(--c), 0.22);
+  animation:
+    jpmHaloIn 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s backwards,
+    jpmHaloGlow 5s ease-in-out 1s infinite;
+}
+
+/* Aura — blooms past the halo on entry, then breathes. */
+.jpm-icon-halo::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--c), 0.42) 0%, transparent 68%);
+  filter: blur(12px);
+  animation: jpmAuraBloom 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.18s backwards;
+}
+
+/* A single point of light travelling the border. The mask keeps the conic
+   gradient to the 1px edge instead of filling the tile. */
+.jpm-icon-halo::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 200deg,
+    rgba(var(--c), 0.5) 290deg,
+    rgb(var(--c)) 340deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: jpmHaloTrace 4.5s linear 0.9s infinite;
+}
+
+.jpm-icon-halo > svg {
+  position: relative;
+  z-index: 2;
+  animation: jpmIconIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.34s backwards;
+}
+
+@keyframes jpmHaloIn {
+  from { opacity: 0; transform: scale(0.4) rotate(-14deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes jpmIconIn {
+  from { opacity: 0; transform: scale(0.55); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes jpmAuraBloom {
+  0%   { opacity: 0; transform: scale(0.5); }
+  55%  { opacity: 1; transform: scale(1.18); }
+  100% { opacity: 0.75; transform: scale(1); }
+}
+
+/* Amplitude is deliberately small — this should read as the sheet being
+   alive, not as something demanding attention behind the title. */
+@keyframes jpmHaloGlow {
+  0%, 100% { box-shadow: 0 8px 28px rgba(var(--c), 0.22); }
+  50%      { box-shadow: 0 8px 38px rgba(var(--c), 0.42); }
+}
+
+@keyframes jpmHaloTrace {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Hero content follows the halo in, a beat apart, so the sheet assembles
+   rather than appearing all at once. */
+.jpm-hero .jpm-title    { animation: jpmRise 0.55s ease-out 0.30s backwards; }
+.jpm-hero .jpm-subtitle { animation: jpmRise 0.55s ease-out 0.38s backwards; }
+.jpm-hero .jpm-meta-row { animation: jpmRise 0.55s ease-out 0.46s backwards; }
+
+@keyframes jpmRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .jpm-title {
@@ -337,9 +430,37 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* The staggered entrance uses `backwards` fill, so simply cancelling the
+   animations would leave those elements stuck at their from-state (invisible
+   and offset). Each has to be reset to its resting values explicitly. */
 @media (prefers-reduced-motion: reduce) {
   .jpm-overlay,
-  .jpm-sheet {
+  .jpm-sheet,
+  .jpm-icon-halo,
+  .jpm-icon-halo::before,
+  .jpm-icon-halo::after,
+  .jpm-icon-halo > svg,
+  .jpm-hero .jpm-title,
+  .jpm-hero .jpm-subtitle,
+  .jpm-hero .jpm-meta-row {
     animation: none;
+  }
+
+  .jpm-icon-halo,
+  .jpm-icon-halo > svg,
+  .jpm-hero .jpm-title,
+  .jpm-hero .jpm-subtitle,
+  .jpm-hero .jpm-meta-row {
+    opacity: 1;
+    transform: none;
+  }
+
+  .jpm-icon-halo {
+    box-shadow: 0 8px 28px rgba(var(--c), 0.22);
+  }
+
+  .jpm-icon-halo::after {
+    opacity: 0.75;
+    transform: scale(1);
   }
 }
