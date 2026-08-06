@@ -7,7 +7,7 @@
 // happens on the next screen, not here — this step is information, and an
 // information step that interrupts browsing should be cheap to leave.
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, ArrowRight, Check, Clock, Target } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -20,9 +20,40 @@ import '../../styles/components/journeyPreviewModal.css';
 const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
   const { t, i18n } = useTranslation('journey');
   const { userProfile } = useAuth();
-  const [showDisclaimer, setShowDisclaimer] = React.useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+  // Edge fades marking that the body scrolls. Driven by real scroll position
+  // rather than shown permanently, so a short path with nothing below the fold
+  // doesn't advertise content that isn't there.
+  const bodyRef = useRef(null);
+  const [edges, setEdges] = useState({ above: false, below: false });
 
   const path = pathId ? getJourneyPath(pathId) : null;
+
+  const updateEdges = useCallback(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const max = el.scrollHeight - el.clientHeight;
+    // A few px of slack: sub-pixel layout means scrollTop rarely lands exactly
+    // on 0 or on max, which would leave a fade stuck on at either end.
+    setEdges({
+      above: el.scrollTop > 4,
+      below: max > 4 && el.scrollTop < max - 4
+    });
+  }, []);
+
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    updateEdges();
+    // Observe the children too, not just the scroller: the scroller's own box
+    // doesn't change when content reflows (fonts finishing, a language switch
+    // re-wrapping the description), but that's exactly when the answer changes.
+    const ro = new ResizeObserver(updateEdges);
+    ro.observe(el);
+    Array.from(el.children).forEach((child) => ro.observe(child));
+    return () => ro.disconnect();
+  }, [updateEdges, pathId]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Escape') onClose?.();
@@ -111,64 +142,66 @@ const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
           </div>
         </header>
 
-        <div className="jpm-body">
-          {path.description && (
-            <section className="jpm-section">
-              <h3 className="jpm-section-title">{t('journeyPreview.whatToExpect', 'What to Expect')}</h3>
-              <p className="jpm-description">{path.description}</p>
-            </section>
-          )}
+        <div className={`jpm-scroll${edges.above ? ' has-above' : ''}${edges.below ? ' has-below' : ''}`}>
+          <div className="jpm-body" ref={bodyRef} onScroll={updateEdges}>
+            {path.description && (
+              <section className="jpm-section">
+                <h3 className="jpm-section-title">{t('journeyPreview.whatToExpect', 'What to Expect')}</h3>
+                <p className="jpm-description">{path.description}</p>
+              </section>
+            )}
 
-          {recommendedFor.length > 0 && (
-            <section className="jpm-section">
-              <h3 className="jpm-section-title">{t('journeyPreview.recommendedFor', 'Recommended for')}</h3>
-              <ul className="jpm-reco-list">
-                {recommendedFor.map((who) => (
-                  <li key={who} className="jpm-reco-item">
-                    <Check size={14} className="jpm-reco-check" />
-                    <span>{who}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+            {recommendedFor.length > 0 && (
+              <section className="jpm-section">
+                <h3 className="jpm-section-title">{t('journeyPreview.recommendedFor', 'Recommended for')}</h3>
+                <ul className="jpm-reco-list">
+                  {recommendedFor.map((who) => (
+                    <li key={who} className="jpm-reco-item">
+                      <Check size={14} className="jpm-reco-check" />
+                      <span>{who}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-          {tags.length > 0 && (
+            {tags.length > 0 && (
+              <section className="jpm-section">
+                <h3 className="jpm-section-title">{t('journeyPreview.themes', 'Themes')}</h3>
+                <div className="jpm-tags">
+                  {tags.map((tag) => (
+                    <span key={tag} className="jpm-tag">{tag}</span>
+                  ))}
+                </div>
+              </section>
+            )}
+
             <section className="jpm-section">
-              <h3 className="jpm-section-title">{t('journeyPreview.themes', 'Themes')}</h3>
-              <div className="jpm-tags">
-                {tags.map((tag) => (
-                  <span key={tag} className="jpm-tag">{tag}</span>
-                ))}
+              <h3 className="jpm-section-title">
+                {t('journeyPreview.theShape', 'The shape of it')}
+              </h3>
+              <div className="jpm-days">
+                {Array.from({ length: Math.min(totalDays, 14) }, (_, i) => {
+                  const day = i + 1;
+                  const done = pathProgress?.completedDays?.includes(day);
+                  return (
+                    <span
+                      key={day}
+                      className={`jpm-day${done ? ' is-done' : ''}${day === nextDay && hasStarted ? ' is-next' : ''}`}
+                    >
+                      {day}
+                    </span>
+                  );
+                })}
+                {totalDays > 14 && <span className="jpm-day-more">+{totalDays - 14}</span>}
               </div>
+              <p className="jpm-note">
+                {hasStarted
+                  ? t('journeyPreview.onDayContinue', "You're on day {{day}} of your {{name}}. Continue your journey!", { day: nextDay, name: path.title })
+                  : t('journeyPreview.eachDayBuilds', 'Each day builds upon the previous, guiding you through a structured {{days}}-day reflection experience.', { days: totalDays })}
+              </p>
             </section>
-          )}
-
-          <section className="jpm-section">
-            <h3 className="jpm-section-title">
-              {t('journeyPreview.theShape', 'The shape of it')}
-            </h3>
-            <div className="jpm-days">
-              {Array.from({ length: Math.min(totalDays, 14) }, (_, i) => {
-                const day = i + 1;
-                const done = pathProgress?.completedDays?.includes(day);
-                return (
-                  <span
-                    key={day}
-                    className={`jpm-day${done ? ' is-done' : ''}${day === nextDay && hasStarted ? ' is-next' : ''}`}
-                  >
-                    {day}
-                  </span>
-                );
-              })}
-              {totalDays > 14 && <span className="jpm-day-more">+{totalDays - 14}</span>}
-            </div>
-            <p className="jpm-note">
-              {hasStarted
-                ? t('journeyPreview.onDayContinue', "You're on day {{day}} of your {{name}}. Continue your journey!", { day: nextDay, name: path.title })
-                : t('journeyPreview.eachDayBuilds', 'Each day builds upon the previous, guiding you through a structured {{days}}-day reflection experience.', { days: totalDays })}
-            </p>
-          </section>
+          </div>
         </div>
 
         <footer className="jpm-footer">

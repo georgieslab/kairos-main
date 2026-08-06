@@ -232,13 +232,77 @@
   text-transform: capitalize;
 }
 
-/* Body — the only scrolling region */
+/* Body — the only scrolling region.
+   The wrapper exists so the edge fades can be positioned against the
+   scroller's box: as children of the scroller itself they would scroll away
+   with the content. min-height:0 is what lets a flex child actually shrink
+   and scroll instead of growing to fit. */
+.jpm-scroll {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+}
+
 .jpm-body {
   flex: 1 1 auto;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 4px 24px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--c), 0.35) transparent;
+}
+
+/* Text cut mid-line under a fade is the clearest signal there is more below —
+   clearer than a chevron, and it costs no space. Toggled from real scroll
+   position, so neither fade appears on a path short enough to fit. */
+.jpm-scroll::before,
+.jpm-scroll::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 44px;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.jpm-scroll::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgb(24, 24, 27) 0%, rgba(24, 24, 27, 0) 100%);
+}
+
+.jpm-scroll::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgb(24, 24, 27) 0%, rgba(24, 24, 27, 0) 100%);
+}
+
+.jpm-scroll.has-above::before,
+.jpm-scroll.has-below::after {
+  opacity: 1;
+}
+
+/* A real scrollbar wherever one is drawn. Overlay scrollbars on touch
+   devices show nothing until you already scroll, which is the moment the
+   hint is no longer needed — hence the fades above carrying the job there. */
+.jpm-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.jpm-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.jpm-body::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(var(--c), 0.35);
+}
+
+.jpm-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--c), 0.55);
 }
 
 .jpm-section {
