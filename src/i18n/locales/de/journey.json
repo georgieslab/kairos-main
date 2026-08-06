@@ -220,20 +220,20 @@
   },
   "journeyPreview": {
     "whatToExpect": "Was dich erwartet",
-    "yourDayJourney": "Deine {{days}}-tägige Reise",
     "onDayContinue": "Du bist an Tag {{day}} deiner {{name}}. Setze deine Reise fort!",
     "eachDayBuilds": "Jeder Tag baut auf dem vorherigen auf und führt dich durch ein strukturiertes {{days}}-tägiges Reflexionserlebnis.",
     "continueToDay": "Weiter zu Tag {{day}}",
     "beginYourJourney": "Beginne deine Reise",
     "recommendedFor": "Empfohlen für",
     "themes": "Themen",
-    "daysLabel": "Tage",
-    "difficultyLabel": "Schwierigkeit",
     "difficulty": {
       "beginner": "Einsteiger",
       "intermediate": "Fortgeschritten",
       "advanced": "Erfahren"
-    }
+    },
+    "close": "Schließen",
+    "dayCount": "{{count}} Tage",
+    "theShape": "Der Aufbau"
   },
   "writeTab": {
     "dayFallback": {

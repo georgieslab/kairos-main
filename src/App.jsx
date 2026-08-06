@@ -29,7 +29,6 @@ import useNFCQuickAccess from './hooks/useNFCQuickAccess';
 // Core Components
 import WelcomeScreen from './pages/WelcomeScreen';
 import SignUpScreen from './components/auth/SignUpScreen';
-import JourneyPreview from './components/journey/JourneyPreview';
 import DailyJourneyView from './components/journey/DailyJourneyView';
 import VoiceJournalUpload from './components/voice/VoiceJournalUpload';
 import JournalUpload from './components/journey/JournalUpload';
@@ -409,9 +408,13 @@ const App = () => {
             navigateToScreen('home', { pathId: activePath, day: activeDay });
           }
         } else {
-          navigateToScreen('journey-preview');
+          // No active path. This used to open the journey preview with no
+          // pathId, which previewed whichever path currentPath happened to
+          // default to ('self-discovery') — an arbitrary recommendation to
+          // someone who has chosen nothing. The picker is the honest landing.
+          navigateToScreen('path-selection');
         }
-        
+
         await hideLoader();
       };
       
@@ -689,35 +692,17 @@ const App = () => {
                   />
                 )}
                 
-                {currentScreen === 'journey-preview' && (
-                  <JourneyPreview
-                    pathId={currentPath}
-                    onStart={() => {
-                      // Was a hand-rolled version of getNextDayForPath that
-                      // resolved progressField for 2 of 53 paths and journey
-                      // length for 4, defaulting everyone else to
-                      // selfDiscoveryProgress and 10 days. JourneyData carries
-                      // progressField and duration per path, and the helper
-                      // already reads them.
-                      navigateToScreen('write', {
-                        pathId: currentPath,
-                        day: getNextDayForPath(userProfile, currentPath)
-                      });
-                    }}
-                  />
-                )}
-
                 {/* Path Selection */}
                 {currentScreen === 'path-selection' && (
                   <Suspense fallback={<LazyLoadingScreen />}>
-                    {/* PathSelection's signature is ({ navigateToScreen,
-                        currentPath }) — it routes internally through
-                        handleAction. The onSelectPath/onSelectDay callbacks
-                        passed here were silently dropped, which is how the
-                        journey-preview route they pointed at went dead. */}
+                    {/* PathSelection routes internally through handleAction
+                        and hosts the journey introduction sheet; screenData
+                        carries previewPathId when a restart flow sends the
+                        user back here to open it. */}
                     <PathSelection
                       navigateToScreen={navigateToScreen}
                       currentPath={currentPath}
+                      screenData={screenData}
                     />
                   </Suspense>
                 )}
@@ -918,7 +903,7 @@ const App = () => {
                   <EnhancedJourneyCompletion 
                     pathId={screenData?.pathId || currentPath}
                     navigateToScreen={navigateToScreen}
-                    onRestart={() => navigateToScreen('journey-preview', { pathId: screenData?.pathId || currentPath })}
+                    onRestart={() => navigateToScreen('path-selection', { previewPathId: screenData?.pathId || currentPath })}
                     onViewDay={(day) => navigateToScreen('daily', { 
                       day, 
                       pathId: screenData?.pathId || currentPath,

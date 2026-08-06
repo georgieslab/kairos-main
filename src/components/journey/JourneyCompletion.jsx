@@ -219,8 +219,9 @@ const JourneyCompletion = ({
     if (onRestart) {
       onRestart();
     } else {
-      // Reset progress and restart (you might want to add confirmation)
-      navigateToScreen('journey-preview', { pathId });
+      // The introduction is a sheet hosted by PathSelection, so restarting
+      // returns there and opens it rather than routing to a screen of its own.
+      navigateToScreen('path-selection', { previewPathId: pathId });
     }
   };
 

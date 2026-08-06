@@ -16,6 +16,7 @@ import PathSuggestionCard from './PathSuggestionCard';
 import PathQuestionnaire from './PathQuestionnaire';
 import PathQuestionnaireResults from './PathQuestionnaireResults';
 import PathUnlockModal from '../subscription/PathUnlockModal';
+import JourneyPreviewModal from '../journey/JourneyPreviewModal';
 import '../../styles/components/pathSelection.css';
 import '../../styles/components/appleGlassNav.css';
 
@@ -26,7 +27,7 @@ const ICON_MAP = {
   Coins, Brush, Sparkles, Feather, Hourglass, Shuffle, Layers
 };
 
-const PathSelection = ({ navigateToScreen, currentPath }) => {
+const PathSelection = ({ navigateToScreen, currentPath, screenData }) => {
   const { t } = useTranslation('paths');
   const { userProfile, currentUser } = useAuth();
   const { inProgressPaths, completedPaths } = useUserProgress();
@@ -38,6 +39,10 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
   const [showResults, setShowResults] = useState(false);
   const [recommendation, setRecommendation] = useState(null);
   const [unlockPath, setUnlockPath] = useState(null);
+  // The restart flows (JourneyCompletion, CompletedPathsScreen) come back here
+  // with a previewPathId so the sheet has a single host rather than one
+  // presentation per caller.
+  const [previewPathId, setPreviewPathId] = useState(screenData?.previewPathId || null);
 
   // Exclusive paths are one-time purchases stored on the user doc
   // Exclusive paths are one-time purchases stored on the user doc. Bundle
@@ -103,15 +108,13 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
     if (isCompleted) {
       navigateToScreen('daily', { pathId, day: 1, fromArchive: true });
     } else if (isActive) {
-      // Already underway — go straight to the next day. The preview is an
-      // introduction, not a gate you pass through every morning.
+      // Already underway — go straight to the next day. The introduction is
+      // not a gate you pass through every morning.
       navigateToScreen('write', { pathId, day: nextDay });
     } else {
-      // Starting fresh: show what the journey actually is first. This used to
-      // jump straight to day 1, which is why the preview screen was
-      // unreachable from here — App.jsx passes an onSelectPath prop that
-      // routes to it, but this component's signature never accepted one.
-      navigateToScreen('journey-preview', { pathId });
+      // Starting fresh: introduce the journey first, as a sheet over the grid
+      // so backing out costs one tap and comparing two paths is cheap.
+      setPreviewPathId(pathId);
     }
   }, [userProfile, navigateToScreen, inProgressPaths, completedPaths, allPaths, isPathUnlocked]);
 
@@ -419,6 +422,18 @@ const PathSelection = ({ navigateToScreen, currentPath }) => {
           path={unlockPath}
           userId={currentUser?.uid}
           onClose={() => setUnlockPath(null)}
+        />
+      )}
+
+      {previewPathId && (
+        <JourneyPreviewModal
+          pathId={previewPathId}
+          onClose={() => setPreviewPathId(null)}
+          onStart={() => {
+            const pathId = previewPathId;
+            setPreviewPathId(null);
+            navigateToScreen('write', { pathId, day: getNextDayForPath(userProfile, pathId) });
+          }}
         />
       )}
     </div>

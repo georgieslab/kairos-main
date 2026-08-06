@@ -220,20 +220,20 @@
   },
   "journeyPreview": {
     "whatToExpect": "რას უნდა ელოდო",
-    "yourDayJourney": "შენი {{days}}-დღიანი მოგზაურობა",
     "onDayContinue": "შენ ხარ {{name}}-ის {{day}}-ე დღეზე. გააგრძელე მოგზაურობა!",
     "eachDayBuilds": "თითოეული დღე წინაზე შენდება და გატარებს სტრუქტურირებულ {{days}}-დღიან რეფლექსიაში.",
     "continueToDay": "გადადი დღე {{day}}-ზე",
     "beginYourJourney": "დაიწყე შენი მოგზაურობა",
     "recommendedFor": "რეკომენდებულია",
     "themes": "თემები",
-    "daysLabel": "დღე",
-    "difficultyLabel": "სირთულე",
     "difficulty": {
       "beginner": "დამწყები",
       "intermediate": "საშუალო",
       "advanced": "მოწინავე"
-    }
+    },
+    "close": "დახურვა",
+    "dayCount": "{{count}} დღე",
+    "theShape": "როგორ არის აგებული"
   },
   "writeTab": {
     "dayFallback": {

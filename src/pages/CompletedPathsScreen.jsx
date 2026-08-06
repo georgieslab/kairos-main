@@ -114,7 +114,9 @@ const CompletedPathsScreen = ({ navigateToScreen }) => {
   };
 
   const restartJourney = (pathId) => {
-    navigateToScreen('journey-preview', { pathId });
+    // The introduction is a sheet hosted by PathSelection, so restarting
+    // returns there and opens it rather than routing to a screen of its own.
+    navigateToScreen('path-selection', { previewPathId: pathId });
   };
 
   const viewJourneyDetails = (pathId) => {
