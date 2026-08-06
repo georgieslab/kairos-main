@@ -8,6 +8,18 @@ import { isVisualPath, isVoicePath, isFlexPath } from '../utils/pathTypeUtils';
 import i18n from '../i18n/config';
 import apiCacheService from './apiCacheService';
 
+/**
+ * Running out of the free monthly AI allowance is an expected state with a
+ * specific remedy, not a failure. Every catch below re-wraps its error into a
+ * plain Error for the UI, which would flatten it into "Failed to analyze…" —
+ * indistinguishable from the API being down, and leaving the user with no idea
+ * that waiting until next month or subscribing would fix it. Call this first
+ * in any catch that wraps a Claude request so the typed error survives.
+ */
+const rethrowIfAllowanceError = (error) => {
+  if (error && error.code === 'free-allowance-exhausted') throw error;
+};
+
 // Claude API configuration
 const CLAUDE_EXTRACTION_MODEL = 'claude-sonnet-4-6';            // Updated july 2026
 
@@ -492,6 +504,7 @@ VOICE ANALYSIS MASTERY:
     logAnalyticsEvent('voice_analysis_error', {
       errorType: 'api', message: error.message, model: CLAUDE_ANALYSIS_MODEL
     });
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to analyze voice entry: ' + formatApiError(error));
   }
 };
@@ -1036,6 +1049,7 @@ ${extractedText ? `• Integrate their written notes with visual elements for ho
     logAnalyticsEvent('journal_analysis_error', {
       errorType: 'api', message: error.message, model: CLAUDE_ANALYSIS_MODEL
     });
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to analyze: ' + formatApiError(error));
   }
 };
@@ -1215,6 +1229,7 @@ export const analyzeMultiPageJournalEntry = async (
     return result;
   } catch (error) {
     console.error('Error analyzing multi-page journal:', error);
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to analyze multi-page journal: ' + error.message);
   }
 };
@@ -1841,6 +1856,7 @@ Respond with JSON:
     logAnalyticsEvent('journey_completion_error', {
       message: error.message, pathId, model: CLAUDE_ANALYSIS_MODEL
     });
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to generate completion: ' + formatApiError(error));
   }
 };
@@ -2038,6 +2054,7 @@ Respond with JSON:
     return result;
   } catch (error) {
     console.error('Error answering daily question:', error);
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to answer question: ' + formatApiError(error));
   }
 };
@@ -2186,6 +2203,7 @@ Respond with JSON:
     return descriptionData;
   } catch (error) {
     console.error('Error generating personality description:', error);
+    rethrowIfAllowanceError(error);
     throw new Error('Failed to generate personality description: ' + formatApiError(error));
   }
 };

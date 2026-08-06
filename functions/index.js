@@ -25,6 +25,97 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+/**
+ * Free-plan AI allowance, per calendar month (UTC).
+ *
+ * The free tier used to gate journey paths, which cost nothing to serve — the
+ * prompts are written and translated once — while leaving AI analysis, the
+ * only thing with a real per-use cost, completely unmetered. A free account
+ * journalling daily ran to roughly EUR 10 a year of API spend indefinitely.
+ * This meters the expensive half instead.
+ *
+ * 10 is above the 5-7 entries that generateProgressReport says are needed
+ * before patterns become visible, so the free plan can still demonstrate the
+ * thing being sold.
+ */
+const FREE_MONTHLY_ANALYSES = 10;
+
+/**
+ * True when a subscription grants Artisan access right now.
+ *
+ * Expiry was previously unenforced anywhere: the client's hasArtisanAccess
+ * looked only at status, and validateSubscriptionData — the one function that
+ * did compare currentPeriodEnd against the clock — was never called. Journal
+ * bundles therefore never actually ran out, whatever tierMonths said.
+ * A null currentPeriodEnd means no expiry (the Legacy grant).
+ */
+function hasActiveArtisan(subscription) {
+  if (!subscription) return false;
+  if (!['active', 'trialing'].includes(subscription.status)) return false;
+  const end = subscription.currentPeriodEnd;
+  if (!end) return true;
+  const endDate = end.toDate ? end.toDate() : new Date(end);
+  return endDate > new Date();
+}
+
+/**
+ * Vision requests carry the photographed page for transcription. They are not
+ * metered on their own: a transcription is useless without the analysis that
+ * follows, and charging for both would make a handwritten entry cost twice
+ * what a typed one does — on the app's core flow.
+ */
+function isVisionRequest(body) {
+  return (body.messages || []).some(
+    (m) =>
+      Array.isArray(m.content) &&
+      m.content.some((c) => c && c.type === 'image')
+  );
+}
+
+/**
+ * Reserves one unit of the free monthly allowance. Runs in a transaction so
+ * simultaneous requests cannot both read the same count and overshoot.
+ * Returns { metered: false } for subscribers, who are not counted at all.
+ */
+async function reserveFreeAnalysis(uid) {
+  const userRef = db.collection('users').doc(uid);
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists ? snap.data() : {};
+
+    if (hasActiveArtisan(data.subscription)) return { metered: false };
+
+    const period = new Date().toISOString().slice(0, 7); // YYYY-MM, UTC
+    const usage = data.aiUsage || {};
+    const used = usage.period === period ? usage.count || 0 : 0;
+
+    if (used >= FREE_MONTHLY_ANALYSES) {
+      return { metered: true, exhausted: true, used, limit: FREE_MONTHLY_ANALYSES };
+    }
+
+    tx.set(userRef, { aiUsage: { period, count: used + 1 } }, { merge: true });
+    return { metered: true, exhausted: false, used: used + 1, limit: FREE_MONTHLY_ANALYSES };
+  });
+}
+
+/** Hands a reserved unit back when the Claude call itself fails. */
+async function releaseFreeAnalysis(uid) {
+  const userRef = db.collection('users').doc(uid);
+  try {
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(userRef);
+      if (!snap.exists) return;
+      const usage = snap.data().aiUsage || {};
+      const period = new Date().toISOString().slice(0, 7);
+      if (usage.period !== period || !usage.count) return;
+      tx.set(userRef, { aiUsage: { period, count: usage.count - 1 } }, { merge: true });
+    });
+  } catch (err) {
+    // Never let a refund failure mask the original error the user is seeing.
+    console.error('⚠️ could not release AI allowance:', err);
+  }
+}
+
 // Helper function to remove undefined values from objects
 function removeUndefined(obj) {
   return Object.fromEntries(
@@ -1004,21 +1095,33 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
     const userData = userDoc.data();
     const currentSubscription = userData.subscription || { status: 'free' };
 
-    // Calculate subscription duration based on tier
-    const tierMonths = {
-      essential: 3,
-      insight: 6,
-      legacy: 12
+    // What each journal grants. Legacy carries Premium for the life of the
+    // service — no renewal, no expiry — which is what the pricing page and
+    // section 7 of the terms promise for it. Essential and Insight are
+    // time-limited. The previous map gave Insight 6 months and Legacy 12,
+    // while the page advertised Insight as the lifetime tier: three different
+    // answers across the server, the sales page and the terms.
+    const TIER_GRANTS = {
+      essential: { months: 3 },
+      insight: { months: 6 },
+      legacy: { lifetime: true }
     };
-    
-    const months = tierMonths[tier];
+
+    const grant = TIER_GRANTS[tier];
+    const months = grant.months;
     const now = new Date();
-    
-    // Calculate end date
-    let subscriptionEndDate;
-    
-    // If user already has an active subscription, extend it
-    if (currentSubscription.status === 'active' && currentSubscription.currentPeriodEnd) {
+
+    // Calculate end date. null means it never ends — hasActiveArtisan treats a
+    // missing currentPeriodEnd as no expiry.
+    let subscriptionEndDate = null;
+
+    if (grant.lifetime) {
+      console.log('♾️ Lifetime grant — no expiry recorded');
+    } else if (currentSubscription.lifetime) {
+      // Never downgrade someone who already owns lifetime by later registering
+      // a shorter journal.
+      console.log('♾️ User already holds lifetime access — leaving it alone');
+    } else if (currentSubscription.status === 'active' && currentSubscription.currentPeriodEnd) {
       const existingEnd = currentSubscription.currentPeriodEnd.toDate 
         ? currentSubscription.currentPeriodEnd.toDate() 
         : new Date(currentSubscription.currentPeriodEnd);
@@ -1041,6 +1144,8 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
       console.log(`📅 Starting new ${months}-month subscription`);
     }
 
+    const isLifetime = !!(grant.lifetime || currentSubscription.lifetime);
+
     // Update user subscription
     const subscriptionUpdate = {
       subscription: {
@@ -1049,7 +1154,10 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
         source: 'journal_bundle',
         journalId: journalId,
         journalTier: tier,
-        currentPeriodEnd: admin.firestore.Timestamp.fromDate(subscriptionEndDate),
+        lifetime: isLifetime,
+        currentPeriodEnd: subscriptionEndDate
+          ? admin.firestore.Timestamp.fromDate(subscriptionEndDate)
+          : null,
         activatedAt: admin.firestore.FieldValue.serverTimestamp(),
         autoRenew: false // Journal bundles don't auto-renew, user must subscribe separately
       },
@@ -1060,16 +1168,23 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
 
     console.log(`✅ Journal subscription activated for user ${userId}`);
     console.log(`📔 Journal: ${journalId} (${tier} tier)`);
-    console.log(`📅 Valid until: ${subscriptionEndDate.toISOString()}`);
+    console.log(
+      isLifetime
+        ? '📅 Valid indefinitely (lifetime)'
+        : `📅 Valid until: ${subscriptionEndDate.toISOString()}`
+    );
 
     return {
       success: true,
       subscription: {
         status: 'active',
         tier: 'artisan',
-        months: months,
-        currentPeriodEnd: subscriptionEndDate.toISOString(),
-        message: `${months} months of Artisan access activated!`
+        lifetime: isLifetime,
+        months: isLifetime ? null : months,
+        currentPeriodEnd: subscriptionEndDate ? subscriptionEndDate.toISOString() : null,
+        message: isLifetime
+          ? 'Kairos Premium activated for the life of the service.'
+          : `${months} months of Artisan access activated!`
       }
     };
 
@@ -1125,32 +1240,65 @@ exports.callClaude = functions
         context.auth.uid
       );
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": key,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const errText = await response.text().catch(() => "");
-        console.error("❌ Anthropic API error:", response.status, errText);
-        throw new functions.https.HttpsError(
-          "internal",
-          `Claude API error: ${response.status}`
-        );
+      // Reserve before calling, not after: reserving afterwards would let
+      // concurrent requests all pass the check and overshoot the allowance.
+      // The reservation is handed back below if the call itself fails.
+      let allowance = { metered: false };
+      if (!isVisionRequest(requestBody)) {
+        allowance = await reserveFreeAnalysis(context.auth.uid);
+        if (allowance.exhausted) {
+          throw new functions.https.HttpsError(
+            "resource-exhausted",
+            `Free plan allowance reached: ${allowance.limit} analyses this month.`,
+            {
+              reason: "free-allowance-exhausted",
+              used: allowance.used,
+              limit: allowance.limit,
+            }
+          );
+        }
       }
 
-      const result = await response.json();
+      let result;
+      try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": key,
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          const errText = await response.text().catch(() => "");
+          console.error("❌ Anthropic API error:", response.status, errText);
+          throw new functions.https.HttpsError(
+            "internal",
+            `Claude API error: ${response.status}`
+          );
+        }
+
+        result = await response.json();
+      } catch (callError) {
+        // The user got nothing, so they should not be charged for it.
+        if (allowance.metered) await releaseFreeAnalysis(context.auth.uid);
+        throw callError;
+      }
+
       console.log(
         "✅ callClaude success | input tokens:",
         result.usage && result.usage.input_tokens,
         "| output tokens:",
         result.usage && result.usage.output_tokens
       );
+
+      // Piggybacked on the Anthropic payload so the client can show what is
+      // left without a second round trip. Absent for subscribers.
+      if (allowance.metered) {
+        result.kairosAllowance = { used: allowance.used, limit: allowance.limit };
+      }
 
       return result;
     } catch (error) {

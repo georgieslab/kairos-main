@@ -306,6 +306,12 @@ const extractListItems = (text) => {
  * @param {Object} requestOptions - { method, body, headers? } (only body is used)
  * @returns {Promise<Object>} - Raw Anthropic response
  */
+/**
+ * Last allowance figures seen from the server, for showing "N of 10 left"
+ * without an extra round trip. Null for subscribers, who are never metered.
+ */
+let lastKnownAllowance = null;
+
 export const callClaudeApi = async (requestOptions) => {
   // Parse the request body that claudeService built (it passes a JSON string)
   let requestBody;
@@ -334,12 +340,37 @@ export const callClaudeApi = async (requestOptions) => {
 
     // httpsCallable returns { data: <function return value> }.
     // Our function returns the raw Anthropic JSON, so result.data has .content.
+    // On the free plan it also carries kairosAllowance so the UI can show what
+    // is left; it is absent for subscribers.
+    if (result.data && result.data.kairosAllowance) {
+      lastKnownAllowance = result.data.kairosAllowance;
+    }
     return result.data;
   } catch (error) {
     console.error('callClaudeApi (via Cloud Function) error:', error);
+
+    // The free monthly allowance is spent. This is an expected state, not a
+    // fault, and it has to survive as something the UI can branch on — by the
+    // time formatApiError has turned it into a string it is indistinguishable
+    // from a network failure, and the user gets "something went wrong" for a
+    // situation that needs a specific explanation and an upgrade route.
+    if (error.code === 'functions/resource-exhausted') {
+      const details = error.details || {};
+      lastKnownAllowance = { used: details.used, limit: details.limit };
+      const quotaError = new Error(
+        `Free plan allowance reached: ${details.limit ?? ''} analyses this month.`
+      );
+      quotaError.code = 'free-allowance-exhausted';
+      quotaError.used = details.used;
+      quotaError.limit = details.limit;
+      throw quotaError;
+    }
+
     throw new Error(formatApiError(error, 'Claude request failed'));
   }
 };
+
+export const getLastKnownAllowance = () => lastKnownAllowance;
 
 /**
  * Debounce function - limits how often a function can be called

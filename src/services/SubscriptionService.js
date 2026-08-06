@@ -467,9 +467,21 @@ Click OK to open subscription management in the same tab.
  */
 export const hasArtisanAccess = (subscription) => {
   if (!subscription) return false;
-  
+
   const activeStatuses = ['active', 'trialing'];
-  return activeStatuses.includes(subscription.status);
+  if (!activeStatuses.includes(subscription.status)) return false;
+
+  // Expiry used to go unchecked here, and validateSubscriptionData in
+  // utils/subscriptionUtils.js — the one place that did compare
+  // currentPeriodEnd against the clock — is called by nothing. Journal bundles
+  // set autoRenew:false and an end date, then never actually ran out.
+  // A missing currentPeriodEnd means no expiry: that is the Legacy grant,
+  // which carries Premium for the life of the service.
+  const end = subscription.currentPeriodEnd;
+  if (!end) return true;
+
+  const endDate = end.toDate ? end.toDate() : new Date(end);
+  return endDate > new Date();
 };
 
 /**
