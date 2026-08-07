@@ -1887,40 +1887,65 @@
                 var(--gradient-hero);
         }
 
+        /* Every row lines up across all three cards — shot, name, tagline,
+           blurb, price, list, "Best for", button — because each card is a
+           subgrid of these ten rows rather than stacking independently.
+           Aligning only the top and bottom is what left the middles ragged:
+           a two-line tagline on one card pushed its price, its INCLUDES label
+           and its whole list out of step with its neighbours. */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-rows: repeat(10, auto);
             gap: 2rem;
             max-width: 1100px;
             margin: 3rem auto 0;
-            /* The featured card is scaled 1.05 and carries its badge at
-               top:-15px, both of which push past the grid box. Without this
-               the badge collides with whatever sits above the section. */
+            /* Clearance for the featured card's badge, which sits above it. */
             padding-top: 1.5rem;
             align-items: stretch;
         }
 
-        /* A column, so the three cards can align to each other rather than
-           each stacking its content from the top and leaving a different
-           amount of dead space underneath — the feature lists are 9, 13 and
-           11 items long, so without this the buttons land at three different
-           heights with gaps below them. */
         .pricing-card {
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
             border-radius: 20px;
             padding: 2.5rem;
             text-align: center;
-            transition: all 0.4s ease;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
             position: relative;
+            /* Fallback for engines without subgrid: a column with the tail
+               pushed down, which aligns the buttons even if the middles drift. */
             display: flex;
             flex-direction: column;
         }
 
+        @supports (grid-template-rows: subgrid) {
+            .pricing-card {
+                display: grid;
+                grid-row: span 10;
+                grid-template-rows: subgrid;
+                row-gap: 0;
+            }
+
+            /* Subgrid places every element on its own shared row, so nothing
+               needs to absorb slack any more. */
+            .pricing-bestfor-label {
+                margin: 0 0 0.6rem;
+                padding-top: 1.5rem;
+            }
+        }
+
+        /* Emphasis without scale. transform: scale(1.05) made every element in
+           this card 5% larger and offset from its neighbours, so its price,
+           its list and its button could never line up with the cards either
+           side of it — the single biggest source of the section looking
+           uneven. Border, glow and the badge carry the emphasis instead. */
         .pricing-card.featured {
             border-color: var(--primary-color);
-            transform: scale(1.05);
-            box-shadow: 0 20px 50px rgba(85, 139, 110, 0.3);
+            background:
+                linear-gradient(180deg, rgba(85, 139, 110, 0.08) 0%, transparent 40%),
+                var(--bg-secondary);
+            box-shadow: 0 20px 50px rgba(85, 139, 110, 0.28);
         }
 
         .pricing-card.featured::before {
@@ -2296,10 +2321,6 @@
                 gap: 2rem;
             }
 
-            .pricing-card.featured {
-                transform: scale(1);
-            }
-
             .story-highlights {
                 grid-template-columns: 1fr;
             }
@@ -2345,8 +2366,23 @@
                 grid-template-columns: 1fr;
             }
 
+            /* Stacked, so there is nothing to align rows against. Dropping
+               back to flow rows keeps each card sized to its own content
+               instead of to ten shared row tracks. */
             .pricing-grid {
                 grid-template-columns: 1fr;
+                grid-template-rows: none;
+            }
+
+            .pricing-card {
+                grid-row: auto;
+                grid-template-rows: none;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .pricing-bestfor-label {
+                margin: auto 0 0.6rem;
             }
 
             .cta-actions {

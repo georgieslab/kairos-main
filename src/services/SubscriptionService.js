@@ -619,9 +619,12 @@ export const activateJournalSubscription = async (userId, journalId, tier) => {
  * ninety-nine-cent subscription. Keep in step with the Stripe price.
  */
 export const getPricingInfo = () => {
+  const monthly = 11.99;
+  const yearly = 111.99; // Stripe product prod_SL33owKsKNM6jq
+
   return {
     monthly: {
-      price: 11.99,
+      price: monthly,
       currency: 'EUR',
       period: 'month',
       description: 'Kairos Premium',
@@ -632,6 +635,16 @@ export const getPricingInfo = () => {
         'Unlimited PDF exports',
         'Progress reports and personal insights'
       ]
+    },
+    yearly: {
+      price: yearly,
+      currency: 'EUR',
+      period: 'year',
+      description: 'Kairos Premium, annual',
+      // Two months and change off twelve monthly payments. Derived rather
+      // than written down so it cannot drift from the prices above.
+      savingPercent: Math.round((1 - yearly / (monthly * 12)) * 100),
+      monthsFree: Math.round((monthly * 12 - yearly) / monthly)
     }
   };
 };
