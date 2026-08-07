@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.2.0';
+export const APP_VERSION = '1.3.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2302,6 +2302,40 @@ export const VERSION_HISTORY = [
     'This release completes the trilogy the app is named for: Moments to recognize the opportune moment, Cards to deal yourself the prompt, and Sparks for a blank canvas.',
     'It also brings the largest content update yet — the guided prompts across nearly every journey have been substantially rewritten for depth and specificity — alongside more reliable progress tracking and tightened data access rules.',
     'All changes are fully backward compatible with existing user data and progress.'
+  ]
+},
+{
+  version: '1.3.0',
+  releaseDate: '2026-08-07',
+  codename: 'Everything Included',
+  features: [
+    'All 50 guided journey paths are now included for everyone. The Free and Artisan labels are gone — there is no longer a subscription standing between you and any path. The Kairos Collection (Moments, Cards and Sparks) remains a single €2.99 purchase that unlocks all three together',
+    'A new introduction sheet appears when you begin a journey, showing that path\'s own description, what it is recommended for, its themes, its length and its difficulty, in the path\'s own colour',
+    'The free plan now includes 10 AI analyses each calendar month. Writing, recording and re-reading entries stay unlimited — only the AI reading of them is counted, and photographing a handwritten page costs the same single analysis as typing one',
+    'A confirmation screen after checkout, showing what you bought and when it started, instead of returning you to an unmarked screen'
+  ],
+  improvements: [
+    'Journeys now carry their own colour through the introduction sheet — the icon, the accents and the button all take the path\'s colour rather than everything appearing in the same green',
+    'The introduction sheet keeps its title and its Begin button fixed while the description scrolls between them, so the button stays reachable on the longest journeys',
+    'Faded edges on that sheet show when there is more to read below, and only when there actually is',
+    'Sheets and dialogs now dim the bottom navigation while they are open, so it is clear you are in a dialog rather than looking at a half-covered screen',
+    'Starting a journey you have already begun goes straight to the next day, rather than showing the introduction again every morning',
+    'The pricing page has been rebuilt as the three Kairos Collections, each with what it contains, what it is best for, and how long Kairos Premium is included'
+  ],
+  bugFixes: [
+    'Fixed the journey introduction screen never appearing at all. It referenced a subscription hook that does not exist in the app, which threw on every attempt to render it, so the screen had never once been shown — which is also why each path\'s written description was never visible anywhere',
+    'Fixed starting a new journey skipping that introduction entirely and jumping straight to day one',
+    'Fixed a red "TEST MODAL" debug button appearing in the corner of every journey screen, which opened a subscription dialog quoting prices the app does not sell',
+    'Fixed every journey except five listing Self-Discovery\'s benefits under its own title',
+    'Fixed the Kairos Collection purchase dialog being covered by the bottom navigation bar, which could hide the buy button',
+    'Fixed journal bundles never expiring: the app recorded an end date for the Premium included with each journal but never checked it',
+    'Fixed the subscription confirmation screen announcing a "Next Billing Date" of today to someone who had just paid, and its "Manage Subscription" button leading to a screen that does not exist',
+    'Fixed the Paths screen advertising an Artisan tier that nothing in the app ever enforced'
+  ],
+  notes: [
+    'This release settles what each Collection includes, and makes the app, the pricing page and the terms agree — they previously gave three different answers about how much Premium came with a journal. Essential includes three months, Legacy twelve, and Insight Kairos Premium for the life of the service.',
+    'Because journal bundles never actually expired before, anyone whose included Premium ran out some time ago will find it has now ended. Access drops to the free plan\'s monthly allowance rather than being lost — every journey and every entry stays exactly where it was.',
+    'Nothing about your entries, your progress or your journeys changes in this release.'
   ]
 }
 
