@@ -2112,6 +2112,74 @@
             z-index: 1;
         }
 
+        /* Origin photographs in the story section. Same collapse-when-missing
+           behaviour as .pricing-shot, for the same reason: the page has to stay
+           publishable while the files are still being dug out. These are not a
+           subgrid, so display:none would be safe here — but keeping the two
+           patterns identical means one behaviour to remember, not two. */
+        .story-origins {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+
+        .story-origin {
+            margin: 0;
+        }
+
+        .story-origin-shot {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-origin-shot::after {
+            content: attr(data-label);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .story-origin-shot img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-origin-shot.is-empty {
+            aspect-ratio: auto;
+            height: 0;
+            border: none;
+            background: none;
+        }
+
+        .story-origin-shot.is-empty::after {
+            content: none;
+        }
+
+        /* With the picture gone the caption alone is a claim rather than
+           evidence, so it goes too. */
+        .story-origin-shot.is-empty + figcaption {
+            display: none;
+        }
+
+        .story-origin figcaption {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-light);
+        }
+
         .pricing-blurb {
             color: var(--text-light);
             font-size: 0.9rem;
@@ -3227,8 +3295,9 @@
                     <span class="section-badge">Built in Austria</span>
                     <h2 class="section-title">From Coffee Shop to AI Innovation</h2>
                     <p class="section-description">
-                        A teaching student who had never written code, working part-time at a village
-                        coffee shop, building a journaling app with Claude AI as the development partner.
+                        A chemistry and English teaching student who had never shipped software, working
+                        part-time at a village coffee shop, building a journaling app with Claude as the
+                        development partner.
                     </p>
                 </div>
                 <div class="story-content">
@@ -3244,17 +3313,43 @@
                     <div class="story-text fade-in stagger-2">
                         <h3>"Everyone should be able to write their own book"</h3>
                         <p>
-                            At 30, I took a leave from university (High School Teachers' Education—Informatics & English) to pursue a dream. Working part-time at a local coffee shop in a small Austrian village to fund development, I read Marcus Aurelius' <em>Meditations</em> and watched my mother journal every day.
+                            At 30, I took a leave from university (High School Teachers' Education—Chemistry & English) to pursue a dream. Working part-time at a local coffee shop in a small Austrian village to fund development, I read Marcus Aurelius' <em>Meditations</em> and watched my mother journal every day.
                         </p>
                         <p>
                             I thought: what if everyone could write their own Meditations? What if AI could help us understand our patterns like Marcus understood his?
                         </p>
                         <div class="story-quote">
-                            "I had zero traditional coding skills. Just a clear vision and Claude AI as my development partner. Together, we built the entire app—50 journey paths, voice recording, NFC integration, everything. This is proof that you don't need to code to build technology. You need to understand people."
+                            "I had never shipped software. What I had was a clear idea and Claude as a development partner — which is not the same as taking whatever it writes. The first pass at the journey prompts came back generic, so I rewrote them, and I still read every prompt before it ships. Deciding what belongs in someone's journal is the work. The syntax was the part I could delegate."
                         </div>
                         <p>
                             From chemistry student in Georgia → car accident → moving to Austria at 26 → 2 years learning German → starting a new degree → taking the leap to build Καιρός. Every struggle taught me something: resilience, patience, vision over perfection.
                         </p>
+
+                        <!-- Where it started. Two photographs do more for the claims
+                             above than another paragraph would: the first build was
+                             black text on white with no design at all, and the first
+                             journal was a plain notebook with an NFC chip in the
+                             cover. Anyone can say they started small; this shows it.
+                             Same collapse-when-absent behaviour as the pricing
+                             shots, so the section reads fine until the files land. -->
+                        <div class="story-origins">
+                            <figure class="story-origin">
+                                <div class="story-origin-shot" data-label="First build">
+                                    <img src="/images/origin-app-v1.png"
+                                         alt="The first version of the Kairos app: plain black text on a white screen, no styling"
+                                         loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
+                                </div>
+                                <figcaption>The first build. Black text, white screen, no design — but it read handwriting.</figcaption>
+                            </figure>
+                            <figure class="story-origin">
+                                <div class="story-origin-shot" data-label="First journal">
+                                    <img src="/images/origin-journal-prototype.png"
+                                         alt="The first Kairos prototype journal: a plain notebook with an NFC chip fitted into the cover"
+                                         loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
+                                </div>
+                                <figcaption>The first journal. A plain notebook and an NFC chip, to find out whether tapping a book felt right.</figcaption>
+                            </figure>
+                        </div>
 
                         <!-- The page had no author anywhere: no name, no links.
                              A portfolio piece a reader cannot follow up on is
@@ -3283,14 +3378,14 @@
                                     <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
                                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
                                 </svg>
-                                <span><strong>Built 100% with Claude AI</strong> - No traditional developers</span>
+                                <span><strong>Built with Claude AI</strong> - every prompt read, and the generic ones rewritten</span>
                             </div>
                             <div class="story-highlight-item">
                                 <svg viewBox="0 0 24 24" fill="none">
                                     <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
                                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
                                 </svg>
-                                <span><strong>Building in the open</strong> - every path, prompt and commit written by hand</span>
+                                <span><strong>Building in the open</strong> - the full source is public on GitHub</span>
                             </div>
                             <div class="story-highlight-item">
                                 <svg viewBox="0 0 24 24" fill="none">

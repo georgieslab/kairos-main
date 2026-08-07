@@ -2,6 +2,42 @@
 
 Everything the landing page still needs, with generation prompts.
 
+> **You already have the three Collection shots.** If those are photographs or
+> renders of the actual journals, use them — save them as
+> `public/images/package-essential.png`, `package-legacy.png` and
+> `package-insight.png` and skip sections 1–3 entirely. A real photograph of
+> the real product beats a generated one every time on a page whose whole
+> argument is that the object is real. The prompts stay below only as a
+> fallback. **Crop them to 4:3 and check the Legacy one has no stone.**
+
+## Origin photographs — the highest-value images on this page
+
+Two slots now exist in the story section for images that already exist on a
+drive somewhere:
+
+| File | What it is |
+|---|---|
+| `origin-app-v1.png` | The first build of the app — black text on a white screen, no styling |
+| `origin-journal-prototype.png` | The first prototype journal — a plain notebook with an NFC chip in the cover |
+
+Both are 4:3, and both collapse silently if absent, so the section reads fine
+until they land. Nothing to generate — these are documents, not renders, and
+their value is precisely that they are unpolished.
+
+**Why these matter more than anything else in this file.** The story section
+makes a claim — someone with no software background built this from nothing.
+Every visitor has read that claim on some other landing page and discounted it.
+A screenshot of black text on a white screen, and a photo of a chip taped into
+a notebook, are not a claim. They are the receipt. They convert the section
+from *assertion* into *evidence*, and no amount of generated product
+photography does that.
+
+They should look bad. Do not clean them up, do not re-render them, do not
+retouch. The worse they look, the further the distance to the current product
+reads.
+
+---
+
 Five images are outstanding, plus one to check. Three are new (the Collection
 shots on the pricing cards); two are replacements for photographs that show a
 product feature we no longer sell.
