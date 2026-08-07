@@ -1893,8 +1893,18 @@
             gap: 2rem;
             max-width: 1100px;
             margin: 3rem auto 0;
+            /* The featured card is scaled 1.05 and carries its badge at
+               top:-15px, both of which push past the grid box. Without this
+               the badge collides with whatever sits above the section. */
+            padding-top: 1.5rem;
+            align-items: stretch;
         }
 
+        /* A column, so the three cards can align to each other rather than
+           each stacking its content from the top and leaving a different
+           amount of dead space underneath — the feature lists are 9, 13 and
+           11 items long, so without this the buttons land at three different
+           heights with gaps below them. */
         .pricing-card {
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
@@ -1903,6 +1913,8 @@
             text-align: center;
             transition: all 0.4s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .pricing-card.featured {
@@ -1979,6 +1991,10 @@
             text-align: left;
         }
 
+        /* The label is wrapped in a span so it is one flex item. Left as a bare
+           text node it split from any inline element beside it — the footnote
+           asterisk on Insight's Premium line became its own flex child and
+           drifted to the far right of the row, a gap away from the words. */
         .pricing-features li {
             display: flex;
             align-items: start;
@@ -1986,6 +2002,11 @@
             padding: 0.75rem 0;
             color: var(--text-secondary);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: left;
+        }
+
+        .pricing-features li span {
+            flex: 1;
         }
 
         .pricing-features li:last-child {
@@ -2004,6 +2025,7 @@
         .pricing-cta {
             width: 100%;
             margin-top: 1.5rem;
+            flex-shrink: 0;
         }
 
         /* Product shot per tier.
@@ -2053,9 +2075,14 @@
 
         /* Who each collection is for. Sits after the feature list because it
            answers a different question — not "what do I get" but "is this the
-           one for me" — which is the last thing read before the button. */
+           one for me" — which is the last thing read before the button.
+
+           margin-top:auto absorbs the leftover height in the flex column, so
+           the "Best for" block and the button sit on the floor of every card
+           and line up across all three regardless of list length. */
         .pricing-bestfor-label {
-            margin: 1.5rem 0 0.6rem;
+            margin: auto 0 0.6rem;
+            padding-top: 1.5rem;
             font-size: 0.6875rem;
             font-weight: 700;
             letter-spacing: 0.14em;
@@ -2776,12 +2803,13 @@
                             </svg>
                         </div>
                         <h3>Claude AI Analysis</h3>
-                        <!-- Kept in sync with claudeService.js. This previously claimed
-                             "Claude Opus 4" and "Claude Sonnet 4" — neither of which the
-                             app has ever run, and both now deprecated. On a page that
-                             doubles as a portfolio piece, a technical reader checking
-                             this is exactly the reader you want to impress. -->
-                        <p>Powered by Anthropic's Claude Sonnet 4.6 — reading your handwriting off the page and analyzing what you wrote, in one model. Vision and reasoning together, so the analysis understands the entry rather than just its transcript.</p>
+                        <!-- Names Anthropic but not the model version. The version is
+                             the part that goes stale: this has already claimed "Claude
+                             Opus 4" and "Claude Sonnet 4", neither of which the app ever
+                             ran. Naming the vendor is a trust signal worth keeping on a
+                             journaling app; naming the point release is a maintenance
+                             burden that gets it wrong. -->
+                        <p>Powered by Anthropic's Claude — reading your handwriting off the page and analyzing what you wrote, in one model. Vision and reasoning together, so the analysis understands the entry rather than just its transcript.</p>
                         <div class="feature-highlight">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
@@ -3371,55 +3399,55 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Essential Journal
+                                <span>Essential Journal</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium hardcover or vegan leather cover
+                                <span>Premium hardcover or vegan leather cover</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Integrated NFC technology
+                                <span>Integrated NFC technology</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Lay-flat binding
+                                <span>Lay-flat binding</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium archival paper
+                                <span>Premium archival paper</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Satin ribbon bookmark
+                                <span>Satin ribbon bookmark</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                The Kairos app, all 50 journeys
+                                <span>The Kairos app, all 50 journeys</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                3 months of Kairos Premium
+                                <span>3 months of Kairos Premium</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium gift box
+                                <span>Premium gift box</span>
                             </li>
                         </ul>
                         <p class="pricing-bestfor-label">Best for</p>
@@ -3447,79 +3475,79 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Legacy Journal
+                                <span>Legacy Journal</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Full-grain leather cover
+                                <span>Full-grain leather cover</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Antique brass corner protectors
+                                <span>Antique brass corner protectors</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Integrated NFC technology
+                                <span>Integrated NFC technology</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium archival paper
+                                <span>Premium archival paper</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Lay-flat binding
+                                <span>Lay-flat binding</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium Kairos metal pen, dip-pen inspired
+                                <span>Premium Kairos metal pen, dip-pen inspired</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Three premium black ink cartridges
+                                <span>Three premium black ink cartridges</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Luxury ribbon bookmark
+                                <span>Luxury ribbon bookmark</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium presentation gift box
+                                <span>Premium presentation gift box</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Welcome card
+                                <span>Welcome card</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                The Kairos app, all 50 journeys
+                                <span>The Kairos app, all 50 journeys</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                12 months of Kairos Premium
+                                <span>12 months of Kairos Premium</span>
                             </li>
                         </ul>
                         <p class="pricing-bestfor-label">Best for</p>
@@ -3547,67 +3575,67 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Insight Journal, exclusive edition
+                                <span>Insight Journal, exclusive edition</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Kairos Mood Cards, 52-card deck
+                                <span>Kairos Mood Cards, 52-card deck</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Brass meditation bell
+                                <span>Brass meditation bell</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Kairos incense holder
+                                <span>Kairos incense holder</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium incense sticks
+                                <span>Premium incense sticks</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Beeswax candle
+                                <span>Beeswax candle</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Brass bookmark
+                                <span>Brass bookmark</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium cotton storage pouch
+                                <span>Premium cotton storage pouch</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Luxury keepsake box
+                                <span>Luxury keepsake box</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Kairos Premium for the life of the service<sup class="pricing-fn">*</sup>
+                                <span>Kairos Premium for the life of the service<sup class="pricing-fn">*</sup></span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Early access to future Kairos products
+                                <span>Early access to future Kairos products</span>
                             </li>
                         </ul>
                         <p class="pricing-bestfor-label">Best for</p>

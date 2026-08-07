@@ -611,19 +611,26 @@ export const activateJournalSubscription = async (userId, journalId, tier) => {
  * Get pricing information
  * @returns {Object} Pricing details
  */
+/**
+ * Displayed subscription pricing. This said €0.99/month and "All 33+ journey
+ * paths" — a price that was never charged and a path count that was never
+ * right. It only escaped notice because its one consumer, SubscriptionStatus,
+ * is imported by nothing; wiring that component up would have advertised a
+ * ninety-nine-cent subscription. Keep in step with the Stripe price.
+ */
 export const getPricingInfo = () => {
   return {
     monthly: {
-      price: 0.99,
+      price: 11.99,
       currency: 'EUR',
       period: 'month',
-      description: 'Artisan Monthly',
+      description: 'Kairos Premium',
       features: [
-        'All 33+ journey paths',
-        'Advanced AI analysis',
+        'Unlimited reflections',
+        'All 50 journey paths',
+        'Handwriting, voice and visual entries',
         'Unlimited PDF exports',
-        'Premium analytics',
-        'Priority support'
+        'Progress reports and personal insights'
       ]
     }
   };
