@@ -53,7 +53,7 @@
           "@type": "Product",
           "@id": "https://reflection-writer.web.app/landing.html#essential",
           "name": "Καιρός Essential Journal",
-          "description": "Soft-touch vegan leather NFC journal with the Kairos app, daily reflection, AI companion and the basic journeys. Everything you need to begin.",
+          "description": "Premium hardcover or vegan leather NFC journal with lay-flat binding, archival paper and a satin ribbon bookmark, in a premium gift box. Includes the Kairos app with all 50 journeys and 3 months of Kairos Premium.",
           "brand": { "@id": "https://reflection-writer.web.app/#org" },
           "image": "https://reflection-writer.web.app/images/journals-lineup.jpg",
           "material": "Vegan leather",
@@ -69,7 +69,7 @@
           "@type": "Product",
           "@id": "https://reflection-writer.web.app/landing.html#insight",
           "name": "Καιρός Insight Journal",
-          "description": "The complete Kairos kit: the Insight journal plus the ritual kit — premium pen, ink, bell and bookmark — mood cards, six months of Kairos Premium, early access and a discount on future journals.",
+          "description": "Everything in the Legacy collection plus the exclusive Insight journal, the 52-card Kairos Mood Cards deck, a brass meditation bell, incense holder and sticks, a beeswax candle, a brass bookmark, a cotton storage pouch and a luxury keepsake box. Includes Kairos Premium for the life of the service and early access to future Kairos products.",
           "brand": { "@id": "https://reflection-writer.web.app/#org" },
           "image": "https://reflection-writer.web.app/images/journals-lineup.jpg",
           "material": "Premium leather",
@@ -85,10 +85,10 @@
           "@type": "Product",
           "@id": "https://reflection-writer.web.app/landing.html#legacy",
           "name": "Καιρός Legacy Journal",
-          "description": "The flagship. Genuine leather NFC journal with a natural green agate centrepiece, antique brass corners and premium packaging, plus the full Kairos app, unlimited journeys, digital mood cards and Kairos Premium for the life of the service. Every stone is unique.",
+          "description": "Full-grain leather NFC journal with antique brass corner protectors, lay-flat binding and premium archival paper, presented with the Kairos metal pen, three ink cartridges, a luxury ribbon bookmark and a welcome card. Includes the Kairos app with all 50 journeys and 12 months of Kairos Premium.",
           "brand": { "@id": "https://reflection-writer.web.app/#org" },
           "image": "https://reflection-writer.web.app/images/journal-legacy-detail.jpg",
-          "material": "Genuine leather, brass, agate",
+          "material": "Full-grain leather, antique brass",
           "offers": {
             "@type": "Offer",
             "price": "149.00",
@@ -2044,6 +2044,43 @@
             z-index: 1;
         }
 
+        .pricing-blurb {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.55;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Who each collection is for. Sits after the feature list because it
+           answers a different question — not "what do I get" but "is this the
+           one for me" — which is the last thing read before the button. */
+        .pricing-bestfor-label {
+            margin: 1.5rem 0 0.6rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        .pricing-bestfor {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .pricing-bestfor li {
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
         /* "Lifetime" is an undated, uncapped promise unless it is defined, so
            the bullet carries a marker and the definition sits directly under
            the grid rather than only in the terms. */
@@ -3283,7 +3320,7 @@
                     <picture>
                         <source srcset="/images/journals-lineup.webp" type="image/webp">
                         <img src="/images/journals-lineup.jpg"
-                         alt="The three Καιρός editions side by side: Essential in olive vegan leather, Legacy in dark green with a natural green agate centrepiece and antique brass corners, and Insight in premium brown leather"
+                         alt="The three Καιρός editions side by side: Essential in olive vegan leather, Legacy in dark green full-grain leather with antique brass corners, and Insight in premium brown leather"
                          width="1536" height="1024" loading="lazy" decoding="async">
                     </picture>
                     <figcaption>
@@ -3295,12 +3332,12 @@
                     <picture>
                         <source srcset="/images/journal-legacy-detail.webp" type="image/webp">
                         <img src="/images/journal-legacy-detail.jpg"
-                         alt="Detail view of the Legacy journal: natural green agate centrepiece, antique brass corner fittings, the NFC medallion, and 200 GSM acid-free paper"
+                         alt="Detail view of the Legacy journal: full-grain leather, antique brass corner fittings, the NFC medallion, and 200 GSM acid-free paper"
                          width="1254" height="1254" loading="lazy" decoding="async">
                     </picture>
                     <figcaption>
-                        The Legacy edition, up close. Every stone is different, so no two
-                        covers are quite the same.
+                        The Legacy edition, up close. Full-grain leather takes on the marks
+                        of being carried, so it looks more like yours the longer you use it.
                     </figcaption>
                 </figure>
 
@@ -3320,15 +3357,13 @@
                 </div>
                 <div class="pricing-grid">
                     <div class="pricing-card fade-in stagger-1">
-                        <!-- Drop images/package-essential.png in place and it appears.
-                             Until then the styled frame below shows instead — see the
-                             note on .pricing-shot in the stylesheet. -->
                         <div class="pricing-shot" data-label="Essential">
-                            <img src="images/package-essential.png" alt="The Καιρός Essential journal"
+                            <img src="images/package-essential.png" alt="The Καιρός Essential journal and its gift box"
                                  loading="lazy" onerror="this.remove()">
                         </div>
                         <div class="pricing-tier">Essential</div>
-                        <p class="pricing-tagline">Begin your journaling practice.</p>
+                        <p class="pricing-tagline">Start your journaling journey.</p>
+                        <p class="pricing-blurb">For anyone building a daily writing habit with AI-assisted reflection.</p>
                         <div class="pricing-price">&euro;49</div>
                         <p class="pricing-includes">Includes</p>
                         <ul class="pricing-features">
@@ -3342,43 +3377,69 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                NFC enabled
+                                Premium hardcover or vegan leather cover
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Kairos App
+                                Integrated NFC technology
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Daily Reflection
+                                Lay-flat binding
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                AI Companion
+                                Premium archival paper
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                All 50 Journeys
+                                Satin ribbon bookmark
                             </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                The Kairos app, all 50 journeys
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                3 months of Kairos Premium
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Premium gift box
+                            </li>
+                        </ul>
+                        <p class="pricing-bestfor-label">Best for</p>
+                        <ul class="pricing-bestfor">
+                            <li>First-time journalers</li>
+                            <li>Students</li>
+                            <li>Daily reflection</li>
+                            <li>Minimalist design lovers</li>
                         </ul>
                         <a href="#cta" class="btn btn-primary pricing-cta">Select Essential</a>
                     </div>
 
                     <div class="pricing-card featured fade-in stagger-2">
                         <div class="pricing-shot" data-label="Legacy">
-                            <img src="images/package-legacy.png" alt="The Καιρός Legacy journal with its agate centrepiece"
+                            <img src="images/package-legacy.png" alt="The Καιρός Legacy journal in full-grain leather with antique brass corners, shown with the Kairos pen"
                                  loading="lazy" onerror="this.remove()">
                         </div>
                         <div class="pricing-tier">Legacy</div>
-                        <p class="pricing-tagline">The flagship.</p>
+                        <p class="pricing-tagline">Crafted to become part of your story.</p>
+                        <p class="pricing-blurb">A luxury leather journal made to age beautifully and become a lifelong companion.</p>
                         <div class="pricing-price">&euro;149</div>
                         <p class="pricing-includes">Includes</p>
                         <ul class="pricing-features">
@@ -3392,55 +3453,149 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Genuine leather
+                                Full-grain leather cover
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Natural agate
+                                Antique brass corner protectors
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Brass corners
+                                Integrated NFC technology
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                NFC
+                                Premium archival paper
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Premium Packaging
+                                Lay-flat binding
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Full Kairos App
+                                Premium Kairos metal pen, dip-pen inspired
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                AI Reflections
+                                Three premium black ink cartridges
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                All 50 Journeys
+                                Luxury ribbon bookmark
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Mood Cards (digital)
+                                Premium presentation gift box
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Welcome card
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                The Kairos app, all 50 journeys
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                12 months of Kairos Premium
+                            </li>
+                        </ul>
+                        <p class="pricing-bestfor-label">Best for</p>
+                        <ul class="pricing-bestfor">
+                            <li>Writers</li>
+                            <li>Professionals</li>
+                            <li>Thoughtful gift giving</li>
+                            <li>Long-term journaling</li>
+                        </ul>
+                        <a href="#cta" class="btn btn-primary pricing-cta">Select Legacy</a>
+                    </div>
+
+                    <div class="pricing-card fade-in stagger-3">
+                        <div class="pricing-shot" data-label="Insight">
+                            <img src="images/package-insight.png" alt="The Καιρός Insight collection: the exclusive journal with the full ritual kit and keepsake box"
+                                 loading="lazy" onerror="this.remove()">
+                        </div>
+                        <div class="pricing-tier">Insight</div>
+                        <p class="pricing-tagline">The complete journaling ritual.</p>
+                        <p class="pricing-blurb">Everything needed to turn journaling into a mindful daily ritual.</p>
+                        <div class="pricing-price">&euro;249</div>
+                        <p class="pricing-includes">Everything in Legacy, plus</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Insight Journal, exclusive edition
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Kairos Mood Cards, 52-card deck
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Brass meditation bell
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Kairos incense holder
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Premium incense sticks
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Beeswax candle
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Brass bookmark
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Premium cotton storage pouch
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Luxury keepsake box
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3448,80 +3603,19 @@
                                 </svg>
                                 Kairos Premium for the life of the service<sup class="pricing-fn">*</sup>
                             </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
+                                </svg>
+                                Early access to future Kairos products
+                            </li>
                         </ul>
-                        <a href="#cta" class="btn btn-primary pricing-cta">Select Legacy</a>
-                    </div>
-
-                    <div class="pricing-card fade-in stagger-3">
-                        <div class="pricing-shot" data-label="Insight">
-                            <img src="images/package-insight.png" alt="The Καιρός Insight journal with the ritual kit"
-                                 loading="lazy" onerror="this.remove()">
-                        </div>
-                        <div class="pricing-tier">Insight</div>
-                        <p class="pricing-tagline">Everything.</p>
-                        <div class="pricing-price">&euro;249</div>
-                        <p class="pricing-includes">Includes</p>
-                        <ul class="pricing-features">
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Insight Journal
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Ritual Kit
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Mood Cards
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Premium Pen
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Ink
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Bell
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Bookmark
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Kairos Premium, 6 months included
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Early access
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
-                                </svg>
-                                Future journals discount
-                            </li>
+                        <p class="pricing-bestfor-label">Best for</p>
+                        <ul class="pricing-bestfor">
+                            <li>Deep self-reflection</li>
+                            <li>Mindfulness practitioners</li>
+                            <li>Premium gifting</li>
+                            <li>Collectors</li>
                         </ul>
                         <a href="#cta" class="btn btn-primary pricing-cta">Select Insight</a>
                     </div>

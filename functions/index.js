@@ -1095,16 +1095,14 @@ exports.activateJournalSubscription = functions.https.onCall(async (data, contex
     const userData = userDoc.data();
     const currentSubscription = userData.subscription || { status: 'free' };
 
-    // What each journal grants. Legacy carries Premium for the life of the
-    // service — no renewal, no expiry — which is what the pricing page and
-    // section 7 of the terms promise for it. Essential and Insight are
-    // time-limited. The previous map gave Insight 6 months and Legacy 12,
-    // while the page advertised Insight as the lifetime tier: three different
-    // answers across the server, the sales page and the terms.
+    // What each journal grants, matching the collections on the pricing page
+    // and section 7 of the terms. Insight carries Premium for the life of the
+    // service — no renewal, no expiry — so the grants rise with the price
+    // rather than inverting partway up.
     const TIER_GRANTS = {
       essential: { months: 3 },
-      insight: { months: 6 },
-      legacy: { lifetime: true }
+      legacy: { months: 12 },
+      insight: { lifetime: true }
     };
 
     const grant = TIER_GRANTS[tier];
