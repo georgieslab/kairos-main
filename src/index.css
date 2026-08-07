@@ -50,6 +50,38 @@
   --color-warning: #E6B89C;        /* Terracotta */
   --color-error: #E57373;          /* Keep existing or change */
   --color-info: #88A38F;           /* Lighter Green */
+
+  /* ── Profile surfaces ────────────────────────────────────────────────────
+     editProfile.css and versionDisplay.css were written against these tokens,
+     but nothing ever defined them. Every rule fell through to its inline
+     fallback, and those fallbacks are a light palette — #ffffff card, #0f172a
+     text — so the Edit Profile dialog rendered as a white sheet with near-black
+     text in the middle of a dark app.
+
+     The dark values are the default here. The old fallbacks were a perfectly
+     good light theme, so they move to .light-theme below rather than being
+     thrown away. */
+  --profile-bg-card: #1c1c1f;
+  --profile-bg-secondary: rgba(255, 255, 255, 0.04);
+  --profile-bg-hover: rgba(255, 255, 255, 0.08);
+  --profile-border-primary: rgba(255, 255, 255, 0.10);
+  --profile-border-hover: rgba(255, 255, 255, 0.22);
+  --profile-text-primary: #F5F5F0;
+  --profile-text-secondary: #D8D8D0;
+  --profile-text-tertiary: rgba(245, 245, 240, 0.60);
+  --profile-text-muted: rgba(245, 245, 240, 0.45);
+}
+
+.light-theme {
+  --profile-bg-card: #ffffff;
+  --profile-bg-secondary: #f8fafc;
+  --profile-bg-hover: #f1f5f9;
+  --profile-border-primary: #e2e8f0;
+  --profile-border-hover: #94a3b8;
+  --profile-text-primary: #0f172a;
+  --profile-text-secondary: #334155;
+  --profile-text-tertiary: #475569;
+  --profile-text-muted: #64748b;
 }
 
 /* Base Styles */
