@@ -2054,13 +2054,21 @@
             flex-shrink: 0;
         }
 
-        /* Product shot per tier.
-           The frame is drawn by the container, and the <img> sits on top of it.
-           If the file isn't there yet the img removes itself via onerror and
-           the frame shows through with the tier name — no broken-image icon,
-           no layout shift when the real picture lands. A <picture> element
-           would not survive this: it selects on format support, not on whether
-           the file exists, so a missing source is a hard 404 with no fallback. */
+        /* Product shot per tier. The frame is drawn by the container with the
+           <img> on top; a missing file marks the container is-empty via
+           onerror, and the frame collapses rather than showing a labelled
+           dashed box on a public page.
+
+           It collapses to zero height instead of display:none because the
+           cards are a subgrid — removing one card's element from flow would
+           shift that card's remaining rows up a track and pull it out of line
+           with its neighbours. Zero-height keeps the row, so with all three
+           images absent the shared track collapses for everyone and the cards
+           stay aligned.
+
+           A <picture> would not work here at all: it selects on format
+           support, not on whether the file exists, so a missing source is a
+           hard 404 with no fallback and no onerror to catch. */
         .pricing-shot {
             position: relative;
             aspect-ratio: 4 / 3;
@@ -2081,6 +2089,18 @@
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.28);
+        }
+
+        .pricing-shot.is-empty {
+            aspect-ratio: auto;
+            height: 0;
+            margin: 0;
+            border: none;
+            background: none;
+        }
+
+        .pricing-shot.is-empty::after {
+            content: none;
         }
 
         .pricing-shot img {
@@ -3424,7 +3444,7 @@
                     <div class="pricing-card fade-in stagger-1">
                         <div class="pricing-shot" data-label="Essential">
                             <img src="images/package-essential.png" alt="The Καιρός Essential journal and its gift box"
-                                 loading="lazy" onerror="this.remove()">
+                                 loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Essential</div>
                         <p class="pricing-tagline">Start your journaling journey.</p>
@@ -3500,7 +3520,7 @@
                     <div class="pricing-card featured fade-in stagger-2">
                         <div class="pricing-shot" data-label="Legacy">
                             <img src="images/package-legacy.png" alt="The Καιρός Legacy journal in full-grain leather with antique brass corners, shown with the Kairos pen"
-                                 loading="lazy" onerror="this.remove()">
+                                 loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Legacy</div>
                         <p class="pricing-tagline">Crafted to become part of your story.</p>
@@ -3600,7 +3620,7 @@
                     <div class="pricing-card fade-in stagger-3">
                         <div class="pricing-shot" data-label="Insight">
                             <img src="images/package-insight.png" alt="The Καιρός Insight collection: the exclusive journal with the full ritual kit and keepsake box"
-                                 loading="lazy" onerror="this.remove()">
+                                 loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Insight</div>
                         <p class="pricing-tagline">The complete journaling ritual.</p>
