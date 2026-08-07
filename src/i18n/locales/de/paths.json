@@ -123,13 +123,9 @@
     "new": "NEU",
     "newBadge": "Neuer Pfad",
     "unlockFor": "Freischalten für {{price}}",
-    "free": "Kostenlos",
-    "artisan": "Artisan",
     "kairos": "Kairos",
     "filterByTier": "Nach Stufe filtern",
     "filterAll": "Alle",
-    "filterFree": "Kostenlos",
-    "filterArtisan": "Artisan",
     "filterKairos": "Kairos"
   },
   "pathSuggestionCard": {

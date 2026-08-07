@@ -2006,6 +2006,44 @@
             margin-top: 1.5rem;
         }
 
+        /* Product shot per tier.
+           The frame is drawn by the container, and the <img> sits on top of it.
+           If the file isn't there yet the img removes itself via onerror and
+           the frame shows through with the tier name — no broken-image icon,
+           no layout shift when the real picture lands. A <picture> element
+           would not survive this: it selects on format support, not on whether
+           the file exists, so a missing source is a hard 404 with no fallback. */
+        .pricing-shot {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background:
+                linear-gradient(145deg, rgba(var(--accent-gold-rgb), 0.06), rgba(255, 255, 255, 0.02));
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pricing-shot::after {
+            content: attr(data-label);
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.28);
+        }
+
+        .pricing-shot img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
         /* "Lifetime" is an undated, uncapped promise unless it is defined, so
            the bullet carries a marker and the definition sits directly under
            the grid rather than only in the terms. */
@@ -3282,6 +3320,13 @@
                 </div>
                 <div class="pricing-grid">
                     <div class="pricing-card fade-in stagger-1">
+                        <!-- Drop images/package-essential.png in place and it appears.
+                             Until then the styled frame below shows instead — see the
+                             note on .pricing-shot in the stylesheet. -->
+                        <div class="pricing-shot" data-label="Essential">
+                            <img src="images/package-essential.png" alt="The Καιρός Essential journal"
+                                 loading="lazy" onerror="this.remove()">
+                        </div>
                         <div class="pricing-tier">Essential</div>
                         <p class="pricing-tagline">Begin your journaling practice.</p>
                         <div class="pricing-price">&euro;49</div>
@@ -3321,13 +3366,17 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Basic Journeys
+                                All 50 Journeys
                             </li>
                         </ul>
                         <a href="#cta" class="btn btn-primary pricing-cta">Select Essential</a>
                     </div>
 
                     <div class="pricing-card featured fade-in stagger-2">
+                        <div class="pricing-shot" data-label="Legacy">
+                            <img src="images/package-legacy.png" alt="The Καιρός Legacy journal with its agate centrepiece"
+                                 loading="lazy" onerror="this.remove()">
+                        </div>
                         <div class="pricing-tier">Legacy</div>
                         <p class="pricing-tagline">The flagship.</p>
                         <div class="pricing-price">&euro;149</div>
@@ -3385,7 +3434,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <polyline points="20 6 9 17 4 12" stroke="currentColor"/>
                                 </svg>
-                                Unlimited Journeys
+                                All 50 Journeys
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3404,6 +3453,10 @@
                     </div>
 
                     <div class="pricing-card fade-in stagger-3">
+                        <div class="pricing-shot" data-label="Insight">
+                            <img src="images/package-insight.png" alt="The Καιρός Insight journal with the ritual kit"
+                                 loading="lazy" onerror="this.remove()">
+                        </div>
                         <div class="pricing-tier">Insight</div>
                         <p class="pricing-tagline">Everything.</p>
                         <div class="pricing-price">&euro;249</div>

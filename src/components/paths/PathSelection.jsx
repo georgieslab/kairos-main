@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Search, X, Play, ArrowRight, BookOpen, Clock, Target, Compass, Heart, Brain, RotateCcw, Palette, Users, Map, Moon, Sun,
   Book, Droplet, Star, Zap, Archive, Lightbulb, Leaf, Coins, Brush, Feather,
-  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock, Crown, Shuffle
+  Sparkles, CheckCircle, ChevronRight, Layers, Hourglass, Lock, Shuffle
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserProgress } from '../../hooks/useUserProgress';
@@ -33,7 +33,10 @@ const PathSelection = ({ navigateToScreen, currentPath, screenData }) => {
   const { inProgressPaths, completedPaths } = useUserProgress();
 
   const [activeTab, setActiveTab] = useState('explore');
-  const [tierFilter, setTierFilter] = useState('all'); // 'all' | 'free' | 'artisan' | 'exclusive'
+  // 'all' | 'exclusive'. The old free/artisan filters described a split that
+  // was never enforced and that the pricing page contradicted; every path
+  // except the €2.99 Kairos Moments pack now ships with the app.
+  const [tierFilter, setTierFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -155,7 +158,7 @@ const PathSelection = ({ navigateToScreen, currentPath, screenData }) => {
     const isActive = !!progress;
     const completionPct = isActive ? (progress?.percentage || 0) : (isCompleted ? 100 : 0);
     const isLocked = path.isExclusive && !isPathUnlocked(path);
-    const tier = getPathTier(path); // 'free' | 'artisan' | 'exclusive'
+    const tier = getPathTier(path); // 'included' | 'exclusive'
 
     const getDifficultyLabel = (diff) => {
       if (!diff) return null;
@@ -205,17 +208,10 @@ const PathSelection = ({ navigateToScreen, currentPath, screenData }) => {
                   {getDifficultyLabel(path.difficulty)}
                 </span>
               )}
-              {tier === 'free' && (
-                <span className="meta-pill meta-pill-free">
-                  {t('pathSelection.free', 'Free')}
-                </span>
-              )}
-              {tier === 'artisan' && (
-                <span className="meta-pill meta-pill-artisan">
-                  <Crown size={12} />
-                  {t('pathSelection.artisan', 'Artisan')}
-                </span>
-              )}
+              {/* No "Free" or "Artisan" pill any more. Every path except the
+                  Kairos Moments pack is included, so a badge saying so on 50
+                  of 53 cards is noise — and the Artisan crown advertised a
+                  paywall that was never implemented. */}
               {tier === 'exclusive' && (
                 <span className="meta-pill meta-pill-kairos">
                   <Sparkles size={12} />
@@ -355,23 +351,6 @@ const PathSelection = ({ navigateToScreen, currentPath, screenData }) => {
           aria-selected={tierFilter === 'all'}
         >
           {t('pathSelection.filterAll', 'All')}
-        </button>
-        <button
-          className={`tier-chip ${tierFilter === 'free' ? 'is-active' : ''}`}
-          onClick={() => setTierFilter('free')}
-          role="tab"
-          aria-selected={tierFilter === 'free'}
-        >
-          {t('pathSelection.filterFree', 'Free')}
-        </button>
-        <button
-          className={`tier-chip tier-chip-artisan ${tierFilter === 'artisan' ? 'is-active' : ''}`}
-          onClick={() => setTierFilter('artisan')}
-          role="tab"
-          aria-selected={tierFilter === 'artisan'}
-        >
-          <Crown size={13} />
-          {t('pathSelection.filterArtisan', 'Artisan')}
         </button>
         <button
           className={`tier-chip tier-chip-kairos ${tierFilter === 'exclusive' ? 'is-active' : ''}`}

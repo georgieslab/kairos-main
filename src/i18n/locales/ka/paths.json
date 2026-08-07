@@ -123,13 +123,9 @@
     "new": "ახალი",
     "newBadge": "ახალი ბილიკი",
     "unlockFor": "გახსენი {{price}}-ად",
-    "free": "უფასო",
-    "artisan": "Artisan",
     "kairos": "Kairos",
     "filterByTier": "ფილტრი დონის მიხედვით",
     "filterAll": "ყველა",
-    "filterFree": "უფასო",
-    "filterArtisan": "Artisan",
     "filterKairos": "Kairos"
   },
   "pathSuggestionCard": {

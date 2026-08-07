@@ -485,138 +485,32 @@ export const hasArtisanAccess = (subscription) => {
 };
 
 /**
- * The 9 curated free starter paths. Everything else (except one-time-purchase
- * "exclusive" paths) is Artisan (paid subscription). Single source of truth for
- * the free/paid split shown on the Paths screen.
- */
-export const FREE_PATH_IDS = [
-  // Traditional 10-day journeys
-  'self-discovery',
-  'gratitude-practice',
-  'shadow-work',
-  'nature-connection',
-  'anxiety-alchemy',
-  // Visual/artistic 10-day journeys
-  'nature-sketching',
-  'abstract-emotions',
-  'mindful-visualization',
-  // Additional free path
-  'digital-detox'
-];
-
-/**
- * Classify a path into one of three tiers for display/filtering:
- *  - 'free'      → in FREE_PATH_IDS, available to everyone
- *  - 'exclusive' → one-time purchase (path.isExclusive, e.g. Kairos Moments)
- *  - 'artisan'   → everything else, requires the Artisan subscription
+ * Classify a path for display and filtering:
+ *  - 'exclusive' → one-time purchase (path.isExclusive, the €2.99 Kairos
+ *                  Moments pack). Genuinely gated: PathSelection routes these
+ *                  through PathUnlockModal until purchased.
+ *  - 'included'  → everything else. Ships with the app for everyone.
+ *
+ * There used to be a free/artisan split here — 9 curated paths free, the other
+ * 41 marked as requiring a subscription. It was never enforced: nothing called
+ * canAccessPath, and PathSelection only ever locked isExclusive paths, so the
+ * Artisan crown promised a paywall that did not exist. It also contradicted
+ * the pricing page, which says all 50 ship with every journal.
+ *
+ * The split is gone rather than wired up, because path content costs nothing
+ * to serve — the prompts are written and translated once, so serving path 43
+ * costs exactly what path 1 costs. What has a real per-use cost is AI
+ * analysis, and that is what the free plan meters (FREE_MONTHLY_ANALYSES in
+ * functions/index.js). Gate what costs money, not what doesn't.
+ *
  * @param {Object} path - A journey path object from JourneyData
- * @returns {'free'|'artisan'|'exclusive'}
+ * @returns {'included'|'exclusive'}
  */
 export const getPathTier = (path) => {
-  if (!path) return 'free';
-  if (path.isExclusive) return 'exclusive';
-  return FREE_PATH_IDS.includes(path.id) ? 'free' : 'artisan';
+  if (!path) return 'included';
+  return path.isExclusive ? 'exclusive' : 'included';
 };
 
-/**
- * 🔧 FIXED: Get path access information with CORRECT path IDs matching JourneyData.js
- * @param {string} pathId - Journey path ID
- * @returns {Object} Path access info
- */
-export const getPathAccessInfo = (pathId) => {
-  // ✅ CORRECTED: Free paths with EXACT IDs from JourneyData.js registry
-  const freePaths = FREE_PATH_IDS;
-  
-  // All other paths are premium/artisan
-  const artisanPaths = [
-    // 14+ day journeys
-    'transformation-journey',
-    'emotional-intelligence', 
-    'mindfulness-awareness',
-    'creative-expression',
-    'habit-formation',
-    'life-vision',
-    'relationship-mastery',
-    'financial-mindfulness',
-    'life-values',
-    'career-compass',
-    'inner-child',
-    'dream-decoder',
-    'seasonal-rhythms',
-    'forgiveness-freedom',
-    'transitions-navigator',
-    'grief-growth',
-    'courage-cultivation',
-    'color-psychology',
-    'sacred-geometry',
-    'visual-storytelling',
-    'ink-essence',
-    'artistic-soul-expression',
-    'holistic-transformation'
-  ];
-  
-  console.log(`🔍 Checking path access for: ${pathId}`);
-  
-  if (freePaths.includes(pathId)) {
-    console.log(`✅ ${pathId} is FREE path`);
-    return {
-      tier: 'free',
-      requiresUpgrade: false
-    };
-  }
-  
-  if (artisanPaths.includes(pathId)) {
-    console.log(`💎 ${pathId} is ARTISAN path`);
-    return {
-      tier: 'artisan',
-      requiresUpgrade: true
-    };
-  }
-  
-  // FIXED: Default to free for unknown paths (safer fallback)
-  console.warn(`⚠️  Unknown path ID: ${pathId}, defaulting to free access`);
-  return {
-    tier: 'free',
-    requiresUpgrade: false
-  };
-};
-
-/**
- * ✅ ENHANCED: Check if specific journey path is accessible to user
- * @param {string} pathId - Journey path ID
- * @param {Object} subscription - User's subscription status
- * @returns {boolean}
- */
-export const canAccessPath = (pathId, subscription) => {
-  // Get path information first
-  const pathInfo = getPathAccessInfo(pathId);
-  
-  console.log(`🔍 Access check for ${pathId}:`, {
-    tier: pathInfo.tier,
-    subscription: subscription?.status || 'null/loading'
-  });
-  
-  // ✅ ALWAYS allow free paths regardless of subscription status
-  if (pathInfo.tier === 'free') {
-    console.log(`✅ ${pathId} is free - access granted`);
-    return true;
-  }
-  
-  // For premium paths, check subscription
-  if (pathInfo.tier === 'artisan') {
-    // Allow access if subscription is loading (fail open temporarily)
-    if (!subscription) {
-      console.log(`⏳ Subscription loading for premium path ${pathId} - temporarily allow`);
-      return false; // Actually, be strict for premium paths
-    }
-    
-    const hasAccess = hasArtisanAccess(subscription);
-    console.log(`💎 Premium path ${pathId} access:`, hasAccess);
-    return hasAccess;
-  }
-  
-  return false;
-};
 
 /**
  * Clear subscription cache
@@ -743,8 +637,8 @@ export default {
   getCustomerPortalUrl,
   openCustomerPortal,
   hasArtisanAccess,
-  canAccessPath,
-  getPathAccessInfo,
+  getPathTier,
+  startPathPurchase,
   clearSubscriptionCache,
   formatSubscriptionInfo,
   getPricingInfo,

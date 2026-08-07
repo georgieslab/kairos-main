@@ -123,13 +123,9 @@
     "new": "NEW",
     "newBadge": "New path",
     "unlockFor": "Unlock for {{price}}",
-    "free": "Free",
-    "artisan": "Artisan",
     "kairos": "Kairos",
     "filterByTier": "Filter by tier",
     "filterAll": "All",
-    "filterFree": "Free",
-    "filterArtisan": "Artisan",
     "filterKairos": "Kairos"
   },
   "pathSuggestionCard": {
