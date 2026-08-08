@@ -1604,9 +1604,29 @@
            warm-lit, so it reads as part of the same space. A border would
            make it look pasted on. The brass hairline underneath ties it to
            the physical product's fittings. */
+        /* Wider than the 900px hero copy above it, and wider than the 1200px
+           container elsewhere, so the photograph reads as the thing the page is
+           about rather than an illustration tucked under the headline. It stays
+           a framed object rather than becoming a background: the composition
+           has no empty area for text to sit on, so anything laid over it would
+           need a scrim, which would hide the image it is there to show. */
+        /* This figure lives inside .hero-content, which is capped at 900px, so
+           widening it alone does nothing — it has to break out of its parent.
+           The usual trick for that is margin-left:50% with
+           transform:translateX(-50%), which cannot be used here: .fade-in
+           already animates transform on this element, and whichever rule won
+           would either cancel the centring or the entrance. Negative margin
+           does the same job and leaves transform alone.
+
+           It stays a framed object rather than becoming a background. The
+           composition has no empty region for text to sit on, so anything laid
+           over it would need a scrim — which would obscure the photograph it
+           exists to show. */
         .hero-showcase {
-            margin: 3.5rem auto 0;
-            max-width: 62rem;
+            width: min(84rem, 94vw);
+            max-width: none;
+            margin-top: 4rem;
+            margin-left: calc(50% - min(42rem, 47vw));
             position: relative;
         }
 
