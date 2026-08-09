@@ -3221,15 +3221,38 @@
         <section id="how-it-works" class="section how-it-works">
             <div class="container">
                 <div class="section-header fade-in">
-                    <span class="section-badge">Simple & Powerful</span>
+                    <span class="section-badge">The loop</span>
                     <h2 class="section-title">How It Works</h2>
                     <p class="section-description">
-                        From ancient wisdom to modern insights in just four simple steps.
+                        You write on paper. The phone only reads. Four steps, and the
+                        longest one is the writing.
                     </p>
                 </div>
                 <div class="steps-container">
 
-                    <!-- 1. A nib draws a line of handwriting across a ruled page.
+                    <!-- 1. The journal meets the phone and NFC rings travel out
+                         from the contact point. This is step one now, not step
+                         two: tapping is what opens the day's prompt, so a reader
+                         told to write first was being given the flow backwards. -->
+                    <div class="step-card" style="--step-c: var(--secondary-rgb)">
+                        <div class="step-visual">
+                            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                                <rect x="7" y="16" width="23" height="33" rx="3" class="sv-stroke sv-faint"/>
+                                <line x1="12" y1="16" x2="12" y2="49" class="sv-stroke sv-faint"/>
+                                <rect x="38" y="12" width="20" height="40" rx="4" class="sv-stroke"/>
+                                <line x1="44" y1="17" x2="52" y2="17" class="sv-stroke sv-faint"/>
+                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r1"/>
+                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r2"/>
+                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r3"/>
+                                <circle cx="34" cy="32" r="2.5" class="sv-fill"/>
+                            </svg>
+                            <span class="step-index">1</span>
+                        </div>
+                        <h3>Tap the cover</h3>
+                        <p>The chip is in the leather. Touch your phone to it and today&rsquo;s prompt is already open &mdash; no app to hunt for, no password. The book is the key.</p>
+                    </div>
+
+                    <!-- 2. A nib draws a line of handwriting across a ruled page.
                          The ruled lines are static; only the ink is drawn, and
                          the nib rides the exact same path via offset-path. -->
                     <div class="step-card" style="--step-c: var(--primary-rgb)">
@@ -3243,38 +3266,17 @@
                                       class="sv-stroke sv-draw" pathLength="100"/>
                                 <circle r="2.4" class="sv-fill sv-nib" style="opacity:0"/>
                             </svg>
-                            <span class="step-index">1</span>
-                        </div>
-                        <h3>Write, Speak, or Create</h3>
-                        <p>Open your handcrafted journal and write with ink, record a voice entry, or make visual art. Choose whichever suits the day.</p>
-                    </div>
-
-                    <!-- 2. The journal meets the phone and NFC rings travel out
-                         from the contact point. These rings previously floated
-                         in the section header, disconnected from the step they
-                         illustrate. -->
-                    <div class="step-card" style="--step-c: var(--secondary-rgb)">
-                        <div class="step-visual">
-                            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                                <rect x="7" y="16" width="23" height="33" rx="3" class="sv-stroke sv-faint"/>
-                                <line x1="12" y1="16" x2="12" y2="49" class="sv-stroke sv-faint"/>
-                                <rect x="38" y="12" width="20" height="40" rx="4" class="sv-stroke"/>
-                                <line x1="44" y1="17" x2="52" y2="17" class="sv-stroke sv-faint"/>
-                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r1"/>
-                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r2"/>
-                                <circle cx="34" cy="32" r="4" class="sv-stroke sv-ring r3"/>
-                                <circle cx="34" cy="32" r="2.5" class="sv-fill"/>
-                            </svg>
                             <span class="step-index">2</span>
                         </div>
-                        <h3>Tap to Connect</h3>
-                        <p>Tap the journal's NFC chip to your phone. No app to find, no password &mdash; the day's entry opens itself.</p>
+                        <h3>Write it by hand</h3>
+                        <p>Then put the phone down. Ink on paper, or speak it aloud, or draw it &mdash; whichever the day calls for. Nothing is timed and nothing is counting.</p>
                     </div>
 
                     <!-- 3. The transformation. Scribbles on the left dissolve as
-                         clean structured bars rise on the right. This is the one
-                         step whose halves are deliberately sequenced, because it
-                         is the actual product claim. -->
+                         clean structured bars rise on the right. The copy now
+                         names the photograph, which the section previously
+                         skipped entirely, leaving the obvious question -- how
+                         does it know what I wrote -- unanswered. -->
                     <div class="step-card" style="--step-c: var(--accent-rgb)">
                         <div class="step-visual">
                             <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -3291,8 +3293,8 @@
                             </svg>
                             <span class="step-index">3</span>
                         </div>
-                        <h3>Claude Reads It Back</h3>
-                        <p>Claude transcribes the page, the audio, or reads the colour and composition &mdash; then tells you what it actually sees, including the parts you skirted.</p>
+                        <h3>Photograph the page</h3>
+                        <p>One photo. Claude reads your handwriting off the paper &mdash; or your voice, or the colour and composition &mdash; and tells you what it sees, including what you circled and left.</p>
                     </div>
 
                     <!-- 4. Scattered entries resolve into a trend: points pop in
@@ -3311,8 +3313,8 @@
                             </svg>
                             <span class="step-index">4</span>
                         </div>
-                        <h3>Watch the Pattern Emerge</h3>
-                        <p>One entry is a mood. Six is a pattern. Καιρός tracks what keeps returning &mdash; and says so plainly when nothing has shifted.</p>
+                        <h3>The pattern shows up</h3>
+                        <p>One entry is a mood. Six is a pattern. Καιρός tracks what keeps returning across weeks &mdash; and says so plainly when nothing has shifted.</p>
                     </div>
                 </div>
             </div>
