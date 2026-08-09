@@ -1209,12 +1209,42 @@
                 var(--bg-primary);
         }
 
+        /* Four explicit columns rather than auto-fit. auto-fit with a 280px
+           minimum resolved to three at container width, which orphaned step
+           four on its own row and broke the read: a numbered sequence that
+           wraps 3 + 1 reads as two groups rather than one loop. */
         .steps-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.75rem;
             margin-top: 4rem;
             position: relative;
+        }
+
+        /* A hairline running behind the row, tying the four steps into one
+           sequence. It draws itself in once, then stops. */
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 52px;
+            left: 12%;
+            right: 12%;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.14) 15%,
+                rgba(255, 255, 255, 0.14) 85%,
+                transparent);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+        }
+
+        .steps-container.animate::before { transform: scaleX(1); }
+
+        @media (max-width: 1080px) {
+            .steps-container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+            .steps-container::before { display: none; }
         }
 
         /* ==================================================================
@@ -1247,6 +1277,30 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Staggered so the row assembles left to right instead of arriving as
+           a block — the same reading order as the numbers. */
+        .step-card:nth-child(1) { transition-delay: 0.00s; }
+        .step-card:nth-child(2) { transition-delay: 0.10s; }
+        .step-card:nth-child(3) { transition-delay: 0.20s; }
+        .step-card:nth-child(4) { transition-delay: 0.30s; }
+
+        /* The tile scales in behind its icon, and the number lands after it. */
+        .step-visual {
+            transform: scale(0.86);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) 0.05s,
+                        opacity 0.5s ease 0.05s;
+        }
+
+        .step-card.animate .step-visual { transform: scale(1); opacity: 1; }
+
+        .step-index {
+            transform: scale(0);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+        }
+
+        .step-card.animate .step-index { transform: scale(1); }
 
         .step-visual {
             width: 104px;
@@ -1339,24 +1393,9 @@
             100% { transform: scale(2.6); opacity: 0; }
         }
 
-        /* 3 — scribbles dissolve as clean bars rise in their place. This is
-               the transformation the whole product is built on, so it is the
-               only step whose two halves are deliberately sequenced. */
-        .sv-scribble { opacity: 1; }
-        .step-card.animate .sv-scribble {
-            animation: svDissolve 0.7s ease 0.9s forwards;
-        }
-        @keyframes svDissolve { to { opacity: 0.12; } }
-
-        .sv-bar { transform: scaleY(0); transform-box: fill-box; transform-origin: bottom; }
-        .step-card.animate .sv-bar {
-            animation: svGrow 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards;
-        }
-        .step-card.animate .sv-bar.b2 { animation-delay: 1.28s; }
-        .step-card.animate .sv-bar.b3 { animation-delay: 1.41s; }
-        @keyframes svGrow { to { transform: scaleY(1); } }
-
-        /* 4 — plotted points pop in behind the trend line as it draws */
+        /* 3 — focus brackets close on the page, then a single flash. See the
+               .sv-bracket / .sv-flash rules below. */
+                        /* 4 — plotted points pop in behind the trend line as it draws */
         .sv-dot { opacity: 0; transform: scale(0); transform-box: fill-box; transform-origin: center; }
         .step-card.animate .sv-dot {
             animation: svPop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -1367,19 +1406,59 @@
         .step-card.animate .sv-dot.d4 { animation-delay: 1.20s; }
         @keyframes svPop { to { opacity: 1; transform: scale(1); } }
 
+        /* Focus brackets close in on the page, then the frame flashes once.
+           Replaces a scribbles-into-bar-chart visual that read as analytics
+           rather than as taking a photograph — the step it now illustrates. */
+        .sv-bracket {
+            opacity: 0;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .step-card.animate .sv-bracket {
+            animation: svFocus 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .step-card.animate .sv-bracket.bk1 { animation-delay: 0.30s; }
+        .step-card.animate .sv-bracket.bk2 { animation-delay: 0.38s; }
+        .step-card.animate .sv-bracket.bk3 { animation-delay: 0.46s; }
+        .step-card.animate .sv-bracket.bk4 { animation-delay: 0.54s; }
+        @keyframes svFocus {
+            from { opacity: 0; transform: scale(1.35); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .sv-flash { fill: #fff; opacity: 0; }
+        .step-card.animate .sv-flash {
+            animation: svFlash 0.5s ease-out 1.0s;
+        }
+        @keyframes svFlash {
+            0%   { opacity: 0; }
+            35%  { opacity: 0.32; }
+            100% { opacity: 0; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .step-card.animate .sv-draw,
             .step-card.animate .sv-nib,
             .step-card.animate .sv-ring,
-            .step-card.animate .sv-scribble,
-            .step-card.animate .sv-bar,
-            .step-card.animate .sv-dot {
+            .step-card.animate .sv-dot,
+            .step-card.animate .sv-bracket,
+            .step-card.animate .sv-flash {
                 animation: none;
             }
+            /* These carry `forwards`, so cancelling the animation without
+               restoring the end state would leave them at their from-values —
+               invisible, or scaled to nothing. */
+            .step-card,
+            .step-visual,
+            .step-index { transition: none; }
+            .step-visual { transform: scale(1); opacity: 1; }
+            .step-index  { transform: scale(1); }
+            .sv-bracket  { opacity: 1; }
+            .sv-flash    { opacity: 0; }
+            .steps-container::before { transition: none; transform: scaleX(1); }
             .sv-draw   { stroke-dashoffset: 0; }
             .sv-nib    { opacity: 0; }
             .sv-ring   { opacity: 0.35; }
-            .sv-bar    { transform: scaleY(1); }
             .sv-dot    { opacity: 1; transform: scale(1); }
         }
 
@@ -3280,16 +3359,15 @@
                     <div class="step-card" style="--step-c: var(--accent-rgb)">
                         <div class="step-visual">
                             <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                                <g class="sv-scribble">
-                                    <path d="M8 24 c 3 -3, 6 3, 9 0 s 5 -3, 7 1" class="sv-stroke sv-faint"/>
-                                    <path d="M8 32 c 4 -3, 7 3, 10 0 s 4 -2, 6 1" class="sv-stroke sv-faint"/>
-                                    <path d="M8 40 c 3 -2, 7 2, 10 -1"           class="sv-stroke sv-faint"/>
-                                </g>
-                                <path d="M28 32 L 36 32 M33 28 L 37 32 L 33 36"
-                                      class="sv-stroke sv-draw" pathLength="100"/>
-                                <rect x="42" y="30" width="5" height="14" rx="1.5" class="sv-fill sv-bar b1"/>
-                                <rect x="50" y="22" width="5" height="22" rx="1.5" class="sv-fill sv-bar b2"/>
-                                <rect x="58" y="34" width="5" height="10" rx="1.5" class="sv-fill sv-bar b3"/>
+                                <rect x="19" y="13" width="26" height="34" rx="3" class="sv-stroke sv-faint"/>
+                                <path d="M24 23 c 3 -2, 6 2, 9 0 s 4 -2, 6 1" class="sv-stroke sv-faint"/>
+                                <path d="M24 30 c 4 -2, 7 2, 10 0 s 3 -1, 5 1" class="sv-stroke sv-faint"/>
+                                <path d="M24 37 c 3 -1, 7 1, 10 -1"           class="sv-stroke sv-faint"/>
+                                <g class="sv-bracket bk1"><path d="M6 21 L6 8 L19 8"   class="sv-stroke"/></g>
+                                <g class="sv-bracket bk2"><path d="M45 8 L58 8 L58 21" class="sv-stroke"/></g>
+                                <g class="sv-bracket bk3"><path d="M58 43 L58 56 L45 56" class="sv-stroke"/></g>
+                                <g class="sv-bracket bk4"><path d="M19 56 L6 56 L6 43" class="sv-stroke"/></g>
+                                <rect x="4" y="6" width="56" height="52" rx="5" class="sv-flash"/>
                             </svg>
                             <span class="step-index">3</span>
                         </div>
@@ -4044,11 +4122,18 @@
                         if (entry.target.classList.contains('step-card')) {
                             entry.target.classList.add('animate');
                         }
+                        // The rail behind the four steps draws itself in. It
+                        // needs the class on the container, not on a card, so
+                        // the container is observed too — without this the
+                        // ::before stays at scaleX(0) and never appears.
+                        if (entry.target.classList.contains('steps-container')) {
+                            entry.target.classList.add('animate');
+                        }
                     }
                 });
             }, observerOptions);
 
-            document.querySelectorAll('.fade-in, .step-card').forEach(el => {
+            document.querySelectorAll('.fade-in, .step-card, .steps-container').forEach(el => {
                 observer.observe(el);
             });
         }
