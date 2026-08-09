@@ -1481,12 +1481,36 @@
             background: var(--gradient-hero);
         }
 
+        /* align-items was center, which floated the photograph in the middle
+           of a column roughly three times its height, with dead space above and
+           below it. Top-aligned and sticky now, so it stays with the reader
+           through the text rather than drifting against it. */
         .story-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            grid-template-columns: 0.85fr 1fr;
+            gap: 3.5rem;
+            align-items: start;
             margin-top: 3rem;
+        }
+
+        .story-image {
+            position: sticky;
+            top: 96px;
+        }
+
+        .story-text > h3 { margin-bottom: 1.25rem; }
+        .story-text > p  { margin-bottom: 1.15rem; }
+
+        /* Full width, beneath the two columns. */
+        .story-footer {
+            margin-top: 3.5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 900px) {
+            .story-content { grid-template-columns: 1fr; gap: 2.5rem; }
+            .story-image   { position: static; }
         }
 
         .story-image {
@@ -1603,9 +1627,17 @@
 
         .story-highlights {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .story-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 520px) {
+            .story-highlights { grid-template-columns: 1fr; }
         }
 
         .story-highlight-item {
@@ -2218,9 +2250,14 @@
            patterns identical means one behaviour to remember, not two. */
         .story-origins {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.25rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+            max-width: 680px;
+            margin: 0 0 2.5rem;
+        }
+
+        @media (max-width: 560px) {
+            .story-origins { grid-template-columns: 1fr; }
         }
 
         .story-origin {
@@ -3443,82 +3480,90 @@
                             "I had never shipped software. What I had was a clear idea and Claude as a development partner &mdash; which is not the same as taking whatever it writes. The first pass at the journey prompts came back generic, so I rewrote them, and I still read every prompt before it ships. Deciding what belongs in someone's journal is the work. The syntax was the part I could delegate."
                         </div>
 
-                        <!-- Where it started. Two photographs do more for the claims
-                             above than another paragraph would: the first build was
-                             black text on white with no design at all, and the first
-                             journal was a plain notebook with an NFC chip in the
-                             cover. Anyone can say they started small; this shows it.
-                             Same collapse-when-absent behaviour as the pricing
-                             shots, so the section reads fine until the files land. -->
-                        <div class="story-origins">
-                            <figure class="story-origin">
-                                <div class="story-origin-shot" data-label="First build">
-                                    <img src="/images/origin-app-v1.png"
-                                         alt="The first version of the Kairos app: plain black text on a white screen, no styling"
-                                         loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
-                                </div>
-                                <figcaption>The first build. Black text, white screen, no design — but it read handwriting.</figcaption>
-                            </figure>
-                            <figure class="story-origin">
-                                <div class="story-origin-shot" data-label="First journal">
-                                    <img src="/images/origin-journal-prototype.jpg"
-                                         alt="The first Kairos prototype journal: a plain notebook with an NFC chip fitted into the cover"
-                                         loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
-                                </div>
-                                <figcaption>The first journal. A plain notebook and an NFC chip, to find out whether tapping a book felt right.</figcaption>
-                            </figure>
-                        </div>
+                    </div>
+                </div>
 
-                        <!-- The page had no author anywhere: no name, no links.
-                             A portfolio piece a reader cannot follow up on is
-                             doing half its job. GitHub is listed first
-                             deliberately — for the technical reader this page
-                             is aimed at, the repository is the strongest
-                             evidence, and it makes the "built without a
-                             traditional background" claim checkable. -->
-                        <div class="story-byline">
-                            <span class="story-byline-label">Built by</span>
-                            <span class="story-byline-name">Georgie</span>
-                            <span class="story-byline-links">
-                                <a href="https://github.com/georgieslab" target="_blank" rel="noopener" aria-label="GitHub profile">
-                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    GitHub
-                                </a>
-                                <a href="https://www.linkedin.com/in/georgieslab/" target="_blank" rel="noopener" aria-label="LinkedIn profile">
-                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
-                                    LinkedIn
-                                </a>
-                            </span>
+                <!-- Lifted out of .story-text, which was carrying ten
+                     elements against a single photograph in the other
+                     column. These three want the full width: the origin
+                     photographs are the strongest thing in the section and
+                     were being shown two-up inside a half-width column. -->
+                <div class="story-footer fade-in">
+                    <!-- Where it started. Two photographs do more for the claims
+                         above than another paragraph would: the first build was
+                         black text on white with no design at all, and the first
+                         journal was a plain notebook with an NFC chip in the
+                         cover. Anyone can say they started small; this shows it.
+                         Same collapse-when-absent behaviour as the pricing
+                         shots, so the section reads fine until the files land. -->
+                    <div class="story-origins">
+                        <figure class="story-origin">
+                            <div class="story-origin-shot" data-label="First build">
+                                <img src="/images/origin-app-v1.png"
+                                     alt="The first version of the Kairos app: plain black text on a white screen, no styling"
+                                     loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
+                            </div>
+                            <figcaption>The first build. Black text, white screen, no design — but it read handwriting.</figcaption>
+                        </figure>
+                        <figure class="story-origin">
+                            <div class="story-origin-shot" data-label="First journal">
+                                <img src="/images/origin-journal-prototype.jpg"
+                                     alt="The first Kairos prototype journal: a plain notebook with an NFC chip fitted into the cover"
+                                     loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
+                            </div>
+                            <figcaption>The first journal. A plain notebook and an NFC chip, to find out whether tapping a book felt right.</figcaption>
+                        </figure>
+                    </div>
+
+                    <!-- The page had no author anywhere: no name, no links.
+                         A portfolio piece a reader cannot follow up on is
+                         doing half its job. GitHub is listed first
+                         deliberately — for the technical reader this page
+                         is aimed at, the repository is the strongest
+                         evidence, and it makes the "built without a
+                         traditional background" claim checkable. -->
+                    <div class="story-byline">
+                        <span class="story-byline-label">Built by</span>
+                        <span class="story-byline-name">Georgie</span>
+                        <span class="story-byline-links">
+                            <a href="https://github.com/georgieslab" target="_blank" rel="noopener" aria-label="GitHub profile">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                GitHub
+                            </a>
+                            <a href="https://www.linkedin.com/in/georgieslab/" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+                                LinkedIn
+                            </a>
+                        </span>
+                    </div>
+                    <div class="story-highlights">
+                        <div class="story-highlight-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span><strong>Built with Claude AI</strong> - every prompt read, and the generic ones rewritten</span>
                         </div>
-                        <div class="story-highlights">
-                            <div class="story-highlight-item">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
-                                </svg>
-                                <span><strong>Built with Claude AI</strong> - every prompt read, and the generic ones rewritten</span>
-                            </div>
-                            <div class="story-highlight-item">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
-                                </svg>
-                                <span><strong>Building in the open</strong> - the full source is public on GitHub</span>
-                            </div>
-                            <div class="story-highlight-item">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
-                                </svg>
-                                <span><strong>A notebook, not a feed</strong> - no streaks to protect, nothing to perform for</span>
-                            </div>
-                            <div class="story-highlight-item">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
-                                </svg>
-                                <span><strong>I use it myself</strong> - every feature here survived my own journal first</span>
-                            </div>
+                        <div class="story-highlight-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span><strong>Building in the open</strong> - the full source is public on GitHub</span>
+                        </div>
+                        <div class="story-highlight-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span><strong>A notebook, not a feed</strong> - no streaks to protect, nothing to perform for</span>
+                        </div>
+                        <div class="story-highlight-item">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <polyline points="9 11 12 14 22 4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span><strong>I use it myself</strong> - every feature here survived my own journal first</span>
                         </div>
                     </div>
                 </div>
