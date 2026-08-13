@@ -1,5 +1,12 @@
 // src/utils/offlineManager.js
 
+// useOfflineSync below calls useState, useCallback and useEffect, and this file
+// imported none of them — no React import at all. Any component using that hook
+// would have thrown ReferenceError: useState is not defined on first render.
+// It never surfaced because nothing calls it: both consumers import only the
+// plain functions, OFFLINE_OPERATIONS and queueOfflineOperation. So this was a
+// crash waiting for whoever wired up offline sync, not a live fault.
+import { useState, useCallback, useEffect } from 'react';
 import { uploadJournalImage, saveAnalysisResult } from '../services/claudeService';
 
 // Queue operation types

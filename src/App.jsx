@@ -676,20 +676,17 @@ const App = () => {
                   />
                 )}
                 
+                {/* ProfileScreen takes only handleSignOut; it reaches
+                    navigation through useNavigation() itself. */}
                 {currentScreen === 'profile' && (
-                  <ProfileScreen 
-                    handleSignOut={handleLogout}
-                    navigateToScreen={navigateToScreen}
-                  />
+                  <ProfileScreen handleSignOut={handleLogout} />
                 )}
                 
                 {/* Core Screens */}
+                {/* HomeScreen derives the active path and day itself from
+                    user progress; it accepts navigateToScreen only. */}
                 {currentScreen === 'home' && (
-                  <HomeScreen 
-                    currentDay={currentDay}
-                    currentPath={currentPath}
-                    navigateToScreen={navigateToScreen}
-                  />
+                  <HomeScreen navigateToScreen={navigateToScreen} />
                 )}
                 
                 {/* Path Selection */}
@@ -823,8 +820,6 @@ const App = () => {
                     dayNumber={currentDay}
                     pathId={currentPath}
                     onBack={navigateBack}
-                    textOnly={screenData?.textOnly || false}
-                    unifiedUpload={screenData?.unifiedUpload || false}
                     flexMode={screenData?.flexMode || null}
                     onUploadComplete={(imageUrl, extractedText, pathId, isTextOnly, isMultiPage, additionalImages, imageFiles) => {
                       handleJournalUpload(
