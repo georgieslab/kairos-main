@@ -305,6 +305,14 @@ const EXCLUSIVE_PATH_PRODUCTS = {
     productId: 'prod_Us7OkREsJYUvmTjqwert',
     currency: 'eur',
     unitAmount: 299 // €2.99
+  },
+  // Starting Over — anchor for 'learning-to-speak' and 'two-homes' as well;
+  // getPurchaseAnchorId routes all three here. Replace the placeholder with the
+  // real Stripe product id before this pack goes on sale.
+  'starting-over': {
+    productId: 'prod_REPLACE_WITH_STARTING_OVER',
+    currency: 'eur',
+    unitAmount: 299 // €2.99
   }
 };
 

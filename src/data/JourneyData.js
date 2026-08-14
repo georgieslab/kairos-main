@@ -13873,6 +13873,580 @@ JOURNEY_PATHS['kairos-sparks'] = createJourneyPath({
   price: '€2.99'
 });
 
+/* =============================================================================
+   STARTING OVER — a one-time-purchase package of three paths, 42 days.
+   For people who moved country and began again. Sold as one product anchored
+   on 'starting-over'; see BUNDLES in src/constants/pathBundles.js.
+
+   The arc is split so a reader can enter where they actually are: The Crossing
+   for the first months, Learning to Speak for the year language takes, Two
+   Homes for the long middle where it stops being an ordeal and becomes a life.
+   ========================================================================== */
+
+export const startingOverCrossingDays = [
+  {
+    day: 1,
+    title: "What Ended",
+    theme: "Rupture",
+    prompt: `Before the moving, before the paperwork, something ended. Start there.
+
+• What actually ended — a plan, a career, a relationship, a body that worked, a country that stopped being possible?
+• Did you get to grieve it, or did the logistics start immediately?
+• What have you been calling "a move" that was really a loss?
+
+Write the ending in one sentence, without the word "but".`
+  },
+  {
+    day: 2,
+    title: "Chosen or Forced",
+    theme: "Agency",
+    prompt: `People will ask why you came. The honest answer is rarely the one you give them.
+
+• How much of this was chosen, and how much was the only remaining option?
+• What do you say when people ask, and how far is it from the truth?
+• If it was forced, what does it cost you to describe it as a choice?
+
+Write the version you have never said out loud.`
+  },
+  {
+    day: 3,
+    title: "What You Packed",
+    theme: "Selection",
+    prompt: `You reduced a life to what would travel. That list says something.
+
+• What did you take that made no practical sense?
+• What did you agonise over and then leave behind?
+• What did you assume you could replace, and were you right?
+
+Name the one object you would go back for.`
+  },
+  {
+    day: 4,
+    title: "What You Left",
+    theme: "Loss",
+    prompt: `Not the objects. The rest of it.
+
+• Which relationship changed shape the moment you left, whether or not anyone admitted it?
+• What role did you hold there that nobody here knows you ever had?
+• What did you leave unfinished because leaving finished it for you?
+
+Write the name of one person you left, and what you owe them.`
+  },
+  {
+    day: 5,
+    title: "The Last Day",
+    theme: "Departure",
+    prompt: `Most people remember arriving. Fewer let themselves remember the day before.
+
+• Where were you, and who was with you, on your last ordinary day there?
+• What did you do that you did not know was for the last time?
+• What did you say goodbye to properly, and what did you skip?
+
+Describe the last hour in that place, in detail, as if you were there.`
+  },
+  {
+    day: 6,
+    title: "The First Week",
+    theme: "Arrival",
+    prompt: `The first week is usually a blur with three sharp things sticking out of it.
+
+• What are the three things you actually remember from that week?
+• What did you get wrong about this place in the first seven days?
+• Where did you sleep, and did it feel like anything?
+
+Write the first moment you thought: this is real now.`
+  },
+  {
+    day: 7,
+    title: "Suddenly Incompetent",
+    theme: "Humility",
+    prompt: `You knew how to do everything. Then you didn't know how to post a letter.
+
+• What ordinary task defeated you first — a form, a ticket machine, a phone call, a shop?
+• You were competent somewhere. What did it do to you to be treated as though you weren't?
+• Who watched you fail at something small, and how did you feel about them afterwards?
+
+Name one thing you can do now without thinking that once took your whole day.`
+  },
+  {
+    day: 8,
+    title: "The Paperwork",
+    theme: "Endurance",
+    prompt: `Nobody tells you that starting over is mostly queuing.
+
+• Which office, form or appointment has taken the most out of you?
+• What did you learn about how this country sees people like you, from how it processes them?
+• What are you still waiting on, and what does the waiting stop you doing?
+
+Write one sentence about what you would say to the person behind that desk.`
+  },
+  {
+    day: 9,
+    title: "Who You Told",
+    theme: "Disclosure",
+    prompt: `Some people got the full story. Most got a shorter one.
+
+• Who at home knows how hard this actually was, and who gets the edited version?
+• What are you protecting them from, and is that the real reason?
+• Who here has no idea what you left, because you have never explained it?
+
+Write the paragraph you would send home if you told the truth.`
+  },
+  {
+    day: 10,
+    title: "The First Time You Cried Here",
+    theme: "Breaking",
+    prompt: `There is usually a small, stupid trigger. That is normal, and it is worth writing down.
+
+• When was it, and what set it off — something trivial, most likely?
+• Were you alone, and did you want to be?
+• What had you been carrying for weeks that finally came out over nothing?
+
+Write what you needed in that moment, and whether you asked for it.`
+  },
+  {
+    day: 11,
+    title: "What You Expected to Miss",
+    theme: "Prediction",
+    prompt: `You braced for certain losses. Check your predictions.
+
+• What did you expect to miss most before you left?
+• Do you actually miss it, or was that a story about who you thought you were?
+• What have you replaced it with, if anything?
+
+Write the thing you were sure you would miss and don't.`
+  },
+  {
+    day: 12,
+    title: "What Surprised You",
+    theme: "Discovery",
+    prompt: `The real homesickness comes for things nobody warns you about.
+
+• What do you miss that you never once thought about while you lived there?
+• What ordinary thing here still catches you off guard?
+• What has this place given you that you did not know you wanted?
+
+Name one small thing here you would now be sad to lose.`
+  },
+  {
+    day: 13,
+    title: "Who Helped",
+    theme: "Debt",
+    prompt: `Somebody made this survivable, and it is easy to forget them once you are steady.
+
+• Who helped when you had nothing to offer in return?
+• What did they do — practically, not sentimentally?
+• Have you ever told them, and if not, what stops you?
+
+Write what you would say to them, then decide whether to send it.`
+  },
+  {
+    day: 14,
+    title: "A Letter to the Plane",
+    theme: "Integration",
+    prompt: `Write to the person in transit, before any of this had happened.
+
+• What do they most need to hear — not reassurance, information?
+• What are they about to get wrong, and can you spare them it?
+• What would you refuse to tell them, because they have to find it themselves?
+
+Write it as a letter, addressed to them, dated the day you arrived.`
+  }
+];
+
+export const learningToSpeakDays = [
+  {
+    day: 1,
+    title: "The Word You Couldn't Find",
+    theme: "Silence",
+    prompt: `There was a first time you stood in a room, knew exactly what you meant, and had nothing to say it with.
+
+• Where were you, and what were you trying to say?
+• What did you do instead — gesture, simplify, give up, laugh?
+• What did the other person think you meant?
+
+Write the sentence you wanted to say, in full, now that you can.`
+  },
+  {
+    day: 2,
+    title: "Treated as Simple",
+    theme: "Perception",
+    prompt: `Your vocabulary shrank. People assumed you had.
+
+• When did someone speak to you slowly, loudly, or in very short words, and what did that feel like?
+• What were you actually thinking in that moment that you couldn't say?
+• Have you ever done this to someone else, before you knew?
+
+Write one sentence you wanted to say back — in your own language, then in theirs.`
+  },
+  {
+    day: 3,
+    title: "Your Jokes Don't Land",
+    theme: "Humour",
+    prompt: `Humour is the last thing to arrive and the first thing you miss.
+
+• What kind of funny were you at home — dry, quick, absurd, cutting?
+• What happened the first time you tried it here?
+• Who here has never once seen you be funny?
+
+Write a joke that works in your first language and cannot survive translation.`
+  },
+  {
+    day: 4,
+    title: "The Exhaustion",
+    theme: "Cost",
+    prompt: `A day in another language costs something a day at home does not.
+
+• How do you feel at 6pm after a day of listening in a language you are still learning?
+• What do you avoid because you do not have the energy for it in this language?
+• What have you cancelled, or not started, for this reason alone?
+
+Name the thing you keep putting off because it would have to happen in their words.`
+  },
+  {
+    day: 5,
+    title: "The First Joke You Understood",
+    theme: "Threshold",
+    prompt: `Comprehension arrives before production. There is a day the room becomes funny.
+
+• When did you first laugh at something without translating it first?
+• Who was there, and did they notice?
+• What did it feel like in your body?
+
+Write the moment down, in as much detail as you have.`
+  },
+  {
+    day: 6,
+    title: "The First Joke You Made",
+    theme: "Return",
+    prompt: `Making people laugh in a foreign language is the moment you get yourself back.
+
+• When did you first say something funny on purpose, in this language, and have it work?
+• Who laughed, and what did you feel?
+• How long was it between understanding their humour and being able to use it?
+
+Write what you said. Even if it was small.`
+  },
+  {
+    day: 7,
+    title: "Words They Have That You Don't",
+    theme: "Gain",
+    prompt: `Every language carries ideas the others have to explain.
+
+• Which word here has no clean equivalent at home?
+• What does having that word let people notice that you previously had no handle for?
+• Has it changed anything about how you think?
+
+Write the word, then write what it would take to explain it to your mother.`
+  },
+  {
+    day: 8,
+    title: "Words You Have That They Don't",
+    theme: "Untranslatable",
+    prompt: `And every language leaves you carrying things nobody here can receive.
+
+• Which word from your language do you most wish existed here?
+• What have you failed to explain because there was no word for it?
+• What does it cost you that the people around you cannot name this thing?
+
+Write the word, and then attempt the translation you have always avoided.`
+  },
+  {
+    day: 9,
+    title: "Who You Are in Each Language",
+    theme: "Selves",
+    prompt: `Most people are not the same person in their second language. That is not a failure.
+
+• Are you warmer, blunter, funnier, more careful, more formal in one than the other?
+• Which version do the people here think is the real you?
+• Which one do you prefer being?
+
+Write two sentences about the same thing — one in each language — and notice the difference.`
+  },
+  {
+    day: 10,
+    title: "The Night You Dreamt in It",
+    theme: "Crossing Over",
+    prompt: `At some point the language stops being something you use and becomes something you are inside.
+
+• Have you dreamt in this language yet, and what happened in the dream?
+• Do you count, swear, or do arithmetic in it?
+• What did you notice the first time you thought a whole thought without translating?
+
+Write the first sentence you remember thinking in this language, unprompted.`
+  },
+  {
+    day: 11,
+    title: "Losing Your Own",
+    theme: "Erosion",
+    prompt: `The new language arrives by taking room from the old one. Nobody warns you.
+
+• When did you first reach for a word in your own language and find the foreign one instead?
+• What does it cost you that your mother tongue is now slightly slower?
+• Who at home has noticed, and what did they say?
+
+Write three sentences in your first language, about anything. Notice what it feels like.`
+  },
+  {
+    day: 12,
+    title: "Talking to Family",
+    theme: "Drift",
+    prompt: `The conversations get shorter. It is rarely because there is less love in them.
+
+• What can you no longer explain to your family about your life here?
+• What do they think you do all day, and how wrong are they?
+• What do you leave out of every call, every time?
+
+Write the thing you have never managed to make them understand.`
+  },
+  {
+    day: 13,
+    title: "The Accent",
+    theme: "Permanence",
+    prompt: `You will probably always have it. Sit with that for one entry.
+
+• How do you feel when someone comments on your accent, kindly or otherwise?
+• Have you tried to lose it, and what did that attempt cost you?
+• What does it mark you as, here?
+
+Write what you want your accent to mean, rather than what you fear it means.`
+  },
+  {
+    day: 14,
+    title: "What You Can Say Now",
+    theme: "Fluency",
+    prompt: `Measure the distance rather than the remaining gap.
+
+• What can you do in this language now that would have been impossible in your first month?
+• What conversation did you have recently that you could not have had a year ago?
+• What do you still avoid, and is it still out of reach or only out of habit?
+
+Write one sentence you are proud of being able to say.`
+  }
+];
+
+export const twoHomesDays = [
+  {
+    day: 1,
+    title: "When It Stopped Being Temporary",
+    theme: "Recognition",
+    prompt: `Nobody announces it. One day you notice you have stopped counting the months.
+
+• When did you realise you were not going back soon, or at all?
+• Was there an object, a purchase, a decision that made it official?
+• Did you tell anyone, or did you keep it to yourself for a while?
+
+Write the moment you knew, even if you did not admit it then.`
+  },
+  {
+    day: 2,
+    title: "The First Thing Here You'd Defend",
+    theme: "Belonging",
+    prompt: `Belonging often shows up first as irritation on someone else's behalf.
+
+• What do people criticise about this place that you now find yourself arguing against?
+• When did you first say "we" about the people here?
+• What have you started doing their way, on purpose?
+
+Write one thing about this country you would defend to someone from home.`
+  },
+  {
+    day: 3,
+    title: "Going Back",
+    theme: "Return",
+    prompt: `The first visit home is not a rest. It is an audit.
+
+• What did you notice on your first trip back that you had never noticed living there?
+• What had changed without you, and how did that land?
+• What did you find yourself defending, in either direction?
+
+Write what you felt at the airport, going back and coming back.`
+  },
+  {
+    day: 4,
+    title: "A Foreigner There Now",
+    theme: "Displacement",
+    prompt: `The hardest part is not being foreign here. It is becoming slightly foreign there.
+
+• When did someone at home treat you as though you had become an outsider?
+• What do you now do differently that marks you out there?
+• What do you no longer understand about the place you are from?
+
+Write the moment you felt like a visitor in your own country.`
+  },
+  {
+    day: 5,
+    title: "What You Carried That Works",
+    theme: "Continuity",
+    prompt: `Some of what you brought turned out to be exactly right.
+
+• Which habit, value or way of doing things from home has served you well here?
+• What have people here noticed about you that comes from there?
+• What are you glad you refused to adapt?
+
+Name one thing you brought that you will never trade.`
+  },
+  {
+    day: 6,
+    title: "What You Carried That Doesn't",
+    theme: "Adaptation",
+    prompt: `And some of it does not survive the crossing.
+
+• Which assumption from home has cost you here?
+• What did you have to unlearn, and how long did it take you to notice?
+• What are you still doing their way in your head and this way in public?
+
+Write the belief you brought that turned out to be local, not universal.`
+  },
+  {
+    day: 7,
+    title: "The One Who Stayed",
+    theme: "Counterfactual",
+    prompt: `Somebody you know did not leave. Their life is the control group for yours.
+
+• Who stayed, and what does their life look like now?
+• What do you envy about it, honestly?
+• What do they think about your leaving, as far as you know?
+
+Write what you would want to ask them, if you could ask it without it sounding like a comparison.`
+  },
+  {
+    day: 8,
+    title: "Smell, Food, a Song",
+    theme: "Involuntary",
+    prompt: `The body remembers on its own schedule and does not consult you.
+
+• What smell, dish or song puts you back there instantly?
+• When did it last happen, and where were you?
+• Do you seek these out or avoid them?
+
+Describe the sensation itself — not the memory, the physical feeling.`
+  },
+  {
+    day: 9,
+    title: `"Where Are You From?"`,
+    theme: "Explanation",
+    prompt: `A simple question that stopped being simple.
+
+• How do you answer now, and how long is the answer?
+• Does it change depending on who is asking?
+• What do you leave out, and why?
+
+Write the shortest true answer you have.`
+  },
+  {
+    day: 10,
+    title: "The Legal Self",
+    theme: "Paper",
+    prompt: `There is a version of you that exists in documents, and it is not quite you.
+
+• What status do you currently hold, and how secure does it feel?
+• What has a piece of paper allowed or refused you?
+• How much of your life is arranged around a renewal date?
+
+Write what you would do first if the paperwork were permanently settled.`
+  },
+  {
+    day: 11,
+    title: "What You Built",
+    theme: "Evidence",
+    prompt: `You arrived with nothing here. Take an inventory of what now exists.
+
+• Who would notice if you disappeared from this city tomorrow?
+• What exists here that would not exist if you had not come?
+• What are you competent at now that you were not on arrival?
+
+List five things you built here. Do not qualify any of them.`
+  },
+  {
+    day: 12,
+    title: "Who You'd Be If You'd Stayed",
+    theme: "Shadow",
+    prompt: `Write the other life honestly, without rigging it in either direction.
+
+• Where would you be living, and doing what?
+• What would you have that you do not have now?
+• What would you not have become?
+
+Write one paragraph about that person, in the third person.`
+  },
+  {
+    day: 13,
+    title: "To Someone Arriving Tomorrow",
+    theme: "Transmission",
+    prompt: `Someone is landing here next week with your first-week face on.
+
+• What do you know now that would have saved you six months?
+• What advice did you receive that turned out to be wrong?
+• What would you not tell them, because it has to be lived?
+
+Write three things you would say, and one you would keep to yourself.`
+  },
+  {
+    day: 14,
+    title: "The Ledger",
+    theme: "Reckoning",
+    prompt: `Both columns are real. Write both, and don't balance them for comfort.
+
+• What did leaving cost you — plainly, without the redemptive ending?
+• What did it buy that you could not have bought by staying?
+• Which of those two lists were you avoiding writing?
+
+If the ledger doesn't balance, say so. Some don't.`
+  }
+];
+
+JOURNEY_PATHS['starting-over'] = createJourneyPath({
+  id: 'starting-over',
+  title: "The Crossing",
+  subtitle: "14 days on leaving and arriving",
+  description: "For anyone who moved countries and began again. The rupture that started it, what you packed and what you left, the first weeks of being suddenly incompetent at ordinary things, and the people who made it survivable. Written from the inside — the anchor path of the Starting Over package.",
+  iconName: "Plane",
+  days: startingOverCrossingDays,
+  color: "96, 125, 173", // Cold departure blue
+  tags: ['starting-over', 'migration', 'transition', 'identity', 'exclusive'],
+  duration: 14,
+  difficulty: 'intermediate',
+  recommendedFor: ['people who moved countries', 'anyone starting again somewhere new', 'those between two places'],
+  isExclusive: true,
+  isNew: true,
+  price: '€2.99'
+});
+
+JOURNEY_PATHS['learning-to-speak'] = createJourneyPath({
+  id: 'learning-to-speak',
+  title: "Learning to Speak",
+  subtitle: "14 days on language, and who you are without it",
+  description: "The part nobody writes about. You do not only lose words — you lose the version of yourself that was quick. Being spoken to slowly, jokes that do not land, the first one you understand, the first one you make, and the strange grief of your own language going slightly slower. Part of the Starting Over package.",
+  iconName: "MessagesSquare",
+  days: learningToSpeakDays,
+  color: "142, 122, 178", // Muted violet — the in-between
+  tags: ['starting-over', 'language', 'identity', 'belonging', 'exclusive'],
+  duration: 14,
+  difficulty: 'intermediate',
+  recommendedFor: ['anyone living in a second language', 'people rebuilding a personality in new words', 'long-term learners'],
+  isExclusive: true,
+  isNew: true,
+  price: '€2.99'
+});
+
+JOURNEY_PATHS['two-homes'] = createJourneyPath({
+  id: 'two-homes',
+  title: "Two Homes",
+  subtitle: "14 days on belonging to neither, then to both",
+  description: "The long middle, where it stops being an ordeal and becomes a life. Going back and finding yourself a visitor, the person who stayed, what a piece of paper allows you, and an honest ledger of what leaving cost and what it bought. Part of the Starting Over package.",
+  iconName: "Home",
+  days: twoHomesDays,
+  color: "191, 145, 106", // Warm settled amber
+  tags: ['starting-over', 'belonging', 'identity', 'home', 'exclusive'],
+  duration: 14,
+  difficulty: 'intermediate',
+  recommendedFor: ['anyone years into a new country', 'people with two passports or none', 'those explaining where they are from'],
+  isExclusive: true,
+  isNew: true,
+  price: '€2.99'
+});
+
 /**
  * Get journey day data for a specific day and path
  * @param {number} day - The day number (1-based)

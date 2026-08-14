@@ -23,6 +23,10 @@ export const BUNDLES = {
   'kairos-moments': {
     label: 'Kairos Moments',
     paths: ['kairos-moments', 'kairos-cards', 'kairos-sparks']
+  },
+  'starting-over': {
+    label: 'Starting Over',
+    paths: ['starting-over', 'learning-to-speak', 'two-homes']
   }
 };
 
