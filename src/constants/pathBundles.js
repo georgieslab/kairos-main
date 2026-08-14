@@ -1,39 +1,75 @@
 // src/constants/pathBundles.js
-// Paths bundled into the Kairos Moments one-time-purchase package. Owning (or
-// redeeming an invite code for) the anchor 'kairos-moments' unlocks every path
-// listed here, and buying any bundle member purchases the single Kairos
-// Moments Stripe product — so one €2.99 payment covers the whole package.
-// Access is checked against users/{uid}.purchasedPaths, the same field the
-// Stripe webhook and invite-code redemption both write to.
+// One-time-purchase path packages.
+//
+// A bundle is a set of exclusive paths sold as a single Stripe product. Owning
+// the anchor path — by purchase or by redeeming an invite code — unlocks every
+// path in that bundle, so one payment covers the package. Access is checked
+// against users/{uid}.purchasedPaths, the field the Stripe webhook and
+// invite-code redemption both write to.
+//
+// ── Adding a bundle ──────────────────────────────────────────────────────────
+// 1. Add an entry to BUNDLES below. The key is the anchor path id.
+// 2. Mark each path `isExclusive: true` in JourneyData.js.
+// 3. Add a matching entry to EXCLUSIVE_PATH_PRODUCTS in functions/index.js
+//    with the Stripe product id and the amount in cents.
+// Nothing else needs touching: PathSelection, PathUnlockModal and the webhook
+// all read through the helpers here.
 
+/**
+ * Every one-time-purchase package, keyed by anchor path id.
+ * `paths` must include the anchor itself.
+ */
+export const BUNDLES = {
+  'kairos-moments': {
+    label: 'Kairos Moments',
+    paths: ['kairos-moments', 'kairos-cards', 'kairos-sparks']
+  }
+};
+
+// Kept as named exports because several modules import them directly. They are
+// now derived from BUNDLES rather than declared separately, so there is one
+// place to change when the package changes.
 export const KAIROS_MOMENTS_ANCHOR = 'kairos-moments';
+export const KAIROS_MOMENTS_PACKAGE = BUNDLES[KAIROS_MOMENTS_ANCHOR].paths;
 
-export const KAIROS_MOMENTS_PACKAGE = ['kairos-moments', 'kairos-cards', 'kairos-sparks'];
+/**
+ * The anchor id for whichever bundle a path belongs to, or null if the path is
+ * sold on its own.
+ * @param {string} pathId
+ * @returns {string|null}
+ */
+export const getBundleAnchor = (pathId) => {
+  for (const [anchor, bundle] of Object.entries(BUNDLES)) {
+    if (bundle.paths.includes(pathId)) return anchor;
+  }
+  return null;
+};
 
 /**
  * The path id whose Stripe product a purchase of `pathId` should actually buy.
- * Every bundle member routes to the single Kairos Moments product, so no
- * separate Stripe price needs configuring for the other paths in the package.
+ * Bundle members route to their anchor, so only the anchor needs a Stripe
+ * product configured. A standalone exclusive path buys itself.
  * @param {string} pathId
  * @returns {string}
  */
-export const getPurchaseAnchorId = (pathId) =>
-  KAIROS_MOMENTS_PACKAGE.includes(pathId) ? KAIROS_MOMENTS_ANCHOR : pathId;
+export const getPurchaseAnchorId = (pathId) => getBundleAnchor(pathId) || pathId;
 
 /**
  * Whether an exclusive path is unlocked given the user's purchased paths.
- * A bundle member unlocks if the user owns it directly OR owns the anchor.
+ * Unlocks if the user owns the path directly, or owns its bundle's anchor.
  * @param {string} pathId
  * @param {string[]} purchasedPaths
  * @returns {boolean}
  */
 export const isExclusivePathUnlocked = (pathId, purchasedPaths = []) => {
   if (purchasedPaths.includes(pathId)) return true;
-  if (KAIROS_MOMENTS_PACKAGE.includes(pathId) && purchasedPaths.includes(KAIROS_MOMENTS_ANCHOR)) {
-    return true;
-  }
-  return false;
+  const anchor = getBundleAnchor(pathId);
+  return !!anchor && purchasedPaths.includes(anchor);
 };
 
-/** Whether a path belongs to the Kairos Moments package. */
-export const isKairosMomentsPackage = (pathId) => KAIROS_MOMENTS_PACKAGE.includes(pathId);
+/** Whether a path belongs to any one-time-purchase bundle. */
+export const isBundledPath = (pathId) => getBundleAnchor(pathId) !== null;
+
+/** Whether a path belongs to the Kairos Moments package specifically. */
+export const isKairosMomentsPackage = (pathId) =>
+  getBundleAnchor(pathId) === KAIROS_MOMENTS_ANCHOR;
