@@ -111,6 +111,20 @@
             "availability": "https://schema.org/InStock",
             "url": "https://reflection-writer.web.app/landing.html#pricing"
           }
+        },
+        {
+          "@type": "Product",
+          "@id": "https://reflection-writer.web.app/landing.html#starting-over-pack",
+          "name": "Starting Over Pack",
+          "description": "Three journaling paths totalling 42 days for people who moved country and began again: The Crossing, Learning to Speak and Two Homes.",
+          "brand": { "@id": "https://reflection-writer.web.app/#org" },
+          "offers": {
+            "@type": "Offer",
+            "price": "2.99",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/PreOrder",
+            "url": "https://reflection-writer.web.app/landing.html#journeys"
+          }
         }
       ]
     }
@@ -1824,6 +1838,13 @@
             box-shadow: var(--glass-shadow);
         }
 
+        /* The second pack in the cold blue of its anchor path, so the two bands
+           read as siblings rather than as the same product twice. */
+        .addon-band-alt {
+            --spark: 96, 125, 173;
+            margin-top: 1.5rem;
+        }
+
         .addon-head {
             display: flex;
             flex-wrap: wrap;
@@ -3326,6 +3347,50 @@
                         <li>
                             <strong>Kairos Sparks</strong>
                             <span>14 days, one spark each &mdash; you supply the rest.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Second one-time pack. Same band, different accent: the
+                     Kairos trilogy is warm amber, this one takes the cold
+                     departure blue of its anchor path so the two read as
+                     siblings rather than duplicates. -->
+                <div class="addon-band addon-band-alt fade-in stagger-4">
+                    <div class="addon-head">
+                        <div>
+                            <span class="addon-label">Optional add-on</span>
+                            <h3 class="addon-title">
+                                <svg class="addon-spark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2Z"/>
+                                </svg>
+                                Starting Over
+                            </h3>
+                            <p class="addon-sub">
+                                Three paths, 42 days, for anyone who moved country and began
+                                again. Written from the inside.
+                            </p>
+                        </div>
+                        <div class="addon-price">
+                            <span class="addon-amount">&euro;2.99</span>
+                            <span class="addon-once">one-time</span>
+                        </div>
+                    </div>
+
+                    <ul class="addon-paths">
+                        <li>
+                            <strong>The Crossing</strong>
+                            <span>14 days on leaving and arriving &mdash; what ended, what you
+                            packed, and the week nothing worked.</span>
+                        </li>
+                        <li>
+                            <strong>Learning to Speak</strong>
+                            <span>14 days on language. You don&rsquo;t only lose words &mdash; you
+                            lose the version of yourself that was quick.</span>
+                        </li>
+                        <li>
+                            <strong>Two Homes</strong>
+                            <span>14 days on belonging to neither, then to both, and an honest
+                            ledger of what it cost and what it bought.</span>
                         </li>
                     </ul>
                 </div>
