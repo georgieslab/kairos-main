@@ -121,17 +121,22 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: rgb(var(--wn-b));
-  /* Two layers clipped differently: the soft fill sits inside the padding box,
-     the three-colour sweep fills the border box. That paints a gradient ring a
-     plain border-color cannot, and it runs a -> b -> c, which on Starting Over
-     is cold departure blue through the uncertain middle to settled amber. */
+  /* Three layers, clipped in two different boxes, painted top to bottom:
+       1. a soft tint,
+       2. an OPAQUE interior — without this the solid sweep below shows through
+          the whole circle rather than only the ring, and the icon ends up on a
+          saturated field of its own hue, which is what made it disappear,
+       3. the a -> b -> c sweep, filling the border box, which is the ring.
+     The interior colour is a variable so the light theme can swap it alone. */
+  --wn-halo-bg: 28, 28, 32;
+  color: rgb(var(--wn-c));
   background:
-    radial-gradient(circle, rgba(var(--wn-b), 0.20) 0%, rgba(var(--wn-b), 0.04) 70%),
+    radial-gradient(circle, rgba(var(--wn-b), 0.30) 0%, transparent 72%),
+    linear-gradient(rgb(var(--wn-halo-bg)), rgb(var(--wn-halo-bg))),
     linear-gradient(135deg, rgb(var(--wn-a)), rgb(var(--wn-b)), rgb(var(--wn-c)));
   background-origin: border-box;
-  background-clip: padding-box, border-box;
-  border: 1.5px solid transparent;
+  background-clip: padding-box, padding-box, border-box;
+  border: 2px solid transparent;
   box-shadow: 0 0 22px rgba(var(--wn-b), 0.22);
 }
 
@@ -468,3 +473,11 @@
 }
 .light-theme .wn-dot { background: rgba(0, 0, 0, 0.18); }
 .light-theme .wn-dot.is-active { background: rgba(0, 0, 0, 0.65); }
+
+/* The halo interior is opaque, so the light theme has to swap it — a dark disc
+   on a light sheet reads as a hole. --wn-a is the most saturated of each trio
+   and the only one that holds up against a near-white interior. */
+.light-theme .whats-new-halo {
+  --wn-halo-bg: 249, 249, 251;
+  color: rgb(var(--wn-a));
+}
