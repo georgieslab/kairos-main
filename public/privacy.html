@@ -243,7 +243,7 @@
         <header>
             <div class="logo">Καιρός</div>
             <h1>Privacy Policy</h1>
-            <p class="last-updated">Last Updated: November 8, 2025</p>
+            <p class="last-updated">Last Updated: August 15, 2026</p>
         </header>
 
         <div class="highlight-box">
@@ -292,6 +292,10 @@
             <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="none"/></svg> <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
             <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg> <strong>Uploaded images</strong> - Photos of handwritten journal pages you scan</div>
 
+            <h3>Purchase Information</h3>
+            <p>If you buy a subscription, a path pack, or register a journal, we store what you bought, when, and whether it is still active, together with the customer and subscription references our payment processor gives us.</p>
+            <p><strong>We never receive your card details.</strong> Those go directly from you to Stripe, who process the payment. We could not see or store them even if we wanted to. See section 3 for what Stripe does with them.</p>
+
             <h3>Location Information (Optional)</h3>
             <p>We store only the city name you provide (e.g., "Vienna"), not precise GPS coordinates. This is completely optional and used exclusively to provide local weather information on your dashboard. You can update, change, or delete your location information anytime.</p>
         </section>
@@ -309,14 +313,31 @@
 
         <section>
             <h2>3. AI Processing & Third-Party Services</h2>
-            <p>We use <strong>Anthropic's Claude AI</strong> to analyze your journal entries and provide personalized insights. When you submit a journal entry for analysis:</p>
+            <p>Some features cannot work without sending your content to a company that provides them. Below is every such company, what reaches it, and when. Nothing is sent to any of them unless you use the feature it powers.</p>
+
+            <h3>Anthropic (Claude) — analysis of your entries</h3>
+            <p>When you ask for an analysis, the text of that entry is sent to <strong>Anthropic</strong> for processing. If you photograph a handwritten page, the image is sent so the writing can be read. This happens only when you request an analysis — writing and storing entries never sends them anywhere.</p>
             <ul>
-                <li>Your journal text is sent to Anthropic's secure servers for processing</li>
-                <li>Anthropic does not store your journal content after processing</li>
-                <li>Anthropic does not use your data to train their AI models</li>
-                <li>All data transmission uses TLS 1.3 encryption</li>
+                <li>Anthropic does not use your entries to train their models</li>
+                <li>Anthropic may retain content briefly for operational and safety purposes under their own terms before deleting it</li>
+                <li>All transmission uses TLS 1.3 encryption</li>
             </ul>
-            <p>We also use <strong>Firebase</strong> (Google) for authentication, database, and storage services. Firebase complies with GDPR and other international privacy regulations.</p>
+
+            <h3>OpenAI (Whisper) — transcription of voice entries</h3>
+            <p>When you record a voice entry and it is transcribed into text, the <strong>audio recording is sent to OpenAI</strong> and processed by their Whisper speech-recognition service. The transcription is returned to us and stored with your entry. This happens only for voice entries; typed, drawn and photographed entries are never sent to OpenAI.</p>
+            <ul>
+                <li>OpenAI does not use data submitted through their API to train their models</li>
+                <li>Your recording is sent for transcription only, and is not used for voice identification or any other purpose</li>
+                <li>All transmission uses TLS 1.3 encryption</li>
+            </ul>
+
+            <h3>Stripe — payments</h3>
+            <p>All payments are processed by <strong>Stripe</strong>. Your card details go directly to Stripe and <strong>never reach our servers</strong> — we cannot see them, and we do not store them. We keep only the customer and subscription references Stripe gives us, so we know what you bought and whether it is still active. Stripe acts as an independent controller for payment data under its own privacy policy.</p>
+
+            <h3>Firebase (Google) — accounts, storage and hosting</h3>
+            <p>We use <strong>Firebase</strong> for authentication, database and file storage. Your entries live here. Firebase is where your data rests when it is not being actively processed by one of the services above.</p>
+
+            <p>We do not sell your data, and we do not share it with anyone other than the processors named here.</p>
         </section>
 
         <section>

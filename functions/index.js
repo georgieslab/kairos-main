@@ -395,6 +395,21 @@ exports.createPathCheckoutSession = functions
       }],
       success_url: `https://reflection-writer.web.app/?checkout=success&path=${pathId}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://reflection-writer.web.app/?checkout=cancel&path=${pathId}`,
+      // Terms §7 states the buyer requests immediate access and thereby gives
+      // up the EU 14-day right of withdrawal. That is only true if they are
+      // actually told so before paying, so it is shown above the pay button.
+      //
+      // This is display text, not a recorded consent. The stronger form is
+      // consent_collection: { terms_of_service: 'required' }, which renders a
+      // real checkbox and stores the acceptance on the session — but it errors
+      // unless a Terms of Service URL is set in the Stripe Dashboard's public
+      // business details. Add the URL there, then switch to it.
+      custom_text: {
+        submit: {
+          message:
+            'These paths unlock immediately. By paying you ask for access straight away and accept that this ends your 14-day right of withdrawal. Faulty or not as described is always refundable.'
+        }
+      },
       metadata: {
         firebaseUID: userId,
         pathId: pathId,
