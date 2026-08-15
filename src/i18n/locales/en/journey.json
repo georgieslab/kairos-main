@@ -342,6 +342,17 @@
     "sparksDesc": "One spark — wherever it takes you",
     "priceMain": "€2.99",
     "priceNote": "once — all three paths, yours forever. Or unlock with a promo code.",
-    "ctaCollection": "Explore the collection"
+    "ctaCollection": "Explore the collection",
+    "soEyebrow": "New — Starting Over",
+    "soTitle": "For anyone who began again",
+    "soText": "Three paths for people who moved country and started over. Written from the inside.",
+    "soCta": "See the paths",
+    "crossingDesc": "Leaving, and the week nothing worked",
+    "speakDesc": "Who you are without the words",
+    "twoHomesDesc": "Belonging to neither, then to both",
+    "navLabel": "Announcements",
+    "prev": "Previous",
+    "next": "Next",
+    "goTo": "Announcement {{n}}"
   }
 }

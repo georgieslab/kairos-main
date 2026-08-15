@@ -365,3 +365,90 @@
   color: transparent;
 }
 .light-theme .wn-price-note { color: rgba(0, 0, 0, 0.55); }
+
+/* ── Slide deck ─────────────────────────────────────────────────────────────
+   The sheet holds several announcements now rather than one. Only the middle
+   swaps; the halo above and the CTA below stay put, so moving between slides
+   reads as turning a page rather than replacing the dialog. */
+.wn-slide {
+  animation: wnSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes wnSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wn-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.wn-arrow {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.wn-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Kept in the layout rather than hidden at the ends, so the row does not
+   shift sideways as you move between slides. */
+.wn-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.wn-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.wn-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: background 0.2s ease, width 0.2s ease;
+}
+
+.wn-dot.is-active {
+  width: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-slide { animation: none; }
+  .wn-dot   { transition: none; }
+}
+
+/* Light mode — slide deck */
+.light-theme .wn-arrow {
+  border-color: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.04);
+  color: rgba(0, 0, 0, 0.6);
+}
+.light-theme .wn-arrow:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.85);
+}
+.light-theme .wn-dot { background: rgba(0, 0, 0, 0.18); }
+.light-theme .wn-dot.is-active { background: rgba(0, 0, 0, 0.65); }

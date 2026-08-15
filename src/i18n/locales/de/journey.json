@@ -342,6 +342,17 @@
     "sparksDesc": "Ein Funke — wohin er dich auch trägt",
     "priceMain": "2,99 €",
     "priceNote": "einmalig — alle drei Pfade, für immer deine. Oder per Promo-Code.",
-    "ctaCollection": "Zur Kollektion"
+    "ctaCollection": "Zur Kollektion",
+    "soEyebrow": "Neu — Noch einmal anfangen",
+    "soTitle": "Für alle, die neu begonnen haben",
+    "soText": "Drei Pfade für Menschen, die das Land gewechselt und noch einmal angefangen haben. Von innen geschrieben.",
+    "soCta": "Pfade ansehen",
+    "crossingDesc": "Das Gehen, und die Woche, in der nichts ging",
+    "speakDesc": "Wer du ohne die Wörter bist",
+    "twoHomesDesc": "Erst zu keinem, dann zu beiden gehören",
+    "navLabel": "Neuigkeiten",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "goTo": "Neuigkeit {{n}}"
   }
 }
