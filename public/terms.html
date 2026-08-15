@@ -69,7 +69,31 @@
             align-items: center;
             gap: 10px;
         }
-        
+
+        /* Inline icons replacing the emoji these headings used to open with,
+           drawn the same way as the ones on landing.html. Sized in em so each
+           tracks the text it sits in, and stroked in currentColor so it takes
+           its section's accent — green in the highlight box, amber in a
+           warning box — without needing a rule per section. */
+        .legal-icon {
+            width: 1.05em;
+            height: 1.05em;
+            flex-shrink: 0;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .key-point h4,
+        .warning-box h4,
+        .contact-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .highlight-box p {
             color: #ccc;
             margin-bottom: 0;
@@ -298,24 +322,24 @@
         </header>
 
         <div class="highlight-box">
-            <h2>📋 Agreement Overview</h2>
+            <h2><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg> Agreement Overview</h2>
             <p>Welcome to Καιρός! These Terms of Service ("Terms") govern your use of the Καιρός Smart Journal application and services. By creating an account or using our services, you agree to these Terms.</p>
             
             <div class="key-points">
                 <div class="key-point">
-                    <h4>✅ What You Get</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> What You Get</h4>
                     <p>AI-powered journal analysis, 50 guided journey paths, voice & visual journaling</p>
                 </div>
                 <div class="key-point">
-                    <h4>📝 Your Content</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg> Your Content</h4>
                     <p>You own your journal entries. We never sell or share your personal content.</p>
                 </div>
                 <div class="key-point">
-                    <h4>🔒 Your Privacy</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Your Privacy</h4>
                     <p>Your data is encrypted and protected. See our Privacy Policy for details.</p>
                 </div>
                 <div class="key-point">
-                    <h4>⚖️ Fair Use</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Fair Use</h4>
                     <p>Use Καιρός responsibly. Don't abuse our services or harm others.</p>
                 </div>
             </div>
@@ -327,7 +351,7 @@
             <p>We may update these Terms from time to time. We will notify you of significant changes via email or in-app notification at least 30 days before they take effect. Your continued use of the Service after changes become effective constitutes acceptance of the updated Terms.</p>
             
             <div class="info-box">
-                <h4>ℹ️ Age Requirement</h4>
+                <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> Age Requirement</h4>
                 <p>You must be at least 13 years old to use Καιρός. If you are between 13 and 18, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf.</p>
             </div>
         </section>
@@ -349,7 +373,7 @@
             <p>You are responsible for maintaining the confidentiality of your account credentials. We recommend using a strong, unique password and enabling biometric authentication if available on your device.</p>
             
             <div class="warning-box">
-                <h4>⚠️ Important</h4>
+                <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg> Important</h4>
                 <p>We will never ask for your password via email or support requests. If you receive such a request, please report it to security@kairos-journal.com.</p>
             </div>
         </section>
@@ -406,7 +430,7 @@
             </ul>
             
             <div class="warning-box">
-                <h4>⚠️ Not Professional Advice</h4>
+                <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg> Not Professional Advice</h4>
                 <p>Καιρός and its AI features are not substitutes for professional mental health care, medical advice, legal counsel, or financial guidance. If you are experiencing a mental health crisis, please contact a qualified professional or emergency services immediately.</p>
             </div>
             
@@ -547,7 +571,7 @@
             <p>Our total liability for any claim arising from your use of the Service shall not exceed the amount you paid to us in the 12 months preceding the claim.</p>
             
             <div class="warning-box">
-                <h4>⚠️ Mental Health Disclaimer</h4>
+                <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg> Mental Health Disclaimer</h4>
                 <p>Καιρός is a journaling tool, not a mental health service. If you are experiencing thoughts of self-harm, suicide, or a mental health emergency, please contact emergency services or a crisis helpline in your area immediately.</p>
             </div>
         </section>
@@ -600,7 +624,7 @@
         </section>
 
         <div class="contact-section">
-            <h2>📬 Questions About These Terms?</h2>
+            <h2><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Questions About These Terms?</h2>
             <p>If you have any questions about these Terms of Service, please don't hesitate to contact us.</p>
             <a href="mailto:legal@kairos-journal.com" class="contact-email">legal@kairos-journal.com</a>
             <p style="margin-top: 20px; font-size: 0.9rem; color: #888;">

@@ -69,7 +69,40 @@
             align-items: center;
             gap: 10px;
         }
-        
+
+        /* Inline icons replacing the emoji these headings used to open with,
+           drawn the same way as the ones on landing.html. Sized in em so each
+           tracks the text it sits in, and stroked in currentColor so it takes
+           its section's accent without needing a rule per section. */
+        .legal-icon {
+            width: 1.05em;
+            height: 1.05em;
+            flex-shrink: 0;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .highlight-item h4,
+        .contact-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* .data-item is deliberately NOT flex. Each one holds a bare text node
+           ("- For account creation...") beside a <strong>, and flex would
+           promote those to separate flex items and open a gap mid-sentence.
+           Inline-block keeps the line intact and still aligns the icon. */
+        .data-item .legal-icon {
+            display: inline-block;
+            vertical-align: -0.15em;
+            margin-right: 7px;
+            color: #4ade80;
+        }
+
         .highlights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -214,30 +247,30 @@
         </header>
 
         <div class="highlight-box">
-            <h2>🛡️ Your Privacy Rights at a Glance</h2>
+            <h2><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Your Privacy Rights at a Glance</h2>
             <div class="highlights-grid">
                 <div class="highlight-item">
-                    <h4>🔒 Complete Data Control</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Complete Data Control</h4>
                     <p>View, export, modify, or permanently delete all your data anytime</p>
                 </div>
                 <div class="highlight-item">
-                    <h4>👁️ Full Transparency</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></svg> Full Transparency</h4>
                     <p>We clearly explain what data we collect, why, and who we share it with</p>
                 </div>
                 <div class="highlight-item">
-                    <h4>📍 Optional Location</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Optional Location</h4>
                     <p>City sharing for weather is completely voluntary</p>
                 </div>
                 <div class="highlight-item">
-                    <h4>🧠 AI Processing Control</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg> AI Processing Control</h4>
                     <p>Choose your level of AI analysis or disable it completely</p>
                 </div>
                 <div class="highlight-item">
-                    <h4>📊 Data Minimization</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg> Data Minimization</h4>
                     <p>We only collect what's necessary to provide our service</p>
                 </div>
                 <div class="highlight-item">
-                    <h4>🌍 GDPR Compliant</h4>
+                    <h4><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg> GDPR Compliant</h4>
                     <p>Full compliance with international privacy regulations</p>
                 </div>
             </div>
@@ -247,17 +280,17 @@
             <h2>1. Information We Collect</h2>
             
             <h3>Account & Profile Information</h3>
-            <div class="data-item">📧 <strong>Email address</strong> - For account creation, login, and important notifications</div>
-            <div class="data-item">👤 <strong>Full name</strong> - To personalize your experience and communications</div>
-            <div class="data-item">🎂 <strong>Date of birth</strong> - To provide age-appropriate content and insights</div>
-            <div class="data-item">🖼️ <strong>Profile picture</strong> - Optional, only if you choose to upload one</div>
-            <div class="data-item">⚙️ <strong>App preferences</strong> - Your settings, theme choices, and notification preferences</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> <strong>Email address</strong> - For account creation, login, and important notifications</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <strong>Full name</strong> - To personalize your experience and communications</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> <strong>Date of birth</strong> - To provide age-appropriate content and insights</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.83 0L6 21"/></svg> <strong>Profile picture</strong> - Optional, only if you choose to upload one</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3"/><path d="M14 2v4M8 10v4M16 18v4"/></svg> <strong>App preferences</strong> - Your settings, theme choices, and notification preferences</div>
 
             <h3>Multi-Modal Journal Content</h3>
-            <div class="data-item">✍️ <strong>Text entries</strong> - Written journal entries you create in the app</div>
-            <div class="data-item">🎤 <strong>Voice recordings</strong> - Audio recordings and AI-generated transcriptions</div>
-            <div class="data-item">🎨 <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
-            <div class="data-item">📷 <strong>Uploaded images</strong> - Photos of handwritten journal pages you scan</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.38 3.62a1 1 0 0 1 3 3L7.37 18.64a2 2 0 0 1-.86.5l-2.87.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .5-.85z"/></svg> <strong>Text entries</strong> - Written journal entries you create in the app</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg> <strong>Voice recordings</strong> - Audio recordings and AI-generated transcriptions</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="none"/></svg> <strong>Visual artwork</strong> - Drawings, paintings, and creative visual entries</div>
+            <div class="data-item"><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg> <strong>Uploaded images</strong> - Photos of handwritten journal pages you scan</div>
 
             <h3>Location Information (Optional)</h3>
             <p>We store only the city name you provide (e.g., "Vienna"), not precise GPS coordinates. This is completely optional and used exclusively to provide local weather information on your dashboard. You can update, change, or delete your location information anytime.</p>
@@ -348,7 +381,7 @@
         </section>
 
         <div class="contact-section">
-            <h2>📬 Privacy Questions or Concerns?</h2>
+            <h2><svg class="legal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Privacy Questions or Concerns?</h2>
             <p>Our privacy team is here to help you understand how your data is protected and to assist with any privacy-related requests.</p>
             <a href="mailto:privacy@kairos-journal.com" class="contact-email">privacy@kairos-journal.com</a>
             <p style="margin-top: 20px; font-size: 0.9rem; color: #888;">
