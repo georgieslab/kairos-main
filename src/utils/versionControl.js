@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.3.0';
+export const APP_VERSION = '1.4.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2335,6 +2335,30 @@ export const VERSION_HISTORY = [
   notes: [
     'This release settles what each Collection includes, and makes the app, the pricing page and the terms agree — they previously gave three different answers about how much Premium came with a journal. Essential includes three months, Legacy twelve, and Insight Kairos Premium for the life of the service.',
     'Because journal bundles never actually expired before, anyone whose included Premium ran out some time ago will find it has now ended. Access drops to the free plan\'s monthly allowance rather than being lost — every journey and every entry stays exactly where it was.',
+    'Nothing about your entries, your progress or your journeys changes in this release.'
+  ]
+},
+{
+  version: '1.4.0',
+  releaseDate: '2026-08-15',
+  codename: 'Starting Over',
+  features: [
+    'A new pack, Starting Over, for anyone who left one country and began again in another. Three paths across 42 days: The Crossing, on leaving and the first weeks when nothing worked; Learning to Speak, on who you are without your own language; and Two Homes, on belonging to neither and then to both. €2.99 once for all three, written in English, German and Georgian rather than translated after the fact',
+    'Kairos Premium can now be paid yearly, at €111.99 — about three months free against paying month to month. The monthly price is unchanged and nothing switches over on its own',
+    'What\'s New is a deck you can page through rather than a single notice. An announcement you have not seen is no longer thrown away the moment a newer one ships'
+  ],
+  improvements: [
+    'Each announcement carries the colours and icon of the paths it is describing, so it is recognisable before a word of it is read',
+    'Georgian now uses ბილიკი throughout for a journey path, rather than გზა. The two are both "path" in a dictionary, but ბილიკი is the walked trail this app means',
+    'Starting Over shows its own disclaimer before you begin, pointing at resources for people far from home — crisis lines by country, UNHCR country guidance, and the Red Cross family-tracing service — rather than the substance-recovery resources shown before the Transformation journey'
+  ],
+  bugFixes: [
+    'Fixed the icon at the top of the What\'s New sheet being invisible against the new coloured background, which left an empty circle where the icon should have been',
+    'Fixed two Georgian phrasings: a purpose clause that read as a plain connector, and a subtitle that described belonging to two places one after the other rather than at the same time'
+  ],
+  notes: [
+    'Starting Over is written from the inside rather than researched. It asks directly about what ended, what was left behind, and the weeks when ordinary things stopped being possible — so it opens with a disclaimer, and any day in it can be left blank.',
+    'Underneath, the parts of Kairos that run on a server moved to a newer platform version and every key the app uses was moved into managed storage. You should see no difference; it is recorded here because it is the bulk of what changed.',
     'Nothing about your entries, your progress or your journeys changes in this release.'
   ]
 }
