@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.0';
+export const APP_VERSION = '1.4.1';
 
 export const VERSION_HISTORY = [
   {
@@ -2360,6 +2360,23 @@ export const VERSION_HISTORY = [
     'Starting Over is written from the inside rather than researched. It asks directly about what ended, what was left behind, and the weeks when ordinary things stopped being possible — so it opens with a disclaimer, and any day in it can be left blank.',
     'Underneath, the parts of Kairos that run on a server moved to a newer platform version and every key the app uses was moved into managed storage. You should see no difference; it is recorded here because it is the bulk of what changed.',
     'Nothing about your entries, your progress or your journeys changes in this release.'
+  ]
+},
+{
+  version: '1.4.1',
+  releaseDate: '2026-08-15',
+  codename: 'The Agate',
+  features: [],
+  improvements: [
+    'A new app icon — the agate, in green and gold on dark stone, matching the stone set into the Insight journal',
+    'The privacy policy now lists every outside company your content can reach, and says exactly what reaches each one and when. Voice recordings are transcribed by OpenAI, which the policy had not previously said',
+    'The terms now cover the one-time path packs, which they had not: what you get, that a pack is yours permanently and separate from any subscription, and your right to withdraw'
+  ],
+  bugFixes: [
+    'Fixed the app icon losing its edges on some home screens. The icon\'s background layer did not extend to the full area a launcher can crop to, so devices using a circular or squircle shape could cut into it'
+  ],
+  notes: [
+    'The legal pages were checked line by line against what the app actually does, and both were last dated November 2025 while describing terms introduced since. They now carry the right date.'
   ]
 }
 
