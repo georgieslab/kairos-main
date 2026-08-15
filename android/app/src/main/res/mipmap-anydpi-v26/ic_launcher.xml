@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  No insets here, deliberately — the previous version inset both layers by
+  16.7%.
+
+  The background must bleed to the full 108dp canvas: the launcher masks these
+  layers to whatever shape it likes (circle, squircle, teardrop) and anything
+  the background does not cover is revealed as empty. Insetting it left a
+  transparent border for the mask to find.
+
+  The foreground art is already sized into the central safe zone by the
+  generator, so it does not need insetting either.
+-->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background>
-        <inset android:drawable="@mipmap/ic_launcher_background" android:inset="16.7%" />
-    </background>
-    <foreground>
-        <inset android:drawable="@mipmap/ic_launcher_foreground" android:inset="16.7%" />
-    </foreground>
+    <background android:drawable="@mipmap/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
 </adaptive-icon>
