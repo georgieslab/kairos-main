@@ -6,17 +6,21 @@ const stripe = require("stripe");
 const cors = require('cors')({ origin: true });
 const fetch = require('node-fetch');
 const FormData = require('form-data');
+// Every credential this file needs now comes from Secret Manager. The old
+// functions.config() / Runtime Config service is retired: deploys that rely on
+// it fail once it shuts down, so nothing here reads it any more.
+//
+// Set or rotate a value with:
+//   firebase functions:secrets:set STRIPE_SECRET_KEY
+//
+// A secret is only readable by a function that declares it in
+// .runWith({ secrets: [...] }) — that binding is not optional. Omitting it
+// makes .value() return undefined at runtime, which the build cannot catch.
 const { defineSecret } = require("firebase-functions/params");
 const anthropicApiKey = defineSecret("ANTHROPIC_API_KEY");
-// Stripe secrets for the exclusive one-time-purchase paths (e.g. kairos-moments).
-// Set with:
-//   firebase functions:secrets:set STRIPE_SECRET_KEY
-//   firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
-// functions.config() (used elsewhere in this file) is deprecated and being
-// retired — new/updated Stripe functions use Secret Manager instead, same
-// pattern as callClaude below.
 const stripeSecretKey = defineSecret("STRIPE_SECRET_KEY");
 const stripeWebhookSecret = defineSecret("STRIPE_WEBHOOK_SECRET");
+const openaiApiKey = defineSecret("OPENAI_API_KEY");
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
@@ -159,7 +163,9 @@ exports.getSubscriptionStatus = functions.https.onCall(async (data, context) => 
   }
 });
 
-exports.createCheckoutSession = functions.https.onCall(async (data, context) => {
+exports.createCheckoutSession = functions
+  .runWith({ secrets: [stripeSecretKey] })
+  .https.onCall(async (data, context) => {
   try {
     console.log("🛒 createCheckoutSession called");
     console.log("📋 Request data:", JSON.stringify(data, null, 2));
@@ -182,40 +188,21 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
 
     console.log("👤 Processing for user:", userId);
 
-    // Get Firebase config
-    let stripeSecretKey;
-    let monthlyPriceId;
-    
-    try {
-      const config = functions.config();
-      console.log("📊 Config keys available:", Object.keys(config));
-      
-      if (!config.stripe) {
-        throw new Error("Stripe configuration section not found");
-      }
-      
-      stripeSecretKey = config.stripe.secret_key;
-      monthlyPriceId = config.stripe.monthly_price_id;
-      
-      if (!stripeSecretKey) {
-        throw new Error("Stripe secret key not found in config");
-      }
-      
-      if (!monthlyPriceId) {
-        throw new Error("Monthly price ID not found in config");
-      }
-      
-      console.log("✅ Stripe config loaded successfully");
-      
-    } catch (configError) {
-      console.error("❌ Configuration error:", configError);
+    // Resolve the Stripe key from Secret Manager. This used to read
+    // functions.config() into a local named stripeSecretKey, which shadowed the
+    // module-level secret binding of the same name — so the local has to go, not
+    // just its value.
+    const secretKey = stripeSecretKey.value();
+    if (!secretKey) {
+      console.error("❌ STRIPE_SECRET_KEY is not bound to this function");
       throw new functions.https.HttpsError('failed-precondition', 'Payment system configuration error');
     }
+    const monthlyPriceId = MONTHLY_PRICE_ID;
 
     // Initialize Stripe
     let stripeClient;
     try {
-      stripeClient = stripe(stripeSecretKey);
+      stripeClient = stripe(secretKey);
       console.log("✅ Stripe client initialized");
     } catch (stripeError) {
       console.error("❌ Stripe initialization failed:", stripeError);
@@ -306,23 +293,31 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
   }
 });
 
-// 💎 ONE-TIME PATH PURCHASE (exclusive paths outside the Artisan subscription)
-// `productId` ties the line item to the real Product created in the Stripe
-// Dashboard (so revenue/reporting shows up against it there); the price
-// itself is still created inline per-session via price_data, so there's no
-// separate Price ID to keep in sync — just the amount below. Grant happens
-// in the webhook via users/{uid}.purchasedPaths arrayUnion.
-// Annual subscription. Priced inline against the real Stripe Product rather
-// than through a separate Price ID, the same pattern the exclusive path packs
-// use — reporting still lands against the product, and there is no second
-// value in functions.config() to drift out of step with this file.
-// Monthly still comes from config.stripe.monthly_price_id.
+// ── What each plan bills against ────────────────────────────────────────────
+// Two shapes are in use here. The monthly subscription bills against a Price
+// created in the Stripe Dashboard, so its ID has to be recorded somewhere.
+// Everything else prices inline per-session via price_data against a real
+// Product — reporting still lands on the product, and there is no second value
+// anywhere that can drift out of step with this file.
+//
+// None of these are credentials. A Stripe Price or Product ID is an identifier
+// that Stripe expects client-side in most integrations, so they are plain
+// constants rather than secrets. MONTHLY_PRICE_ID used to live in
+// config.stripe.monthly_price_id and moved here when Runtime Config was retired.
+
+// Monthly Artisan subscription — the one plan billing through a Dashboard Price.
+const MONTHLY_PRICE_ID = 'price_1SL5HqIbSI0LUOgqxD7GSfiJ';
+
+// Annual Artisan subscription, priced inline.
 const ANNUAL_SUBSCRIPTION = {
   productId: 'prod_SL33owKsKNM6jq',
   currency: 'eur',
   unitAmount: 11199 // €111.99 — €31.89 less than twelve months at €11.99
 };
 
+// 💎 ONE-TIME PATH PURCHASES (exclusive paths outside the Artisan subscription).
+// Priced inline like the annual plan. The grant happens in the webhook, via
+// users/{uid}.purchasedPaths arrayUnion.
 const EXCLUSIVE_PATH_PRODUCTS = {
   'kairos-moments': {
     productId: 'prod_Us7OkREsJYUvmTjqwert',
@@ -420,23 +415,26 @@ exports.createPathCheckoutSession = functions
 });
 
 // 🆕 FIXED: STRIPE WEBHOOK HANDLER
-exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+exports.stripeWebhook = functions
+  .runWith({ secrets: [stripeSecretKey, stripeWebhookSecret] })
+  .https.onRequest(async (req, res) => {
   try {
     console.log("🔔 Stripe webhook received");
     console.log("📋 Headers:", req.headers);
     console.log("🎯 Event type:", req.body?.type);
     
-    // Get Stripe config
-    const config = functions.config();
-    const stripeSecretKey = config.stripe.secret_key;
-    const webhookSecret = config.stripe.webhook_secret;
-    
-    if (!stripeSecretKey || !webhookSecret) {
-      console.error("❌ Missing Stripe configuration");
+    // Both come from Secret Manager and both are bound in .runWith above. The
+    // locals are named apart from the module-level bindings on purpose: the
+    // previous versions reused those exact names and shadowed them.
+    const secretKey = stripeSecretKey.value();
+    const webhookSecret = stripeWebhookSecret.value();
+
+    if (!secretKey || !webhookSecret) {
+      console.error("❌ Stripe secrets are not bound to this function");
       return res.status(500).send("Missing Stripe configuration");
     }
-    
-    const stripeClient = stripe(stripeSecretKey);
+
+    const stripeClient = stripe(secretKey);
     
     // Get the signature from headers
     const signature = req.headers['stripe-signature'];
@@ -800,7 +798,9 @@ async function handleInvoicePaymentFailed(invoice) {
 }
 
 // Keep existing portal and cancellation functions...
-exports.getCustomerPortalUrl = functions.https.onCall(async (data, context) => {
+exports.getCustomerPortalUrl = functions
+  .runWith({ secrets: [stripeSecretKey] })
+  .https.onCall(async (data, context) => {
   try {
     console.log("🏪 getCustomerPortalUrl called");
     
@@ -813,14 +813,13 @@ exports.getCustomerPortalUrl = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError('invalid-argument', 'User ID is required');
     }
 
-    const config = functions.config();
-    const stripeSecretKey = config.stripe.secret_key;
-    
-    if (!stripeSecretKey) {
+    const secretKey = stripeSecretKey.value();
+
+    if (!secretKey) {
       throw new functions.https.HttpsError('failed-precondition', 'Stripe configuration missing');
     }
 
-    const stripeClient = stripe(stripeSecretKey);
+    const stripeClient = stripe(secretKey);
 
     const userDoc = await db.collection("users").doc(userId).get();
     if (!userDoc.exists) {
@@ -851,7 +850,9 @@ exports.getCustomerPortalUrl = functions.https.onCall(async (data, context) => {
   }
 });
 
-exports.cancelSubscription = functions.https.onCall(async (data, context) => {
+exports.cancelSubscription = functions
+  .runWith({ secrets: [stripeSecretKey] })
+  .https.onCall(async (data, context) => {
   try {
     console.log("❌ cancelSubscription called");
     
@@ -864,14 +865,13 @@ exports.cancelSubscription = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError('invalid-argument', 'User ID is required');
     }
 
-    const config = functions.config();
-    const stripeSecretKey = config.stripe.secret_key;
-    
-    if (!stripeSecretKey) {
+    const secretKey = stripeSecretKey.value();
+
+    if (!secretKey) {
       throw new functions.https.HttpsError('failed-precondition', 'Stripe configuration missing');
     }
 
-    const stripeClient = stripe(stripeSecretKey);
+    const stripeClient = stripe(secretKey);
 
     const userDoc = await db.collection("users").doc(userId).get();
     if (!userDoc.exists) {
@@ -925,7 +925,9 @@ exports.testWebhook = functions.https.onRequest(async (req, res) => {
 });
 
 // 🎙️ NEW: Transcribe audio using OpenAI Whisper
-exports.transcribeAudio = functions.https.onCall(async (data, context) => {
+exports.transcribeAudio = functions
+  .runWith({ secrets: [openaiApiKey] })
+  .https.onCall(async (data, context) => {
   try {
     console.log("🎙️ transcribeAudio called");
     
@@ -938,11 +940,11 @@ exports.transcribeAudio = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError('invalid-argument', 'Audio URL is required');
     }
 
-    // Get OpenAI API key from config
-    const config = functions.config();
-    const openaiApiKey = config.openai?.api_key;
-    
-    if (!openaiApiKey) {
+    // From Secret Manager, bound in .runWith above. Local renamed because the
+    // old name shadowed the module-level binding.
+    const whisperKey = openaiApiKey.value();
+
+    if (!whisperKey) {
       throw new functions.https.HttpsError('failed-precondition', 'OpenAI API key not configured');
     }
 
@@ -973,7 +975,7 @@ exports.transcribeAudio = functions.https.onCall(async (data, context) => {
     const whisperResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${whisperKey}`,
         ...formData.getHeaders()
       },
       body: formData
@@ -1000,7 +1002,9 @@ exports.transcribeAudio = functions.https.onCall(async (data, context) => {
 });
 
 // 🎙️ HTTP fallback with explicit CORS for environments where callable preflight fails
-exports.transcribeAudioHttp = functions.https.onRequest(async (req, res) => {
+exports.transcribeAudioHttp = functions
+  .runWith({ secrets: [openaiApiKey] })
+  .https.onRequest(async (req, res) => {
   cors(req, res, async () => {
     try {
       if (req.method === 'OPTIONS') {
@@ -1028,10 +1032,10 @@ exports.transcribeAudioHttp = functions.https.onRequest(async (req, res) => {
         return res.status(400).json({ error: 'Audio URL is required' });
       }
 
-      // Get OpenAI API key from config
-      const config = functions.config();
-      const openaiApiKey = config.openai?.api_key;
-      if (!openaiApiKey) {
+      // From Secret Manager, bound in .runWith above. Local renamed because the
+      // old name shadowed the module-level binding.
+      const whisperKey = openaiApiKey.value();
+      if (!whisperKey) {
         return res.status(500).json({ error: 'OpenAI API key not configured' });
       }
 
@@ -1061,7 +1065,7 @@ exports.transcribeAudioHttp = functions.https.onRequest(async (req, res) => {
       const whisperResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${openaiApiKey}`,
+          'Authorization': `Bearer ${whisperKey}`,
           ...formData.getHeaders()
         },
         body: formData
