@@ -20,7 +20,10 @@
     "manageButton": "Manage Subscription",
     "freeTitle": "Free Plan",
     "freeDescription": "Upgrade to Artisan for unlimited features",
-    "upgradeButton": "Upgrade to Artisan"
+    "upgradeButton": "Upgrade to Artisan",
+    "upgradeYearly": "Artisan — €{{price}}/year",
+    "upgradeMonthly": "or €{{price}} monthly",
+    "saveBadge": "save {{pct}}%"
   },
   "profile": {
     "avatarUpdateSuccess": "Avatar updated successfully!",

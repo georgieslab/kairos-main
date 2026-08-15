@@ -11,6 +11,7 @@ import { loadGoogleMapsApi, initPlacesAutocomplete, extractCityFromPlace } from 
 import {
   getSubscriptionStatus,
   createCheckoutSession,
+  getPricingInfo,
   getCustomerPortalUrl,
   hasArtisanAccess
 } from '../../services/SubscriptionService';
@@ -136,10 +137,14 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
     }
   };
 
-  const handleUpgrade = async () => {
+  // Derived once rather than per render branch; getPricingInfo is a pure
+  // lookup and the saving is computed inside it from the two prices.
+  const pricing = getPricingInfo();
+
+  const handleUpgrade = async (interval = 'month') => {
     try {
       setProcessingUpgrade(true);
-      const { url } = await createCheckoutSession(currentUser.uid);
+      const { url } = await createCheckoutSession(currentUser.uid, null, interval);
       window.open(url, '_blank');
     } catch (error) {
       console.error('Error:', error);
@@ -575,9 +580,31 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
                   <p>{t('subscriptionSection.freeDescription', 'Upgrade to Artisan for unlimited features')}</p>
                 </div>
               </div>
-              <button className="settings-btn settings-btn-primary" onClick={handleUpgrade} disabled={processingUpgrade}>
-                <Sparkles size={18} />{t('subscriptionSection.upgradeButton', 'Upgrade to Artisan')}
-              </button>
+              {/* Both intervals offered outright rather than behind a toggle:
+                  there are only two, and a toggle would hide the saving until
+                  someone flipped it. The percentage comes from getPricingInfo,
+                  which derives it from the two prices, so it cannot drift from
+                  what is actually charged. */}
+              <div className="settings-plan-choice">
+                <button
+                  className="settings-btn settings-btn-primary"
+                  onClick={() => handleUpgrade('year')}
+                  disabled={processingUpgrade}
+                >
+                  <Sparkles size={18} />
+                  {t('subscriptionSection.upgradeYearly', 'Artisan — €{{price}}/year', { price: pricing.yearly.price })}
+                  <span className="settings-plan-save">
+                    {t('subscriptionSection.saveBadge', 'save {{pct}}%', { pct: pricing.yearly.savingPercent })}
+                  </span>
+                </button>
+                <button
+                  className="settings-btn settings-btn-secondary"
+                  onClick={() => handleUpgrade('month')}
+                  disabled={processingUpgrade}
+                >
+                  {t('subscriptionSection.upgradeMonthly', 'or €{{price}} monthly', { price: pricing.monthly.price })}
+                </button>
+              </div>
             </>
           )}
         </div>

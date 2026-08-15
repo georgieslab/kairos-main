@@ -170,11 +170,15 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
 
-    const { userId } = data;
+    const { userId, interval } = data;
     if (!userId) {
       console.error("❌ No userId provided");
       throw new functions.https.HttpsError('invalid-argument', 'User ID is required');
     }
+
+    // 'month' | 'year'. Anything else falls back to monthly rather than
+    // erroring, so a stale client cannot lock someone out of subscribing.
+    const billingInterval = interval === 'year' ? 'year' : 'month';
 
     console.log("👤 Processing for user:", userId);
 
@@ -246,17 +250,25 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
 
     // Create checkout session with webhook URL
     try {
-      console.log("🛒 Creating checkout session...");
-      console.log("💰 Using price ID:", monthlyPriceId);
-      
+      console.log("🛒 Creating checkout session...", billingInterval);
+
+      const lineItem = billingInterval === 'year'
+        ? {
+            price_data: {
+              currency: ANNUAL_SUBSCRIPTION.currency,
+              product: ANNUAL_SUBSCRIPTION.productId,
+              unit_amount: ANNUAL_SUBSCRIPTION.unitAmount,
+              recurring: { interval: 'year' }
+            },
+            quantity: 1,
+          }
+        : { price: monthlyPriceId, quantity: 1 };
+
       const session = await stripeClient.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['card'],
         mode: 'subscription',
-        line_items: [{
-          price: monthlyPriceId,
-          quantity: 1,
-        }],
+        line_items: [lineItem],
         success_url: `https://reflection-writer.web.app/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `https://reflection-writer.web.app/cancel`,
         metadata: {
@@ -300,6 +312,17 @@ exports.createCheckoutSession = functions.https.onCall(async (data, context) => 
 // itself is still created inline per-session via price_data, so there's no
 // separate Price ID to keep in sync — just the amount below. Grant happens
 // in the webhook via users/{uid}.purchasedPaths arrayUnion.
+// Annual subscription. Priced inline against the real Stripe Product rather
+// than through a separate Price ID, the same pattern the exclusive path packs
+// use — reporting still lands against the product, and there is no second
+// value in functions.config() to drift out of step with this file.
+// Monthly still comes from config.stripe.monthly_price_id.
+const ANNUAL_SUBSCRIPTION = {
+  productId: 'prod_SL33owKsKNM6jq',
+  currency: 'eur',
+  unitAmount: 11199 // €111.99 — €31.89 less than twelve months at €11.99
+};
+
 const EXCLUSIVE_PATH_PRODUCTS = {
   'kairos-moments': {
     productId: 'prod_Us7OkREsJYUvmTjqwert',

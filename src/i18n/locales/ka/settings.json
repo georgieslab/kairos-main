@@ -20,7 +20,10 @@
     "manageButton": "გამოწერის მართვა",
     "freeTitle": "უფასო გეგმა",
     "freeDescription": "გადადი Artisan-ზე შეუზღუდავი ფუნქციებისთვის",
-    "upgradeButton": "გადადი Artisan-ზე"
+    "upgradeButton": "გადადი Artisan-ზე",
+    "upgradeYearly": "Artisan — €{{price}}/წელი",
+    "upgradeMonthly": "ან €{{price}} თვეში",
+    "saveBadge": "დაზოგე {{pct}}%"
   },
   "profile": {
     "avatarUpdateSuccess": "ავატარი წარმატებით განახლდა!",

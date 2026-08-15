@@ -20,7 +20,10 @@
     "manageButton": "Abo verwalten",
     "freeTitle": "Kostenloser Plan",
     "freeDescription": "Upgrade auf Artisan für unbegrenzte Funktionen",
-    "upgradeButton": "Auf Artisan upgraden"
+    "upgradeButton": "Auf Artisan upgraden",
+    "upgradeYearly": "Artisan — {{price}} €/Jahr",
+    "upgradeMonthly": "oder {{price}} € monatlich",
+    "saveBadge": "{{pct}}% sparen"
   },
   "profile": {
     "avatarUpdateSuccess": "Avatar erfolgreich aktualisiert!",

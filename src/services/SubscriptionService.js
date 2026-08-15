@@ -12,9 +12,11 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
  * 🔧 FIXED: Create Stripe checkout session with popup blocker prevention
  * @param {string} userId - User ID
  * @param {Window|null} popupWindow - Pre-opened popup window (optional)
+ * @param {'month'|'year'} interval - Billing period. The server falls back to
+ *   monthly on anything unrecognised, so an older client cannot break signup.
  * @returns {Promise<{sessionId: string, url: string}>}
  */
-export const createCheckoutSession = async (userId, popupWindow = null) => {
+export const createCheckoutSession = async (userId, popupWindow = null, interval = 'month') => {
   try {
     console.log(`🛒 Creating checkout session for user: ${userId}`);
     
@@ -69,7 +71,7 @@ export const createCheckoutSession = async (userId, popupWindow = null) => {
     }
     
     const createSession = httpsCallable(functions, 'createCheckoutSession');
-    const result = await createSession({ userId });
+    const result = await createSession({ userId, interval });
     console.log(`✅ Checkout session created:`, result.data);
     
     // Redirect the popup window if provided

@@ -726,3 +726,28 @@
   .settings-data-stats { grid-template-columns: 1fr; }
   .settings-account-name { font-size: 1.1rem; }
 }
+
+/* Annual and monthly shown together rather than behind a toggle — two options
+   do not need a control, and a toggle hides the saving until it is flipped. */
+.settings-plan-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.settings-plan-choice .settings-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Sits inside the primary button, so it inherits the button's text colour
+   rather than fighting it on either theme. */
+.settings-plan-save {
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: rgba(255, 255, 255, 0.22);
+}
