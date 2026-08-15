@@ -16,7 +16,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Gift, X, Hourglass, Shuffle, Sparkles, ArrowRight, Ticket,
-  Plane, MessagesSquare, Home, ChevronLeft, ChevronRight
+  Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route
 } from 'lucide-react';
 import '../../styles/components/whatsNew.css';
 
@@ -32,6 +32,11 @@ const ANNOUNCEMENT_ID = 'starting-over';
 const SLIDES = [
   {
     id: 'starting-over',
+    halo: Route,
+    // The three path colours, in the order the pack is meant to be read:
+    // departure blue, the uncertain middle, settled amber. The sheet paints
+    // them as one gradient, so the arc is visible before a word is read.
+    accent: ['96, 125, 173', '142, 122, 178', '191, 145, 106'],
     eyebrowKey: 'whatsNew.soEyebrow',      eyebrow: 'New — Starting Over',
     titleKey: 'whatsNew.soTitle',          title: 'For anyone who began again',
     textKey: 'whatsNew.soText',            text: 'Three paths for people who moved country and started over. Written from the inside.',
@@ -44,6 +49,8 @@ const SLIDES = [
   },
   {
     id: 'kairos-collection',
+    halo: Sparkles,
+    accent: ['212, 175, 55', '230, 145, 90', '244, 197, 102'],
     eyebrowKey: 'whatsNew.eyebrow',         eyebrow: 'The Kairos Collection',
     titleKey: 'whatsNew.collectionTitle',   title: 'Three paths, one moment',
     textKey: 'whatsNew.collectionText',     text: 'Three ways to meet the moment — the collection is complete.',
@@ -67,6 +74,7 @@ const WhatsNew = ({ navigateToScreen }) => {
   const hasUnseen = seen !== ANNOUNCEMENT_ID;
   const slide = SLIDES[index];
   const count = SLIDES.length;
+  const HaloIcon = slide.halo;
 
   const open = () => {
     setIndex(0);                       // always land on the newest
@@ -101,6 +109,11 @@ const WhatsNew = ({ navigateToScreen }) => {
     <div className="whats-new-overlay" onClick={() => setIsOpen(false)}>
       <div
         className="whats-new-sheet whats-new-sheet--collection"
+        style={{
+          '--wn-a': slide.accent[0],
+          '--wn-b': slide.accent[1],
+          '--wn-c': slide.accent[2],
+        }}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -114,8 +127,10 @@ const WhatsNew = ({ navigateToScreen }) => {
           <X size={18} />
         </button>
 
-        <div className="whats-new-halo">
-          <Sparkles size={26} />
+        {/* Keyed so the icon swaps with its slide rather than persisting
+            across the transition. */}
+        <div className="whats-new-halo" key={slide.id + '-halo'}>
+          <HaloIcon size={26} />
         </div>
 
         {/* Keyed on the slide id so React swaps the subtree rather than

@@ -42,8 +42,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgb(212, 175, 55);
-  box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+  background: rgb(var(--wn-a));
+  box-shadow: 0 0 6px rgba(var(--wn-a), 0.8);
 }
 
 /* ===== Popup (portaled to <body>, above everything) ===== */
@@ -67,19 +67,27 @@
 }
 
 .whats-new-sheet {
+  /* Accent trio, overridden per announcement from the SLIDES table. The
+     defaults are the three Kairos Collection path colours, so the original
+     sheet is unchanged. --wn-a carries every single-colour use; all three
+     appear together on the halo, the eyebrow and the button. */
+  --wn-a: 212, 175, 55;
+  --wn-b: 230, 145, 90;
+  --wn-c: 244, 197, 102;
+
   position: relative;
   width: 100%;
   max-width: 360px;
   padding: 34px 26px 26px;
   text-align: center;
   border-radius: 36px;
-  background: linear-gradient(160deg, rgba(212, 175, 55, 0.10) 0%, rgba(28, 28, 30, 0.55) 40%);
+  background: linear-gradient(160deg, rgba(var(--wn-a), 0.10) 0%, rgba(28, 28, 30, 0.55) 40%);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  border: 1px solid rgba(var(--wn-a), 0.28);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 44px rgba(212, 175, 55, 0.12),
+    0 0 44px rgba(var(--wn-a), 0.12),
     0 24px 60px rgba(0, 0, 0, 0.4);
   animation: whatsNewSheetIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -113,10 +121,18 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: rgb(212, 175, 55);
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.04) 70%);
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 0 22px rgba(212, 175, 55, 0.25);
+  color: rgb(var(--wn-b));
+  /* Two layers clipped differently: the soft fill sits inside the padding box,
+     the three-colour sweep fills the border box. That paints a gradient ring a
+     plain border-color cannot, and it runs a -> b -> c, which on Starting Over
+     is cold departure blue through the uncertain middle to settled amber. */
+  background:
+    radial-gradient(circle, rgba(var(--wn-b), 0.20) 0%, rgba(var(--wn-b), 0.04) 70%),
+    linear-gradient(135deg, rgb(var(--wn-a)), rgb(var(--wn-b)), rgb(var(--wn-c)));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 22px rgba(var(--wn-b), 0.22);
 }
 
 .whats-new-eyebrow {
@@ -129,7 +145,7 @@
   padding: 4px 12px;
   border-radius: 999px;
   color: #1a1503;
-  background: linear-gradient(135deg, rgb(212, 175, 55), rgba(212, 175, 55, 0.75));
+  background: linear-gradient(135deg, rgb(var(--wn-a)), rgb(var(--wn-b)), rgb(var(--wn-c)));
 }
 
 .whats-new-title {
@@ -137,7 +153,7 @@
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.4px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(212, 175, 55, 0.9));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(var(--wn-a), 0.9));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -175,7 +191,7 @@
 
 .whats-new-perks li svg {
   flex-shrink: 0;
-  color: rgb(212, 175, 55);
+  color: rgb(var(--wn-a));
 }
 
 .whats-new-cta {
@@ -192,8 +208,8 @@
   font-family: inherit;
   cursor: pointer;
   color: #1a1503;
-  background: linear-gradient(135deg, rgb(212, 175, 55), rgba(212, 175, 55, 0.8));
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, rgb(var(--wn-a)), rgb(var(--wn-b)), rgb(var(--wn-c)));
+  box-shadow: 0 8px 24px rgba(var(--wn-a), 0.3);
   transition: transform 0.15s ease;
 }
 
@@ -213,11 +229,11 @@
 }
 
 .light-theme .whats-new-sheet {
-  background: linear-gradient(160deg, rgba(212, 175, 55, 0.14) 0%, rgba(245, 245, 247, 0.72) 40%);
-  border-color: rgba(212, 175, 55, 0.4);
+  background: linear-gradient(160deg, rgba(var(--wn-a), 0.14) 0%, rgba(245, 245, 247, 0.72) 40%);
+  border-color: rgba(var(--wn-a), 0.4);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 0 44px rgba(212, 175, 55, 0.14),
+    0 0 44px rgba(var(--wn-a), 0.14),
     0 24px 60px rgba(0, 0, 0, 0.15);
 }
 
@@ -325,15 +341,15 @@
   padding: 12px 16px;
   border-radius: 16px;
   text-align: left;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(212, 175, 55, 0.03));
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, rgba(var(--wn-a), 0.14), rgba(var(--wn-a), 0.03));
+  border: 1px solid rgba(var(--wn-a), 0.3);
 }
 .wn-price-badge {
   flex-shrink: 0;
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #ffffff, rgb(212, 175, 55));
+  background: linear-gradient(135deg, #ffffff, rgb(var(--wn-a)));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -346,7 +362,7 @@
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.62);
 }
-.wn-price-note svg { flex-shrink: 0; color: rgb(212, 175, 55); }
+.wn-price-note svg { flex-shrink: 0; color: rgb(var(--wn-a)); }
 
 /* Light mode — collection */
 .light-theme .wn-path-row {
@@ -356,7 +372,7 @@
 .light-theme .wn-path-name { color: rgba(0, 0, 0, 0.85); }
 .light-theme .wn-path-desc { color: rgba(0, 0, 0, 0.5); }
 .light-theme .wn-price {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.16), rgba(255, 255, 255, 0.5));
+  background: linear-gradient(135deg, rgba(var(--wn-a), 0.16), rgba(255, 255, 255, 0.5));
 }
 .light-theme .wn-price-badge {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgb(160, 128, 30));
