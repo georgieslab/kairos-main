@@ -1,14 +1,64 @@
 // src/components/paths/components/JourneyDisclaimerModal.jsx
+//
+// Shown before starting a path whose subject sits close to something a
+// journal alone should not be handling. Gated in JourneyPreviewModal, which
+// maps path ids to a variant — deliberately a short list, because a warning
+// on every path is a warning on none.
+//
+// Two variants today:
+//   substance     — Transformation Journey: habits, substances, behaviour
+//   displacement  — the Starting Over pack: leaving, arriving, what was lost
+//
+// The resources differ per variant and that is the whole point. Pointing
+// someone rebuilding a life in a new country at a substance-recovery helpline
+// would be worse than showing nothing.
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, AlertTriangle, Check, ExternalLink } from 'lucide-react';
 
-/**
- * Modal component to display disclaimer before starting the Transformation Journey
- */
-const JourneyDisclaimerModal = ({ onAccept, onCancel }) => {
+const VARIANTS = {
+  substance: {
+    aboutKey: 'disclaimerModal.aboutText',
+    aboutFallback:
+      'The "Transformation Journey: Breaking Patterns" is designed to support you in addressing and transforming challenging patterns in your life. This may include habits related to substances, behaviors, or thought patterns that you wish to change.',
+    disclaimerKey: 'disclaimerModal.disclaimerText',
+    disclaimerFallback:
+      "While journaling can be a powerful tool for personal growth and recovery, this journey is not a substitute for professional treatment, therapy, or medical advice. If you're struggling with addiction or other serious mental health issues, please consult with a healthcare professional.",
+    privacy1Key: 'disclaimerModal.privacyText1',
+    privacy1Fallback:
+      'The prompts in this journey will refer to "[substance/behavior]" - mentally replace this with the specific pattern you\'re working to transform. Your responses are private and processed according to your privacy settings.',
+    resources: [
+      { key: 'disclaimerModal.resourceSamhsa', label: 'SAMHSA National Helpline: 1-800-662-4357', href: 'https://www.samhsa.gov/find-help/national-helpline' },
+      { key: 'disclaimerModal.resourceAA', label: 'Alcoholics Anonymous', href: 'https://www.aa.org/' },
+      { key: 'disclaimerModal.resourceSmartRecovery', label: 'SMART Recovery', href: 'https://www.smartrecovery.org/' },
+      { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
+    ],
+  },
+
+  displacement: {
+    aboutKey: 'disclaimerModal.dpAboutText',
+    aboutFallback:
+      'The "Starting Over" paths are for people who left one country and began again in another. They ask directly about what ended, what was left behind, and what the move cost — including the parts most people skip when they tell the story.',
+    disclaimerKey: 'disclaimerModal.dpDisclaimerText',
+    disclaimerFallback:
+      'Leaving is not always a choice, and it is not always safe. If your move involved violence, loss, separation from family, or an ongoing asylum process, some of these questions may reach further than you expected. Writing is not treatment. Nothing here is a substitute for a therapist, a doctor, or a lawyer, and there is no wrong time to stop and come back later.',
+    privacy1Key: 'disclaimerModal.dpPrivacyText1',
+    privacy1Fallback:
+      'You choose how much to write and can leave any day blank. Your entries are private and processed according to your privacy settings.',
+    resources: [
+      { key: 'disclaimerModal.resourceBefrienders', label: 'Befrienders Worldwide — crisis lines by country', href: 'https://www.befrienders.org/' },
+      { key: 'disclaimerModal.resourceUnhcr', label: 'UNHCR Help — country-by-country guidance', href: 'https://help.unhcr.org/' },
+      { key: 'disclaimerModal.resourceFamilyLinks', label: 'Restoring Family Links (ICRC)', href: 'https://familylinks.icrc.org/' },
+      { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
+    ],
+  },
+};
+
+const JourneyDisclaimerModal = ({ onAccept, onCancel, variant = 'substance' }) => {
   const { t } = useTranslation('paths');
+  const v = VARIANTS[variant] || VARIANTS.substance;
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -25,23 +75,17 @@ const JourneyDisclaimerModal = ({ onAccept, onCancel }) => {
         <div className="modal-content">
           <div className="disclaimer-section">
             <h3 className="disclaimer-title">{t('disclaimerModal.aboutTitle', 'About This Journey')}</h3>
-            <p>
-              {t('disclaimerModal.aboutText', 'The "Transformation Journey: Breaking Patterns" is designed to support you in addressing and transforming challenging patterns in your life. This may include habits related to substances, behaviors, or thought patterns that you wish to change.')}
-            </p>
+            <p>{t(v.aboutKey, v.aboutFallback)}</p>
           </div>
 
           <div className="disclaimer-section">
             <h3 className="disclaimer-title">{t('disclaimerModal.disclaimerTitle', 'Important Disclaimer')}</h3>
-            <p>
-              {t('disclaimerModal.disclaimerText', "While journaling can be a powerful tool for personal growth and recovery, this journey is not a substitute for professional treatment, therapy, or medical advice. If you're struggling with addiction or other serious mental health issues, please consult with a healthcare professional.")}
-            </p>
+            <p>{t(v.disclaimerKey, v.disclaimerFallback)}</p>
           </div>
 
           <div className="disclaimer-section">
             <h3 className="disclaimer-title">{t('disclaimerModal.privacyTitle', 'Privacy & Personalization')}</h3>
-            <p>
-              {t('disclaimerModal.privacyText1', 'The prompts in this journey will refer to "[substance/behavior]" - mentally replace this with the specific pattern you\'re working to transform. Your responses are private and processed according to your privacy settings.')}
-            </p>
+            <p>{t(v.privacy1Key, v.privacy1Fallback)}</p>
             <p>
               {t('disclaimerModal.privacyText2', 'Your entries are processed to generate your reflections and are never used to train AI models.')}
             </p>
@@ -50,30 +94,14 @@ const JourneyDisclaimerModal = ({ onAccept, onCancel }) => {
           <div className="disclaimer-section">
             <h3 className="disclaimer-title">{t('disclaimerModal.resourcesTitle', 'Support Resources')}</h3>
             <ul className="resource-list">
-              <li>
-                <ExternalLink className="resource-icon" />
-                <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener noreferrer">
-                  {t('disclaimerModal.resourceSamhsa', 'SAMHSA National Helpline: 1-800-662-4357')}
-                </a>
-              </li>
-              <li>
-                <ExternalLink className="resource-icon" />
-                <a href="https://www.aa.org/" target="_blank" rel="noopener noreferrer">
-                  {t('disclaimerModal.resourceAA', 'Alcoholics Anonymous')}
-                </a>
-              </li>
-              <li>
-                <ExternalLink className="resource-icon" />
-                <a href="https://www.smartrecovery.org/" target="_blank" rel="noopener noreferrer">
-                  {t('disclaimerModal.resourceSmartRecovery', 'SMART Recovery')}
-                </a>
-              </li>
-              <li>
-                <ExternalLink className="resource-icon" />
-                <a href="https://www.psychologytoday.com/us/therapists" target="_blank" rel="noopener noreferrer">
-                  {t('disclaimerModal.resourceFindTherapist', 'Find a Therapist')}
-                </a>
-              </li>
+              {v.resources.map(({ key, label, href }) => (
+                <li key={key}>
+                  <ExternalLink className="resource-icon" />
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    {t(key, label)}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

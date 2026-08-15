@@ -17,6 +17,17 @@ import JourneyDisclaimerModal from '../paths/components/JourneyDisclaimerModal';
 import { getUserPathProgress, getNextDayForPath } from '../../utils/userProgress';
 import '../../styles/components/journeyPreviewModal.css';
 
+// Paths that show a disclaimer before starting, and which one. Kept short on
+// purpose: a warning before every path is a warning before none, and these are
+// the only two subjects where a journal alone is the wrong tool for some of
+// the people who will open it.
+const DISCLAIMER_VARIANTS = {
+  'transformation-journey': 'substance',   // habits, substances, behaviour
+  'starting-over': 'displacement',         // the Starting Over pack
+  'learning-to-speak': 'displacement',
+  'two-homes': 'displacement',
+};
+
 const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
   const { t, i18n } = useTranslation('journey');
   const { userProfile } = useAuth();
@@ -92,10 +103,7 @@ const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
     : null;
 
   const begin = () => {
-    // The Transformation Journey is explicitly about substance and behavioural
-    // patterns, so it gets the disclaimer carrying the SAMHSA, AA and SMART
-    // Recovery contacts. It is deliberately the only path that does.
-    if (pathId === 'transformation-journey') {
+    if (DISCLAIMER_VARIANTS[pathId]) {
       setShowDisclaimer(true);
       return;
     }
@@ -216,6 +224,7 @@ const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
 
       {showDisclaimer && (
         <JourneyDisclaimerModal
+          variant={DISCLAIMER_VARIANTS[pathId]}
           onAccept={() => { setShowDisclaimer(false); onStart?.(); }}
           onCancel={() => setShowDisclaimer(false)}
         />

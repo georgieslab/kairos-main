@@ -14,7 +14,13 @@
     "resourceSmartRecovery": "SMART Recovery",
     "resourceFindTherapist": "Find a Therapist",
     "cancel": "Cancel",
-    "accept": "I Understand & Want to Begin"
+    "accept": "I Understand & Want to Begin",
+    "dpAboutText": "The \"Starting Over\" paths are for people who left one country and began again in another. They ask directly about what ended, what was left behind, and what the move cost — including the parts most people skip when they tell the story.",
+    "dpDisclaimerText": "Leaving is not always a choice, and it is not always safe. If your move involved violence, loss, separation from family, or an ongoing asylum process, some of these questions may reach further than you expected. Writing is not treatment. Nothing here is a substitute for a therapist, a doctor, or a lawyer, and there is no wrong time to stop and come back later.",
+    "dpPrivacyText1": "You choose how much to write and can leave any day blank. Your entries are private and processed according to your privacy settings.",
+    "resourceBefrienders": "Befrienders Worldwide — crisis lines by country",
+    "resourceUnhcr": "UNHCR Help — country-by-country guidance",
+    "resourceFamilyLinks": "Restoring Family Links (ICRC)"
   },
   "pathCard": {
     "progressText": "{{count}} of 10 days completed",

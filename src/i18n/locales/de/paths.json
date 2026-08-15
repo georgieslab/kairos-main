@@ -14,7 +14,13 @@
     "resourceSmartRecovery": "SMART Recovery",
     "resourceFindTherapist": "Therapeut:in finden",
     "cancel": "Abbrechen",
-    "accept": "Ich verstehe & möchte beginnen"
+    "accept": "Ich verstehe & möchte beginnen",
+    "dpAboutText": "Die Pfade „Noch einmal anfangen“ sind für Menschen, die ein Land verlassen und in einem anderen neu begonnen haben. Sie fragen direkt danach, was zu Ende ging, was zurückblieb und was der Umzug gekostet hat — auch nach den Teilen, die die meisten beim Erzählen überspringen.",
+    "dpDisclaimerText": "Weggehen ist nicht immer eine Entscheidung, und es ist nicht immer sicher. Wenn zu deinem Umzug Gewalt, Verlust, Trennung von der Familie oder ein laufendes Asylverfahren gehören, reichen manche dieser Fragen möglicherweise weiter, als du erwartest. Schreiben ist keine Behandlung. Nichts hier ersetzt eine Therapeutin, einen Arzt oder eine Anwältin, und es gibt keinen falschen Zeitpunkt aufzuhören und später wiederzukommen.",
+    "dpPrivacyText1": "Du entscheidest, wie viel du schreibst, und kannst jeden Tag leer lassen. Deine Einträge sind privat und werden gemäß deinen Datenschutzeinstellungen verarbeitet.",
+    "resourceBefrienders": "Befrienders Worldwide — Krisentelefone nach Ländern",
+    "resourceUnhcr": "UNHCR Help — Hilfe nach Ländern",
+    "resourceFamilyLinks": "Restoring Family Links (IKRK)"
   },
   "pathCard": {
     "progressText": "{{count}} von 10 Tagen abgeschlossen",
