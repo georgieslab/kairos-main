@@ -14460,7 +14460,10 @@ JOURNEY_PATHS['first-light'] = createJourneyPath({
   isMultiModal: true,
   isExclusive: true,
   isNew: true,
-  price: '€0.29'
+  // Stripe will not charge below €0.50, so €0.29 was never possible. See
+  // MINIMUM_CHARGE in functions/index.js — this string is display only, and the
+  // amount actually charged lives there.
+  price: '€0.99'
 });
 
 JOURNEY_PATHS['starting-over'] = createJourneyPath({

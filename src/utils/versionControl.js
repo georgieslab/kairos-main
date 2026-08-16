@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.3';
+export const APP_VERSION = '1.4.4';
 
 export const VERSION_HISTORY = [
   {
@@ -2402,12 +2402,25 @@ export const VERSION_HISTORY = [
   releaseDate: '2026-08-16',
   codename: 'First Light',
   features: [
-    'A new short path, First Light — three days, €0.29. One day written, one spoken, one drawn, so you can find out which way of journaling is yours before starting something that runs a fortnight. The shortest path in Kairos'
+    'A new short path, First Light — three days, €0.99. One day written, one spoken, one drawn, so you can find out which way of journaling is yours before starting something that runs a fortnight. The shortest path in Kairos'
   ],
   improvements: [],
   bugFixes: [],
   notes: [
     'First Light is deliberately small. Three days cannot build toward anything, so each day stands on its own and each one asks why its medium is different from the last.'
+  ]
+},
+{
+  version: '1.4.4',
+  releaseDate: '2026-08-16',
+  codename: 'First Light, Corrected',
+  features: [],
+  improvements: [],
+  bugFixes: [
+    'Fixed First Light being impossible to buy. It briefly went out priced below the minimum a card payment can be charged, so tapping to buy it failed every time with a generic error'
+  ],
+  notes: [
+    'First Light is €0.99. If you tried to buy it earlier today and it would not go through, nothing was charged — the payment never started.'
   ]
 }
 

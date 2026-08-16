@@ -332,16 +332,39 @@ const EXCLUSIVE_PATH_PRODUCTS = {
     unitAmount: 299 // €2.99
   },
   // First Light — a single path rather than a pack of three, priced as an
-  // impulse buy. Note that Stripe's fixed per-transaction fee (~€0.25 on EEA
-  // cards) takes most of this: roughly €0.04 lands, against ~€0.08 in AI if the
-  // buyer analyses all three days. It earns its place as a way in, not as
-  // revenue — worth remembering before discounting anything else this far.
+  // impulse buy. Shipped at €0.29 first, which Stripe refuses outright: see
+  // MINIMUM_CHARGE below. €0.99 nets about €0.72 after the fixed fee, against
+  // €0.04 at the original price.
   'first-light': {
-    productId: 'prod_V5Cjuol3RIJvde',
+    productId: 'prod_V5G9gux3Xgo07y',
     currency: 'eur',
-    unitAmount: 29 // €0.29
+    unitAmount: 99 // €0.99
   }
 };
+
+// Stripe rejects any Checkout Session below a per-currency floor, with
+// "The Checkout Session's total amount due must add up to at least €0.50 EUR".
+// It is a 400 at session creation, so the failure surfaces to the user as
+// "could not start the payment" with nothing indicating why, and only in
+// production — nothing in a build or a type check will catch a price set too
+// low. Hence the explicit guard.
+//
+// Only EUR is listed because every product here is priced in EUR. Add the
+// currency's own minimum before selling in another one; they differ.
+const MINIMUM_CHARGE = { eur: 50 };
+
+// Checked at module load so a bad price fails at deploy time rather than on a
+// customer's first tap. Logged rather than thrown: throwing here would take
+// down every function in the file, not just this one.
+for (const [pathId, product] of Object.entries(EXCLUSIVE_PATH_PRODUCTS)) {
+  const floor = MINIMUM_CHARGE[product.currency];
+  if (floor && product.unitAmount < floor) {
+    console.error(
+      `❌ ${pathId} is priced at ${product.unitAmount} ${product.currency}, below Stripe's ` +
+      `minimum of ${floor}. Checkout for this path will fail with a 400.`
+    );
+  }
+}
 
 exports.createPathCheckoutSession = functions
   .runWith({ secrets: [stripeSecretKey] })
@@ -364,6 +387,17 @@ exports.createPathCheckoutSession = functions
     const product = EXCLUSIVE_PATH_PRODUCTS[pathId];
     if (!product) {
       throw new functions.https.HttpsError('invalid-argument', `Unknown exclusive path: ${pathId}`);
+    }
+
+    // Fail here rather than letting Stripe return a 400 the client renders as a
+    // generic "could not start the payment", which says nothing about the cause.
+    const minimum = MINIMUM_CHARGE[product.currency];
+    if (minimum && product.unitAmount < minimum) {
+      console.error(`❌ ${pathId} priced below Stripe's minimum: ${product.unitAmount} < ${minimum} ${product.currency}`);
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        `${pathId} is priced below the minimum Stripe will charge for ${product.currency.toUpperCase()}.`
+      );
     }
 
     const secretKey = stripeSecretKey.value();
