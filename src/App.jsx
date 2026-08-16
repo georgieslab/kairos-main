@@ -295,6 +295,58 @@ const App = () => {
     setupStatusBar();
   }, []);
 
+  // Re-read the profile whenever the app comes back to the foreground.
+  //
+  // Anything that changes entitlements happens on the server: the Stripe
+  // webhook grants a path pack, a subscription renews or is cancelled in the
+  // customer portal. The app has no way to learn about any of it on its own,
+  // so before this it kept showing whatever it had at launch — a purchase made
+  // seconds earlier only appeared after a full restart.
+  //
+  // The checkout flows already refresh when their browser closes; this is the
+  // net underneath, covering every other way back in — the task switcher, a
+  // notification, or a checkout that returned by some route we did not
+  // anticipate.
+  //
+  // @capacitor/app is imported dynamically and only on native. A top-level
+  // native-plugin import here is what blanked the whole app once before on a
+  // platform that did not implement it.
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || !currentUser) return;
+
+    let handle;
+    let backgroundedAt = 0;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { App: CapacitorApp } = await import('@capacitor/app');
+        const listener = await CapacitorApp.addListener('appStateChange', ({ isActive }) => {
+          if (!isActive) {
+            backgroundedAt = Date.now();
+            return;
+          }
+          // Only when the user was actually away. Android fires this on brief
+          // interruptions too — a permission dialog, the notification shade —
+          // and refetching the profile for each of those is a Firestore read
+          // for nothing.
+          if (Date.now() - backgroundedAt > 3000) {
+            refreshUserProfile();
+          }
+        });
+        if (cancelled) listener.remove();
+        else handle = listener;
+      } catch (error) {
+        console.error('Could not attach resume listener:', error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      handle?.remove();
+    };
+  }, [currentUser, refreshUserProfile]);
+
   // Page Transitions
   useEffect(() => {
     if (previousScreen && previousScreen !== currentScreen) {

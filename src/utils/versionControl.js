@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.1';
+export const APP_VERSION = '1.4.2';
 
 export const VERSION_HISTORY = [
   {
@@ -2377,6 +2377,24 @@ export const VERSION_HISTORY = [
   ],
   notes: [
     'The legal pages were checked line by line against what the app actually does, and both were last dated November 2025 while describing terms introduced since. They now carry the right date.'
+  ]
+},
+{
+  version: '1.4.2',
+  releaseDate: '2026-08-16',
+  codename: 'Coming Back',
+  features: [],
+  improvements: [
+    'Buying a path pack or a subscription now happens inside Kairos rather than throwing you out into your browser. Payment opens as a sheet over the app, and closing it puts you straight back where you were',
+    'Kairos re-checks what you own whenever you return to it, so anything bought or changed elsewhere is simply there when you come back'
+  ],
+  bugFixes: [
+    'Fixed payments leaving the app entirely. Tapping buy handed the payment page to your browser, and after paying you were left on a web page with no way back — the purchase had happened, but the app had no idea',
+    'Fixed a completed purchase not appearing until the app was fully restarted. Access was granted correctly on our side; the app simply never asked again',
+    'Removed a "your browser is blocking popups" message that could appear on the phone, where there is no browser and no popup blocker'
+  ],
+  notes: [
+    'If you bought something and it has not appeared, close Kairos and open it again — it now re-checks on the way back in.'
   ]
 }
 

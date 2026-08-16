@@ -33,20 +33,14 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
       // Bundle members buy the single Kairos Moments package product — see
       // constants/pathBundles.js. One payment unlocks every path in the bundle.
       const result = await startPathPurchase(userId, getPurchaseAnchorId(path.id));
-      // Checkout continues in the popup/new tab; keep the modal open so the
-      // user lands back on a stable screen after paying. The webhook grants
-      // access server-side, but this tab's in-memory userProfile won't know
-      // that happened on its own — poll for the popup closing (the signal
-      // that the user is done, either paid or canceled) and refresh so the
-      // path shows unlocked without requiring a manual app reload.
-      if (result?.popupWindow) {
-        const popup = result.popupWindow;
-        const poll = setInterval(() => {
-          if (popup.closed) {
-            clearInterval(poll);
-            refreshUserProfile();
-          }
-        }, 1000);
+      // Checkout happens elsewhere — a popup on web, an in-app browser on
+      // native. Keep the modal open so the user lands back on a stable screen.
+      // The webhook grants access server-side, but this app's in-memory
+      // userProfile has no way to learn that on its own, so wait until the user
+      // is done with checkout and re-read it. Without this the purchase only
+      // appears after a full restart.
+      if (result?.finished) {
+        result.finished.then(() => refreshUserProfile()).catch(() => {});
       }
     } catch (err) {
       setError(t('unlockModal.error', 'Could not start the payment. Please try again.'));

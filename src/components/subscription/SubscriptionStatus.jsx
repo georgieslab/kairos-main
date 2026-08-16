@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Crown, CreditCard, Calendar, AlertCircle, CheckCircle, X, ExternalLink, Gift, Sparkles, User, Zap, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { openExternalUrl } from '../../services/checkoutLauncher';
 import { 
   getSubscriptionStatus, 
   formatSubscriptionInfo, 
@@ -59,7 +60,9 @@ const SubscriptionStatus = ({
     try {
       setProcessingUpgrade(true);
       const { url } = await createCheckoutSession(currentUser.uid);
-      window.open(url, '_blank');
+      // See checkoutLauncher: window.open sends the user to the system browser
+      // on native, leaving the app with no way back and no refresh.
+      await openExternalUrl(url);
     } catch (error) {
       console.error('Error creating checkout session:', error);
     } finally {
@@ -71,7 +74,9 @@ const SubscriptionStatus = ({
     try {
       setManagingSubscription(true);
       const { url } = await getCustomerPortalUrl(currentUser.uid);
-      window.open(url, '_blank');
+      // See checkoutLauncher: window.open sends the user to the system browser
+      // on native, leaving the app with no way back and no refresh.
+      await openExternalUrl(url);
     } catch (error) {
       console.error('Error opening customer portal:', error);
     } finally {

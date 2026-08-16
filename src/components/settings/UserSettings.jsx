@@ -15,6 +15,7 @@ import {
   getCustomerPortalUrl,
   hasArtisanAccess
 } from '../../services/SubscriptionService';
+import { openExternalUrl } from '../../services/checkoutLauncher';
 import { deleteUserAccount, getDataDeletionSummary } from '../../services/deleteAccountService';
 
 import VersionDisplay from '../common/VersionDisplay';
@@ -31,7 +32,7 @@ import {
 
 const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) => {
   const { t, i18n } = useTranslation('settings');
-  const { currentUser, userProfile, updateUserProfile, logout } = useAuth();
+  const { currentUser, userProfile, updateUserProfile, logout, refreshUserProfile } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const { statistics } = useUserStatistics();
 
@@ -145,7 +146,12 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
     try {
       setProcessingUpgrade(true);
       const { url } = await createCheckoutSession(currentUser.uid, null, interval);
-      window.open(url, '_blank');
+      // Not window.open: on native that hands the URL to the system browser and
+      // the user finishes paying outside the app, with nothing bringing them
+      // back and nothing refreshing when they return. openExternalUrl keeps it
+      // in an in-app browser and resolves when it closes.
+      await openExternalUrl(url);
+      await refreshUserProfile?.();
     } catch (error) {
       console.error('Error:', error);
       showMessage('error', t('subscriptionSection.upgradeError', 'Error starting upgrade. Please try again.'));
@@ -158,7 +164,11 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
     try {
       setProcessingPortal(true);
       const { url } = await getCustomerPortalUrl(currentUser.uid);
-      window.open(url, '_blank');
+      // Cancelling or switching plan in the portal changes subscription state,
+      // so refresh on the way back rather than showing the old plan until the
+      // next restart.
+      await openExternalUrl(url);
+      await refreshUserProfile?.();
     } catch (error) {
       console.error('Error:', error);
       showMessage('error', t('subscriptionSection.portalError', 'Error opening management portal.'));

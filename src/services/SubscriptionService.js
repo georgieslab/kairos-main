@@ -2,6 +2,7 @@
 
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../config/firebase';
+import { preOpenPopup, openCheckout } from './checkoutLauncher';
 
 // Cache for subscription status
 let cachedSubscriptionStatus = null;
@@ -152,7 +153,9 @@ export const createCheckoutSession = async (userId, popupWindow = null, interval
  * @param {string} pathId - Exclusive path ID, e.g. 'kairos-moments'
  */
 export const startPathPurchase = async (userId, pathId) => {
-  const popupWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+  // Web only, and it must happen before the await below or the popup blocker
+  // kills it. Returns null on native, where there is no popup to block.
+  const popupWindow = preOpenPopup();
 
   try {
     const createSession = httpsCallable(functions, 'createPathCheckoutSession');
@@ -160,19 +163,13 @@ export const startPathPurchase = async (userId, pathId) => {
     const url = result.data?.url;
     if (!url) throw new Error('No checkout URL returned');
 
-    let usedPopup = false;
-    if (popupWindow && !popupWindow.closed) {
-      popupWindow.location.href = url;
-      usedPopup = true;
-    } else {
-      // Popup blocked — same-tab fallback
-      window.location.href = url;
-    }
-    // Return the popup reference (when we actually used one) so callers can
-    // detect when the user closes it and refresh purchase state — the main
-    // tab has no other way to know payment finished, since it's the popup
-    // that lands on the Stripe success/cancel redirect, not this tab.
-    return { ...result.data, popupWindow: usedPopup ? popupWindow : null };
+    // Resolves when the user is done with checkout, however they got there:
+    // popup closed on web, in-app browser dismissed on native. The caller
+    // refreshes then — the webhook has already granted access server-side, so
+    // the app only needs to re-read its own state.
+    const finished = openCheckout(url, popupWindow);
+
+    return { ...result.data, finished };
   } catch (error) {
     if (popupWindow && !popupWindow.closed) popupWindow.close();
     console.error('❌ Error starting path purchase:', error);
