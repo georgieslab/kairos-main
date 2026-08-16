@@ -330,6 +330,16 @@ const EXCLUSIVE_PATH_PRODUCTS = {
     productId: 'prod_V4m4CDE6lLcyTj',
     currency: 'eur',
     unitAmount: 299 // €2.99
+  },
+  // First Light — a single path rather than a pack of three, priced as an
+  // impulse buy. Note that Stripe's fixed per-transaction fee (~€0.25 on EEA
+  // cards) takes most of this: roughly €0.04 lands, against ~€0.08 in AI if the
+  // buyer analyses all three days. It earns its place as a way in, not as
+  // revenue — worth remembering before discounting anything else this far.
+  'first-light': {
+    productId: 'prod_V5Cjuol3RIJvde',
+    currency: 'eur',
+    unitAmount: 29 // €0.29
   }
 };
 

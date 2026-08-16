@@ -14,6 +14,13 @@
 //    with the Stripe product id and the amount in cents.
 // Nothing else needs touching: PathSelection, PathUnlockModal and the webhook
 // all read through the helpers here.
+//
+// ── Adding a single path sold on its own ─────────────────────────────────────
+// Do NOT add it to BUNDLES — a bundle of one is not a bundle, and the helpers
+// already cover this case. getPurchaseAnchorId falls back to the path's own id
+// when it belongs to no bundle, and isExclusivePathUnlocked matches it directly
+// in purchasedPaths. Steps 2 and 3 above are the whole job. 'first-light' is
+// the worked example.
 
 /**
  * Every one-time-purchase package, keyed by anchor path id.

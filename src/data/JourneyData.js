@@ -1,4 +1,3 @@
-// src/data/JourneyData.js - Enhanced with unified path registry
 import i18n from '../i18n/config';
 
 // Central registry for all journey paths
@@ -13883,6 +13882,56 @@ JOURNEY_PATHS['kairos-sparks'] = createJourneyPath({
    Homes for the long middle where it stops being an ordeal and becomes a life.
    ========================================================================== */
 
+// First Light — the shortest path in Kairos, and the only one whose subject is
+// Kairos itself. Three days, one per medium: written, spoken, drawn. It exists
+// so someone can find out which mode is theirs before committing to a
+// fourteen-day path, so each day has to stand on its own rather than build an
+// arc, and each has to give a reason the medium is different from the last.
+export const firstLightDays = [
+  {
+    day: 1,
+    title: "One True Thing",
+    theme: "Beginning",
+    type: "text",
+    modality: "writing",
+    prompt: `Most journals open with what happened today. Start somewhere harder.
+
+• What is true for you today that you have not said out loud to anyone?
+• Is it true because something happened, or because you finally stopped avoiding it?
+• Who would be most surprised to read it, and what does that tell you?
+
+Write it as one sentence. Then write the sentence underneath it that you actually mean.`
+  },
+  {
+    day: 2,
+    title: "Out Loud",
+    theme: "Voice",
+    type: "voice",
+    modality: "speaking",
+    prompt: `Writing gives you time to edit. Speaking does not, which is the point of today.
+
+• Say the thing you began writing yesterday and then softened.
+• Listen for where your voice changes — that is usually the real sentence.
+• What arrives when you do not get to choose the words carefully?
+
+Record it once. Do not re-record — the first take is the honest one.`
+  },
+  {
+    day: 3,
+    title: "No Words For It",
+    theme: "Image",
+    type: "visual",
+    modality: "art",
+    prompt: `Some things are not sentences, and forcing them into sentences loses them.
+
+• Draw the shape of the last few days — not a picture of what happened, the shape of it.
+• Reach for whichever colour is nearest to right, even if you cannot justify it.
+• Where did your hand slow down or hesitate?
+
+Give it a title of three words or fewer, and resist explaining it.`
+  }
+];
+
 export const startingOverCrossingDays = [
   {
     day: 1,
@@ -14395,6 +14444,24 @@ Write three things you would say, and one you would keep to yourself.`
 If the ledger doesn't balance, say so. Some don't.`
   }
 ];
+
+JOURNEY_PATHS['first-light'] = createJourneyPath({
+  id: 'first-light',
+  title: "First Light",
+  subtitle: "3 days, three ways to say it",
+  description: "Three days and three ways of putting something down: written, spoken, drawn. The same honesty each time, in a different medium — because some things only arrive once you stop typing. The shortest path in Kairos, and the quickest way to find out which mode is yours.",
+  iconName: "Sunrise",
+  days: firstLightDays,
+  color: "236, 170, 120", // Dawn amber — warmer than Sparks' gold, distinct from the Starting Over blues
+  tags: ['multi-modal', 'beginner', 'short', 'introduction', 'exclusive'],
+  duration: 3,
+  difficulty: 'beginner',
+  recommendedFor: ['anyone new to Kairos', 'people unsure whether to write, speak or draw', 'those who want something finishable'],
+  isMultiModal: true,
+  isExclusive: true,
+  isNew: true,
+  price: '€0.29'
+});
 
 JOURNEY_PATHS['starting-over'] = createJourneyPath({
   id: 'starting-over',
