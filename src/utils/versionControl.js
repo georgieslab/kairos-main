@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.2';
+export const APP_VERSION = '1.4.3';
 
 export const VERSION_HISTORY = [
   {
@@ -2395,6 +2395,19 @@ export const VERSION_HISTORY = [
   ],
   notes: [
     'If you bought something and it has not appeared, close Kairos and open it again — it now re-checks on the way back in.'
+  ]
+},
+{
+  version: '1.4.3',
+  releaseDate: '2026-08-16',
+  codename: 'First Light',
+  features: [
+    'A new short path, First Light — three days, €0.29. One day written, one spoken, one drawn, so you can find out which way of journaling is yours before starting something that runs a fortnight. The shortest path in Kairos'
+  ],
+  improvements: [],
+  bugFixes: [],
+  notes: [
+    'First Light is deliberately small. Three days cannot build toward anything, so each day stands on its own and each one asks why its medium is different from the last.'
   ]
 }
 
