@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.4';
+export const APP_VERSION = '1.4.5';
 
 export const VERSION_HISTORY = [
   {
@@ -2421,6 +2421,17 @@ export const VERSION_HISTORY = [
   ],
   notes: [
     'First Light is €0.99. If you tried to buy it earlier today and it would not go through, nothing was charged — the payment never started.'
+  ]
+},
+{
+  version: '1.4.5',
+  releaseDate: '2026-08-17',
+  codename: 'Housekeeping',
+  features: [],
+  improvements: [],
+  bugFixes: [],
+  notes: [
+    'Nothing changes for you in this release. The code that opens the payment sheet now loads only on phones, where it is actually used, instead of being carried by the web version too. Recorded here because every version gets an entry, not because there is anything to look at.'
   ]
 }
 

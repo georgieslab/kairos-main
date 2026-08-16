@@ -22,8 +22,24 @@
 // Callers await `finished` and then refresh. They should not branch on
 // platform themselves.
 
+// @capacitor/browser is imported dynamically, inside the native branch below,
+// rather than at the top of this file.
+//
+// The reason is the dev server. A static import pulls a new dependency into
+// Vite's graph the moment this module is first requested, which re-triggers
+// dependency optimization and kills the in-flight request with "504 Outdated
+// Optimize Dep" — and it stays broken until the server is restarted, which is
+// not obvious when all you see is a failed import. That cost an afternoon once.
+//
+// It does NOT keep the plugin out of the web bundle, which was the other hoped-
+// for benefit: Rollup inlines this import into the main chunk, so the code
+// ships either way and is merely not evaluated until called. Checked in the
+// built output rather than assumed. Being inlined does at least mean there is
+// no separate chunk that could fail to load mid-purchase.
+//
+// @capacitor/core is safe to import statically: App.jsx already does, so it is
+// in the graph from startup.
 import { Capacitor } from '@capacitor/core';
-import { Browser } from '@capacitor/browser';
 
 export const isNative = () => Capacitor.isNativePlatform();
 
@@ -45,6 +61,8 @@ export const preOpenPopup = () => {
  */
 export const openCheckout = async (url, popupWindow = null) => {
   if (isNative()) {
+    const { Browser } = await import('@capacitor/browser');
+
     // Resolve when the in-app browser closes. Stripe redirects to the
     // success/cancel URL inside this browser; the user then dismisses it,
     // which is the signal we act on. Android App Links cannot be relied on to
