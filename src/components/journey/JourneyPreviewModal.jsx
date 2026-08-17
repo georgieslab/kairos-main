@@ -26,6 +26,7 @@ const DISCLAIMER_VARIANTS = {
   'starting-over': 'displacement',         // the Starting Over pack
   'learning-to-speak': 'displacement',
   'two-homes': 'displacement',
+  'moral-pain': 'moralInjury',             // what you did, or failed to prevent
 };
 
 const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {

@@ -5,13 +5,15 @@
 // maps path ids to a variant — deliberately a short list, because a warning
 // on every path is a warning on none.
 //
-// Two variants today:
+// Three variants today:
 //   substance     — Transformation Journey: habits, substances, behaviour
 //   displacement  — the Starting Over pack: leaving, arriving, what was lost
+//   moralInjury   — Moral Pain: what you did, or failed to prevent
 //
 // The resources differ per variant and that is the whole point. Pointing
 // someone rebuilding a life in a new country at a substance-recovery helpline
-// would be worse than showing nothing.
+// would be worse than showing nothing, and pointing someone in moral pain at
+// either would miss entirely.
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +34,24 @@ const VARIANTS = {
       { key: 'disclaimerModal.resourceSamhsa', label: 'SAMHSA National Helpline: 1-800-662-4357', href: 'https://www.samhsa.gov/find-help/national-helpline' },
       { key: 'disclaimerModal.resourceAA', label: 'Alcoholics Anonymous', href: 'https://www.aa.org/' },
       { key: 'disclaimerModal.resourceSmartRecovery', label: 'SMART Recovery', href: 'https://www.smartrecovery.org/' },
+      { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
+    ],
+  },
+
+  moralInjury: {
+    aboutKey: 'disclaimerModal.miAboutText',
+    aboutFallback:
+      '"Moral Pain" is for something you did, watched, or failed to prevent, and have not been able to put down since. It asks directly about the act, who was harmed by it, and what you believe you owe. It does not set out to reassure you, and it does not set out to condemn you.',
+    disclaimerKey: 'disclaimerModal.miDisclaimerText',
+    disclaimerFallback:
+      'This kind of pain is closely linked to depression, post-traumatic stress and thoughts of suicide, and looking straight at it can make things feel worse before they feel better. Writing is not treatment. If you are having thoughts of harming yourself, please contact one of the services below or your own doctor — today, not after the next entry. There is no wrong time to stop, and nothing here has to be finished.',
+    privacy1Key: 'disclaimerModal.miPrivacyText1',
+    privacy1Fallback:
+      'You decide how much to write, and any day can be left blank. Your entries are private and processed according to your privacy settings. If what you are writing about may have legal consequences, consider speaking to a lawyer before recording a detailed account anywhere, including here.',
+    resources: [
+      { key: 'disclaimerModal.resourceBefrienders', label: 'Befrienders Worldwide — crisis lines by country', href: 'https://www.befrienders.org/' },
+      { key: 'disclaimerModal.resourceIasp', label: 'IASP — crisis centres worldwide', href: 'https://www.iasp.info/resources/Crisis_Centres/' },
+      { key: 'disclaimerModal.resourceMoralInjury', label: 'Moral injury — what it is and who it affects', href: 'https://www.ptsd.va.gov/professional/treat/cooccurring/moral_injury.asp' },
       { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
     ],
   },

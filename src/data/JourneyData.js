@@ -13882,6 +13882,188 @@ JOURNEY_PATHS['kairos-sparks'] = createJourneyPath({
    Homes for the long middle where it stops being an ordeal and becomes a life.
    ========================================================================== */
 
+// Moral Pain — moral injury, which is not guilt and not shame. Guilt is "I did
+// a bad thing"; shame is "I am a bad thing"; moral injury is "something happened
+// that violated what I believe is right, and I was part of it". The distinction
+// matters for every prompt here: the two failure modes in writing about this are
+// absolving the person ("you did your best with what you had") and piling on,
+// and both stop the work. These ask someone to look without telling them how to
+// feel about what they see.
+//
+// Gated behind a disclaimer — see DISCLAIMER_VARIANTS in JourneyPreviewModal.
+// Moral injury correlates with PTSD, depression and suicidality more strongly
+// than either subject already gated in this app.
+export const moralPainDays = [
+  {
+    day: 1,
+    title: "The Thing Itself",
+    theme: "Account",
+    prompt: `Before any explanation, write down what happened. Just that.
+
+• What did you do, or fail to do, that you have not been able to put down?
+• Where were you, who else was there, and what did it look like?
+• At what exact moment did you know?
+
+Write it as a plain account, with no reasons attached. The reasons get their own days.`
+  },
+  {
+    day: 2,
+    title: "The Version You Tell",
+    theme: "Editing",
+    prompt: `There is what happened, and there is the account you have practised. They are rarely the same length.
+
+• How do you describe this when you have to, and what gets left out?
+• Which detail do you always include, and what work is it doing for you?
+• Who has heard the full version, if anyone?
+
+Put the two side by side and mark every place they differ.`
+  },
+  {
+    day: 3,
+    title: "What You Could Have Done",
+    theme: "Agency",
+    prompt: `This is the question that circles at night, so meet it deliberately rather than at 3am.
+
+• What options did you actually have at the time — not the ones visible now?
+• What did you know then, as opposed to what you learned afterwards?
+• Were you following an instruction, a fear, or a preference?
+
+Write the honest answer to how much of it was choice. Do not round it in either direction.`
+  },
+  {
+    day: 4,
+    title: "The Belief It Broke",
+    theme: "Rupture",
+    prompt: `Moral pain needs a moral to injure. Something you believed took the damage.
+
+• What did you believe about yourself that this made impossible to keep believing?
+• Was it about courage, loyalty, competence, or being someone who does not do that?
+• When did you first notice it was gone?
+
+Write the sentence about yourself that you can no longer say.`
+  },
+  {
+    day: 5,
+    title: "Whose Voice",
+    theme: "Origin",
+    prompt: `The standard you failed came from somewhere. It is worth knowing where.
+
+• Who taught you that this was the line, and did they hold it themselves?
+• Is it a standard you chose as an adult, or inherited and never examined?
+• Would you apply it as harshly to someone else in your position?
+
+Name the person whose judgement you are still imagining. Then say whether it is really theirs or yours.`
+  },
+  {
+    day: 6,
+    title: "Whether It Survived",
+    theme: "Inventory",
+    prompt: `Some beliefs break and stay broken. Others turn out to be intact and merely bruised.
+
+• Do you still think the thing you did was wrong, or only that it felt wrong?
+• If someone you love had done it, what would you actually conclude?
+• What part of the belief still holds, even now?
+
+Separate what you did from what you are. Write both sentences and notice which is harder.`
+  },
+  {
+    day: 7,
+    title: "Who Was Harmed",
+    theme: "Names",
+    prompt: `Moral pain tends to stay abstract, because abstract is bearable. Today it does not.
+
+• Who was actually affected — name them, or describe them precisely if you never knew the name.
+• What happened to them afterwards, as far as you know?
+• Have you avoided finding out, and what would finding out change?
+
+Write the name. If there is more than one, write them all.`
+  },
+  {
+    day: 8,
+    title: "What It Cost Them",
+    theme: "Ledger",
+    prompt: `Today is not about your pain. Give theirs the space first — it is the part most often skipped.
+
+• What did this cost the person on the other end of it, concretely?
+• What did they lose that cannot be given back?
+• What might they not even know they lost?
+
+Write it from their side, in their position, without mentioning yourself.`
+  },
+  {
+    day: 9,
+    title: "What It Cost You",
+    theme: "Toll",
+    prompt: `Now yours. Not as balance — the ledger does not net out — but because it is real and you have been carrying it.
+
+• What has this taken from you since: sleep, closeness, work, the ability to be told you are good?
+• What do you avoid now because of it?
+• Who has quietly paid for the fact that you are carrying this?
+
+Write the cost plainly, without offering it as payment.`
+  },
+  {
+    day: 10,
+    title: "Debt or Punishment",
+    theme: "Distinction",
+    prompt: `People in moral pain often punish themselves and call it accountability. They are different things.
+
+• What have you been doing to yourself since, and who does it help?
+• Would the person harmed be served by any of it?
+• What are you owed nothing for, and what is genuinely owed?
+
+Write what you actually owe. Then cross out everything on the list that is only self-punishment.`
+  },
+  {
+    day: 11,
+    title: "What You Did Instead",
+    theme: "Substitutes",
+    prompt: `Where repair is impossible or terrifying, most people substitute something. The substitutes are worth naming.
+
+• What have you done in place of addressing this — overwork, generosity elsewhere, silence, distance?
+• Which of those helped someone, and which only helped you not think about it?
+• What would you have to stop doing to face it directly?
+
+Name the substitute you are most defensive about.`
+  },
+  {
+    day: 12,
+    title: "What Repair Would Be",
+    theme: "Specifics",
+    prompt: `Not whether it is possible. What it would actually consist of, in concrete terms.
+
+• What would the harmed person need — an account, an acknowledgement, restitution, distance?
+• Have you ever asked, or assumed you knew?
+• What part of it could you do this month, if you decided to?
+
+Write the specific act. Not "make it right" — the actual thing, with a verb in it.`
+  },
+  {
+    day: 13,
+    title: "When It Cannot Be Repaired",
+    theme: "Limits",
+    prompt: `Sometimes the person is dead, or unreachable, or would be harmed again by hearing from you. This is the day for that.
+
+• What makes repair impossible here — their absence, their refusal, or your own imagination of it?
+• If contact would hurt them again, whose need would the apology serve?
+• What can be done that does not involve them at all?
+
+Write what you will do instead, given that the direct route is closed.`
+  },
+  {
+    day: 14,
+    title: "Carrying It",
+    theme: "Continuance",
+    prompt: `The aim was never to stop feeling this. It is to stop it running the place.
+
+• What has changed in fourteen days — not about the event, about your grip on it?
+• What will you do when it surfaces again, because it will?
+• What do you want it to have made you, if it must have made you something?
+
+Write a paragraph to yourself for the next time this arrives at 3am. Be accurate rather than kind.`
+  }
+];
+
 // First Light — the shortest path in Kairos, and the only one whose subject is
 // Kairos itself. Three days, one per medium: written, spoken, drawn. It exists
 // so someone can find out which mode is theirs before committing to a
@@ -14444,6 +14626,25 @@ Write three things you would say, and one you would keep to yourself.`
 If the ledger doesn't balance, say so. Some don't.`
   }
 ];
+
+JOURNEY_PATHS['moral-pain'] = createJourneyPath({
+  id: 'moral-pain',
+  title: "Moral Pain",
+  subtitle: "14 days on what you did, or failed to do",
+  // Named plainly rather than poetically. Someone looking for this is looking
+  // for it on purpose, often in distress, and needs to recognise it on sight.
+  description: "For the thing you did, or watched, or failed to stop — and have not been able to put down since. Moral pain is not guilt and not shame: it is what happens when you act against what you believe is right, and then have to go on being yourself. Fourteen days on the act, the belief it broke, who carried the cost, what is actually owed, and what repair looks like when repair is not available.",
+  iconName: "Scale",
+  days: moralPainDays,
+  color: "134, 106, 106", // Muted oxblood — sombre without being alarming
+  tags: ['moral-injury', 'guilt', 'accountability', 'repair', 'exclusive'],
+  duration: 14,
+  difficulty: 'advanced',
+  recommendedFor: ['anyone carrying something they did or failed to prevent', 'people whose work put them in impossible positions', 'those who have apologised and found it did not help'],
+  isExclusive: true,
+  isNew: true,
+  price: '€2.99'
+});
 
 JOURNEY_PATHS['first-light'] = createJourneyPath({
   id: 'first-light',
