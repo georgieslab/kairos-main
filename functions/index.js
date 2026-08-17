@@ -331,6 +331,13 @@ const EXCLUSIVE_PATH_PRODUCTS = {
     currency: 'eur',
     unitAmount: 299 // €2.99
   },
+  // Pain — anchor for 'existential-pain' and 'body-pain' as well;
+  // getPurchaseAnchorId routes all three here, so only this one needs a product.
+  'moral-pain': {
+    productId: 'prod_V5eR8w8cqyutxE',
+    currency: 'eur',
+    unitAmount: 299 // €2.99
+  },
   // First Light — a single path rather than a pack of three, priced as an
   // impulse buy. Shipped at €0.29 first, which Stripe refuses outright: see
   // MINIMUM_CHARGE below. €0.99 nets about €0.72 after the fixed fee, against

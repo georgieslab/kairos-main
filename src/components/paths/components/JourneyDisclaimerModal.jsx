@@ -38,6 +38,40 @@ const VARIANTS = {
     ],
   },
 
+  chronicPain: {
+    aboutKey: 'disclaimerModal.cpAboutText',
+    aboutFallback:
+      '"The Body That Hurts" is for living in a body that hurts most days, and for the second injury of not being believed about it. It asks about ordinary days, language, appointments, the body you had before, and what genuinely helps.',
+    disclaimerKey: 'disclaimerModal.cpDisclaimerText',
+    disclaimerFallback:
+      'This path does not suggest your pain is caused by stress, attitude or unprocessed feelings, and it will not ask you to reframe it. Writing is not treatment and will not reduce your pain. It also does not replace medical care: if your symptoms change or worsen, that belongs with a clinician, not a journal. Living with constant pain carries a raised risk of depression and of thoughts of suicide — if that is where you are, please use one of the services below or contact your doctor today.',
+    privacy1Key: 'disclaimerModal.cpPrivacyText1',
+    privacy1Fallback:
+      'Write as little as you like — energy is the scarce resource here and every day is designed to be answerable in a few lines. Any day can be left blank. Your entries are private and processed according to your privacy settings, and you can export them if you want to bring a record to an appointment.',
+    resources: [
+      { key: 'disclaimerModal.resourceBefrienders', label: 'Befrienders Worldwide — crisis lines by country', href: 'https://www.befrienders.org/' },
+      { key: 'disclaimerModal.resourceIasp', label: 'IASP — crisis centres worldwide', href: 'https://www.iasp.info/resources/Crisis_Centres/' },
+      { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
+    ],
+  },
+
+  existential: {
+    aboutKey: 'disclaimerModal.exAboutText',
+    aboutFallback:
+      '"Existential Pain" stays with four questions that have no answers: that you will die, that no one is coming to tell you what your life is for, that no one can fully reach you inside it, and whether any of it means anything. It does not offer consolation, because consolation is what stops working once you have genuinely looked.',
+    disclaimerKey: 'disclaimerModal.exDisclaimerText',
+    disclaimerFallback:
+      'Sitting with these questions deliberately can be steadying, and it can also make a low period lower. If you are already in a dark stretch, this may not be the right fortnight for it. If you are having thoughts of ending your life, please contact one of the services below or your own doctor today — not after the next entry. Writing is not treatment, no day here has to be completed, and stopping is a reasonable thing to do.',
+    privacy1Key: 'disclaimerModal.exPrivacyText1',
+    privacy1Fallback:
+      'You decide how much to write, and any day can be left blank. Your entries are private and processed according to your privacy settings.',
+    resources: [
+      { key: 'disclaimerModal.resourceBefrienders', label: 'Befrienders Worldwide — crisis lines by country', href: 'https://www.befrienders.org/' },
+      { key: 'disclaimerModal.resourceIasp', label: 'IASP — crisis centres worldwide', href: 'https://www.iasp.info/resources/Crisis_Centres/' },
+      { key: 'disclaimerModal.resourceFindTherapist', label: 'Find a Therapist', href: 'https://www.psychologytoday.com/us/therapists' },
+    ],
+  },
+
   moralInjury: {
     aboutKey: 'disclaimerModal.miAboutText',
     aboutFallback:

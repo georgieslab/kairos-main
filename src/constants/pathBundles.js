@@ -34,6 +34,13 @@ export const BUNDLES = {
   'starting-over': {
     label: 'Starting Over',
     paths: ['starting-over', 'learning-to-speak', 'two-homes']
+  },
+  // Three sources of suffering rather than three variations on one: what you
+  // did, what is true of being alive at all, and what your body does to you.
+  // Every path in this bundle shows a disclaimer before it starts.
+  'moral-pain': {
+    label: 'Pain',
+    paths: ['moral-pain', 'existential-pain', 'body-pain']
   }
 };
 

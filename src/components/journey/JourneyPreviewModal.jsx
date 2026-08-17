@@ -27,6 +27,8 @@ const DISCLAIMER_VARIANTS = {
   'learning-to-speak': 'displacement',
   'two-homes': 'displacement',
   'moral-pain': 'moralInjury',             // what you did, or failed to prevent
+  'existential-pain': 'existential',       // dying, choosing, being alone, meaning
+  'body-pain': 'chronicPain',              // chronic pain, and not being believed
 };
 
 const JourneyPreviewModal = ({ pathId, onStart, onClose }) => {
