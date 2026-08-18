@@ -75,6 +75,10 @@ import './styles/components/pathIndicator.css';
 import './styles/components/WriteTab.css';
 import './styles/components/pageTransitions.css';
 import './styles/components/theme.css';
+// Last, so its ≥1024px rules land after the component stylesheets they build
+// on. The selectors inside are specific enough not to depend on this, but the
+// order matches the intent and costs nothing.
+import './styles/layouts/desktop.css';
 
 // Initialize API Cache Service
 if (!window.apiCacheService) {

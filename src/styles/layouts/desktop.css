@@ -1,0 +1,198 @@
+/* src/styles/layouts/desktop.css
+ *
+ * Desktop layout, ≥1024px. Everything below that breakpoint is untouched — the
+ * phone layout is the default and this file only ever adds to it.
+ *
+ * Kept in one file rather than scattered through the component stylesheets so
+ * the whole desktop treatment can be read, extended, or removed in one place.
+ * homeScreen.css alone is 1,455 lines with two min-width queries in it; adding
+ * a third layout in there would bury it.
+ *
+ * Everything here is CSS. No JSX changes, which matters in this codebase —
+ * markup and stylesheets have drifted apart before, and a layout that exists
+ * only in CSS cannot drift from markup it never touched.
+ *
+ * ── Scope ───────────────────────────────────────────────────────────────────
+ *   1. The bottom nav pill becomes a left rail
+ *   2. Home becomes a three-column grid: rail | reading column | side rail
+ * Other screens keep their current single column and simply sit beside the
+ * rail. They are not broken by this, they are just not improved by it yet.
+ */
+
+@media (min-width: 1024px) {
+
+  /* ── 1. Bottom pill → left rail ───────────────────────────────────────────
+   * The nav markup is a flex row of buttons, so it becomes a column with
+   * flex-direction alone. Position moves from a centred floating pill to a
+   * fixed vertical rail.
+   */
+  /* Selectors here are qualified with the element name (nav.x rather than .x)
+   * purely to raise specificity. bottomNavigation.css and homeScreen.css are
+   * imported from their components rather than from main.css, so which of the
+   * two files wins a same-specificity tie depends on module graph order — the
+   * exact fragility that made .modal-overlay resolve differently on different
+   * screens earlier in this project. Qualified selectors do not care about
+   * order.
+   */
+  nav.apple-glass-nav {
+    bottom: auto;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: auto;
+    max-width: none;
+  }
+
+  nav.apple-glass-nav .apple-glass-nav-track {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px 10px;
+    border-radius: 22px;
+  }
+
+  nav.apple-glass-nav .glass-nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    min-width: 168px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  nav.apple-glass-nav .glass-nav-label {
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  /* The sliding indicator is positioned by JS as translateX plus a measured
+   * width — see BottomNavigation.jsx. In a column that would slide sideways
+   * across the rail instead of down it, so it is hidden here and the active
+   * item is marked directly. A filled row is the sidebar idiom regardless;
+   * a travelling pill is a tab-bar idiom.
+   */
+  nav.apple-glass-nav .glass-slider {
+    display: none !important;
+  }
+
+  nav.apple-glass-nav .glass-nav-item.is-active {
+    background: rgba(var(--journey-color, 85, 139, 110), 0.16);
+    box-shadow: inset 0 0 0 1px rgba(var(--journey-color, 85, 139, 110), 0.28);
+  }
+
+  /* The centre action button loses its raised treatment: in a vertical list
+   * there is no centre for it to occupy, and an outsized row reads as an
+   * error rather than as emphasis.
+   */
+  nav.apple-glass-nav .glass-nav-item.is-center {
+    transform: none;
+  }
+
+  /* Clear the rail. The pill used to sit over the content, which is fine for
+   * something 420px wide at the bottom of a phone and wrong for a rail down
+   * the side of a page.
+   *
+   * Conditional on the rail actually being rendered. Several screens hide the
+   * nav entirely — welcome, signup, and the legal pages — and an unconditional
+   * gutter would leave 220px of nothing down the side of all of them. :has()
+   * checks the shared ancestor for the nav rather than assuming it is there.
+   */
+  .min-h-screen:has(nav.apple-glass-nav) .page-transition-container {
+    padding-left: 220px;
+  }
+
+  /* ── 2. Home: three columns ───────────────────────────────────────────────
+   * Named areas rather than nth-child, so the grid survives sections being
+   * reordered or conditionally rendered — the week strip and vitals both
+   * disappear for a user with no entries yet.
+   */
+  /* The seven direct children of .spatial-home, verified against the JSX
+   * rather than assumed: .hero-header, .home-week, .mood-weather, .hero-card,
+   * .vitals-section, .home-listen-card, .spark-section. Two of them —
+   * .home-week and .vitals-section — are conditional on the user having
+   * entries, so the grid is written with named areas rather than positions.
+   * With nth-child, a new user missing both sections would shift everything
+   * else into the wrong cells.
+   */
+  .spatial-home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-areas:
+      'header  header'
+      'hero    week'
+      'hero    vitals'
+      'mood    vitals'
+      'listen  spark';
+    gap: 20px 28px;
+    align-content: start;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 40px 64px;
+  }
+
+  .spatial-home > .hero-header      { grid-area: header; }
+  .spatial-home > .hero-card        { grid-area: hero; align-self: start; }
+  .spatial-home > .home-week        { grid-area: week; }
+  .spatial-home > .vitals-section   { grid-area: vitals; align-self: start; }
+  .spatial-home > .mood-weather     { grid-area: mood; }
+  .spatial-home > .home-listen-card { grid-area: listen; }
+  .spatial-home > .spark-section    { grid-area: spark; }
+
+  /* A prompt is prose, and prose does not want 1,100px of measure. The card
+   * can be wide; the sentence inside it should not be.
+   */
+  .hero-prompt-text {
+    max-width: 34ch;
+  }
+
+  /* The week strip was a full-width row of seven dots. In a 320px rail it
+   * becomes a block, so it gets a surface of its own rather than floating.
+   */
+  .home-week {
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Vitals stack in the rail instead of sitting in a row under the hero. The
+   * section is a grid on phones; one column is what a 320px rail wants.
+   */
+  .vitals-section {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* ── Pointer affordances ─────────────────────────────────────────────────
+   * Guarded on hover:hover so a touch device that happens to be 1024px wide
+   * does not get states it can never leave. A tablet in landscape would
+   * otherwise keep a hover style stuck on after a tap.
+   */
+  @media (hover: hover) {
+    nav.apple-glass-nav .glass-nav-item:hover:not(.is-active) {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-1px);
+    }
+  }
+}
+
+/* Light theme: the rail surfaces above are tuned for the dark background and
+ * disappear against a light one. */
+@media (min-width: 1024px) {
+  .light-theme .home-week {
+    background: rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.07);
+  }
+
+  @media (hover: hover) {
+    .light-theme nav.apple-glass-nav .glass-nav-item:hover:not(.is-active) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
