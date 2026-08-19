@@ -54,12 +54,37 @@ const BottomNavigation = ({ currentScreen, navigateToScreen }) => {
   }, [targetId, activeId]);
 
   // Reposition when the target changes, and keep it aligned on resize.
+  //
+  // The resize listener is not enough on its own. positionSlider measures the
+  // items, so anything that changes an item's width has to re-run it — and two
+  // such things fire no resize event and are in no dependency array:
+  //
+  //   - Switching language. `t()` swaps the labels in place; German "Einblicke"
+  //     and Georgian "ინსაითები" are ~45px wider than "Insights". Invisible
+  //     while the labels are folded away and item widths are icon-driven, but
+  //     the desktop top bar shows labels and lets items size to their content,
+  //     and the language switcher sits on the Home screen itself.
+  //   - A late webfont load. Noto Sans Georgian arrives over the network; the
+  //     same text re-measures wider once it does.
+  //
+  // Observing the items covers both, and anything else that reflows them,
+  // without having to enumerate the causes. Observing the track would not:
+  // in a full-width bar the track keeps its size while the items inside it
+  // change, and on a phone the track is a fixed-width pill for the same reason.
   useEffect(() => {
     const raf = requestAnimationFrame(positionSlider);
     window.addEventListener('resize', positionSlider);
+
+    let observer;
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(positionSlider);
+      itemRefs.current.forEach(el => el && observer.observe(el));
+    }
+
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', positionSlider);
+      if (observer) observer.disconnect();
     };
   }, [positionSlider]);
 

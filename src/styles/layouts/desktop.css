@@ -1,169 +1,636 @@
 /* src/styles/layouts/desktop.css
  *
  * Desktop layout, ≥1024px. Everything below that breakpoint is untouched — the
- * phone layout is the default and this file only ever adds to it.
+ * phone layout is the default and this file only ever adds to it. The whole
+ * file is one `@media (min-width: 1024px)` block for exactly that reason: a
+ * rule outside it would silently reach the phone, and there is no way to see
+ * that in a diff. Nothing is added at the bottom of this file outside the
+ * query; if you need a second query, nest it.
  *
  * Kept in one file rather than scattered through the component stylesheets so
  * the whole desktop treatment can be read, extended, or removed in one place.
- * homeScreen.css alone is 1,455 lines with two min-width queries in it; adding
- * a third layout in there would bury it.
- *
- * Everything here is CSS. No JSX changes, which matters in this codebase —
- * markup and stylesheets have drifted apart before, and a layout that exists
- * only in CSS cannot drift from markup it never touched.
+ * homeScreen.css alone is 1,455 lines; a third layout buried in there would not
+ * be findable.
  *
  * ── Scope ───────────────────────────────────────────────────────────────────
- *   1. The bottom nav pill becomes a left rail
- *   2. Home becomes a three-column grid: rail | reading column | side rail
- * Other screens keep their current single column and simply sit beside the
- * rail. They are not broken by this, they are just not improved by it yet.
+ *   1. The bottom nav pill becomes a flush top band
+ *   2. Home becomes "Mosaic": twelve columns of glass tiles, every element
+ *      sized by how much it matters, the whole screen in the eye at once
+ * Other screens keep their current single column and simply sit under the
+ * band. They are not broken by this, they are just not improved by it yet.
+ *
+ * ── Specificity doctrine ────────────────────────────────────────────────────
+ * Selectors are qualified with an element name (`nav.apple-glass-nav`,
+ * `div.spatial-home`) purely to raise specificity. bottomNavigation.css and
+ * homeScreen.css are imported from their components *and* from main.css, so
+ * which of two same-specificity rules wins depends on module graph order —
+ * the exact fragility that made .modal-overlay resolve differently on
+ * different screens earlier in this project. An element-qualified selector is
+ * (0,n,1) against the component file's (0,n,0) and does not care about order.
+ *
+ * The one JSX change this layout needed is in BottomNavigation.jsx: a
+ * ResizeObserver on the nav items, because the sliding pill is positioned from
+ * measured rects and item widths here are content-driven. See the comment
+ * there. No other markup was touched.
  */
 
 @media (min-width: 1024px) {
 
-  /* ── 1. Bottom pill → left rail ───────────────────────────────────────────
-   * The nav markup is a flex row of buttons, so it becomes a column with
-   * flex-direction alone. Position moves from a centred floating pill to a
-   * fixed vertical rail.
-   */
-  /* Selectors here are qualified with the element name (nav.x rather than .x)
-   * purely to raise specificity. bottomNavigation.css and homeScreen.css are
-   * imported from their components rather than from main.css, so which of the
-   * two files wins a same-specificity tie depends on module graph order — the
-   * exact fragility that made .modal-overlay resolve differently on different
-   * screens earlier in this project. Qualified selectors do not care about
-   * order.
+  /* ══ 1. Bottom pill → flush top band ══════════════════════════════════════
+   *
+   * The nav renders as a sibling *after* <main> in App.jsx, so `position:
+   * sticky` is not available without moving the JSX — it would stick to the
+   * bottom of the document flow. It stays `fixed` and is simply re-anchored.
+   *
+   * Flush, not floating: edge to edge, square corners, one hairline along the
+   * bottom. It reads as app chrome rather than as an object hovering over the
+   * page, and it gives the aurora underneath something to be seen through —
+   * .spatial-home::before/::after are `top: -50%` and blurred 80px, and
+   * `overflow-x: clip` clips them horizontally only, so coloured light drifts
+   * behind the band's own backdrop-filter. That is free and it is the best
+   * thing on the screen.
    */
   nav.apple-glass-nav {
+    top: 0;
     bottom: auto;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-    width: auto;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
     max-width: none;
   }
 
+  /* .apple-glass-nav-track is declared four times in bottomNavigation.css and
+   * the last block re-asserts height, padding-bottom and overflow, so plain
+   * `.apple-glass-nav-track` here would lose on source order no matter where
+   * this file is imported. Qualified, it is (0,2,1) and beats all four.
+   *
+   * `height` and `padding` both have to be restated rather than nudged: the
+   * base values are `calc(64px + env(safe-area-inset-bottom))` and
+   * `max(10px, env(...))`, which exist to lift a floating pill clear of the
+   * home indicator. At the top of the window there is no home indicator.
+   *
+   * backdrop-filter is restated because the base declares blur(8px) on the
+   * standard property and blur(40px) on the -webkit- one. Chrome aliases them
+   * and takes the later 40px; Firefox ignores the prefixed one and takes 8px,
+   * so the same bar is frosted in one browser and nearly clear in the other.
+   * Declared once here, in agreement.
+   */
   nav.apple-glass-nav .apple-glass-nav-track {
-    flex-direction: column;
+    height: 64px;
+    padding: 0 24px;
+    border-radius: 0;
     justify-content: center;
     gap: 4px;
-    padding: 12px 10px;
-    border-radius: 22px;
+
+    /* No side or top borders — a flush band has no sides to draw. */
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* The base track is `rgba(28,28,30,0)` — fully transparent, which works
+     * for a 420px pill and not for a 1,856px band that page content scrolls
+     * under. A real tint, still translucent enough for the aurora. */
+    background: rgba(16, 16, 18, 0.55);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 10px 30px rgba(0, 0, 0, 0.28);
   }
 
-  nav.apple-glass-nav .glass-nav-item {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 12px;
-    width: 100%;
-    min-width: 168px;
-    padding: 10px 14px;
-    border-radius: 14px;
-    text-align: left;
+  /* The base ::before is a light wash across the top of the glass, rounded to
+   * match a 28px pill. Square it, or the band grows two ghost corners. */
+  nav.apple-glass-nav .apple-glass-nav-track::before {
+    border-radius: 0;
   }
 
-  nav.apple-glass-nav .glass-nav-label {
-    font-size: 0.875rem;
-    white-space: nowrap;
-  }
-
-  /* The sliding indicator is positioned by JS as translateX plus a measured
-   * width — see BottomNavigation.jsx. In a column that would slide sideways
-   * across the rail instead of down it, so it is hidden here and the active
-   * item is marked directly. A filled row is the sidebar idiom regardless;
-   * a travelling pill is a tab-bar idiom.
+  /* Brand, left. Drawn as generated content rather than markup because this
+   * layout is meant to be revertible by deleting one file, and because the
+   * nav is shared with the phone, where a wordmark has nowhere to live.
+   * ::after rather than ::before — ::before is already the light wash.
+   *
+   * Absolutely positioned on purpose: as a flex item it would push the nav
+   * group off the centre of the window. Out of flow, the five tabs are
+   * centred against the window, which is what makes the band read as balanced
+   * with nothing at its right end.
    */
-  nav.apple-glass-nav .glass-slider {
-    display: none !important;
+  nav.apple-glass-nav .apple-glass-nav-track::after {
+    content: 'Καιρός';
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Sans Georgian', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.82);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Items go icon-beside-label and size to their content. `flex: 1` would have
+   * made widths language-independent for free, but it also spreads five tabs
+   * across 1,856px, which is a toolbar, not a tab bar. Content-driven widths
+   * are the reason the ResizeObserver in BottomNavigation.jsx had to go in.
+   *
+   * Every item carries a 1px border, transparent unless it has something to
+   * say. Not cosmetic: the base gives `.is-active` a 1px border and nothing
+   * else, so under content-driven widths the active tab was 2px wider than the
+   * others and the pill visibly resized as it arrived. A border that is always
+   * there costs nothing and holds the widths still.
+   */
+  nav.apple-glass-nav .glass-nav-item {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 14px;
+    border: 1px solid transparent;
   }
 
   nav.apple-glass-nav .glass-nav-item.is-active {
-    background: rgba(var(--journey-color, 85, 139, 110), 0.16);
-    box-shadow: inset 0 0 0 1px rgba(var(--journey-color, 85, 139, 110), 0.28);
+    border-color: transparent;
   }
 
-  /* The centre action button loses its raised treatment: in a vertical list
-   * there is no centre for it to occupy, and an outsized row reads as an
-   * error rather than as emphasis.
-   */
+  /* The centre action loses its raised icon — there is no arc for it to rise
+   * out of in a flat band — and keeps a hairline at rest instead, so Journal
+   * still reads as the primary destination without breaking the row.
+   * Ordered after .is-active: both are (0,3,1), so source order decides, and
+   * an active Journal tab should keep its green edge. */
   nav.apple-glass-nav .glass-nav-item.is-center {
-    transform: none;
+    border-color: rgba(85, 139, 110, 0.28);
   }
 
-  /* Clear the rail. The pill used to sit over the content, which is fine for
-   * something 420px wide at the bottom of a phone and wrong for a rail down
-   * the side of a page.
+  nav.apple-glass-nav .glass-nav-item.is-center.is-active {
+    border-color: rgba(85, 139, 110, 0.45);
+  }
+
+  nav.apple-glass-nav .glass-nav-icon-wrap,
+  nav.apple-glass-nav .glass-nav-item.is-center .glass-nav-icon-wrap {
+    width: 22px;
+    height: 22px;
+    margin-top: 0;
+  }
+
+  /* One icon size for every state. The base ships four different sizes —
+   * 24px active, 26px inactive, 26px centre, 28px centre-inactive — which is a
+   * nice touch when the item is a fixed fifth of a pill and a liability when
+   * the item is as wide as its contents: switching tabs would resize two items
+   * by 2px each and shuffle every offset in the row.
    *
-   * Conditional on the rail actually being rendered. Several screens hide the
-   * nav entirely — welcome, signup, and the legal pages — and an unconditional
-   * gutter would leave 220px of nothing down the side of all of them. :has()
-   * checks the shared ancestor for the nav rather than assuming it is there.
+   * All four base rules are listed because each is matched on its own
+   * specificity, and `.glass-nav-item.is-center:not(.is-active) .glass-nav-icon`
+   * is (0,4,0) — a single `nav.apple-glass-nav .glass-nav-icon` at (0,2,1)
+   * would not have touched it.
    */
-  .min-h-screen:has(nav.apple-glass-nav) .page-transition-container {
-    padding-left: 220px;
+  nav.apple-glass-nav .glass-nav-icon,
+  nav.apple-glass-nav .glass-nav-item:not(.is-active) .glass-nav-icon,
+  nav.apple-glass-nav .glass-nav-item.is-center .glass-nav-icon,
+  nav.apple-glass-nav .glass-nav-item.is-center:not(.is-active) .glass-nav-icon {
+    width: 20px;
+    height: 20px;
   }
 
-  /* ── 2. Home: three columns ───────────────────────────────────────────────
+  /* Labels unfold and stay unfolded. Icon-only in a full-width band looks like
+   * an unfinished toolbar, and these five glyphs are not self-explanatory —
+   * Route against Telescope is a coin toss.
+   *
+   * (0,2,1) is deliberate: it clears `.glass-nav-item.is-active .glass-nav-label`
+   * and `.glass-nav-item:hover .glass-nav-label`, both (0,2,0), which is what
+   * makes the label stop animating open and closed as the pill travels.
+   * `overflow: visible` because the base folds with `max-height: 0; overflow:
+   * hidden`, and `max-height: 14px` on the active tab would crop the descenders
+   * off Georgian at 13px.
+   */
+  nav.apple-glass-nav .glass-nav-label {
+    max-height: none;
+    margin-top: 0;
+    transform: none;
+    overflow: visible;
+    opacity: 0.78;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  nav.apple-glass-nav .glass-nav-item.is-active .glass-nav-label {
+    opacity: 1;
+  }
+
+  /* The pill is positioned by JS from measured rects — a horizontal-bar
+   * algorithm that happens to already be exactly right for a horizontal bar.
+   * It only needs new insets: items are 44px centred in a 64px track, so 10px
+   * top and bottom wraps them exactly. */
+  nav.apple-glass-nav .glass-slider {
+    top: 10px;
+    bottom: 10px;
+    border-radius: 14px;
+  }
+
+  /* Clear the band. Conditional on the band actually being rendered: the nav
+   * is hidden on welcome, signup, the legal pages, upload, voice-upload and
+   * analysis (App.jsx ~L995), and an unconditional gutter would leave a 64px
+   * hole at the top of every one of them. :has() checks the shared ancestor
+   * for the nav rather than assuming it is there. */
+  .min-h-screen:has(nav.apple-glass-nav) .page-transition-container {
+    padding-top: 64px;
+  }
+
+  /* journal-archive is the one screen that draws the app <header>, and it is
+   * `position: sticky; top: 0` — which would park it under the band. */
+  .min-h-screen:has(nav.apple-glass-nav) .spatial-header {
+    top: 64px;
+  }
+
+  /* ══ 2. Home: "Mosaic" ════════════════════════════════════════════════════
+   *
+   * Twelve columns, four rows, every element sized by how much it matters. At
+   * 1920×1080 the greeting, the week dots, all three vitals, the day's prompt,
+   * the CTA, the aura picker, the podcast and the quote are simultaneously in
+   * the eye with room to spare. Nothing is cropped and nothing is scrolled.
+   *
    * Named areas rather than nth-child, so the grid survives sections being
-   * reordered or conditionally rendered — the week strip and vitals both
-   * disappear for a user with no entries yet.
+   * conditionally rendered. The seven direct children of .spatial-home,
+   * verified against the JSX rather than assumed: .hero-header, .home-week,
+   * .mood-weather, .hero-card, .vitals-section, .home-listen-card,
+   * .spark-section. (.hj-overlay is portaled to <body> and is not a grid
+   * child.) With nth-child, a first-run user missing two of them would shift
+   * every remaining section into the wrong cell.
+   *
+   * Known and accepted: focus order diverges from reading order. The DOM runs
+   * header → week → mood → hero → vitals → listen → spark; the grid reads
+   * header → hero/week → vitals → mood/listen/spark, so a keyboard user tabs
+   * backward twice — from the week card leftward to the hero, and from mood
+   * (bottom left) back up to the hero. CSS cannot reorder focus. The JSX fix —
+   * moving .vitals-section above .hero-card — would reorder the phone layout,
+   * which is pure DOM order, so that is not available either. Left as is on
+   * purpose. Do not paper over it with tabindex: a positive tabindex would
+   * pull these buttons ahead of every other control on the page and make the
+   * problem larger.
+   *
+   * `div.spatial-home` rather than `.spatial-home` because homeScreen.css sets
+   * `padding` and `min-height` on the same (0,1,0) selector — see the
+   * specificity note at the top of the file.
    */
-  /* The seven direct children of .spatial-home, verified against the JSX
-   * rather than assumed: .hero-header, .home-week, .mood-weather, .hero-card,
-   * .vitals-section, .home-listen-card, .spark-section. Two of them —
-   * .home-week and .vitals-section — are conditional on the user having
-   * entries, so the grid is written with named areas rather than positions.
-   * With nth-child, a new user missing both sections would shift everything
-   * else into the wrong cells.
-   */
-  .spatial-home {
+  div.spatial-home {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-areas:
-      'header  header'
-      'hero    week'
-      'hero    vitals'
-      'mood    vitals'
-      'listen  spark';
-    gap: 20px 28px;
+      'header header header header header header header header header header header header'
+      'hero   hero   hero   hero   hero   hero   hero   week   week   week   week   week  '
+      'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
+      'mood   mood   mood   mood   listen listen listen listen spark  spark  spark  spark ';
+    gap: 20px;
     align-content: start;
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 32px 40px 64px;
+
+    /* Full bleed. No centring, no ceiling — the whole point of the brief. */
+    max-width: none;
+    margin: 0;
+    padding: 24px 32px 40px;
+
+    /* The band takes 64px off the top of the window via the gutter above.
+     * Without this the page's own `min-height: 100vh` overflows by exactly
+     * that much and Home gains a permanent 64px scrollbar with nothing in it. */
+    min-height: calc(100vh - 64px);
+  }
+
+  /* The padding-bottom above never lands on its own: homeScreen.css sets it on
+   * `.spatial-home.analytics-screen` (0,2,0), which outranks `.spatial-home`
+   * (0,1,0), and a media query contributes no specificity. The 96px it asks
+   * for exists to clear the floating bottom nav — up here the nav is a band at
+   * the top and there is nothing below the quote to clear. */
+  div.spatial-home.analytics-screen {
+    padding-bottom: 40px;
+  }
+
+  /* Six children carry phone margins — .home-week `-10px 4px 24px`,
+   * .hero-header 24px, .mood-weather 16px, .vitals-section `24px 0 32px`,
+   * .home-listen-card 16px, .spark-section 24px — which stack on top of `gap`
+   * and give every row a different rhythm. Gap owns spacing in a grid. */
+  div.spatial-home > * {
+    margin: 0;
   }
 
   .spatial-home > .hero-header      { grid-area: header; }
-  .spatial-home > .hero-card        { grid-area: hero; align-self: start; }
+  .spatial-home > .hero-card        { grid-area: hero; }
   .spatial-home > .home-week        { grid-area: week; }
-  .spatial-home > .vitals-section   { grid-area: vitals; align-self: start; }
+  .spatial-home > .vitals-section   { grid-area: vitals; }
   .spatial-home > .mood-weather     { grid-area: mood; }
   .spatial-home > .home-listen-card { grid-area: listen; }
   .spatial-home > .spark-section    { grid-area: spark; }
 
-  /* A prompt is prose, and prose does not want 1,100px of measure. The card
-   * can be wide; the sentence inside it should not be.
+  /* First run. .home-week and .vitals-section are one conditional unit: both
+   * gate on the same `statistics.totalEntries > 0`, and the loading branch
+   * renders both skeletons, so the pair is never half-present — there is no
+   * partial state to design for. It is either there or it is not.
+   *
+   * When it is not, the aura and the podcast move up into the column beside
+   * the hero and the quote takes the full width, so a new user's first screen
+   * is the invitation, the check-in, the podcast and a line of writing about
+   * writing — with no empty cells and no holes where the stats would go.
+   *
+   * (0,2,1) — outranks the base template above it. Its narrow counterpart is
+   * declared inside the ≤1599px query further down at the same specificity, so
+   * that one wins on source order where it applies.
    */
-  .hero-prompt-text {
-    max-width: 34ch;
+  div.spatial-home:not(:has(> .home-week)) {
+    grid-template-areas:
+      'header header header header header header header header header header header header'
+      'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
+      'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+      'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
   }
 
-  /* The week strip was a full-width row of seven dots. In a 320px rail it
-   * becomes a block, so it gets a surface of its own rather than floating.
+  /* ── Tiles share their edges ──────────────────────────────────────────────
+   * The hero spans two rows against the week card and the vitals row stacked
+   * beside it. Grid gives a spanning item any height its two rows cannot
+   * absorb, split evenly between them — so whichever side is taller, both
+   * sides end up flush at the top and at the bottom. That only reads as
+   * deliberate if the shorter tile's *contents* centre inside the space rather
+   * than sitting at the top of it, which is what the three rules below do.
+   * This is what makes it a mosaic rather than a column of cards.
+   *
+   * Two of the three live with the elements they belong to further down —
+   * `align-items: center` on .home-week and `justify-content: center` on
+   * .vital-card. The third needs a rule of its own:
+   *
+   * .spark-section is a bare wrapper around .spark-glass-card, and a block
+   * child does not inherit a stretched parent's height — the glass plate would
+   * stop short of the tiles beside it whenever something else drove the row. */
+  .spatial-home > .spark-section {
+    display: flex;
+  }
+
+  .spatial-home .spark-glass-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ── The week strip gets a plate ──────────────────────────────────────────
+   * It is the only child with no background of its own — on a phone it is a
+   * row of dots floating on the page between two cards, which is fine there
+   * and looks like a rendering failure when it is one tile among eight.
+   * The standard plate, matched to .hero-card / .vital-card / .mood-weather.
+   *
+   * The dots keep `flex: 1` and stay spread across the tile. The design called
+   * for a left-aligned fixed 40px pitch, but that was drawn against a
+   * wireframe with a "THIS WEEK" heading and a streak line — neither of which
+   * exists in the markup — and without them, 350px of dots at the left of a
+   * 760px plate leaves a void where the caption would have been. Spread, the
+   * seven days read as a week ruler, which is what they are.
    */
-  .home-week {
-    justify-content: space-between;
-    padding: 18px 20px;
+  .spatial-home > .home-week {
+    align-items: center;   /* shares the hero's top and bottom edge — see above */
+    gap: 8px;
+    padding: 22px 26px;
+    border-radius: 28px;
+    background: rgba(28, 28, 30, 0.65);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ── The vitals ───────────────────────────────────────────────────────────
+   * `display: flex` is restated rather than inherited from homeScreen.css:503.
+   * A previous version of this file set `grid-template-columns` here, which did
+   * nothing at all because the section was already flex — a layout rule that
+   * depends on a display value declared a thousand lines away in another file
+   * is a rule that silently stops working.
+   *
+   * No fixed track count: the third card renders only `if (currentPath)`, so
+   * the count is 2 or 3. `flex: 1` on .vital-card already handles both — at
+   * 760px that is three ~240px cards or two ~370px ones, and both are wider
+   * than the ~106px they get on a phone.
+   */
+  .spatial-home > .vitals-section {
+    display: flex;
+    gap: 20px;
+  }
+
+  .spatial-home .vital-card {
+    justify-content: center;   /* shares the hero's edges — see "Tiles share their edges" */
+    padding: 22px 16px;
+    gap: 14px;
+  }
+
+  /* .vital-data is a plain block in the base styles — only `.vital-skeleton
+   * .vital-data` ever makes it flex — so flex-direction alone would be inert,
+   * the same trap as the grid-template-columns above. Display is declared, not
+   * assumed. Routing through .vital-card also outranks the skeleton's own
+   * (0,2,0) rule, so the loading state has the geometry of the real one and
+   * the numbers do not jump when they arrive. */
+  .spatial-home .vital-card .vital-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .spatial-home .vital-number {
+    font-size: 34px;
+  }
+
+  /* ── The hero ─────────────────────────────────────────────────────────────
+   * The prompt is the product, so it gets the largest tile and the largest
+   * type on the screen. A prompt is prose, though, and prose does not want a
+   * thousand pixels of measure — the sentence is capped well short of the
+   * card it sits in.
+   */
+  .spatial-home > .hero-card {
+    padding: 32px 36px;
+  }
+
+  .spatial-home .hero-prompt-block {
+    margin: 20px 0 28px;
+  }
+
+  .spatial-home .hero-prompt-text {
+    font-size: 30px;
+    max-width: 42ch;
+  }
+
+  /* The first-run branch is three centred lines and a button in a tile sized
+   * for a full prompt, so it needs centring vertically too. Scoped with
+   * :has() rather than applied to .hero-card, because the path branch must NOT
+   * become a flex column: .hero-cta is `display: inline-flex`, and as a flex
+   * item it would stretch to the full 1,074px width of the card. */
+  .spatial-home > .hero-card:has(> .hero-empty) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ── The header band ──────────────────────────────────────────────────────
+   * The three glass controls stack into a column in the base styles — a phone
+   * compromise, and beside a 44px greeting across 1,856px it reads as a bug.
+   */
+  .spatial-home .header-controls {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  /* ── Listen and Spark ─────────────────────────────────────────────────────
+   * Both keep their existing composition — the sheen, the pulse ring, the
+   * equalizer, the miniature aurora inside the quote plate all survive
+   * untouched. They only grow into the tiles they now occupy: at 600px wide a
+   * 48px headphone plate and a 16px title look like a phone card that has been
+   * stretched, not like a tile that was drawn at this size.
+   */
+  .spatial-home > .home-listen-card {
+    gap: 18px;
+    padding: 24px 28px;
+    border-radius: 28px;
+  }
+
+  .spatial-home .home-listen-icon {
+    width: 56px;
+    height: 56px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.035);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   }
 
-  /* Vitals stack in the rail instead of sitting in a row under the hero. The
-   * section is a grid on phones; one column is what a 320px rail wants.
+  /* lucide writes width="22" as an attribute on the svg; an attribute is not a
+   * declaration, so any CSS rule at all beats it. */
+  .spatial-home .home-listen-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .spatial-home .home-listen-title {
+    font-size: 20px;
+  }
+
+  .spatial-home .home-listen-sub {
+    font-size: 13.5px;
+  }
+
+  .spatial-home .home-listen-eq {
+    height: 34px;
+    gap: 4px;
+  }
+
+  .spatial-home .home-listen-eq span {
+    width: 4px;
+  }
+
+  /* The quote takes a full-width band in two of the four templates — both
+   * first-run ones and the narrow returning-user one — and a single line of it
+   * running 1,300px is not readable. Cap the measure and centre it inside the
+   * plate; the plate itself stays as wide as its cell. The `margin-inline`
+   * lands on top of the base `margin: 0 0 12px`, so the 12px below survives. */
+  .spatial-home .spark-text {
+    font-size: 21px;
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+
+  /* ── Motion ───────────────────────────────────────────────────────────────
+   * Two problems the wide layout creates, and one rule they share.
+   *
+   * The whole block is guarded on `prefers-reduced-motion: no-preference`,
+   * which is not decoration. homeScreen.css switches these same elements off
+   * with `animation: none` at (0,1,0) under `reduce`; every rule below is
+   * (0,2,0) and would reinstate the motion for exactly the people who asked
+   * for none of it. Under `reduce` this block simply does not exist, the base
+   * `animation: none` stands, and the hero's float is off for free.
+   *
+   *   - .hero-card floats forever: `homeEnter …, cardFloat 4s … infinite` is a
+   *     permanent ±4px bob. On a phone it is the only card in view. Here its
+   *     top edge slides against a static week card 20px to its right, which
+   *     reads as a rendering bug. Restating the animation without cardFloat is
+   *     the only way to stop it — animations outrank declarations, so no
+   *     `transform: none`, at any specificity, would have done it.
+   *
+   *   - .home-listen-card has no entrance at all. The cascade runs header →
+   *     week → mood → hero → vitals → spark and Listen is simply *there* from
+   *     frame one. Nobody notices in a phone column; in a row of three tiles
+   *     it pops in ahead of its neighbours.
+   *
+   * Delays are re-timed to run in *visual* order — header, then the hero and
+   * the week beside it, then the vitals, then the bottom row left to right —
+   * rather than in DOM order, which now zig-zags.
+   *
+   * Listen's fill is `backwards`, not `both`, and that is load-bearing:
+   * `both` leaves `transform: translateY(0)` filling forwards forever, and it
+   * would beat the card's own `:hover { transform: translateY(-2px) }` and
+   * `:active { transform: scale(.98) }`. `backwards` covers the delay and then
+   * gets out of the way. The others already use `both` in the base and have no
+   * transform of their own to lose.
    */
-  .vitals-section {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  @media (prefers-reduced-motion: no-preference) {
+    .spatial-home > .hero-header      { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0s    both; }
+    .spatial-home > .hero-card        { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.07s both; }
+    .spatial-home > .home-week        { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.11s both; }
+    .spatial-home > .vitals-section   { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both; }
+    .spatial-home > .mood-weather     { animation: moodWeatherEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both; }
+    .spatial-home > .home-listen-card { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.26s backwards; }
+    .spatial-home > .spark-section    { animation: homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s  both; }
+  }
+
+  /* ── Narrow desktop, below 1600px ─────────────────────────────────────────
+   * At twelve columns the bottom row is three tiles of four columns each. Four
+   * columns is 605px at 1920 and 445px at 1599 — and .mood-weather needs 460px
+   * before .mood-weather-subtitle starts ellipsing, which is the one line that
+   * tells a new user what "Lunar" means. Five auras at 38px plus their gaps is
+   * 214px of that on its own; there is nothing to shrink.
+   *
+   * So re-template rather than squeeze: the bottom row becomes two halves and
+   * the quote takes a band of its own. One extra row of height, bought back in
+   * legibility.
+   *
+   *   1440 → col 96px: hero 794, week/vitals 561, mood/listen 678, quote 1376
+   *   1280 → col 83px: hero 701, week/vitals 495, mood/listen 598, quote 1216
+   *   1024 → col 62px: hero 552, week/vitals 388, mood/listen 470, quote  960
+   *
+   * The aura clears 460px at every one of them, and the vitals at 388px are
+   * three 116px cards — still wider than the ~106px they get on a phone.
+   *
+   * Vertically this is roughly 830px at 1440 against about 810px of viewport
+   * on a 1440×900 display, so the quote's lower edge sits just on the fold and
+   * the page scrolls by a few dozen pixels. At 1920×1080 nothing scrolls,
+   * which is the case the layout was chosen for.
+   */
+  @media (max-width: 1599px) {
+    div.spatial-home {
+      grid-template-areas:
+        'header header header header header header header header header header header header'
+        'hero   hero   hero   hero   hero   hero   hero   week   week   week   week   week  '
+        'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
+        'mood   mood   mood   mood   mood   mood   listen listen listen listen listen listen'
+        'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
+    }
+
+    /* The first-run template needs its own narrow form. In the wide one the
+     * aura sits in five columns, which is 388px at 1024 — under its floor. Six
+     * columns holds it at 470px all the way down. Same (0,2,1) as the wide
+     * first-run rule above, so this wins on source order where it applies. */
+    div.spatial-home:not(:has(> .home-week)) {
+      grid-template-areas:
+        'header header header header header header header header header header header header'
+        'hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood   mood  '
+        'hero   hero   hero   hero   hero   hero   listen listen listen listen listen listen'
+        'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
+    }
+
+    /* 30px was set against a 1,074px hero. At 552px it is eighteen characters
+     * a line and the prompt breaks like a ransom note. */
+    .spatial-home .hero-prompt-text {
+      font-size: 26px;
+    }
+
+    .spatial-home > .hero-card {
+      padding: 28px 30px;
+    }
   }
 
   /* ── Pointer affordances ─────────────────────────────────────────────────
@@ -172,27 +639,116 @@
    * otherwise keep a hover style stuck on after a tap.
    */
   @media (hover: hover) {
-    nav.apple-glass-nav .glass-nav-item:hover:not(.is-active) {
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .hero-cta:hover {
-      transform: translateY(-1px);
+    /* The base dims a hovered label to 0.7 as part of unfolding it. With the
+     * labels permanently open that reads backwards — hovering should brighten. */
+    nav.apple-glass-nav .glass-nav-item:hover .glass-nav-label {
+      opacity: 1;
     }
   }
-}
 
-/* Light theme: the rail surfaces above are tuned for the dark background and
- * disappear against a light one. */
-@media (min-width: 1024px) {
-  .light-theme .home-week {
-    background: rgba(0, 0, 0, 0.03);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.07);
+  /* ── Light theme ──────────────────────────────────────────────────────────
+   * Almost nothing to do, which is why this layout was worth building: every
+   * tile keeps the glass plate that `.hs-light .hero-card, .hs-light
+   * .vital-card, .hs-light .spark-glass-card` already knows how to paint.
+   * Only two surfaces are new to it.
+   *
+   * .hs-light sits on .spatial-home itself — that is how homeScreen.css
+   * addresses this screen, so it is how this file addresses it too. The nav is
+   * keyed off .light-theme on <html> instead, because the nav is on every
+   * screen and .hs-light only wraps Home.
+   */
+  .spatial-home.hs-light > .home-week {
+    background: rgba(245, 245, 247, 0.7);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.08);
   }
 
-  @media (hover: hover) {
-    .light-theme nav.apple-glass-nav .glass-nav-item:hover:not(.is-active) {
-      background: rgba(0, 0, 0, 0.05);
-    }
+  /* bottomNavigation.css already has authoritative `.light-theme
+   * .apple-glass-nav-track` rules — but at (0,2,0) they lose to the band's own
+   * (0,2,1) geometry rule above, so the background and the border have to be
+   * restated one level up rather than left to the file that owns them. */
+  .light-theme nav.apple-glass-nav .apple-glass-nav-track {
+    background: rgba(255, 255, 255, 0.78);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.02),
+      0 10px 30px rgba(0, 0, 0, 0.06);
+  }
+
+  .light-theme nav.apple-glass-nav .apple-glass-nav-track::after {
+    color: rgba(0, 0, 0, 0.78);
+  }
+
+  /* ── 3. Paths ─────────────────────────────────────────────────────────────
+   * Every selector in this section is element-qualified (div.x, not .x) and
+   * that is load-bearing, not style. pathSelection.css is imported inside
+   * PathSelection.jsx, which is lazy-loaded, so it ships as its own chunk and
+   * arrives AFTER this file — which App.jsx imports eagerly. At equal
+   * specificity the later sheet wins, so a plain `.paths-container` here loses
+   * to the base rule every time and the override silently does nothing.
+   * `div.` costs one element and settles it independently of chunk order.
+   * Paths was not a desktop layout at all: `.paths-container` carries
+   * `max-width: 600px; margin: 0 auto`, so on any monitor the screen was a
+   * 600px column down the middle. The grid inside it is already
+   * `repeat(auto-fill, minmax(320px, 1fr))` and perfectly capable of going
+   * multi-column — it resolved to one column because two 320px tracks plus a
+   * gap do not fit in 600px. The container was strangling it, not the grid.
+   *
+   * So this section mostly removes constraints rather than adding structure.
+   */
+  div.paths-container {
+    /* Full bleed on the same terms as Home, so the two screens agree. */
+    max-width: none;
+    margin: 0;
+    padding: 24px 32px 40px;
+
+    /* Matches div.spatial-home above. The 120px of bottom padding was there to
+     * clear the floating bottom nav, which on desktop is a top band — that
+     * space is now just a hole under the last row of cards. */
+    min-height: calc(100vh - 64px);
+    gap: 28px;
+  }
+
+  /* A search field the width of a 1920px monitor is not a search field, it is a
+   * horizon. Cap it and let the tabs sit beside it rather than under it. */
+  div.paths-search-bar {
+    max-width: 520px;
+  }
+
+  /* The grid keeps its own auto-fill maths — it just needs room to breathe.
+   * A 340px floor gives 4 columns at 1600px and 5 at 1920px, which keeps the
+   * card's two-line subtitle from wrapping to three.
+   */
+  div.paths-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  /* Current Journeys is a horizontal scroller on phones, with negative margins
+   * bleeding it to the screen edges and scroll-snap doing the paging. On a wide
+   * screen a horizontal scroller is the wrong instrument: the cards fit, and
+   * asking someone to swipe sideways through four items they can already see is
+   * friction for nothing. It becomes a wrapping grid, and the phone's edge-bleed
+   * margins have to come off with it or the row hangs 20px into the padding.
+   */
+  div.active-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* The card is `flex: 0 0 260px` for the carousel. In a grid track that fixed
+   * basis stops it filling its cell, so it has to be released. */
+  div.active-carousel > .glass-active-carousel-card {
+    flex: initial;
+    width: auto;
+    scroll-snap-align: none;
   }
 }
