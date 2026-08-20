@@ -751,4 +751,229 @@
     width: auto;
     scroll-snap-align: none;
   }
+
+  /* ── 4. Insights: Console ─────────────────────────────────────────────────
+   * Every selector below is qualified `div.analytics-screen:not(.spatial-home)`
+   * and both halves are load-bearing.
+   *
+   * The `:not()` is not defensive. HomeScreen.jsx:121 renders
+   * `spatial-home analytics-screen`, so a bare `.analytics-screen` rule lands
+   * on Home and eats the Mosaic grid two sections above this one.
+   *
+   * The element qualifier settles cascade order against analyticsScreen.css.
+   * That sheet only rides in the eager bundle today because HomeScreen.jsx
+   * imports it too; remove that stray import and it becomes a lazy chunk that
+   * loads after this file, at which point equal specificity would lose.
+   *
+   * The layout is a re-reading of state that already exists rather than a new
+   * structure. `expandedSection` is a single value, so the accordion has
+   * always been a radio button: at most one panel can be open. Console draws
+   * that honestly — a wall of readouts, and one panel promoted to a
+   * full-width stage beneath them. No JSX involved.
+   */
+  div.analytics-screen:not(.spatial-home) {
+    max-width: none;
+    margin: 0;
+    padding: 24px 32px 40px;
+    /* The band takes 64px. 100vh here would hand the screen a permanent empty
+     * scrollbar, the same bug fixed on Home and Paths. */
+    min-height: calc(100vh - 64px);
+
+    /* Glass needs something behind it. This screen paints nothing of its own —
+     * its ::before is a deliberately transparent stacking-context stub — so
+     * all 28 backdrop-filter declarations inside it have been frosting flat
+     * colour, which renders as grey plastic. On a 768px column with one card
+     * in view that is survivable; at 1920px with nine plates side by side it
+     * is the first thing you see. Same mesh as .spatial-surface, minus its
+     * noise layer, which is a data URI that a page this dense cannot show. */
+    background:
+      radial-gradient(ellipse at 12% 14%, rgba(139, 92, 246, 0.13) 0%, transparent 48%),
+      radial-gradient(ellipse at 88% 76%, rgba(59, 130, 246, 0.09) 0%, transparent 48%),
+      radial-gradient(ellipse at 50% 100%, rgba(85, 139, 110, 0.11) 0%, transparent 48%),
+      linear-gradient(180deg, #050507 0%, #0a0a0c 100%);
+  }
+
+  /* Keyed off .light-mode, which is how analyticsScreen.css addresses this
+   * screen. NOT .hs-light — that is Home's class, and confusing the two is
+   * exactly why ThemeCloud and JournalCalendar had no working light theme
+   * here at all. */
+  div.analytics-screen.light-mode:not(.spatial-home) {
+    background:
+      radial-gradient(ellipse at 12% 14%, rgba(139, 92, 246, 0.06) 0%, transparent 48%),
+      radial-gradient(ellipse at 88% 76%, rgba(59, 130, 246, 0.05) 0%, transparent 48%),
+      linear-gradient(180deg, #fbfbfd 0%, #f2f2f5 100%);
+  }
+
+  /* The loading and empty states are now wrapped in .analytics-screen so they
+   * inherit the --as-* tokens; they still carry their own 100vh. */
+  div.analytics-screen:not(.spatial-home) .as-state-wrap {
+    min-height: calc(100vh - 64px - 64px);
+  }
+
+  /* ── The wall ────────────────────────────────────────────────────────────
+   * Span-based auto-placement, not named areas. Four of the twelve sections
+   * are independently conditional (journey, personality, question, completed),
+   * which is twelve distinct section sets. Twelve grid-template-areas variants
+   * would be a maintenance liability; with spans, an absent section simply
+   * does not reserve a cell and the flow closes up on its own.
+   *
+   * Visual order follows DOM order here, so unlike Home this screen gets
+   * correct tab order for free and needs no apology.
+   *
+   * span 4, not span 3. An accordion header spends 124px on chrome — 40 icon,
+   * 28 of gaps, 16 chevron, 40 padding — before the title gets anything. At
+   * span 3 that leaves 165px at 1280px, where the German and Georgian titles
+   * wrap to two lines. Three-up holds everywhere this layout runs.
+   */
+  div.analytics-screen:not(.spatial-home) .as-content {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
+
+  /* .as-section is a bare wrapper, and a block child does not inherit a
+   * stretched parent's height — so plates in a row would end at different
+   * depths. Same idiom as the Mosaic tiles. */
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section {
+    display: flex;
+    grid-column: span 4;
+    animation-delay: 0s;
+  }
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section > * {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* The control strip and the colophon are bands, not tiles. */
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(> .as-pulse) {
+    grid-column: span 12;
+    order: 0;
+  }
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section.as-footer {
+    grid-column: span 12;
+    order: 4;
+  }
+
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.as-expandable),
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(> .as-focus),
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(> .as-archive) {
+    order: 1;
+  }
+
+  /* THE STAGE — the whole layout in one selector. The panel whose body carries
+   * .as-open leaves the wall and takes the full width beneath it. `order`
+   * participates in auto-placement, so no explicit rows are needed and the
+   * wall closes up behind the departing panel by itself.
+   *
+   * The panel does not slide across the page: grid placement is not animatable
+   * and CSS has no FLIP. It leaves the wall and its body unrolls on the stage,
+   * which reads as a tab switch — which is what it is.
+   */
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.as-expand-body.as-open) {
+    grid-column: 1 / -1;
+    order: 2;
+  }
+
+  /* The narrative sits below the instrument. These two are the only things on
+   * the screen that can genuinely consume width: several hundred words of
+   * generated prose that has never had more than 340px to sit in. */
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.ai-person-description-card) {
+    grid-column: span 7;
+    order: 3;
+  }
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.daily-ai-question-card) {
+    grid-column: span 5;
+    order: 3;
+  }
+
+  /* Readout tiles get a floor so the wall is a grid of equal plates, with the
+   * chevron pinned to the bottom of each. */
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.as-expandable) .as-expand-header,
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(> .as-archive) .as-archive-inner {
+    min-height: 92px;
+    align-items: flex-start;
+  }
+  div.analytics-screen:not(.spatial-home) .as-content > .as-section:has(.as-expandable) .as-expand-chevron {
+    margin-top: auto;
+  }
+
+  /* ── The stage interior ──────────────────────────────────────────────────
+   * A promoted panel restyles to match its promotion. The chevron flips to
+   * point up: on a stage "collapse" is the honest affordance, where in the
+   * wall it was "open". `.as-expand-chevron.as-open` is (0,2,0); this is
+   * (0,6,1) and wins.
+   */
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-expand-body.as-open) .as-expand-header {
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--as-border);
+  }
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-expand-body.as-open) .as-expand-title {
+    font-size: 20px;
+  }
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-expand-body.as-open) .as-expand-icon {
+    width: 44px;
+    height: 44px;
+  }
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-expand-body.as-open) .as-expand-chevron {
+    transform: rotate(-90deg);
+  }
+  div.analytics-screen:not(.spatial-home) .as-expand-body.as-open {
+    max-height: 1200px;
+  }
+
+  /* A full-width row growing from 0 to ~615px shoves the two AI cards down
+   * over the transition. 400ms of that much travel reads as a lurch. */
+  div.analytics-screen:not(.spatial-home) .as-expand-body {
+    transition: max-height 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Rhythm is the one panel whose interior genuinely reorganises at width:
+   * habit stats beside the calendar rather than stacked above it. */
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-expand-body.as-open) .as-habits-stats {
+    flex-direction: column;
+    max-width: 320px;
+    margin: 0 40px 0 0;
+  }
+  div.analytics-screen:not(.spatial-home) .as-section:has(.as-habits-stats) .as-expand-body > * {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  /* ── Charts that do not want width ───────────────────────────────────────
+   * The calendar's cells are aspect-ratio 1/1 across seven columns, so its
+   * height grows linearly with its width, six rows over. Uncapped on a wide
+   * stage it would blow straight through the accordion's max-height. 560px is
+   * 80px cells, which is as large as a day cell has any reason to be.
+   *
+   * The other two cannot be helped from here. EmotionTrends' donut radius is a
+   * recharts prop (outerRadius: 65) and ThemeCloud's radius derives from a
+   * hardcoded height of 320, so both stay small in the middle of a wide stage
+   * however much room they are given. Changing that means touching their
+   * props, which is a separate piece of work.
+   */
+  div.analytics-screen:not(.spatial-home) .calendar-grid {
+    max-width: 560px;
+  }
+
+  /* Single-column stacks inside the AI cards, columns only because 340px left
+   * them no choice. */
+  div.analytics-screen:not(.spatial-home) .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  div.analytics-screen:not(.spatial-home) .strengths-grid,
+  div.analytics-screen:not(.spatial-home) .suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* The Pulse band becomes a toolbar rather than three centred figures. */
+  div.analytics-screen:not(.spatial-home) .as-pulse .as-pulse-row {
+    justify-content: flex-start;
+    gap: 28px;
+  }
 }
