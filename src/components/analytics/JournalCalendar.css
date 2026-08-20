@@ -11,7 +11,8 @@
 }
 
 /* Light mode */
-.hs-light .glass-calendar {
+.hs-light .glass-calendar,
+.light-mode .glass-calendar {
   background: rgba(245, 245, 247, 0.7);
   border-color: rgba(0, 0, 0, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -37,7 +38,9 @@
   margin: 0;
 }
 .hs-light .calendar-title,
-.hs-light .calendar-title-large {
+.light-mode .calendar-title,
+.hs-light .calendar-title-large,
+.light-mode .calendar-title-large {
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -58,7 +61,8 @@
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
 }
-.hs-light .stat-pill {
+.hs-light .stat-pill,
+.light-mode .stat-pill {
   background: rgba(0, 0, 0, 0.04);
   color: rgba(0, 0, 0, 0.6);
 }
@@ -88,10 +92,12 @@
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.5px;
 }
-.hs-light .stat-value {
+.hs-light .stat-value,
+.light-mode .stat-value {
   color: rgba(0, 0, 0, 0.85);
 }
-.hs-light .stat-label {
+.hs-light .stat-label,
+.light-mode .stat-label {
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -109,7 +115,8 @@
   color: rgba(255, 255, 255, 0.4);
   padding-bottom: 8px;
 }
-.hs-light .grid-day-header {
+.hs-light .grid-day-header,
+.light-mode .grid-day-header {
   color: rgba(0, 0, 0, 0.4);
 }
 .calendar-cell {
@@ -132,10 +139,12 @@
   color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
 }
-.hs-light .calendar-cell {
+.hs-light .calendar-cell,
+.light-mode .calendar-cell {
   color: rgba(0, 0, 0, 0.6);
 }
-.hs-light .calendar-cell.is-today {
+.hs-light .calendar-cell.is-today,
+.light-mode .calendar-cell.is-today {
   background: rgba(var(--c, 85, 139, 110), 0.15);
   color: rgba(0, 0, 0, 0.85);
 }
@@ -157,7 +166,8 @@
   color: white;
   font-weight: 600;
 }
-.hs-light .calendar-cell.intensity-4 span {
+.hs-light .calendar-cell.intensity-4 span,
+.light-mode .calendar-cell.intensity-4 span {
   color: white;
 }
 
@@ -204,7 +214,8 @@
 .legend-dot.intensity-3 {
   background: rgba(var(--c, 85, 139, 110), 0.6);
 }
-.hs-light .legend-item {
+.hs-light .legend-item,
+.light-mode .legend-item {
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -218,7 +229,8 @@
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-.hs-light .legend-grid {
+.hs-light .legend-grid,
+.light-mode .legend-grid {
   border-top-color: rgba(0, 0, 0, 0.08);
 }
 .legend-grid .legend-item {
@@ -232,7 +244,8 @@
 .legend-grid .legend-dot.intensity-0 {
   background: rgba(255, 255, 255, 0.03);
 }
-.hs-light .legend-grid .legend-dot.intensity-0 {
+.hs-light .legend-grid .legend-dot.intensity-0,
+.light-mode .legend-grid .legend-dot.intensity-0 {
   background: rgba(0, 0, 0, 0.03);
 }
 .legend-grid .legend-dot.intensity-1 { background: rgba(var(--c, 85, 139, 110), 0.15); }
@@ -256,7 +269,8 @@
 .glass-icon-btn:active {
   transform: scale(0.95);
 }
-.hs-light .glass-icon-btn {
+.hs-light .glass-icon-btn,
+.light-mode .glass-icon-btn {
   background: rgba(0, 0, 0, 0.04);
   border-color: rgba(0, 0, 0, 0.08);
 }
@@ -296,7 +310,8 @@
   background-size: 400% 100%;
   animation: calendar-shimmer 1.4s ease infinite;
 }
-.hs-light .skeleton-bar {
+.hs-light .skeleton-bar,
+.light-mode .skeleton-bar {
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0.04) 25%,

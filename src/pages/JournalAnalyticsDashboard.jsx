@@ -157,23 +157,26 @@ const AnalyticsScreen = ({ navigateToScreen }) => {
 
   if (statsError) {
     return (
-      <div className="as-state-wrap">
-        <AsGlass className="as-state-card">
-          <Brain size={40} strokeWidth={1} className="as-state-icon" />
-          <h2>{t('dashboard.errorTitle', "Couldn't load insights")}</h2>
-          <p>{statsError}</p>
-          <button onClick={handleRefresh} className="as-action-btn">
-            <RefreshCw size={16} />
-            {t('dashboard.tryAgain', 'Try Again')}
-          </button>
-        </AsGlass>
+      <div className={`analytics-screen ${!isDarkMode ? 'light-mode' : ''}`}>
+        <div className="as-state-wrap">
+          <AsGlass className="as-state-card">
+            <Brain size={40} strokeWidth={1} className="as-state-icon" />
+            <h2>{t('dashboard.errorTitle', "Couldn't load insights")}</h2>
+            <p>{statsError}</p>
+            <button onClick={handleRefresh} className="as-action-btn">
+              <RefreshCw size={16} />
+              {t('dashboard.tryAgain', 'Try Again')}
+            </button>
+          </AsGlass>
+        </div>
       </div>
     );
   }
 
   if (statistics.totalEntries < 2) {
     return (
-      <div className="as-state-wrap">
+      <div className={`analytics-screen ${!isDarkMode ? 'light-mode' : ''}`}>
+        <div className="as-state-wrap">
         <AsGlass className="as-state-card">
           <Target size={40} strokeWidth={1} className="as-state-icon" />
           <h2>{t('dashboard.notEnoughDataTitle', 'Not Enough Data Yet')}</h2>
@@ -186,7 +189,8 @@ const AnalyticsScreen = ({ navigateToScreen }) => {
             {t('dashboard.writeFirstEntry', 'Write Your First Entry')}
             <ChevronRight size={16} />
           </button>
-        </AsGlass>
+          </AsGlass>
+        </div>
       </div>
     );
   }
