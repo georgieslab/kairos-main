@@ -976,4 +976,166 @@
     justify-content: flex-start;
     gap: 28px;
   }
+
+  /* ── 5. The writing flow ──────────────────────────────────────────────────
+   * write -> daily -> upload.
+   *
+   * Selectors here are element-qualified (`div.upload-glass-container` rather
+   * than `.upload-glass-container`) even though they do not need to be today.
+   * All three components are imported statically by App.jsx, so their
+   * stylesheets evaluate before App.jsx reaches its own `import desktop.css`
+   * and we currently load last and win on equal specificity — verified by byte
+   * offset in the built bundle, not assumed. Two things would silently invert
+   * that: making any of the three components React.lazy, which turns its sheet
+   * into a chunk loading after us; or importing the dead styles/main.css from
+   * App.jsx below this file. The qualifier costs one token and makes the
+   * question moot.
+   *
+   * Scoping matters for a second reason here. `.glass-btn`, `.glass-actions`
+   * and `.glass-card` are shared with AnalysisResults, ProfileScreen and six
+   * other components, so every rule below is anchored on its screen's own
+   * container. Same lesson as `.analytics-screen` also being Home's class.
+   */
+
+  /* Three faults that are live on desktop right now, independent of layout. */
+
+  /* The band is fixed at --z-bottom-nav and 64px tall; these two screens still
+   * ask for a full 100vh underneath it, which buys a permanently empty
+   * scrollbar. Same bug already fixed on Home, Paths and Insights. */
+  div.write-tab-container,
+  div.djv-container {
+    min-height: calc(100vh - 64px);
+  }
+
+  /* .djv-header is `sticky; top: 0` at z-index 100. The nav band is `fixed` at
+   * 1000, so the day view's own header — back button, path badge, day title,
+   * prev/next — has been sitting behind it. */
+  div.djv-container .djv-header {
+    top: 64px;
+  }
+
+  /* 5.75rem of bottom padding existed to clear the floating phone nav. The nav
+   * is at the top on desktop, so this was 92px of nothing. */
+  div.djv-container .djv-action-container {
+    padding-bottom: 16px;
+  }
+
+  /* ── upload: the light table ─────────────────────────────────────────────
+   * This screen has no nav band — App.jsx lists 'upload' in
+   * hideBottomNavScreens — so it keeps its own 100vh and gets no padding-top.
+   *
+   * The reason this section exists: GlassImagePreview advances only through
+   * onTouchStart/onTouchEnd, its dots are <div>s with no onClick, and there are
+   * no arrows. On any desktop browser, adding a second page meant seeing page
+   * one and nothing else, permanently. Rather than add mouse controls to a
+   * carousel, the carousel stops being one — every page is laid side by side.
+   *
+   * Kairos photographs handwriting; five images of your own handwriting are the
+   * most detail-dense thing in the app and the only thing never given room.
+   */
+  div.upload-glass-container {
+    max-width: none;
+    margin: 0;
+    padding: 24px 32px 48px;
+    justify-content: flex-start;
+  }
+
+  /* The empty state is one prompt and two buttons — it wants a page, not a
+   * hall. Once there are images the card releases and the table takes over. */
+  div.upload-glass-container > .upload-glass-card:has(> .upload-glass-empty) {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  div.upload-glass-container > .upload-glass-card:has(> .upload-glass-content) {
+    max-width: none;
+  }
+
+  div.upload-glass-container .upload-glass-title,
+  div.upload-glass-container .upload-glass-subtitle {
+    max-width: 56ch;
+    margin-inline: auto;
+  }
+
+  /* The track's translateX is an inline style, so `transform: none` has to be
+   * !important to reach it. This is the one place in this file that earns one:
+   * the alternative is a JSX change to a component whose only other fault is
+   * that it was written for a thumb. */
+  div.upload-glass-container .glass-preview-container {
+    height: min(56vh, 560px);
+    margin-bottom: 16px;
+  }
+  div.upload-glass-container .glass-preview-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+    transform: none !important;
+    transition: none;
+    counter-reset: page;
+  }
+  div.upload-glass-container .glass-preview-slide {
+    min-width: 0;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  /* With every page visible at once, "page 3 of 5" has to be readable off the
+   * table itself rather than from a position indicator. */
+  div.upload-glass-container .glass-preview-slide::after {
+    counter-increment: page;
+    content: counter(page);
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  /* Both of these described a position that no longer exists. */
+  div.upload-glass-container .glass-preview-dots,
+  div.upload-glass-container .glass-preview-indicator {
+    display: none;
+  }
+
+  /* Five remove buttons permanently visible reads as five errors. On a pointer
+   * device the control can wait to be asked for. */
+  div.upload-glass-container .glass-preview-remove {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  div.upload-glass-container .glass-preview-slide:hover .glass-preview-remove,
+  div.upload-glass-container .glass-preview-remove:focus-visible {
+    opacity: 1;
+  }
+
+  /* Controls and the optional note stay at a page width under a wide table —
+   * the images earn the room, the buttons do not. */
+  div.upload-glass-container .glass-actions,
+  div.upload-glass-container .glass-notes,
+  div.upload-glass-container .glass-btn-submit {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  /* The one genuine measure question in this flow. GlassNotesField is an
+   * optional context note, not an editor — the writing happens on paper. */
+  div.upload-glass-container .glass-notes-input {
+    max-width: 70ch;
+  }
+
+  /* Below 1280 a five-across table gives each page less than a phone does.
+   * Three per row, flowing down, with the height cap released. */
+  @media (max-width: 1279px) {
+    div.upload-glass-container .glass-preview-track {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    div.upload-glass-container .glass-preview-container {
+      height: auto;
+      max-height: none;
+    }
+  }
 }

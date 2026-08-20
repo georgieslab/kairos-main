@@ -875,6 +875,10 @@ const App = () => {
                   <JournalUpload
                     dayNumber={currentDay}
                     pathId={currentPath}
+                    /* Without this the capture screen renders green on all 53
+                       paths — the component defaults pathColor to
+                       self-discovery's colour and nothing was overriding it. */
+                    pathColor={getJourneyPath(currentPath)?.color || '85, 139, 110'}
                     onBack={navigateBack}
                     flexMode={screenData?.flexMode || null}
                     onUploadComplete={(imageUrl, extractedText, pathId, isTextOnly, isMultiPage, additionalImages, imageFiles) => {
