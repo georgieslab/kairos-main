@@ -96,8 +96,6 @@
   }
 }
 
-
-
 /* ===== TYPOGRAPHY ===== */
 .upload-glass-title {
   font-size: 28px;
@@ -418,19 +416,6 @@
 }
 
 /* Glass Container – Base (your existing code) */
-.glass-upload-container {
-  background: rgba(28, 28, 30, 0.65);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),   /* inner top light catch */
-    0 8px 32px rgba(0, 0, 0, 0.2);              /* outer shadow – deep but soft */
-  border-radius: 24px;
-  padding: 32px 24px;
-  animation: glassFadeIn 0.4s ease-out, floatGlow 4s ease-in-out infinite;
-  will-change: transform;
-}
 
 /* Outer Glow Enhancement – adds a coloured radiant aura */
 /* Use CSS custom property --glow-color (default is the path's RGB) */
@@ -727,14 +712,6 @@
 }
 
 /* ===== Glass Upload SVG Icon ===== */
-.glass-upload-icon-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 24px;
-  animation: floatUploadIcon 3s ease-in-out infinite;
-  will-change: transform;
-}
 
 @keyframes floatUploadIcon {
   0% { transform: translateY(0px); }
@@ -1212,7 +1189,6 @@
   transition: box-shadow 0.3s ease;
   will-change: transform, box-shadow;
 }
-
 
 /* ===== MAIN GLASS CARD (with Magical Glow) ===== */
 .upload-glass-card {
