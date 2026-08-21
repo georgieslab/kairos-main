@@ -1316,136 +1316,123 @@
     }
   }
 
+
   /* ── 6. Profile ───────────────────────────────────────────────────────────
-   * Two columns: who you are on the left, what you can do on the right.
+   * Identity across the top, then the settings in two columns.
    *
-   * Profile is the first screen in this file with no shared-class landmine —
-   * .glass-profile and every class under it belong to ProfileScreen alone, so
-   * the usual `:not()` guarding is unnecessary. Selectors are still element-
-   * qualified for cascade order, since profile.css is imported by the
-   * component and would load after this file if ProfileScreen were ever made
-   * React.lazy.
+   * The first attempt at this put identity in a sticky left rail and the
+   * sections in a right column. It does not work, and the reason is worth
+   * recording because it will look tempting again: a sticky element's
+   * containing block is its grid area, and grid rows are shared across
+   * columns. With the header in row 1 and the stats in row 2 against seven
+   * auto-placed sections on the right, the left column's rows end after two —
+   * so the rail unsticks, scrolls away, and leaves a third of the screen empty
+   * for the remaining five rows. Making header and stats behave as one rail
+   * needs a wrapper element around them, which is a JSX change this screen
+   * does not otherwise need.
    *
-   * Light theme here is the global `.light-theme` on <html> — a third
-   * mechanism, after Home's `.hs-light` and Insights' `.light-mode`. The 51
-   * existing rules are all token-ish colour swaps that survive a relayout, so
-   * this section needs none of its own.
+   * So identity spans the full width instead. It reads better anyway: the
+   * avatar and name are a masthead, not a sidebar, and the stats stay the
+   * horizontal row they were designed as rather than being stacked into a
+   * column narrow enough to wrap their labels.
    *
-   * Nine direct children, two of them conditional (Active Journeys needs
-   * inProgressPaths, Achievements needs achievements). Four more share the
-   * class .profile-section and are therefore addressed by what they contain
-   * rather than by position — nth-child would renumber the moment a
-   * conditional section appeared.
+   * Profile has no shared-class landmine — .glass-profile and everything under
+   * it belong to ProfileScreen alone — so none of the :not() guarding the
+   * other sections need. Selectors stay element-qualified for cascade order in
+   * case ProfileScreen is ever made lazy. Light theme is the global
+   * .light-theme on <html>, and its 51 rules are colour swaps that survive a
+   * relayout untouched.
    */
   div.glass-profile {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 20px 28px;
     align-content: start;
-    max-width: none;
-    margin: 0;
+    max-width: 1200px;
+    margin-inline: auto;
     padding: 24px 32px 40px;
     min-height: calc(100vh - 64px);
   }
 
-  /* Left column: identity. The header and the stats row are the two things
-   * that answer "whose profile is this", so they travel together and stay put
-   * while the right column is read. */
-  div.glass-profile > .profile-header {
-    grid-column: 1 / 5;
-    grid-row: 1;
-    position: sticky;
-    top: 88px;
-    align-self: start;
-  }
+  /* Identity, full width. */
+  div.glass-profile > .profile-header,
   div.glass-profile > .profile-stats-section {
-    grid-column: 1 / 5;
-    grid-row: 2;
-    position: sticky;
-    top: 400px;
-    align-self: start;
+    grid-column: 1 / -1;
   }
 
-  /* The stats row was three items across a 600px phone column. In a 4-column
-   * rail it has less than half that, so it stacks rather than shrinking the
-   * numbers to fit. */
-  div.glass-profile .glass-stats-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-  div.glass-profile .glass-stat-item {
+  /* The header was a vertical stack because a phone column has no other
+   * option. Across the full width the avatar sits beside the name and the
+   * edit button rather than above them. */
+  div.glass-profile > .profile-header {
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
+    gap: 28px;
     text-align: left;
   }
-  div.glass-profile .glass-stat-data {
-    align-items: flex-start;
+  div.glass-profile .profile-avatar-container {
+    margin-bottom: 0;
+    flex: 0 0 auto;
   }
 
-  /* Right column: everything you can act on, in DOM order.
+  /* Two columns of sections, auto-placed. The two conditional sections —
+   * Active Journeys and Achievements — simply do not create a cell when
+   * absent and the rest close up, so there is no template to keep in step.
    *
-   * `grid-column: 5 / -1` on every one of them, with auto-placed rows. The two
-   * conditional sections simply do not create a row when absent, so no
-   * template variant is needed — the same span-based approach as Insights.
-   * Addressed by contents because four of them share .profile-section.
+   * Addressed by contents rather than position: four of them share the class
+   * .profile-section, and nth-child would renumber the moment either
+   * conditional appeared. Two handles here were guessed wrong the first time
+   * and checked against the JSX before shipping — a wrong :has() fails
+   * silently, dropping its section out of the flow rather than erroring.
    */
   div.glass-profile > section:has(.glass-journeys-list),
   div.glass-profile > section:has(.glass-mood-board-card),
   div.glass-profile > section:has(.glass-achievements-preview),
   div.glass-profile > section:has(.glass-actions-grid),
-  div.glass-profile > section:has(.glass-links-card),
-  div.glass-profile > section:has(.glass-signout-btn),
-  div.glass-profile > .glass-version {
-    grid-column: 5 / -1;
+  div.glass-profile > section:has(.glass-links-card) {
+    grid-column: span 6;
   }
 
-  /* The two-column action grid was two-up on a phone at 280px each. Given the
-   * right column's width it goes three-up rather than growing the cards into
-   * billboards. */
+  /* Sign out and the version line are not settings and do not belong in a
+   * column beside them. */
+  div.glass-profile > section:has(.glass-signout-btn),
+  div.glass-profile > .glass-version {
+    grid-column: 1 / -1;
+  }
+  div.glass-profile > section:has(.glass-signout-btn) {
+    margin-top: 8px;
+  }
+  div.glass-profile .glass-signout-btn {
+    max-width: 320px;
+    margin-inline: auto;
+  }
+
+  /* Three action cards fit across half the grid at this width; two left them
+   * wider than they are tall. */
   div.glass-profile .glass-actions-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  /* The version line is a footnote, not a section. Left-aligned under the
-   * column it belongs to rather than centred across the page. */
-  div.glass-profile > .glass-version {
-    text-align: left;
-  }
-
-  /* Below 1360 the identity rail gets tight — the name and the stat labels
-   * start wrapping — so the whole thing becomes one column and the sticky
-   * behaviour is dropped, since there is nothing beside it to stay level with.
-   */
-  @media (max-width: 1359px) {
+  /* Below 1280 two columns of sections leaves each one under 420px, where the
+   * action cards and journey rows start wrapping. One column, and the header
+   * returns to its stacked shape. */
+  @media (max-width: 1279px) {
     div.glass-profile {
-      grid-template-columns: minmax(0, 1fr);
-      max-width: 860px;
-      margin-inline: auto;
-    }
-    div.glass-profile > .profile-header,
-    div.glass-profile > .profile-stats-section {
-      grid-column: 1;
-      grid-row: auto;
-      position: static;
+      max-width: 800px;
     }
     div.glass-profile > section:has(.glass-journeys-list),
     div.glass-profile > section:has(.glass-mood-board-card),
     div.glass-profile > section:has(.glass-achievements-preview),
     div.glass-profile > section:has(.glass-actions-grid),
-    div.glass-profile > section:has(.glass-links-card),
-    div.glass-profile > section:has(.glass-signout-btn),
-    div.glass-profile > .glass-version {
-      grid-column: 1;
+    div.glass-profile > section:has(.glass-links-card) {
+      grid-column: 1 / -1;
     }
-    div.glass-profile .glass-stats-row {
-      flex-direction: row;
-    }
-    div.glass-profile .glass-stat-item {
+    div.glass-profile > .profile-header {
       flex-direction: column;
-      align-items: center;
       text-align: center;
+      gap: 0;
+    }
+    div.glass-profile .profile-avatar-container {
+      margin-bottom: 16px;
     }
     div.glass-profile .glass-actions-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
