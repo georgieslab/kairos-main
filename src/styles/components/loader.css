@@ -588,36 +588,6 @@
   .kairos-hourglass .kh-heap       { transform: scale(0.6, 0.7); opacity: 0.85; }
 }
 
-/* ── Inline variant ───────────────────────────────────────────────────────
- * The same glass at chat scale, used as the "thinking" indicator in Kairos AI.
- *
- * Only the durations are overridden, as longhands: the five animations are
- * declared as shorthands above, and restating a shorthand here would drop the
- * timing function and iteration count with it. Nine seconds is right for a
- * full-screen wait but wrong for a chat — most answers arrive in well under
- * that, so at the original speed the glass would never visibly turn and the
- * sand would barely move. At 3.2s a reply of any length shows real drain.
- */
-.kairos-hourglass.kh-inline {
-  width: 26px;
-  height: 36px;
-}
-
-.kairos-hourglass.kh-inline .kh-glass,
-.kairos-hourglass.kh-inline .kh-sand-top,
-.kairos-hourglass.kh-inline .kh-sand-bottom,
-.kairos-hourglass.kh-inline .kh-stream,
-.kairos-hourglass.kh-inline .kh-heap {
-  animation-duration: 3.2s;
-}
-
-/* At 26px the hairline vessel stroke disappears, so it is thickened to hold
-   the silhouette. stroke-width is a presentation attribute and safe to set
-   from CSS anywhere; the rect's own x/width are SVG geometry properties, which
-   is exactly what the component avoids touching from CSS, so the stream keeps
-   its authored size and simply scales with the viewBox. */
-.kairos-hourglass.kh-inline .kh-vessel { stroke-width: 3; }
-
 /* Light theme: the vessel outline and caps are tuned for a dark backdrop. */
 .light-theme .kairos-hourglass .kh-frame  { fill: rgba(0, 0, 0, 0.28); }
 .light-theme .kairos-hourglass .kh-vessel {

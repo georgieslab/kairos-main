@@ -27,29 +27,30 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
-import { KairosHourglass } from './KairosLoader';
+import { KairosBlobs } from './KairosLoader';
+import '../../styles/components/loader.css';
 import MiroMark from './MiroMark';
 import '../../styles/components/kairosAi.css';
 
 // Matches the cap every other history-fed generator uses. It is the reason a
 // user in year eight costs the same as one in week one.
-const CONTEXT_ENTRIES = 20;
+const CONTEXT_ENTRIES = 25;
 
 // How much of the conversation is resent each turn. Every turn resends the
 // thread, so without a ceiling turn 40 costs several times turn 1 — the same
 // compounding the slice() caps exist to prevent elsewhere.
-const CONTEXT_TURNS = 20;
+const CONTEXT_TURNS = 50;
 
 // Anthropic downscales anything larger than this anyway, so sending more is
 // paying upload and latency for pixels that get thrown away.
-const MAX_EDGE = 1568;
+const MAX_EDGE = 1000;
 const JPEG_QUALITY = 0.75;
 
 // An image costs roughly 1.6k tokens and the thread is resent every turn, so
 // five images in a conversation would silently add ~8k tokens to every
 // subsequent turn. Only the newest few are resent as pixels; older ones survive
 // as a note, which keeps follow-up questions working without the compounding.
-const IMAGE_MEMORY = 4;
+const IMAGE_MEMORY = 10;
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
@@ -440,7 +441,9 @@ before the substance.`;
           ))}
           {isThinking && (
             <div className="kai-msg kai-msg-ai kai-typing" aria-live="polite">
-              <KairosHourglass className="kh-inline" />
+              <span className="miro-blobs-wrap">
+                <KairosBlobs className="miro-blobs" />
+              </span>
               <span className="kai-typing-word">
                 {t('kairosAi.thinking', 'reading back through your entries…')}
               </span>

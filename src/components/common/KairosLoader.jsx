@@ -62,6 +62,31 @@ export const KairosHourglass = ({ sandColor = null, className = '' }) => (
   </svg>
 );
 
+/* The orb: a soft ball with blobs orbiting inside it and sparkles outside.
+ * Exported bare, like the hourglass, so it can be used at small sizes outside
+ * the full loader chrome — Miro uses it as its thinking indicator.
+ * Colour lives entirely in CSS, so a caller restyles it by class rather than
+ * by prop. */
+export const KairosBlobs = ({ className = '' }) => (
+  <div className={`center ${className}`.trim()}>
+    <div className="ball"></div>
+    <div className="blubb-1"></div>
+    <div className="blubb-2"></div>
+    <div className="blubb-3"></div>
+    <div className="blubb-4"></div>
+    <div className="blubb-5"></div>
+    <div className="blubb-6"></div>
+    <div className="sparkle-1"></div>
+    <div className="sparkle-2"></div>
+    <div className="sparkle-3"></div>
+    <div className="sparkle-4"></div>
+    <div className="sparkle-5"></div>
+    <div className="sparkle-6"></div>
+    <div className="sparkle-7"></div>
+    <div className="sparkle-8"></div>
+  </div>
+);
+
 const KairosLoader = ({
   size = 'medium',
   fullScreen = false,
@@ -147,23 +172,7 @@ const KairosLoader = ({
           </div>
         ) : (
         <div className={`orb-wrapper ${isAnimating ? 'scale-in' : 'scale-out'}`}>
-          <div className="center">
-            <div className="ball"></div>
-            <div className="blubb-1"></div>
-            <div className="blubb-2"></div>
-            <div className="blubb-3"></div>
-            <div className="blubb-4"></div>
-            <div className="blubb-5"></div>
-            <div className="blubb-6"></div>
-            <div className="sparkle-1"></div>
-            <div className="sparkle-2"></div>
-            <div className="sparkle-3"></div>
-            <div className="sparkle-4"></div>
-            <div className="sparkle-5"></div>
-            <div className="sparkle-6"></div>
-            <div className="sparkle-7"></div>
-            <div className="sparkle-8"></div>
-          </div>
+          <KairosBlobs />
         </div>
         )}
         

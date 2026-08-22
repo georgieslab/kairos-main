@@ -563,6 +563,99 @@
 
 @keyframes kaiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+/* ── Miro's thinking orb ──────────────────────────────────────────────────
+ * The same blob loader, shrunk to chat scale and taken down to deep water.
+ *
+ * Every rule here is scoped under .miro-blobs and only ever ADDS colour or
+ * size — the full-screen loader's own green is untouched, because that one
+ * still tints to the active path and this one must not.
+ *
+ * The orb is authored at 100x100. Rather than rewrite every offset, it is
+ * scaled down as a whole and the wrapper is given the final size: the blur
+ * radii and orbit origins then scale with it, which is the only way the
+ * proportions survive at a tenth of the size.
+ */
+.miro-blobs-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.miro-blobs-wrap .miro-blobs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  /* The scale and the wrapper size are one number in two places: the orb is
+     authored at 100x100, so the box must match whatever it is scaled to or it
+     leaves a hole in the layout. */
+  transform: scale(0.52);
+  transform-origin: top left;
+}
+
+/* Deep sea. The body of the orb is a lit blue that still reads as dark
+   against the card, not a bright dot. */
+.miro-blobs .ball {
+  background: #24406b;
+  box-shadow:
+    0 0 40px rgba(36, 64, 107, 0.55),
+    0 0 80px rgba(46, 82, 138, 0.28);
+}
+
+/* The blobs turning inside it are nearly black, so they read as depth in the
+   water rather than as separate objects. */
+.miro-blobs .blubb-1:after,
+.miro-blobs .blubb-2:after,
+.miro-blobs .blubb-3:after,
+.miro-blobs .blubb-4:after,
+.miro-blobs .blubb-5:after,
+.miro-blobs .blubb-6:after {
+  background: #0f1c33;
+}
+
+/* The sparkles are the one light thing — pale periwinkle, the same family as
+   the ring in Miro's mark, so the two read as one object. */
+.miro-blobs .sparkle-1:after,
+.miro-blobs .sparkle-2:after,
+.miro-blobs .sparkle-3:after,
+.miro-blobs .sparkle-4:after,
+.miro-blobs .sparkle-5:after,
+.miro-blobs .sparkle-6:after,
+.miro-blobs .sparkle-7:after,
+.miro-blobs .sparkle-8:after {
+  background: #9fb0e8;
+  box-shadow: 0 0 10px rgba(159, 176, 232, 0.5);
+}
+
+/* On a pale plate the near-black blobs turn into holes, so they lift toward
+   the ball's own blue and the ball itself brightens a little. */
+.hs-light .miro-blobs .ball {
+  background: #2d5285;
+  box-shadow:
+    0 0 40px rgba(45, 82, 133, 0.4),
+    0 0 80px rgba(58, 100, 160, 0.2);
+}
+.hs-light .miro-blobs .blubb-1:after,
+.hs-light .miro-blobs .blubb-2:after,
+.hs-light .miro-blobs .blubb-3:after,
+.hs-light .miro-blobs .blubb-4:after,
+.hs-light .miro-blobs .blubb-5:after,
+.hs-light .miro-blobs .blubb-6:after {
+  background: #1c3252;
+}
+
+/* The orbiting is the whole indicator, so reduced motion leaves it lit and
+   still rather than removing it — a frozen orb still says "working", an
+   absent one says nothing. */
+@media (prefers-reduced-motion: reduce) {
+  .miro-blobs .ball,
+  .miro-blobs [class^="blubb-"]:after,
+  .miro-blobs [class^="sparkle-"]:after {
+    animation: none;
+  }
+}
+
 /* ── Light theme ──────────────────────────────────────────────────────────
  * Home puts .hs-light on .spatial-home itself, so this card is addressed
  * through it rather than through the global .light-theme on <html>.
