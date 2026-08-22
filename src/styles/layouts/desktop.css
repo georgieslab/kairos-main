@@ -1155,68 +1155,207 @@
    */
 
   /* ── write ───────────────────────────────────────────────────────────────
-   * One column, centred.
+   * Immersive. The page is the card.
    *
-   * This was two columns — prompt on the left, notice and tips card on the
-   * right — and it put the day's question in a fight with its own furniture.
-   * The tips card is dismissible and the notice only appears once a day is
-   * already finished; neither is worth half the screen, and giving them a
-   * column implied they were.
+   * Two earlier attempts got the emphasis wrong. Two columns put the day's
+   * question in a fight with a dismissible tips card. A single 780px column
+   * fixed that but still read as a phone screen stretched — a small stack of
+   * boxes adrift in a wide dark field.
    *
-   * A launcher has one job: show the question and offer the ways to answer it.
-   * So the column is sized to the prompt and everything else queues below it.
-   * Nothing here is a grid, which also means the two conditional children and
-   * the three alternate whole-tree states need no guarding at all — the base
-   * flex column already handles every combination.
+   * So the boxes go. On a monitor there is room to let the question simply be
+   * on the page, at a size you read across a desk, with everything else
+   * demoted to chrome at the edges. The prompt card loses its background,
+   * border, blur and padding; the header and progress bar collapse into one
+   * thin line above; the tips card becomes a footnote.
+   *
+   * Nothing here is a grid, so the two conditional children and the three
+   * alternate whole-tree states — loading, error, completed — need no guarding.
+   * The base flex column already handles every combination.
    */
   div.write-tab-container {
-    max-width: 780px;
+    max-width: 1100px;
     margin-inline: auto;
-    padding: 32px 32px 48px;
-    gap: 22px;
+    padding: 28px 40px 48px;
+    gap: 0;
+    justify-content: center;
   }
 
+  /* ── Chrome: one thin line ───────────────────────────────────────────────
+   * Path, day and progress belong together as a status line, not as two
+   * stacked blocks each with their own vertical rhythm.
+   */
+  div.write-tab-container > .write-header {
+    margin-bottom: 10px;
+  }
   div.write-tab-container .write-title {
-    font-size: 34px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.01em;
   }
-  /* The second-largest prompt in the app, behind Home's. Capped because a
-   * prompt is a sentence, not a column of body text. */
-  div.write-tab-container .write-prompt-text {
-    font-size: 24px;
-    max-width: 42ch;
+  div.write-tab-container .write-subtitle {
+    font-size: 13px;
   }
-  div.write-tab-container .write-prompt-card {
-    padding: 32px 34px;
+  div.write-tab-container > .write-progress {
+    max-width: 320px;
+    margin: 0 0 auto;
+  }
+  div.write-tab-container .write-progress-bar {
+    height: 3px;
   }
 
-  /* The mode buttons were stacked because a phone column had no width for
-   * anything else. Given room they sit side by side as three real choices. */
+  /* ── The question ────────────────────────────────────────────────────────
+   * No card. Everything that made it an object is removed, and the type does
+   * the work instead.
+   */
+  div.write-tab-container > .write-prompt-card {
+    background: none;
+    border: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    margin: auto 0;
+    text-align: center;
+    /* The base rule clips to the card's rounded box. Nothing to clip now. */
+    overflow: visible;
+  }
+
+  /* The card carried a path-coloured light in its top corner, behind the day
+   * badge. It was lighting the inside of a glass panel; without the panel it
+   * is a glow hanging in open space. Same fault as the milestone flame on
+   * Insights, same fix. */
+  div.write-tab-container > .write-prompt-card::before {
+    display: none;
+  }
+  div.write-tab-container .write-prompt-header {
+    margin-bottom: 26px;
+  }
+  div.write-tab-container .write-prompt-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+  }
+  /* The label is a caption on a card. Without the card it is noise above the
+   * only sentence on the screen. */
+  div.write-tab-container .write-prompt-label {
+    justify-content: center;
+    opacity: 0.5;
+    margin-bottom: 18px;
+  }
+  div.write-tab-container .write-prompt-text {
+    font-size: clamp(30px, 3vw, 44px);
+    line-height: 1.32;
+    color: rgba(255, 255, 255, 0.94);
+    max-width: 20ch;
+    margin-inline: auto;
+    font-style: normal;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  div.write-tab-container .write-theme-chip {
+    margin-top: 26px;
+  }
+
+  /* ── The ways in ─────────────────────────────────────────────────────────
+   * A quiet row under the question rather than a stack of buttons. These are
+   * three equal choices, so they read as three equal things.
+   */
   div.write-tab-container .write-actions {
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 14px;
+    margin-top: 44px;
   }
   div.write-tab-container .write-action-primary {
     width: auto;
-    min-width: 300px;
+    min-width: 260px;
     flex: 0 0 auto;
   }
+  div.write-tab-container .write-flex-choice {
+    width: 100%;
+  }
+  div.write-tab-container .write-flex-choice-label {
+    text-align: center;
+  }
   div.write-tab-container .write-flex-choice-buttons {
-    gap: 14px;
+    justify-content: center;
+    gap: 16px;
   }
   div.write-tab-container .write-flex-option {
-    height: 168px;
-    font-size: 16px;
-    gap: 12px;
+    width: 150px;
+    height: 120px;
+    gap: 10px;
+    font-size: 15px;
   }
   div.write-tab-container .write-flex-option svg {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
+  }
+
+  /* ── Footnotes ───────────────────────────────────────────────────────────
+   * The notice and the tips card are the two things that were competing with
+   * the question for a column. They sit at the bottom edge, sized as asides.
+   */
+  div.write-tab-container > .write-notice,
+  div.write-tab-container > .write-tips-card {
+    max-width: 620px;
+    margin-inline: auto;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  div.write-tab-container > .write-tips-card {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 14px 18px;
   }
 
   /* 40px of bottom clearance for a nav bar that is now at the top. */
   div.write-tab-container > div:not([class]) {
     display: none;
+  }
+
+  /* ── Arrival ─────────────────────────────────────────────────────────────
+   * With the card gone there is no object to slide in, so the entrance is
+   * carried by the type. The question rises and settles first; the choices
+   * follow once it has landed, which is the order you actually read them in.
+   * `both` fill so neither is visible during its delay.
+   */
+  /* This also drops writeCardFloat, deliberately. The base rule gives the card
+   * an infinite 4px drift — "the focus card breathes", the same language as
+   * Home's hero. A breathing card is fine; text that will not hold still is
+   * not, and there is no card here any more. Replacing the whole `animation`
+   * shorthand is what removes it. */
+  div.write-tab-container > .write-prompt-card {
+    animation: writeQuestionIn 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
+  }
+  div.write-tab-container .write-actions {
+    animation: writeQuestionIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
+  }
+  div.write-tab-container > .write-header,
+  div.write-tab-container > .write-progress {
+    animation: writeChromeIn 0.5s ease 0s both;
+  }
+
+  @keyframes writeQuestionIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes writeChromeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    div.write-tab-container > .write-prompt-card,
+    div.write-tab-container .write-actions,
+    div.write-tab-container > .write-header,
+    div.write-tab-container > .write-progress {
+      animation: none;
+    }
   }
   /* ── daily ───────────────────────────────────────────────────────────────
    * Direct children of .djv-content: the prompt card, then one of entry /
