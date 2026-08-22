@@ -281,9 +281,10 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-areas:
       'header header header header header header header header header header header header'
-      'hero   hero   hero   hero   hero   hero   hero   week   week   week   week   week  '
+      'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
       'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
-      'mood   mood   mood   mood   listen listen listen listen spark  spark  spark  spark ';
+      'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+      'week   week   week   week   week   week   spark  spark  spark  spark  spark  spark ';
     gap: 20px;
     align-content: start;
 
@@ -604,9 +605,10 @@
     div.spatial-home {
       grid-template-areas:
         'header header header header header header header header header header header header'
-        'hero   hero   hero   hero   hero   hero   hero   week   week   week   week   week  '
+        'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
         'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
-        'mood   mood   mood   mood   mood   mood   listen listen listen listen listen listen'
+        'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+        'week   week   week   week   week   week   week   week   week   week   week   week '
         'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
     }
 
@@ -1545,6 +1547,267 @@
     }
     div.glass-profile .glass-actions-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ── The aura's floor ────────────────────────────────────────────────────
+   * .mood-weather has swapped into the five-column slot beside the hero, and
+   * five columns is 561px at 1440 and 495px at 1280 but only 388px at 1024.
+   * Its subtitle is `white-space: nowrap` with an ellipsis and needs about
+   * 460px before that starts eating the one line that tells a new user what
+   * "Lunar" means. Five auras at 38px plus gaps is 214px of that on its own,
+   * so there is nothing to shrink.
+   *
+   * Five columns clears 460px down to roughly 1196px of viewport. Below that,
+   * let the subtitle wrap rather than truncate — two lines of legible text
+   * beats one line with its end cut off.
+   */
+  @media (max-width: 1199px) {
+    .spatial-home .mood-weather-subtitle {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.35;
+    }
+  }
+
+
+  /* ── Vitals and Listen are one tile ──────────────────────────────────────
+   * They are two separate elements in the DOM and cannot be merged without
+   * JSX, so they are stacked in the same column and the seam between them is
+   * closed: the 20px row-gap is cancelled by a negative margin, the facing
+   * corners are squared, and the upper plate drops its bottom border so there
+   * is one hairline between them rather than two.
+   *
+   * They are a pair by meaning as well as by position — what you have done so
+   * far, and the thing to do next — so reading as one plate is the honest
+   * shape.
+   */
+  .spatial-home > .vitals-section {
+    margin-bottom: -20px;
+    padding-bottom: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  /* Guarded on the vitals actually being there. At first run they are absent —
+   * .vitals-section and .home-week are one conditional unit — and the listen
+   * card sits under the aura with a normal gap above it. Unguarded, it would
+   * keep its squared top and its seam hairline and read as a card torn off
+   * whatever used to be above it. */
+  div.spatial-home:has(> .vitals-section) > .home-listen-card {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* ── Living edges ─────────────────────────────────────────────────────────
+   * A slow breath along each tile's border. The plates are glass sitting on an
+   * aurora that already drifts behind them, which is enough movement on a
+   * phone. Across a monitor the same eight plates are static rectangles in a
+   * large dark field, so their edges pick up the drift instead.
+   *
+   * Deliberately not a travelling gradient or a rotating conic — those read as
+   * "processing", and this app is not doing anything. It is a border colour
+   * and an outer glow easing between two states, tinted with the active path's
+   * colour so the whole screen shares one hue.
+   *
+   * Staggered, and the offsets are negative so every tile starts mid-cycle
+   * rather than all of them beginning dark on load. Synchronised, eight plates
+   * pulsing together reads as the page flashing; offset, it reads as eight
+   * things quietly alive.
+   *
+   * ── Why every rule below re-declares its entrance ────────────────────────
+   * Four of these tiles already carry an `animation` from the choreography
+   * block above, and .hero-card carries two — its entrance plus an infinite
+   * float. `animation` is a shorthand, so adding the breath in a later rule
+   * REPLACES them rather than adding to it, and the entrance cascade would
+   * silently disappear. Each conflicting tile therefore restates its full
+   * list. The two that have no entrance of their own — .vital-card and
+   * .spark-glass-card, both children of an animated wrapper rather than the
+   * wrapper itself — can take the breath on its own.
+   */
+  @keyframes tileEdgeBreath {
+    0%, 100% {
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      border-color: rgba(var(--journey-color, 85, 139, 110), 0.34);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        0 0 22px rgba(var(--journey-color, 85, 139, 110), 0.16);
+    }
+  }
+
+  /* The listen card has a violet of its own, matching the Listen screen, so it
+   * breathes in that rather than the path's — otherwise it would change hue
+   * every time the user switches journey. */
+  @keyframes listenEdgeBreath {
+    0%, 100% { border-color: rgba(var(--lc), 0.30); }
+    50%      { border-color: rgba(var(--lc), 0.62); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spatial-home > .hero-card {
+      animation:
+        homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.07s both,
+        cardFloat 4s ease-in-out 1s infinite,
+        tileEdgeBreath 7s ease-in-out 0s infinite;
+    }
+    .spatial-home > .home-week {
+      animation:
+        homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.11s both,
+        tileEdgeBreath 7s ease-in-out -0.9s infinite;
+    }
+    .spatial-home > .mood-weather {
+      animation:
+        moodWeatherEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both,
+        tileEdgeBreath 7s ease-in-out -1.8s infinite;
+    }
+    .spatial-home > .home-listen-card {
+      animation:
+        homeEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.26s backwards,
+        listenEdgeBreath 7s ease-in-out -5s infinite;
+    }
+
+    /* :not() on the streak states is load-bearing. .vital-streak.has-streak
+     * and .is-milestone paint their own orange glow through a running
+     * animation, and an animated property beats a normal declaration — so the
+     * breath would not merely sit on top of them, it would take their slot and
+     * the streak would stop reading as lit. A card with a live streak keeps
+     * its own signal. */
+    .spatial-home .vital-card:not(.has-streak):not(.is-milestone) {
+      animation: tileEdgeBreath 7s ease-in-out infinite;
+    }
+    .spatial-home .vital-card:nth-child(1) { animation-delay: -2.6s; }
+    .spatial-home .vital-card:nth-child(2) { animation-delay: -3.4s; }
+    .spatial-home .vital-card:nth-child(3) { animation-delay: -4.2s; }
+
+    .spatial-home .spark-glass-card {
+      animation: tileEdgeBreath 7s ease-in-out -5.8s infinite;
+    }
+  }
+
+  /* ── The week strip, at width ─────────────────────────────────────────────
+   * On a phone this is seven 30px dots spread across a 340px row, which is as
+   * much as that space allows. In a six-column tile it has around 750px and
+   * seven small dots in it read as a placeholder — the tile looks like it is
+   * waiting for content that never arrives.
+   *
+   * So the dots get room to become the thing they represent. Larger, sitting
+   * on a rail that runs the width of the tile so the seven days read as a
+   * continuum rather than seven separate marks, each carrying a soft halo in
+   * the active path's colour that breathes on its own offset.
+   *
+   * Everything below is additive. The strip's existing behaviour — the streak
+   * heartbeat travelling toward today, today's orbiting spark, the entrance
+   * cascade — is untouched, because all of it lives on .home-week-day and
+   * .home-week-dot and every new rule here targets a pseudo-element instead.
+   * Adding `animation` to either of those would replace what is already there.
+   */
+  .spatial-home > .home-week {
+    position: relative;
+    justify-content: space-between;
+    gap: 0;
+    padding: 30px 34px;
+  }
+
+  /* The rail. Sits behind the dots, level with their centres, fading out at
+   * both ends so it reads as a passage rather than a bounded bar. */
+  .spatial-home > .home-week::before {
+    content: '';
+    position: absolute;
+    left: 34px;
+    right: 34px;
+    top: 52px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.09) 14%,
+      rgba(255, 255, 255, 0.09) 86%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    pointer-events: none;
+  }
+
+  .spatial-home .home-week-day {
+    position: relative;
+    gap: 12px;
+  }
+
+  /* The halo. Only under days that were actually journalled — an empty day
+   * with a glow behind it would be a lie about the week. Staggered by the same
+   * --d the entrance uses, so the seven pulse in sequence rather than together.
+   */
+  .spatial-home .home-week-day.is-active::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 62px;
+    height: 62px;
+    margin-left: -31px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(var(--journey-color, 85, 139, 110), 0.24) 0%,
+      transparent 68%
+    );
+    filter: blur(6px);
+    pointer-events: none;
+    animation: weekHaloBreath 5.5s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0ms) * 4);
+  }
+
+  @keyframes weekHaloBreath {
+    0%, 100% { opacity: 0.45; transform: scale(0.92); }
+    50%      { opacity: 1;    transform: scale(1.06); }
+  }
+
+  .spatial-home .home-week-dot {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* A journalled day stops being a filled circle and becomes a lit one: the
+   * gradient keeps the path's colour, and an inner highlight gives the disc
+   * some depth against the plate rather than sitting flat on it. */
+  .spatial-home .home-week-day.is-active .home-week-dot {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 0 18px rgba(var(--journey-color, 85, 139, 110), 0.55);
+  }
+
+  .spatial-home .home-week-day.is-today .home-week-dot {
+    border-width: 2px;
+  }
+
+  .spatial-home .home-week-label {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* The rail is a hairline tuned for the dark plate; on the light theme it
+   * disappears entirely. */
+  .spatial-home.hs-light > .home-week::before {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.10) 14%,
+      rgba(0, 0, 0, 0.10) 86%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spatial-home .home-week-day.is-active::before {
+      animation: none;
     }
   }
 }
