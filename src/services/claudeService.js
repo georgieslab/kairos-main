@@ -56,11 +56,36 @@ const AI_LANGUAGE_NAMES = {
  * Returns a directive to append to a system prompt so Claude responds in the
  * user's selected language. Returns '' for English (the default), so English
  * behavior is byte-for-byte unchanged.
+ *
+ * Comes in two shapes, because the instruction that keeps a JSON generator
+ * honest actively breaks a conversation. Every prompt here produced JSON when
+ * this was written, so the directive told the model — mandatorily — to fill
+ * string VALUES in a JSON object and leave the English keys alone. Kairos AI
+ * is the first prompt that wants prose, and inherited that: asked a question
+ * in Georgian it was being ordered to answer with a JSON object containing
+ * "summary" and "reflectionQuestion". In English the directive returns '' and
+ * never fires, so the chat looked perfectly healthy right up until someone
+ * used it in the language it was built for.
+ *
+ * `json` defaults true so all eight existing callers are unchanged.
  */
-export const getLanguageDirective = () => {
+export const getLanguageDirective = ({ json = true } = {}) => {
   const lng = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
   const languageName = AI_LANGUAGE_NAMES[lng];
   if (!languageName) return '';
+
+  if (!json) {
+    return `
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 LANGUAGE (MANDATORY):
+Write your entire reply in ${languageName}. Not a word of English.
+Write it naturally and idiomatically, the way someone thinking in
+${languageName} would — never word-for-word from English.
+Reply in plain prose. No JSON, no field names, no markup of any kind.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+  }
+
   return `
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -128,7 +153,7 @@ DO NOT:
 • Do not reframe every difficulty as growth in disguise. Sometimes a bad week is
   just a bad week, and saying that is more useful than finding the silver lining.
 
-TONE: warm, direct, specific, unsentimental. Plain language, short sentences.
+TONE:direct, specific, unsentimental. Plain language, short sentences.
 Someone who has read every word, respects them enough to be straight with them,
 and has no interest in performing wisdom.
 

@@ -42,7 +42,7 @@ const CONTEXT_TURNS = 20;
 // Anthropic downscales anything larger than this anyway, so sending more is
 // paying upload and latency for pixels that get thrown away.
 const MAX_EDGE = 1568;
-const JPEG_QUALITY = 0.82;
+const JPEG_QUALITY = 0.75;
 
 // An image costs roughly 1.6k tokens and the thread is resent every turn, so
 // five images in a conversation would silently add ~8k tokens to every
@@ -227,7 +227,7 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     setError(null);
 
     const system = `${HONESTY_DIRECTIVE}
-${getLanguageDirective()}
+${getLanguageDirective({ json: false })}
 
 You are Miro — the name Kairos AI goes by. Say it if you are asked who you
 are, but do not announce it unprompted and never make yourself the subject:
@@ -243,6 +243,10 @@ something that sounds insightful and is not about them.
 
 This is a conversation. You can see what has already been said in it — refer
 back to it rather than restating context they have just given you.
+
+permission to say "I don't know" more plainly when I'm working from too little.
+Sometimes I construct an observation that sounds grounded but is actually me filling a gap.
+That should be named more directly.
 
 They may share an image: a page of handwriting, a drawing, a photograph of
 something from their day. Read it as part of what they are telling you and
