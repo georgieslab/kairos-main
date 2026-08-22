@@ -1830,4 +1830,178 @@
       animation: none;
     }
   }
+
+  /* ── 7. What's New ────────────────────────────────────────────────────────
+   * The announcement sheet is portaled to <body>, so unlike every other
+   * section here it has no screen container to hang off — and no shared-class
+   * risk either, since .whats-new-* and .wn-* belong to one component.
+   *
+   * On a phone it is a 360px card and the three paths are a stacked list,
+   * which is all that fits. On a monitor that card sits in the middle of a
+   * dimmed 1920px field looking like a phone screenshot someone pasted in, and
+   * the list is the wrong shape for what it describes: a collection of three
+   * paths sold together, not three rows of a menu.
+   *
+   * So the sheet widens, the paths go three across as cards, and the motion
+   * stops being one fade. Everything below is additive — the base entrance,
+   * the per-slide transition and the deck's keyboard handling are untouched.
+   */
+  .whats-new-overlay {
+    padding: 40px;
+  }
+
+  .whats-new-sheet {
+    max-width: 720px;
+    padding: 44px 44px 32px;
+    border-radius: 40px;
+  }
+
+  /* ── The halo ────────────────────────────────────────────────────────────
+   * Bigger, and it turns. The ring is already an a -> b -> c sweep across the
+   * three accent colours; rotating the element rotates that sweep, which reads
+   * as light moving around the rim rather than as a spinner, because the ring
+   * is continuous and has no visible start.
+   */
+  .whats-new-sheet .whats-new-halo {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 20px;
+    animation: wnHaloTurn 14s linear infinite;
+  }
+  @keyframes wnHaloTurn {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  /* The icon must not turn with the rim, so it counter-rotates at the same
+   * rate and stays upright. */
+  .whats-new-sheet .whats-new-halo > svg {
+    animation: wnHaloTurn 14s linear infinite reverse;
+  }
+
+  /* ── Type ────────────────────────────────────────────────────────────────*/
+  .whats-new-sheet .whats-new-title {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .whats-new-sheet .whats-new-text {
+    font-size: 15px;
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+  .whats-new-sheet .whats-new-eyebrow {
+    letter-spacing: 0.16em;
+  }
+
+  /* ── Three across ────────────────────────────────────────────────────────
+   * Each path stops being an icon-then-text row and becomes a card with the
+   * icon over the name: at roughly 190px a horizontal row leaves the
+   * description two words per line.
+   */
+  .whats-new-sheet .wn-collection {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 10px 0 22px;
+  }
+  .whats-new-sheet .wn-path-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 22px 14px;
+    /* Replaces wnRowIn, which slid each row in from the left — right for a
+     * list assembling itself, wrong for three columns. The per-row delays are
+     * declared on :nth-child in the base sheet and survive the name swap, so
+     * the stagger now runs left to right. */
+    animation-name: wnCardRise;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+  }
+  @keyframes wnCardRise {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .whats-new-sheet .wn-path-text {
+    align-items: center;
+  }
+
+  /* Each card is already tinted with its own path colour through --pc, so the
+   * hover lifts into that rather than into a generic white. */
+  @media (hover: hover) {
+    .whats-new-sheet .wn-path-row:hover {
+      transform: translateY(-4px);
+      border-color: rgba(var(--pc), 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3),
+                  0 0 26px rgba(var(--pc), 0.22);
+    }
+    .whats-new-sheet .wn-path-row:hover .wn-path-icon {
+      transform: scale(1.1);
+    }
+  }
+  .whats-new-sheet .wn-path-icon {
+    width: 46px;
+    height: 46px;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── The button ──────────────────────────────────────────────────────────
+   * It is a three-colour gradient already. Widening the gradient and sliding
+   * it makes the colour travel across the button instead of sitting still —
+   * the one place on the sheet where a moving gradient is right, because it is
+   * the thing being offered.
+   */
+  .whats-new-sheet .whats-new-cta {
+    width: auto;
+    min-width: 300px;
+    margin-inline: auto;
+    height: 56px;
+    font-size: 16px;
+    background-size: 220% 100%;
+    animation: wnCtaSheen 6s ease-in-out infinite;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.25s ease;
+  }
+  @keyframes wnCtaSheen {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  @media (hover: hover) {
+    .whats-new-sheet .whats-new-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(var(--wn-a), 0.42);
+    }
+  }
+
+  /* ── Deck controls ───────────────────────────────────────────────────────
+   * Arrows are the only way through the deck on a pointer device — there is no
+   * swipe — so they get a real target and a visible response.
+   */
+  .whats-new-sheet .wn-arrow {
+    width: 42px;
+    height: 42px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  @media (hover: hover) {
+    .whats-new-sheet .wn-arrow:hover:not(:disabled) {
+      transform: scale(1.08);
+    }
+  }
+  .whats-new-sheet .wn-dot {
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+  }
+  /* The active dot stretches into a bar rather than only brightening, so the
+   * deck's position is readable at a glance from across a desk. */
+  .whats-new-sheet .wn-dot.is-active {
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whats-new-sheet .whats-new-halo,
+    .whats-new-sheet .whats-new-halo > svg,
+    .whats-new-sheet .whats-new-cta {
+      animation: none;
+    }
+  }
 }
