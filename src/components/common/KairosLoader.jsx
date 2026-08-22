@@ -17,9 +17,9 @@ import '../../styles/components/loader.css';
  * animatable in CSS only in newer browsers and repaints rather than composites.
  * Translating a masked rectangle costs nothing and works everywhere.
  */
-const KairosHourglass = ({ sandColor = null }) => (
+export const KairosHourglass = ({ sandColor = null, className = '' }) => (
   <svg
-    className="kairos-hourglass"
+    className={`kairos-hourglass ${className}`.trim()}
     viewBox="0 0 100 140"
     role="presentation"
     style={sandColor ? { '--kh-c': sandColor } : undefined}

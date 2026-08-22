@@ -373,5 +373,24 @@
     "aiKeptDesc": "Today's conversation is still there when you come back",
     "aiPriceMain": "Free daily",
     "aiPriceNote": "one message every day at no cost. Unlimited with a subscription."
+  },
+  "kairosAi": {
+    "title": "Kairos AI",
+    "readCount": "has read {{count}} of your entries",
+    "needMore": "a few more entries and it can start reading",
+    "placeholder": "Ask about what you have been writing…",
+    "placeholderFollow": "Say more…",
+    "placeholderLocked": "Write a few entries first",
+    "placeholderTomorrow": "Back tomorrow",
+    "send": "Send",
+    "addImage": "Add an image",
+    "removeImage": "Remove image",
+    "dropHere": "Drop the image here",
+    "imageGone": "image",
+    "notAnImage": "That needs to be an image.",
+    "defaultImagePrompt": "What do you make of this?",
+    "exhausted": "That's today's message. Kairos AI is unlimited on a subscription — otherwise it picks up again tomorrow.",
+    "failed": "That didn't go through. Nothing in your journal was affected — try again in a moment.",
+    "thinking": "reading back through your entries…"
   }
 }

@@ -373,5 +373,24 @@
     "aiKeptDesc": "Das Gespräch von heute ist noch da, wenn du zurückkommst",
     "aiPriceMain": "Täglich gratis",
     "aiPriceNote": "eine Nachricht pro Tag, kostenlos. Unbegrenzt mit einem Abo."
+  },
+  "kairosAi": {
+    "title": "Kairos AI",
+    "readCount": "hat {{count}} deiner Einträge gelesen",
+    "needMore": "noch ein paar Einträge, dann kann es mitlesen",
+    "placeholder": "Frag nach dem, was du geschrieben hast…",
+    "placeholderFollow": "Erzähl weiter…",
+    "placeholderLocked": "Schreib zuerst ein paar Einträge",
+    "placeholderTomorrow": "Morgen wieder",
+    "send": "Senden",
+    "addImage": "Bild hinzufügen",
+    "removeImage": "Bild entfernen",
+    "dropHere": "Bild hier ablegen",
+    "imageGone": "Bild",
+    "notAnImage": "Das muss ein Bild sein.",
+    "defaultImagePrompt": "Was hältst du davon?",
+    "exhausted": "Das war die Nachricht für heute. Mit einem Abo ist Kairos AI unbegrenzt — sonst geht es morgen weiter.",
+    "failed": "Das hat nicht geklappt. An deinem Journal hat sich nichts geändert — versuch es gleich noch einmal.",
+    "thinking": "liest deine Einträge noch einmal durch…"
   }
 }

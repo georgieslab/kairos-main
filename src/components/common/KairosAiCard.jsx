@@ -15,15 +15,19 @@
 // The free allowance is one message a day. A free user therefore sees their
 // exchange and a closed input with a reason — which is still better than the
 // answer being thrown away, and is why threading is right for both tiers.
+//
+// One model for the whole thread. Switching models between turns would change
+// the voice mid-conversation, which is worse than any per-turn saving is worth.
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, ArrowUp } from 'lucide-react';
+import { Sparkles, ArrowUp, ImagePlus, X } from 'lucide-react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
+import { KairosHourglass } from './KairosLoader';
 import '../../styles/components/kairosAi.css';
 
 // Matches the cap every other history-fed generator uses. It is the reason a
@@ -32,22 +36,67 @@ const CONTEXT_ENTRIES = 20;
 
 // How much of the conversation is resent each turn. Every turn resends the
 // thread, so without a ceiling turn 40 costs several times turn 1 — the same
-// compounding the slice() caps exist to prevent elsewhere. Ten exchanges is
-// well past the point where a thread is still about one thing.
+// compounding the slice() caps exist to prevent elsewhere.
 const CONTEXT_TURNS = 20;
 
+// Anthropic downscales anything larger than this anyway, so sending more is
+// paying upload and latency for pixels that get thrown away.
+const MAX_EDGE = 1568;
+const JPEG_QUALITY = 0.82;
+
+// An image costs roughly 1.6k tokens and the thread is resent every turn, so
+// five images in a conversation would silently add ~8k tokens to every
+// subsequent turn. Only the newest few are resent as pixels; older ones survive
+// as a note, which keeps follow-up questions working without the compounding.
+const IMAGE_MEMORY = 4;
+
 const todayKey = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Reads a file into a capped, re-encoded JPEG. The cap is the point: the
+ * existing journal upload halves whatever it is given, which leaves a modern
+ * phone photo at ~3000px — still far past what the model can use.
+ */
+const prepareImage = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read that file'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('That file is not an image'));
+      img.onload = () => {
+        const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        // Photographs of paper are the likely case here and arrive with no
+        // alpha — a white ground keeps a transparent PNG from turning black.
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+        resolve({ dataUrl, mediaType: 'image/jpeg', base64: dataUrl.split(',')[1] });
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 
 const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const { t } = useTranslation('journey');
   const { currentUser } = useAuth();
 
-  const [messages, setMessages] = useState([]);   // { role: 'user'|'assistant', content }
+  // { role, content, image?: { dataUrl, mediaType, base64 }, hadImage?: bool }
+  const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState('');
+  const [pending, setPending] = useState(null);   // the attachment, before sending
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState(null);
   const [exhausted, setExhausted] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const threadRef = useRef(null);
+  const fileRef = useRef(null);
 
   // Below a handful of entries there is nothing to reflect on, and an AI that
   // answers anyway is inventing a person.
@@ -94,14 +143,48 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     [entries]
   );
 
+  const attach = useCallback(async (file) => {
+    if (!file || locked || isThinking) return;
+    if (!file.type?.startsWith('image/')) {
+      setError(t('kairosAi.notAnImage', 'That needs to be an image.'));
+      return;
+    }
+    try {
+      setError(null);
+      setPending(await prepareImage(file));
+    } catch (e) {
+      setError(e.message);
+    }
+  }, [locked, isThinking, t]);
+
+  // Pasting a screenshot straight into the box is the fastest path on desktop,
+  // and costs nothing to support.
+  const onPaste = (e) => {
+    const item = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith('image/'));
+    if (item) {
+      e.preventDefault();
+      attach(item.getAsFile());
+    }
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file) attach(file);
+  };
+
   const persist = async (next) => {
     if (!currentUser) return;
     try {
       await setDoc(
         doc(db, 'users', currentUser.uid, 'kairos_conversations', todayKey()),
         {
-          messages: next,
-          // The first thing asked, for a conversation list to label this with.
+          // Base64 never goes in the document. A single capped photo is a few
+          // hundred KB encoded and Firestore's ceiling is 1MB per document, so
+          // two images would cost the user the whole conversation. The image
+          // stays for the session; what is kept is that there was one.
+          messages: next.map(({ image, ...m }) => (image ? { ...m, hadImage: true } : m)),
           title: next.find((m) => m.role === 'user')?.content?.slice(0, 80) || '',
           entriesSeen: context.length,
           updatedAt: serverTimestamp()
@@ -115,23 +198,44 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     }
   };
 
+  // The wire format. Images are only sent as pixels while they are recent;
+  // beyond that they become a line of text so the thread still makes sense.
+  const toApiMessage = (m, fromEnd) => {
+    if (m.role === 'user' && m.image && fromEnd < IMAGE_MEMORY) {
+      return {
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: m.image.mediaType, data: m.image.base64 } },
+          { type: 'text', text: m.content || t('kairosAi.defaultImagePrompt', 'What do you make of this?') }
+        ]
+      };
+    }
+    const note = (m.image || m.hadImage) ? '[an image they shared earlier] ' : '';
+    return { role: m.role, content: note + (m.content || '') };
+  };
+
   const ask = async () => {
     const q = question.trim();
-    if (!q || isThinking || locked || !currentUser) return;
+    if ((!q && !pending) || isThinking || locked || !currentUser) return;
 
-    const withUser = [...messages, { role: 'user', content: q }];
+    const outgoing = { role: 'user', content: q, ...(pending ? { image: pending } : {}) };
+    const withUser = [...messages, outgoing];
     setMessages(withUser);
     setQuestion('');
+    setPending(null);
     setIsThinking(true);
     setError(null);
 
     const system = `${HONESTY_DIRECTIVE}
 ${getLanguageDirective()}
 
-You are Kairos AI. The person is talking to you about their own journal, which
-you have read. You are not a coach and not a cheerleader — you are closer to a
-good reader of someone's work, or the friend who remembers what they said last
-month.
+You are Miro — the name Kairos AI goes by. Say it if you are asked who you
+are, but do not announce it unprompted and never make yourself the subject:
+the person and what they have written is the subject.
+
+The person is talking to you about their own journal, which you have read. You
+are not a coach and not a cheerleader — you are closer to a good reader of
+someone's work, or the friend who remembers what they said last month.
 
 Ground every claim in their actual entries. Quote or reference specific ones.
 If their entries do not support an answer, say so plainly rather than producing
@@ -139,6 +243,11 @@ something that sounds insightful and is not about them.
 
 This is a conversation. You can see what has already been said in it — refer
 back to it rather than restating context they have just given you.
+
+They may share an image: a page of handwriting, a drawing, a photograph of
+something from their day. Read it as part of what they are telling you and
+connect it to their journal where it genuinely connects. Do not force a link
+that is not there.
 
 Their journal (${context.length} of ${totalEntries} entries, most recent first):
 ${JSON.stringify(context)}
@@ -149,6 +258,7 @@ Answer in prose, under 200 words, second person. No preamble, no compliment
 before the substance.`;
 
     try {
+      const sent = withUser.slice(-CONTEXT_TURNS);
       const data = await callClaudeApi({
         method: 'POST',
         body: JSON.stringify({
@@ -159,11 +269,7 @@ before the substance.`;
           model: 'claude-sonnet-4-6',
           system,
           max_tokens: 700,
-          // Only the tail of the thread. See CONTEXT_TURNS.
-          messages: withUser.slice(-CONTEXT_TURNS).map((m) => ({
-            role: m.role,
-            content: m.content
-          }))
+          messages: sent.map((m, i) => toApiMessage(m, sent.length - 1 - i))
         })
       });
 
@@ -187,9 +293,11 @@ before the substance.`;
         );
       }
       // Take the unanswered question back out of the thread rather than
-      // leaving it sitting there as though it were asked and ignored.
+      // leaving it sitting there as though it were asked and ignored, and hand
+      // the attachment back so it does not have to be picked again.
       setMessages(messages);
       setQuestion(q);
+      if (outgoing.image) setPending(outgoing.image);
     } finally {
       setIsThinking(false);
     }
@@ -202,8 +310,23 @@ before the substance.`;
     }
   };
 
+  const canSend = !locked && !isThinking && (!!question.trim() || !!pending);
+
   return (
-    <section className="kai-card" aria-label={t('kairosAi.title', 'Kairos AI')}>
+    <section
+      className={`kai-card${isThinking ? ' is-working' : ''}${isDragging ? ' is-dragging' : ''}`}
+      aria-label={t('kairosAi.title', 'Miro')}
+      onDragOver={(e) => { e.preventDefault(); if (!locked) setIsDragging(true); }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={onDrop}
+    >
+      {/* Two slow-drifting colour fields behind the glass. Purely decorative,
+          so it is inert to pointers and hidden from assistive tech. */}
+      <div className="kai-aurora" aria-hidden="true">
+        <span className="kai-blob kai-blob-a" />
+        <span className="kai-blob kai-blob-b" />
+      </div>
+
       <div className="kai-head">
         <span className="kai-halo" aria-hidden="true">
           <Sparkles size={16} />
@@ -219,25 +342,67 @@ before the substance.`;
       {messages.length > 0 && (
         <div className="kai-thread" ref={threadRef}>
           {messages.map((m, i) => (
-            <p key={i} className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}>
-              {m.content}
-            </p>
+            <div key={i} className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}>
+              {m.image && <img className="kai-msg-img" src={m.image.dataUrl} alt="" />}
+              {/* A thread reloaded from storage has the note but not the
+                  pixels — say so rather than showing a broken frame. */}
+              {!m.image && m.hadImage && (
+                <span className="kai-msg-imgnote">
+                  <ImagePlus size={12} />
+                  {t('kairosAi.imageGone', 'image')}
+                </span>
+              )}
+              {m.content && <p className="kai-msg-text">{m.content}</p>}
+            </div>
           ))}
           {isThinking && (
-            <p className="kai-msg kai-msg-ai kai-typing" aria-live="polite">
-              <span /><span /><span />
-            </p>
+            <div className="kai-msg kai-msg-ai kai-typing" aria-live="polite">
+              <KairosHourglass className="kh-inline" />
+              <span className="kai-typing-word">
+                {t('kairosAi.thinking', 'reading back through your entries…')}
+              </span>
+            </div>
           )}
         </div>
       )}
 
+      {pending && (
+        <div className="kai-attach">
+          <img src={pending.dataUrl} alt="" className="kai-attach-img" />
+          <button
+            className="kai-attach-x"
+            onClick={() => setPending(null)}
+            aria-label={t('kairosAi.removeImage', 'Remove image')}
+          >
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
       <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}`}>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={(e) => { attach(e.target.files?.[0]); e.target.value = ''; }}
+        />
+        <button
+          className="kai-attach-btn"
+          onClick={() => fileRef.current?.click()}
+          disabled={locked || isThinking}
+          aria-label={t('kairosAi.addImage', 'Add an image')}
+        >
+          <ImagePlus size={17} />
+        </button>
+
         <textarea
           className="kai-input"
           rows={1}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={onKeyDown}
+          onPaste={onPaste}
           disabled={locked || isThinking}
           placeholder={
             exhausted
@@ -252,12 +417,19 @@ before the substance.`;
         <button
           className="kai-send"
           onClick={ask}
-          disabled={locked || isThinking || !question.trim()}
+          disabled={!canSend}
           aria-label={t('kairosAi.send', 'Send')}
         >
           <ArrowUp size={16} />
         </button>
       </div>
+
+      {isDragging && (
+        <div className="kai-drop" aria-hidden="true">
+          <ImagePlus size={20} />
+          {t('kairosAi.dropHere', 'Drop the image here')}
+        </div>
+      )}
 
       {error && <p className={exhausted ? 'kai-limit' : 'kai-error'}>{error}</p>}
     </section>
