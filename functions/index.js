@@ -1450,6 +1450,13 @@ exports.callClaude = functions
         }
       }
 
+      // The body is forwarded to Anthropic verbatim, so anything Kairos added
+      // for its own purposes has to come off first — the API rejects unknown
+      // top-level parameters with a 400, and the request never reaches the
+      // model. `kairosAi` is ours: it chose the allowance above and has no
+      // meaning past this point.
+      delete requestBody.kairosAi;
+
       let result;
       try {
         const response = await fetch("https://api.anthropic.com/v1/messages", {
