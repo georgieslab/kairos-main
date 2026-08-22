@@ -11,6 +11,15 @@
  */
 
 .kai-card {
+  /* Miro's own colours, deliberately NOT --journey-color.
+     Every other tile on Home takes the active path's hue; this one took it
+     too, which meant the card glowed the brown-gold of Kairos Moments right
+     next to a night-blue mark. Miro is not part of any path, so the surface
+     does not change colour with the path you happen to be walking. Deep water
+     for the body of the glow, the mark's own violet for the second light. */
+  --kai-glow: 74, 106, 170;
+  --kai-glow-alt: 116, 110, 205;
+
   position: relative;
   isolation: isolate;
   overflow: hidden;          /* keeps the drifting blobs inside the plate */
@@ -37,17 +46,10 @@
   flex-wrap: wrap;
 }
 
-.kai-halo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
+/* The mark brings its own glow and colour (see miroMark.css); all this has to
+   do is stop the head squashing it. */
+.kai-head .miro-mark {
   flex-shrink: 0;
-  border-radius: 50%;
-  color: rgb(var(--journey-color, 85, 139, 110));
-  background: rgba(var(--journey-color, 85, 139, 110), 0.14);
-  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.28);
 }
 
 .kai-title {
@@ -78,8 +80,8 @@
 }
 
 .kai-input-row:focus-within {
-  border-color: rgba(var(--journey-color, 85, 139, 110), 0.45);
-  box-shadow: 0 0 20px rgba(var(--journey-color, 85, 139, 110), 0.12);
+  border-color: rgba(var(--kai-glow), 0.45);
+  box-shadow: 0 0 20px rgba(var(--kai-glow), 0.12);
 }
 
 /* A textarea rather than an input so a long question wraps instead of
@@ -119,8 +121,10 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  color: #0b0b0d;
-  background: rgb(var(--journey-color, 85, 139, 110));
+  /* White, not the near-black that worked against a mid-gold: on deep water
+     a dark glyph disappears. */
+  color: #fff;
+  background: rgb(var(--kai-glow));
   transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 }
 
@@ -140,8 +144,8 @@
   animation: kaiThinking 1.8s ease-in-out infinite;
 }
 @keyframes kaiThinking {
-  0%, 100% { border-color: rgba(var(--journey-color, 85, 139, 110), 0.20); }
-  50%      { border-color: rgba(var(--journey-color, 85, 139, 110), 0.55); }
+  0%, 100% { border-color: rgba(var(--kai-glow), 0.20); }
+  50%      { border-color: rgba(var(--kai-glow), 0.55); }
 }
 
 .kai-thinking,
@@ -207,8 +211,8 @@
   font-size: 14px;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.92);
-  background: rgba(var(--journey-color, 85, 139, 110), 0.18);
-  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.24);
+  background: rgba(var(--kai-glow), 0.18);
+  border: 1px solid rgba(var(--kai-glow), 0.24);
 }
 
 /* Its replies are not bubbled. They are the thing you came to read, and prose
@@ -291,14 +295,14 @@
 .kai-blob-a {
   top: -110px;
   left: -70px;
-  background: radial-gradient(circle, rgba(var(--journey-color, 85, 139, 110), 0.55), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--kai-glow), 0.55), transparent 70%);
   animation: kaiDriftA 22s ease-in-out infinite;
 }
 
 .kai-blob-b {
   right: -90px;
   bottom: -120px;
-  background: radial-gradient(circle, rgba(120, 145, 190, 0.42), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--kai-glow-alt), 0.42), transparent 70%);
   animation: kaiDriftB 28s ease-in-out infinite;
 }
 
@@ -337,7 +341,7 @@
   background: conic-gradient(
     from var(--kai-a),
     transparent 0deg,
-    rgba(var(--journey-color, 85, 139, 110), 0.75) 34deg,
+    rgba(var(--kai-glow), 0.75) 34deg,
     transparent 86deg,
     transparent 360deg
   );
@@ -367,34 +371,22 @@
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.05),
       0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 26px rgba(var(--journey-color, 85, 139, 110), 0.10);
+      0 0 26px rgba(var(--kai-glow), 0.10);
   }
   50% {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.05),
       0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 52px rgba(var(--journey-color, 85, 139, 110), 0.30);
+      0 0 52px rgba(var(--kai-glow), 0.30);
   }
 }
 
-/* The halo keeps a slow pulse so the card reads as awake before you touch it,
-   and turns faster once it is actually working. */
-.kai-halo {
-  animation: kaiHalo 4.5s ease-in-out infinite;
-}
-.kai-card.is-working .kai-halo {
-  animation: kaiHalo 1.6s ease-in-out infinite;
-}
-
-@keyframes kaiHalo {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(var(--journey-color, 85, 139, 110), 0.30);
-  }
-  50% {
-    transform: scale(1.07);
-    box-shadow: 0 0 0 7px rgba(var(--journey-color, 85, 139, 110), 0);
-  }
+/* While it is answering, the opening in Miro's ring comes round faster. Only
+   the duration is touched — restating the shorthand would drop the linear
+   timing and the infinite count with it — so the mark's own glow and breath
+   are untouched and it never stops being calm. */
+.kai-card.is-working .miro-ring {
+  animation-duration: 7s;
 }
 
 /* ── Images ───────────────────────────────────────────────────────────────*/
@@ -460,8 +452,8 @@
 .kai-attach-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 @media (hover: hover) {
   .kai-attach-btn:not(:disabled):hover {
-    color: rgb(var(--journey-color, 85, 139, 110));
-    background: rgba(var(--journey-color, 85, 139, 110), 0.12);
+    color: rgb(var(--kai-glow));
+    background: rgba(var(--kai-glow), 0.12);
     transform: translateY(-1px);
   }
 }
@@ -493,7 +485,7 @@
 
 /* ── Drop target ──────────────────────────────────────────────────────────*/
 .kai-card.is-dragging {
-  border-color: rgba(var(--journey-color, 85, 139, 110), 0.5);
+  border-color: rgba(var(--kai-glow), 0.5);
 }
 
 .kai-drop {
@@ -512,7 +504,7 @@
   background: rgba(18, 20, 19, 0.72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 0 2px rgba(var(--journey-color, 85, 139, 110), 0.55);
+  box-shadow: inset 0 0 0 2px rgba(var(--kai-glow), 0.55);
   animation: kaiFadeIn 0.18s ease both;
 }
 
@@ -532,8 +524,8 @@
 .hs-light .kai-msg-ai { color: rgba(0, 0, 0, 0.85); }
 .hs-light .kai-msg-you {
   color: rgba(0, 0, 0, 0.88);
-  background: rgba(var(--journey-color, 85, 139, 110), 0.14);
-  border-color: rgba(var(--journey-color, 85, 139, 110), 0.22);
+  background: rgba(var(--kai-glow), 0.14);
+  border-color: rgba(var(--kai-glow), 0.22);
 }
 .hs-light .kai-limit { color: rgba(0, 0, 0, 0.5); }
 .hs-light .kai-typing-word { color: rgba(0, 0, 0, 0.5); }
@@ -577,13 +569,13 @@
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.8),
       0 8px 20px rgba(0, 0, 0, 0.05),
-      0 0 24px rgba(var(--journey-color, 85, 139, 110), 0.10);
+      0 0 24px rgba(var(--kai-glow), 0.10);
   }
   50% {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.8),
       0 8px 20px rgba(0, 0, 0, 0.05),
-      0 0 48px rgba(var(--journey-color, 85, 139, 110), 0.26);
+      0 0 48px rgba(var(--kai-glow), 0.26);
   }
 }
 
@@ -595,8 +587,6 @@
   .kai-msg,
   .kai-typing-word,
   .kai-blob,
-  .kai-halo,
-  .kai-card.is-working .kai-halo,
   .kai-attach,
   .kai-drop,
   .kai-card.is-working,
@@ -608,7 +598,7 @@
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.05),
       0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 40px rgba(var(--journey-color, 85, 139, 110), 0.22);
+      0 0 40px rgba(var(--kai-glow), 0.22);
   }
   .kai-typing-word { opacity: 0.7; }
 }

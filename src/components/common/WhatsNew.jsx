@@ -26,7 +26,7 @@ const SEEN_KEY = 'kairos_whats_new_seen';
 
 // Bump to the newest slide's id when something ships. The unseen dot compares
 // against this, so it reappears for everyone exactly once per announcement.
-const ANNOUNCEMENT_ID = 'kairos-ai';
+const ANNOUNCEMENT_ID = 'miro';
 
 // Newest first. Path names are brand and stay untranslated; everything else
 // runs through i18n with the English as fallback. Colours mirror each path's
@@ -48,16 +48,16 @@ const PACK_PRICE = {
 
 const SLIDES = [
   {
-    id: 'kairos-ai',
+    id: 'miro',
     halo: MessageCircle,
     // The app's own green, cooling through teal into blue — its palette, not a
     // pack's. This slide is about the app itself rather than something to buy.
     accent: ['85, 139, 110', '92, 138, 154', '108, 132, 176'],
-    eyebrowKey: 'whatsNew.aiEyebrow',   eyebrow: 'New — Kairos AI',
-    titleKey: 'whatsNew.aiTitle',       title: 'It talks back now',
-    textKey: 'whatsNew.aiText',         text: 'Kairos AI has read your journal, and it answers from what is actually in it. On the Home screen.',
-    ctaKey: 'whatsNew.aiCta',           cta: 'Try it',
-    action: 'kairos-ai',
+    eyebrowKey: 'whatsNew.aiEyebrow',   eyebrow: 'New — Miro',
+    titleKey: 'whatsNew.aiTitle',       title: 'Meet Miro',
+    textKey: 'whatsNew.aiText',         text: 'Miro has read your journal, and answers from what is actually in it. On the Home screen.',
+    ctaKey: 'whatsNew.aiCta',           cta: 'Say hello',
+    action: 'miro',
     rows: [
       { icon: BookOpen,      color: '85, 139, 110',  nameKey: 'whatsNew.aiReadsName',  name: 'It has read your entries',
         descKey: 'whatsNew.aiReadsDesc',  desc: 'Answers cite what you wrote, not generic advice' },
@@ -173,7 +173,7 @@ const WhatsNew = ({ navigateToScreen }) => {
   // somewhere the user already is.
   const onCta = () => {
     setIsOpen(false);
-    if (slide.action === 'kairos-ai') {
+    if (slide.action === 'miro') {
       // After the sheet unmounts, or the scroll competes with the overlay.
       setTimeout(() => {
         document.querySelector('.kai-card')

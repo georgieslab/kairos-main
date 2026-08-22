@@ -21,13 +21,14 @@
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, ArrowUp, ImagePlus, X } from 'lucide-react';
+import { ArrowUp, ImagePlus, X } from 'lucide-react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 import { KairosHourglass } from './KairosLoader';
+import MiroMark from './MiroMark';
 import '../../styles/components/kairosAi.css';
 
 // Matches the cap every other history-fed generator uses. It is the reason a
@@ -286,7 +287,7 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     const system = `${HONESTY_DIRECTIVE}
 ${getLanguageDirective({ json: false })}
 
-You are Miro — the name Kairos AI goes by. Say it if you are asked who you
+You are Miro. Say it if you are asked who you
 are, but do not announce it unprompted and never make yourself the subject:
 the person and what they have written is the subject.
 
@@ -363,7 +364,7 @@ before the substance.`;
       if (isExhausted) {
         setExhausted(true);
         setError(
-          t('kairosAi.exhausted', "That's today's message. Kairos AI is unlimited on a subscription — otherwise it picks up again tomorrow.")
+          t('kairosAi.exhausted', "That's today's message. Miro is unlimited on a subscription — otherwise it picks up again tomorrow.")
         );
       } else {
         setError(
@@ -406,10 +407,8 @@ before the substance.`;
       </div>
 
       <div className="kai-head">
-        <span className="kai-halo" aria-hidden="true">
-          <Sparkles size={16} />
-        </span>
-        <span className="kai-title">{t('kairosAi.title', 'Kairos AI')}</span>
+        <MiroMark size={34} />
+        <span className="kai-title">{t('kairosAi.title', 'Miro')}</span>
         <span className="kai-sub">
           {hasEnough
             ? t('kairosAi.readCount', 'has read {{count}} of your entries', { count: Math.min(totalEntries, CONTEXT_ENTRIES) })

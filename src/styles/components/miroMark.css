@@ -1,0 +1,83 @@
+/* src/styles/components/miroMark.css
+ *
+ * The glow and the two slow motions. Everything here is calm on purpose: the
+ * mark should be noticed once and then live at the edge of attention.
+ */
+
+.miro-mark {
+  display: block;
+  overflow: visible;          /* the glow spills past the viewBox */
+  /* Two drop-shadows rather than one: a tight violet close to the body for
+     depth, and a wide diffuse blue further out for the air around it. A
+     single shadow big enough to read reads as a halo sticker instead. */
+  filter:
+    drop-shadow(0 0 4px rgba(126, 116, 210, 0.45))
+    drop-shadow(0 0 13px rgba(78, 96, 176, 0.32));
+  animation: miroBreathe 7.5s ease-in-out infinite;
+}
+
+/* Slower than a resting breath. Anything quicker starts to feel like a
+   notification badge asking to be tapped. */
+@keyframes miroBreathe {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 4px rgba(126, 116, 210, 0.38))
+      drop-shadow(0 0 11px rgba(78, 96, 176, 0.24));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 7px rgba(140, 128, 232, 0.6))
+      drop-shadow(0 0 20px rgba(92, 112, 200, 0.42));
+  }
+}
+
+/* The opening drifts around the mark. One turn every 26 seconds is below the
+   speed at which peripheral vision reports motion — you only notice the gap
+   has moved if you come back and look. */
+.miro-ring {
+  transform-origin: 20px 20px;
+  animation: miroTurn 26s linear infinite;
+}
+
+@keyframes miroTurn {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Light theme. The body stays dark — it is a night sky, and a pale version of
+   it would just be a grey dot — but the glow is warmed and lifted slightly so
+   it still separates from a near-white plate. */
+.hs-light .miro-mark,
+.light-theme .miro-mark {
+  filter:
+    drop-shadow(0 0 4px rgba(110, 104, 200, 0.34))
+    drop-shadow(0 0 12px rgba(96, 112, 190, 0.22));
+  animation: miroBreatheLight 7.5s ease-in-out infinite;
+}
+
+@keyframes miroBreatheLight {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 3px rgba(110, 104, 200, 0.28))
+      drop-shadow(0 0 10px rgba(96, 112, 190, 0.18));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 6px rgba(124, 116, 224, 0.46))
+      drop-shadow(0 0 17px rgba(104, 124, 206, 0.3));
+  }
+}
+
+/* The glow is the mark's whole character, so reduced motion keeps it — at the
+   midpoint of the breath — and only stops it moving. */
+@media (prefers-reduced-motion: reduce) {
+  .miro-mark,
+  .hs-light .miro-mark,
+  .light-theme .miro-mark {
+    animation: none;
+    filter:
+      drop-shadow(0 0 5px rgba(133, 122, 220, 0.48))
+      drop-shadow(0 0 15px rgba(85, 104, 188, 0.32));
+  }
+  .miro-ring { animation: none; }
+}

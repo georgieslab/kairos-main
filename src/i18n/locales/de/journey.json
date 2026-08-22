@@ -361,10 +361,10 @@
     "moralDesc": "Was du getan oder nicht verhindert hast",
     "existentialDesc": "Sterben, wählen, und ob es zählt",
     "bodyDesc": "Chronischer Schmerz — und dass man dir nicht glaubt",
-    "aiEyebrow": "Neu — Kairos AI",
-    "aiTitle": "Jetzt antwortet es",
-    "aiText": "Kairos AI hat dein Journal gelesen und antwortet aus dem, was wirklich darin steht. Auf dem Startbildschirm.",
-    "aiCta": "Ausprobieren",
+    "aiEyebrow": "Neu — Miro",
+    "aiTitle": "Das ist Miro",
+    "aiText": "Miro hat dein Journal gelesen und antwortet aus dem, was wirklich darin steht. Auf dem Startbildschirm.",
+    "aiCta": "Hallo sagen",
     "aiReadsName": "Es hat deine Einträge gelesen",
     "aiReadsDesc": "Antworten beziehen sich auf das, was du geschrieben hast — keine Ratschläge von der Stange",
     "aiThreadName": "Ein echtes Gespräch",
@@ -375,7 +375,7 @@
     "aiPriceNote": "eine Nachricht pro Tag, kostenlos. Unbegrenzt mit einem Abo."
   },
   "kairosAi": {
-    "title": "Kairos AI",
+    "title": "Miro",
     "readCount": "hat {{count}} deiner Einträge gelesen",
     "needMore": "noch ein paar Einträge, dann kann es mitlesen",
     "placeholder": "Frag nach dem, was du geschrieben hast…",
@@ -389,8 +389,12 @@
     "imageGone": "Bild",
     "notAnImage": "Das muss ein Bild sein.",
     "defaultImagePrompt": "Was hältst du davon?",
-    "exhausted": "Das war die Nachricht für heute. Mit einem Abo ist Kairos AI unbegrenzt — sonst geht es morgen weiter.",
+    "exhausted": "Das war die Nachricht für heute. Mit einem Abo ist Miro unbegrenzt — sonst geht es morgen weiter.",
     "failed": "Das hat nicht geklappt. An deinem Journal hat sich nichts geändert — versuch es gleich noch einmal.",
     "thinking": "liest deine Einträge noch einmal durch…"
+  },
+  "nudge": {
+    "title": "Kairos",
+    "body": "Die Seite ist noch offen, wann immer du magst."
   }
 }

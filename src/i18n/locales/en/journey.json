@@ -361,10 +361,10 @@
     "moralDesc": "What you did, or failed to prevent",
     "existentialDesc": "Dying, choosing, and whether it matters",
     "bodyDesc": "Chronic pain, and not being believed",
-    "aiEyebrow": "New — Kairos AI",
-    "aiTitle": "It talks back now",
-    "aiText": "Kairos AI has read your journal, and it answers from what is actually in it. On the Home screen.",
-    "aiCta": "Try it",
+    "aiEyebrow": "New — Miro",
+    "aiTitle": "Meet Miro",
+    "aiText": "Miro has read your journal, and answers from what is actually in it. On the Home screen.",
+    "aiCta": "Say hello",
     "aiReadsName": "It has read your entries",
     "aiReadsDesc": "Answers cite what you wrote, not generic advice",
     "aiThreadName": "A real conversation",
@@ -375,7 +375,7 @@
     "aiPriceNote": "one message every day at no cost. Unlimited with a subscription."
   },
   "kairosAi": {
-    "title": "Kairos AI",
+    "title": "Miro",
     "readCount": "has read {{count}} of your entries",
     "needMore": "a few more entries and it can start reading",
     "placeholder": "Ask about what you have been writing…",
@@ -389,8 +389,12 @@
     "imageGone": "image",
     "notAnImage": "That needs to be an image.",
     "defaultImagePrompt": "What do you make of this?",
-    "exhausted": "That's today's message. Kairos AI is unlimited on a subscription — otherwise it picks up again tomorrow.",
+    "exhausted": "That's today's message. Miro is unlimited on a subscription — otherwise it picks up again tomorrow.",
     "failed": "That didn't go through. Nothing in your journal was affected — try again in a moment.",
     "thinking": "reading back through your entries…"
+  },
+  "nudge": {
+    "title": "Kairos",
+    "body": "The page is still open, whenever you want it."
   }
 }

@@ -18,6 +18,7 @@ import '../styles/components/homeScreen.css';
 import '../styles/pages/analyticsScreen.css';
 import { useTheme } from '../contexts/ThemeContext';
 import { quotes } from '../data/quotes';
+import { canNudge, requestNudgePermission, scheduleNudge } from '../services/nudgeService';
 
 const HomeScreen = ({ navigateToScreen }) => {
   const { t, i18n } = useTranslation('journey');
@@ -61,6 +62,44 @@ const HomeScreen = ({ navigateToScreen }) => {
   // Overall completion across every active journey (weighted by days), shown on
   // the "% Complete" vital — which opens the full journeys list on tap.
   const activeCompletion = getActiveJourneysCompletion(inProgressPaths);
+
+  // The two-day reminder. Rebuilt whenever the entries change, which is
+  // exactly when the answer can change: the pending notification is a pure
+  // function of when they last wrote, so nothing else can invalidate it. No
+  // resume listener is needed for the same reason — if no entry was added,
+  // what is already scheduled is still right.
+  useEffect(() => {
+    if (!canNudge()) return;                       // web: nothing to schedule
+    const all = statistics.allEntries || [];
+    if (!all.length) return;                       // nothing to be reminded of yet
+
+    let cancelled = false;
+    (async () => {
+      // Asked only once someone has actually written something. A permission
+      // prompt on first launch, before the app has shown what it is for, is
+      // the one most people refuse — and a refusal here is permanent.
+      const ok = await requestNudgePermission();
+      if (!ok || cancelled) return;
+
+      const times = all
+        .map((e) => {
+          const d = e?.timestamp;
+          if (!d) return null;
+          if (d.toDate) return d.toDate().getTime();
+          if (d.seconds != null) return d.seconds * 1000;
+          const parsed = new Date(d).getTime();
+          return isNaN(parsed) ? null : parsed;
+        })
+        .filter(Boolean);
+      if (!times.length || cancelled) return;
+
+      await scheduleNudge(new Date(Math.max(...times)), {
+        title: t('nudge.title', 'Kairos'),
+        body: t('nudge.body', 'The page is still open, whenever you want it.'),
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [statistics.allEntries, t]);
 
   // Rolling last-7-days journaling activity (oldest → today), for the activity
   // strip — a fixed Mon-Sun window meant today's progress was invisible until
