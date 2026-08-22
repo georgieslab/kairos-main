@@ -150,58 +150,95 @@
 .kai-thinking { color: rgba(255, 255, 255, 0.45); }
 .kai-error    { color: rgba(255, 170, 150, 0.9); }
 
-/* ── The exchange ─────────────────────────────────────────────────────────*/
-.kai-exchange {
+/* ── The thread ───────────────────────────────────────────────────────────
+ * A conversation, so the turns stay on screen and accumulate. The thread
+ * scrolls inside its own box rather than growing the tile without limit —
+ * Home is a mosaic of fixed plates, and one that stretched to a thousand
+ * pixels because you had a long conversation would push everything below it
+ * off the screen.
+ */
+.kai-thread {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  animation: kaiAnswerIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  gap: 12px;
+  max-height: 340px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
-@keyframes kaiAnswerIn {
-  from { opacity: 0; transform: translateY(8px); }
+.kai-thread::-webkit-scrollbar { width: 5px; }
+.kai-thread::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.kai-msg {
+  margin: 0;
+  white-space: pre-wrap;
+  animation: kaiMsgIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes kaiMsgIn {
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* The question is set back rather than forward — it is context for the answer,
-   not the thing you came to read. */
-.kai-asked {
-  margin: 0;
-  padding-left: 12px;
-  border-left: 2px solid rgba(var(--journey-color, 85, 139, 110), 0.4);
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.kai-answer {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
+/* Yours sits in a bubble, held to the right and to a readable width so a long
+   question does not become a wall the answer has to compete with. */
+.kai-msg-you {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 9px 14px;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 14px;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.92);
-  white-space: pre-wrap;
+  background: rgba(var(--journey-color, 85, 139, 110), 0.18);
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.24);
 }
 
-.kai-again {
-  align-self: flex-start;
-  display: inline-flex;
+/* Its replies are not bubbled. They are the thing you came to read, and prose
+   reads better full width than boxed. */
+.kai-msg-ai {
+  align-self: stretch;
+  font-size: 15px;
+  line-height: 1.62;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Three dots in the assistant's own position, so the wait happens where the
+   answer will appear rather than somewhere else on the card. */
+.kai-typing {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.7);
-  font-family: inherit;
-  font-size: 12.5px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  gap: 5px;
+  height: 20px;
+}
+.kai-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(var(--journey-color, 85, 139, 110), 0.75);
+  animation: kaiDot 1.3s ease-in-out infinite;
+}
+.kai-typing span:nth-child(2) { animation-delay: 0.16s; }
+.kai-typing span:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes kaiDot {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30%           { opacity: 1;    transform: translateY(-3px); }
 }
 
-@media (hover: hover) {
-  .kai-again:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.18);
-  }
+/* Running out for the day is not an error — it is the plan working. It should
+   not be coloured like something went wrong. */
+.kai-limit {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Light theme ──────────────────────────────────────────────────────────
@@ -215,8 +252,17 @@
 }
 .hs-light .kai-title  { color: rgba(0, 0, 0, 0.85); }
 .hs-light .kai-sub    { color: rgba(0, 0, 0, 0.5); }
-.hs-light .kai-answer { color: rgba(0, 0, 0, 0.85); }
-.hs-light .kai-asked  { color: rgba(0, 0, 0, 0.5); }
+.hs-light .kai-msg-ai { color: rgba(0, 0, 0, 0.85); }
+.hs-light .kai-msg-you {
+  color: rgba(0, 0, 0, 0.88);
+  background: rgba(var(--journey-color, 85, 139, 110), 0.14);
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.22);
+}
+.hs-light .kai-limit { color: rgba(0, 0, 0, 0.5); }
+.hs-light .kai-thread {
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.hs-light .kai-thread::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
 .hs-light .kai-input  { color: rgba(0, 0, 0, 0.88); }
 .hs-light .kai-input::placeholder { color: rgba(0, 0, 0, 0.35); }
 .hs-light .kai-input-row {
@@ -224,16 +270,11 @@
   border-color: rgba(0, 0, 0, 0.08);
 }
 .hs-light .kai-send { color: #fff; }
-.hs-light .kai-again {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.10);
-  color: rgba(0, 0, 0, 0.7);
-}
-.hs-light .kai-thinking { color: rgba(0, 0, 0, 0.5); }
 
 @media (prefers-reduced-motion: reduce) {
   .kai-input-row.is-thinking,
-  .kai-exchange {
+  .kai-msg,
+  .kai-typing span {
     animation: none;
   }
 }

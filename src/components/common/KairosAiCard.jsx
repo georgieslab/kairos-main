@@ -3,42 +3,83 @@
 // Kairos AI on the Home screen — a conversation with yourself, held by
 // something that has read your journal.
 //
-// This is the first surface of the feature and it is deliberately one exchange
-// rather than a thread. The free allowance is one message a day (see
-// FREE_DAILY_AI_MESSAGES in functions/index.js), so a threaded UI here would
-// spend most of its life showing a locked input to the people who have not
-// paid. The full conversation lives on its own screen; this is the way in, and
-// for a free user it is the whole feature.
+// A thread, not a question box. The first version answered once and offered
+// "ask another", which discarded the exchange — the opposite of a conversation.
+// Now the turns accumulate, the model sees what was already said, and the whole
+// thing is kept.
 //
-// It replaces the Daily Insight card that used to sit on Insights. Same idea,
-// moved to where the daily habit already is.
+// One conversation per day, keyed by date. That matches the rhythm of the app,
+// keeps any single document small, and means the old daily_questions documents
+// migrate in under the same key when that is done.
+//
+// The free allowance is one message a day. A free user therefore sees their
+// exchange and a closed input with a reason — which is still better than the
+// answer being thrown away, and is why threading is right for both tiers.
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, ArrowUp, RotateCcw } from 'lucide-react';
+import { Sparkles, ArrowUp } from 'lucide-react';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import { callClaudeApi, safeJsonParse } from '../../utils/apiUtils';
+import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 import '../../styles/components/kairosAi.css';
 
 // Matches the cap every other history-fed generator uses. It is the reason a
-// user in year eight costs the same as one in week one — see the note on
-// FREE_DAILY_AI_MESSAGES.
+// user in year eight costs the same as one in week one.
 const CONTEXT_ENTRIES = 20;
+
+// How much of the conversation is resent each turn. Every turn resends the
+// thread, so without a ceiling turn 40 costs several times turn 1 — the same
+// compounding the slice() caps exist to prevent elsewhere. Ten exchanges is
+// well past the point where a thread is still about one thing.
+const CONTEXT_TURNS = 20;
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
 
 const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const { t } = useTranslation('journey');
-  const { currentUser, userProfile } = useAuth();
+  const { currentUser } = useAuth();
 
+  const [messages, setMessages] = useState([]);   // { role: 'user'|'assistant', content }
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState(null);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState(null);
+  const [exhausted, setExhausted] = useState(false);
+  const threadRef = useRef(null);
 
   // Below a handful of entries there is nothing to reflect on, and an AI that
-  // answers anyway is inventing a person. The card says so rather than
-  // pretending, which is the same call the analysis prompts make.
+  // answers anyway is inventing a person.
   const hasEnough = totalEntries >= 3;
+  const locked = !hasEnough || exhausted;
+
+  // Today's thread, if there is one. Loading it is what makes the card feel
+  // like somewhere you return to rather than a form that resets.
+  useEffect(() => {
+    if (!currentUser) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await getDoc(
+          doc(db, 'users', currentUser.uid, 'kairos_conversations', todayKey())
+        );
+        if (!cancelled && snap.exists()) {
+          setMessages(snap.data().messages || []);
+        }
+      } catch {
+        // A thread that will not load is not worth blocking the card for —
+        // the user can still start a new one, and nothing is lost.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [currentUser]);
+
+  // Keep the newest turn in view as the thread grows.
+  useEffect(() => {
+    const el = threadRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, isThinking]);
 
   const context = useMemo(
     () =>
@@ -53,10 +94,34 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     [entries]
   );
 
+  const persist = async (next) => {
+    if (!currentUser) return;
+    try {
+      await setDoc(
+        doc(db, 'users', currentUser.uid, 'kairos_conversations', todayKey()),
+        {
+          messages: next,
+          // The first thing asked, for a conversation list to label this with.
+          title: next.find((m) => m.role === 'user')?.content?.slice(0, 80) || '',
+          entriesSeen: context.length,
+          updatedAt: serverTimestamp()
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      // The exchange already happened and is on screen. Failing to write it
+      // down should not remove it.
+      console.error('Could not save the conversation:', e.message);
+    }
+  };
+
   const ask = async () => {
     const q = question.trim();
-    if (!q || isThinking || !currentUser) return;
+    if (!q || isThinking || locked || !currentUser) return;
 
+    const withUser = [...messages, { role: 'user', content: q }];
+    setMessages(withUser);
+    setQuestion('');
     setIsThinking(true);
     setError(null);
 
@@ -69,8 +134,11 @@ good reader of someone's work, or the friend who remembers what they said last
 month.
 
 Ground every claim in their actual entries. Quote or reference specific ones.
-If their entries do not support an answer, say that plainly rather than
-producing something that sounds insightful and is not about them.
+If their entries do not support an answer, say so plainly rather than producing
+something that sounds insightful and is not about them.
+
+This is a conversation. You can see what has already been said in it — refer
+back to it rather than restating context they have just given you.
 
 Their journal (${context.length} of ${totalEntries} entries, most recent first):
 ${JSON.stringify(context)}
@@ -78,48 +146,56 @@ ${JSON.stringify(context)}
 Current streak: ${statistics.currentStreak || 0} days.
 
 Answer in prose, under 200 words, second person. No preamble, no compliment
-before the substance, no closing question unless it is genuinely the next thing
-worth asking.`;
+before the substance.`;
 
     try {
       const data = await callClaudeApi({
         method: 'POST',
         body: JSON.stringify({
-          // Routes this to the DAILY allowance rather than the monthly analysis
-          // one. Without the flag it is metered as an analysis and would eat
-          // the ten-a-month a free user needs for their actual entries.
+          // Routes to the DAILY allowance rather than the monthly analysis one.
+          // Stripped server-side before the call — Anthropic 400s on unknown
+          // top-level parameters.
           kairosAi: true,
           model: 'claude-sonnet-4-6',
           system,
           max_tokens: 700,
-          messages: [{ role: 'user', content: q }]
+          // Only the tail of the thread. See CONTEXT_TURNS.
+          messages: withUser.slice(-CONTEXT_TURNS).map((m) => ({
+            role: m.role,
+            content: m.content
+          }))
         })
       });
 
       const text = data?.content?.[0]?.text || '';
-      setAnswer({ question: q, text });
-      setQuestion('');
+      const next = [...withUser, { role: 'assistant', content: text }];
+      setMessages(next);
+      persist(next);
     } catch (e) {
-      // The daily gate throws resource-exhausted with a reason the UI can
-      // distinguish from a genuine failure — one is a limit, the other is a
-      // bug, and telling someone "try again" when they cannot is worse than
-      // saying why.
-      const exhausted =
-        e?.details?.reason === 'ai-daily-allowance-exhausted' ||
-        e?.code === 'functions/resource-exhausted';
-      setError(
-        exhausted
-          ? t('kairosAi.exhausted', "That's today's question. Kairos AI is unlimited on a subscription — otherwise it comes back tomorrow.")
-          : t('kairosAi.failed', "That didn't go through. Nothing in your journal was affected — try again in a moment.")
-      );
+      // apiUtils rewrites the raw callable error, so this matches what it
+      // actually throws: the generic allowance code, narrowed by .reason.
+      const isExhausted = e?.reason === 'ai-daily-allowance-exhausted';
+
+      if (isExhausted) {
+        setExhausted(true);
+        setError(
+          t('kairosAi.exhausted', "That's today's message. Kairos AI is unlimited on a subscription — otherwise it picks up again tomorrow.")
+        );
+      } else {
+        setError(
+          t('kairosAi.failed', "That didn't go through. Nothing in your journal was affected — try again in a moment.")
+        );
+      }
+      // Take the unanswered question back out of the thread rather than
+      // leaving it sitting there as though it were asked and ignored.
+      setMessages(messages);
+      setQuestion(q);
     } finally {
       setIsThinking(false);
     }
   };
 
   const onKeyDown = (e) => {
-    // Enter sends, Shift+Enter breaks the line. A single-line question is the
-    // common case and reaching for a button for it is friction.
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       ask();
@@ -140,47 +216,50 @@ worth asking.`;
         </span>
       </div>
 
-      {answer ? (
-        <div className="kai-exchange">
-          <p className="kai-asked">{answer.question}</p>
-          <p className="kai-answer">{answer.text}</p>
-          <button className="kai-again" onClick={() => setAnswer(null)}>
-            <RotateCcw size={13} />
-            {t('kairosAi.askAnother', 'Ask another')}
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}`}>
-            <textarea
-              className="kai-input"
-              rows={1}
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={onKeyDown}
-              disabled={!hasEnough || isThinking}
-              placeholder={
-                hasEnough
-                  ? t('kairosAi.placeholder', 'Ask about what you have been writing…')
-                  : t('kairosAi.placeholderLocked', 'Write a few entries first')
-              }
-            />
-            <button
-              className="kai-send"
-              onClick={ask}
-              disabled={!hasEnough || isThinking || !question.trim()}
-              aria-label={t('kairosAi.send', 'Ask')}
-            >
-              <ArrowUp size={16} />
-            </button>
-          </div>
-
+      {messages.length > 0 && (
+        <div className="kai-thread" ref={threadRef}>
+          {messages.map((m, i) => (
+            <p key={i} className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}>
+              {m.content}
+            </p>
+          ))}
           {isThinking && (
-            <p className="kai-thinking">{t('kairosAi.thinking', 'Reading what you wrote…')}</p>
+            <p className="kai-msg kai-msg-ai kai-typing" aria-live="polite">
+              <span /><span /><span />
+            </p>
           )}
-          {error && <p className="kai-error">{error}</p>}
-        </>
+        </div>
       )}
+
+      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}`}>
+        <textarea
+          className="kai-input"
+          rows={1}
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={onKeyDown}
+          disabled={locked || isThinking}
+          placeholder={
+            exhausted
+              ? t('kairosAi.placeholderTomorrow', 'Back tomorrow')
+              : hasEnough
+                ? messages.length
+                  ? t('kairosAi.placeholderFollow', 'Say more…')
+                  : t('kairosAi.placeholder', 'Ask about what you have been writing…')
+                : t('kairosAi.placeholderLocked', 'Write a few entries first')
+          }
+        />
+        <button
+          className="kai-send"
+          onClick={ask}
+          disabled={locked || isThinking || !question.trim()}
+          aria-label={t('kairosAi.send', 'Send')}
+        >
+          <ArrowUp size={16} />
+        </button>
+      </div>
+
+      {error && <p className={exhausted ? 'kai-limit' : 'kai-error'}>{error}</p>}
     </section>
   );
 };

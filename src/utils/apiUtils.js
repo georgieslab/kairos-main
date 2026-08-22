@@ -356,11 +356,30 @@ export const callClaudeApi = async (requestOptions) => {
     // situation that needs a specific explanation and an upgrade route.
     if (error.code === 'functions/resource-exhausted') {
       const details = error.details || {};
-      lastKnownAllowance = { used: details.used, limit: details.limit };
+
+      // Two different allowances arrive here: the monthly analysis one and the
+      // daily Kairos AI one. They are not interchangeable, so the reason has to
+      // survive the translation — otherwise a spent chat turn is
+      // indistinguishable from a spent month, and the UI cannot say which limit
+      // was hit or when it lifts.
+      const reason = details.reason || 'free-allowance-exhausted';
+      const isDailyAi = reason === 'ai-daily-allowance-exhausted';
+
+      // Only the monthly counter belongs in the shared allowance. Writing the
+      // daily one here would have the analysis quota report "1 of 1".
+      if (!isDailyAi) {
+        lastKnownAllowance = { used: details.used, limit: details.limit };
+      }
+
       const quotaError = new Error(
-        `Free plan allowance reached: ${details.limit ?? ''} analyses this month.`
+        isDailyAi
+          ? `Free plan allowance reached: ${details.limit ?? ''} Kairos AI message per day.`
+          : `Free plan allowance reached: ${details.limit ?? ''} analyses this month.`
       );
+      // Deliberately the same code for both, so rethrowIfAllowanceError keeps
+      // catching either; callers that care which one branch on .reason.
       quotaError.code = 'free-allowance-exhausted';
+      quotaError.reason = reason;
       quotaError.used = details.used;
       quotaError.limit = details.limit;
       throw quotaError;
