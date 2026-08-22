@@ -69,19 +69,73 @@
 
 /* ── Input ────────────────────────────────────────────────────────────────*/
 .kai-input-row {
+  /* Its own cooler palette. The card is deep water; the one thing on it you
+     can actually type into is lit differently so it reads as live rather than
+     as another panel. */
+  --kai-edge-a: 122, 110, 224;   /* violet */
+  --kai-edge-b: 79, 209, 224;    /* cyan */
+  --kai-edge-c: 106, 143, 240;   /* blue */
+
+  position: relative;
   display: flex;
   align-items: flex-end;
   gap: 10px;
   padding: 10px 10px 10px 16px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  /* Nearly invisible on its own — the ::before ring is the real edge. This is
+     only what remains if mask-composite is unsupported. */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.3s ease;
 }
 
+/* The lit edge. Same masked-ring trick as the card, but with a linear gradient
+   wider than the box, slid sideways — so the colour travels along the border
+   rather than rotating around it. Painted above the row: it is a 1px trace at
+   the very edge and the content is inset 10px, so nothing is covered. */
+.kai-input-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(
+    100deg,
+    rgba(var(--kai-edge-a), 0.9),
+    rgba(var(--kai-edge-b), 0.9),
+    rgba(var(--kai-edge-c), 0.9),
+    rgba(var(--kai-edge-a), 0.9)
+  );
+  background-size: 300% 100%;
+  animation: kaiEdgeFlow 9s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+}
+
+@keyframes kaiEdgeFlow {
+  from { background-position:   0% 50%; }
+  to   { background-position: 300% 50%; }
+}
+
+/* Focus brings the edge fully up and puts light in the air around it. */
+.kai-input-row:focus-within::before { opacity: 1; }
+
 .kai-input-row:focus-within {
-  border-color: rgba(var(--kai-glow), 0.45);
-  box-shadow: 0 0 20px rgba(var(--kai-glow), 0.12);
+  box-shadow:
+    0 0 0 1px rgba(var(--kai-edge-a), 0.16),
+    0 0 22px rgba(var(--kai-edge-a), 0.20),
+    0 0 44px rgba(var(--kai-edge-c), 0.12);
+}
+
+/* Hovering says it is live before you commit to clicking it. */
+@media (hover: hover) {
+  .kai-input-row:hover:not(:focus-within)::before { opacity: 0.78; }
 }
 
 /* A textarea rather than an input so a long question wraps instead of
@@ -138,14 +192,13 @@
 }
 .kai-send:not(:disabled):active { transform: scale(0.94); }
 
-/* While it is thinking the row's edge breathes, so the wait has a pulse
-   rather than being a frozen box. */
-.kai-input-row.is-thinking {
-  animation: kaiThinking 1.8s ease-in-out infinite;
-}
-@keyframes kaiThinking {
-  0%, 100% { border-color: rgba(var(--kai-glow), 0.20); }
-  50%      { border-color: rgba(var(--kai-glow), 0.55); }
+/* While it is thinking, the colour runs round the edge faster. Only the
+   duration is overridden — restating the shorthand would drop the linear
+   timing and the infinite count. The old version animated border-color, which
+   the ring now covers, so it would have pulsed somewhere nobody could see. */
+.kai-input-row.is-thinking::before {
+  opacity: 1;
+  animation-duration: 2.6s;
 }
 
 .kai-thinking,
@@ -537,7 +590,13 @@
 .hs-light .kai-input::placeholder { color: rgba(0, 0, 0, 0.35); }
 .hs-light .kai-input-row {
   background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+/* The same travelling edge, pulled back: at full strength these colours glare
+   against a near-white plate instead of glowing on it. */
+.hs-light .kai-input-row::before { opacity: 0.66; }
+@media (hover: hover) {
+  .hs-light .kai-input-row:hover:not(:focus-within)::before { opacity: 0.85; }
 }
 .hs-light .kai-send { color: #fff; }
 
@@ -583,7 +642,11 @@
    are how you know it is busy, so they resolve to a steady version rather
    than disappearing. */
 @media (prefers-reduced-motion: reduce) {
-  .kai-input-row.is-thinking,
+  /* The edge stops travelling but stays lit — it is what marks the input as
+     live, and a dead border would read as a disabled field. */
+  .kai-input-row::before,
+  .kai-input-row.is-thinking::before,
+  .miro-ring,
   .kai-msg,
   .kai-typing-word,
   .kai-blob,
@@ -601,4 +664,5 @@
       0 0 40px rgba(var(--kai-glow), 0.22);
   }
   .kai-typing-word { opacity: 0.7; }
+  .kai-input-row::before { opacity: 0.72; }
 }
