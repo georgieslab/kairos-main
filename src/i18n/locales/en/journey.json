@@ -353,6 +353,25 @@
     "navLabel": "Announcements",
     "prev": "Previous",
     "next": "Next",
-    "goTo": "Announcement {{n}}"
+    "goTo": "Announcement {{n}}",
+    "painEyebrow": "New — Pain",
+    "painTitle": "Three kinds of pain",
+    "painText": "Divided by where the suffering comes from: what you did, what is true of being alive, and what your body does to you.",
+    "painCta": "See the paths",
+    "moralDesc": "What you did, or failed to prevent",
+    "existentialDesc": "Dying, choosing, and whether it matters",
+    "bodyDesc": "Chronic pain, and not being believed",
+    "aiEyebrow": "New — Kairos AI",
+    "aiTitle": "It talks back now",
+    "aiText": "Kairos AI has read your journal, and it answers from what is actually in it. On the Home screen.",
+    "aiCta": "Try it",
+    "aiReadsName": "It has read your entries",
+    "aiReadsDesc": "Answers cite what you wrote, not generic advice",
+    "aiThreadName": "A real conversation",
+    "aiThreadDesc": "Ask again and go deeper — it remembers the thread",
+    "aiKeptName": "Kept by the day",
+    "aiKeptDesc": "Today's conversation is still there when you come back",
+    "aiPriceMain": "Free daily",
+    "aiPriceNote": "one message every day at no cost. Unlimited with a subscription."
   }
 }

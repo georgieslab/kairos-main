@@ -17,7 +17,8 @@ import { useTranslation } from 'react-i18next';
 import {
   Gift, X, Hourglass, Shuffle, Sparkles, ArrowRight, Ticket,
   Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route,
-  HeartCrack, Scale, Infinity as InfinityIcon, Activity
+  HeartCrack, Scale, Infinity as InfinityIcon, Activity,
+  MessageCircle, BookOpen, CalendarDays
 } from 'lucide-react';
 import '../../styles/components/whatsNew.css';
 
@@ -25,12 +26,52 @@ const SEEN_KEY = 'kairos_whats_new_seen';
 
 // Bump to the newest slide's id when something ships. The unseen dot compares
 // against this, so it reappears for everyone exactly once per announcement.
-const ANNOUNCEMENT_ID = 'pain';
+const ANNOUNCEMENT_ID = 'kairos-ai';
 
 // Newest first. Path names are brand and stay untranslated; everything else
 // runs through i18n with the English as fallback. Colours mirror each path's
 // registry colour so a row here matches the card in the Paths tab.
+//
+// A slide is no longer necessarily a pack of paths for sale. Kairos AI is a
+// feature, not a purchase, so `price` and the CTA's destination are per-slide —
+// the deck used to hardcode "EUR 2.99, all three paths" beneath every slide,
+// which would have priced a subscription feature as a one-off path bundle.
+// Rows carry an optional nameKey: path names are brand and stay as written,
+// feature names are prose and are translated.
+// The three path packs are all the same one-off purchase, so it is written
+// once. Kairos AI carries its own.
+const PACK_PRICE = {
+  icon: Ticket,
+  badgeKey: 'whatsNew.priceMain', badge: '€2.99',
+  noteKey: 'whatsNew.priceNote',  note: 'once — all three paths, yours forever. Or unlock with a promo code.',
+};
+
 const SLIDES = [
+  {
+    id: 'kairos-ai',
+    halo: MessageCircle,
+    // The app's own green, cooling through teal into blue — its palette, not a
+    // pack's. This slide is about the app itself rather than something to buy.
+    accent: ['85, 139, 110', '92, 138, 154', '108, 132, 176'],
+    eyebrowKey: 'whatsNew.aiEyebrow',   eyebrow: 'New — Kairos AI',
+    titleKey: 'whatsNew.aiTitle',       title: 'It talks back now',
+    textKey: 'whatsNew.aiText',         text: 'Kairos AI has read your journal, and it answers from what is actually in it. On the Home screen.',
+    ctaKey: 'whatsNew.aiCta',           cta: 'Try it',
+    action: 'kairos-ai',
+    rows: [
+      { icon: BookOpen,      color: '85, 139, 110',  nameKey: 'whatsNew.aiReadsName',  name: 'It has read your entries',
+        descKey: 'whatsNew.aiReadsDesc',  desc: 'Answers cite what you wrote, not generic advice' },
+      { icon: MessagesSquare, color: '92, 138, 154', nameKey: 'whatsNew.aiThreadName', name: 'A real conversation',
+        descKey: 'whatsNew.aiThreadDesc', desc: 'Ask again and go deeper — it remembers the thread' },
+      { icon: CalendarDays,  color: '108, 132, 176', nameKey: 'whatsNew.aiKeptName',   name: 'Kept by the day',
+        descKey: 'whatsNew.aiKeptDesc',   desc: "Today's conversation is still there when you come back" },
+    ],
+    price: {
+      icon: Sparkles,
+      badgeKey: 'whatsNew.aiPriceMain', badge: 'Free daily',
+      noteKey: 'whatsNew.aiPriceNote',  note: 'one message every day at no cost. Unlimited with a subscription.',
+    },
+  },
   {
     id: 'pain',
     halo: HeartCrack,
@@ -43,11 +84,13 @@ const SLIDES = [
     titleKey: 'whatsNew.painTitle',        title: 'Three kinds of pain',
     textKey: 'whatsNew.painText',          text: 'Divided by where the suffering comes from: what you did, what is true of being alive, and what your body does to you.',
     ctaKey: 'whatsNew.painCta',            cta: 'See the paths',
-    paths: [
+    rows: [
       { icon: Scale,        color: '134, 106, 106', name: 'Moral Pain',         descKey: 'whatsNew.moralDesc',       desc: 'What you did, or failed to prevent' },
       { icon: InfinityIcon, color: '88, 96, 122',   name: 'Existential Pain',   descKey: 'whatsNew.existentialDesc', desc: 'Dying, choosing, and whether it matters' },
       { icon: Activity,     color: '168, 124, 116', name: 'The Body That Hurts', descKey: 'whatsNew.bodyDesc',       desc: 'Chronic pain, and not being believed' },
     ],
+    price: PACK_PRICE,
+    action: 'paths',
   },
   {
     id: 'starting-over',
@@ -60,11 +103,13 @@ const SLIDES = [
     titleKey: 'whatsNew.soTitle',          title: 'For anyone who began again',
     textKey: 'whatsNew.soText',            text: 'Three paths for people who moved country and started over. Written from the inside.',
     ctaKey: 'whatsNew.soCta',              cta: 'See the paths',
-    paths: [
+    rows: [
       { icon: Plane,          color: '96, 125, 173',  name: 'The Crossing',      descKey: 'whatsNew.crossingDesc', desc: 'Leaving, and the week nothing worked' },
       { icon: MessagesSquare, color: '142, 122, 178', name: 'Learning to Speak', descKey: 'whatsNew.speakDesc',    desc: 'Who you are without the words' },
       { icon: Home,           color: '191, 145, 106', name: 'Two Homes',         descKey: 'whatsNew.twoHomesDesc', desc: 'Belonging to neither, then to both' },
     ],
+    price: PACK_PRICE,
+    action: 'paths',
   },
   {
     id: 'kairos-collection',
@@ -74,11 +119,13 @@ const SLIDES = [
     titleKey: 'whatsNew.collectionTitle',   title: 'Three paths, one moment',
     textKey: 'whatsNew.collectionText',     text: 'Three ways to meet the moment — the collection is complete.',
     ctaKey: 'whatsNew.ctaCollection',       cta: 'Explore the collection',
-    paths: [
+    rows: [
       { icon: Hourglass, color: '212, 175, 55',  name: 'Kairos Moments', descKey: 'whatsNew.momentsDesc', desc: 'Recognize the opportune moment' },
       { icon: Shuffle,   color: '230, 145, 90',  name: 'Kairos Cards',   descKey: 'whatsNew.cardsDesc',   desc: 'Deal yourself the prompt' },
       { icon: Sparkles,  color: '244, 197, 102', name: 'Kairos Sparks',  descKey: 'whatsNew.sparksDesc',  desc: 'One spark — wherever it takes you' },
     ],
+    price: PACK_PRICE,
+    action: 'paths',
   },
 ];
 
@@ -94,6 +141,7 @@ const WhatsNew = ({ navigateToScreen }) => {
   const slide = SLIDES[index];
   const count = SLIDES.length;
   const HaloIcon = slide.halo;
+  const PriceIcon = slide.price?.icon || Ticket;
 
   const open = () => {
     setIndex(0);                       // always land on the newest
@@ -119,8 +167,20 @@ const WhatsNew = ({ navigateToScreen }) => {
     return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, go]);
 
-  const goToPath = () => {
+  // Where the CTA goes depends on what is being announced. A pack sends you to
+  // the Paths tab to buy it; Kairos AI is already on the screen behind this
+  // sheet, so it closes and brings the card into view instead of navigating
+  // somewhere the user already is.
+  const onCta = () => {
     setIsOpen(false);
+    if (slide.action === 'kairos-ai') {
+      // After the sheet unmounts, or the scroll competes with the overlay.
+      setTimeout(() => {
+        document.querySelector('.kai-card')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 140);
+      return;
+    }
     navigateToScreen && navigateToScreen('path-selection');
   };
 
@@ -160,27 +220,31 @@ const WhatsNew = ({ navigateToScreen }) => {
           <p className="whats-new-text">{t(slide.textKey, slide.text)}</p>
 
           <div className="wn-collection">
-            {slide.paths.map(({ icon: Icon, color, name, descKey, desc }) => (
+            {slide.rows.map(({ icon: Icon, color, name, nameKey, descKey, desc }) => (
               <div key={name} className="wn-path-row" style={{ '--pc': color }}>
                 <div className="wn-path-icon"><Icon size={18} /></div>
                 <div className="wn-path-text">
-                  <span className="wn-path-name">{name}</span>
+                  {/* Path names are brand and stay as written. Feature names
+                      are prose, so they carry a key and get translated. */}
+                  <span className="wn-path-name">{nameKey ? t(nameKey, name) : name}</span>
                   <span className="wn-path-desc">{t(descKey, desc)}</span>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="wn-price">
-            <span className="wn-price-badge">{t('whatsNew.priceMain', '€2.99')}</span>
-            <span className="wn-price-note">
-              <Ticket size={13} />
-              {t('whatsNew.priceNote', 'once — all three paths, yours forever. Or unlock with a promo code.')}
-            </span>
-          </div>
+          {slide.price && (
+            <div className="wn-price">
+              <span className="wn-price-badge">{t(slide.price.badgeKey, slide.price.badge)}</span>
+              <span className="wn-price-note">
+                <PriceIcon size={13} />
+                {t(slide.price.noteKey, slide.price.note)}
+              </span>
+            </div>
+          )}
         </div>
 
-        <button className="whats-new-cta" onClick={goToPath}>
+        <button className="whats-new-cta" onClick={onCta}>
           {t(slide.ctaKey, slide.cta)}
           <ArrowRight size={16} />
         </button>

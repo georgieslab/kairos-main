@@ -353,6 +353,25 @@
     "navLabel": "Neuigkeiten",
     "prev": "Zurück",
     "next": "Weiter",
-    "goTo": "Neuigkeit {{n}}"
+    "goTo": "Neuigkeit {{n}}",
+    "painEyebrow": "Neu — Schmerz",
+    "painTitle": "Drei Arten von Schmerz",
+    "painText": "Unterschieden danach, woher das Leiden kommt: was du getan hast, was zum Leben selbst gehört, und was dein Körper dir antut.",
+    "painCta": "Pfade ansehen",
+    "moralDesc": "Was du getan oder nicht verhindert hast",
+    "existentialDesc": "Sterben, wählen, und ob es zählt",
+    "bodyDesc": "Chronischer Schmerz — und dass man dir nicht glaubt",
+    "aiEyebrow": "Neu — Kairos AI",
+    "aiTitle": "Jetzt antwortet es",
+    "aiText": "Kairos AI hat dein Journal gelesen und antwortet aus dem, was wirklich darin steht. Auf dem Startbildschirm.",
+    "aiCta": "Ausprobieren",
+    "aiReadsName": "Es hat deine Einträge gelesen",
+    "aiReadsDesc": "Antworten beziehen sich auf das, was du geschrieben hast — keine Ratschläge von der Stange",
+    "aiThreadName": "Ein echtes Gespräch",
+    "aiThreadDesc": "Frag nach und geh tiefer — es erinnert sich an den Verlauf",
+    "aiKeptName": "Nach Tagen aufbewahrt",
+    "aiKeptDesc": "Das Gespräch von heute ist noch da, wenn du zurückkommst",
+    "aiPriceMain": "Täglich gratis",
+    "aiPriceNote": "eine Nachricht pro Tag, kostenlos. Unbegrenzt mit einem Abo."
   }
 }
