@@ -16,7 +16,8 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Gift, X, Hourglass, Shuffle, Sparkles, ArrowRight, Ticket,
-  Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route
+  Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route,
+  HeartCrack, Scale, Infinity as InfinityIcon, Activity
 } from 'lucide-react';
 import '../../styles/components/whatsNew.css';
 
@@ -24,12 +25,30 @@ const SEEN_KEY = 'kairos_whats_new_seen';
 
 // Bump to the newest slide's id when something ships. The unseen dot compares
 // against this, so it reappears for everyone exactly once per announcement.
-const ANNOUNCEMENT_ID = 'starting-over';
+const ANNOUNCEMENT_ID = 'pain';
 
 // Newest first. Path names are brand and stay untranslated; everything else
 // runs through i18n with the English as fallback. Colours mirror each path's
 // registry colour so a row here matches the card in the Paths tab.
 const SLIDES = [
+  {
+    id: 'pain',
+    halo: HeartCrack,
+    // Three sources of suffering rather than three shades of one: oxblood for
+    // what you did, slate for what is true of being alive, ember for what your
+    // body does. Sombre without being alarming — this pack should not look
+    // like a warning.
+    accent: ['134, 106, 106', '88, 96, 122', '168, 124, 116'],
+    eyebrowKey: 'whatsNew.painEyebrow',    eyebrow: 'New — Pain',
+    titleKey: 'whatsNew.painTitle',        title: 'Three kinds of pain',
+    textKey: 'whatsNew.painText',          text: 'Divided by where the suffering comes from: what you did, what is true of being alive, and what your body does to you.',
+    ctaKey: 'whatsNew.painCta',            cta: 'See the paths',
+    paths: [
+      { icon: Scale,        color: '134, 106, 106', name: 'Moral Pain',         descKey: 'whatsNew.moralDesc',       desc: 'What you did, or failed to prevent' },
+      { icon: InfinityIcon, color: '88, 96, 122',   name: 'Existential Pain',   descKey: 'whatsNew.existentialDesc', desc: 'Dying, choosing, and whether it matters' },
+      { icon: Activity,     color: '168, 124, 116', name: 'The Body That Hurts', descKey: 'whatsNew.bodyDesc',       desc: 'Chronic pain, and not being believed' },
+    ],
+  },
   {
     id: 'starting-over',
     halo: Route,
