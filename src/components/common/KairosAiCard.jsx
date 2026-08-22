@@ -52,6 +52,37 @@ const IMAGE_MEMORY = 4;
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
+// Entry timestamps arrive as Firestore Timestamps, {seconds}, or plain dates
+// depending on when and how they were written. Same shape Home parses with.
+const toDate = (ts) => {
+  if (!ts) return null;
+  try {
+    if (ts.toDate) return ts.toDate();
+    if (ts.seconds != null) return new Date(ts.seconds * 1000);
+    const d = new Date(ts);
+    return isNaN(d.getTime()) ? null : d;
+  } catch {
+    return null;
+  }
+};
+
+/** Whole days between two moments, counted by calendar day rather than by
+ *  24-hour blocks — "yesterday" should read as 1 even at 23 hours apart. */
+const daysBetween = (a, b) => {
+  const d1 = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  const d2 = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.round((d2 - d1) / 86400000);
+};
+
+const humanGap = (days) => {
+  if (days <= 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 7) return `${days} days ago`;
+  if (days < 14) return 'about a week ago';
+  if (days < 60) return `about ${Math.round(days / 7)} weeks ago`;
+  return `about ${Math.round(days / 30)} months ago`;
+};
+
 /**
  * Reads a file into a capped, re-encoded JPEG. The cap is the point: the
  * existing journal upload halves whatever it is given, which leaves a modern
@@ -143,6 +174,31 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     [entries]
   );
 
+  // What Miro is told about time. Recomputed per render rather than memoised:
+  // it is a handful of date arithmetic, and a stale "today" is worse than the
+  // work saved — a thread left open past midnight would otherwise keep
+  // insisting it is yesterday.
+  const timeSense = () => {
+    const now = new Date();
+    const dates = (entries || []).map((e) => toDate(e.timestamp)).filter(Boolean);
+    const last = dates.length ? new Date(Math.max(...dates)) : null;
+    const sinceEntry = last ? daysBetween(last, now) : null;
+
+    const hour = now.getHours();
+    const partOfDay =
+      hour < 5 ? 'the middle of the night' :
+      hour < 12 ? 'morning' :
+      hour < 17 ? 'afternoon' :
+      hour < 22 ? 'evening' : 'late evening';
+
+    // The gap since their previous turn, so a reply picked up hours later does
+    // not read as though no time passed.
+    const priorUser = [...messages].reverse().find((m) => m.role === 'user' && m.at);
+    const sinceTurn = priorUser ? Math.round((Date.now() - priorUser.at) / 60000) : null;
+
+    return { now, partOfDay, sinceEntry, last, sinceTurn };
+  };
+
   const attach = useCallback(async (file) => {
     if (!file || locked || isThinking) return;
     if (!file.type?.startsWith('image/')) {
@@ -218,7 +274,7 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     const q = question.trim();
     if ((!q && !pending) || isThinking || locked || !currentUser) return;
 
-    const outgoing = { role: 'user', content: q, ...(pending ? { image: pending } : {}) };
+    const outgoing = { role: 'user', content: q, at: Date.now(), ...(pending ? { image: pending } : {}) };
     const withUser = [...messages, outgoing];
     setMessages(withUser);
     setQuestion('');
@@ -226,6 +282,7 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     setIsThinking(true);
     setError(null);
 
+    const when = timeSense();
     const system = `${HONESTY_DIRECTIVE}
 ${getLanguageDirective({ json: false })}
 
@@ -258,6 +315,23 @@ ${JSON.stringify(context)}
 
 Current streak: ${statistics.currentStreak || 0} days.
 
+WHEN IT IS
+Right now: ${when.now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${when.partOfDay}.
+${when.sinceEntry === null
+  ? 'They have not written a dated entry yet.'
+  : `They last wrote in their journal ${humanGap(when.sinceEntry)}.`}
+${when.sinceTurn === null
+  ? ''
+  : when.sinceTurn < 3
+    ? 'They replied straight away.'
+    : `They came back to this conversation after ${when.sinceTurn < 90 ? `${when.sinceTurn} minutes` : humanGap(Math.round(when.sinceTurn / 1440))}.`}
+
+You know what day it is and how long it has been. Use it only where it earns
+its place — placing something in the week, noticing a gap that matters, or
+because they asked. Do not open with it, do not remark on the hour, and never
+scold or congratulate them about a gap. A long silence is information about
+their life, not a lapse to be mentioned.
+
 Answer in prose, under 200 words, second person. No preamble, no compliment
 before the substance.`;
 
@@ -278,7 +352,7 @@ before the substance.`;
       });
 
       const text = data?.content?.[0]?.text || '';
-      const next = [...withUser, { role: 'assistant', content: text }];
+      const next = [...withUser, { role: 'assistant', content: text, at: Date.now() }];
       setMessages(next);
       persist(next);
     } catch (e) {
