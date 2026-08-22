@@ -479,3 +479,118 @@
     opacity: 0.9;
   }
 }
+/* ===== The sand clock =====================================================
+   Shown for waits long enough that the orb stops reassuring anyone — the
+   journal analysis, which is several seconds of a model reading handwriting.
+
+   One cycle is 9s: 8s of sand running through, then 1s of the glass turning
+   over. The bulbs are drawn identical precisely so the turn works — after 180
+   degrees the lower vessel is the upper one, so the sand levels simply reset
+   and the same masks serve both halves of the cycle.
+
+   Everything animates by transform. Animating the `height` or `y` of the sand
+   rectangles is the obvious approach and the wrong one: those are SVG geometry
+   properties, animatable in CSS only in newer browsers, and they repaint
+   rather than composite. A masked rectangle that slides costs nothing.
+   ========================================================================== */
+
+.kairos-hourglass {
+  /* Falls back to the Kairos gold; the analysis loader overrides it with the
+     active path's colour so the sand matches the journey being read. */
+  --kh-c: 212, 175, 55;
+  width: 104px;
+  height: 146px;
+  overflow: visible;
+}
+
+.kairos-hourglass .kh-frame {
+  fill: rgba(255, 255, 255, 0.22);
+}
+
+.kairos-hourglass .kh-vessel {
+  fill: rgba(255, 255, 255, 0.045);
+  stroke: rgba(255, 255, 255, 0.20);
+  stroke-width: 1.4;
+}
+
+/* The turn. `steps` would snap; this eases so the glass has weight, and the
+   9s cycle means it sits still for 8 of every 9 seconds. */
+.kairos-hourglass .kh-glass {
+  transform-origin: 50px 70px;
+  animation: khTurn 9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes khTurn {
+  0%, 88%  { transform: rotate(0deg); }
+  100%     { transform: rotate(180deg); }
+}
+
+/* Upper bulb empties: the sand block slides down out of its own mask. */
+.kairos-hourglass .kh-sand-top {
+  animation: khDrainTop 9s linear infinite;
+}
+@keyframes khDrainTop {
+  0%       { transform: translateY(0); }
+  86%      { transform: translateY(50px); }
+  100%     { transform: translateY(50px); }
+}
+
+/* Lower bulb fills: its block starts below the mask and rises into it. */
+.kairos-hourglass .kh-sand-bottom {
+  animation: khFillBottom 9s linear infinite;
+}
+@keyframes khFillBottom {
+  0%       { transform: translateY(50px); }
+  86%      { transform: translateY(0); }
+  100%     { transform: translateY(0); }
+}
+
+/* The stream runs while there is sand to fall, and stops before the turn so
+   the glass never rotates with a thread of sand hanging in it. The dash makes
+   the fall legible as movement rather than a static line. */
+.kairos-hourglass .kh-stream {
+  animation: khStream 9s linear infinite;
+  transform-origin: 50px 70px;
+}
+@keyframes khStream {
+  0%       { opacity: 0; transform: scaleY(0.2); }
+  6%       { opacity: 0.9; transform: scaleY(1); }
+  80%      { opacity: 0.9; transform: scaleY(1); }
+  86%,100% { opacity: 0; transform: scaleY(0.2); }
+}
+
+/* The heap the stream lands on, widening as the lower bulb fills. */
+.kairos-hourglass .kh-heap {
+  transform-origin: 50px 117px;
+  animation: khHeap 9s linear infinite;
+}
+@keyframes khHeap {
+  0%       { transform: scale(0.2, 0.4); opacity: 0; }
+  10%      { opacity: 0.85; }
+  86%,100% { transform: scale(1, 1); opacity: 0.85; }
+}
+
+/* Motion is the whole point of this loader, so reduced-motion does not simply
+   freeze it mid-drain — that reads as a hang, which is the one impression a
+   loader must never give. It settles into a finished state and the message
+   below carries the waiting instead. */
+@media (prefers-reduced-motion: reduce) {
+  .kairos-hourglass .kh-glass,
+  .kairos-hourglass .kh-sand-top,
+  .kairos-hourglass .kh-sand-bottom,
+  .kairos-hourglass .kh-stream,
+  .kairos-hourglass .kh-heap {
+    animation: none;
+  }
+  .kairos-hourglass .kh-sand-top   { transform: translateY(25px); }
+  .kairos-hourglass .kh-sand-bottom { transform: translateY(25px); }
+  .kairos-hourglass .kh-stream     { opacity: 0.9; }
+  .kairos-hourglass .kh-heap       { transform: scale(0.6, 0.7); opacity: 0.85; }
+}
+
+/* Light theme: the vessel outline and caps are tuned for a dark backdrop. */
+.light-theme .kairos-hourglass .kh-frame  { fill: rgba(0, 0, 0, 0.28); }
+.light-theme .kairos-hourglass .kh-vessel {
+  fill: rgba(0, 0, 0, 0.03);
+  stroke: rgba(0, 0, 0, 0.22);
+}

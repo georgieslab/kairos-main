@@ -547,6 +547,13 @@ const App = () => {
     try {
       showLoader({
         size: 'medium',
+        // The sand clock rather than the orb. This wait is a model reading
+        // handwriting — several seconds, sometimes more — and an orb that
+        // pulses at a fixed rate says nothing about elapsed time. A glass that
+        // visibly empties does, and turns over rather than ending, which is
+        // honest about not knowing how long is left.
+        variant: 'hourglass',
+        sandColor: getJourneyPath(currentPath)?.color || '212, 175, 55',
         message: voiceData ? 'Analyzing your voice journal...' : 'Analyzing your journal...',
         showQuote: true
       });
