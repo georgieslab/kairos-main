@@ -1139,92 +1139,58 @@
     }
   }
 
-  /* ── 5b. write and daily: Two Pages ───────────────────────────────────────
-   * A wide monitor is not a wider page, it is a second page. Each screen
-   * becomes a left page you read and a right page you act on, and the prompt
-   * holds the same left edge as the flow advances — so only the right page
-   * turns.
+  /* ── 5b. write and daily ──────────────────────────────────────────────────
+   * These two started as one idea — a left page you read and a right page you
+   * act on, the prompt holding the same edge as the flow advanced. It survived
+   * on `daily`, where the second column carries the journey map and there is
+   * genuinely a list to read beside the entry. It did not survive on `write`,
+   * where the only things available to fill a second column were a dismissible
+   * tips card and a notice that appears once the day is already done. Giving
+   * those half the screen put the day's question in a fight with its own
+   * furniture, so `write` is a single centred column and only `daily` is two.
    *
-   * Span-based placement rather than named areas, the Console idiom. Both
-   * screens have conditional children, and with spans an absent child simply
-   * does not reserve a cell.
-   *
-   * No JSX. The one element Draft A wanted — a prompt rail on `upload` — is
+   * No JSX. The one element the design wanted — a prompt rail on `upload` — is
    * deliberately not built: `upload` is already the light table and narrowing
    * it to make room would undo the thing that screen is for.
    */
 
   /* ── write ───────────────────────────────────────────────────────────────
-   * Direct children: .write-header, .write-progress, .write-prompt-card,
-   * .write-notice (day already completed), .write-tips-card (dismissible),
-   * and an unclassed 40px spacer that exists to clear the phone nav.
-   * .write-actions is inside the prompt card, not a sibling.
+   * One column, centred.
+   *
+   * This was two columns — prompt on the left, notice and tips card on the
+   * right — and it put the day's question in a fight with its own furniture.
+   * The tips card is dismissible and the notice only appears once a day is
+   * already finished; neither is worth half the screen, and giving them a
+   * column implied they were.
+   *
+   * A launcher has one job: show the question and offer the ways to answer it.
+   * So the column is sized to the prompt and everything else queues below it.
+   * Nothing here is a grid, which also means the two conditional children and
+   * the three alternate whole-tree states need no guarding at all — the base
+   * flex column already handles every combination.
    */
   div.write-tab-container {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 20px;
-    align-content: start;
-    max-width: none;
-    margin: 0;
-    padding: 24px 32px 40px;
-  }
-
-  div.write-tab-container > .write-header,
-  div.write-tab-container > .write-progress {
-    grid-column: 1 / -1;
-  }
-
-  /* `grid-row: span 2` is what lets one template survive all four furniture
-   * combinations. With both notice and tips the prompt spans them and the
-   * column is flush; with only one, the second row collapses to zero and the
-   * prompt absorbs the crossed gap rather than leaving a hole. */
-  div.write-tab-container > .write-prompt-card {
-    grid-column: 1 / 8;
-    grid-row: span 2;
-  }
-  div.write-tab-container > .write-notice,
-  div.write-tab-container > .write-tips-card {
-    grid-column: 8 / -1;
-  }
-
-  /* The one case spans cannot absorb: with neither notice nor tips there is
-   * simply nothing in the right column, and a 762px void beside the prompt
-   * reads as a missing panel rather than as space. Centre it instead. */
-  div.write-tab-container:not(:has(> .write-tips-card)):not(:has(> .write-notice))
-    > .write-prompt-card {
-    grid-column: 3 / 11;
-  }
-
-  /* 40px of bottom clearance for a nav bar that is now at the top. */
-  div.write-tab-container > div:not([class]) {
-    display: none;
-  }
-
-  /* The three alternate whole-tree states are each the sole child and are
-   * already centred by the base flex rules. Gridding them would lay a single
-   * centred card into column 1 of 12. */
-  div.write-tab-container:has(> .write-loading),
-  div.write-tab-container:has(> .write-error),
-  div.write-tab-container:has(> .write-completed) {
-    display: flex;
+    max-width: 780px;
+    margin-inline: auto;
+    padding: 32px 32px 48px;
+    gap: 22px;
   }
 
   div.write-tab-container .write-title {
-    font-size: 38px;
+    font-size: 34px;
   }
-  /* The second-largest prompt in the app, behind Home's. Measure capped
-   * because a prompt is a sentence, not a column of body text. */
+  /* The second-largest prompt in the app, behind Home's. Capped because a
+   * prompt is a sentence, not a column of body text. */
   div.write-tab-container .write-prompt-text {
     font-size: 24px;
-    max-width: 46ch;
+    max-width: 42ch;
   }
   div.write-tab-container .write-prompt-card {
     padding: 32px 34px;
   }
 
-  /* The mode buttons were a stacked column because a phone had no width.
-   * Given room they become three real choice plates side by side. */
+  /* The mode buttons were stacked because a phone column had no width for
+   * anything else. Given room they sit side by side as three real choices. */
   div.write-tab-container .write-actions {
     flex-direction: row;
     align-items: center;
@@ -1239,7 +1205,7 @@
     gap: 14px;
   }
   div.write-tab-container .write-flex-option {
-    height: 180px;
+    height: 168px;
     font-size: 16px;
     gap: 12px;
   }
@@ -1248,6 +1214,10 @@
     height: 28px;
   }
 
+  /* 40px of bottom clearance for a nav bar that is now at the top. */
+  div.write-tab-container > div:not([class]) {
+    display: none;
+  }
   /* ── daily ───────────────────────────────────────────────────────────────
    * Direct children of .djv-content: the prompt card, then one of entry /
    * empty / error, then the journey map last in the DOM.
