@@ -284,6 +284,7 @@
       'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
       'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
       'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+      'kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai   '
       'week   week   week   week   week   week   spark  spark  spark  spark  spark  spark ';
     gap: 20px;
     align-content: start;
@@ -322,6 +323,10 @@
   .spatial-home > .vitals-section   { grid-area: vitals; }
   .spatial-home > .mood-weather     { grid-area: mood; }
   .spatial-home > .home-listen-card { grid-area: listen; }
+  /* Kairos AI is the only child on Home that accepts typing, so it gets a band
+   * of its own rather than a tile in a row — an input in a 4-column cell is a
+   * search box, and this is meant to be a question. */
+  .spatial-home > .kai-card         { grid-area: kai; }
   .spatial-home > .spark-section    { grid-area: spark; }
 
   /* First run. .home-week and .vitals-section are one conditional unit: both
@@ -343,6 +348,7 @@
       'header header header header header header header header header header header header'
       'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
       'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+      'kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai   '
       'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
   }
 
@@ -608,6 +614,7 @@
         'hero   hero   hero   hero   hero   hero   hero   mood   mood   mood   mood   mood  '
         'hero   hero   hero   hero   hero   hero   hero   vitals vitals vitals vitals vitals'
         'hero   hero   hero   hero   hero   hero   hero   listen listen listen listen listen'
+        'kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai    kai   '
         'week   week   week   week   week   week   week   week   week   week   week   week '
         'spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark  spark ';
     }

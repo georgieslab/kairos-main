@@ -1,0 +1,239 @@
+/* src/styles/components/kairosAi.css
+ *
+ * Kairos AI on Home. Mobile-first, like every other component stylesheet here;
+ * the desktop placement lives in layouts/desktop.css with the rest of the
+ * Mosaic.
+ *
+ * It borrows the plate language of the other Home tiles rather than inventing
+ * one — same glass, same radius, same inner top light — because it is a tile
+ * among tiles. What distinguishes it is the input, which is the only place on
+ * Home that accepts typing.
+ */
+
+.kai-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  margin-top: 16px;
+  border-radius: 28px;
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────────*/
+.kai-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.kai-halo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: rgb(var(--journey-color, 85, 139, 110));
+  background: rgba(var(--journey-color, 85, 139, 110), 0.14);
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.28);
+}
+
+.kai-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Says how much of their journal it has actually read. The number is the point:
+   an assistant that claims to know you is worth less than one that tells you
+   exactly what it has seen. */
+.kai-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Input ────────────────────────────────────────────────────────────────*/
+.kai-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.kai-input-row:focus-within {
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.45);
+  box-shadow: 0 0 20px rgba(var(--journey-color, 85, 139, 110), 0.12);
+}
+
+/* A textarea rather than an input so a long question wraps instead of
+   scrolling sideways out of view — you cannot re-read what you are asking if
+   it only shows the last forty characters. field-sizing does the growing where
+   it is supported; elsewhere it stays one comfortable row. */
+.kai-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.45;
+  max-height: 120px;
+  field-sizing: content;
+}
+
+.kai-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.kai-input:disabled {
+  cursor: not-allowed;
+}
+
+.kai-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #0b0b0d;
+  background: rgb(var(--journey-color, 85, 139, 110));
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+.kai-send:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .kai-send:not(:disabled):hover { transform: scale(1.08); }
+}
+.kai-send:not(:disabled):active { transform: scale(0.94); }
+
+/* While it is thinking the row's edge breathes, so the wait has a pulse
+   rather than being a frozen box. */
+.kai-input-row.is-thinking {
+  animation: kaiThinking 1.8s ease-in-out infinite;
+}
+@keyframes kaiThinking {
+  0%, 100% { border-color: rgba(var(--journey-color, 85, 139, 110), 0.20); }
+  50%      { border-color: rgba(var(--journey-color, 85, 139, 110), 0.55); }
+}
+
+.kai-thinking,
+.kai-error {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.kai-thinking { color: rgba(255, 255, 255, 0.45); }
+.kai-error    { color: rgba(255, 170, 150, 0.9); }
+
+/* ── The exchange ─────────────────────────────────────────────────────────*/
+.kai-exchange {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: kaiAnswerIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes kaiAnswerIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* The question is set back rather than forward — it is context for the answer,
+   not the thing you came to read. */
+.kai-asked {
+  margin: 0;
+  padding-left: 12px;
+  border-left: 2px solid rgba(var(--journey-color, 85, 139, 110), 0.4);
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.kai-answer {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: pre-wrap;
+}
+
+.kai-again {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .kai-again:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* ── Light theme ──────────────────────────────────────────────────────────
+ * Home puts .hs-light on .spatial-home itself, so this card is addressed
+ * through it rather than through the global .light-theme on <html>.
+ */
+.hs-light .kai-card {
+  background: rgba(245, 245, 247, 0.75);
+  border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+.hs-light .kai-title  { color: rgba(0, 0, 0, 0.85); }
+.hs-light .kai-sub    { color: rgba(0, 0, 0, 0.5); }
+.hs-light .kai-answer { color: rgba(0, 0, 0, 0.85); }
+.hs-light .kai-asked  { color: rgba(0, 0, 0, 0.5); }
+.hs-light .kai-input  { color: rgba(0, 0, 0, 0.88); }
+.hs-light .kai-input::placeholder { color: rgba(0, 0, 0, 0.35); }
+.hs-light .kai-input-row {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.hs-light .kai-send { color: #fff; }
+.hs-light .kai-again {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.10);
+  color: rgba(0, 0, 0, 0.7);
+}
+.hs-light .kai-thinking { color: rgba(0, 0, 0, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kai-input-row.is-thinking,
+  .kai-exchange {
+    animation: none;
+  }
+}

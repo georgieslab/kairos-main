@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress } from '../hooks/useUserProgress';
 import { useUserStatistics } from '../hooks/useUserStatistics';
+import KairosAiCard from '../components/common/KairosAiCard';
 import { getJourneyDay } from '../data/JourneyData';
 import { getMostRecentActivePathId, getActiveJourneysCompletion } from '../utils/pathUtils';
 import DynamicIcon from '../components/common/DynamicIcon';
@@ -278,7 +279,14 @@ const HomeScreen = ({ navigateToScreen }) => {
         </section>
       )}
 
-      {/* ========== 5. LISTEN (Podcast entry point → Listen screen) ========== */}
+      {/* ========== 5. KAIROS AI ========== */}
+      <KairosAiCard
+        entries={statistics.allEntries || []}
+        totalEntries={statistics.totalEntries || 0}
+        statistics={statistics}
+      />
+
+      {/* ========== 6. LISTEN (Podcast entry point → Listen screen) ========== */}
       <button className="home-listen-card" onClick={() => navigateToScreen('listen')}>
         <div className="home-listen-icon">
           <Headphones size={22} />
@@ -294,7 +302,7 @@ const HomeScreen = ({ navigateToScreen }) => {
         </div>
       </button>
 
-      {/* ========== 6. SPARK (Ambient Quote) ========== */}
+      {/* ========== 7. SPARK (Ambient Quote) ========== */}
       <section className={`spark-section ${timeGradient}`} onClick={changeQuote}>
         <div className="spark-glass-card">
           <div className="spark-decoration">
