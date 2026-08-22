@@ -149,7 +149,20 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
       return;
     }
 
-    const useVoice = isFlex ? mode === 'voice' : isVoice;
+    // Multi-modal paths prescribe the medium per DAY rather than per path —
+    // First Light is written on day 1, spoken on day 2, drawn on day 3 — and
+    // the day object carries that as `type`. Neither isVoicePath nor
+    // isFlexPath sees it: the first is a whole-path list, the second means
+    // "the user chooses". So a spoken day fell through to the image-upload
+    // flow and asked for a photograph of a page that was never written.
+    const dayType = journeyData?.type;            // 'text' | 'voice' | 'visual'
+    const useVoice = isFlex ? mode === 'voice' : (dayType === 'voice' || isVoice);
+
+    // JournalUpload takes its instruction set from flexMode. A prescribed
+    // visual or written day needs the same steer a flex path gets from the
+    // picker, or it shows the default (draw) instructions on a writing day.
+    const dayMode = dayType === 'visual' ? 'draw' : dayType === 'text' ? 'write' : null;
+
     isNavigating.current = true;
     navigateToScreen(useVoice ? 'voice-upload' : 'upload', {
       pathId: activePath,
@@ -159,7 +172,9 @@ const WriteTab = ({ navigateToScreen, currentPath, currentDay }) => {
       prompt: currentPrompt,
       theme: journeyData?.theme,
       // Tells JournalUpload which instruction set to show ('draw' | 'write')
-      ...(isFlex && !useVoice ? { flexMode: mode } : {}),
+      ...(!useVoice && (isFlex ? mode : dayMode)
+        ? { flexMode: isFlex ? mode : dayMode }
+        : {}),
     });
   };
 

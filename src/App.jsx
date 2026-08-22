@@ -785,12 +785,17 @@ const App = () => {
                       const targetPath = pathId || screenData?.pathId || currentPath;
                       const targetDay = screenData?.day || currentDay;
                       const p = getJourneyPath(targetPath);
-                      if (p?.isVoiceJourney) {
+                      // Same per-day check WriteTab makes. Multi-modal paths
+                      // carry the medium on the day, not the path, so a spoken
+                      // day reached from the day view would otherwise land on
+                      // the image-upload flow.
+                      const dayData = getJourneyDay(targetDay, targetPath);
+                      if (p?.isVoiceJourney || dayData?.type === 'voice') {
                         navigateToScreen('voice-upload', {
                           pathId: targetPath,
                           day: targetDay,
-                          prompt: getCurrentJourneyDay().prompt,
-                          theme: getCurrentJourneyDay().theme
+                          prompt: dayData?.prompt || getCurrentJourneyDay().prompt,
+                          theme: dayData?.theme || getCurrentJourneyDay().theme
                         });
                       } else if (isFlexPath(targetPath)) {
                         // Flex paths need the WriteTab write/speak/draw picker —
