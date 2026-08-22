@@ -2011,4 +2011,56 @@
       animation: none;
     }
   }
+
+  /* ── 8. MIRO — inner light while typing ─────────────────────────────────
+   * Desktop only, and deliberately so: this is a pointer-and-keyboard
+   * flourish. On a phone the input sits under a thumb and behind a software
+   * keyboard, where an inner glow is both invisible and one more thing to
+   * composite.
+   *
+   * Painted on ::after rather than as another box-shadow on the row itself.
+   * The row already declares box-shadow on :focus-within, and both selectors
+   * carry the same specificity — whichever file happened to load last would
+   * silently win and drop the other's shadow. A separate layer cannot
+   * collide with it.
+   *
+   * "Typing" here is a real state, held for 900ms past the last keystroke by
+   * the component, not :focus-within — a glow that came up on focus and
+   * stayed would just be a second focus ring.
+   */
+  .kai-input-row::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    box-shadow:
+      inset 0 0 18px rgba(var(--kai-edge-b), 0.20),
+      inset 0 0 38px rgba(var(--kai-edge-a), 0.13);
+  }
+
+  .kai-input-row.is-typing::after {
+    opacity: 1;
+    animation: kaiInnerBreathe 2.2s ease-in-out infinite;
+  }
+
+  /* Barely a swell — enough that the light feels responsive to the writing
+     rather than switched on. */
+  @keyframes kaiInnerBreathe {
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
+  }
+
+  .hs-light .kai-input-row::after {
+    box-shadow:
+      inset 0 0 16px rgba(var(--kai-edge-b), 0.16),
+      inset 0 0 34px rgba(var(--kai-edge-a), 0.10);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kai-input-row.is-typing::after { animation: none; opacity: 0.85; }
+  }
 }

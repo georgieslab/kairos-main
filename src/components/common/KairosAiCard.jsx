@@ -127,6 +127,10 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const [error, setError] = useState(null);
   const [exhausted, setExhausted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  // Actively typing, as distinct from merely focused. Held for a beat after
+  // the last keystroke so the glow does not flicker between words.
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimer = useRef(null);
   const threadRef = useRef(null);
   const fileRef = useRef(null);
 
@@ -155,6 +159,8 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     })();
     return () => { cancelled = true; };
   }, [currentUser]);
+
+  useEffect(() => () => clearTimeout(typingTimer.current), []);
 
   // Keep the newest turn in view as the thread grows.
   useEffect(() => {
@@ -456,7 +462,7 @@ before the substance.`;
         </div>
       )}
 
-      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}`}>
+      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}${isTyping ? ' is-typing' : ''}`}>
         <input
           ref={fileRef}
           type="file"
@@ -477,7 +483,12 @@ before the substance.`;
           className="kai-input"
           rows={1}
           value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          onChange={(e) => {
+            setQuestion(e.target.value);
+            setIsTyping(true);
+            clearTimeout(typingTimer.current);
+            typingTimer.current = setTimeout(() => setIsTyping(false), 900);
+          }}
           onKeyDown={onKeyDown}
           onPaste={onPaste}
           disabled={locked || isThinking}
