@@ -45,6 +45,21 @@ const db = admin.firestore();
 const FREE_MONTHLY_ANALYSES = 10;
 
 /**
+ * Kairos AI is a conversation, and a conversation is the first unbounded thing
+ * in this app. Every other AI feature is capped somewhere — analyses cap
+ * history at slice(0, 20), the daily question capped itself at one per day —
+ * which is why a user in year eight costs the same as one in week one.
+ *
+ * A thread has no such ceiling: turns are unlimited AND each turn resends the
+ * whole thread, so cost rises as the conversation goes on. On sonnet-4-6 a
+ * ten-turn thread is roughly $0.27, and a user having five a week is ~$70/year.
+ * That is fine against a 9.99/month subscription and ruinous against nothing,
+ * so the free tier keeps the gate the daily question already had: one exchange
+ * per day.
+ */
+const FREE_DAILY_AI_MESSAGES = 1;
+
+/**
  * True when a subscription grants Artisan access right now.
  *
  * Expiry was previously unenforced anywhere: the client's hasArtisanAccess
@@ -74,6 +89,62 @@ function isVisionRequest(body) {
       Array.isArray(m.content) &&
       m.content.some((c) => c && c.type === 'image')
   );
+}
+
+/**
+ * A Kairos AI turn, flagged by the client rather than sniffed from the payload.
+ * Sniffing would be guesswork — a conversation turn and an analysis are both
+ * just messages — and guessing wrong in either direction is bad: an analysis
+ * charged against the daily gate locks someone out of the app's core flow, and
+ * a conversation charged against the monthly one exhausts it in ten turns.
+ */
+function isKairosAiRequest(body) {
+  return body && body.kairosAi === true;
+}
+
+/**
+ * Reserves one unit of the free DAILY Kairos AI allowance. Same transaction
+ * shape as the monthly reservation, and a separate counter: the two limits
+ * measure different things and must not draw down each other.
+ */
+async function reserveDailyAiMessage(uid) {
+  const userRef = db.collection('users').doc(uid);
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists ? snap.data() : {};
+
+    if (hasActiveArtisan(data.subscription)) return { metered: false };
+    // An invite code grants the same unmetered access a subscription does.
+    if (data.kairosAiAccess === true) return { metered: false };
+
+    const day = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, UTC
+    const usage = data.aiChatUsage || {};
+    const used = usage.day === day ? usage.count || 0 : 0;
+
+    if (used >= FREE_DAILY_AI_MESSAGES) {
+      return { metered: true, exhausted: true, used, limit: FREE_DAILY_AI_MESSAGES };
+    }
+
+    tx.set(userRef, { aiChatUsage: { day, count: used + 1 } }, { merge: true });
+    return { metered: true, exhausted: false, used: used + 1, limit: FREE_DAILY_AI_MESSAGES };
+  });
+}
+
+/** Hands back a reserved AI turn when the Claude call itself fails. */
+async function releaseDailyAiMessage(uid) {
+  const userRef = db.collection('users').doc(uid);
+  try {
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(userRef);
+      const data = snap.exists ? snap.data() : {};
+      const day = new Date().toISOString().slice(0, 10);
+      const usage = data.aiChatUsage || {};
+      if (usage.day !== day || !usage.count) return;
+      tx.set(userRef, { aiChatUsage: { day, count: usage.count - 1 } }, { merge: true });
+    });
+  } catch (e) {
+    console.error('Could not release AI turn:', e.message);
+  }
 }
 
 /**
@@ -1341,8 +1412,30 @@ exports.callClaude = functions
       // Reserve before calling, not after: reserving afterwards would let
       // concurrent requests all pass the check and overshoot the allowance.
       // The reservation is handed back below if the call itself fails.
+      // Two allowances, and a request draws on exactly one of them. A Kairos AI
+      // turn is gated daily; everything else is gated monthly; a vision request
+      // is not gated at all, because a transcription is useless without the
+      // analysis that follows and charging for both would make a handwritten
+      // entry cost twice what a typed one does.
       let allowance = { metered: false };
-      if (!isVisionRequest(requestBody)) {
+      let allowanceKind = null;
+
+      if (isKairosAiRequest(requestBody)) {
+        allowanceKind = 'ai';
+        allowance = await reserveDailyAiMessage(context.auth.uid);
+        if (allowance.exhausted) {
+          throw new functions.https.HttpsError(
+            "resource-exhausted",
+            `Free plan allowance reached: ${allowance.limit} Kairos AI message per day.`,
+            {
+              reason: "ai-daily-allowance-exhausted",
+              used: allowance.used,
+              limit: allowance.limit,
+            }
+          );
+        }
+      } else if (!isVisionRequest(requestBody)) {
+        allowanceKind = 'analysis';
         allowance = await reserveFreeAnalysis(context.auth.uid);
         if (allowance.exhausted) {
           throw new functions.https.HttpsError(
@@ -1380,8 +1473,17 @@ exports.callClaude = functions
 
         result = await response.json();
       } catch (callError) {
-        // The user got nothing, so they should not be charged for it.
-        if (allowance.metered) await releaseFreeAnalysis(context.auth.uid);
+        // The user got nothing, so they should not be charged for it — and the
+        // refund has to go back to whichever of the two allowances was drawn
+        // down. Handing an AI turn back to the monthly analysis counter would
+        // both leave the daily gate closed and quietly inflate the other.
+        if (allowance.metered) {
+          if (allowanceKind === 'ai') {
+            await releaseDailyAiMessage(context.auth.uid);
+          } else {
+            await releaseFreeAnalysis(context.auth.uid);
+          }
+        }
         throw callError;
       }
 
