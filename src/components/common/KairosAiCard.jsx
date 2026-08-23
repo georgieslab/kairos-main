@@ -28,6 +28,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 import MiroMark from './MiroMark';
+import MiroThinking from './MiroThinking';
 import '../../styles/components/kairosAi.css';
 
 // Matches the cap every other history-fed generator uses. It is the reason a
@@ -49,25 +50,6 @@ const JPEG_QUALITY = 0.75;
 // subsequent turn. Only the newest few are resent as pixels; older ones survive
 // as a note, which keeps follow-up questions working without the compounding.
 const IMAGE_MEMORY = 10;
-
-/**
- * One wave, as cubic segments — eight half-periods of 100 units, so the path
- * is 800 wide against a 400 viewBox. That surplus is the whole trick: sliding
- * it left by one full wavelength (200) returns it to an identical shape, so
- * the loop has no visible seam and no JS is involved in the motion.
- *
- * 0.36/0.64 are where a cubic's control points have to sit to approximate a
- * sine; evenly spaced ones give a lumpier curve that reads as a ribbon rather
- * than water.
- */
-const WAVE = (amp) => {
-  let d = 'M 0 32';
-  for (let i = 0; i < 8; i++) {
-    const a = i % 2 === 0 ? -amp : amp;
-    d += ` c 36 ${a}, 64 ${a}, 100 0`;
-  }
-  return d;
-};
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
@@ -480,45 +462,18 @@ before the substance.`;
             </div>
           ))}
           {isThinking && (
-            /* Faint lines where the answer will be, with a light passing
-               through them. No icon and no orb: the wait occupies exactly the
-               space the reply will fill, so the thread does not jump when it
-               arrives — which a fixed-size indicator cannot do.
-               The label is for screen readers, which get nothing from a
-               shimmer. */
+            /* Miro's own sphere with water moving in it, so the wait is the
+               same object as the mark in the header rather than a second
+               shape. Being fixed-size it does not fill the answer's space, so
+               the thread does shift a little when the reply lands — the
+               trade taken deliberately for something that belongs here.
+               The label is for screen readers, which get nothing from it. */
             <div
               className="kai-msg kai-msg-ai kai-waiting"
               role="status"
               aria-label={t('kairosAi.thinking', 'reading back through your entries…')}
             >
-              <svg
-                className="kai-wave"
-                viewBox="0 0 400 64"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <defs>
-                  {/* The stop colours are set in CSS, not here: a custom
-                      property inside a stop-color ATTRIBUTE is not reliably
-                      resolved, and the failure is silent — an invisible wave
-                      rather than an error. */}
-                  <linearGradient id="kai-wave-g" x1="0" y1="0" x2="1" y2="0">
-                    <stop className="kai-wave-s0" offset="0%" />
-                    <stop className="kai-wave-s1" offset="22%" />
-                    <stop className="kai-wave-s2" offset="52%" />
-                    <stop className="kai-wave-s3" offset="78%" />
-                    <stop className="kai-wave-s4" offset="100%" />
-                  </linearGradient>
-                </defs>
-                {/* Three passes of the same wave at different amplitudes and
-                    speeds. One wave is a line; three at different rates read as
-                    water, because the crossings are never in the same place
-                    twice. Each path is twice the viewBox wide, so translating
-                    it by exactly one wavelength loops with no seam. */}
-                <path className="kai-wave-1" d={WAVE(11)} />
-                <path className="kai-wave-2" d={WAVE(17)} />
-                <path className="kai-wave-3" d={WAVE(6)} />
-              </svg>
+              <MiroThinking size={46} />
             </div>
           )}
         </div>

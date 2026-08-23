@@ -1,0 +1,122 @@
+/* src/styles/components/miroThinking.css
+ *
+ * Water inside the sphere. Four things move at once and none of them share a
+ * period, which is what stops it resolving into a loop: each wave drifts
+ * sideways at its own rate, the whole body of water rises and falls beneath
+ * them, and the sphere breathes.
+ *
+ * All motion is transform, so it composites. Nothing animates an SVG geometry
+ * attribute and no frame is ever asked of JavaScript.
+ */
+
+.miro-think {
+  display: block;
+  overflow: visible;
+  flex-shrink: 0;
+  filter:
+    drop-shadow(0 0 4px rgba(126, 116, 210, 0.5))
+    drop-shadow(0 0 14px rgba(78, 96, 176, 0.36));
+  animation:
+    mtBreathe 3.4s ease-in-out infinite,
+    mtArrive 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Quicker than the mark's 7.5s rest — this one is working. */
+@keyframes mtBreathe {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 4px rgba(126, 116, 210, 0.42))
+      drop-shadow(0 0 12px rgba(78, 96, 176, 0.28));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 8px rgba(146, 134, 240, 0.68))
+      drop-shadow(0 0 22px rgba(96, 116, 205, 0.48));
+  }
+}
+
+@keyframes mtArrive {
+  from { opacity: 0; transform: scale(0.72); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── The water ────────────────────────────────────────────────────────────*/
+.miro-think path {
+  fill: none;
+  stroke: url(#mt-wave);
+  stroke-linecap: round;
+}
+
+.mt-s0 { stop-color: rgba(88, 116, 190, 0); }
+.mt-s1 { stop-color: rgba(122, 150, 225, 0.9); }
+.mt-s2 { stop-color: rgba(158, 150, 245, 1); }
+.mt-s3 { stop-color: rgba(122, 150, 225, 0.9); }
+.mt-s4 { stop-color: rgba(88, 116, 190, 0); }
+
+/* Exactly one wavelength — any other distance shows a seam on the wrap. */
+@keyframes mtDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-32px); }
+}
+
+/* No duration is a multiple of another. Common factors would put the
+   crossings back in the same place on a visible cycle, which is precisely
+   what makes moving water look like an animation instead. */
+.mt-w1 { stroke-width: 1.5; opacity: 0.95; animation: mtDrift 3.1s linear infinite; }
+.mt-w2 { stroke-width: 1.1; opacity: 0.6;  animation: mtDrift 4.7s linear infinite reverse; }
+.mt-w3 { stroke-width: 0.9; opacity: 0.42; animation: mtDrift 6.3s linear infinite; }
+.mt-w4 { stroke-width: 1.9; opacity: 0.3;  animation: mtDrift 8.9s linear infinite reverse; }
+
+/* The tide, under the drift. Its period shares no factor with any wave
+   either, so the surface never repeats a state. */
+.mt-tide {
+  animation: mtTide 5.3s ease-in-out infinite;
+}
+
+@keyframes mtTide {
+  0%, 100% { transform: translateY(2.2px); }
+  50%      { transform: translateY(-2.2px); }
+}
+
+/* Light theme: the sphere stays dark — it is deep water, and a pale version
+   is just a grey disc — but the glow tightens so it does not haze against a
+   near-white plate. */
+.hs-light .miro-think,
+.light-theme .miro-think {
+  filter:
+    drop-shadow(0 0 3px rgba(110, 104, 200, 0.38))
+    drop-shadow(0 0 10px rgba(96, 112, 190, 0.24));
+  animation:
+    mtBreatheLight 3.4s ease-in-out infinite,
+    mtArrive 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes mtBreatheLight {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 3px rgba(110, 104, 200, 0.3))
+      drop-shadow(0 0 9px rgba(96, 112, 190, 0.2));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 6px rgba(130, 120, 232, 0.52))
+      drop-shadow(0 0 17px rgba(104, 124, 206, 0.34));
+  }
+}
+
+/* Reduced motion keeps the sphere and its water — they are the only thing
+   saying an answer is on its way — and simply stops them moving. */
+@media (prefers-reduced-motion: reduce) {
+  .miro-think,
+  .hs-light .miro-think,
+  .light-theme .miro-think,
+  .miro-think .mt-tide,
+  .miro-think path {
+    animation: none;
+  }
+  .miro-think {
+    filter:
+      drop-shadow(0 0 5px rgba(133, 122, 220, 0.5))
+      drop-shadow(0 0 15px rgba(85, 104, 188, 0.34));
+  }
+}
