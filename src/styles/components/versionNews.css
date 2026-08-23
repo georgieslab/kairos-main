@@ -1,0 +1,213 @@
+/* src/styles/components/versionNews.css
+ *
+ * The release history. Borrows the pill and the sheet from whatsNew.css so
+ * the two buttons in the header row are visibly the same kind of control;
+ * only what is inside the sheet is defined here.
+ *
+ * The palette is deliberately neutral rather than the gold of an
+ * announcement. This is a record, not a pitch.
+ */
+
+.vn-pill {
+  /* Its own accent, so the shared sheet does not inherit whatever the last
+     What's New slide happened to set. */
+  --wn-a: 132, 142, 166;
+}
+
+.vn-sheet {
+  /* A changelog is long by nature, so the sheet is a fixed height with the
+     list scrolling inside it, rather than a dialog that grows past the
+     viewport and takes its own close button off-screen. */
+  max-height: min(78vh, 680px);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding-bottom: 8px;
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────────*/
+.vn-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 2px 0 14px;
+  flex-shrink: 0;
+}
+
+.vn-current {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.vn-current-label {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── The list ─────────────────────────────────────────────────────────────*/
+.vn-list {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.vn-list::-webkit-scrollbar { width: 5px; }
+.vn-list::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.vn-release + .vn-release {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.vn-release-head {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 13px 2px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: opacity 0.2s ease;
+}
+
+/* A release with nothing in it still gets a row — the record is the point —
+   but it does not pretend to be openable. */
+.vn-release-head:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.vn-version {
+  font-size: 14px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.92);
+  flex-shrink: 0;
+}
+
+.vn-codename {
+  font-size: 13px;
+  color: rgba(var(--wn-a), 1);
+  flex: 1;
+  min-width: 0;
+}
+
+.vn-date {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.35);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.vn-chevron {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.vn-release.is-open .vn-chevron { transform: rotate(180deg); }
+
+/* ── A release's contents ─────────────────────────────────────────────────*/
+.vn-body {
+  padding: 0 2px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: vnOpen 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vnOpen {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.vn-group-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Each kind of change gets its own colour on the label only. Colouring the
+   text itself would make a long fix list read as a warning. */
+.vn-features     .vn-group-label { color: rgba(150, 190, 165, 0.85); }
+.vn-improvements .vn-group-label { color: rgba(150, 170, 205, 0.85); }
+.vn-bugFixes     .vn-group-label { color: rgba(200, 165, 145, 0.85); }
+
+.vn-body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.vn-body li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.vn-body li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Notes are context rather than change, so they are set back and unbulleted. */
+.vn-notes li {
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.vn-notes li::before { display: none; }
+
+/* ── Light theme ──────────────────────────────────────────────────────────*/
+.light-theme .vn-current       { color: rgba(0, 0, 0, 0.9); }
+.light-theme .vn-current-label { color: rgba(0, 0, 0, 0.5); }
+.light-theme .vn-version       { color: rgba(0, 0, 0, 0.88); }
+.light-theme .vn-date          { color: rgba(0, 0, 0, 0.4); }
+.light-theme .vn-chevron       { color: rgba(0, 0, 0, 0.45); }
+.light-theme .vn-group-label   { color: rgba(0, 0, 0, 0.45); }
+.light-theme .vn-body li       { color: rgba(0, 0, 0, 0.78); }
+.light-theme .vn-body li::before { background: rgba(0, 0, 0, 0.3); }
+.light-theme .vn-notes li {
+  color: rgba(0, 0, 0, 0.55);
+  border-left-color: rgba(0, 0, 0, 0.14);
+}
+.light-theme .vn-release + .vn-release { border-top-color: rgba(0, 0, 0, 0.08); }
+.light-theme .vn-list {
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.light-theme .vn-list::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
+.light-theme .vn-features     .vn-group-label { color: rgba(70, 120, 90, 0.9); }
+.light-theme .vn-improvements .vn-group-label { color: rgba(70, 100, 155, 0.9); }
+.light-theme .vn-bugFixes     .vn-group-label { color: rgba(160, 100, 70, 0.9); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vn-body { animation: none; }
+  .vn-chevron { transition: none; }
+}

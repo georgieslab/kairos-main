@@ -396,5 +396,12 @@
   "nudge": {
     "title": "Kairos",
     "body": "The page is still open, whenever you want it."
+  },
+  "version": {
+    "title": "Version & news",
+    "youAreOn": "the version you are running",
+    "new": "New",
+    "better": "Better",
+    "fixed": "Fixed"
   }
 }

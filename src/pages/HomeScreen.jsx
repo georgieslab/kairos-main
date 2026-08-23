@@ -12,6 +12,7 @@ import DynamicIcon from '../components/common/DynamicIcon';
 import ThemeSwitcher from '../components/common/ThemeSwitcher';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
 import WhatsNew from '../components/common/WhatsNew';
+import VersionNews from '../components/common/VersionNews';
 import MoodWeather from '../components/common/MoodWeather';
 import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones } from 'lucide-react';
 import '../styles/components/homeScreen.css';
@@ -176,6 +177,7 @@ const HomeScreen = ({ navigateToScreen }) => {
               <LanguageSwitcher />
               <ThemeSwitcher />
               <WhatsNew navigateToScreen={navigateToScreen} />
+              <VersionNews />
             </div>
       </div>
 
