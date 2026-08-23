@@ -50,6 +50,25 @@ const JPEG_QUALITY = 0.75;
 // as a note, which keeps follow-up questions working without the compounding.
 const IMAGE_MEMORY = 10;
 
+/**
+ * One wave, as cubic segments — eight half-periods of 100 units, so the path
+ * is 800 wide against a 400 viewBox. That surplus is the whole trick: sliding
+ * it left by one full wavelength (200) returns it to an identical shape, so
+ * the loop has no visible seam and no JS is involved in the motion.
+ *
+ * 0.36/0.64 are where a cubic's control points have to sit to approximate a
+ * sine; evenly spaced ones give a lumpier curve that reads as a ribbon rather
+ * than water.
+ */
+const WAVE = (amp) => {
+  let d = 'M 0 32';
+  for (let i = 0; i < 8; i++) {
+    const a = i % 2 === 0 ? -amp : amp;
+    d += ` c 36 ${a}, 64 ${a}, 100 0`;
+  }
+  return d;
+};
+
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
 // Entry timestamps arrive as Firestore Timestamps, {seconds}, or plain dates
@@ -472,9 +491,34 @@ before the substance.`;
               role="status"
               aria-label={t('kairosAi.thinking', 'reading back through your entries…')}
             >
-              <span className="kai-skel" />
-              <span className="kai-skel" />
-              <span className="kai-skel" />
+              <svg
+                className="kai-wave"
+                viewBox="0 0 400 64"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  {/* The stop colours are set in CSS, not here: a custom
+                      property inside a stop-color ATTRIBUTE is not reliably
+                      resolved, and the failure is silent — an invisible wave
+                      rather than an error. */}
+                  <linearGradient id="kai-wave-g" x1="0" y1="0" x2="1" y2="0">
+                    <stop className="kai-wave-s0" offset="0%" />
+                    <stop className="kai-wave-s1" offset="22%" />
+                    <stop className="kai-wave-s2" offset="52%" />
+                    <stop className="kai-wave-s3" offset="78%" />
+                    <stop className="kai-wave-s4" offset="100%" />
+                  </linearGradient>
+                </defs>
+                {/* Three passes of the same wave at different amplitudes and
+                    speeds. One wave is a line; three at different rates read as
+                    water, because the crossings are never in the same place
+                    twice. Each path is twice the viewBox wide, so translating
+                    it by exactly one wavelength loops with no seam. */}
+                <path className="kai-wave-1" d={WAVE(11)} />
+                <path className="kai-wave-2" d={WAVE(17)} />
+                <path className="kai-wave-3" d={WAVE(6)} />
+              </svg>
             </div>
           )}
         </div>

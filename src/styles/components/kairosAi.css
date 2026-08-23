@@ -280,47 +280,82 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* The wait, in the assistant's own position: faint lines standing in for the
- * answer, with a light passing through them.
+/* The wait: light moving on water.
  *
- * Sized like the prose that replaces it, so the thread does not jump when the
- * reply arrives — which is the thing a fixed-size spinner or orb cannot do,
- * and the reason both of those were wrong here. The widths taper because real
- * paragraphs do; three equal bars read as a loading table, not a reply.
+ * Two earlier versions of this were wrong in the same way — an hourglass and
+ * an orb are both a small busy object sitting where prose will go. This spans
+ * the width the answer will occupy, so the thread settles rather than jumps,
+ * and it belongs to the card's own world instead of being a widget dropped
+ * onto it.
+ *
+ * All motion is transform on a path that is twice as wide as the frame, which
+ * composites on the GPU. Nothing here animates a geometry attribute or asks
+ * JavaScript for a frame.
  */
 .kai-waiting {
-  display: flex;
-  /* .kai-msg is a column already, but stated because this depends on it. */
-  flex-direction: column;
-  gap: 9px;
-  padding: 3px 0 5px;
+  display: block;
+  padding: 2px 0 4px;
 }
 
-.kai-skel {
-  height: 11px;
-  border-radius: 6px;
-  /* The base is the resting tint; the highlight rides across it. Sized to
-     220% so the lit band is a narrow pass rather than the whole line
-     brightening at once. */
-  background: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0.055) 32%,
-    rgba(var(--kai-glow), 0.30) 50%,
-    rgba(255, 255, 255, 0.055) 68%
-  );
-  background-size: 220% 100%;
-  animation: kaiSkelSweep 1.7s ease-in-out infinite;
+.kai-wave {
+  display: block;
+  width: 100%;
+  height: 64px;
+  overflow: visible;
+  /* The glow is what makes it light rather than line-art. Two radii: a tight
+     one for the filament, a wide one for the water around it. */
+  filter:
+    drop-shadow(0 0 3px rgba(var(--kai-glow-alt), 0.55))
+    drop-shadow(0 0 12px rgba(var(--kai-glow), 0.4));
+  animation: kaiWaveIn 0.7s ease both;
 }
 
-/* A short stagger, so the light reads as one wave crossing the block rather
-   than three lines flashing together. */
-.kai-skel:nth-child(1) { width: 100%; }
-.kai-skel:nth-child(2) { width: 82%;  animation-delay: 0.13s; }
-.kai-skel:nth-child(3) { width: 55%;  animation-delay: 0.26s; }
+@keyframes kaiWaveIn {
+  from { opacity: 0; transform: scaleY(0.4); }
+  to   { opacity: 1; transform: scaleY(1); }
+}
 
-@keyframes kaiSkelSweep {
-  from { background-position: 130% 50%; }
-  to   { background-position: -30% 50%; }
+/* Set as CSS properties so the palette variables actually resolve. The band
+   is dark at both ends and violet in the middle, so the light reads as
+   passing through rather than as a coloured rope. */
+.kai-wave-s0 { stop-color: rgba(var(--kai-glow), 0); }
+.kai-wave-s1 { stop-color: rgba(var(--kai-glow), 0.85); }
+.kai-wave-s2 { stop-color: rgba(var(--kai-glow-alt), 1); }
+.kai-wave-s3 { stop-color: rgba(var(--kai-glow), 0.85); }
+.kai-wave-s4 { stop-color: rgba(var(--kai-glow), 0); }
+
+.kai-wave path {
+  fill: none;
+  stroke: url(#kai-wave-g);
+  /* The frame is stretched to the card's width, so without this the stroke
+     would be stretched with it and thin out on wide screens. */
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+
+/* Three speeds, none of them a multiple of another — common factors would
+   have the crossings recur on a visible cycle, which is what makes an
+   animation look like a loop instead of like water. */
+.kai-wave-1 {
+  stroke-width: 1.7;
+  opacity: 0.9;
+  animation: kaiWaveDrift 4.3s linear infinite;
+}
+.kai-wave-2 {
+  stroke-width: 1.1;
+  opacity: 0.5;
+  animation: kaiWaveDrift 6.7s linear infinite reverse;
+}
+.kai-wave-3 {
+  stroke-width: 2.4;
+  opacity: 0.28;
+  animation: kaiWaveDrift 9.1s linear infinite;
+}
+
+/* Exactly one wavelength. Any other distance shows a seam on the wrap. */
+@keyframes kaiWaveDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-200px); }
 }
 
 /* Running out for the day is not an error — it is the plan working. It should
@@ -602,15 +637,16 @@
   border-color: rgba(var(--kai-glow), 0.22);
 }
 .hs-light .kai-limit { color: rgba(0, 0, 0, 0.5); }
-.hs-light .kai-skel {
-  background: linear-gradient(
-    100deg,
-    rgba(0, 0, 0, 0.05) 32%,
-    rgba(var(--kai-glow), 0.24) 50%,
-    rgba(0, 0, 0, 0.05) 68%
-  );
-  background-size: 220% 100%;
+/* On a pale plate the glow has nothing to bloom into, so it tightens and the
+   strokes carry more of the weight themselves. */
+.hs-light .kai-wave {
+  filter:
+    drop-shadow(0 0 2px rgba(var(--kai-glow-alt), 0.4))
+    drop-shadow(0 0 8px rgba(var(--kai-glow), 0.28));
 }
+.hs-light .kai-wave-1 { opacity: 1; }
+.hs-light .kai-wave-2 { opacity: 0.6; }
+.hs-light .kai-wave-3 { opacity: 0.35; }
 .hs-light .kai-thread {
   scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
@@ -677,7 +713,8 @@
   .kai-input-row.is-thinking::before,
   .miro-ring,
   .kai-msg,
-  .kai-skel,
+  .kai-wave,
+  .kai-wave path,
   .kai-blob,
   .kai-attach,
   .kai-drop,
@@ -692,7 +729,8 @@
       0 8px 24px rgba(0, 0, 0, 0.2),
       0 0 40px rgba(var(--kai-glow), 0.22);
   }
-  /* Still visibly a placeholder, just not moving. */
-  .kai-skel { opacity: 0.55; }
+  /* Held still at full strength: the wave is the only thing saying an answer
+     is coming, so it stays visible — it simply stops moving. */
+  .kai-wave { opacity: 1; transform: none; }
   .kai-input-row::before { opacity: 0.72; }
 }
