@@ -1,9 +1,9 @@
 /* src/styles/components/miroThinking.css
  *
- * Water inside the sphere. Four things move at once and none of them share a
- * period, which is what stops it resolving into a loop: each wave drifts
- * sideways at its own rate, the whole body of water rises and falls beneath
- * them, and the sphere breathes.
+ * Water inside the sphere. Five motions and no shared period, which is what
+ * stops it resolving into a loop: four waves drift sideways at their own
+ * rates, and the whole body of water rises and falls beneath them. The
+ * sphere itself does not move — all the life is in the water.
  *
  * All motion is transform, so it composites. Nothing animates an SVG geometry
  * attribute and no frame is ever asked of JavaScript.
@@ -11,28 +11,12 @@
 
 .miro-think {
   display: block;
-  overflow: visible;
   flex-shrink: 0;
-  filter:
-    drop-shadow(0 0 4px rgba(126, 116, 210, 0.5))
-    drop-shadow(0 0 14px rgba(78, 96, 176, 0.36));
-  animation:
-    mtBreathe 3.4s ease-in-out infinite,
-    mtArrive 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* Quicker than the mark's 7.5s rest — this one is working. */
-@keyframes mtBreathe {
-  0%, 100% {
-    filter:
-      drop-shadow(0 0 4px rgba(126, 116, 210, 0.42))
-      drop-shadow(0 0 12px rgba(78, 96, 176, 0.28));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 8px rgba(146, 134, 240, 0.68))
-      drop-shadow(0 0 22px rgba(96, 116, 205, 0.48));
-  }
+  /* No outer glow, and therefore no `overflow: visible` — nothing is drawn
+     outside the circle any more. The light in this object comes from the
+     water inside it, which is enough: with a halo as well, the sphere read
+     as a lamp rather than as something with depth. */
+  animation: mtArrive 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes mtArrive {
@@ -78,45 +62,17 @@
   50%      { transform: translateY(-2.2px); }
 }
 
-/* Light theme: the sphere stays dark — it is deep water, and a pale version
-   is just a grey disc — but the glow tightens so it does not haze against a
-   near-white plate. */
-.hs-light .miro-think,
-.light-theme .miro-think {
-  filter:
-    drop-shadow(0 0 3px rgba(110, 104, 200, 0.38))
-    drop-shadow(0 0 10px rgba(96, 112, 190, 0.24));
-  animation:
-    mtBreatheLight 3.4s ease-in-out infinite,
-    mtArrive 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-@keyframes mtBreatheLight {
-  0%, 100% {
-    filter:
-      drop-shadow(0 0 3px rgba(110, 104, 200, 0.3))
-      drop-shadow(0 0 9px rgba(96, 112, 190, 0.2));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 6px rgba(130, 120, 232, 0.52))
-      drop-shadow(0 0 17px rgba(104, 124, 206, 0.34));
-  }
-}
+/* No light-theme override is needed now. The body is deep water in both
+   themes — a pale version would just be a grey disc — and with the halo gone
+   there is nothing left that had to be retuned against a near-white plate. */
 
 /* Reduced motion keeps the sphere and its water — they are the only thing
    saying an answer is on its way — and simply stops them moving. */
 @media (prefers-reduced-motion: reduce) {
   .miro-think,
-  .hs-light .miro-think,
-  .light-theme .miro-think,
   .miro-think .mt-tide,
   .miro-think path {
     animation: none;
   }
-  .miro-think {
-    filter:
-      drop-shadow(0 0 5px rgba(133, 122, 220, 0.5))
-      drop-shadow(0 0 15px rgba(85, 104, 188, 0.34));
-  }
+
 }

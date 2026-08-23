@@ -283,9 +283,13 @@
 /* The wait is Miro's own sphere (see MiroThinking). All this has to do is
  * seat it in the thread — the object brings its own motion and glow.
  */
+/* Centred, not left-aligned with the prose. It is an object rather than the
+   first line of an answer, and hanging it off the left margin made it read as
+   a stray bullet. */
 .kai-waiting {
-  display: block;
-  padding: 4px 0 6px;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 10px;
 }
 
 /* Running out for the day is not an error — it is the plan working. It should
