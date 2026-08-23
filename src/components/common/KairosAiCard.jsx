@@ -27,8 +27,6 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
-import { KairosBlobs } from './KairosLoader';
-import '../../styles/components/loader.css';
 import MiroMark from './MiroMark';
 import '../../styles/components/kairosAi.css';
 
@@ -463,13 +461,20 @@ before the substance.`;
             </div>
           ))}
           {isThinking && (
-            <div className="kai-msg kai-msg-ai kai-typing" aria-live="polite">
-              <span className="miro-blobs-wrap">
-                <KairosBlobs className="miro-blobs" />
-              </span>
-              <span className="kai-typing-word">
-                {t('kairosAi.thinking', 'reading back through your entries…')}
-              </span>
+            /* Faint lines where the answer will be, with a light passing
+               through them. No icon and no orb: the wait occupies exactly the
+               space the reply will fill, so the thread does not jump when it
+               arrives — which a fixed-size indicator cannot do.
+               The label is for screen readers, which get nothing from a
+               shimmer. */
+            <div
+              className="kai-msg kai-msg-ai kai-waiting"
+              role="status"
+              aria-label={t('kairosAi.thinking', 'reading back through your entries…')}
+            >
+              <span className="kai-skel" />
+              <span className="kai-skel" />
+              <span className="kai-skel" />
             </div>
           )}
         </div>

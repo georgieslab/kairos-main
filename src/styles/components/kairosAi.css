@@ -280,29 +280,47 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* The wait happens in the assistant's own position, so it appears where the
-   answer will. It is the app's hourglass rather than the three dots every chat
-   uses — this app already has a symbol for time passing, and the sand actually
-   draining says "still working" more honestly than dots that cycle forever
-   whether anything is happening or not. */
-.kai-typing {
+/* The wait, in the assistant's own position: faint lines standing in for the
+ * answer, with a light passing through them.
+ *
+ * Sized like the prose that replaces it, so the thread does not jump when the
+ * reply arrives — which is the thing a fixed-size spinner or orb cannot do,
+ * and the reason both of those were wrong here. The widths taper because real
+ * paragraphs do; three equal bars read as a loading table, not a reply.
+ */
+.kai-waiting {
   display: flex;
-  /* .kai-msg is a column now that a message can hold an image above its text.
-     This is the one message that runs across. */
-  flex-direction: row;
-  align-items: center;
+  /* .kai-msg is a column already, but stated because this depends on it. */
+  flex-direction: column;
   gap: 9px;
+  padding: 3px 0 5px;
 }
 
-.kai-typing-word {
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.45);
-  animation: kaiWordFade 2.4s ease-in-out infinite;
+.kai-skel {
+  height: 11px;
+  border-radius: 6px;
+  /* The base is the resting tint; the highlight rides across it. Sized to
+     220% so the lit band is a narrow pass rather than the whole line
+     brightening at once. */
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.055) 32%,
+    rgba(var(--kai-glow), 0.30) 50%,
+    rgba(255, 255, 255, 0.055) 68%
+  );
+  background-size: 220% 100%;
+  animation: kaiSkelSweep 1.7s ease-in-out infinite;
 }
 
-@keyframes kaiWordFade {
-  0%, 100% { opacity: 0.5; }
-  50%      { opacity: 0.95; }
+/* A short stagger, so the light reads as one wave crossing the block rather
+   than three lines flashing together. */
+.kai-skel:nth-child(1) { width: 100%; }
+.kai-skel:nth-child(2) { width: 82%;  animation-delay: 0.13s; }
+.kai-skel:nth-child(3) { width: 55%;  animation-delay: 0.26s; }
+
+@keyframes kaiSkelSweep {
+  from { background-position: 130% 50%; }
+  to   { background-position: -30% 50%; }
 }
 
 /* Running out for the day is not an error — it is the plan working. It should
@@ -566,105 +584,6 @@
 
 @keyframes kaiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ── Miro's thinking orb ──────────────────────────────────────────────────
- * The same blob loader, shrunk to chat scale and taken down to deep water.
- *
- * Every rule here is scoped under .miro-blobs and only ever ADDS colour or
- * size — the full-screen loader's own green is untouched, because that one
- * still tints to the active path and this one must not.
- *
- * The orb is authored at 100x100. Rather than rewrite every offset, it is
- * scaled down as a whole and the wrapper is given the final size: the blur
- * radii and orbit origins then scale with it, which is the only way the
- * proportions survive at a tenth of the size.
- */
-.miro-blobs-wrap {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  /* The remaining glow still reaches past 52px; this keeps it off the
-     container's edges rather than relying on the thread's padding alone. */
-  margin: 4px 2px 6px 2px;
-}
-
-.miro-blobs-wrap .miro-blobs {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
-  /* The scale and the wrapper size are one number in two places: the orb is
-     authored at 100x100, so the box must match whatever it is scaled to or it
-     leaves a hole in the layout. */
-  transform: scale(0.52);
-  transform-origin: top left;
-}
-
-/* Deep sea. The body of the orb is a lit blue that still reads as dark
-   against the card, not a bright dot. */
-.miro-blobs .ball {
-  background: #24406b;
-  /* Authored at 40px/80px for a full-screen loader. Scaled to 52px that still
-     throws light ~40px past the orb in every direction, which no inline box
-     can hold — pulled in to something proportional to its actual size. */
-  box-shadow:
-    0 0 18px rgba(36, 64, 107, 0.55),
-    0 0 32px rgba(46, 82, 138, 0.28);
-}
-
-/* The blobs turning inside it are nearly black, so they read as depth in the
-   water rather than as separate objects. */
-.miro-blobs .blubb-1:after,
-.miro-blobs .blubb-2:after,
-.miro-blobs .blubb-3:after,
-.miro-blobs .blubb-4:after,
-.miro-blobs .blubb-5:after,
-.miro-blobs .blubb-6:after {
-  background: #0f1c33;
-}
-
-/* The sparkles are the one light thing — pale periwinkle, the same family as
-   the ring in Miro's mark, so the two read as one object. */
-.miro-blobs .sparkle-1:after,
-.miro-blobs .sparkle-2:after,
-.miro-blobs .sparkle-3:after,
-.miro-blobs .sparkle-4:after,
-.miro-blobs .sparkle-5:after,
-.miro-blobs .sparkle-6:after,
-.miro-blobs .sparkle-7:after,
-.miro-blobs .sparkle-8:after {
-  background: #9fb0e8;
-  box-shadow: 0 0 10px rgba(159, 176, 232, 0.5);
-}
-
-/* On a pale plate the near-black blobs turn into holes, so they lift toward
-   the ball's own blue and the ball itself brightens a little. */
-.hs-light .miro-blobs .ball {
-  background: #2d5285;
-  box-shadow:
-    0 0 18px rgba(45, 82, 133, 0.4),
-    0 0 32px rgba(58, 100, 160, 0.2);
-}
-.hs-light .miro-blobs .blubb-1:after,
-.hs-light .miro-blobs .blubb-2:after,
-.hs-light .miro-blobs .blubb-3:after,
-.hs-light .miro-blobs .blubb-4:after,
-.hs-light .miro-blobs .blubb-5:after,
-.hs-light .miro-blobs .blubb-6:after {
-  background: #1c3252;
-}
-
-/* The orbiting is the whole indicator, so reduced motion leaves it lit and
-   still rather than removing it — a frozen orb still says "working", an
-   absent one says nothing. */
-@media (prefers-reduced-motion: reduce) {
-  .miro-blobs .ball,
-  .miro-blobs [class^="blubb-"]:after,
-  .miro-blobs [class^="sparkle-"]:after {
-    animation: none;
-  }
-}
-
 /* ── Light theme ──────────────────────────────────────────────────────────
  * Home puts .hs-light on .spatial-home itself, so this card is addressed
  * through it rather than through the global .light-theme on <html>.
@@ -683,7 +602,15 @@
   border-color: rgba(var(--kai-glow), 0.22);
 }
 .hs-light .kai-limit { color: rgba(0, 0, 0, 0.5); }
-.hs-light .kai-typing-word { color: rgba(0, 0, 0, 0.5); }
+.hs-light .kai-skel {
+  background: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.05) 32%,
+    rgba(var(--kai-glow), 0.24) 50%,
+    rgba(0, 0, 0, 0.05) 68%
+  );
+  background-size: 220% 100%;
+}
 .hs-light .kai-thread {
   scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
@@ -750,7 +677,7 @@
   .kai-input-row.is-thinking::before,
   .miro-ring,
   .kai-msg,
-  .kai-typing-word,
+  .kai-skel,
   .kai-blob,
   .kai-attach,
   .kai-drop,
@@ -765,6 +692,7 @@
       0 8px 24px rgba(0, 0, 0, 0.2),
       0 0 40px rgba(var(--kai-glow), 0.22);
   }
-  .kai-typing-word { opacity: 0.7; }
+  /* Still visibly a placeholder, just not moving. */
+  .kai-skel { opacity: 0.55; }
   .kai-input-row::before { opacity: 0.72; }
 }
