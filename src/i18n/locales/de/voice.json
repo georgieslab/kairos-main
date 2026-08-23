@@ -46,6 +46,13 @@
     "errorEnterTranscription": "Bitte gib eine Transkription ein.",
     "errorCannotChangeModeWhileRecording": "Modus kann während der Aufnahme nicht geändert werden",
     "errorTranscriptionIncomplete": "Bitte stelle sicher, dass die Transkription vollständig ist.",
-    "errorUploadFailed": "Upload fehlgeschlagen: {{msg}}"
+    "errorUploadFailed": "Upload fehlgeschlagen: {{msg}}",
+    "startRecording": "Aufnahme starten",
+    "stopRecording": "Aufnahme beenden",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "stepSpeak": "Sprechen",
+    "stepWrite": "Aufschreiben",
+    "stepReview": "Prüfen"
   }
 }

@@ -2063,4 +2063,80 @@
   @media (prefers-reduced-motion: reduce) {
     .kai-input-row.is-typing::after { animation: none; opacity: 0.85; }
   }
+
+  /* ── 9. VOICE JOURNAL ──────────────────────────────────────────────────
+   * On a phone this page is a stack you scroll: prompt, recorder,
+   * transcript. On a wide screen that stack leaves two thirds of the window
+   * empty and pushes the transcript below the fold — so you cannot see what
+   * you said while deciding whether to keep it.
+   *
+   * Two columns, by column placement rather than a named-area template. The
+   * template would have to name every card, and most of them are absent most
+   * of the time (the status banner only while recording, the transcript only
+   * after, the error almost never) — a fixed template collapses the moment
+   * one is missing. Placing by column lets whatever exists flow.
+   *
+   * The recorder takes the left and is top-aligned; everything you read runs
+   * down the right. Nothing here is sticky and nothing spans rows, which is
+   * what keeps it out of the trap where a grid row's height is shared across
+   * both columns.
+   */
+  .glass-voice-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 32px 56px;
+    display: grid;
+    grid-template-columns: minmax(330px, 5fr) 7fr;
+    align-content: start;
+    gap: 18px 28px;
+  }
+
+  .glass-voice-container > .glass-header-row {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  /* Left: the recorder, and the progress under it. */
+  .glass-voice-container > .recording-card {
+    grid-column: 1;
+    align-self: start;
+    margin: 0;
+  }
+  .glass-voice-container > .vj-steps {
+    grid-column: 1;
+    align-self: start;
+    margin: 0;
+  }
+
+  /* Right: everything you read or act on. Row is left to auto-placement, so
+     an absent card costs nothing. */
+  .glass-voice-container > .prompt-card,
+  .glass-voice-container > .permission-card,
+  .glass-voice-container > .glass-status,
+  .glass-voice-container > .transcription-card,
+  .glass-voice-container > .glass-notice,
+  .glass-voice-container > .submit-button {
+    grid-column: 2;
+    margin: 0;
+  }
+
+  .glass-voice-container > .submit-button { justify-self: start; }
+
+  /* With room to spare, the recorder becomes the centrepiece it could not be
+     in a phone-width stack. */
+  .glass-voice-container .vj-timer  { font-size: 54px; }
+  .glass-voice-container .vj-wave   { height: 84px; }
+  .glass-voice-container .vj-record { width: 88px; height: 88px; }
+
+  /* Read at width, the transcript wants a measure and some air. */
+  .glass-voice-container .transcription-text p {
+    font-size: 16.5px;
+    line-height: 1.7;
+    max-width: 68ch;
+  }
+  .glass-voice-container .editor-area textarea {
+    min-height: 220px;
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
 }

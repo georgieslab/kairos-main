@@ -106,7 +106,9 @@ const AIPersonDescription = ({ entries, totalEntries, progressStats }) => {
           theme: entry.theme || '',
           summary: entry.analysis?.summary || '',
           insights: entry.analysis?.insights || [],
-          extractedText: entry.extractedText ? entry.extractedText.substring(0, 400) : '',
+          // Voice entries keep their words in `transcription`; reading only
+          // extractedText fed this a person with every spoken entry blank.
+          extractedText: (entry.extractedText || entry.transcription || '').substring(0, 400),
           affirmation: entry.analysis?.affirmation || '',
           practicalAction: entry.analysis?.practicalAction || ''
         }))

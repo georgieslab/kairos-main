@@ -34,6 +34,7 @@ const VoiceJournalUpload = ({
   onUploadComplete,
   onBack,
   prompt,
+  pathColor,
 }) => {
   const { t } = useTranslation('voice');
   const { currentUser, userProfile } = useAuth();
@@ -50,7 +51,6 @@ const VoiceJournalUpload = ({
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
-  const [audioLevel, setAudioLevel] = useState(0);
   const [stage, setStage] = useState('record'); // 'record', 'review'
   const [isEditingTranscription, setIsEditingTranscription] = useState(false);
   const [editedTranscription, setEditedTranscription] = useState('');
@@ -78,6 +78,13 @@ const VoiceJournalUpload = ({
   const recognitionRef = useRef(null);
   const recognitionRestartTimeoutRef = useRef(null);
   const isRecordingRef = useRef(false);
+  // The level loop runs outside React, so it cannot read state: a closure made
+  // in startRecording captures isRecording as false (setIsRecording had not
+  // committed yet), which is why the old meter never drew a single frame.
+  const isPausedRef = useRef(false);
+  const waveCanvasRef = useRef(null);
+  const recorderShellRef = useRef(null);
+  const levelsRef = useRef([]);
   const manualStopRef = useRef(false);
   const finalTranscriptRef = useRef('');
   const interimTranscriptRef = useRef('');
@@ -428,17 +435,99 @@ const VoiceJournalUpload = ({
     setIsRecording(true);
     isRecordingRef.current = true;
     setStage('record');
-    if (!isMobileDevice && analyserRef.current) {
-      const monitor = () => {
-        if (analyserRef.current && isRecording && !isPaused) {
-          const data = new Uint8Array(analyserRef.current.frequencyBinCount);
-          analyserRef.current.getByteFrequencyData(data);
-          const avg = data.reduce((a,b)=>a+b,0)/data.length;
-          setAudioLevel(avg/255);
-          animationRef.current = requestAnimationFrame(monitor);
+    // Every platform, not just desktop. The waveform is the whole feedback
+    // loop of speaking into a screen, and a phone is where most of this
+    // recording actually happens.
+    isPausedRef.current = false;
+    runLevelLoop();
+  };
+
+  /**
+   * Drives everything that reacts to the sound of your voice: the bars, and
+   * the glow around the record button.
+   *
+   * Deliberately outside React. At 60fps a setState per frame would re-render
+   * a 900-line component sixty times a second; the canvas is drawn to directly
+   * and the button's intensity is written as a CSS variable, so this loop
+   * causes no renders at all.
+   *
+   * It reads refs rather than state for the same reason the refs exist: the
+   * previous version tested `isRecording`, captured false in the closure that
+   * started it, so the condition failed on frame one and the meter never ran.
+   */
+  const runLevelLoop = () => {
+    const draw = () => {
+      const analyser = analyserRef.current;
+      if (!analyser || !isRecordingRef.current) return;
+
+      let level = 0;
+      if (!isPausedRef.current) {
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(data);
+        const avg = data.reduce((a, b) => a + b, 0) / data.length;
+        // The raw average sits low and flat for speech. A gentle curve lifts
+        // ordinary talking into the visible range without pinning shouts.
+        level = Math.min(1, Math.pow(avg / 255, 0.62) * 1.35);
+      }
+
+      // Reported to the shell as a variable, so the glow is pure CSS.
+      if (recorderShellRef.current) {
+        recorderShellRef.current.style.setProperty('--level', level.toFixed(3));
+      }
+
+      // A rolling history, newest last. Paused pushes silence, so the trace
+      // shows the gap rather than freezing mid-word.
+      const bars = levelsRef.current;
+      bars.push(level);
+      if (bars.length > 64) bars.shift();
+
+      const canvas = waveCanvasRef.current;
+      if (canvas) {
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+          canvas.width = w * dpr;
+          canvas.height = h * dpr;
         }
-      };
-      monitor();
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+
+        const gap = 2;
+        const barW = Math.max(2, (w - gap * (bars.length - 1)) / bars.length);
+        const mid = h / 2;
+        const accent = getComputedStyle(canvas).getPropertyValue('--c').trim() || '85,139,110';
+
+        bars.forEach((v, i) => {
+          // Symmetrical about the centre line, with a floor so silence is a
+          // visible thread rather than nothing at all.
+          const barH = Math.max(2, v * (h - 4));
+          const x = i * (barW + gap);
+          // Older bars fade, so the trace reads as time moving left.
+          const age = i / bars.length;
+          ctx.fillStyle = `rgba(${accent}, ${(0.25 + age * 0.75).toFixed(2)})`;
+          ctx.beginPath();
+          ctx.roundRect(x, mid - barH / 2, barW, barH, barW / 2);
+          ctx.fill();
+        });
+      }
+
+      animationRef.current = requestAnimationFrame(draw);
+    };
+    cancelAnimationFrame(animationRef.current);
+    draw();
+  };
+
+  const stopLevelLoop = () => {
+    cancelAnimationFrame(animationRef.current);
+    levelsRef.current = [];
+    if (recorderShellRef.current) {
+      recorderShellRef.current.style.setProperty('--level', '0');
+    }
+    const canvas = waveCanvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   };
 
@@ -450,9 +539,11 @@ const VoiceJournalUpload = ({
         if (nativeSpeechActiveRef.current) stopNativeSpeech();
         if (recognitionRestartTimeoutRef.current) clearTimeout(recognitionRestartTimeoutRef.current);
         setIsPaused(true);
+        isPausedRef.current = true;
         setIsListening(false);
         if (timerRef.current) clearInterval(timerRef.current);
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
+        // The loop keeps running while paused — it pushes silence, so the
+        // trace shows the gap instead of freezing mid-word.
       } else {
         mediaRecorderRef.current.resume();
         if (liveTranscriptionEnabled && speechRecognitionSupported) {
@@ -460,18 +551,8 @@ const VoiceJournalUpload = ({
           else { const r = initializeSpeechRecognition(); if (r) r.start(); }
         }
         setIsPaused(false);
-        if (!isMobileDevice && analyserRef.current) {
-          const monitor = () => {
-            if (analyserRef.current && isRecording && !isPaused) {
-              const data = new Uint8Array(analyserRef.current.frequencyBinCount);
-              analyserRef.current.getByteFrequencyData(data);
-              const avg = data.reduce((a,b)=>a+b,0)/data.length;
-              setAudioLevel(avg/255);
-              animationRef.current = requestAnimationFrame(monitor);
-            }
-          };
-          monitor();
-        }
+        isPausedRef.current = false;
+        runLevelLoop();
       }
     }
   };
@@ -488,7 +569,7 @@ const VoiceJournalUpload = ({
       setIsPaused(false);
       setIsListening(false);
       if (timerRef.current) clearInterval(timerRef.current);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      stopLevelLoop();
       if (audioContextRef.current && audioContextRef.current.state !== 'closed') audioContextRef.current.close();
       streamRef.current?.getTracks().forEach(track => track.stop());
     }
@@ -695,7 +776,11 @@ const VoiceJournalUpload = ({
   }, []);
 
   const themeClass = isDarkMode ? 'dark' : 'light';
-  const pathColorRgb = '85,139,110'; // You can compute from pathId if needed
+  // Accepted from the caller rather than derived here: path colours live on
+  // the user's in-progress path objects, not in a static registry this
+  // component can reach. The default is the app green, which is what the
+  // hardcoded value was anyway.
+  const pathColorRgb = pathColor || '85, 139, 110';
 
   // ========== RENDER (Glass UI) ==========
   if (isUploading) {
@@ -773,42 +858,63 @@ const VoiceJournalUpload = ({
       {hasPermission === true && (
         <div className="glass-card recording-card">
           {stage === 'record' && !audioUrl ? (
-            <>
-              <h3>{t('voiceUpload.recordTitle', 'Record Your Voice Journal')}</h3>
-              <p className="subtitle">
-                {t('voiceUpload.recordSubtitle', 'Tap the mic and speak freely — your entry is written down for you.')}
+            <div className="vj-stage" ref={recorderShellRef}>
+              {/* The timer is the largest thing on the screen while recording.
+                  It is the one number you actually look for, and reading it
+                  should not mean hunting through a status line. */}
+              <div className={`vj-timer${isRecording ? ' is-live' : ''}`}>
+                {formatTime(recordingTime)}
+              </div>
+
+              <p className="vj-hint">
+                {!isRecording
+                  ? t('voiceUpload.recordSubtitle', 'Tap the mic and speak freely — your entry is written down for you.')
+                  : isPaused
+                    ? t('voiceUpload.paused', 'Paused')
+                    : t('voiceUpload.recording', 'Recording')}
               </p>
-              {!isRecording ? (
-                <button className="record-button" onClick={startRecording}>
-                  <Mic size={32} />
-                </button>
-              ) : (
-                <div className="recording-controls">
-                  <div className="button-group">
+
+              {/* The trace. Rendered at all times so the layout does not jump
+                  when recording starts; it simply has nothing to draw yet. */}
+              <canvas
+                ref={waveCanvasRef}
+                className={`vj-wave${isRecording && !isPaused ? ' is-live' : ''}`}
+                aria-hidden="true"
+              />
+
+              <div className="vj-controls">
+                {!isRecording ? (
+                  <button
+                    className="vj-record"
+                    onClick={startRecording}
+                    aria-label={t('voiceUpload.startRecording', 'Start recording')}
+                  >
+                    <span className="vj-record-ring" aria-hidden="true" />
+                    <Mic size={30} />
+                  </button>
+                ) : (
+                  <>
                     {!isNativeAndroid() && (
-                      <button className="glass-icon-btn" onClick={pauseRecording}>
-                        {isPaused ? <Play size={24} /> : <Pause size={24} />}
+                      <button
+                        className="vj-secondary"
+                        onClick={pauseRecording}
+                        aria-label={isPaused ? t('voiceUpload.resume', 'Resume') : t('voiceUpload.pause', 'Pause')}
+                      >
+                        {isPaused ? <Play size={22} /> : <Pause size={22} />}
                       </button>
                     )}
-                    <button className="glass-icon-btn stop" onClick={stopRecording}>
-                      <Square size={24} />
+                    <button
+                      className="vj-record is-stop"
+                      onClick={stopRecording}
+                      aria-label={t('voiceUpload.stopRecording', 'Stop recording')}
+                    >
+                      <span className="vj-record-ring" aria-hidden="true" />
+                      <Square size={26} />
                     </button>
-                  </div>
-                  <div className="recording-status">
-                    <span className={`status-dot ${isPaused ? 'paused' : 'recording'}`} />
-                    <span>{isPaused ? t('voiceUpload.paused', 'Paused') : t('voiceUpload.recording', 'Recording')}</span>
-                    <Clock size={14} />
-                    <span>{formatTime(recordingTime)}</span>
-                    {isMobileDevice && <span className="device-badge"><Smartphone size={11} strokeWidth={1.8} />{t('voiceUpload.mobileBadge', 'Mobile')}</span>}
-                  </div>
-                  {!isMobileDevice && (
-                    <div className="level-meter">
-                      <div className="level-fill" style={{ transform: `scaleX(${audioLevel})` }} />
-                    </div>
-                  )}
-                </div>
-              )}
-            </>
+                  </>
+                )}
+              </div>
+            </div>
           ) : stage === 'review' && audioUrl ? (
             <>
               <h3>{t('voiceUpload.reviewTitle', 'Review Your Recording')}</h3>
@@ -832,25 +938,28 @@ const VoiceJournalUpload = ({
         </div>
       )}
 
-      {/* How-it-works guide (all platforms — record, then auto-transcribe) */}
-      {hasPermission === true && !isRecording && !audioUrl && (
-        <div className="glass-card voice-howto-card">
-          <h3>{t('voiceUpload.howItWorksTitle', 'How it works')}</h3>
-          <ol className="voice-steps">
-            <li className="voice-step">
-              <span className="voice-step-num">1</span>
-              <span>{t('voiceUpload.step1', 'Tap the microphone and speak naturally.')}</span>
+      {/* Where you are, rather than a permanent lesson in how to use a
+          microphone. The old card explained three steps and then sat there
+          taking a third of the screen forever; this says the same thing on
+          first arrival and afterwards reports progress. */}
+      {hasPermission === true && (
+        <ol className="vj-steps" aria-label={t('voiceUpload.howItWorksTitle', 'How it works')}>
+          {[
+            { key: 'speak',  label: t('voiceUpload.stepSpeak', 'Speak'),      done: !!audioUrl,      now: isRecording },
+            { key: 'write',  label: t('voiceUpload.stepWrite', 'Write down'), done: !!transcription, now: isTranscribing },
+            { key: 'review', label: t('voiceUpload.stepReview', 'Review'),    done: false,           now: !!transcription && !isTranscribing },
+          ].map((st, i) => (
+            <li
+              key={st.key}
+              className={`vj-step${st.done ? ' is-done' : ''}${st.now ? ' is-now' : ''}`}
+            >
+              <span className="vj-step-dot">
+                {st.done ? <CheckCircle size={13} strokeWidth={2.2} /> : i + 1}
+              </span>
+              <span className="vj-step-label">{st.label}</span>
             </li>
-            <li className="voice-step">
-              <span className="voice-step-num">2</span>
-              <span>{t('voiceUpload.step2', "Tap the stop button when you're finished.")}</span>
-            </li>
-            <li className="voice-step">
-              <span className="voice-step-num">3</span>
-              <span>{t('voiceUpload.step3', 'Your words turn into text automatically — review and edit before saving.')}</span>
-            </li>
-          </ol>
-        </div>
+          ))}
+        </ol>
       )}
 
       {/* Transcription Progress (Whisper, all platforms) */}

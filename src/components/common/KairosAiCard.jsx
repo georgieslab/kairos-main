@@ -171,13 +171,36 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
 
   const context = useMemo(
     () =>
-      (entries || []).slice(0, CONTEXT_ENTRIES).map((e) => ({
+      (entries || [])
+        // Sorted here, and by timestamp, because neither holds upstream.
+        //
+        // getPreviousEntries returns sort((a, b) => a.day - b.day): ascending,
+        // so slicing the first 20 took the OLDEST twenty and handed them to
+        // Miro labelled "most recent first". Past 20 entries a new one could
+        // never reach the context at all, which is exactly what "it cannot see
+        // my entry" looks like.
+        //
+        // And `day` is not chronological to begin with — it is a per-path day
+        // index, so day 3 of a path started this morning sorts before day 10
+        // of one finished last year. Only the timestamp orders entries across
+        // paths. The service's own ordering is left alone: walking a single
+        // journey in sequence wants ascending day, and other callers do that.
+        .slice()
+        .sort((a, b) => (toDate(b?.timestamp)?.getTime() || 0) - (toDate(a?.timestamp)?.getTime() || 0))
+        .slice(0, CONTEXT_ENTRIES)
+        .map((e) => ({
         day: e.day,
         pathId: e.pathId || null,
         theme: e.theme || '',
         summary: e.analysis?.summary || '',
         insights: e.analysis?.insights || [],
-        excerpt: e.extractedText ? e.extractedText.substring(0, 300) : ''
+        // Two fields, because saveAnalysisResult writes the text to a
+        // different one per modality: extractedText for typed and
+        // photographed entries, transcription for voice. Reading only the
+        // first meant every spoken entry reached Miro with no words in it —
+        // a theme and a summary, but nothing the person actually said.
+        spoken: !!e.isVoiceEntry,
+        excerpt: (e.extractedText || e.transcription || '').substring(0, 300)
       })),
     [entries]
   );

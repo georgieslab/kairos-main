@@ -125,7 +125,9 @@ const DailyAIQuestion = ({ entries, totalEntries, progressStats }) => {
         theme: entry.theme || '',
         summary: entry.analysis?.summary || '',
         insights: entry.analysis?.insights || [],
-        extractedText: entry.extractedText ? entry.extractedText.substring(0, 300) : ''
+        // Voice entries keep their words in `transcription` (see
+        // saveAnalysisResult), so reading only extractedText dropped them.
+        extractedText: (entry.extractedText || entry.transcription || '').substring(0, 300)
       }));
 
       // ✅ ENHANCED: More detailed system prompt with user context

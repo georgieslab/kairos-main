@@ -46,6 +46,13 @@
     "errorEnterTranscription": "Please enter a transcription.",
     "errorCannotChangeModeWhileRecording": "Cannot change mode while recording",
     "errorTranscriptionIncomplete": "Please ensure transcription is complete.",
-    "errorUploadFailed": "Upload failed: {{msg}}"
+    "errorUploadFailed": "Upload failed: {{msg}}",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "pause": "Pause",
+    "resume": "Resume",
+    "stepSpeak": "Speak",
+    "stepWrite": "Write down",
+    "stepReview": "Review"
   }
 }

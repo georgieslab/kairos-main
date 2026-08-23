@@ -46,6 +46,13 @@
     "errorEnterTranscription": "გთხოვთ, შეიყვანოთ ტრანსკრიფცია.",
     "errorCannotChangeModeWhileRecording": "ჩაწერისას რეჟიმის შეცვლა შეუძლებელია",
     "errorTranscriptionIncomplete": "გთხოვთ, დარწმუნდეთ, რომ ტრანსკრიფცია სრულია.",
-    "errorUploadFailed": "ატვირთვა ვერ მოხერხდა: {{msg}}"
+    "errorUploadFailed": "ატვირთვა ვერ მოხერხდა: {{msg}}",
+    "startRecording": "ჩაწერის დაწყება",
+    "stopRecording": "ჩაწერის შეწყვეტა",
+    "pause": "პაუზა",
+    "resume": "გაგრძელება",
+    "stepSpeak": "ისაუბრე",
+    "stepWrite": "ჩაწერა",
+    "stepReview": "შემოწმება"
   }
 }

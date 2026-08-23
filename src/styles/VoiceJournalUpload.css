@@ -263,59 +263,6 @@
   margin: 0;
 }
 
-/* ===== HOW-IT-WORKS CARD (Android) ===== */
-.voice-howto-card {
-  margin-bottom: 20px;
-}
-
-.voice-howto-card h3 {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 16px;
-}
-
-.voice-steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.voice-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 15px;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.voice-step-num {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  background: rgba(var(--c-green), 0.2);
-  color: rgba(var(--c-green), 1);
-}
-
-.glass-voice-container.light .voice-howto-card h3 {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.glass-voice-container.light .voice-step {
-  color: rgba(0, 0, 0, 0.8);
-}
-
 /* ===== STATUS INDICATOR ===== */
 .glass-status {
   background: rgba(28, 28, 30, 0.65);
@@ -358,28 +305,6 @@
   margin-bottom: 24px;
 }
 
-/* Record Button – animated pulse glow */
-.record-button {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(var(--c-green), 0.2);
-  border: 2px solid rgba(var(--c-green), 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  cursor: pointer;
-  transition: transform 0.1s ease;
-  color: rgba(var(--c-green), 1);
-  box-shadow: 0 0 0 0 rgba(var(--c-green), 0.7);
-  animation: recordPulse 1.5s infinite;
-}
-
-.record-button:active {
-  transform: scale(0.94);
-}
-
 @keyframes recordPulse {
   0% {
     box-shadow: 0 0 0 0 rgba(var(--c-green), 0.7);
@@ -395,77 +320,14 @@
   }
 }
 
-/* Recording controls */
-.recording-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
 .button-group {
   display: flex;
   gap: 20px;
 }
 
-.recording-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.status-dot.recording {
-  background: #ef4444;
-  animation: blink 1s infinite;
-}
-
-.status-dot.paused {
-  background: rgba(var(--c-orange), 1);
-}
-
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
-}
-
-.device-badge {
-  background: rgba(255,255,255,0.1);
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-size: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.device-badge svg {
-  opacity: 0.8;
-  flex-shrink: 0;
-}
-
-.level-meter {
-  width: 80%;
-  height: 4px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.level-fill {
-  height: 100%;
-  width: 100%;
-  background: rgba(var(--c-green), 1);
-  transform-origin: left;
-  transition: transform 0.05s linear;
 }
 
 /* ===== REVIEW CONTROLS ===== */
@@ -722,13 +584,8 @@
   background: rgba(239,68,68,0.1);
   border-color: rgba(239,68,68,0.2);
 }
-.glass-voice-container.light .record-button {
-  background: rgba(var(--c-green),0.15);
-  border-color: rgba(var(--c-green),0.4);
-}
 .glass-voice-container.light .toggle-info,
-.glass-voice-container.light .glass-status,
-.glass-voice-container.light .recording-status {
+.glass-voice-container.light .glass-status {
   color: rgba(0,0,0,0.7);
 }
 .glass-voice-container.light .subtitle,
@@ -745,10 +602,6 @@
   color: rgba(0,0,0,0.8);
   border-color: rgba(0,0,0,0.1);
 }
-.glass-voice-container.light .level-meter {
-  background: rgba(0,0,0,0.1);
-}
-
 /* Light mode — additional coverage (text/buttons that were still white) */
 .glass-voice-container.light .permission-card p,
 .glass-voice-container.light .duration,
@@ -766,14 +619,9 @@
   border-color: rgba(0, 0, 0, 0.1);
   color: rgba(0, 0, 0, 0.7);
 }
-.glass-voice-container.light .progress-bar,
-.glass-voice-container.light .device-badge {
+.glass-voice-container.light .progress-bar {
   background: rgba(0, 0, 0, 0.06);
 }
-.glass-voice-container.light .record-button {
-  color: rgb(var(--c-green));
-}
-
 /* Light mode — "Processing" upload state */
 .glass-voice-container.light .glass-loading-state {
   background: rgba(255, 255, 255, 0.8);
@@ -793,7 +641,240 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
   .glass-title { font-size: 20px; }
-  .record-button { width: 80px; height: 80px; }
-  .record-button svg { width: 28px; height: 28px; }
+  .vj-record { width: 70px; height: 70px; }
+  .vj-timer { font-size: 38px; }
   .glass-card { padding: 16px; }
+}
+/* ===== RECORDER =====
+ * Rebuilt around three things in a fixed order: how long you have been
+ * speaking, what your voice looks like, and the one button that matters.
+ *
+ * What it replaces was a card containing a heading, a subtitle, a small mic,
+ * and — once recording — a status line where the timer, the state, and a
+ * device badge all competed at the same size. The timer is the number people
+ * actually look for, so it is now the largest thing here.
+ *
+ * --level is written to .vj-stage by the audio loop every frame (see
+ * VoiceJournalUpload.jsx). Nothing in this file animates it; it is a live
+ * value, so the glow tracks the voice rather than running on a timer.
+ */
+.vj-stage {
+  --level: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 2px;
+}
+
+/* Tabular figures so the digits do not jitter as the seconds tick — a
+   proportional font makes a timer visibly twitch once per second. */
+.vj-timer {
+  font-size: 44px;
+  font-weight: 250;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.34);
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+
+.vj-timer.is-live {
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 0 26px rgba(var(--c, 85, 139, 110), 0.45);
+}
+
+.vj-hint {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 34ch;
+}
+
+/* The trace. Held at a fixed height whether or not anything is being drawn,
+   so starting to record does not shove the buttons down the screen. */
+.vj-wave {
+  width: 100%;
+  height: 62px;
+  display: block;
+  opacity: 0.35;
+  transition: opacity 0.45s ease;
+}
+
+.vj-wave.is-live { opacity: 1; }
+
+.vj-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 2px;
+}
+
+/* One button, unmistakably the point of the screen. */
+.vj-record {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(155deg,
+    rgba(var(--c, 85, 139, 110), 1),
+    rgba(var(--c, 85, 139, 110), 0.72));
+  box-shadow:
+    0 10px 30px rgba(var(--c, 85, 139, 110), 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .vj-record:hover { transform: scale(1.05); }
+}
+.vj-record:active { transform: scale(0.95); }
+
+.vj-record.is-stop {
+  background: linear-gradient(155deg,
+    rgba(var(--c-red), 0.95),
+    rgba(var(--c-red), 0.68));
+  box-shadow:
+    0 10px 30px rgba(var(--c-red), 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* The ring is the voice made visible on the control itself: it scales and
+   brightens straight from --level, so it is silent when you are and swells
+   when you speak. Idle it sits invisible at scale 1, which is why there is no
+   idle animation to switch off. */
+.vj-record-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 2px solid rgba(var(--c, 85, 139, 110), calc(0.15 + var(--level, 0) * 0.55));
+  transform: scale(calc(1 + var(--level, 0) * 0.28));
+  /* No transition on transform: the value already arrives once per frame, and
+     easing it on top would lag the glow behind the voice. */
+  transition: border-color 0.12s linear;
+}
+
+.vj-record.is-stop .vj-record-ring {
+  border-color: rgba(var(--c-red), calc(0.18 + var(--level, 0) * 0.55));
+}
+
+.vj-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.2s ease, transform 0.18s ease;
+}
+@media (hover: hover) {
+  .vj-secondary:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+}
+
+/* ===== STAGE INDICATOR =====
+ * Replaces a permanent "How it works" card that explained three steps and
+ * then kept explaining them forever. Same information on first arrival,
+ * and afterwards it reports where you actually are.
+ */
+.vj-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 18px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.vj-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  transition: color 0.35s ease;
+}
+
+/* The rule between steps, drawn from the step rather than as extra markup. */
+.vj-step:not(:last-child)::after {
+  content: "";
+  width: 26px;
+  height: 1px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.vj-step-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.vj-step.is-now { color: rgba(255, 255, 255, 0.92); }
+.vj-step.is-now .vj-step-dot {
+  color: #fff;
+  border-color: rgba(var(--c, 85, 139, 110), 0.7);
+  background: rgba(var(--c, 85, 139, 110), 0.3);
+  animation: vjStepPulse 2s ease-in-out infinite;
+}
+
+@keyframes vjStepPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--c, 85, 139, 110), 0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(var(--c, 85, 139, 110), 0); }
+}
+
+.vj-step.is-done { color: rgba(255, 255, 255, 0.62); }
+.vj-step.is-done .vj-step-dot {
+  color: rgba(var(--c, 85, 139, 110), 1);
+  border-color: rgba(var(--c, 85, 139, 110), 0.5);
+  background: rgba(var(--c, 85, 139, 110), 0.16);
+}
+
+/* ===== LIGHT THEME ===== */
+.glass-voice-container.light .vj-timer { color: rgba(0, 0, 0, 0.32); }
+.glass-voice-container.light .vj-timer.is-live { color: rgba(0, 0, 0, 0.9); }
+.glass-voice-container.light .vj-hint { color: rgba(0, 0, 0, 0.55); }
+.glass-voice-container.light .vj-step { color: rgba(0, 0, 0, 0.42); }
+.glass-voice-container.light .vj-step.is-now { color: rgba(0, 0, 0, 0.9); }
+.glass-voice-container.light .vj-step.is-done { color: rgba(0, 0, 0, 0.62); }
+.glass-voice-container.light .vj-step-dot {
+  border-color: rgba(0, 0, 0, 0.14);
+  background: rgba(0, 0, 0, 0.04);
+}
+.glass-voice-container.light .vj-step:not(:last-child)::after {
+  background: rgba(0, 0, 0, 0.14);
+}
+.glass-voice-container.light .vj-secondary {
+  color: rgba(0, 0, 0, 0.72);
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vj-step.is-now .vj-step-dot { animation: none; }
+  /* The ring still tracks the voice — it is data, not decoration, and it is
+     the only confirmation that the microphone is hearing anything. */
 }
