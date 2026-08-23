@@ -53,7 +53,7 @@ const SLIDES = [
     // The app's own green, cooling through teal into blue — its palette, not a
     // pack's. This slide is about the app itself rather than something to buy.
     accent: ['85, 139, 110', '92, 138, 154', '108, 132, 176'],
-    eyebrowKey: 'whatsNew.aiEyebrow',   eyebrow: 'New — Miro',
+    eyebrowKey: 'whatsNew.aiEyebrow',   eyebrow: 'Version 2.0 — Miro',
     titleKey: 'whatsNew.aiTitle',       title: 'Meet Miro',
     textKey: 'whatsNew.aiText',         text: 'Miro has read your journal, and answers from what is actually in it. On the Home screen.',
     ctaKey: 'whatsNew.aiCta',           cta: 'Say hello',

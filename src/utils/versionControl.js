@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '1.4.5';
+export const APP_VERSION = '2.0.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2432,6 +2432,37 @@ export const VERSION_HISTORY = [
   bugFixes: [],
   notes: [
     'Nothing changes for you in this release. The code that opens the payment sheet now loads only on phones, where it is actually used, instead of being carried by the web version too. Recorded here because every version gets an entry, not because there is anything to look at.'
+  ]
+},
+{
+  version: '2.0.0',
+  releaseDate: '2026-08-23',
+  codename: 'Miro',
+  features: [
+    'Kairos AI is a conversation now, and it has a name: Miro. Turns accumulate, it can see what was already said, and the thread is kept — the old version answered once and offered "Ask another", which threw the exchange away.',
+    'Miro reads images. Attach one, drop it on the card, or paste it — a page of handwriting, a drawing, a photograph from your day — and it reads that alongside the journal it already has.',
+    'Miro knows what day it is. It has the date, how long since you last wrote, and how long you took to come back, so it can place something in your week instead of talking about your entries as though they all happened at once.',
+    'One free message a day, and unlimited with a subscription.',
+    'A two-day reminder on Android: if you have not written in a couple of days the app says so once, quietly, and then leaves you alone.',
+    'The voice journal has been rebuilt around a live waveform of your own voice, a timer you can actually read, and a progress indicator that reports where you are instead of explaining the same three steps forever.',
+    'Desktop layouts for the voice journal and for Miro, and the What\'s New deck now handles announcements that are not paid path packs.'
+  ],
+  improvements: [
+    'Miro has its own face — a dark blue sphere with an open ring, a conversation that has not closed — and the card carries its own deep-water colour instead of borrowing whichever path you happen to be walking.',
+    'While Miro is thinking, that sphere fills with moving water.',
+    'German and Georgian for everything new, plus the Pain paths, which had been falling back to English since they shipped.'
+  ],
+  bugFixes: [
+    'Miro could not see your most recent entries. Entries were being sorted oldest-first and the twenty oldest were being handed over labelled "most recent" — so past twenty entries a new one might never reach it at all.',
+    'Miro could not read voice entries at all. Spoken entries keep their words in a different field, and nothing was reading it, so a voice entry arrived with a theme and a summary and none of what you said. The same fault was quietly degrading the personality description and the daily question.',
+    'Asked a question in German or Georgian, Miro was being instructed to reply with a JSON object. The instruction was written for the analysis prompts and does not fire in English, so the chat looked healthy until it was used in the language it was built for.',
+    'The voice recorder\'s level meter never drew a single frame, on any device, since it was added.',
+    'Every Kairos AI message failed with a 400 for a short period, from a flag being forwarded to the model that it does not accept.',
+    'Running out of daily messages showed a generic "try again" rather than saying the allowance was spent and when it comes back.'
+  ],
+  notes: [
+    'The version number jumps because this is the release where the AI became someone you talk to rather than a feature that answers questions. There was no 1.5.0 — it existed only as a web build and never shipped.',
+    'The two-day reminder is Android only. It is scheduled on the device rather than sent from a server, which is why it needs no account setup and also why it cannot reach the web version.'
   ]
 }
 
