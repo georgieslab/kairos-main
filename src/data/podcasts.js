@@ -29,3 +29,44 @@ export const ABOUT_JOURNALING = {
     { title: 'Builds intention', text: 'A small daily ritual turns autopilot back into choice.' },
   ],
 };
+
+// Curated contemplative ambient soundscapes for writing sessions
+export const AMBIENT_TRACKS = [
+  {
+    id: 'rain',
+    title: 'Rain on Japanese Slate',
+    subtitle: 'Gentle raindrops falling on ancient stone tiles',
+    tagline: 'Focus · Deep Calm',
+    iconName: 'CloudRain',
+    colorRgb: '79, 140, 201',
+    durationLabel: 'Infinite Loop'
+  },
+  {
+    id: 'temple',
+    title: 'Temple Singing Bowl',
+    subtitle: '432Hz harmonic drone with resonant bronze bells',
+    tagline: 'Contemplation · Zen',
+    iconName: 'Bell',
+    colorRgb: '201, 169, 97',
+    durationLabel: 'Infinite Loop'
+  },
+  {
+    id: 'pen',
+    title: 'Fountain Pen Whispers',
+    subtitle: 'Archival nib acoustics & fibrous paper texture',
+    tagline: 'Writing · Tactile Presence',
+    iconName: 'PenTool',
+    colorRgb: '85, 139, 110',
+    durationLabel: 'Infinite Loop'
+  },
+  {
+    id: 'night',
+    title: 'Celestial Night',
+    subtitle: 'Cosmic emerald aurora & deep harmonic stillness',
+    tagline: 'Evening · Rest',
+    iconName: 'Moon',
+    colorRgb: '147, 112, 219',
+    durationLabel: 'Infinite Loop'
+  }
+];
+

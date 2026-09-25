@@ -23,7 +23,14 @@
     "upgradeButton": "გადადი Artisan-ზე",
     "upgradeYearly": "Artisan — €{{price}}/წელი",
     "upgradeMonthly": "ან €{{price}} თვეში",
-    "saveBadge": "დაზოგე {{pct}}%"
+    "saveBadge": "დაზოგე {{pct}}%",
+    "havePromoCode": "გაქვს პრომო კოდი?",
+    "promoPlaceholder": "შეიყვანე პრომო კოდი (მაგ. HalfJournal2026)",
+    "redeemBtn": "გააქტიურება",
+    "codeInvalid": "ეს პრომო კოდი არასწორია.",
+    "codeAlreadyRedeemed": "ეს პრომო კოდი უკვე გამოყენებულია შენს ანგარიშზე.",
+    "promoSuccess": "✨ Artisan გააქტიურდა 30 დღით! მოქმედებს {{date}}-მდე.",
+    "validUntil": "მოქმედებს {{date}}-მდე"
   },
   "profile": {
     "avatarUpdateSuccess": "ავატარი წარმატებით განახლდა!",

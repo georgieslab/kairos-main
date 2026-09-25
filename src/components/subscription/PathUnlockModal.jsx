@@ -6,15 +6,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Hourglass, Mic, Palette, Sparkles, Lock, Loader2, Ticket, CheckCircle2, Package } from 'lucide-react';
-import { startPathPurchase } from '../../services/SubscriptionService';
-import { resolveInviteCode } from '../../constants/inviteCodes';
-import { getPurchaseAnchorId, isKairosMomentsPackage } from '../../constants/pathBundles';
+import { startPathPurchase, redeemSubscriptionPromoCode } from '../../services/SubscriptionService';
+import { resolveInviteCode, hasInviteCodeForPath, resolveSubscriptionPromoCode } from '../../constants/inviteCodes';
+import { getPurchaseAnchorId, getBundleAnchor, BUNDLES, isKairosMomentsPackage } from '../../constants/pathBundles';
 import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/components/pathUnlockModal.css';
 
 const PathUnlockModal = ({ path, userId, onClose }) => {
   const { t } = useTranslation('paths');
-  const { userProfile, updateUserProfile, refreshUserProfile } = useAuth();
+  const { currentUser, userProfile, updateUserProfile, refreshUserProfile } = useAuth();
   const [isBuying, setIsBuying] = useState(false);
   const [error, setError] = useState(null);
   const [showCodeInput, setShowCodeInput] = useState(false);
@@ -24,6 +24,8 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
   const [redeemed, setRedeemed] = useState(false);
 
   if (!path) return null;
+
+  const offersPromoCode = hasInviteCodeForPath(path.id);
 
   const handleBuy = async () => {
     if (!userId || isBuying) return;
@@ -53,8 +55,25 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
     if (isRedeeming || redeemed) return;
     setCodeError(null);
 
+    // Check if user entered a subscription promo code (e.g. HalfJournal2026)
+    const subPromo = resolveSubscriptionPromoCode(codeValue);
+    if (subPromo) {
+      setIsRedeeming(true);
+      try {
+        await redeemSubscriptionPromoCode(currentUser, userProfile, updateUserProfile, codeValue);
+        setRedeemed(true);
+        setTimeout(onClose, 1400);
+      } catch (err) {
+        console.error('Error redeeming subscription promo code:', err);
+        setCodeError(err.message || t('unlockModal.codeFailed', 'Could not redeem the code. Please try again.'));
+      } finally {
+        setIsRedeeming(false);
+      }
+      return;
+    }
+
     const unlockedPathIds = resolveInviteCode(codeValue);
-    if (!unlockedPathIds || !unlockedPathIds.includes(path.id)) {
+    if (!unlockedPathIds || (!unlockedPathIds.includes(path.id) && !unlockedPathIds.includes(getPurchaseAnchorId(path.id)))) {
       setCodeError(t('unlockModal.codeInvalid', "That code isn't valid for this path."));
       return;
     }
@@ -68,7 +87,7 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
       // Give the success state a beat, then close — the card is now unlocked.
       setTimeout(onClose, 1400);
     } catch (err) {
-      console.error('Error redeeming invite code:', err);
+      console.error('Error redeeming promo code:', err);
       setCodeError(t('unlockModal.codeFailed', 'Could not redeem the code. Please try again.'));
     } finally {
       setIsRedeeming(false);
@@ -110,10 +129,16 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
             <Palette size={16} />
             <span>{t('unlockModal.perkExclusive', 'Exclusive path — yours forever, one payment')}</span>
           </li>
-          {isKairosMomentsPackage(path.id) && (
+          {getBundleAnchor(path.id) && BUNDLES[getBundleAnchor(path.id)] && (
             <li>
               <Package size={16} />
-              <span>{t('unlockModal.perkBundle', 'One payment unlocks the whole Kairos Moments package — both paths')}</span>
+              <span>
+                {isKairosMomentsPackage(path.id)
+                  ? t('unlockModal.perkBundle', 'One payment unlocks the whole Kairos Moments package — all three paths')
+                  : t('unlockModal.perkBundleGeneral', 'One payment unlocks the whole {{bundle}} package — all three paths', {
+                      bundle: BUNDLES[getBundleAnchor(path.id)].label
+                    })}
+              </span>
             </li>
           )}
         </ul>
@@ -136,38 +161,42 @@ const PathUnlockModal = ({ path, userId, onClose }) => {
               </span>
             </button>
 
-            {showCodeInput ? (
-              <div className="pum-code-row">
-                <input
-                  className="pum-code-input"
-                  type="text"
-                  value={codeValue}
-                  onChange={(e) => { setCodeValue(e.target.value); setCodeError(null); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleRedeem(); }}
-                  placeholder={t('unlockModal.codePlaceholder', 'Enter invite code')}
-                  autoCapitalize="characters"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  autoFocus
-                />
-                <button
-                  className="pum-code-redeem"
-                  onClick={handleRedeem}
-                  disabled={isRedeeming || !codeValue.trim()}
-                >
-                  {isRedeeming
-                    ? <Loader2 size={16} className="pum-spin" />
-                    : t('unlockModal.redeem', 'Redeem')}
-                </button>
-              </div>
-            ) : (
-              <button className="pum-code-toggle" onClick={() => setShowCodeInput(true)}>
-                <Ticket size={14} />
-                {t('unlockModal.haveCode', 'Have an invite code?')}
-              </button>
-            )}
+            {offersPromoCode && (
+              <>
+                {showCodeInput ? (
+                  <div className="pum-code-row">
+                    <input
+                      className="pum-code-input"
+                      type="text"
+                      value={codeValue}
+                      onChange={(e) => { setCodeValue(e.target.value); setCodeError(null); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleRedeem(); }}
+                      placeholder={t('unlockModal.codePlaceholder', 'Enter promo code')}
+                      autoCapitalize="characters"
+                      autoCorrect="off"
+                      spellCheck="false"
+                      autoFocus
+                    />
+                    <button
+                      className="pum-code-redeem"
+                      onClick={handleRedeem}
+                      disabled={isRedeeming || !codeValue.trim()}
+                    >
+                      {isRedeeming
+                        ? <Loader2 size={16} className="pum-spin" />
+                        : t('unlockModal.redeem', 'Redeem')}
+                    </button>
+                  </div>
+                ) : (
+                  <button className="pum-code-toggle" onClick={() => setShowCodeInput(true)}>
+                    <Ticket size={14} />
+                    {t('unlockModal.haveCode', 'Have a promo code?')}
+                  </button>
+                )}
 
-            {codeError && <p className="pum-error">{codeError}</p>}
+                {codeError && <p className="pum-error">{codeError}</p>}
+              </>
+            )}
 
             <p className="pum-note">
               {t('unlockModal.note', 'Secure payment via Stripe. Access unlocks automatically after payment — just return to this screen.')}

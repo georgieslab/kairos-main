@@ -1,8 +1,10 @@
 // src/components/weather/WeatherDialog.jsx
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Sun, Moon, Cloud, CloudRain, CloudSnow, CloudLightning, Droplets, Wind, Thermometer, Eye, X } from 'lucide-react';
 import { mapWeatherCodeToIcon } from '../../services/weatherService';
+import '../../styles/components/weatherDialog.css';
 
 const WeatherDialog = ({ weather, onClose }) => {
   const { t, i18n } = useTranslation('weather');
@@ -36,8 +38,8 @@ const WeatherDialog = ({ weather, onClose }) => {
     }
   };
 
-  return (
-    <div className="weather-dialog-overlay" onClick={onClose}>
+  return createPortal(
+    <div className="weather-dialog-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="weather-dialog" onClick={(e) => e.stopPropagation()}>
         <button className="weather-dialog-close" onClick={onClose}><X size={20} /></button>
         <div className="weather-dialog-header">
@@ -62,7 +64,8 @@ const WeatherDialog = ({ weather, onClose }) => {
           <div className="weather-dialog-sun-time"><Moon size={16} /><span className="weather-dialog-sun-label">{t('weatherDialog.sunset', 'Sunset')}</span><span className="weather-dialog-sun-value">{sunset}</span></div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

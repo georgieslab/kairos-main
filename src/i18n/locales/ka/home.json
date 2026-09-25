@@ -1,0 +1,46 @@
+{
+  "miro": {
+    "voiceInput": "შეეხეთ მიროსთან სასაუბროდ",
+    "listening": "გისმენთ...",
+    "muteVoice": "მიროს ხმის გათიშვა",
+    "unmuteVoice": "მიროს ხმის ჩართვა",
+    "micDenied": "მიკროფონზე წვდომა უარყოფილია",
+    "voiceModeActive": "მირო ხმამაღლა გიპასუხებთ",
+    "voiceModeMuted": "მიროს ხმა გამორთულია",
+    "voiceTitle": "მირო ხმოვანი რეჟიმი",
+    "listeningSubtitle": "გისმენთ...",
+    "thinkingSubtitle": "მირო ფიქრობს თქვენს დღიურზე...",
+    "speakingSubtitle": "მირო საუბრობს...",
+    "tapToInterrupt": "შეეხეთ შეწყვეტისთვის",
+    "tapToSpeak": "შეეხეთ სასაუბროდ",
+    "voiceInputPrompt": "თქვით რამე თქვენს დღეზე ან დღიურზე...",
+    "done": "დასრულება",
+    "closeVoiceMode": "ხმოვანი რეჟიმის დახურვა",
+    "typeMessage": "შეიყვანეთ შეტყობინება...",
+    "continuousActive": "უწყვეტი დიალოგი ჩართულია",
+    "voiceWelcomePrompt": "თავისუფლად ესაუბრეთ მიროს თქვენს დღეზე, ემოციებზე ან დღიურის ჩანაწერებზე.",
+    "starterPrompt1": "როგორ მიდის ჩემი ბოლო დღეები?",
+    "starterPrompt2": "რა თემებს ამჩნევ ჩემს დღიურში?",
+    "starterPrompt3": "დამეხმარე დღევანდელი დღის გააზრებაში",
+    "voiceChamber": "ხმოვანი სივრცე",
+    "talkVoice": "ხმოვანი რეჟიმი",
+    "openVoiceChamber": "ხმოვანი სივრცის გახსნა",
+    "voiceReflection": "ხმოვანი რეფლექსია"
+  },
+  "physicalJournal": {
+    "title": "ფიზიკური დღიური",
+    "connected": "დაკავშირებულია",
+    "serialLabel": "სერია",
+    "nfcReady": "NFC მზადაა · შეეხეთ დღიურს დასაწერად",
+    "nfcScanning": "მიმდინარეობს NFC სკანირება...",
+    "nfcTapToWrite": "შეეხეთ დასაწერად",
+    "nfcDisabled": "NFC გამორთულია პარამეტრებში",
+    "nfcNotAvailable": "ხელმისაწვდომია ხელით სინქრონიზაცია",
+    "pairPromptTitle": "დააკავშირეთ ფიზიკური დღიური",
+    "pairPromptDesc": "შეეხეთ თქვენი დღიურის თითბერის NFC ბეჭედს ფიზიკური გვერდების მირო AI-სთან დასაკავშირებლად.",
+    "pairAction": "დღიურის დაკავშირება",
+    "manageCollection": "ჩემი კოლექცია",
+    "openJournal": "დღიურის გახსნა"
+  }
+}
+

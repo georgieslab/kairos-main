@@ -306,6 +306,9 @@
     "discoverPaths": "Entdecke geführte Pfade, um dein Potenzial zu entfalten.",
     "explorePaths": "Pfade entdecken",
     "dayStreak": "Tage-Serie",
+    "dayStreakCount": "{{count}} Tage Serie",
+    "today": "Heute",
+    "monthActivityAriaLabel": "Deine monatliche Journaling-Aktivität",
     "entries": "Einträge",
     "complete": "Abgeschlossen",
     "tapForReflection": "Tippen zum Reflektieren",
@@ -320,6 +323,9 @@
   "listen": {
     "title": "Hören",
     "eyebrow": "Podcast",
+    "ambientEyebrow": "Kontemplation & Fokus",
+    "tabPodcast": "Podcast",
+    "tabAmbient": "Atmosphärische Klänge",
     "back": "Zurück",
     "topic": "Handschrift & Journaling",
     "about": "Über Journaling",
@@ -329,7 +335,33 @@
     "minutes": "{{count}} Min.",
     "noAudio": "Dein Browser unterstützt keine Audiowiedergabe.",
     "listenExternal": "Anhören",
-    "poweredBy": "Erstellt mit Microsoft Copilot"
+    "poweredBy": "Erstellt mit Microsoft Copilot",
+    "volume": "Lautstärke",
+    "mute": "Stumm",
+    "unmute": "Ton an",
+    "timer": "Fokus-Timer",
+    "timerOff": "Endlosschleife",
+    "timerLabel": "Timer: {{time}}",
+    "timerMinutes": "{{min}}m",
+    "timerRemaining": "Noch {{time}}",
+    "tracks": {
+      "rain": {
+        "title": "Regen auf Schiefer",
+        "tagline": "Fokus · Tiefe Ruhe"
+      },
+      "temple": {
+        "title": "Tempel-Klangschale",
+        "tagline": "Kontemplation · Zen"
+      },
+      "pen": {
+        "title": "Federhalter-Flüstern",
+        "tagline": "Schreiben · Taktile Präsenz"
+      },
+      "night": {
+        "title": "Sternennacht",
+        "tagline": "Abend · Ruhe"
+      }
+    }
   },
   "whatsNew": {
     "title": "Was ist neu",
@@ -372,7 +404,31 @@
     "aiKeptName": "Nach Tagen aufbewahrt",
     "aiKeptDesc": "Das Gespräch von heute ist noch da, wenn du zurückkommst",
     "aiPriceMain": "Täglich gratis",
-    "aiPriceNote": "eine Nachricht pro Tag, kostenlos. Unbegrenzt mit einem Abo."
+    "aiPriceNote": "eine Nachricht pro Tag, kostenlos. Unbegrenzt mit einem Abo.",
+    "ambientEyebrow": "Neu · Audio-Suite",
+    "ambientTitle": "Atmosphärische Klangwelten",
+    "ambientText": "Endlose, offlinefähige Klangwelten zur Begleitung deiner Handschrift im Journal, plus der Ink & Intention Podcast.",
+    "ambientCta": "Audio-Suite öffnen",
+    "ambientRainName": "Regen auf Schiefer",
+    "ambientRainDesc": "Sanfter Regen auf uralten Tempel-Steinplatten",
+    "ambientTempleName": "Tempel-Klangschale",
+    "ambientTempleDesc": "432Hz harmonischer Bordun mit bronzener Resonanz",
+    "ambientTimerName": "Fokus-Timer",
+    "ambientTimerDesc": "15–60 Min. Sitzungen mit sanftem Ausblenden",
+    "ambientPriceBadge": "Inklusive",
+    "ambientPriceNote": "100% offline, kein Datenverbrauch, für alle Nutzer verfügbar.",
+    "physicalEyebrow": "Version 2.2 · Hardware & Stimme",
+    "physicalTitle": "Physisches Journal & Sprachraum",
+    "physicalText": "Verbinde dein physisches Buch mit Live-NFC-Status und starte freihändige Sprachdialoge mit Miro mit 1 Tippen.",
+    "physicalCta": "Sprachraum ausprobieren",
+    "physicalNfcName": "Physische Journal-NFC-Karte",
+    "physicalNfcDesc": "Live-NFC-Bereitschaft, Seriennummer und Schnellschreiben auf Home",
+    "physicalVoiceName": "1-Klick Sprach-Juwel",
+    "physicalVoiceDesc": "Freihändige akustische Reflexion direkt auf der Miro-Karte",
+    "physicalI18nName": "Dreisprachiges Erlebnis",
+    "physicalI18nDesc": "Nahtloser Sprachwechsel zwischen Englisch, Deutsch und Georgisch",
+    "physicalPriceBadge": "Verbunden",
+    "physicalPriceNote": "Verbindet deine Papierseiten nahtlos mit digitaler Intelligenz."
   },
   "kairosAi": {
     "title": "Miro",
@@ -380,6 +436,7 @@
     "needMore": "noch ein paar Einträge, dann kann es mitlesen",
     "placeholder": "Frag nach dem, was du geschrieben hast…",
     "placeholderFollow": "Erzähl weiter…",
+    "placeholderArtisan": "Sprich mit Miro über dein Journal…",
     "placeholderLocked": "Schreib zuerst ein paar Einträge",
     "placeholderTomorrow": "Morgen wieder",
     "send": "Senden",
@@ -389,9 +446,35 @@
     "imageGone": "Bild",
     "notAnImage": "Das muss ein Bild sein.",
     "defaultImagePrompt": "Was hältst du davon?",
-    "exhausted": "Das war die Nachricht für heute. Mit einem Abo ist Miro unbegrenzt — sonst geht es morgen weiter.",
+    "exhausted": "Das war die Nachricht für heute. Mit Artisan ist Miro unbegrenzt — sonst geht es morgen weiter.",
+    "exhaustedTitle": "Tagesnachricht genutzt",
+    "exhaustedDesc": "Der kostenlose Plan enthält 1 Nachricht täglich. Wechsle zu Artisan für unbegrenzte, fortlaufende Gespräche.",
+    "upgradeCta": "Zu Artisan wechseln",
+    "newChat": "Neues Thema beginnen",
+    "newChatShort": "Neues Thema",
+    "artisanUnlimited": "Artisan · Unbegrenzt",
+    "freeDailyBadge": "1 täglich",
+    "dateToday": "Heute",
+    "dateYesterday": "Gestern",
     "failed": "Das hat nicht geklappt. An deinem Journal hat sich nichts geändert — versuch es gleich noch einmal.",
-    "thinking": "liest deine Einträge noch einmal durch…"
+    "thinking": "liest deine Einträge noch einmal durch…",
+    "voiceInput": "Tippen, um mit Miro zu sprechen",
+    "listening": "Zuhören...",
+    "muteVoice": "Miros Stimme stummschalten",
+    "unmuteVoice": "Miros Stimme aktivieren",
+    "micDenied": "Mikrofonzugriff verweigert",
+    "voiceModeActive": "Miro spricht Antworten aus",
+    "voiceModeMuted": "Miros Stimme ist stummgeschaltet",
+    "voiceTitle": "Miro Stimme",
+    "listeningSubtitle": "Ich höre dir zu...",
+    "thinkingSubtitle": "Miro denkt über dein Journal nach...",
+    "speakingSubtitle": "Miro spricht...",
+    "tapToInterrupt": "Auf Orb tippen zum Unterbrechen",
+    "tapToSpeak": "Tippen zum Sprechen",
+    "voiceInputPrompt": "Sag etwas über deinen Tag oder dein Journal...",
+    "done": "Fertig",
+    "closeVoiceMode": "Sprachmodus schließen",
+    "continuousActive": "Fortlaufender Dialog aktiv"
   },
   "nudge": {
     "title": "Kairos",

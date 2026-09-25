@@ -1,0 +1,528 @@
+/* src/styles/components/homeActivityCalendar.css
+ *
+ * Responsive Activity Component for Home:
+ * - Mobile (< 768px): streamlined 7-day strip.
+ * - Desktop & Tablet (>= 768px): comprehensive monthly activity calendar.
+ */
+
+.home-activity-container {
+  width: 100%;
+  position: relative;
+}
+
+/* ── 1. Mobile Strip (< 768px) ───────────────────────────────────────────── */
+.home-week-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: rgba(28, 28, 30, 0.45);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(251, 146, 60, 0.22);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.20),
+    0 0 16px rgba(249, 115, 22, 0.20),
+    0 0 32px rgba(245, 158, 11, 0.10);
+  animation: fieryWeekBreathe 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes fieryWeekBreathe {
+  0% {
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.18),
+      0 0 12px rgba(249, 115, 22, 0.16),
+      0 0 26px rgba(245, 158, 11, 0.08);
+    border-color: rgba(251, 146, 60, 0.20);
+  }
+  100% {
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.22),
+      0 0 22px rgba(249, 115, 22, 0.28),
+      0 0 42px rgba(245, 158, 11, 0.15);
+    border-color: rgba(251, 146, 60, 0.35);
+  }
+}
+
+.home-month-view {
+  display: none;
+}
+
+/* ── 2. Desktop & Tablet (>= 768px) ──────────────────────────────────────── */
+@media (min-width: 768px) {
+  .home-week-strip {
+    display: none !important;
+  }
+
+  .home-month-view {
+    display: flex !important;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  /* When on tablet (768px - 1023px) before desktop grid, give the card its plate with outer fiery glow */
+  .home-activity-container {
+    position: relative;
+    isolation: isolate;
+    padding: 20px 24px;
+    margin: 0 0 20px 0;
+    border-radius: 28px;
+    background: rgba(28, 28, 30, 0.65);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(251, 146, 60, 0.32);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 0 24px rgba(251, 146, 60, 0.12),
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 0 25px rgba(249, 115, 22, 0.35),
+      0 0 55px rgba(251, 146, 60, 0.22),
+      0 0 95px rgba(245, 158, 11, 0.14),
+      0 0 135px rgba(234, 88, 12, 0.08);
+    animation: fieryMonthlyBreathe 4.8s ease-in-out infinite alternate;
+  }
+
+  /* Radiant outer fire corona behind the monthly card */
+  .home-activity-container::after {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 38px;
+    background: radial-gradient(
+      ellipse at 50% 40%,
+      rgba(249, 115, 22, 0.26) 0%,
+      rgba(251, 146, 60, 0.16) 45%,
+      rgba(245, 158, 11, 0.07) 70%,
+      transparent 85%
+    );
+    filter: blur(28px);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.85;
+    animation: fieryCoronaBreathe 4.8s ease-in-out infinite alternate;
+  }
+
+  /* Disable the desktop 2px single-line rail that was drawn for the 7 dots */
+  .spatial-home > .home-week::before {
+    display: none !important;
+  }
+}
+
+@keyframes fieryMonthlyBreathe {
+  0% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),
+      inset 0 0 20px rgba(251, 146, 60, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.32),
+      0 0 22px rgba(249, 115, 22, 0.28),
+      0 0 48px rgba(251, 146, 60, 0.18),
+      0 0 85px rgba(245, 158, 11, 0.12),
+      0 0 120px rgba(234, 88, 12, 0.06);
+    border-color: rgba(251, 146, 60, 0.28);
+  }
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 0 28px rgba(251, 146, 60, 0.16),
+      0 8px 36px rgba(0, 0, 0, 0.36),
+      0 0 34px rgba(249, 115, 22, 0.45),
+      0 0 68px rgba(251, 146, 60, 0.32),
+      0 0 110px rgba(245, 158, 11, 0.22),
+      0 0 150px rgba(234, 88, 12, 0.12);
+    border-color: rgba(251, 146, 60, 0.48);
+  }
+}
+
+@keyframes fieryCoronaBreathe {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.98);
+    filter: blur(24px);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.02);
+    filter: blur(32px);
+  }
+}
+
+/* ── Header Row ──────────────────────────────────────────────────────────── */
+.hmv-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hmv-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hmv-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hmv-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 4px;
+  min-width: 130px;
+}
+
+.hmv-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .hmv-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    transform: scale(1.06);
+  }
+}
+
+.hmv-nav-btn:active {
+  transform: scale(0.94);
+}
+
+.hmv-today-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.35);
+  background: rgba(var(--journey-color, 85, 139, 110), 0.16);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (hover: hover) {
+  .hmv-today-chip:hover {
+    background: rgba(var(--journey-color, 85, 139, 110), 0.28);
+    color: #fff;
+  }
+}
+
+/* Badges */
+.hmv-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hmv-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hmv-stat-badge.is-streak {
+  color: rgba(255, 200, 150, 0.95);
+  background: rgba(251, 146, 60, 0.12);
+  border-color: rgba(251, 146, 60, 0.24);
+}
+
+.hmv-badge-icon {
+  flex-shrink: 0;
+}
+
+.streak-flame {
+  color: #fb923c;
+}
+
+/* ── Grid Layout ─────────────────────────────────────────────────────────── */
+.hmv-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.hmv-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  text-align: center;
+}
+
+.hmv-weekday-col {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  padding: 2px 0;
+}
+
+.hmv-cells-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* Day Cell */
+.hmv-cell {
+  position: relative;
+  aspect-ratio: 1.1;
+  min-height: 36px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.hmv-cell.is-empty {
+  background: transparent;
+  border-color: transparent;
+  pointer-events: none;
+}
+
+.hmv-cell-day {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1;
+}
+
+.hmv-cell-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Active Day (Journaled) */
+.hmv-cell.is-active {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.16);
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.36);
+  box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.18);
+}
+
+.hmv-cell.is-active .hmv-cell-day {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
+.hmv-cell.is-active .hmv-cell-dot {
+  background: rgb(var(--journey-color, 85, 139, 110));
+  box-shadow: 0 0 6px rgb(var(--journey-color, 85, 139, 110));
+}
+
+/* Today */
+.hmv-cell.is-today {
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.hmv-cell.is-today .hmv-cell-day {
+  color: #fff;
+  font-weight: 800;
+}
+
+.hmv-cell.is-today.is-active {
+  border-color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--journey-color, 85, 139, 110), 0.35),
+    rgba(var(--journey-color, 85, 139, 110), 0.18)
+  );
+  box-shadow:
+    0 0 16px rgba(var(--journey-color, 85, 139, 110), 0.5),
+    inset 0 0 8px rgba(var(--journey-color, 85, 139, 110), 0.25);
+}
+
+/* Future Day */
+.hmv-cell.is-future {
+  opacity: 0.32;
+}
+
+@media (hover: hover) {
+  .hmv-cell:not(.is-empty):hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    z-index: 2;
+  }
+  .hmv-cell.is-active:hover {
+    background: rgba(var(--journey-color, 85, 139, 110), 0.26);
+    border-color: rgba(var(--journey-color, 85, 139, 110), 0.5);
+  }
+}
+
+/* ── Light Mode ──────────────────────────────────────────────────────────── */
+.hs-light .home-week-strip {
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(249, 115, 22, 0.22);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    0 0 16px rgba(249, 115, 22, 0.16),
+    0 0 32px rgba(245, 158, 11, 0.08);
+}
+
+.hs-light .home-activity-container {
+  background: rgba(245, 245, 247, 0.75);
+  border-color: rgba(249, 115, 22, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 28px rgba(0, 0, 0, 0.06),
+    0 0 22px rgba(249, 115, 22, 0.22),
+    0 0 50px rgba(251, 146, 60, 0.14),
+    0 0 85px rgba(245, 158, 11, 0.08);
+}
+
+.hs-light .home-activity-container::after {
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(249, 115, 22, 0.18) 0%,
+    rgba(251, 146, 60, 0.10) 45%,
+    transparent 75%
+  );
+  opacity: 0.7;
+}
+
+.hs-light .hmv-title {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.hs-light .hmv-nav-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+@media (hover: hover) {
+  .hs-light .hmv-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: rgba(0, 0, 0, 0.9);
+  }
+}
+
+.hs-light .hmv-stat-badge {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.hs-light .hmv-stat-badge.is-streak {
+  background: rgba(251, 146, 60, 0.10);
+  border-color: rgba(251, 146, 60, 0.20);
+  color: #c2410c;
+}
+
+.hs-light .hmv-weekday-col {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.hs-light .hmv-cell {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+.hs-light .hmv-cell-day {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.hs-light .hmv-cell.is-active {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.12);
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.3);
+}
+
+.hs-light .hmv-cell.is-active .hmv-cell-day {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.hs-light .hmv-cell.is-today {
+  border-color: rgba(0, 0, 0, 0.45);
+}
+
+.hs-light .hmv-cell.is-today.is-active {
+  border-color: rgb(var(--journey-color, 85, 139, 110));
+}
+
+@media (hover: hover) {
+  .hs-light .hmv-cell:not(.is-empty):hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ── Skeletons ───────────────────────────────────────────────────────────── */
+.hmv-skel-title {
+  width: 140px;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.hmv-skel-pill {
+  width: 100px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.hmv-skel-hdr {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.hmv-skel-cell {
+  aspect-ratio: 1.1;
+  min-height: 36px;
+  border-radius: 12px;
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hmv-nav-btn,
+  .hmv-cell,
+  .hmv-today-chip {
+    transition: none !important;
+  }
+  .home-activity-container,
+  .home-activity-container::after,
+  .home-week-strip {
+    animation: none !important;
+  }
+}
+

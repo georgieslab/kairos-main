@@ -8,7 +8,6 @@ import { extractThemesFromEntries, extractEmotionData } from '../utils/textProce
 import { useTheme } from '../contexts/ThemeContext';
 import AnalyticsSkeleton from '../components/analytics/AnalyticsSkeleton';
 import AIPersonDescription from '../components/analytics/AIPersonDescription';
-import DailyAIQuestion from '../components/analytics/DailyAIQuestion';
 import EmotionTrends from '../components/analytics/EmotionTrends';
 import ThemeCloud from '../components/analytics/ThemeCloud';
 import JournalCalendar from '../components/analytics/JournalCalendar';
@@ -285,17 +284,6 @@ const AnalyticsScreen = ({ navigateToScreen }) => {
         {statistics.totalEntries >= 5 && (
           <section className="as-section">
             <AIPersonDescription 
-              entries={statistics.allEntries}
-              totalEntries={statistics.totalEntries}
-              progressStats={progressStats}
-            />
-          </section>
-        )}
-
-        {/* DAILY AI QUESTION */}
-        {statistics.totalEntries >= 3 && (
-          <section className="as-section">
-            <DailyAIQuestion 
               entries={statistics.allEntries}
               totalEntries={statistics.totalEntries}
               progressStats={progressStats}

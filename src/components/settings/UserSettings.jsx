@@ -13,10 +13,12 @@ import {
   createCheckoutSession,
   getPricingInfo,
   getCustomerPortalUrl,
-  hasArtisanAccess
+  hasArtisanAccess,
+  redeemSubscriptionPromoCode
 } from '../../services/SubscriptionService';
 import { openExternalUrl } from '../../services/checkoutLauncher';
 import { deleteUserAccount, getDataDeletionSummary } from '../../services/deleteAccountService';
+import hapticService from '../../services/hapticService';
 
 import VersionDisplay from '../common/VersionDisplay';
 import { SUPPORTED_LANGUAGES } from '../../i18n/config';
@@ -27,7 +29,7 @@ import {
   ArrowLeft, User, Crown, Calendar, MapPin, Save, RefreshCw, Sparkles,
   CreditCard, ExternalLink, Bell, Moon, Sun, Database, FileText, Download,
   Trash2, Check, AlertTriangle, HelpCircle, Mail, Info, ChevronRight,
-  Camera, Lock, Loader, Image, Mic, Shield
+  Camera, Lock, Loader, Image, Mic, Shield, Ticket, Tag
 } from 'lucide-react';
 
 const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) => {
@@ -50,6 +52,10 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [processingUpgrade, setProcessingUpgrade] = useState(false);
   const [processingPortal, setProcessingPortal] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [isRedeemingPromo, setIsRedeemingPromo] = useState(false);
+  const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -313,7 +319,51 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
     ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : t('account.unknown', 'Unknown');
 
-  const isArtisan = hasArtisanAccess(subscription);
+  const activeSubscription = (hasArtisanAccess(userProfile?.subscription) ? userProfile.subscription : subscription);
+  const isArtisan = hasArtisanAccess(activeSubscription);
+
+  const formatExpiry = (val) => {
+    if (!val) return '';
+    let d;
+    if (typeof val.toDate === 'function') d = val.toDate();
+    else if (val._seconds) d = new Date(val._seconds * 1000);
+    else if (val.seconds) d = new Date(val.seconds * 1000);
+    else d = new Date(val);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString(i18n.language, { month: 'long', day: 'numeric', year: 'numeric' });
+  };
+
+  const handleRedeemPromo = async () => {
+    const trimmed = promoCode.trim();
+    if (!trimmed || isRedeemingPromo) return;
+    setPromoError('');
+    setPromoSuccess('');
+    setIsRedeemingPromo(true);
+
+    try {
+      const result = await redeemSubscriptionPromoCode(
+        currentUser,
+        userProfile,
+        updateUserProfile,
+        trimmed
+      );
+      hapticService.success?.();
+      setPromoSuccess(
+        t('subscriptionSection.promoSuccess', '✨ 30 days of Artisan activated! Valid until {{date}}.', {
+          date: formatExpiry(result.endDate)
+        })
+      );
+      setPromoCode('');
+      await loadSubscriptionStatus();
+      await refreshUserProfile?.();
+    } catch (err) {
+      console.error('Error redeeming promo code:', err);
+      hapticService.error?.();
+      setPromoError(err.message || t('subscriptionSection.codeInvalid', "That promo code isn't valid."));
+    } finally {
+      setIsRedeemingPromo(false);
+    }
+  };
 
   const renderDeleteModalContent = () => {
     switch (deleteStep) {
@@ -574,13 +624,29 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
               <div className="settings-subscription-status artisan">
                 <div className="settings-subscription-icon"><Crown size={22} /></div>
                 <div className="settings-subscription-info">
-                  <h3>{t('subscriptionSection.artisanTitle', 'Artisan Member')}</h3>
+                  <div className="settings-artisan-title-row">
+                    <h3>{t('subscriptionSection.artisanTitle', 'Artisan Member')}</h3>
+                    {activeSubscription?.promoCode && (
+                      <span className="settings-promo-pill">
+                        <Tag size={11} />
+                        <span>{activeSubscription.promoCode}</span>
+                      </span>
+                    )}
+                  </div>
                   <p>{t('subscriptionSection.artisanDescription', 'You have access to all premium features')}</p>
+                  {activeSubscription?.currentPeriodEnd && (
+                    <p className="settings-subscription-expiry">
+                      <Calendar size={13} />
+                      <span>{t('subscriptionSection.validUntil', 'Valid until {{date}}', { date: formatExpiry(activeSubscription.currentPeriodEnd) })}</span>
+                    </p>
+                  )}
                 </div>
               </div>
-              <button className="settings-btn settings-btn-secondary" onClick={handleManageSubscription} disabled={processingPortal}>
-                <CreditCard size={18} />{t('subscriptionSection.manageButton', 'Manage Subscription')}<ExternalLink size={15} />
-              </button>
+              {activeSubscription?.source !== 'promo_code' ? (
+                <button className="settings-btn settings-btn-secondary" onClick={handleManageSubscription} disabled={processingPortal}>
+                  <CreditCard size={18} />{t('subscriptionSection.manageButton', 'Manage Subscription')}<ExternalLink size={15} />
+                </button>
+              ) : null}
             </>
           ) : (
             <>
@@ -617,6 +683,59 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
               </div>
             </>
           )}
+
+          {/* Promo Code Redemption */}
+          <div className="settings-promo-section">
+            <div className="settings-divider" />
+            <div className="settings-promo-header">
+              <Ticket size={15} className="settings-promo-icon" />
+              <span className="settings-promo-title">{t('subscriptionSection.havePromoCode', 'Have a promo code?')}</span>
+            </div>
+            <div className="settings-promo-form">
+              <div className="settings-promo-input-wrap">
+                <Tag size={14} className="settings-promo-field-icon" />
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => {
+                    setPromoCode(e.target.value);
+                    if (promoError) setPromoError('');
+                    if (promoSuccess) setPromoSuccess('');
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleRedeemPromo();
+                  }}
+                  placeholder={t('subscriptionSection.promoPlaceholder', 'Enter promo code (e.g. HalfJournal2026)')}
+                  className="settings-promo-input"
+                  disabled={isRedeemingPromo}
+                />
+              </div>
+              <button
+                type="button"
+                className="settings-promo-submit-btn"
+                onClick={handleRedeemPromo}
+                disabled={isRedeemingPromo || !promoCode.trim()}
+              >
+                {isRedeemingPromo ? (
+                  <RefreshCw size={14} className="animate-spin" />
+                ) : (
+                  <span>{t('subscriptionSection.redeemBtn', 'Redeem')}</span>
+                )}
+              </button>
+            </div>
+            {promoError && (
+              <div className="settings-promo-feedback error" role="alert">
+                <AlertTriangle size={14} />
+                <span>{promoError}</span>
+              </div>
+            )}
+            {promoSuccess && (
+              <div className="settings-promo-feedback success" role="status">
+                <Sparkles size={14} />
+                <span>{promoSuccess}</span>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -778,6 +897,7 @@ const UserSettings = ({ onBack, initialSection = 'profile', navigateToScreen }) 
           onClose={() => setShowAvatarPicker(false)}
         />
       )}
+
     </div>
   );
 };

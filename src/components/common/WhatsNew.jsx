@@ -18,7 +18,8 @@ import {
   Gift, X, Hourglass, Shuffle, Sparkles, ArrowRight, Ticket,
   Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route,
   HeartCrack, Scale, Infinity as InfinityIcon, Activity,
-  MessageCircle, BookOpen, CalendarDays
+  MessageCircle, BookOpen, CalendarDays, Headphones, Radio,
+  CloudRain, Bell, Timer, Mic
 } from 'lucide-react';
 import '../../styles/components/whatsNew.css';
 
@@ -26,20 +27,11 @@ const SEEN_KEY = 'kairos_whats_new_seen';
 
 // Bump to the newest slide's id when something ships. The unseen dot compares
 // against this, so it reappears for everyone exactly once per announcement.
-const ANNOUNCEMENT_ID = 'miro';
+const ANNOUNCEMENT_ID = 'ambient-audio';
 
 // Newest first. Path names are brand and stay untranslated; everything else
 // runs through i18n with the English as fallback. Colours mirror each path's
 // registry colour so a row here matches the card in the Paths tab.
-//
-// A slide is no longer necessarily a pack of paths for sale. Kairos AI is a
-// feature, not a purchase, so `price` and the CTA's destination are per-slide —
-// the deck used to hardcode "EUR 2.99, all three paths" beneath every slide,
-// which would have priced a subscription feature as a one-off path bundle.
-// Rows carry an optional nameKey: path names are brand and stay as written,
-// feature names are prose and are translated.
-// The three path packs are all the same one-off purchase, so it is written
-// once. Kairos AI carries its own.
 const PACK_PRICE = {
   icon: Ticket,
   badgeKey: 'whatsNew.priceMain', badge: '€2.99',
@@ -47,6 +39,52 @@ const PACK_PRICE = {
 };
 
 const SLIDES = [
+  {
+    id: 'ambient-audio',
+    halo: Headphones,
+    accent: ['79, 140, 201', '201, 169, 97', '147, 112, 219'],
+    eyebrowKey: 'whatsNew.ambientEyebrow',  eyebrow: 'New · Audio Suite',
+    titleKey: 'whatsNew.ambientTitle',      title: 'Contemplative Soundscapes',
+    textKey: 'whatsNew.ambientText',        text: 'Infinite, offline ambient soundscapes designed to accompany your physical handwriting sessions, plus the Ink & Intention podcast.',
+    ctaKey: 'whatsNew.ambientCta',          cta: 'Open Audio Suite',
+    action: 'listen',
+    rows: [
+      { icon: CloudRain, color: '79, 140, 201',  nameKey: 'whatsNew.ambientRainName',  name: 'Rain on Japanese Slate',
+        descKey: 'whatsNew.ambientRainDesc',  desc: 'Gentle raindrops falling on ancient stone tiles' },
+      { icon: Bell,      color: '201, 169, 97',  nameKey: 'whatsNew.ambientTempleName', name: 'Temple Singing Bowl',
+        descKey: 'whatsNew.ambientTempleDesc', desc: '432Hz harmonic drone with resonant bronze bells' },
+      { icon: Timer,     color: '85, 139, 110',  nameKey: 'whatsNew.ambientTimerName',  name: 'Focus Session Timer',
+        descKey: 'whatsNew.ambientTimerDesc',  desc: '15m–60m sessions with smooth audio fade-out' },
+    ],
+    price: {
+      icon: Sparkles,
+      badgeKey: 'whatsNew.ambientPriceBadge', badge: 'Built-in',
+      noteKey: 'whatsNew.ambientPriceNote',  note: '100% offline, zero data usage, included for all users.',
+    },
+  },
+  {
+    id: 'physical-voice',
+    halo: Radio,
+    accent: ['201, 169, 97', '85, 139, 110', '139, 92, 246'],
+    eyebrowKey: 'whatsNew.physicalEyebrow',  eyebrow: 'Version 2.2 · Hardware & Voice',
+    titleKey: 'whatsNew.physicalTitle',      title: 'Physical Journal & Voice',
+    textKey: 'whatsNew.physicalText',        text: 'Connect your physical book with live NFC status and jump into hands-free voice dialogue with Miro in 1 tap.',
+    ctaKey: 'whatsNew.physicalCta',          cta: 'Try Voice Chamber',
+    action: 'voice',
+    rows: [
+      { icon: Radio,    color: '201, 169, 97',  nameKey: 'whatsNew.physicalNfcName',  name: 'Physical Journal NFC Card',
+        descKey: 'whatsNew.physicalNfcDesc',  desc: 'Live NFC readiness, stamped serial, and quick-tap writing on Home' },
+      { icon: Mic,      color: '85, 139, 110',  nameKey: 'whatsNew.physicalVoiceName', name: '1-Tap Voice Jewel',
+        descKey: 'whatsNew.physicalVoiceDesc', desc: 'Hands-free acoustic reflection chamber directly on the Miro card' },
+      { icon: Sparkles, color: '139, 92, 246', nameKey: 'whatsNew.physicalI18nName', name: 'Trilingual Experience',
+        descKey: 'whatsNew.physicalI18nDesc', desc: 'Zero-reload language switching across English, German, and Georgian' },
+    ],
+    price: {
+      icon: Sparkles,
+      badgeKey: 'whatsNew.physicalPriceBadge', badge: 'Connected',
+      noteKey: 'whatsNew.physicalPriceNote',  note: 'Seamlessly binds paper pages with digital intelligence.',
+    },
+  },
   {
     id: 'miro',
     halo: MessageCircle,
@@ -181,6 +219,16 @@ const WhatsNew = ({ navigateToScreen }) => {
       }, 140);
       return;
     }
+    if (slide.action === 'listen') {
+      navigateToScreen && navigateToScreen('listen');
+      return;
+    }
+    if (slide.action === 'voice') {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('kairos:open-voice-modal'));
+      }, 150);
+      return;
+    }
     navigateToScreen && navigateToScreen('path-selection');
   };
 
@@ -289,11 +337,12 @@ const WhatsNew = ({ navigateToScreen }) => {
   return (
     <>
       <button
-        className={`whats-new-pill${hasUnseen ? ' has-unseen' : ''}`}
+        className={`whats-new-pill whats-new-spark-badge${hasUnseen ? ' has-unseen' : ''}`}
         onClick={open}
+        title={t('whatsNew.title', "What's New")}
         aria-label={t('whatsNew.title', "What's New")}
       >
-        <Gift size={14} />
+        <Sparkles size={14} className="whats-new-spark-icon" />
         {hasUnseen && <span className="whats-new-dot" aria-hidden="true" />}
       </button>
 

@@ -1,0 +1,408 @@
+/* src/styles/components/physicalJournalCard.css
+   Apple Spatial Glass Physical Journal Status Card */
+
+.pjc-card {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(18, 22, 28, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pjc-card:hover {
+  border-color: rgba(var(--pjc-glow, 201, 169, 97), 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 32px rgba(0, 0, 0, 0.36),
+    0 0 24px rgba(var(--pjc-glow, 201, 169, 97), 0.12);
+}
+
+/* Ambient Radial Glow */
+.pjc-ambient-aura {
+  position: absolute;
+  top: -40px;
+  left: 20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--pjc-glow, 201, 169, 97), 0.22) 0%, transparent 70%);
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── STATE 1: UNREGISTERED / PAIRING INVITATION ────────────────────────────*/
+.pjc-card-unregistered {
+  border-style: dashed;
+  border-color: rgba(201, 169, 97, 0.25);
+  background: linear-gradient(135deg, rgba(22, 26, 32, 0.75) 0%, rgba(16, 20, 24, 0.82) 100%);
+}
+
+.pjc-unregistered-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.pjc-emblem-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(201, 169, 97, 0.12);
+  border: 1px solid rgba(201, 169, 97, 0.28);
+  flex-shrink: 0;
+}
+
+.pjc-emblem-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 97, 0.18);
+  animation: pjcEmblemPulse 3s ease-in-out infinite;
+}
+
+@keyframes pjcEmblemPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.12); opacity: 0.8; }
+}
+
+.pjc-emblem-icon {
+  color: #C9A961;
+}
+
+.pjc-unregistered-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pjc-eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.pjc-eyebrow-spark {
+  color: #C9A961;
+  font-size: 11px;
+}
+
+.pjc-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #C9A961;
+}
+
+.pjc-unregistered-title {
+  margin: 0 0 3px 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.pjc-unregistered-desc {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pjc-pair-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.28) 0%, rgba(85, 139, 110, 0.32) 100%);
+  border: 1px solid rgba(201, 169, 97, 0.45);
+  color: #f7e7ce;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pjc-pair-btn:hover {
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.4) 0%, rgba(85, 139, 110, 0.45) 100%);
+  border-color: rgba(201, 169, 97, 0.75);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.25);
+}
+
+.pjc-pair-btn-icon {
+  color: #C9A961;
+}
+
+.pjc-pair-btn-arrow {
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.pjc-pair-btn:hover .pjc-pair-btn-arrow {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+/* ── STATE 2: REGISTERED PHYSICAL JOURNAL ──────────────────────────────────*/
+.pjc-content-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+/* Medallion */
+.pjc-medallion-col {
+  flex-shrink: 0;
+}
+
+.pjc-medallion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(var(--pjc-glow, 201, 169, 97), 0.14);
+  border: 1px solid rgba(var(--pjc-glow, 201, 169, 97), 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.pjc-tier-icon {
+  color: var(--pjc-color, #C9A961);
+}
+
+/* Info Column */
+.pjc-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pjc-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pjc-edition-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Stamped Gold Foil Serial Badge */
+.pjc-serial-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(201, 169, 97, 0.10);
+  border: 1px solid rgba(201, 169, 97, 0.28);
+  font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 10.5px;
+  color: #dfcaa4;
+  letter-spacing: 0.04em;
+}
+
+.pjc-serial-prefix {
+  color: rgba(201, 169, 97, 0.65);
+  font-weight: 500;
+}
+
+.pjc-serial-number {
+  font-weight: 600;
+  color: #f7e7ce;
+}
+
+/* Live NFC Status */
+.pjc-status-row {
+  display: flex;
+  align-items: center;
+}
+
+.pjc-nfc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.pjc-nfc-status.is-disabled-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #f59e0b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Status Dots */
+.pjc-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pjc-status-dot.pulse-green {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pjcDotPulse 2s ease-in-out infinite;
+}
+
+.pjc-status-dot.dot-orange {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+.pjc-status-dot.dot-gold {
+  background: #C9A961;
+  box-shadow: 0 0 6px #C9A961;
+}
+
+@keyframes pjcDotPulse {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
+.pjc-spin-icon {
+  animation: pjcSpin 1.2s linear infinite;
+  color: #3b82f6;
+}
+
+@keyframes pjcSpin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Actions Column */
+.pjc-actions-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pjc-write-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(var(--pjc-glow, 201, 169, 97), 0.28) 0%, rgba(85, 139, 110, 0.32) 100%);
+  border: 1px solid rgba(var(--pjc-glow, 201, 169, 97), 0.42);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.22);
+  transition: all 0.25s ease;
+}
+
+.pjc-write-cta:hover {
+  background: linear-gradient(135deg, rgba(var(--pjc-glow, 201, 169, 97), 0.4) 0%, rgba(85, 139, 110, 0.45) 100%);
+  border-color: rgba(var(--pjc-glow, 201, 169, 97), 0.7);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 4px 14px rgba(var(--pjc-glow, 201, 169, 97), 0.25);
+}
+
+.pjc-write-cta:active {
+  transform: scale(0.96);
+}
+
+.pjc-write-icon {
+  color: var(--pjc-color, #C9A961);
+}
+
+.pjc-collection-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.pjc-collection-link:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────────────────────────*/
+@media (max-width: 580px) {
+  .pjc-content-grid {
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .pjc-actions-col {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 2px;
+  }
+
+  .pjc-write-cta {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .pjc-unregistered-inner {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .pjc-pair-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

@@ -3,58 +3,51 @@
 // Kairos AI on the Home screen — a conversation with yourself, held by
 // something that has read your journal.
 //
-// A thread, not a question box. The first version answered once and offered
-// "ask another", which discarded the exchange — the opposite of a conversation.
-// Now the turns accumulate, the model sees what was already said, and the whole
-// thing is kept.
+// A continuous living thread, not a ephemeral box that resets daily.
+// Turns accumulate, Miro sees what was already said across days, and the entire
+// conversation is kept. Users can talk over multiple days or start a fresh
+// topic whenever they choose.
 //
-// One conversation per day, keyed by date. That matches the rhythm of the app,
-// keeps any single document small, and means the old daily_questions documents
-// migrate in under the same key when that is done.
-//
-// The free allowance is one message a day. A free user therefore sees their
-// exchange and a closed input with a reason — which is still better than the
-// answer being thrown away, and is why threading is right for both tiers.
-//
-// One model for the whole thread. Switching models between turns would change
-// the voice mid-conversation, which is worse than any per-turn saving is worth.
+// Subscribed users (Artisan) have unlimited, uninterrupted conversation turns.
+// Free users receive 1 message daily with a direct upgrade path.
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, ImagePlus, X } from 'lucide-react';
+import { ArrowUp, ImagePlus, X, Sparkles, RotateCcw, Volume2, VolumeX, Mic, MicOff } from 'lucide-react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
+import { getSubscriptionStatus, hasArtisanAccess, startUpgradeProcess } from '../../services/SubscriptionService';
+import speechRecognitionService from '../../services/speechRecognitionService';
+import textToSpeechService from '../../services/textToSpeechService';
+import hapticService from '../../services/hapticService';
 import MiroMark from './MiroMark';
 import MiroThinking from './MiroThinking';
+import MiroVoiceModal from './MiroVoiceModal';
 import '../../styles/components/kairosAi.css';
 
-// Matches the cap every other history-fed generator uses. It is the reason a
-// user in year eight costs the same as one in week one.
+// Storage key for Miro spoken response toggle
+const VOICE_ENABLED_KEY = 'kairos_miro_voice_enabled';
+
+// Matches the cap every other history-fed generator uses.
 const CONTEXT_ENTRIES = 25;
 
-// How much of the conversation is resent each turn. Every turn resends the
-// thread, so without a ceiling turn 40 costs several times turn 1 — the same
-// compounding the slice() caps exist to prevent elsewhere.
+// How much of the conversation is resent each turn.
 const CONTEXT_TURNS = 50;
 
-// Anthropic downscales anything larger than this anyway, so sending more is
-// paying upload and latency for pixels that get thrown away.
+// Image dimensions and memory constraints
 const MAX_EDGE = 1000;
 const JPEG_QUALITY = 0.75;
-
-// An image costs roughly 1.6k tokens and the thread is resent every turn, so
-// five images in a conversation would silently add ~8k tokens to every
-// subsequent turn. Only the newest few are resent as pixels; older ones survive
-// as a note, which keeps follow-up questions working without the compounding.
 const IMAGE_MEMORY = 10;
+
+// Persistent document key for the continuous active chat
+const ACTIVE_THREAD_KEY = 'active_thread';
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
 // Entry timestamps arrive as Firestore Timestamps, {seconds}, or plain dates
-// depending on when and how they were written. Same shape Home parses with.
 const toDate = (ts) => {
   if (!ts) return null;
   try {
@@ -67,8 +60,7 @@ const toDate = (ts) => {
   }
 };
 
-/** Whole days between two moments, counted by calendar day rather than by
- *  24-hour blocks — "yesterday" should read as 1 even at 23 hours apart. */
+/** Whole days between two moments, counted by calendar day */
 const daysBetween = (a, b) => {
   const d1 = new Date(a.getFullYear(), a.getMonth(), a.getDate());
   const d2 = new Date(b.getFullYear(), b.getMonth(), b.getDate());
@@ -84,11 +76,7 @@ const humanGap = (days) => {
   return `about ${Math.round(days / 30)} months ago`;
 };
 
-/**
- * Reads a file into a capped, re-encoded JPEG. The cap is the point: the
- * existing journal upload halves whatever it is given, which leaves a modern
- * phone photo at ~3000px — still far past what the model can use.
- */
+/** Reads a file into a capped, re-encoded JPEG */
 const prepareImage = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -102,8 +90,6 @@ const prepareImage = (file) =>
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
         const ctx = canvas.getContext('2d');
-        // Photographs of paper are the likely case here and arrive with no
-        // alpha — a white ground keeps a transparent PNG from turning black.
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -116,51 +102,98 @@ const prepareImage = (file) =>
   });
 
 const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
-  const { t } = useTranslation('journey');
+  const { t, i18n } = useTranslation(['journey', 'home']);
   const { currentUser } = useAuth();
 
-  // { role, content, image?: { dataUrl, mediaType, base64 }, hadImage?: bool }
+  // { role, content, at?: number, image?: { dataUrl, mediaType, base64 }, hadImage?: bool }
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState('');
-  const [pending, setPending] = useState(null);   // the attachment, before sending
+  const [pending, setPending] = useState(null);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState(null);
   const [exhausted, setExhausted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  // Actively typing, as distinct from merely focused. Held for a beat after
-  // the last keystroke so the glow does not flicker between words.
+  const [subscription, setSubscription] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+
+  // Voice mode & speech states
+  const [voiceEnabled, setVoiceEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem(VOICE_ENABLED_KEY) !== 'false';
+  });
+  const [isListening, setIsListening] = useState(false);
+  const [isMiroSpeaking, setIsMiroSpeaking] = useState(false);
+  const [micError, setMicError] = useState(null);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+
   const typingTimer = useRef(null);
   const threadRef = useRef(null);
   const fileRef = useRef(null);
 
-  // Below a handful of entries there is nothing to reflect on, and an AI that
-  // answers anyway is inventing a person.
-  const hasEnough = totalEntries >= 3;
-  const locked = !hasEnough || exhausted;
+  // Check Artisan subscription status
+  useEffect(() => {
+    if (!currentUser) return;
+    getSubscriptionStatus(currentUser.uid)
+      .then(setSubscription)
+      .catch(() => setSubscription({ status: 'free' }));
+  }, [currentUser]);
 
-  // Today's thread, if there is one. Loading it is what makes the card feel
-  // like somewhere you return to rather than a form that resets.
+  const isArtisan = useMemo(() => hasArtisanAccess(subscription), [subscription]);
+
+  // Below a handful of entries there is nothing to reflect on
+  const hasEnough = totalEntries >= 3;
+  const locked = !hasEnough || (exhausted && !isArtisan);
+
+  // Continuous active thread loading (with fallback to today's doc for seamless migration)
   useEffect(() => {
     if (!currentUser) return;
     let cancelled = false;
     (async () => {
       try {
-        const snap = await getDoc(
+        // 1. Try loading persistent active_thread
+        const activeSnap = await getDoc(
+          doc(db, 'users', currentUser.uid, 'kairos_conversations', ACTIVE_THREAD_KEY)
+        );
+        if (!cancelled && activeSnap.exists() && (activeSnap.data().messages || []).length > 0) {
+          setMessages(activeSnap.data().messages || []);
+          return;
+        }
+
+        // 2. Fallback: load today's daily doc if active_thread is empty
+        const todaySnap = await getDoc(
           doc(db, 'users', currentUser.uid, 'kairos_conversations', todayKey())
         );
-        if (!cancelled && snap.exists()) {
-          setMessages(snap.data().messages || []);
+        if (!cancelled && todaySnap.exists()) {
+          const prevMessages = todaySnap.data().messages || [];
+          setMessages(prevMessages);
+          // Migrate to active_thread
+          if (prevMessages.length > 0) {
+            setDoc(
+              doc(db, 'users', currentUser.uid, 'kairos_conversations', ACTIVE_THREAD_KEY),
+              {
+                messages: prevMessages,
+                title: todaySnap.data().title || '',
+                updatedAt: serverTimestamp()
+              },
+              { merge: true }
+            ).catch(() => {});
+          }
         }
-      } catch {
-        // A thread that will not load is not worth blocking the card for —
-        // the user can still start a new one, and nothing is lost.
+      } catch (err) {
+        console.warn('Could not load Miro thread:', err);
       }
     })();
     return () => { cancelled = true; };
   }, [currentUser]);
 
-  useEffect(() => () => clearTimeout(typingTimer.current), []);
+  useEffect(() => {
+    return () => {
+      clearTimeout(typingTimer.current);
+      textToSpeechService.stop();
+      speechRecognitionService.cancel();
+    };
+  }, []);
 
   // Keep the newest turn in view as the thread grows.
   useEffect(() => {
@@ -171,43 +204,21 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const context = useMemo(
     () =>
       (entries || [])
-        // Sorted here, and by timestamp, because neither holds upstream.
-        //
-        // getPreviousEntries returns sort((a, b) => a.day - b.day): ascending,
-        // so slicing the first 20 took the OLDEST twenty and handed them to
-        // Miro labelled "most recent first". Past 20 entries a new one could
-        // never reach the context at all, which is exactly what "it cannot see
-        // my entry" looks like.
-        //
-        // And `day` is not chronological to begin with — it is a per-path day
-        // index, so day 3 of a path started this morning sorts before day 10
-        // of one finished last year. Only the timestamp orders entries across
-        // paths. The service's own ordering is left alone: walking a single
-        // journey in sequence wants ascending day, and other callers do that.
         .slice()
         .sort((a, b) => (toDate(b?.timestamp)?.getTime() || 0) - (toDate(a?.timestamp)?.getTime() || 0))
         .slice(0, CONTEXT_ENTRIES)
         .map((e) => ({
-        day: e.day,
-        pathId: e.pathId || null,
-        theme: e.theme || '',
-        summary: e.analysis?.summary || '',
-        insights: e.analysis?.insights || [],
-        // Two fields, because saveAnalysisResult writes the text to a
-        // different one per modality: extractedText for typed and
-        // photographed entries, transcription for voice. Reading only the
-        // first meant every spoken entry reached Miro with no words in it —
-        // a theme and a summary, but nothing the person actually said.
-        spoken: !!e.isVoiceEntry,
-        excerpt: (e.extractedText || e.transcription || '').substring(0, 300)
-      })),
+          day: e.day,
+          pathId: e.pathId || null,
+          theme: e.theme || '',
+          summary: e.analysis?.summary || '',
+          insights: e.analysis?.insights || [],
+          spoken: !!e.isVoiceEntry,
+          excerpt: (e.extractedText || e.transcription || '').substring(0, 300)
+        })),
     [entries]
   );
 
-  // What Miro is told about time. Recomputed per render rather than memoised:
-  // it is a handful of date arithmetic, and a stale "today" is worse than the
-  // work saved — a thread left open past midnight would otherwise keep
-  // insisting it is yesterday.
   const timeSense = () => {
     const now = new Date();
     const dates = (entries || []).map((e) => toDate(e.timestamp)).filter(Boolean);
@@ -221,8 +232,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
       hour < 17 ? 'afternoon' :
       hour < 22 ? 'evening' : 'late evening';
 
-    // The gap since their previous turn, so a reply picked up hours later does
-    // not read as though no time passed.
     const priorUser = [...messages].reverse().find((m) => m.role === 'user' && m.at);
     const sinceTurn = priorUser ? Math.round((Date.now() - priorUser.at) / 60000) : null;
 
@@ -243,8 +252,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     }
   }, [locked, isThinking, t]);
 
-  // Pasting a screenshot straight into the box is the fastest path on desktop,
-  // and costs nothing to support.
   const onPaste = (e) => {
     const item = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith('image/'));
     if (item) {
@@ -264,12 +271,8 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     if (!currentUser) return;
     try {
       await setDoc(
-        doc(db, 'users', currentUser.uid, 'kairos_conversations', todayKey()),
+        doc(db, 'users', currentUser.uid, 'kairos_conversations', ACTIVE_THREAD_KEY),
         {
-          // Base64 never goes in the document. A single capped photo is a few
-          // hundred KB encoded and Firestore's ceiling is 1MB per document, so
-          // two images would cost the user the whole conversation. The image
-          // stays for the session; what is kept is that there was one.
           messages: next.map(({ image, ...m }) => (image ? { ...m, hadImage: true } : m)),
           title: next.find((m) => m.role === 'user')?.content?.slice(0, 80) || '',
           entriesSeen: context.length,
@@ -278,14 +281,83 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
         { merge: true }
       );
     } catch (e) {
-      // The exchange already happened and is on screen. Failing to write it
-      // down should not remove it.
       console.error('Could not save the conversation:', e.message);
     }
   };
 
-  // The wire format. Images are only sent as pixels while they are recent;
-  // beyond that they become a line of text so the thread still makes sense.
+  const toggleVoiceEnabled = () => {
+    hapticService.light?.();
+    setVoiceEnabled((prev) => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(VOICE_ENABLED_KEY, String(next));
+      }
+      if (!next && (isMiroSpeaking || textToSpeechService.isSpeaking())) {
+        textToSpeechService.stop();
+        setIsMiroSpeaking(false);
+      }
+      return next;
+    });
+  };
+
+  const handleStopSpeaking = () => {
+    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
+      hapticService.light?.();
+      textToSpeechService.stop();
+      setIsMiroSpeaking(false);
+    }
+  };
+
+  const startNewChat = async () => {
+    if (messages.length === 0 || isThinking || isClearing) return;
+    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
+      textToSpeechService.stop();
+      setIsMiroSpeaking(false);
+    }
+    if (isListening || speechRecognitionService.isListening()) {
+      speechRecognitionService.cancel();
+      setIsListening(false);
+    }
+    setIsClearing(true);
+    try {
+      if (currentUser) {
+        // Archive current thread
+        const archiveId = `archive_${Date.now()}`;
+        await setDoc(
+          doc(db, 'users', currentUser.uid, 'kairos_conversations', archiveId),
+          {
+            messages: messages.map(({ image, ...m }) => (image ? { ...m, hadImage: true } : m)),
+            title: messages.find((m) => m.role === 'user')?.content?.slice(0, 80) || '',
+            archivedAt: serverTimestamp()
+          }
+        );
+        // Clear active thread
+        await setDoc(
+          doc(db, 'users', currentUser.uid, 'kairos_conversations', ACTIVE_THREAD_KEY),
+          { messages: [], updatedAt: serverTimestamp() }
+        );
+      }
+      setMessages([]);
+      setError(null);
+      setMicError(null);
+      setExhausted(false);
+    } catch (e) {
+      console.warn('Error archiving thread:', e);
+      setMessages([]);
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
+  const handleUpgrade = async () => {
+    if (!currentUser) return;
+    try {
+      await startUpgradeProcess(currentUser.uid);
+    } catch (e) {
+      console.error('Failed to open upgrade:', e);
+    }
+  };
+
   const toApiMessage = (m, fromEnd) => {
     if (m.role === 'user' && m.image && fromEnd < IMAGE_MEMORY) {
       return {
@@ -300,8 +372,17 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     return { role: m.role, content: note + (m.content || '') };
   };
 
-  const ask = async () => {
-    const q = question.trim();
+  const ask = async (textOverride) => {
+    if (textToSpeechService.isSpeaking()) {
+      textToSpeechService.stop();
+      setIsMiroSpeaking(false);
+    }
+    if (speechRecognitionService.isListening()) {
+      speechRecognitionService.stop();
+      setIsListening(false);
+    }
+
+    const q = (typeof textOverride === 'string' ? textOverride : question).trim();
     if ((!q && !pending) || isThinking || locked || !currentUser) return;
 
     const outgoing = { role: 'user', content: q, at: Date.now(), ...(pending ? { image: pending } : {}) };
@@ -311,6 +392,7 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     setPending(null);
     setIsThinking(true);
     setError(null);
+    setMicError(null);
 
     const when = timeSense();
     const system = `${HONESTY_DIRECTIVE}
@@ -328,17 +410,15 @@ Ground every claim in their actual entries. Quote or reference specific ones.
 If their entries do not support an answer, say so plainly rather than producing
 something that sounds insightful and is not about them.
 
-This is a conversation. You can see what has already been said in it — refer
+This is an ongoing conversation. You can see what has already been said in it — refer
 back to it rather than restating context they have just given you.
 
-permission to say "I don't know" more plainly when I'm working from too little.
-Sometimes I construct an observation that sounds grounded but is actually me filling a gap.
-That should be named more directly.
+Permission to say "I don't know" plainly when you are working from too little.
+Do not invent facts about their life or journal.
 
 They may share an image: a page of handwriting, a drawing, a photograph of
 something from their day. Read it as part of what they are telling you and
-connect it to their journal where it genuinely connects. Do not force a link
-that is not there.
+connect it to their journal where it genuinely connects.
 
 Their journal (${context.length} of ${totalEntries} entries, most recent first):
 ${JSON.stringify(context)}
@@ -357,10 +437,8 @@ ${when.sinceTurn === null
     : `They came back to this conversation after ${when.sinceTurn < 90 ? `${when.sinceTurn} minutes` : humanGap(Math.round(when.sinceTurn / 1440))}.`}
 
 You know what day it is and how long it has been. Use it only where it earns
-its place — placing something in the week, noticing a gap that matters, or
-because they asked. Do not open with it, do not remark on the hour, and never
-scold or congratulate them about a gap. A long silence is information about
-their life, not a lapse to be mentioned.
+its place. Do not open with it, do not remark on the hour, and never
+scold or congratulate them about a gap.
 
 Answer in prose, under 200 words, second person. No preamble, no compliment
 before the substance.`;
@@ -370,9 +448,6 @@ before the substance.`;
       const data = await callClaudeApi({
         method: 'POST',
         body: JSON.stringify({
-          // Routes to the DAILY allowance rather than the monthly analysis one.
-          // Stripped server-side before the call — Anthropic 400s on unknown
-          // top-level parameters.
           kairosAi: true,
           model: 'claude-sonnet-4-6',
           system,
@@ -385,37 +460,83 @@ before the substance.`;
       const next = [...withUser, { role: 'assistant', content: text, at: Date.now() }];
       setMessages(next);
       persist(next);
+
+      // Spoken voice playback if voiceEnabled (only when modal is closed to prevent double-speak collision)
+      if (voiceEnabled && text && !isVoiceModalOpen) {
+        const activeLang = i18n.resolvedLanguage || i18n.language || 'en';
+        textToSpeechService.speak(text, {
+          lang: activeLang,
+          rate: 0.95,
+          pitch: 0.98,
+          onStart: () => setIsMiroSpeaking(true),
+          onEnd: () => setIsMiroSpeaking(false),
+          onError: () => setIsMiroSpeaking(false)
+        });
+      }
+      return text;
     } catch (e) {
-      // apiUtils rewrites the raw callable error, so this matches what it
-      // actually throws: the generic allowance code, narrowed by .reason.
       const isExhausted = e?.reason === 'ai-daily-allowance-exhausted';
 
       if (isExhausted) {
         setExhausted(true);
         setError(
-          t('kairosAi.exhausted', "That's today's message. Miro is unlimited on a subscription — otherwise it picks up again tomorrow.")
+          t('kairosAi.exhausted', "That's today's message. Miro is unlimited with Artisan — otherwise it picks up again tomorrow.")
         );
       } else {
         setError(
           t('kairosAi.failed', "That didn't go through. Nothing in your journal was affected — try again in a moment.")
         );
       }
-      // Take the unanswered question back out of the thread rather than
-      // leaving it sitting there as though it were asked and ignored, and hand
-      // the attachment back so it does not have to be picked again.
       setMessages(messages);
       setQuestion(q);
       if (outgoing.image) setPending(outgoing.image);
+      return null;
     } finally {
       setIsThinking(false);
     }
   };
+
+  const handleOpenVoiceModal = useCallback(() => {
+    if (locked || isThinking) return;
+
+    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
+      textToSpeechService.stop();
+      setIsMiroSpeaking(false);
+    }
+
+    hapticService.light?.();
+    setIsVoiceModalOpen(true);
+  }, [locked, isThinking, isMiroSpeaking]);
+
+  // Global event listener to allow 1-tap voice trigger from Hero card or anywhere in app
+  useEffect(() => {
+    const handleGlobalVoiceOpen = () => {
+      handleOpenVoiceModal();
+    };
+    window.addEventListener('kairos:open-voice-modal', handleGlobalVoiceOpen);
+    return () => window.removeEventListener('kairos:open-voice-modal', handleGlobalVoiceOpen);
+  }, [handleOpenVoiceModal]);
 
   const onKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       ask();
     }
+  };
+
+  const formatMessageDate = (timestamp) => {
+    if (!timestamp) return null;
+    const d = new Date(timestamp);
+    const today = new Date();
+    if (d.toDateString() === today.toDateString()) {
+      return t('kairosAi.dateToday', 'Today');
+    }
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (d.toDateString() === yesterday.toDateString()) {
+      return t('kairosAi.dateYesterday', 'Yesterday');
+    }
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   };
 
   const canSend = !locked && !isThinking && (!!question.trim() || !!pending);
@@ -428,52 +549,132 @@ before the substance.`;
       onDragLeave={() => setIsDragging(false)}
       onDrop={onDrop}
     >
-      {/* Two slow-drifting colour fields behind the glass. Purely decorative,
-          so it is inert to pointers and hidden from assistive tech. */}
-      <div className="kai-aurora" aria-hidden="true">
-        <span className="kai-blob kai-blob-a" />
-        <span className="kai-blob kai-blob-b" />
-      </div>
+      {/* Living Ambient Presence (Refined & Minimalist) */}
+      <div className="kai-ambient" aria-hidden="true" />
 
       <div className="kai-head">
-        <MiroMark size={34} />
-        <span className="kai-title">{t('kairosAi.title', 'Miro')}</span>
-        <span className="kai-sub">
-          {hasEnough
-            ? t('kairosAi.readCount', 'has read {{count}} of your entries', { count: Math.min(totalEntries, CONTEXT_ENTRIES) })
-            : t('kairosAi.needMore', 'a few more entries and it can start reading')}
-        </span>
+        <div className="kai-head-left">
+          <div
+            className={`miro-orb-wrap${isMiroSpeaking ? ' miro-orb-interactive' : ' miro-orb-clickable'}`}
+            onClick={isMiroSpeaking ? handleStopSpeaking : handleOpenVoiceModal}
+            title={isMiroSpeaking ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('miro.openVoiceChamber', "Open Voice Chamber")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (isMiroSpeaking) handleStopSpeaking();
+                else handleOpenVoiceModal();
+              }
+            }}
+          >
+            {isMiroSpeaking && <div className="miro-speaking-glow" aria-hidden="true" />}
+            <MiroMark size={34} />
+          </div>
+          <div className="kai-title-wrap">
+            <div className="kai-title-row">
+              <span className="kai-title">{t('kairosAi.title', 'Miro')}</span>
+              {isArtisan ? (
+                <span className="kai-artisan-badge" title={t('kairosAi.artisanUnlimited', 'Artisan · Unlimited')}>
+                  <Sparkles size={11} />
+                  <span>Artisan</span>
+                </span>
+              ) : (
+                <span className="kai-free-badge">
+                  <span>{t('kairosAi.freeDailyBadge', '1 daily')}</span>
+                </span>
+              )}
+            </div>
+            <span className="kai-sub">
+              {hasEnough
+                ? t('kairosAi.readCount', 'has read {{count}} of your entries', { count: Math.min(totalEntries, CONTEXT_ENTRIES) })
+                : t('kairosAi.needMore', 'a few more entries and it can start reading')}
+            </span>
+          </div>
+        </div>
+
+        <div className="kai-head-actions">
+          {/* Prominent 1-Tap Voice Chamber Jewel */}
+          <button
+            type="button"
+            className="kai-voice-jewel-btn"
+            onClick={handleOpenVoiceModal}
+            disabled={locked || isThinking}
+            title={t('miro.openVoiceChamber', 'Open Voice Chamber')}
+            aria-label={t('miro.openVoiceChamber', 'Open Voice Chamber')}
+          >
+            <span className="kai-voice-jewel-aura" aria-hidden="true" />
+            <Mic size={13} className="kai-voice-jewel-icon" />
+            <span className="kai-voice-jewel-label">{t('miro.talkVoice', 'Voice Mode')}</span>
+            <span className="kai-voice-jewel-eq" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
+          </button>
+
+          <button
+            className={`kai-voice-toggle-btn${voiceEnabled ? ' is-active' : ' is-muted'}`}
+            onClick={toggleVoiceEnabled}
+            title={voiceEnabled ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('kairosAi.unmuteVoice', "Unmute Miro's voice")}
+            aria-label={voiceEnabled ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('kairosAi.unmuteVoice', "Unmute Miro's voice")}
+          >
+            {voiceEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
+          </button>
+
+          {messages.length > 0 && (
+            <button
+              className="kai-new-chat-btn"
+              onClick={startNewChat}
+              disabled={isThinking || isClearing}
+              title={t('kairosAi.newChat', 'Start a fresh topic')}
+              aria-label={t('kairosAi.newChat', 'Start a fresh topic')}
+            >
+              <RotateCcw size={13} />
+              <span className="kai-new-chat-label">{t('kairosAi.newChatShort', 'New topic')}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {messages.length > 0 && (
         <div className="kai-thread" ref={threadRef}>
-          {messages.map((m, i) => (
-            <div key={i} className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}>
-              {m.image && <img className="kai-msg-img" src={m.image.dataUrl} alt="" />}
-              {/* A thread reloaded from storage has the note but not the
-                  pixels — say so rather than showing a broken frame. */}
-              {!m.image && m.hadImage && (
-                <span className="kai-msg-imgnote">
-                  <ImagePlus size={12} />
-                  {t('kairosAi.imageGone', 'image')}
-                </span>
-              )}
-              {m.content && <p className="kai-msg-text">{m.content}</p>}
-            </div>
-          ))}
+          {messages.map((m, i) => {
+            const showDate =
+              m.at &&
+              (i === 0 ||
+                !messages[i - 1].at ||
+                new Date(m.at).toDateString() !== new Date(messages[i - 1].at).toDateString());
+
+            return (
+              <React.Fragment key={i}>
+                {showDate && (
+                  <div className="kai-date-separator">
+                    <span>{formatMessageDate(m.at)}</span>
+                  </div>
+                )}
+                <div
+                  className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}
+                  onClick={m.role === 'assistant' && isMiroSpeaking ? handleStopSpeaking : undefined}
+                  title={m.role === 'assistant' && isMiroSpeaking ? t('kairosAi.muteVoice', "Mute Miro's voice") : undefined}
+                >
+                  {m.image && <img className="kai-msg-img" src={m.image.dataUrl} alt="" />}
+                  {!m.image && m.hadImage && (
+                    <span className="kai-msg-imgnote">
+                      <ImagePlus size={12} />
+                      {t('kairosAi.imageGone', 'image')}
+                    </span>
+                  )}
+                  {m.content && <p className="kai-msg-text">{m.content}</p>}
+                </div>
+              </React.Fragment>
+            );
+          })}
           {isThinking && (
-            /* Miro's own sphere with water moving in it, so the wait is the
-               same object as the mark in the header rather than a second
-               shape. Being fixed-size it does not fill the answer's space, so
-               the thread does shift a little when the reply lands — the
-               trade taken deliberately for something that belongs here.
-               The label is for screen readers, which get nothing from it. */
             <div
               className="kai-msg kai-msg-ai kai-waiting"
               role="status"
               aria-label={t('kairosAi.thinking', 'reading back through your entries…')}
             >
-              <MiroThinking size={46} />
+              <MiroThinking size={32} />
             </div>
           )}
         </div>
@@ -492,7 +693,7 @@ before the substance.`;
         </div>
       )}
 
-      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}${isTyping ? ' is-typing' : ''}`}>
+      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}${isTyping ? ' is-typing' : ''}${isListening ? ' is-listening' : ''}`}>
         <input
           ref={fileRef}
           type="file"
@@ -509,11 +710,30 @@ before the substance.`;
           <ImagePlus size={17} />
         </button>
 
+        <button
+          className={`kai-mic-btn${isListening ? ' is-listening' : ''}`}
+          onClick={handleOpenVoiceModal}
+          disabled={locked || isThinking}
+          title={t('miro.voiceTitle', 'Miro Voice')}
+          aria-label={t('miro.voiceTitle', 'Miro Voice')}
+        >
+          <span className="kai-mic-aura" aria-hidden="true" />
+          {isListening ? (
+            <MicOff size={16} className="kai-mic-icon" />
+          ) : (
+            <Mic size={16} className="kai-mic-icon" />
+          )}
+        </button>
+
         <textarea
           className="kai-input"
           rows={1}
           value={question}
           onChange={(e) => {
+            if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
+              textToSpeechService.stop();
+              setIsMiroSpeaking(false);
+            }
             setQuestion(e.target.value);
             setIsTyping(true);
             clearTimeout(typingTimer.current);
@@ -523,22 +743,27 @@ before the substance.`;
           onPaste={onPaste}
           disabled={locked || isThinking}
           placeholder={
-            exhausted
-              ? t('kairosAi.placeholderTomorrow', 'Back tomorrow')
-              : hasEnough
-                ? messages.length
-                  ? t('kairosAi.placeholderFollow', 'Say more…')
-                  : t('kairosAi.placeholder', 'Ask about what you have been writing…')
-                : t('kairosAi.placeholderLocked', 'Write a few entries first')
+            isListening
+              ? t('kairosAi.listening', 'Listening...')
+              : exhausted && !isArtisan
+                ? t('kairosAi.placeholderTomorrow', 'Back tomorrow')
+                : hasEnough
+                  ? messages.length
+                    ? t('kairosAi.placeholderFollow', 'Say more…')
+                    : isArtisan
+                      ? t('kairosAi.placeholderArtisan', 'Talk with Miro about your journal…')
+                      : t('kairosAi.placeholder', 'Ask about what you have been writing…')
+                  : t('kairosAi.placeholderLocked', 'Write a few entries first')
           }
         />
         <button
-          className="kai-send"
-          onClick={ask}
+          className={`kai-send${canSend ? ' is-ready' : ''}`}
+          onClick={() => ask()}
           disabled={!canSend}
           aria-label={t('kairosAi.send', 'Send')}
         >
-          <ArrowUp size={16} />
+          <span className="kai-send-aura" aria-hidden="true" />
+          <ArrowUp size={16} className="kai-send-icon" />
         </button>
       </div>
 
@@ -549,7 +774,36 @@ before the substance.`;
         </div>
       )}
 
-      {error && <p className={exhausted ? 'kai-limit' : 'kai-error'}>{error}</p>}
+      {exhausted && !isArtisan ? (
+        <div className="kai-upgrade-prompt">
+          <div className="kai-upgrade-text">
+            <p className="kai-limit-title">{t('kairosAi.exhaustedTitle', 'Daily message used')}</p>
+            <p className="kai-limit-desc">{t('kairosAi.exhaustedDesc', 'Free tier includes 1 message daily. Upgrade to Artisan for continuous, unlimited conversations.')}</p>
+          </div>
+          <button className="kai-upgrade-btn" onClick={handleUpgrade}>
+            <Sparkles size={14} />
+            <span>{t('kairosAi.upgradeCta', 'Upgrade to Artisan')}</span>
+          </button>
+        </div>
+      ) : micError ? (
+        <p className="kai-error">{micError}</p>
+      ) : error ? (
+        <p className="kai-error">{error}</p>
+      ) : null}
+
+      {/* Dedicated Spatial Glass Voice Chamber Popup */}
+      <MiroVoiceModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
+        messages={messages}
+        onSendMessage={ask}
+        isArtisan={isArtisan}
+        exhausted={exhausted}
+        onUpgrade={handleUpgrade}
+        locked={locked}
+        voiceEnabled={voiceEnabled}
+        onToggleVoiceEnabled={toggleVoiceEnabled}
+      />
     </section>
   );
 };

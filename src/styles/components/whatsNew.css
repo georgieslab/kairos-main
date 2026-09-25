@@ -17,24 +17,43 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.75);
   cursor: pointer;
-  transition: transform 0.1s ease, background 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.15s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Golden Spark Badge for What's New */
+.whats-new-pill.whats-new-spark-badge {
+  color: #fbbf24;
+}
+
+.whats-new-pill.whats-new-spark-badge .whats-new-spark-icon {
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.65));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
 }
 
 @media (hover: hover) {
   .whats-new-pill:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+  .whats-new-pill.whats-new-spark-badge:hover {
+    background: rgba(251, 191, 36, 0.14);
+    border-color: rgba(251, 191, 36, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 14px rgba(251, 191, 36, 0.35);
+  }
+  .whats-new-pill.whats-new-spark-badge:hover .whats-new-spark-icon {
+    transform: scale(1.15) rotate(10deg);
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.95));
   }
 }
 
 @media (hover: none) {
   .whats-new-pill:active {
-    transform: scale(0.95);
+    transform: scale(0.93);
   }
 }
 
-/* Unseen indicator: quiet gold dot, no motion on the pill itself */
+/* Unseen indicator: glowing gold spark dot with warm beacon pulse */
 .whats-new-dot {
   position: absolute;
   top: 4px;
@@ -42,8 +61,14 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgb(var(--wn-a));
-  box-shadow: 0 0 6px rgba(var(--wn-a), 0.8);
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.9);
+  animation: sparkDotPulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes sparkDotPulse {
+  0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 4px rgba(251, 191, 36, 0.6); }
+  100% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px rgba(251, 191, 36, 1); }
 }
 
 /* ===== Popup (portaled to <body>, above everything) ===== */
@@ -55,9 +80,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(5, 5, 7, 0.45);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  background: rgba(5, 5, 7, 0.55);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
   animation: whatsNewFadeIn 0.25s ease;
 }
 
@@ -67,10 +92,7 @@
 }
 
 .whats-new-sheet {
-  /* Accent trio, overridden per announcement from the SLIDES table. The
-     defaults are the three Kairos Collection path colours, so the original
-     sheet is unchanged. --wn-a carries every single-colour use; all three
-     appear together on the halo, the eyebrow and the button. */
+  /* Accent trio, overridden per announcement from the SLIDES table. */
   --wn-a: 212, 175, 55;
   --wn-b: 230, 145, 90;
   --wn-c: 244, 197, 102;
@@ -81,14 +103,14 @@
   padding: 34px 26px 26px;
   text-align: center;
   border-radius: 36px;
-  background: linear-gradient(160deg, rgba(var(--wn-a), 0.10) 0%, rgba(28, 28, 30, 0.55) 40%);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(var(--wn-a), 0.28);
+  background: linear-gradient(160deg, rgba(var(--wn-a), 0.14) 0%, rgba(24, 24, 28, 0.75) 38%, rgba(16, 16, 18, 0.9) 100%);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(var(--wn-a), 0.38);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 44px rgba(var(--wn-a), 0.12),
-    0 24px 60px rgba(0, 0, 0, 0.4);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 52px rgba(var(--wn-a), 0.22),
+    0 28px 70px rgba(0, 0, 0, 0.55);
   animation: whatsNewSheetIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 

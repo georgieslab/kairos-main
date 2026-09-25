@@ -15,23 +15,395 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.2);
   animation: moodWeatherEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
   transition: background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+  position: relative;
+  overflow: hidden; /* Encapsulates the fluid animated ambient aura */
 }
 
-/* Once an aura is chosen, the whole container glows in its colour. */
+/* Outer breathing aura glow when a mood is selected */
 .mood-weather.has-aura {
-  border-color: rgba(var(--aura-color), 0.35);
-  background:
-    radial-gradient(140% 160% at 100% 50%, rgba(var(--aura-color), 0.14), transparent 62%),
-    rgba(28, 28, 30, 0.65);
+  border-color: rgba(var(--aura-color), 0.45);
+  background: rgba(28, 28, 30, 0.58);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0 30px rgba(var(--aura-color), 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 0 35px rgba(var(--aura-color), 0.26),
     0 8px 24px rgba(0, 0, 0, 0.22);
+  animation:
+    moodWeatherEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both,
+    moodWeatherOuterGlow 6s ease-in-out infinite alternate;
+}
+
+.mood-weather.has-hover-preview {
+  border-color: rgba(var(--aura-preview-color, var(--aura-color)), 0.25);
+}
+
+@keyframes moodWeatherOuterGlow {
+  0% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 28px rgba(var(--aura-color), 0.22),
+      0 8px 24px rgba(0, 0, 0, 0.22);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 0 46px rgba(var(--aura-color), 0.38),
+      0 12px 30px rgba(0, 0, 0, 0.28);
+  }
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),
+      0 0 32px rgba(var(--aura-color), 0.26),
+      0 8px 24px rgba(0, 0, 0, 0.22);
+  }
 }
 
 @keyframes moodWeatherEnter {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   ✨ DYNAMIC ANIMATED AURA BACKDROP (Behind Content)
+   ========================================================================== */
+
+.mood-weather-aura-backdrop {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mood-weather-aura-backdrop.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.mood-weather-aura-backdrop.is-preview {
+  opacity: 0.45;
+  transform: scale(0.98);
+}
+
+.mood-aura-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 1. Primary Liquid Blob */
+.mood-aura-blob-primary {
+  position: absolute;
+  width: 240px;
+  height: 190px;
+  top: -60px;
+  left: -40px;
+  border-radius: 50%;
+  filter: blur(38px);
+  opacity: 0.65;
+  will-change: transform;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(var(--aura-color), 0.85) 0%,
+    rgba(var(--aura-secondary), 0.45) 55%,
+    transparent 78%
+  );
+  animation: moodBlobFlow1 14s ease-in-out infinite alternate;
+}
+
+/* 2. Secondary Liquid Blob (Drifting Opposite) */
+.mood-aura-blob-secondary {
+  position: absolute;
+  width: 210px;
+  height: 170px;
+  bottom: -50px;
+  right: -30px;
+  border-radius: 50%;
+  filter: blur(36px);
+  opacity: 0.55;
+  will-change: transform;
+  background: radial-gradient(
+    circle at 65% 65%,
+    rgba(var(--aura-secondary), 0.80) 0%,
+    rgba(var(--aura-accent), 0.40) 60%,
+    transparent 80%
+  );
+  animation: moodBlobFlow2 18s ease-in-out infinite alternate;
+}
+
+/* 3. Accent Breathing Core */
+.mood-aura-blob-accent {
+  position: absolute;
+  width: 160px;
+  height: 130px;
+  top: 15%;
+  right: 30%;
+  border-radius: 50%;
+  filter: blur(28px);
+  opacity: 0.45;
+  will-change: transform;
+  background: radial-gradient(
+    circle,
+    rgba(var(--aura-accent), 0.75) 0%,
+    rgba(var(--aura-color), 0.25) 50%,
+    transparent 75%
+  );
+  animation: moodBlobPulse 8s ease-in-out infinite alternate;
+}
+
+/* 4. Conic Ethereal Wave (Rotating Color Ripple) */
+.mood-aura-wave {
+  position: absolute;
+  inset: -60%;
+  width: 220%;
+  height: 220%;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  filter: blur(30px);
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(var(--aura-color), 0.7) 0deg,
+    rgba(var(--aura-secondary), 0.4) 100deg,
+    rgba(var(--aura-accent), 0.6) 200deg,
+    rgba(var(--aura-secondary), 0.3) 290deg,
+    rgba(var(--aura-color), 0.7) 360deg
+  );
+  animation: moodWaveRotate 22s linear infinite;
+}
+
+/* 5. Liquid Glass Shimmer Sweep */
+.mood-aura-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 15%,
+    rgba(var(--aura-accent), 0.16) 48%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(var(--aura-secondary), 0.16) 52%,
+    transparent 85%
+  );
+  background-size: 250% 100%;
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+  animation: moodShimmerSweep 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 6. Floating Ambient Atmospheric Sparks */
+.mood-aura-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mood-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(var(--aura-accent));
+  opacity: 0;
+  box-shadow: 0 0 8px rgba(var(--aura-accent), 0.9), 0 0 14px rgba(var(--aura-color), 0.6);
+}
+
+.mood-particle.p1 {
+  width: 3.5px;
+  height: 3.5px;
+  left: 18%;
+  bottom: 12%;
+  animation: moodParticleFloat 6s ease-in-out infinite 0.2s;
+}
+
+.mood-particle.p2 {
+  width: 2.5px;
+  height: 2.5px;
+  left: 42%;
+  bottom: 8%;
+  animation: moodParticleFloat 5.2s ease-in-out infinite 1.8s;
+}
+
+.mood-particle.p3 {
+  width: 4px;
+  height: 4px;
+  left: 65%;
+  bottom: 16%;
+  animation: moodParticleFloat 6.8s ease-in-out infinite 0.9s;
+}
+
+.mood-particle.p4 {
+  width: 2px;
+  height: 2px;
+  left: 82%;
+  bottom: 10%;
+  animation: moodParticleFloat 4.6s ease-in-out infinite 2.5s;
+}
+
+.mood-particle.p5 {
+  width: 3px;
+  height: 3px;
+  left: 30%;
+  bottom: 20%;
+  animation: moodParticleFloat 5.8s ease-in-out infinite 3.4s;
+}
+
+/* === Specific Mood Energy Nuances === */
+
+/* Lunar: Slow cosmic tidal drift */
+.aura-lunar .mood-aura-blob-primary {
+  animation-duration: 18s;
+}
+.aura-lunar .mood-aura-wave {
+  animation-duration: 28s;
+}
+
+/* Ethereal: Featherlight horizontal sway */
+.aura-ethereal .mood-aura-blob-primary {
+  animation-name: moodBlobFlowEthereal;
+  animation-duration: 16s;
+}
+
+/* Sparkle: Enchanted twinkling pulse */
+.aura-sparkle .mood-aura-blob-accent {
+  animation-duration: 5.5s;
+}
+.aura-sparkle .mood-particle {
+  box-shadow: 0 0 10px rgba(var(--aura-accent), 1), 0 0 18px rgba(var(--aura-color), 0.8);
+}
+
+/* Radiant: Solar warm breathing expansion */
+.aura-radiant .mood-aura-blob-primary {
+  filter: blur(44px);
+  opacity: 0.72;
+}
+
+/* Ember: Flickering warm rising hearth */
+.aura-ember .mood-particle {
+  animation-name: moodEmberRise;
+}
+
+/* === Ambient Keyframes === */
+
+@keyframes moodBlobFlow1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(55px, 20px, 0) scale(1.18) rotate(45deg);
+  }
+  100% {
+    transform: translate3d(20px, 40px, 0) scale(0.92) rotate(90deg);
+  }
+}
+
+@keyframes moodBlobFlow2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-60px, -22px, 0) scale(1.22) rotate(-50deg);
+  }
+  100% {
+    transform: translate3d(-25px, -38px, 0) scale(0.95) rotate(-100deg);
+  }
+}
+
+@keyframes moodBlobPulse {
+  0% {
+    transform: scale(0.9) translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.25) translate3d(-15px, 10px, 0);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(0.95) translate3d(15px, -10px, 0);
+    opacity: 0.40;
+  }
+}
+
+@keyframes moodBlobFlowEthereal {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(80px, -10px, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(120px, 15px, 0) scale(0.95);
+  }
+}
+
+@keyframes moodWaveRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moodShimmerSweep {
+  0% {
+    background-position: 200% 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  60% {
+    background-position: -100% 0;
+    opacity: 0.7;
+  }
+  100% {
+    background-position: -100% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes moodParticleFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(18px, -45px, 0) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes moodEmberRise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate3d(-10px, -30px, 0) scale(1.1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(14px, -60px, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+/* Elevate interactive content above the animated background */
+.mood-weather-text,
+.mood-weather-options {
+  position: relative;
+  z-index: 2;
 }
 
 .mood-weather-text {
@@ -108,12 +480,12 @@
 }
 
 .mood-weather-option.is-selected {
-  background: rgba(var(--mood-color), 0.15);
-  border-color: rgba(var(--mood-color), 0.4);
+  background: rgba(var(--mood-color), 0.18);
+  border-color: rgba(var(--mood-color), 0.5);
   color: rgb(var(--mood-color));
 
   /* Soft, steady outer glow */
-  box-shadow: 0 0 12px rgba(var(--mood-color), 0.25);
+  box-shadow: 0 0 14px rgba(var(--mood-color), 0.32);
   animation: moodPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -191,29 +563,61 @@
   pointer-events: none;
 }
 
-/* ===== Light mode =====
-   Two selector conventions coexist in this app: some screens (Home, Insights)
-   apply a local .hs-light/.light-mode class to their own root; others rely
-   solely on the global .light-theme class ThemeContext puts on <html>. We
-   match both so these mood components render correctly regardless of which
-   screen they're dropped into. */
+/* ===== Light mode ===== */
 .hs-light .mood-weather,
 .light-theme .mood-weather {
-  background: rgba(245, 245, 247, 0.7);
+  background: rgba(255, 255, 255, 0.72);
   border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
 .hs-light .mood-weather.has-aura,
 .light-theme .mood-weather.has-aura {
-  border-color: rgba(var(--aura-color), 0.4);
-  background:
-    radial-gradient(140% 160% at 100% 50%, rgba(var(--aura-color), 0.16), transparent 62%),
-    rgba(245, 245, 247, 0.7);
+  border-color: rgba(var(--aura-color), 0.45);
+  background: rgba(255, 255, 255, 0.78);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 0 24px rgba(var(--aura-color), 0.20),
-    0 4px 12px rgba(0, 0, 0, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 32px rgba(var(--aura-color), 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.hs-light .mood-weather-aura-backdrop,
+.light-theme .mood-weather-aura-backdrop {
+  opacity: 0;
+}
+
+.hs-light .mood-weather-aura-backdrop.is-active,
+.light-theme .mood-weather-aura-backdrop.is-active {
+  opacity: 0.85;
+}
+
+.hs-light .mood-aura-blob-primary,
+.light-theme .mood-aura-blob-primary {
+  opacity: 0.45;
+  filter: blur(42px);
+}
+
+.hs-light .mood-aura-blob-secondary,
+.light-theme .mood-aura-blob-secondary {
+  opacity: 0.38;
+  filter: blur(40px);
+}
+
+.hs-light .mood-aura-blob-accent,
+.light-theme .mood-aura-blob-accent {
+  opacity: 0.35;
+}
+
+.hs-light .mood-aura-wave,
+.light-theme .mood-aura-wave {
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+}
+
+.hs-light .mood-aura-shimmer,
+.light-theme .mood-aura-shimmer {
+  opacity: 0.4;
+  mix-blend-mode: soft-light;
 }
 
 .hs-light .mood-weather-title,
@@ -226,10 +630,6 @@
   color: rgba(0, 0, 0, 0.8);
 }
 
-/* :not(.is-selected) matters here: this rule and .mood-weather-option.is-selected
-   have equal specificity (two classes each), so without the exclusion this one
-   would win on source order alone and the selected mood would never visibly
-   "light up" in light theme. */
 .hs-light .mood-weather-option:not(.is-selected),
 .light-theme .mood-weather-option:not(.is-selected) {
   background: rgba(0, 0, 0, 0.04);
@@ -242,15 +642,13 @@
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* Selected state colors work in both themes via --mood-color */
-
+/* Mobile Layout Responsiveness */
 @media (max-width: 480px) {
   .mood-weather {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  /* Spread the auras across the full width once stacked */
   .mood-weather-options {
     width: 100%;
     justify-content: space-between;
@@ -264,9 +662,17 @@
   }
 }
 
-/* Respect reduced motion preferences */
+/* Reduced Motion Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .mood-weather,
+  .mood-weather.has-aura,
+  .mood-weather-aura-backdrop,
+  .mood-aura-blob-primary,
+  .mood-aura-blob-secondary,
+  .mood-aura-blob-accent,
+  .mood-aura-wave,
+  .mood-aura-shimmer,
+  .mood-particle,
   .mood-weather-option.is-selected,
   .mood-weather-option.is-selected::before,
   .mood-weather-option.is-selected::after,
@@ -274,8 +680,19 @@
     animation: none !important;
   }
 
+  .mood-weather-aura-backdrop.is-active {
+    opacity: 0.7;
+    transform: none;
+  }
+
+  .mood-aura-blob-primary,
+  .mood-aura-blob-secondary,
+  .mood-aura-blob-accent {
+    transform: none !important;
+  }
+
   .mood-weather-option.is-selected::after {
-    opacity: 0.5; /* Keep a static glow if motion is disabled */
+    opacity: 0.5;
   }
 }
 

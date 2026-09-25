@@ -1,0 +1,46 @@
+{
+  "miro": {
+    "voiceInput": "Tap to speak to Miro",
+    "listening": "Listening...",
+    "muteVoice": "Mute Miro's voice",
+    "unmuteVoice": "Unmute Miro's voice",
+    "micDenied": "Microphone access denied",
+    "voiceModeActive": "Miro will speak responses",
+    "voiceModeMuted": "Miro's voice is muted",
+    "voiceTitle": "Miro Voice",
+    "listeningSubtitle": "Listening to you...",
+    "thinkingSubtitle": "Miro is reflecting on your journal...",
+    "speakingSubtitle": "Miro is speaking...",
+    "tapToInterrupt": "Tap orb to interrupt",
+    "tapToSpeak": "Tap to speak",
+    "voiceInputPrompt": "Say anything about your day or journal...",
+    "done": "Done",
+    "closeVoiceMode": "Close voice mode",
+    "typeMessage": "Type a message...",
+    "continuousActive": "Continuous dialogue active",
+    "voiceWelcomePrompt": "Speak freely to Miro about your day, your feelings, or anything in your journal.",
+    "starterPrompt1": "How have I been doing lately?",
+    "starterPrompt2": "What themes do you notice in my journal?",
+    "starterPrompt3": "Help me reflect on today",
+    "voiceChamber": "Voice Chamber",
+    "talkVoice": "Voice Mode",
+    "openVoiceChamber": "Open Voice Chamber",
+    "voiceReflection": "Voice Reflection"
+  },
+  "physicalJournal": {
+    "title": "Physical Journal",
+    "connected": "Connected",
+    "serialLabel": "Serial",
+    "nfcReady": "NFC Ready · Tap book to write",
+    "nfcScanning": "Scanning NFC tag...",
+    "nfcTapToWrite": "Tap to Write",
+    "nfcDisabled": "NFC Disabled in Settings",
+    "nfcNotAvailable": "Manual Sync Available",
+    "pairPromptTitle": "Connect Your Physical Journal",
+    "pairPromptDesc": "Tap your journal's brass NFC seal to bind your physical pages with Miro AI.",
+    "pairAction": "Pair Journal",
+    "manageCollection": "My Collection",
+    "openJournal": "Open Journal"
+  }
+}
+

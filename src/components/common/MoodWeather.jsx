@@ -2,7 +2,7 @@
 // "Inner Aura" — a one-tap daily magical check-in.
 // Stored per-day at users/{uid}/moods/{YYYY-MM-DD}.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -73,17 +73,51 @@ const MoodWeather = () => {
   // The subtitle previews whichever aura the user is pointing at / focusing,
   // then settles on their pick — so the meaning is discoverable before tapping.
   const activeId = hovered || mood;
+  const activeAura = useMemo(() => AURAS.find((m) => m.id === activeId) || null, [activeId]);
+  const selectedAura = useMemo(() => AURAS.find((m) => m.id === mood) || null, [mood]);
+
   // The active aura's colour accents the descriptive text (not the whole card).
-  const activeColor = AURAS.find((m) => m.id === activeId)?.color || null;
-  // Once an aura is chosen, the whole container takes on its colour glow.
-  const selectedColor = AURAS.find((m) => m.id === mood)?.color || null;
+  const activeColor = activeAura?.color || null;
+
+  // Custom CSS variables for the animated aura background
+  const auraStyle = useMemo(() => {
+    const targetAura = selectedAura || (hovered ? activeAura : null);
+    if (!targetAura) return undefined;
+
+    return {
+      '--aura-color': targetAura.color,
+      '--aura-secondary': targetAura.secondaryColor || targetAura.color,
+      '--aura-accent': targetAura.accentColor || targetAura.color,
+    };
+  }, [selectedAura, activeAura, hovered]);
 
   return (
     <section
-      className={`mood-weather ${isLoading ? 'is-loading' : ''}${mood ? ' has-aura' : ''}`}
-      style={selectedColor ? { '--aura-color': selectedColor } : undefined}
+      className={`mood-weather ${isLoading ? 'is-loading' : ''}${mood ? ` has-aura aura-${mood}` : ''}${hovered && !mood ? ` has-hover-preview aura-${hovered}` : ''}`}
+      style={auraStyle}
       aria-label={t('innerAura.title', "Today's inner aura")}
     >
+      {/* Dynamic Animated Ambient Color Aura Behind Content */}
+      <div 
+        className={`mood-weather-aura-backdrop${mood ? ' is-active' : ''}${hovered && !mood ? ' is-preview' : ''}`}
+        aria-hidden="true"
+      >
+        <div className="mood-aura-canvas">
+          <div className="mood-aura-blob mood-aura-blob-primary" />
+          <div className="mood-aura-blob mood-aura-blob-secondary" />
+          <div className="mood-aura-blob mood-aura-blob-accent" />
+          <div className="mood-aura-wave" />
+          <div className="mood-aura-shimmer" />
+          <div className="mood-aura-particles">
+            <span className="mood-particle p1" />
+            <span className="mood-particle p2" />
+            <span className="mood-particle p3" />
+            <span className="mood-particle p4" />
+            <span className="mood-particle p5" />
+          </div>
+        </div>
+      </div>
+
       <div className="mood-weather-text">
         <span className="mood-weather-title">{t('innerAura.title', "Today's inner aura")}</span>
         <span
@@ -96,8 +130,16 @@ const MoodWeather = () => {
         </span>
       </div>
       <div className="mood-weather-options" role="radiogroup" aria-label={t('innerAura.prompt', 'How does today feel?')}>
-        {AURAS.map(({ id, icon: Icon, color }) => (
-          <div key={id} className="mood-weather-cell" style={{ '--mood-color': color }}>
+        {AURAS.map(({ id, icon: Icon, color, secondaryColor, accentColor }) => (
+          <div 
+            key={id} 
+            className="mood-weather-cell" 
+            style={{ 
+              '--mood-color': color,
+              '--mood-secondary': secondaryColor || color,
+              '--mood-accent': accentColor || color,
+            }}
+          >
             <button
               className={`mood-weather-option${mood === id ? ' is-selected' : ''}`}
               onClick={() => pickMood(id)}

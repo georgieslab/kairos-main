@@ -1,5 +1,5 @@
 // src/pages/WelcomeScreen.jsx
-// Refactored: 5 slides – Apple Spatial Glass, all Lucide icons
+// Refactored: 6 slides – Apple Spatial Glass, all Lucide icons + Miro companion
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,12 @@ import {
   ArrowRight, ArrowLeft, Shield, BookOpen,
   User, Heart, Star, Zap, Check,
   Infinity as InfinityIcon, Target, Layers, Compass, Clock,
-  Smartphone, Wifi, Lock, Download, Trash2
+  Smartphone, Wifi, Lock, Download, Trash2,
+  MessagesSquare, ImagePlus, CalendarDays
 } from 'lucide-react';
 import claudeLogo from '../icons/claude.png';
 import kairosLogo from '../icons/kairos-logo.svg';
+import MiroMark from '../components/common/MiroMark';
 import { APP_VERSION } from '../utils/versionControl';
 import '../styles/components/welcomeScreen.css';
 
@@ -27,12 +29,13 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
 
   const minSwipeDistance = 50;
 
-  // ===== 5 SLIDES (Merged) =====
+  // ===== 6 SLIDES =====
   const cards = [
     { id: 'hero', type: 'hero' },
     { id: 'express', type: 'express' },        // multimodal + NFC merged
-    { id: 'ai-intelligence', type: 'ai-intelligence' }, // AI + Personality merged
-    { id: 'journeys', type: 'journeys' },
+    { id: 'miro', type: 'miro' },              // Meet Miro — Conversation & Reflection
+    { id: 'ai-intelligence', type: 'ai-intelligence' }, // AI Analysis + Personality merged
+    { id: 'journeys', type: 'journeys' },      // 50+ guided paths
     { id: 'privacy-start', type: 'privacy-start' } // Privacy + Start merged
   ];
 
@@ -128,7 +131,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
       <p className="ws-hero-subtitle">{t('welcomeScreen.hero.subtitle', 'Your AI-Powered Journey to Self-Discovery')}</p>
       <div className="ws-hero-chips">
         <div className="ws-chip ws-chip-highlight">
-                    <InfinityIcon size={16} />
+          <InfinityIcon size={16} />
           <span>{t('welcomeScreen.hero.chipMultiModal', "World's First Multi-Modal")}</span>
         </div>
         <div className="ws-chip">
@@ -183,7 +186,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
         </div>
       </div>
 
-      {/* NFC Bridge – merged here */}
+      {/* NFC Bridge */}
       <div className="ws-nfc-bridge">
         <div className="ws-nfc-bridge-icon">
           <Smartphone size={20} />
@@ -201,7 +204,73 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
     </div>
   );
 
-  // ===== SLIDE 3: AI INTELLIGENCE (AI + Personality merged) =====
+  // ===== SLIDE 3: MEET MIRO (New Slide) =====
+  const MiroCard = () => (
+    <div className="ws-card-content ws-miro">
+      <div className="ws-badge ws-badge-miro">
+        <Sparkles size={14} />
+        <span>{t('welcomeScreen.miro.badge', 'MEET MIRO')}</span>
+      </div>
+
+      <div className="ws-miro-hero">
+        <div className="ws-miro-orb-container">
+          <MiroMark size={54} />
+          <div className="ws-miro-glow"></div>
+          <div className="ws-miro-rings">
+            <div className="ws-miro-ring"></div>
+            <div className="ws-miro-ring ws-miro-ring-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 className="ws-card-title">{t('welcomeScreen.miro.title', 'A Conversation With Your Journal')}</h2>
+      <p className="ws-card-subtitle">{t('welcomeScreen.miro.subtitle', 'Miro reads what you write and holds a continuous dialogue with your thoughts')}</p>
+
+      <div className="ws-miro-grid">
+        <div className="ws-miro-item">
+          <div className="ws-miro-item-icon ws-miro-icon-blue">
+            <BookOpen size={18} />
+          </div>
+          <div className="ws-miro-item-text">
+            <span className="ws-miro-item-title">{t('welcomeScreen.miro.featureReadsTitle', 'Cites Your Entries')}</span>
+            <span className="ws-miro-item-desc">{t('welcomeScreen.miro.featureReadsDesc', 'Answers reflect your actual writing, not generic advice')}</span>
+          </div>
+        </div>
+
+        <div className="ws-miro-item">
+          <div className="ws-miro-item-icon ws-miro-icon-violet">
+            <MessagesSquare size={18} />
+          </div>
+          <div className="ws-miro-item-text">
+            <span className="ws-miro-item-title">{t('welcomeScreen.miro.featureThreadTitle', 'Real Conversation')}</span>
+            <span className="ws-miro-item-desc">{t('welcomeScreen.miro.featureThreadDesc', 'Remembers the thread so you can explore deeper')}</span>
+          </div>
+        </div>
+
+        <div className="ws-miro-item">
+          <div className="ws-miro-item-icon ws-miro-icon-cyan">
+            <ImagePlus size={18} />
+          </div>
+          <div className="ws-miro-item-text">
+            <span className="ws-miro-item-title">{t('welcomeScreen.miro.featureVisionTitle', 'Reads Handwriting & Photos')}</span>
+            <span className="ws-miro-item-desc">{t('welcomeScreen.miro.featureVisionDesc', 'Attach photos of your journal pages or moments')}</span>
+          </div>
+        </div>
+
+        <div className="ws-miro-item">
+          <div className="ws-miro-item-icon ws-miro-icon-lavender">
+            <CalendarDays size={18} />
+          </div>
+          <div className="ws-miro-item-text">
+            <span className="ws-miro-item-title">{t('welcomeScreen.miro.featureDailyTitle', 'Kept by the Day')}</span>
+            <span className="ws-miro-item-desc">{t('welcomeScreen.miro.featureDailyDesc', 'Free message daily, preserved on your Home screen')}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ===== SLIDE 4: AI INTELLIGENCE (AI + Personality merged) =====
   const AIIntelligenceCard = () => (
     <div className="ws-card-content ws-ai-intelligence">
       <div className="ws-claude-badge-large">
@@ -250,7 +319,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
     </div>
   );
 
-  // ===== SLIDE 4: JOURNEYS =====
+  // ===== SLIDE 5: JOURNEYS =====
   const JourneysCard = () => (
     <div className="ws-card-content ws-journeys">
       <div className="ws-journeys-icon">
@@ -307,7 +376,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
     </div>
   );
 
-  // ===== SLIDE 5: PRIVACY + START (merged) =====
+  // ===== SLIDE 6: PRIVACY + START =====
   const PrivacyStartCard = () => (
     <div className="ws-card-content ws-privacy-start">
       <div className="ws-privacy-icon">
@@ -356,7 +425,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
           <span>{t('welcomeScreen.privacyStart.trustPrivacy', 'Privacy First')}</span>
         </div>
         <div className="ws-trust-badge">
-              <InfinityIcon size={14} />
+          <InfinityIcon size={14} />
           <span>{t('welcomeScreen.privacyStart.trustMultiModal', 'Multi-Modal')}</span>
         </div>
         <div className="ws-trust-badge">
@@ -367,14 +436,12 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
     </div>
   );
 
-  // Render as plain function calls (not <JSX/> components): these are
-  // redefined on every render, so mounting them as components gives React a
-  // new element type each time → full remount → CSS entrance animations
-  // replayed twice. Calling them keeps the DOM stable across re-renders.
+  // Render as plain function calls (keeps DOM stable across re-renders)
   const renderCard = (card) => {
     switch (card.type) {
       case 'hero': return HeroCard();
       case 'express': return ExpressCard();
+      case 'miro': return MiroCard();
       case 'ai-intelligence': return AIIntelligenceCard();
       case 'journeys': return JourneysCard();
       case 'privacy-start': return PrivacyStartCard();

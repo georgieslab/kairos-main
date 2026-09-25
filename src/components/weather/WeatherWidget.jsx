@@ -6,6 +6,7 @@ import {
   Sun, Moon, Cloud, CloudRain, CloudSnow, CloudLightning, Loader
 } from 'lucide-react';
 import WeatherDialog from './WeatherDialog';
+import '../../styles/components/weather.css';
 
 const WeatherWidget = ({ city, className, onWeatherData }) => {
   const { t } = useTranslation('weather');

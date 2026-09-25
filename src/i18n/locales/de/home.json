@@ -1,0 +1,46 @@
+{
+  "miro": {
+    "voiceInput": "Tippen, um mit Miro zu sprechen",
+    "listening": "Zuhören...",
+    "muteVoice": "Miros Stimme stummschalten",
+    "unmuteVoice": "Miros Stimme aktivieren",
+    "micDenied": "Mikrofonzugriff verweigert",
+    "voiceModeActive": "Miro spricht Antworten aus",
+    "voiceModeMuted": "Miros Stimme ist stummgeschaltet",
+    "voiceTitle": "Miro Stimme",
+    "listeningSubtitle": "Ich höre dir zu...",
+    "thinkingSubtitle": "Miro denkt über dein Journal nach...",
+    "speakingSubtitle": "Miro spricht...",
+    "tapToInterrupt": "Auf Orb tippen zum Unterbrechen",
+    "tapToSpeak": "Tippen zum Sprechen",
+    "voiceInputPrompt": "Sag etwas über deinen Tag oder dein Journal...",
+    "done": "Fertig",
+    "closeVoiceMode": "Sprachmodus schließen",
+    "typeMessage": "Nachricht eingeben...",
+    "continuousActive": "Fortlaufender Dialog aktiv",
+    "voiceWelcomePrompt": "Sprich ganz ungezwungen mit Miro über deinen Tag, deine Gedanken oder dein Journal.",
+    "starterPrompt1": "Wie ging es mir in letzter Zeit?",
+    "starterPrompt2": "Welche Muster siehst du in meinem Journal?",
+    "starterPrompt3": "Hilf mir über den heutigen Tag nachzudenken",
+    "voiceChamber": "Sprachraum",
+    "talkVoice": "Sprachmodus",
+    "openVoiceChamber": "Sprachraum öffnen",
+    "voiceReflection": "Sprach-Reflexion"
+  },
+  "physicalJournal": {
+    "title": "Physisches Journal",
+    "connected": "Verbunden",
+    "serialLabel": "Serien-Nr.",
+    "nfcReady": "NFC bereit · Buch antippen zum Schreiben",
+    "nfcScanning": "NFC-Tag wird gescannt...",
+    "nfcTapToWrite": "Tippen zum Schreiben",
+    "nfcDisabled": "NFC in Einstellungen deaktiviert",
+    "nfcNotAvailable": "Manuelle Synchronisierung verfügbar",
+    "pairPromptTitle": "Verbinde dein physisches Journal",
+    "pairPromptDesc": "Tippe auf das Messing-NFC-Siegel deines Journals, um deine physischen Seiten mit Miro AI zu verknüpfen.",
+    "pairAction": "Journal koppeln",
+    "manageCollection": "Meine Sammlung",
+    "openJournal": "Journal öffnen"
+  }
+}
+

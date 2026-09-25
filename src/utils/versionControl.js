@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '2.0.0';
+export const APP_VERSION = '2.2.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2463,6 +2463,70 @@ export const VERSION_HISTORY = [
   notes: [
     'The version number jumps because this is the release where the AI became someone you talk to rather than a feature that answers questions. There was no 1.5.0 — it existed only as a web build and never shipped.',
     'The two-day reminder is Android only. It is scheduled on the device rather than sent from a server, which is why it needs no account setup and also why it cannot reach the web version.'
+  ]
+},
+{
+  version: '2.0.1',
+  releaseDate: '2026-09-06',
+  codename: 'Spatial Sanctuary & Miro Lock',
+  features: [
+    'Two-Stage Apple Spatial Lock Screen with live clock, local weather, and 6-digit PIN keypad.',
+    'Multitasking Privacy Shield concealing private journal reflections when switching apps in background.',
+    'Standalone Lock Button on Home Screen for immediate one-tap security.',
+    'Miro Lock Screen Companion: Miro welcomes you with a calming ambient glow and personalized reflection thought.',
+    '30-Day Artisan Subscription promo code redemption support in Settings.',
+    'Mobile Bento UX: unconstrained full-width greeting, top reflection card, and balanced 2-column bento widgets.'
+  ],
+  improvements: [
+    'Eliminated mobile overlap between the daily prompt hero card and the week activity calendar.',
+    'Apple continuous curves, deep spatial glass saturation, and tactile haptic feedback throughout security controls.'
+  ],
+  bugFixes: [
+    'Fixed weather card plain-text display with frosted spatial glass modal.',
+    'Corrected timestamp parsing for promo code subscription dates.'
+  ]
+},
+{
+  version: '2.1.0',
+  releaseDate: '2026-09-06',
+  codename: 'Miro Sanctuary & Clean Insights',
+  features: [
+    'Calm Apple Spatial Glass Miro Sanctuary Plate with authentic animated MiroMark and living ambient breathing aura on lock screen.',
+    'Full-fledged Two-Stage Spatial Lock Screen with live clock, local weather, and 6-digit PIN keypad.',
+    'Multitasking Privacy Shield concealing reflections during app switching.',
+    '30-day Artisan subscription promo code HalfJournal2026 redemption.'
+  ],
+  improvements: [
+    'Removed Daily AI Insight container from the INSIGHTS dashboard for a cleaner, decluttered analytical overview.',
+    'Enhanced Weather Mood aura visibility with vibrant solid jewel selection, dark isolation ring, and softened backdrop glare.',
+    'Mobile Bento UX with unconstrained greeting width and separated Standalone Lock jewel.'
+  ],
+  bugFixes: [
+    'Resolved MiroLivingArt reference error on lock screen cover overlay.',
+    'Fixed and cleaned all CSS syntax warnings in appLock.css.',
+    'Fixed calendar and prompt container layout overlap on mobile.'
+  ]
+},
+{
+  version: '2.2.0',
+  releaseDate: '2026-09-17',
+  codename: 'Acoustic Resonance & Physical-Digital Harmony',
+  features: [
+    'Contemplative Ambient Soundscapes Audio Suite with 4 infinite procedural Web Audio loops (Rain on Japanese Slate, Temple Singing Bowl, Fountain Pen Whispers, Celestial Night).',
+    'Focus Session Timer with customizable presets (15m–60m) and gentle 3-second audio fade-out.',
+    '1-Tap Direct Voice Jewel on the Home screen and Miro card header with living equalizer animation for instant hands-free reflection.',
+    'Physical Journal NFC Status Card in Apple Spatial Glass, featuring active edition tier, stamped gold foil serial badge, and live NFC readiness.',
+    'Trilingual Language Engine with seamless zero-reload switching across English, German, and Georgian.'
+  ],
+  improvements: [
+    'Interactive Miro living orb on the Home card for instant voice mode trigger.',
+    'Tactile volume slider and 1-tap mute toggle on the Listen screen.',
+    'Dynamic soundscape color morphing for the central morphing liquid blob player.',
+    'Announcements deck in What’s New highlighting audio soundscapes and physical book connection.'
+  ],
+  bugFixes: [
+    'Fixed voice chamber modal unclosed DOM elements and turn-taking loop.',
+    'Ensured full offline playback for ambient soundscapes without network latency.'
   ]
 }
 

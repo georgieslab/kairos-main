@@ -1,55 +1,230 @@
 /* src/styles/components/kairosAi.css
  *
- * Kairos AI on Home. Mobile-first, like every other component stylesheet here;
- * the desktop placement lives in layouts/desktop.css with the rest of the
- * Mosaic.
- *
- * It borrows the plate language of the other Home tiles rather than inventing
- * one — same glass, same radius, same inner top light — because it is a tile
- * among tiles. What distinguishes it is the input, which is the only place on
- * Home that accepts typing.
+ * Kairos AI (Miro) on Home.
+ * High-end Apple Spatial Glass aesthetics with quiet, living presence.
+ * No overwhelming visual noise or heavy bouncing blobs — just calm, refined
+ * light and responsive intelligence.
  */
 
 .kai-card {
-  /* Miro's own colours, deliberately NOT --journey-color.
-     Every other tile on Home takes the active path's hue; this one took it
-     too, which meant the card glowed the brown-gold of Kairos Moments right
-     next to a night-blue mark. Miro is not part of any path, so the surface
-     does not change colour with the path you happen to be walking. Deep water
-     for the body of the glow, the mark's own violet for the second light. */
-  --kai-glow: 74, 106, 170;
-  --kai-glow-alt: 116, 110, 205;
+  --kai-glow: 74, 106, 170;           /* Deep ocean blue */
+  --kai-glow-alt: 116, 110, 205;      /* Celestial violet */
+  --kai-glow-cyan: 79, 209, 224;      /* Thought cyan */
+  --kai-glow-starlight: 199, 210, 254;
 
   position: relative;
   isolation: isolate;
-  overflow: hidden;          /* keeps the drifting blobs inside the plate */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 14px;
   padding: 20px;
   margin-top: 16px;
   border-radius: 28px;
-  background: rgba(28, 28, 30, 0.65);
+  background: rgba(24, 25, 30, 0.68);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 8px 24px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    0 0 24px rgba(var(--kai-glow), 0.08);
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ── Refined Living Ambient Presence ────────────────────────────────────────*/
+.kai-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  opacity: 0.65;
+  transition: opacity 0.6s ease;
+}
+
+/* Subtle, breathing top-left ambient light field near Miro's mark */
+.kai-ambient::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  left: -40px;
+  width: 240px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--kai-glow), 0.38) 0%,
+    rgba(var(--kai-glow-alt), 0.16) 55%,
+    transparent 75%
+  );
+  filter: blur(42px);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Subtle corner light accent */
+.kai-ambient::after {
+  content: "";
+  position: absolute;
+  bottom: -40px;
+  right: -30px;
+  width: 180px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--kai-glow-cyan), 0.12) 0%,
+    transparent 70%
+  );
+  filter: blur(36px);
+}
+
+/* When the card is active or typing, the ambient light responds with gentle warmth */
+.kai-card:focus-within .kai-ambient::before,
+.kai-card.is-working .kai-ambient::before {
+  opacity: 0.9;
+  transform: scale(1.08);
+}
+
+.kai-card.is-working {
+  border-color: rgba(var(--kai-glow-alt), 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 8px 24px rgba(0, 0, 0, 0.24),
+    0 0 32px rgba(var(--kai-glow-alt), 0.16);
+}
+
+/* Real content sits above ambient layer */
+.kai-card > *:not(.kai-ambient) {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Head ─────────────────────────────────────────────────────────────────*/
 .kai-head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
 }
 
-/* The mark brings its own glow and colour (see miroMark.css); all this has to
-   do is stop the head squashing it. */
+.kai-head-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
 .kai-head .miro-mark {
+  position: relative;
+  z-index: 1;
   flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kai-card:hover .kai-head .miro-mark {
+  transform: scale(1.03);
+}
+
+/* ── Miro Orb Wrap & Living Acoustic Resonance ───────────────────────────*/
+.miro-orb-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.miro-orb-interactive {
+  cursor: pointer;
+}
+
+.miro-orb-clickable {
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.miro-orb-clickable:hover {
+  transform: scale(1.08);
+}
+
+.miro-orb-clickable:active {
+  transform: scale(0.96);
+}
+
+/* Living Acoustic Resonance Aura (Soft deep-water breathing ripples) */
+.miro-speaking-glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle,
+    rgba(var(--kai-glow-alt), 0.5) 0%,
+    rgba(var(--kai-glow), 0.35) 45%,
+    rgba(var(--kai-glow-cyan), 0.2) 70%,
+    transparent 85%
+  );
+  filter: blur(8px);
+  animation: miroAcousticResonance 3.2s ease-in-out infinite alternate;
+}
+
+.miro-speaking-glow::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--kai-glow), 0.28) 0%,
+    rgba(var(--kai-glow-alt), 0.16) 55%,
+    transparent 78%
+  );
+  filter: blur(12px);
+  animation: miroAcousticBreathing 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes miroAcousticResonance {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.14);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes miroAcousticBreathing {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.22);
+  }
+}
+
+.kai-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.kai-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .kai-title {
@@ -59,22 +234,236 @@
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Says how much of their journal it has actually read. The number is the point:
-   an assistant that claims to know you is worth less than one that tells you
-   exactly what it has seen. */
+.kai-artisan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(122, 110, 224, 0.45), rgba(79, 209, 224, 0.35));
+  border: 1px solid rgba(163, 176, 255, 0.4);
+  box-shadow: 0 0 10px rgba(122, 110, 224, 0.25);
+}
+
+.kai-free-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .kai-sub {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Head Actions ─────────────────────────────────────────────────────────*/
+.kai-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── 1-Tap Voice Chamber Jewel ───────────────────────────────────────────*/
+.kai-voice-jewel-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(85, 139, 110, 0.22) 0%, rgba(201, 169, 97, 0.18) 100%);
+  border: 1px solid rgba(201, 169, 97, 0.38);
+  color: #f7e7ce;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.22),
+    0 0 12px rgba(201, 169, 97, 0.14);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.kai-voice-jewel-aura {
+  position: absolute;
+  inset: -6px;
+  border-radius: 28px;
+  background: radial-gradient(circle, rgba(201, 169, 97, 0.25) 0%, transparent 70%);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.kai-voice-jewel-btn:hover {
+  background: linear-gradient(135deg, rgba(85, 139, 110, 0.32) 0%, rgba(201, 169, 97, 0.28) 100%);
+  border-color: rgba(201, 169, 97, 0.65);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 4px 14px rgba(0, 0, 0, 0.3),
+    0 0 18px rgba(201, 169, 97, 0.32);
+}
+
+.kai-voice-jewel-btn:hover .kai-voice-jewel-aura {
+  opacity: 1;
+}
+
+.kai-voice-jewel-btn:active {
+  transform: scale(0.96);
+}
+
+.kai-voice-jewel-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.kai-voice-jewel-icon {
+  color: #C9A961;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.kai-voice-jewel-btn:hover .kai-voice-jewel-icon {
+  transform: scale(1.1);
+  color: #ffd977;
+}
+
+.kai-voice-jewel-label {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Voice Equalizer Waves */
+.kai-voice-jewel-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+  margin-left: 1px;
+}
+
+.kai-voice-jewel-eq span {
+  width: 2px;
+  background: #C9A961;
+  border-radius: 1px;
+  opacity: 0.8;
+  animation: jewelWave 1.4s ease-in-out infinite alternate;
+}
+
+.kai-voice-jewel-eq span:nth-child(1) { height: 4px; animation-delay: 0s; }
+.kai-voice-jewel-eq span:nth-child(2) { height: 9px; animation-delay: 0.25s; }
+.kai-voice-jewel-eq span:nth-child(3) { height: 6px; animation-delay: 0.5s; }
+
+@keyframes jewelWave {
+  0% { height: 3px; }
+  50% { height: 10px; }
+  100% { height: 4px; }
+}
+
+@media (max-width: 420px) {
+  .kai-voice-jewel-btn {
+    padding: 5px 9px;
+    gap: 5px;
+    font-size: 11px;
+  }
+}
+
+/* Voice Response Mute/Unmute Toggle */
+.kai-voice-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.kai-voice-toggle-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.kai-voice-toggle-btn.is-active {
+  color: rgba(199, 210, 254, 0.95);
+  background: rgba(116, 110, 205, 0.18);
+  border-color: rgba(116, 110, 205, 0.35);
+  box-shadow: 0 0 10px rgba(116, 110, 205, 0.2);
+}
+
+.kai-voice-toggle-btn.is-muted {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.kai-voice-toggle-btn:active {
+  transform: scale(0.94);
+}
+
+.kai-new-chat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.kai-new-chat-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.kai-new-chat-btn:active {
+  transform: scale(0.96);
 }
 
 /* ── Input ────────────────────────────────────────────────────────────────*/
 .kai-input-row {
-  /* Its own cooler palette. The card is deep water; the one thing on it you
-     can actually type into is lit differently so it reads as live rather than
-     as another panel. */
   --kai-edge-a: 122, 110, 224;   /* violet */
   --kai-edge-b: 79, 209, 224;    /* cyan */
   --kai-edge-c: 106, 143, 240;   /* blue */
+  --kai-edge-d: 199, 210, 254;   /* starlight */
 
   position: relative;
   display: flex;
@@ -83,65 +472,81 @@
   padding: 10px 10px 10px 16px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.04);
-  /* Nearly invisible on its own — the ::before ring is the real edge. This is
-     only what remains if mask-composite is unsupported. */
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
 }
 
-/* The lit edge. Same masked-ring trick as the card, but with a linear gradient
-   wider than the box, slid sideways — so the colour travels along the border
-   rather than rotating around it. Painted above the row: it is a 1px trace at
-   the very edge and the content is inset 10px, so nothing is covered. */
+/* Luminous animated flowing border */
 .kai-input-row::before {
   content: "";
   position: absolute;
-  inset: 0;
-  z-index: 1;
+  inset: -1px;
   border-radius: inherit;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+  opacity: 0;
+  transition: opacity 0.35s ease;
   background: linear-gradient(
-    100deg,
-    rgba(var(--kai-edge-a), 0.9),
+    125deg,
+    rgba(var(--kai-edge-a), 0.95),
     rgba(var(--kai-edge-b), 0.9),
+    rgba(var(--kai-edge-d), 0.95),
     rgba(var(--kai-edge-c), 0.9),
-    rgba(var(--kai-edge-a), 0.9)
+    rgba(var(--kai-edge-a), 0.95)
   );
-  background-size: 300% 100%;
-  animation: kaiEdgeFlow 9s linear infinite;
+  background-size: 300% 300%;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask-composite: exclude;
+  z-index: 2;
 }
 
-@keyframes kaiEdgeFlow {
-  from { background-position:   0% 50%; }
-  to   { background-position: 300% 50%; }
+/* Border animation triggers when input is active (focused, typing, or thinking) */
+.kai-input-row:focus-within::before,
+.kai-input-row.is-typing::before,
+.kai-input-row.is-thinking::before {
+  opacity: 1;
+  animation: kaiBorderFlow 4s ease infinite;
 }
 
-/* Focus brings the edge fully up and puts light in the air around it. */
-.kai-input-row:focus-within::before { opacity: 1; }
+.kai-input-row.is-thinking::before {
+  animation: kaiBorderFlow 2s linear infinite;
+}
 
-.kai-input-row:focus-within {
+@keyframes kaiBorderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.kai-input-row:focus-within,
+.kai-input-row.is-typing,
+.kai-input-row.is-thinking {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: transparent;
   box-shadow:
-    0 0 0 1px rgba(var(--kai-edge-a), 0.16),
-    0 0 22px rgba(var(--kai-edge-a), 0.20),
-    0 0 44px rgba(var(--kai-edge-c), 0.12);
+    inset 0 0 16px rgba(var(--kai-edge-a), 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 16px rgba(var(--kai-edge-a), 0.22),
+    0 0 32px rgba(var(--kai-edge-b), 0.12);
 }
 
-/* Hovering says it is live before you commit to clicking it. */
 @media (hover: hover) {
-  .kai-input-row:hover:not(:focus-within)::before { opacity: 0.78; }
+  .kai-input-row:hover:not(:focus-within):not(.is-typing):not(.is-thinking) {
+    box-shadow: inset 0 0 10px rgba(var(--kai-edge-a), 0.08);
+  }
+  .kai-input-row:hover:not(:focus-within):not(.is-typing):not(.is-thinking)::before {
+    opacity: 0.45;
+  }
 }
 
-/* A textarea rather than an input so a long question wraps instead of
-   scrolling sideways out of view — you cannot re-read what you are asking if
-   it only shows the last forty characters. field-sizing does the growing where
-   it is supported; elsewhere it stays one comfortable row. */
 .kai-input {
   flex: 1;
   min-width: 0;
@@ -151,7 +556,7 @@
   background: none;
   color: rgba(255, 255, 255, 0.95);
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14.5px;
   line-height: 1.45;
   max-height: 120px;
   field-sizing: content;
@@ -165,7 +570,9 @@
   cursor: not-allowed;
 }
 
+/* ── Miro Send Button ─────────────────────────────────────────────────────*/
 .kai-send {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,30 +582,103 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  /* White, not the near-black that worked against a mid-gold: on deep water
-     a dark glyph disappears. */
-  color: #fff;
-  background: rgb(var(--kai-glow));
-  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              color 0.25s ease;
+  overflow: visible;
 }
 
 .kai-send:disabled {
-  opacity: 0.3;
   cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Ambient glow ring behind the button when ready */
+.kai-send-aura {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(122, 110, 224, 0.45) 0%,
+    rgba(79, 209, 224, 0.3) 50%,
+    transparent 75%
+  );
+  filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: 0;
+}
+
+.kai-send-icon {
+  position: relative;
+  z-index: 3;
+}
+
+/* When ready / typing (canSend) */
+.kai-send.is-ready,
+.kai-send:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(122, 110, 224, 0.95) 0%,
+    rgba(74, 106, 170, 0.95) 55%,
+    rgba(79, 209, 224, 0.85) 100%
+  );
+  border-color: transparent;
+  box-shadow:
+    inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+    0 4px 14px rgba(74, 106, 170, 0.4),
+    0 0 16px rgba(122, 110, 224, 0.35);
+  animation: kaiSendPulse 3.5s ease-in-out infinite alternate;
+}
+
+.kai-send.is-ready .kai-send-aura,
+.kai-send:not(:disabled) .kai-send-aura {
+  opacity: 1;
+}
+
+@keyframes kaiSendPulse {
+  0% {
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+      0 4px 12px rgba(74, 106, 170, 0.35),
+      0 0 12px rgba(122, 110, 224, 0.25);
+  }
+  100% {
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.65),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+      0 6px 18px rgba(74, 106, 170, 0.5),
+      0 0 22px rgba(79, 209, 224, 0.45);
+  }
 }
 
 @media (hover: hover) {
-  .kai-send:not(:disabled):hover { transform: scale(1.08); }
+  .kai-send:not(:disabled):hover {
+    transform: translateY(-2px) scale(1.06);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow:
+      inset 0 1px 1.5px rgba(255, 255, 255, 0.75),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+      0 8px 22px rgba(122, 110, 224, 0.55),
+      0 0 24px rgba(79, 209, 224, 0.55);
+  }
+  .kai-send:not(:disabled):hover .kai-send-icon {
+    transform: translateY(-1px);
+  }
 }
-.kai-send:not(:disabled):active { transform: scale(0.94); }
 
-/* While it is thinking, the colour runs round the edge faster. Only the
-   duration is overridden — restating the shorthand would drop the linear
-   timing and the infinite count. The old version animated border-color, which
-   the ring now covers, so it would have pulsed somewhere nobody could see. */
-.kai-input-row.is-thinking::before {
-  opacity: 1;
-  animation-duration: 2.6s;
+.kai-send:not(:disabled):active {
+  transform: scale(0.92);
 }
 
 .kai-thinking,
@@ -210,13 +690,7 @@
 .kai-thinking { color: rgba(255, 255, 255, 0.45); }
 .kai-error    { color: rgba(255, 170, 150, 0.9); }
 
-/* ── The thread ───────────────────────────────────────────────────────────
- * A conversation, so the turns stay on screen and accumulate. The thread
- * scrolls inside its own box rather than growing the tile without limit —
- * Home is a mosaic of fixed plates, and one that stretched to a thousand
- * pixels because you had a long conversation would push everything below it
- * off the screen.
- */
+/* ── The thread ───────────────────────────────────────────────────────────*/
 .kai-thread {
   display: flex;
   flex-direction: column;
@@ -224,10 +698,7 @@
   max-height: 340px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Room on every side, not just the right. This is a scroll container, so it
-     clips — and the orb's glow spills well past its layout box, which is what
-     was shaving its bottom and left edges. */
-  padding: 2px 4px 6px 8px;
+  padding: 4px 6px 8px 6px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
@@ -243,22 +714,20 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  animation: kaiMsgIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: kaiMsgIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* A message is a container now, so the text rules live on the paragraph. */
 .kai-msg-text {
   margin: 0;
   white-space: pre-wrap;
 }
 
 @keyframes kaiMsgIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Yours sits in a bubble, held to the right and to a readable width so a long
-   question does not become a wall the answer has to compete with. */
+/* User Bubble */
 .kai-msg-you {
   align-self: flex-end;
   max-width: 85%;
@@ -266,34 +735,27 @@
   border-radius: 16px 16px 4px 16px;
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(var(--kai-glow), 0.18);
-  border: 1px solid rgba(var(--kai-glow), 0.24);
+  color: rgba(255, 255, 255, 0.94);
+  background: rgba(var(--kai-glow), 0.22);
+  border: 1px solid rgba(var(--kai-glow), 0.30);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-/* Its replies are not bubbled. They are the thing you came to read, and prose
-   reads better full width than boxed. */
+/* Miro Prose */
 .kai-msg-ai {
   align-self: stretch;
-  font-size: 15px;
+  font-size: 14.5px;
   line-height: 1.62;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
 }
 
-/* The wait is Miro's own sphere (see MiroThinking). All this has to do is
- * seat it in the thread — the object brings its own motion and glow.
- */
-/* Centred, not left-aligned with the prose. It is an object rather than the
-   first line of an answer, and hanging it off the left margin made it read as
-   a stray bullet. */
+/* Centered Thinking Orb */
 .kai-waiting {
   display: flex;
   justify-content: center;
-  padding: 8px 0 10px;
+  padding: 6px 0;
 }
 
-/* Running out for the day is not an error — it is the plan working. It should
-   not be coloured like something went wrong. */
 .kai-limit {
   margin: 0;
   font-size: 12.5px;
@@ -301,181 +763,140 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* ── Decoration ───────────────────────────────────────────────────────────
- * Everything below is behind or on top of the content and inert to pointers.
- * The card is the only surface on Home you type into, so it earns more motion
- * than the tiles around it — but it is also the surface you read long prose
- * on, so the motion stays slow and off to the sides. Nothing moves underneath
- * the text itself.
- */
-
-/* Real content sits above the aurora. The aurora is excluded by name rather
-   than given a negative z-index, which would push it behind the card's own
-   background and make it invisible. */
-.kai-card > *:not(.kai-aurora) {
+/* ── Date Separator in Chat ───────────────────────────────────────────────*/
+.kai-date-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0 2px;
   position: relative;
-  z-index: 1;
 }
 
-.kai-aurora {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.kai-blob {
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.5;
-  will-change: transform;
-}
-
-.kai-blob-a {
-  top: -110px;
-  left: -70px;
-  background: radial-gradient(circle, rgba(var(--kai-glow), 0.55), transparent 70%);
-  animation: kaiDriftA 22s ease-in-out infinite;
-}
-
-.kai-blob-b {
-  right: -90px;
-  bottom: -120px;
-  background: radial-gradient(circle, rgba(var(--kai-glow-alt), 0.42), transparent 70%);
-  animation: kaiDriftB 28s ease-in-out infinite;
-}
-
-@keyframes kaiDriftA {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  33%      { transform: translate3d(40px, 26px, 0) scale(1.14); }
-  66%      { transform: translate3d(14px, 52px, 0) scale(0.94); }
-}
-@keyframes kaiDriftB {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  40%      { transform: translate3d(-46px, -30px, 0) scale(1.1); }
-  75%      { transform: translate3d(-16px, -58px, 0) scale(0.92); }
-}
-
-/* A light travelling round the rim while it answers. Drawn as a conic gradient
-   masked down to the border width so it traces the card's actual rounded edge
-   instead of approximating it with a second box. Where @property is missing
-   the angle simply does not animate and a static arc is left, which is a fine
-   thing to degrade to. */
-@property --kai-a {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.kai-card::before {
+.kai-date-separator::before {
   content: "";
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: inherit;
-  padding: 1px;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08) 20%, rgba(255, 255, 255, 0.08) 80%, transparent);
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.45s ease;
-  background: conic-gradient(
-    from var(--kai-a),
-    transparent 0deg,
-    rgba(var(--kai-glow), 0.75) 34deg,
-    transparent 86deg,
-    transparent 360deg
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask-composite: exclude;
 }
 
-.kai-card.is-working::before {
-  opacity: 1;
-  animation: kaiRing 2.4s linear infinite;
+.kai-date-separator span {
+  position: relative;
+  z-index: 1;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: rgba(20, 20, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
 }
 
-@keyframes kaiRing { to { --kai-a: 360deg; } }
-
-/* The plate breathes while it works. Every keyframe restates the base shadow
-   layers: an animated box-shadow replaces the declared one outright, so
-   omitting them here would drop the inner top light and the depth shadow for
-   as long as the animation ran. */
-.kai-card.is-working {
-  animation: kaiWorking 2.4s ease-in-out infinite;
+/* ── Upgrade Prompt for Free Users ────────────────────────────────────────*/
+.kai-upgrade-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(74, 106, 170, 0.18), rgba(116, 110, 205, 0.14));
+  border: 1px solid rgba(116, 110, 205, 0.28);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  animation: kaiMsgIn 0.35s ease both;
 }
 
-@keyframes kaiWorking {
-  0%, 100% {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 26px rgba(var(--kai-glow), 0.10);
-  }
-  50% {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 52px rgba(var(--kai-glow), 0.30);
-  }
+.kai-upgrade-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-/* While it is answering, the opening in Miro's ring comes round faster. Only
-   the duration is touched — restating the shorthand would drop the linear
-   timing and the infinite count with it — so the mark's own glow and breath
-   are untouched and it never stops being calm. */
-.kai-card.is-working .miro-ring {
-  animation-duration: 7s;
+.kai-limit-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
 }
 
-/* ── Images ───────────────────────────────────────────────────────────────*/
+.kai-limit-desc {
+  margin: 0;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.35;
+}
 
-/* Sits between the thread and the input, where it reads as part of what you
-   are about to send rather than as something already sent. */
+.kai-upgrade-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.kai-upgrade-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.5);
+}
+
+.kai-upgrade-btn:active {
+  transform: scale(0.96);
+}
+
+/* ── Attachments ──────────────────────────────────────────────────────────*/
 .kai-attach {
   position: relative;
+  display: inline-flex;
   align-self: flex-start;
-  animation: kaiPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-@keyframes kaiPop {
-  from { opacity: 0; transform: scale(0.86); }
-  to   { opacity: 1; transform: scale(1); }
+  padding: 3px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .kai-attach-img {
   display: block;
-  width: 84px;
-  height: 84px;
+  max-width: 140px;
+  max-height: 90px;
   object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
 }
 
 .kai-attach-x {
   position: absolute;
-  top: -7px;
-  right: -7px;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(20, 20, 22, 0.92);
+  background: rgba(30, 30, 34, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
-  transition: transform 0.18s ease, background 0.2s ease;
+  transition: transform 0.15s ease;
 }
-@media (hover: hover) {
-  .kai-attach-x:hover { transform: scale(1.12); background: rgba(40, 40, 44, 0.95); }
-}
+
+.kai-attach-x:hover { transform: scale(1.1); color: #fff; }
 
 .kai-attach-btn {
   display: flex;
@@ -483,26 +904,122 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  flex-shrink: 0;
-  padding: 0;
+  border-radius: 12px;
   border: none;
-  border-radius: 50%;
-  background: none;
-  color: rgba(255, 255, 255, 0.42);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease, transform 0.18s ease;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
-.kai-attach-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-@media (hover: hover) {
-  .kai-attach-btn:not(:disabled):hover {
-    color: rgb(var(--kai-glow));
-    background: rgba(var(--kai-glow), 0.12);
-    transform: translateY(-1px);
+
+.kai-attach-btn:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.kai-attach-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Microphone Jewel Button ──────────────────────────────────────────────*/
+.kai-mic-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.kai-mic-btn:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.kai-mic-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Molten amber / celestial violet pulse with tactile ripple aura */
+.kai-mic-btn.is-listening {
+  color: #fff;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #8b5cf6 100%);
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow:
+    0 0 14px rgba(245, 158, 11, 0.5),
+    0 0 24px rgba(139, 92, 246, 0.4);
+  animation: kaiMicListeningPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.kai-mic-aura {
+  position: absolute;
+  inset: -6px;
+  border-radius: 16px;
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.45) 0%,
+    rgba(139, 92, 246, 0.35) 50%,
+    transparent 75%
+  );
+  filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.kai-mic-btn.is-listening .kai-mic-aura {
+  opacity: 1;
+  animation: kaiMicAuraRipple 2s ease-out infinite;
+}
+
+.kai-mic-icon {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes kaiMicListeningPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 12px rgba(245, 158, 11, 0.45),
+      0 0 20px rgba(139, 92, 246, 0.35);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow:
+      0 0 20px rgba(245, 158, 11, 0.75),
+      0 0 30px rgba(139, 92, 246, 0.6);
   }
 }
 
-/* Capped by height rather than width so a tall photograph of a notebook page
-   does not take over the thread. */
+@keyframes kaiMicAuraRipple {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
 .kai-msg-img {
   display: block;
   max-width: 100%;
@@ -512,8 +1029,6 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* What is left of an image after a reload: the pixels were never stored, so
-   this says an image was here rather than showing a broken frame. */
 .kai-msg-imgnote {
   display: inline-flex;
   align-items: center;
@@ -553,100 +1068,192 @@
 
 @keyframes kaiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ── Light theme ──────────────────────────────────────────────────────────
- * Home puts .hs-light on .spatial-home itself, so this card is addressed
- * through it rather than through the global .light-theme on <html>.
- */
-.hs-light .kai-card {
-  background: rgba(245, 245, 247, 0.75);
-  border-color: rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(0, 0, 0, 0.05);
+/* ── Light Mode Support ───────────────────────────────────────────────────*/
+.hs-light .kai-card,
+.light-theme .kai-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 24px rgba(0, 0, 0, 0.06);
 }
-.hs-light .kai-title  { color: rgba(0, 0, 0, 0.85); }
-.hs-light .kai-sub    { color: rgba(0, 0, 0, 0.5); }
-.hs-light .kai-msg-ai { color: rgba(0, 0, 0, 0.85); }
-.hs-light .kai-msg-you {
-  color: rgba(0, 0, 0, 0.88);
-  background: rgba(var(--kai-glow), 0.14);
-  border-color: rgba(var(--kai-glow), 0.22);
+
+.hs-light .kai-ambient,
+.light-theme .kai-ambient {
+  opacity: 0.35;
 }
-.hs-light .kai-limit { color: rgba(0, 0, 0, 0.5); }
-.hs-light .kai-input  { color: rgba(0, 0, 0, 0.88); }
-.hs-light .kai-input::placeholder { color: rgba(0, 0, 0, 0.35); }
-.hs-light .kai-input-row {
+
+.hs-light .kai-title,
+.light-theme .kai-title {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.hs-light .kai-sub,
+.light-theme .kai-sub {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.hs-light .kai-input-row,
+.light-theme .kai-input-row {
   background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.08);
 }
-/* The same travelling edge, pulled back: at full strength these colours glare
-   against a near-white plate instead of glowing on it. */
-.hs-light .kai-input-row::before { opacity: 0.66; }
-@media (hover: hover) {
-  .hs-light .kai-input-row:hover:not(:focus-within)::before { opacity: 0.85; }
-}
-.hs-light .kai-send { color: #fff; }
 
-/* Light theme: the same decoration, dialled down. On a pale plate the blobs
-   read as smudges at the dark-theme opacity, and the drop veil has to be
-   light or it flashes black over a white card. */
-.hs-light .kai-blob { opacity: 0.32; }
-.hs-light .kai-msg-imgnote {
-  color: rgba(0, 0, 0, 0.5);
+.hs-light .kai-input-row:focus-within,
+.hs-light .kai-input-row.is-typing,
+.hs-light .kai-input-row.is-thinking,
+.light-theme .kai-input-row:focus-within,
+.light-theme .kai-input-row.is-typing,
+.light-theme .kai-input-row.is-thinking {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: transparent;
+  box-shadow:
+    inset 0 0 14px rgba(122, 110, 224, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(122, 110, 224, 0.18),
+    0 0 30px rgba(79, 209, 224, 0.10);
+}
+
+.hs-light .kai-input,
+.light-theme .kai-input {
+  color: rgba(0, 0, 0, 0.92);
+}
+
+.hs-light .kai-input::placeholder,
+.light-theme .kai-input::placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.hs-light .kai-send,
+.light-theme .kai-send {
   background: rgba(0, 0, 0, 0.05);
-}
-.hs-light .kai-attach-btn { color: rgba(0, 0, 0, 0.4); }
-.hs-light .kai-attach-img,
-.hs-light .kai-msg-img { border-color: rgba(0, 0, 0, 0.1); }
-.hs-light .kai-attach-x {
-  background: rgba(250, 250, 252, 0.95);
-  border-color: rgba(0, 0, 0, 0.12);
-  color: rgba(0, 0, 0, 0.75);
-}
-.hs-light .kai-drop {
-  color: rgba(0, 0, 0, 0.85);
-  background: rgba(248, 248, 250, 0.8);
-}
-.hs-light .kai-card.is-working {
-  animation: kaiWorkingLight 2.4s ease-in-out infinite;
-}
-@keyframes kaiWorkingLight {
-  0%, 100% {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 8px 20px rgba(0, 0, 0, 0.05),
-      0 0 24px rgba(var(--kai-glow), 0.10);
-  }
-  50% {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 8px 20px rgba(0, 0, 0, 0.05),
-      0 0 48px rgba(var(--kai-glow), 0.26);
-  }
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
 }
 
-/* Reduced motion keeps every state legible — the ring and the working glow
-   are how you know it is busy, so they resolve to a steady version rather
-   than disappearing. */
+.hs-light .kai-send.is-ready,
+.hs-light .kai-send:not(:disabled),
+.light-theme .kai-send.is-ready,
+.light-theme .kai-send:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(106, 92, 210, 0.95) 0%,
+    rgba(74, 106, 170, 0.95) 55%,
+    rgba(60, 185, 200, 0.9) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    0 4px 14px rgba(74, 106, 170, 0.35),
+    0 0 16px rgba(106, 92, 210, 0.3);
+}
+
+.hs-light .kai-msg-you,
+.light-theme .kai-msg-you {
+  color: rgba(0, 0, 0, 0.92);
+  background: rgba(var(--kai-glow), 0.12);
+  border-color: rgba(var(--kai-glow), 0.20);
+}
+
+.hs-light .kai-msg-ai,
+.light-theme .kai-msg-ai {
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.hs-light .kai-artisan-badge {
+  background: linear-gradient(135deg, rgba(122, 110, 224, 0.22), rgba(79, 209, 224, 0.2));
+  color: #3b368c;
+  border-color: rgba(122, 110, 224, 0.35);
+  box-shadow: 0 0 8px rgba(122, 110, 224, 0.15);
+}
+
+.hs-light .kai-free-badge {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.55);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.hs-light .kai-new-chat-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.09);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.hs-light .kai-new-chat-btn:hover {
+  background: rgba(0, 0, 0, 0.09);
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.hs-light .kai-voice-toggle-btn,
+.light-theme .kai-voice-toggle-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.09);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.hs-light .kai-voice-toggle-btn:hover,
+.light-theme .kai-voice-toggle-btn:hover {
+  color: #000;
+  background: rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.hs-light .kai-voice-toggle-btn.is-active,
+.light-theme .kai-voice-toggle-btn.is-active {
+  background: rgba(116, 110, 205, 0.16);
+  border-color: rgba(116, 110, 205, 0.35);
+  color: #4338ca;
+}
+
+.hs-light .kai-mic-btn,
+.light-theme .kai-mic-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.hs-light .kai-mic-btn:hover:not(:disabled),
+.light-theme .kai-mic-btn:hover:not(:disabled) {
+  color: #000;
+  background: rgba(0, 0, 0, 0.09);
+}
+
+.hs-light .miro-speaking-glow,
+.light-theme .miro-speaking-glow {
+  background: radial-gradient(
+    circle,
+    rgba(var(--kai-glow-alt), 0.35) 0%,
+    rgba(var(--kai-glow), 0.25) 45%,
+    rgba(var(--kai-glow-cyan), 0.15) 70%,
+    transparent 85%
+  );
+}
+
+.hs-light .kai-date-separator span {
+  background: rgba(240, 240, 244, 0.95);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.hs-light .kai-upgrade-prompt {
+  background: linear-gradient(135deg, rgba(74, 106, 170, 0.10), rgba(116, 110, 205, 0.08));
+  border-color: rgba(116, 110, 205, 0.22);
+}
+
+.hs-light .kai-limit-title { color: rgba(0, 0, 0, 0.9); }
+.hs-light .kai-limit-desc { color: rgba(0, 0, 0, 0.6); }
+
+/* ── Reduced Motion ───────────────────────────────────────────────────────*/
 @media (prefers-reduced-motion: reduce) {
-  /* The edge stops travelling but stays lit — it is what marks the input as
-     live, and a dead border would read as a disabled field. */
-  .kai-input-row::before,
-  .kai-input-row.is-thinking::before,
-  .miro-ring,
+  .kai-card,
+  .kai-ambient::before,
+  .kai-ambient::after,
   .kai-msg,
-  .kai-blob,
   .kai-attach,
-  .kai-drop,
-  .kai-card.is-working,
-  .hs-light .kai-card.is-working,
-  .kai-card.is-working::before {
-    animation: none;
+  .kai-drop {
+    animation: none !important;
+    transition: none !important;
   }
-  .kai-card.is-working {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 40px rgba(var(--kai-glow), 0.22);
-  }
-
-  .kai-input-row::before { opacity: 0.72; }
 }

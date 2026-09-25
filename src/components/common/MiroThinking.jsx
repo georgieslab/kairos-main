@@ -32,7 +32,7 @@ const W = (amp, y) => {
   return d;
 };
 
-const MiroThinking = ({ size = 46, className = '' }) => (
+const MiroThinking = ({ size = 32, className = '' }) => (
   <svg
     className={`miro-think ${className}`.trim()}
     viewBox="0 0 64 64"

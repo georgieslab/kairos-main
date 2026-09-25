@@ -29,3 +29,6 @@ dist
 *.jks
 *.keystore
 keystore.properties
+*.apk
+*.aab
+.firebase/

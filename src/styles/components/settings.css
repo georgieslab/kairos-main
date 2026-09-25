@@ -394,6 +394,154 @@
 .settings-subscription-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--s-text); margin: 0 0 2px 0; }
 .settings-subscription-info p { font-size: 0.85rem; color: var(--s-text-3); margin: 0; }
 
+.settings-artisan-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.settings-promo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: rgba(249, 115, 22, 0.16);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #fb923c;
+}
+
+.settings-subscription-expiry {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px !important;
+  font-size: 0.78rem !important;
+  color: rgba(var(--s-gold), 0.9) !important;
+}
+
+/* Promo Code Box */
+.settings-promo-section {
+  margin-top: 0.5rem;
+}
+
+.settings-promo-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.65rem;
+  color: var(--s-text-2);
+}
+
+.settings-promo-icon {
+  color: #fb923c;
+}
+
+.settings-promo-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.settings-promo-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-promo-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.settings-promo-field-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--s-text-3);
+  pointer-events: none;
+}
+
+.settings-promo-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px 0 34px;
+  border-radius: 12px;
+  background: var(--s-input);
+  border: 1px solid var(--s-input-border);
+  color: var(--s-text);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.settings-promo-input:focus {
+  border-color: rgba(249, 115, 22, 0.5);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.settings-promo-submit-btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.28);
+}
+
+.settings-promo-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.settings-promo-submit-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.settings-promo-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.settings-promo-feedback {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.35;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.settings-promo-feedback.error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.settings-promo-feedback.success {
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #fdba74;
+}
+
 /* ============================================================
    PREFERENCES (theme + toggles)
    ============================================================ */

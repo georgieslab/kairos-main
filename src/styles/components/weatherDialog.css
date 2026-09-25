@@ -3,31 +3,33 @@
 
 .weather-dialog-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1000005;
+  padding: 16px;
   animation: fadeIn 0.2s ease;
 }
 
 .weather-dialog {
-  background: rgba(28, 28, 30, 0.85);
-  backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 44px;
-  width: 90%;
+  background: rgba(28, 28, 30, 0.88);
+  backdrop-filter: blur(50px) saturate(190%);
+  -webkit-backdrop-filter: blur(50px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  width: 100%;
   max-width: 380px;
-  padding: 24px;
+  padding: 26px 24px;
   position: relative;
-  animation: scaleIn 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
-              0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 48px rgba(0, 0, 0, 0.5),
+    0 0 35px rgba(249, 115, 22, 0.15);
 }
 
 .weather-dialog-close {
@@ -178,4 +180,73 @@
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.96); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Light Mode */
+.hs-light .weather-dialog,
+.settings-light .weather-dialog,
+.light-theme .weather-dialog {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 24px 48px rgba(0, 0, 0, 0.12),
+    0 0 35px rgba(249, 115, 22, 0.10);
+}
+
+.hs-light .weather-dialog-location,
+.settings-light .weather-dialog-location,
+.light-theme .weather-dialog-location,
+.hs-light .weather-dialog-temp-value,
+.settings-light .weather-dialog-temp-value,
+.light-theme .weather-dialog-temp-value,
+.hs-light .weather-dialog-sun-value,
+.settings-light .weather-dialog-sun-value,
+.light-theme .weather-dialog-sun-value {
+  color: #1c1917;
+}
+
+.hs-light .weather-dialog-date,
+.settings-light .weather-dialog-date,
+.light-theme .weather-dialog-date,
+.hs-light .weather-dialog-desc,
+.settings-light .weather-dialog-desc,
+.light-theme .weather-dialog-desc,
+.hs-light .weather-dialog-detail-label,
+.settings-light .weather-dialog-detail-label,
+.light-theme .weather-dialog-detail-label,
+.hs-light .weather-dialog-sun-label,
+.settings-light .weather-dialog-sun-label,
+.light-theme .weather-dialog-sun-label {
+  color: rgba(28, 25, 23, 0.55);
+}
+
+.hs-light .weather-dialog-details,
+.settings-light .weather-dialog-details,
+.light-theme .weather-dialog-details,
+.hs-light .weather-dialog-sun-time,
+.settings-light .weather-dialog-sun-time,
+.light-theme .weather-dialog-sun-time {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.hs-light .weather-dialog-detail,
+.settings-light .weather-dialog-detail,
+.light-theme .weather-dialog-detail {
+  color: #1c1917;
+}
+
+.hs-light .weather-dialog-close,
+.settings-light .weather-dialog-close,
+.light-theme .weather-dialog-close {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-dialog-overlay,
+  .weather-dialog {
+    animation: none !important;
+  }
 }

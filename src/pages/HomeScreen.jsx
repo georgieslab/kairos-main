@@ -14,24 +14,36 @@ import LanguageSwitcher from '../components/common/LanguageSwitcher';
 import WhatsNew from '../components/common/WhatsNew';
 import VersionNews from '../components/common/VersionNews';
 import MoodWeather from '../components/common/MoodWeather';
-import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones } from 'lucide-react';
+import HomeActivityCalendar from '../components/common/HomeActivityCalendar';
+import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones, Mic } from 'lucide-react';
+import PhysicalJournalCard from '../components/journal/PhysicalJournalCard';
+import JournalRegistration from '../components/journal/JournalRegistration';
+import MyJournalsList from '../components/journal/MyJournalsList';
 import '../styles/components/homeScreen.css';
 import '../styles/pages/analyticsScreen.css';
 import { useTheme } from '../contexts/ThemeContext';
 import { quotes } from '../data/quotes';
 import { canNudge, requestNudgePermission, scheduleNudge } from '../services/nudgeService';
+import hapticService from '../services/hapticService';
 
 const HomeScreen = ({ navigateToScreen }) => {
-  const { t, i18n } = useTranslation('journey');
+  const { t, i18n } = useTranslation(['journey', 'settings', 'home']);
   const { userProfile } = useAuth();
   const { isDarkMode } = useTheme();
   const { statistics, isLoading: statsLoading } = useUserStatistics();
   const { inProgressPaths, hasActiveJourneys } = useUserProgress();
   
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [showJournalsList, setShowJournalsList] = useState(false);
   const [quote, setQuote] = useState(quotes[0]);
   const [isQuoteChanging, setIsQuoteChanging] = useState(false);
   const [timeGradient, setTimeGradient] = useState('');
   const [showJourneys, setShowJourneys] = useState(false);
+
+  const handleOpenVoiceReflection = () => {
+    hapticService.medium?.();
+    window.dispatchEvent(new CustomEvent('kairos:open-voice-modal'));
+  };
 
   useEffect(() => {
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -102,47 +114,6 @@ const HomeScreen = ({ navigateToScreen }) => {
     return () => { cancelled = true; };
   }, [statistics.allEntries, t]);
 
-  // Rolling last-7-days journaling activity (oldest → today), for the activity
-  // strip — a fixed Mon-Sun window meant today's progress was invisible until
-  // it showed up on the right edge again next Monday.
-  const weekActivity = useMemo(() => {
-    const toDate = (ts) => {
-      if (!ts) return null;
-      try {
-        if (ts.toDate) return ts.toDate();
-        if (ts.seconds != null) return new Date(ts.seconds * 1000);
-        const d = new Date(ts);
-        return isNaN(d.getTime()) ? null : d;
-      } catch {
-        return null;
-      }
-    };
-    const daysWithEntries = new Set();
-    (statistics.allEntries || []).forEach((e) => {
-      const d = toDate(e.timestamp);
-      if (d) daysWithEntries.add(d.toDateString());
-    });
-    const now = new Date();
-    // Mon-first weekday initials, e.g. ['M','T','W','T','F','S','S']
-    const weekdayInitials = t('home.weekdayInitials', { returnObjects: true, defaultValue: ['M', 'T', 'W', 'T', 'F', 'S', 'S'] });
-    const days = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(now);
-      d.setDate(now.getDate() - (6 - i));
-      const mondayFirstIndex = (d.getDay() + 6) % 7; // Sun(0)->6, Mon(1)->0, ... Sat(6)->5
-      return {
-        label: weekdayInitials[mondayFirstIndex],
-        active: daysWithEntries.has(d.toDateString()),
-        isToday: i === 6
-      };
-    });
-    // Mark the trailing run of consecutive active days ending today — those
-    // dots carry the traveling streak-heartbeat animation (see homeScreen.css).
-    for (let i = days.length - 1; i >= 0 && days[i].active; i--) {
-      days[i].inStreak = true;
-    }
-    return days;
-  }, [statistics.allEntries, t]);
-
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return t('home.greetingMorning', 'Good morning');
@@ -173,43 +144,18 @@ const HomeScreen = ({ navigateToScreen }) => {
             {new Date().toLocaleDateString(i18n.language, { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
         </div>
-            <div className="header-controls">
-              <LanguageSwitcher />
-              <ThemeSwitcher />
-              <WhatsNew navigateToScreen={navigateToScreen} />
-              <VersionNews />
-            </div>
+        <div className="header-actions-cluster">
+          {/* Main Controls Pillar */}
+          <div className="header-controls-dock" role="toolbar" aria-label={t('home.quickControls', 'Quick controls')}>
+            <WhatsNew navigateToScreen={navigateToScreen} />
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+            <VersionNews />
+          </div>
+        </div>
       </div>
 
-      {/* ========== WEEK ACTIVITY STRIP ========== */}
-      {statsLoading ? (
-        <div className="home-week home-week-loading" aria-hidden="true">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <div key={i} className="home-week-day">
-              <span className="home-week-dot is-skeleton" />
-              <span className="home-week-label-skeleton skeleton-bar" />
-            </div>
-          ))}
-        </div>
-      ) : statistics.totalEntries > 0 && (
-        <div className="home-week" aria-label={t('home.weekActivityAriaLabel', 'Your last 7 days of journaling')}>
-          {weekActivity.map((d, i) => (
-            <div
-              key={i}
-              className={`home-week-day${d.active ? ' is-active' : ''}${d.isToday ? ' is-today' : ''}${d.inStreak ? ' in-streak' : ''}`}
-              style={{ '--d': `${i * 60}ms` }}
-            >
-              <span className="home-week-dot" />
-              <span className="home-week-label">{d.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ========== INNER AURA (Daily Mood Check-in) ========== */}
-      <MoodWeather />
-
-      {/* ========== 2. HERO CARD (Focus) ========== */}
+      {/* ========== 2. HERO CARD (Focus & Today's Reflection) ========== */}
       <div 
         className={`hero-card ${timeGradient}`}
         style={{ '--glow-color': glowColor }}
@@ -229,31 +175,77 @@ const HomeScreen = ({ navigateToScreen }) => {
               <h2 className="hero-prompt-text">"{currentPrompt?.prompt || t('home.reflectFallback', 'Take a moment to reflect...')}"</h2>
             </div>
 
-            <button
-              className="hero-cta"
-              onClick={() => navigateToScreen('write', { pathId: currentPath.id, day: currentPath.nextDay })}
-              style={{ '--cta-color': currentPath.color }}
-            >
-              <Sparkles size={18} />
-              {t('home.beginJournaling', 'Begin Journaling')}
-              <ArrowRight size={16} className="cta-arrow" />
-            </button>
+            <div className="hero-cta-cluster">
+              <button
+                className="hero-cta"
+                onClick={() => navigateToScreen('write', { pathId: currentPath.id, day: currentPath.nextDay })}
+                style={{ '--cta-color': currentPath.color }}
+              >
+                <Sparkles size={18} />
+                {t('home.beginJournaling', 'Begin Journaling')}
+                <ArrowRight size={16} className="cta-arrow" />
+              </button>
+
+              <button
+                type="button"
+                className="hero-voice-cta"
+                onClick={handleOpenVoiceReflection}
+                title={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
+                aria-label={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
+              >
+                <Mic size={16} className="hero-voice-icon" />
+                <span>{t('miro.voiceReflection', 'Voice')}</span>
+              </button>
+            </div>
           </>
         ) : (
           <div className="hero-empty">
             <h2>{t('home.beginYourJourney', 'Begin your journey')}</h2>
             <p>{t('home.discoverPaths', 'Discover guided paths to unlock your potential.')}</p>
-            <button
-              className="hero-cta"
-              onClick={() => navigateToScreen('path-selection')}
-              style={{ '--cta-color': '85, 139, 110' }}
-            >
-              {t('home.explorePaths', 'Explore Paths')}
-              <ArrowRight size={16} className="cta-arrow" />
-            </button>
+            <div className="hero-cta-cluster">
+              <button
+                className="hero-cta"
+                onClick={() => navigateToScreen('path-selection')}
+                style={{ '--cta-color': '85, 139, 110' }}
+              >
+                {t('home.explorePaths', 'Explore Paths')}
+                <ArrowRight size={16} className="cta-arrow" />
+              </button>
+
+              <button
+                type="button"
+                className="hero-voice-cta"
+                onClick={handleOpenVoiceReflection}
+                title={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
+                aria-label={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
+              >
+                <Mic size={16} className="hero-voice-icon" />
+                <span>{t('miro.voiceReflection', 'Voice')}</span>
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      {/* ========== 2.5 PHYSICAL JOURNAL STATUS CARD ========== */}
+      <PhysicalJournalCard
+        userProfile={userProfile}
+        onOpenRegistration={() => setShowRegistration(true)}
+        onOpenJournalsList={() => setShowJournalsList(true)}
+        navigateToScreen={navigateToScreen}
+      />
+
+      {/* ========== 3. ACTIVITY CALENDAR (Week on mobile, Month on tablet & desktop) ========== */}
+      <HomeActivityCalendar
+        allEntries={statistics.allEntries}
+        totalEntries={statistics.totalEntries}
+        currentStreak={statistics.currentStreak}
+        pathColor={glowColor}
+        statsLoading={statsLoading}
+      />
+
+      {/* ========== 4. INNER AURA (Daily Mood Check-in) ========== */}
+      <MoodWeather />
 
       {/* Weather widget moved into the header for compact layout */}
 
@@ -327,37 +319,38 @@ const HomeScreen = ({ navigateToScreen }) => {
         statistics={statistics}
       />
 
-      {/* ========== 6. LISTEN (Podcast entry point → Listen screen) ========== */}
-      <button className="home-listen-card" onClick={() => navigateToScreen('listen')}>
-        <div className="home-listen-icon">
-          <Headphones size={22} />
-          <span className="home-listen-pulse" aria-hidden="true" />
-        </div>
-        <div className="home-listen-text">
-          <span className="home-listen-eyebrow">{t('home.listenEyebrow', 'New · Podcast')}</span>
-          <span className="home-listen-title">{t('home.listenTitle', 'Listen')}</span>
-          <span className="home-listen-sub">{t('home.listenSubtitle', 'Episodes on handwriting & journaling')}</span>
-        </div>
-        <div className="home-listen-eq" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </button>
+      {/* ========== 6. BENTO PAIR (Listen & Spark) ========== */}
+      <div className="home-bento-grid">
+        <button className="home-listen-card" onClick={() => navigateToScreen('listen')}>
+          <div className="home-listen-icon">
+            <Headphones size={22} />
+            <span className="home-listen-pulse" aria-hidden="true" />
+          </div>
+          <div className="home-listen-text">
+            <span className="home-listen-eyebrow">{t('home.listenEyebrow', 'New · Podcast')}</span>
+            <span className="home-listen-title">{t('home.listenTitle', 'Listen')}</span>
+            <span className="home-listen-sub">{t('home.listenSubtitle', 'Episodes on handwriting & journaling')}</span>
+          </div>
+          <div className="home-listen-eq" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </button>
 
-      {/* ========== 7. SPARK (Ambient Quote) ========== */}
-      <section className={`spark-section ${timeGradient}`} onClick={changeQuote}>
-        <div className="spark-glass-card">
-          <div className="spark-decoration">
-            <Quote size={40} />
+        <section className={`spark-section ${timeGradient}`} onClick={changeQuote}>
+          <div className="spark-glass-card">
+            <div className="spark-decoration">
+              <Quote size={40} />
+            </div>
+            
+            <div className={`spark-content ${isQuoteChanging ? 'is-changing' : ''}`}>
+              <p className="spark-text">"{quote.text}"</p>
+              <p className="spark-author">— {quote.author}</p>
+            </div>
+            
+            <span className="spark-interact-hint">{t('home.tapForReflection', 'Tap for reflection')}</span>
           </div>
-          
-          <div className={`spark-content ${isQuoteChanging ? 'is-changing' : ''}`}>
-            <p className="spark-text">"{quote.text}"</p>
-            <p className="spark-author">— {quote.author}</p>
-          </div>
-          
-          <span className="spark-interact-hint">{t('home.tapForReflection', 'Tap for reflection')}</span>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Current-journeys popup — opened from the "% Complete" card. Lists every
           started journey with its progress; the most recent one is featured.
@@ -418,6 +411,27 @@ const HomeScreen = ({ navigateToScreen }) => {
         </div>,
         document.body
       )}
+
+
+      {/* Physical Journal Registration Modal */}
+      <JournalRegistration
+        isOpen={showRegistration}
+        onClose={() => setShowRegistration(false)}
+        onComplete={() => {
+          setShowRegistration(false);
+          window.location.reload();
+        }}
+      />
+
+      {/* Physical Journals Collection Modal */}
+      <MyJournalsList
+        isOpen={showJournalsList}
+        onClose={() => setShowJournalsList(false)}
+        onRegisterAnother={() => {
+          setShowJournalsList(false);
+          setTimeout(() => setShowRegistration(true), 300);
+        }}
+      />
 
     </div>
   );

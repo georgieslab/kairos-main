@@ -380,6 +380,157 @@
   color: rgba(255,255,255,0.5);
 }
 
+/* ===== Slide: Miro Conversation ===== */
+.ws-badge-miro {
+  background: rgba(74, 106, 170, 0.18);
+  border-color: rgba(74, 106, 170, 0.38);
+  color: rgb(163, 176, 255);
+}
+
+.ws-miro-hero {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-miro-orb-container {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-miro-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(74, 106, 170, 0.55) 0%,
+    rgba(116, 110, 205, 0.3) 50%,
+    transparent 75%
+  );
+  filter: blur(14px);
+  animation: miroGlowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes miroGlowPulse {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.15); opacity: 0.9; }
+}
+
+.ws-miro-rings {
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+}
+
+.ws-miro-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(116, 110, 205, 0.35);
+  animation: miroRingRotate 22s linear infinite;
+}
+
+.ws-miro-ring-2 {
+  inset: -6px;
+  border: 1px solid rgba(79, 209, 224, 0.2);
+  animation: miroRingRotate 16s linear infinite reverse;
+}
+
+@keyframes miroRingRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ws-miro-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  text-align: left;
+}
+
+.ws-miro-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+@media (hover: hover) {
+  .ws-miro-item:hover {
+    transform: translateX(3px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.ws-miro-item-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ws-miro-icon-blue {
+  color: rgb(110, 160, 245);
+  background: rgba(74, 106, 170, 0.15);
+  border-color: rgba(74, 106, 170, 0.3);
+}
+
+.ws-miro-icon-violet {
+  color: rgb(180, 160, 255);
+  background: rgba(116, 110, 205, 0.15);
+  border-color: rgba(116, 110, 205, 0.3);
+}
+
+.ws-miro-icon-cyan {
+  color: rgb(79, 209, 224);
+  background: rgba(79, 209, 224, 0.12);
+  border-color: rgba(79, 209, 224, 0.25);
+}
+
+.ws-miro-icon-lavender {
+  color: rgb(199, 210, 254);
+  background: rgba(163, 176, 255, 0.12);
+  border-color: rgba(163, 176, 255, 0.25);
+}
+
+.ws-miro-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ws-miro-item-title {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ws-miro-item-desc {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.35;
+}
+
 /* AI Features */
 .ws-claude-badge-large {
   position: relative;
@@ -1006,7 +1157,14 @@
 }
 .ws-nfc-wifi { animation: wsNfcPing 1.6s ease-in-out infinite; }
 
-/* ----- Slide 3: AI Intelligence ----- */
+/* ----- Slide: Miro Conversation ----- */
+.ws-card-active .ws-miro-item { animation: wsRiseIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both; }
+.ws-card-active .ws-miro-item:nth-child(1) { animation-delay: 0.12s; }
+.ws-card-active .ws-miro-item:nth-child(2) { animation-delay: 0.22s; }
+.ws-card-active .ws-miro-item:nth-child(3) { animation-delay: 0.32s; }
+.ws-card-active .ws-miro-item:nth-child(4) { animation-delay: 0.42s; }
+
+/* ----- Slide 4: AI Intelligence ----- */
 .ws-card-active .ws-ai-item { animation: wsRiseIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both; }
 .ws-card-active .ws-ai-item:nth-child(1) { animation-delay: 0.15s; }
 .ws-card-active .ws-ai-item:nth-child(2) { animation-delay: 0.27s; }
@@ -1136,6 +1294,9 @@
 @media (prefers-reduced-motion: reduce) {
   .ws-card-active .ws-modality,
   .ws-card-active .ws-nfc-bridge,
+  .ws-card-active .ws-miro-item,
+  .ws-miro-glow,
+  .ws-miro-ring,
   .ws-card-active .ws-ai-item,
   .ws-card-active .ws-journey-tag,
   .ws-card-active .ws-journey-stats,

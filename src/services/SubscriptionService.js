@@ -2,6 +2,8 @@
 
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../config/firebase';
+import { Timestamp } from 'firebase/firestore';
+import { resolveSubscriptionPromoCode } from '../constants/inviteCodes';
 import { preOpenPopup, openCheckout } from './checkoutLauncher';
 
 // Cache for subscription status
@@ -470,17 +472,21 @@ export const hasArtisanAccess = (subscription) => {
   const activeStatuses = ['active', 'trialing'];
   if (!activeStatuses.includes(subscription.status)) return false;
 
-  // Expiry used to go unchecked here, and validateSubscriptionData in
-  // utils/subscriptionUtils.js — the one place that did compare
-  // currentPeriodEnd against the clock — is called by nothing. Journal bundles
-  // set autoRenew:false and an end date, then never actually ran out.
-  // A missing currentPeriodEnd means no expiry: that is the Legacy grant,
-  // which carries Premium for the life of the service.
   const end = subscription.currentPeriodEnd;
   if (!end) return true;
 
-  const endDate = end.toDate ? end.toDate() : new Date(end);
-  return endDate > new Date();
+  let endDate;
+  if (typeof end.toDate === 'function') {
+    endDate = end.toDate();
+  } else if (typeof end._seconds === 'number') {
+    endDate = new Date(end._seconds * 1000);
+  } else if (typeof end.seconds === 'number') {
+    endDate = new Date(end.seconds * 1000);
+  } else {
+    endDate = new Date(end);
+  }
+
+  return !isNaN(endDate.getTime()) && endDate > new Date();
 };
 
 /**
@@ -648,6 +654,90 @@ export const getPricingInfo = () => {
   };
 };
 
+/**
+ * Redeem a subscription promo code (e.g. HalfJournal2026 for 30 days of Artisan)
+ * @param {Object} currentUser - Firebase auth user object
+ * @param {Object} userProfile - Current user profile
+ * @param {Function} updateUserProfile - Profile update function from AuthContext
+ * @param {string} rawCode - User-entered promo code
+ * @returns {Promise<{success: boolean, message: string, endDate: Date, promo: Object}>}
+ */
+export const redeemSubscriptionPromoCode = async (
+  currentUser,
+  userProfile,
+  updateUserProfile,
+  rawCode
+) => {
+  if (!currentUser || !currentUser.uid) {
+    throw new Error('Please sign in to redeem a promo code.');
+  }
+
+  const promo = resolveSubscriptionPromoCode(rawCode);
+  if (!promo) {
+    throw new Error("That promo code isn't valid.");
+  }
+
+  const normalizedCode = promo.code.toUpperCase();
+  const redeemedCodes = userProfile?.redeemedPromoCodes || [];
+
+  // Prevent duplicate redemption if already used on this account
+  if (redeemedCodes.includes(normalizedCode)) {
+    throw new Error('This promo code has already been redeemed on your account.');
+  }
+
+  // Calculate new end date (extend existing period if currently active in the future)
+  const now = new Date();
+  let baseDate = now;
+
+  const existingSub = userProfile?.subscription;
+  if (existingSub && existingSub.currentPeriodEnd) {
+    let existingEnd;
+    if (typeof existingSub.currentPeriodEnd.toDate === 'function') {
+      existingEnd = existingSub.currentPeriodEnd.toDate();
+    } else if (typeof existingSub.currentPeriodEnd._seconds === 'number') {
+      existingEnd = new Date(existingSub.currentPeriodEnd._seconds * 1000);
+    } else if (typeof existingSub.currentPeriodEnd.seconds === 'number') {
+      existingEnd = new Date(existingSub.currentPeriodEnd.seconds * 1000);
+    } else {
+      existingEnd = new Date(existingSub.currentPeriodEnd);
+    }
+
+    if (!isNaN(existingEnd.getTime()) && existingEnd > now) {
+      baseDate = existingEnd;
+    }
+  }
+
+  const newEndDate = new Date(baseDate.getTime() + promo.days * 24 * 60 * 60 * 1000);
+
+  const subscriptionPayload = {
+    status: 'active',
+    tier: promo.tier || 'artisan',
+    source: 'promo_code',
+    promoCode: promo.code,
+    lifetime: false,
+    currentPeriodEnd: Timestamp.fromDate(newEndDate),
+    activatedAt: Timestamp.fromDate(now),
+    autoRenew: false
+  };
+
+  const updatedRedeemed = [...new Set([...redeemedCodes, normalizedCode])];
+
+  await updateUserProfile({
+    subscription: subscriptionPayload,
+    redeemedPromoCodes: updatedRedeemed
+  });
+
+  // Clear cache so all components fetch fresh status
+  clearSubscriptionCache();
+
+  return {
+    success: true,
+    promo,
+    endDate: newEndDate,
+    message: `${promo.days} days of Artisan activated!`
+  };
+};
+
 export default {
   createCheckoutSession,
   startUpgradeProcess,
@@ -661,5 +751,6 @@ export default {
   clearSubscriptionCache,
   formatSubscriptionInfo,
   getPricingInfo,
-  activateJournalSubscription
+  activateJournalSubscription,
+  redeemSubscriptionPromoCode
 };

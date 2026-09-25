@@ -23,7 +23,14 @@
     "upgradeButton": "Auf Artisan upgraden",
     "upgradeYearly": "Artisan — {{price}} €/Jahr",
     "upgradeMonthly": "oder {{price}} € monatlich",
-    "saveBadge": "{{pct}}% sparen"
+    "saveBadge": "{{pct}}% sparen",
+    "havePromoCode": "Hast du einen Promo-Code?",
+    "promoPlaceholder": "Promo-Code eingeben (z. B. HalfJournal2026)",
+    "redeemBtn": "Einlösen",
+    "codeInvalid": "Dieser Promo-Code ist ungültig.",
+    "codeAlreadyRedeemed": "Dieser Promo-Code wurde für dein Konto bereits eingelöst.",
+    "promoSuccess": "✨ 30 Tage Artisan aktiviert! Gültig bis {{date}}.",
+    "validUntil": "Gültig bis {{date}}"
   },
   "profile": {
     "avatarUpdateSuccess": "Avatar erfolgreich aktualisiert!",

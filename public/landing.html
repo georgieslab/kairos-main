@@ -1822,6 +1822,189 @@
             opacity: 0.9;
         }
 
+        /* --- Language Switcher ------------------------------------------- */
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.6rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(var(--accent-gold-rgb), 0.28);
+            border-radius: 50px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            user-select: none;
+            margin-right: 0.5rem;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            letter-spacing: inherit;
+        }
+
+        .lang-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .lang-btn.active {
+            color: var(--accent-gold);
+            text-shadow: 0 0 12px rgba(var(--accent-gold-rgb), 0.5);
+        }
+
+        .lang-divider {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.75rem;
+        }
+
+        .mobile-lang-switch {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Mindful Rituals & Artifacts Showcase -----------------------
+           Features the physical objects that accompany the Καιρός writing ritual:
+           The Contemplation Glass, Fine Writing Ink & Pen Ingot, and The Incense Ceremony.
+           Matted inside spatial glass panels with subtle brass halos. */
+        .rituals-header {
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .rituals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 2rem;
+            max-width: 68rem;
+            margin: 3rem auto 0;
+        }
+
+        .ritual-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid rgba(var(--accent-gold-rgb), 0.18);
+            border-radius: var(--radius-card);
+            box-shadow: var(--glass-shadow);
+            padding: clamp(1.25rem, 2.5vw, 1.75rem);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease;
+        }
+
+        .ritual-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(var(--accent-gold-rgb), 0.4);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45),
+                        0 0 28px rgba(var(--accent-gold-rgb), 0.14);
+        }
+
+        .ritual-card-image {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: calc(var(--radius-card) - 16px);
+            overflow: hidden;
+            background: #faf9f7;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .ritual-card-image picture {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ritual-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ritual-card:hover .ritual-card-image img {
+            transform: scale(1.04);
+        }
+
+        .ritual-card-body {
+            padding: 1.5rem 0.5rem 0.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .ritual-card-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .ritual-card-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.65rem;
+            line-height: 1.3;
+        }
+
+        .ritual-card-text {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .rituals-footnote {
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+
+        .rituals-pricing-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .rituals-pricing-link:hover {
+            opacity: 0.85;
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 960px) {
+            .rituals-grid {
+                grid-template-columns: 1fr;
+                max-width: 32rem;
+                gap: 2rem;
+            }
+        }
+
+
         /* --- Add-on band -------------------------------------------------
            Now sits with the journey paths rather than the pricing table,
            because it is content and not hardware. Flat layout and a warm amber
@@ -2898,7 +3081,452 @@
         }
         @media (max-width: 900px) {
             .nav-cta-secondary { display: none; } /* keep the mobile menu as the single entry point below 900px */
-        }    </style>
+        }
+        /* --- Mobile Floating Quick-Action Bar ---------------------------- */
+        .mobile-quick-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 990;
+            padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+            background: rgba(14, 14, 18, 0.85);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border-top: 1px solid rgba(var(--accent-gold-rgb), 0.25);
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(110%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.35s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mobile-quick-bar.is-visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-quick-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .quick-bar-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .quick-bar-tag {
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .quick-bar-price {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .quick-bar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.35),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .quick-bar-btn svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s ease;
+        }
+
+        .quick-bar-btn:hover svg,
+        .quick-bar-btn:active svg {
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-quick-bar {
+                display: block;
+            }
+        }
+
+        /* ============================================
+           FAQ SECTION & ACCORDION (Spatial Glass)
+           ============================================ */
+        .faq-section {
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(var(--primary-rgb), 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(var(--secondary-rgb), 0.06) 0%, transparent 60%),
+                var(--bg-primary);
+            position: relative;
+        }
+
+        .faq-accordion {
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .faq-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: var(--glass-shadow);
+            transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(var(--primary-rgb), 0.35);
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.08),
+                        0 12px 36px rgba(0, 0, 0, 0.35);
+        }
+
+        .faq-item.is-open {
+            border-color: rgba(var(--accent-gold-rgb), 0.45);
+            box-shadow: inset 0 2px 0 rgba(var(--accent-gold-rgb), 0.15),
+                        0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            padding: 1.4rem 1.75rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            text-align: left;
+            font-family: inherit;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: color 0.25s ease;
+        }
+
+        .faq-question:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: -2px;
+            border-radius: 20px;
+        }
+
+        .faq-item.is-open .faq-question {
+            color: var(--accent-gold);
+        }
+
+        .faq-question-text {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .faq-icon-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.is-open .faq-icon-pill {
+            background: rgba(var(--accent-gold-rgb), 0.15);
+            border-color: rgba(var(--accent-gold-rgb), 0.35);
+        }
+
+        .faq-chevron {
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background 0.3s ease,
+                        color 0.3s ease;
+        }
+
+        .faq-chevron svg {
+            width: 14px;
+            height: 14px;
+            stroke-width: 2.2;
+            transition: transform 0.4s ease;
+        }
+
+        .faq-item.is-open .faq-chevron {
+            transform: rotate(180deg);
+            background: rgba(var(--accent-gold-rgb), 0.2);
+            color: var(--accent-gold);
+        }
+
+        .faq-answer-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.is-open .faq-answer-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-answer-content {
+            overflow: hidden;
+        }
+
+        .faq-answer {
+            padding: 0 1.75rem 1.6rem 3.75rem;
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.75;
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.is-open .faq-answer {
+            border-top-color: rgba(255, 255, 255, 0.05);
+            padding-top: 0.6rem;
+        }
+
+        /* ============================================
+           VIP EARLY BIRD WAITLIST FORM
+           ============================================ */
+        .waitlist-form-container {
+            max-width: 620px;
+            margin: 2.5rem auto 1.75rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .waitlist-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .waitlist-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(20, 22, 26, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 60px;
+            padding: 6px 8px 6px 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                        0 8px 30px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .waitlist-input-group:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25),
+                        0 12px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        .waitlist-input-icon {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .waitlist-input-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .waitlist-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            min-width: 0;
+        }
+
+        .waitlist-input::placeholder {
+            color: var(--text-light);
+            opacity: 0.85;
+        }
+
+        .waitlist-submit-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.85rem 1.8rem;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            white-space: nowrap;
+            box-shadow: 0 4px 18px rgba(var(--primary-rgb), 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .waitlist-submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(var(--primary-rgb), 0.55);
+        }
+
+        .waitlist-submit-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .waitlist-submit-btn svg {
+            width: 15px;
+            height: 15px;
+            transition: transform 0.2s ease;
+        }
+
+        .waitlist-submit-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        .waitlist-guarantee {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .waitlist-guarantee span.star {
+            color: var(--accent-gold);
+        }
+
+        .waitlist-success {
+            background: rgba(85, 139, 110, 0.15);
+            border: 1px solid rgba(85, 139, 110, 0.4);
+            border-radius: 20px;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            text-align: left;
+            animation: fadeIn 0.4s ease-out;
+            box-shadow: 0 8px 30px rgba(85, 139, 110, 0.15);
+        }
+
+        .waitlist-success-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(85, 139, 110, 0.4);
+        }
+
+        .waitlist-success-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .waitlist-success-text strong {
+            display: block;
+            color: #ffffff;
+            font-size: 1.05rem;
+            margin-bottom: 0.2rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .waitlist-success-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 768px) {
+            .faq-question {
+                padding: 1.2rem;
+                font-size: 1.02rem;
+                gap: 0.85rem;
+            }
+            .faq-answer {
+                padding: 0 1.2rem 1.25rem 1.2rem;
+                font-size: 0.93rem;
+            }
+            .waitlist-input-group {
+                flex-direction: column;
+                border-radius: 24px;
+                padding: 0.9rem;
+                gap: 0.85rem;
+            }
+            .waitlist-input-icon {
+                display: none;
+            }
+            .waitlist-input {
+                width: 100%;
+                text-align: center;
+                padding: 0.25rem 0;
+            }
+            .waitlist-submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -2939,15 +3567,23 @@
                     <img src="/images/kairos-logo.png" alt="Καιρός" width="45" height="45" decoding="async">
                 </a>
                 <ul class="nav-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#journeys">Journeys</a></li>
-                    <li><a href="#journals">The Journals</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#about">About</a></li>
+                    <li><a href="#features" data-i18n="nav_features">Features</a></li>
+                    <li><a href="#journeys" data-i18n="nav_journeys">Journeys</a></li>
+                    <li><a href="#journals" data-i18n="nav_journals">The Journals</a></li>
+                    <li><a href="#how-it-works" data-i18n="nav_how_it_works">How It Works</a></li>
+                    <li><a href="#pricing" data-i18n="nav_pricing">Pricing</a></li>
+                    <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+                    <li><a href="#about" data-i18n="nav_about">About</a></li>
                 </ul>
+                <div class="lang-switch" role="group" aria-label="Language Selector">
+                    <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+                    <span class="lang-divider" aria-hidden="true">|</span>
+                    <button type="button" class="lang-btn" data-lang="de" aria-pressed="false">DE</button>
+                    <span class="lang-divider" aria-hidden="true">|</span>
+                    <button type="button" class="lang-btn" data-lang="ka" aria-pressed="false">KA</button>
+                </div>
                 <a href="https://reflection-writer.web.app" target="_blank" rel="noopener" class="nav-cta nav-cta-try">
-                    <span class="nav-cta-label">Try the App</span>
+                    <span class="nav-cta-label" data-i18n="nav_try_app">Try the App</span>
                     <svg class="nav-cta-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -2964,16 +3600,26 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="mobile-menu">
+            <div class="mobile-lang-switch">
+                <div class="lang-switch" role="group" aria-label="Language Selector">
+                    <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+                    <span class="lang-divider" aria-hidden="true">|</span>
+                    <button type="button" class="lang-btn" data-lang="de" aria-pressed="false">DE</button>
+                    <span class="lang-divider" aria-hidden="true">|</span>
+                    <button type="button" class="lang-btn" data-lang="ka" aria-pressed="false">KA</button>
+                </div>
+            </div>
             <div class="mobile-nav-links">
                 <a href="#features">Features</a>
                 <a href="#journeys">Journeys</a>
                 <a href="#how-it-works">How It Works</a>
                 <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
                 <a href="#about">About</a>
             </div>
             <div class="mobile-nav-actions">
                 <a href="https://reflection-writer.web.app" target="_blank" rel="noopener" class="btn btn-primary nav-cta-try" style="width: 100%; justify-content: center;">
-                    <span class="nav-cta-label">Try the App</span>
+                    <span class="nav-cta-label" data-i18n="nav_try_app">Try the App</span>
                     <svg class="nav-cta-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -2988,22 +3634,22 @@
                     <svg viewBox="0 0 24 24" fill="none">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Built with Claude AI • 100% AI-Native Development
+                    <span data-i18n="hero_badge">Built with Claude AI • 100% AI-Native Development</span>
                 </div>
-                <h1>Where Ancient Wisdom<br/>Meets Modern AI</h1>
+                <h1 data-i18n="hero_title">Where Ancient Wisdom<br/>Meets Modern AI</h1>
                 <!-- hero flourish squiggle removed with the other gradient lines -->
-                <p class="hero-subtitle">
+                <p class="hero-subtitle" data-i18n="hero_subtitle">
                     The smart journal inspired by Marcus Aurelius' Meditations.<br/>
                     Transform handwriting into insights with Claude AI.
                 </p>
-                <p class="hero-description">
+                <p class="hero-description" data-i18n="hero_description">
                     Bridge the gap between physical journaling and digital wisdom. NFC-enabled journals meet Claude AI analysis for the deepest self-discovery experience ever created.
                 </p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <span class="hero-stat-number">50</span>
                         <span class="hero-stat-label-row">
-                            <span class="hero-stat-label">Journey Paths</span>
+                            <span class="hero-stat-label" data-i18n="hero_stat1_label">Journey Paths</span>
                             <button type="button" class="info-icon" aria-describedby="tip-paths">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <span class="info-tooltip" id="tip-paths" role="tooltip">28 text &middot; 11 visual &middot; 5 voice &middot; 6 multi-modal &mdash; from 4-day sprints to 100-day odysseys.</span>
@@ -3014,7 +3660,7 @@
                     <div class="hero-stat">
                         <span class="hero-stat-number">3</span>
                         <span class="hero-stat-label-row">
-                            <span class="hero-stat-label">Ways to Write</span>
+                            <span class="hero-stat-label" data-i18n="hero_stat2_label">Ways to Write</span>
                             <button type="button" class="info-icon" aria-describedby="tip-modalities">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <span class="info-tooltip" id="tip-modalities" role="tooltip">Write by hand, speak aloud, paint or sketch &mdash; or blend all three in one multi-modal path.</span>
@@ -3025,7 +3671,7 @@
                     <div class="hero-stat">
                         <span class="hero-stat-number">92%</span>
                         <span class="hero-stat-label-row">
-                            <span class="hero-stat-label">AI Accuracy</span>
+                            <span class="hero-stat-label" data-i18n="hero_stat3_label">AI Accuracy</span>
                             <button type="button" class="info-icon" aria-describedby="tip-accuracy">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <span class="info-tooltip" id="tip-accuracy" role="tooltip">Claude's handwriting transcription accuracy, measured against manual transcription during beta testing.</span>
@@ -3071,7 +3717,7 @@
                          width="1678" height="937"
                          fetchpriority="high" decoding="async">
                     </picture>
-                    <figcaption>Paper and pixels, doing what each is best at.</figcaption>
+                    <figcaption data-i18n="hero_caption">Paper and pixels, doing what each is best at.</figcaption>
                 </figure>
             </div>
         </section>
@@ -3080,9 +3726,9 @@
         <section id="features" class="section features">
             <div class="container">
                 <div class="section-header fade-in">
-                    <span class="section-badge">Revolutionary Technology</span>
-                    <h2 class="section-title">Why Καιρός is Different</h2>
-                    <p class="section-description">
+                    <span class="section-badge" data-i18n="features_badge">Revolutionary Technology</span>
+                    <h2 class="section-title" data-i18n="features_title">Why Καιρός is Different</h2>
+                    <p class="section-description" data-i18n="features_description">
                         The world's first multi-modal journaling system powered by Claude AI. Write, speak, or create art—your journey, your way.
                     </p>
                 </div>
@@ -3398,13 +4044,15 @@
             </div>
         </section>
 
+
+        
         <!-- How It Works Section -->
         <section id="how-it-works" class="section how-it-works">
             <div class="container">
                 <div class="section-header fade-in">
-                    <span class="section-badge">The loop</span>
-                    <h2 class="section-title">How It Works</h2>
-                    <p class="section-description">
+                    <span class="section-badge" data-i18n="how_badge">The loop</span>
+                    <h2 class="section-title" data-i18n="how_title">How It Works</h2>
+                    <p class="section-description" data-i18n="how_description">
                         You write on paper. The phone only reads. Four steps, and the
                         longest one is the writing.
                     </p>
@@ -3429,8 +4077,8 @@
                             </svg>
                             <span class="step-index">1</span>
                         </div>
-                        <h3>Tap the cover</h3>
-                        <p>The chip is in the leather. Touch your phone to it and today&rsquo;s prompt is already open &mdash; no app to hunt for, no password. The book is the key.</p>
+                        <h3 data-i18n="step1_title">Tap the cover</h3>
+                        <p data-i18n="step1_desc">The chip is in the leather. Touch your phone to it and today&rsquo;s prompt is already open &mdash; no app to hunt for, no password. The book is the key.</p>
                     </div>
 
                     <!-- 2. A nib draws a line of handwriting across a ruled page.
@@ -3449,8 +4097,8 @@
                             </svg>
                             <span class="step-index">2</span>
                         </div>
-                        <h3>Write it by hand</h3>
-                        <p>Then put the phone down. Ink on paper, or speak it aloud, or draw it &mdash; whichever the day calls for. Nothing is timed and nothing is counting.</p>
+                        <h3 data-i18n="step2_title">Write it by hand</h3>
+                        <p data-i18n="step2_desc">Then put the phone down. Ink on paper, or speak it aloud, or draw it &mdash; whichever the day calls for. Nothing is timed and nothing is counting.</p>
                     </div>
 
                     <!-- 3. The transformation. Scribbles on the left dissolve as
@@ -3473,8 +4121,8 @@
                             </svg>
                             <span class="step-index">3</span>
                         </div>
-                        <h3>Photograph the page</h3>
-                        <p>One photo. Claude reads your handwriting off the paper &mdash; or your voice, or the colour and composition &mdash; and tells you what it sees, including what you circled and left.</p>
+                        <h3 data-i18n="step3_title">Photograph the page</h3>
+                        <p data-i18n="step3_desc">One photo. Claude reads your handwriting off the paper &mdash; or your voice, or the colour and composition &mdash; and tells you what it sees, including what you circled and left.</p>
                     </div>
 
                     <!-- 4. Scattered entries resolve into a trend: points pop in
@@ -3717,7 +4365,7 @@
                 <div class="section-header fade-in">
                     <span class="section-badge">The object itself</span>
                     <h2 class="section-title">Two Journals. Three Collections.</h2>
-                    <p class="section-description">
+                    <p class="section-description" data-i18n="journals_description">
                         The app is only half of it. Every Καιρός journal carries an NFC
                         chip in the cover &mdash; tap it and the day&rsquo;s reflection is
                         already waiting. Choose the one that suits how you write.
@@ -3735,7 +4383,7 @@
                          alt="The two Καιρός journals side by side: the Legacy in dark green leather with a natural agate centrepiece and antique brass corners, and the Essential in soft mint-green vegan leather"
                          width="1800" height="1005" loading="lazy" decoding="async">
                     </picture>
-                    <figcaption>
+                    <figcaption data-i18n="journals_lineup_cap">
                         Two journals, both NFC-enabled. Insight ships the Legacy journal with the full ritual kit around it.
                     </figcaption>
                 </figure>
@@ -3747,7 +4395,7 @@
                          alt="Detail view of the Legacy journal: the natural agate centrepiece, full-grain leather, antique brass corner fittings, the NFC medallion, and 200 GSM acid-free paper"
                          width="1254" height="1254" loading="lazy" decoding="async">
                     </picture>
-                    <figcaption>
+                    <figcaption data-i18n="journals_detail_cap">
                         The Legacy edition, up close. Every agate is cut from a different stone,
                         so no two covers are quite the same.
                     </figcaption>
@@ -3764,13 +4412,100 @@
                          alt="A Καιρός journal lying open and flat, one page filled with a handwritten entry, the facing page blank"
                          width="1254" height="1254" loading="lazy" decoding="async">
                     </picture>
-                    <figcaption>
+                    <figcaption data-i18n="journals_opened_cap">
                         Lay-flat binding, so the page stays where you put it. The app reads
                         this back &mdash; the handwriting stays yours.
                     </figcaption>
                 </figure>
 
-                <p class="journals-tagline fade-in">Time is not just measured. It is felt.</p>
+                
+                <figure class="product-sheet fade-in stagger-3">
+                    <picture>
+                        <source srcset="/images/kairos-legacy-set.webp" type="image/webp">
+                        <img src="/images/kairos-legacy-set.jpg"
+                         alt="The Καιρός Legacy Collection presentation box unboxed: dark green leather journal with natural agate stone, solid brass pen tray with fountain pen and ink cartridges, linen pouch, and welcome card"
+                         width="1024" height="764" loading="lazy" decoding="async">
+                    </picture>
+                    <figcaption data-i18n="journals_unboxed_cap">
+                        The Legacy Collection, unboxed. A dark green full-grain leather journal, natural cut agate centerpiece, solid brass pen tray, fountain pen with three ink cartridges, protective linen pouch, and letterpress welcome card in a bespoke gift box.
+                    </figcaption>
+                </figure>
+
+                <!-- Rituals & Artifacts Showcase -->
+                <div class="rituals-header fade-in">
+                    <span class="section-badge" data-i18n="rituals_badge">The Mindful Ritual</span>
+                    <h3 class="section-title" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem);" data-i18n="rituals_title">Artifacts of Contemplation</h3>
+                    <p class="section-description" style="max-width: 38rem; margin: 0.75rem auto 0;" data-i18n="rituals_description">
+                        Writing in Καιρός is not a digital chore; it is an intentional pause. Every piece in the collection is crafted from solid brushed brass and natural elements to anchor your focus before a single word is penned.
+                    </p>
+                </div>
+
+                <div class="rituals-grid fade-in">
+                    <!-- 1. The Contemplation Glass -->
+                    <article class="ritual-card fade-in stagger-1">
+                        <div class="ritual-card-image">
+                            <picture>
+                                <source srcset="/images/kairos-hourglass.webp" type="image/webp">
+                                <img src="/images/kairos-hourglass.jpg"
+                                     alt="The Καιρός Contemplation Glass: solid brushed brass hourglass engraved with celestial moon and stars, filled with emerald green mineral sand"
+                                     width="1024" height="1024" loading="lazy" decoding="async">
+                            </picture>
+                        </div>
+                        <div class="ritual-card-body">
+                            <span class="ritual-card-tag" data-i18n="ritual1_tag">Unhurried Time</span>
+                            <h4 class="ritual-card-title" data-i18n="ritual1_title">The Contemplation Glass</h4>
+                            <p class="ritual-card-text" data-i18n="ritual1_text">
+                                Solid brushed brass engraved with celestial moon phases and stars, holding emerald mineral sand that falls without sound. It marks presence rather than countdowns&mdash;a visual boundary for quiet introspection.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 2. Fine Writing Ink & Pen Ingot -->
+                    <article class="ritual-card fade-in stagger-2">
+                        <div class="ritual-card-image">
+                            <picture>
+                                <source srcset="/images/kairos-ink-pen.webp" type="image/webp">
+                                <img src="/images/kairos-ink-pen.jpg"
+                                     alt="Καιρός Fine Writing Ink in matte black glass with brass sun cap, paired with the forest green and brass fountain pen on a solid brass pen rest"
+                                     width="1024" height="1024" loading="lazy" decoding="async">
+                            </picture>
+                        </div>
+                        <div class="ritual-card-body">
+                            <span class="ritual-card-tag" data-i18n="ritual2_tag">Writing Instrument</span>
+                            <h4 class="ritual-card-title" data-i18n="ritual2_title">Archival Ink &amp; Pen Ingot</h4>
+                            <p class="ritual-card-text" data-i18n="ritual2_text">
+                                Matte black heavy glass filled with deep archival ink, sealed beneath a brushed brass cap bearing the radiating Καιρός sun. Balanced alongside our precision fountain pen on a solid brass pen rest.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 3. The Incense Ceremony -->
+                    <article class="ritual-card fade-in stagger-3">
+                        <div class="ritual-card-image">
+                            <picture>
+                                <source srcset="/images/kairos-incense-ritual.webp" type="image/webp">
+                                <img src="/images/kairos-incense-ritual.jpg"
+                                     alt="Καιρός Incense Ceremony: artisanal incense sticks in deep green band, solid brass celestial burner dish with rising smoke, and threaded brass travel cylinder"
+                                     width="1024" height="1024" loading="lazy" decoding="async">
+                            </picture>
+                        </div>
+                        <div class="ritual-card-body">
+                            <span class="ritual-card-tag" data-i18n="ritual3_tag">Sensory Space</span>
+                            <h4 class="ritual-card-title" data-i18n="ritual3_title">The Incense Ceremony</h4>
+                            <p class="ritual-card-text" data-i18n="ritual3_text">
+                                A sensory prelude before pen touches paper. Artisanal sticks housed in an engraved solid brass travel cylinder, resting in a celestial dish with moon and star inlays that gently catches falling ash as thoughts settle.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="rituals-footnote fade-in">
+                    <a href="#pricing" class="rituals-pricing-link" data-i18n="rituals_footnote">
+                        Featured across the Καιρός Legacy &amp; Insight Collections <span>&rarr;</span>
+                    </a>
+                </div>
+
+                <p class="journals-tagline fade-in" data-i18n="journals_tagline">Time is not just measured. It is felt.</p>
             </div>
         </section>
 
@@ -3778,9 +4513,9 @@
         <section id="pricing" class="section pricing">
             <div class="container">
                 <div class="section-header fade-in">
-                    <span class="section-badge">Kickstarter Exclusive</span>
-                    <h2 class="section-title">Early Adopter Pricing</h2>
-                    <p class="section-description">
+                    <span class="section-badge" data-i18n="pricing_badge">Kickstarter Exclusive</span>
+                    <h2 class="section-title" data-i18n="pricing_title">Early Adopter Pricing</h2>
+                    <p class="section-description" data-i18n="pricing_description">
                         One payment, no subscription. Every tier includes the journal, the NFC chip and the Kairos app.
                     </p>
                 </div>
@@ -3791,8 +4526,8 @@
                                  loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Essential</div>
-                        <p class="pricing-tagline">Start your journaling journey.</p>
-                        <p class="pricing-blurb">For anyone building a daily writing habit with AI-assisted reflection.</p>
+                        <p class="pricing-tagline" data-i18n="tier_essential_tag">Start your journaling journey.</p>
+                        <p class="pricing-blurb" data-i18n="tier_essential_blurb">For anyone building a daily writing habit with AI-assisted reflection.</p>
                         <div class="pricing-price">&euro;49</div>
                         <p class="pricing-includes">Includes</p>
                         <ul class="pricing-features">
@@ -3858,7 +4593,7 @@
                             <li>Daily reflection</li>
                             <li>Minimalist design lovers</li>
                         </ul>
-                        <a href="#cta" class="btn btn-primary pricing-cta">Select Essential</a>
+                        <a href="#cta" class="btn btn-primary pricing-cta" data-i18n="tier_essential_cta">Select Essential</a>
                     </div>
 
                     <div class="pricing-card featured fade-in stagger-2">
@@ -3867,8 +4602,8 @@
                                  loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Legacy</div>
-                        <p class="pricing-tagline">Crafted to become part of your story.</p>
-                        <p class="pricing-blurb">A luxury leather journal made to age beautifully and become a lifelong companion.</p>
+                        <p class="pricing-tagline" data-i18n="tier_legacy_tag">Crafted to become part of your story.</p>
+                        <p class="pricing-blurb" data-i18n="tier_legacy_blurb">A luxury leather journal made to age beautifully and become a lifelong companion.</p>
                         <div class="pricing-price">&euro;149</div>
                         <p class="pricing-includes">Includes</p>
                         <ul class="pricing-features">
@@ -3964,7 +4699,7 @@
                             <li>Thoughtful gift giving</li>
                             <li>Long-term journaling</li>
                         </ul>
-                        <a href="#cta" class="btn btn-primary pricing-cta">Select Legacy</a>
+                        <a href="#cta" class="btn btn-primary pricing-cta" data-i18n="tier_legacy_cta">Select Legacy</a>
                     </div>
 
                     <div class="pricing-card fade-in stagger-3">
@@ -3973,8 +4708,8 @@
                                  loading="lazy" onerror="this.parentElement.classList.add('is-empty'); this.remove()">
                         </div>
                         <div class="pricing-tier">Insight</div>
-                        <p class="pricing-tagline">The complete journaling ritual.</p>
-                        <p class="pricing-blurb">Everything needed to turn journaling into a mindful daily ritual.</p>
+                        <p class="pricing-tagline" data-i18n="tier_insight_tag">The complete journaling ritual.</p>
+                        <p class="pricing-blurb" data-i18n="tier_insight_blurb">Everything needed to turn journaling into a mindful daily ritual.</p>
                         <div class="pricing-price">&euro;249</div>
                         <p class="pricing-includes">Everything in Legacy, plus</p>
                         <ul class="pricing-features">
@@ -4052,7 +4787,7 @@
                             <li>Premium gifting</li>
                             <li>Collectors</li>
                         </ul>
-                        <a href="#cta" class="btn btn-primary pricing-cta">Select Insight</a>
+                        <a href="#cta" class="btn btn-primary pricing-cta" data-i18n="tier_insight_cta">Select Insight</a>
                     </div>
 
                 </div>
@@ -4071,6 +4806,135 @@
             </div>
         </section>
 
+        <!-- FAQ Section -->
+        <section id="faq" class="section faq-section">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <span class="section-badge" data-i18n="faq_badge">Backer Questions</span>
+                    <h2 class="section-title" data-i18n="faq_title">Frequently Asked Questions</h2>
+                    <p class="section-description" data-i18n="faq_desc">
+                        Everything you need to know about the NFC hardware, handwriting recognition, privacy encryption, and Kickstarter delivery.
+                    </p>
+                </div>
+                <div class="faq-accordion" id="faqAccordion">
+                    <!-- Q1 -->
+                    <div class="faq-item fade-in stagger-1">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-1" id="faq-btn-1">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">⚡</span>
+                                <span data-i18n="faq_q1">Does the physical journal require charging, batteries, or pairing?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-1" role="region" aria-labelledby="faq-btn-1">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a1">
+                                    None at all. The cover embeds a passive NTAG213 NFC chip powered entirely by the radio frequency field of your smartphone during the split-second tap. It contains no lithium battery, requires zero charging, emits no EMF when resting, and will continue functioning indefinitely for decades.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="faq-item fade-in stagger-2">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-2" id="faq-btn-2">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">✍️</span>
+                                <span data-i18n="faq_q2">Can Miro &amp; Claude AI really read my cursive or messy handwriting?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-2" role="region" aria-labelledby="faq-btn-2">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a2">
+                                    Yes, with remarkable accuracy. Powered by Claude 3.5 Sonnet's state-of-the-art multimodal vision architecture, Καιρός deciphers varied cursive, quick shorthand, and hasty scribbles across 50+ languages. It even recognizes marginalia, struck-through sentences, and circled reflections.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="faq-item fade-in stagger-3">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-3" id="faq-btn-3">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">🔒</span>
+                                <span data-i18n="faq_q3">How is my handwriting and deep private reflection protected?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-3" role="region" aria-labelledby="faq-btn-3">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a3">
+                                    Your inner world remains strictly your sanctuary. We operate on a zero-knowledge architecture: your handwritten scans are processed through private enterprise APIs with zero AI model training on your data. Reflections are encrypted in transit and at rest with AES-256 and can be locked behind your device's native Face ID / Touch ID.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="faq-item fade-in stagger-4">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-4" id="faq-btn-4">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">📱</span>
+                                <span data-i18n="faq_q4">Can I use the Καιρός app without purchasing a physical journal?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-4" role="region" aria-labelledby="faq-btn-4">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a4">
+                                    Absolutely. The Καιρός Web &amp; Mobile App can be used standalone with any notebook you already cherish—simply take a photo of your page or record voice reflections. However, the physical Kickstarter editions grant lifetime digital access, zero subscription fees, and the effortless 1-tap NFC physical ritual.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="faq-item fade-in stagger-1">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-5" id="faq-btn-5">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">✒️</span>
+                                <span data-i18n="faq_q5">What kind of paper is inside, and will my fountain pen bleed through?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-5" role="region" aria-labelledby="faq-btn-5">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a5">
+                                    Every Καιρός edition features custom-milled 120 gsm FSC-certified fountain pen-friendly archival paper with a subtle warm ivory tone. It is formulated to prevent ghosting, feathering, and ink bleed-through, even with wet flex nibs and dark pigmented inks.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Q6 -->
+                    <div class="faq-item fade-in stagger-2">
+                        <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-ans-6" id="faq-btn-6">
+                            <span class="faq-question-text">
+                                <span class="faq-icon-pill" aria-hidden="true">🌍</span>
+                                <span data-i18n="faq_q6">When will Kickstarter pledges ship, and do you deliver internationally?</span>
+                            </span>
+                            <span class="faq-chevron" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-6" role="region" aria-labelledby="faq-btn-6">
+                            <div class="faq-answer-content">
+                                <div class="faq-answer" data-i18n="faq_a6">
+                                    Worldwide tracked shipping is included for all backers. Tooling and leather crafting in Austria begin immediately upon campaign completion. Batch 1 Early Bird pledges will dispatch within 6–8 weeks post-campaign, packaged in bespoke collector gift boxes with customs documentation handled.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <section id="cta" class="section cta-section">
             <div class="container">
@@ -4083,10 +4947,41 @@
                         <path class="cta-star s5" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#8B5CF6" transform="translate(400,30) scale(0.6)"/>
                         <path class="cta-star s6" d="M0 -9 L2.2 -2.2 L9 0 L2.2 2.2 L0 9 L-2.2 2.2 L-9 0 L-2.2 -2.2 Z" fill="#3B82F6" transform="translate(50,170) scale(0.5)"/>
                     </svg>
-                    <h2>Start Your Journey with Καιρός</h2>
-                    <p>
+                    <h2 data-i18n="cta_title">Start Your Journey with Καιρός</h2>
+                    <p data-i18n="cta_desc">
                         Join the waitlist for our Kickstarter launch. Be among the first to experience the future of journaling—where ancient wisdom meets modern AI.
                     </p>
+
+                    <!-- VIP Early Bird Waitlist Form -->
+                    <div class="waitlist-form-container">
+                        <form id="vipWaitlistForm" class="waitlist-form" novalidate>
+                            <div class="waitlist-input-group">
+                                <span class="waitlist-input-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><polyline points="3,7 12,13 21,7" stroke="currentColor" stroke-width="2"/></svg>
+                                </span>
+                                <input type="email" id="waitlistEmail" class="waitlist-input" placeholder="Enter your email for 25% Early Bird pledge..." required autocomplete="email" aria-label="Email address" data-i18n-placeholder="waitlist_placeholder" />
+                                <button type="submit" id="waitlistSubmitBtn" class="waitlist-submit-btn">
+                                    <span data-i18n="waitlist_btn">Reserve VIP Access</span>
+                                    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                        <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="waitlist-guarantee">
+                                <span class="star">✦</span> <span data-i18n="waitlist_guarantee">25% off Kickstarter launch pledge • Exclusive backer NFC seal • Zero spam</span>
+                            </div>
+                            <div id="waitlistSuccess" class="waitlist-success" style="display: none;" role="alert">
+                                <div class="waitlist-success-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+                                <div class="waitlist-success-text">
+                                    <strong data-i18n="waitlist_success_title">VIP Reservation Confirmed!</strong>
+                                    <p id="waitlistSuccessDesc" data-i18n="waitlist_success_desc">You are on the priority list. We will send you private 48-hour advance notice before the public Kickstarter launch.</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="cta-actions">
                         <a href="https://www.kickstarter.com" target="_blank" class="btn btn-primary">
                             <svg viewBox="0 0 24 24" fill="none">
@@ -4134,7 +5029,7 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <h4>Καιρός</h4>
-                        <p>
+                        <p data-i18n="footer_about">
                             AI-powered journaling for personal growth and self-discovery. Built with Claude AI in Austria.
                         </p>
                         <div class="social-links">
@@ -4155,10 +5050,11 @@
                     <div class="footer-section">
                         <h4>Product</h4>
                         <a href="https://reflection-writer.web.app" target="_blank" rel="noopener">Try the App</a>
-                        <a href="#features">Features</a>
-                        <a href="#journeys">50 Journey Paths</a>
-                        <a href="#pricing">Pricing</a>
-                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features" data-i18n="nav_features">Features</a>
+                        <a href="#journeys" data-i18n="nav_journeys">50 Journey Paths</a>
+                        <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
+                        <a href="#faq" data-i18n="nav_faq">FAQ</a>
+                        <a href="#how-it-works" data-i18n="nav_how_it_works">How It Works</a>
                     </div>
                     <div class="footer-section">
                         <h4>Company</h4>
@@ -4177,12 +5073,28 @@
                 </div>
                 <div class="footer-bottom">
                     <p>&copy; 2025 Καιρός Smart Journal. All rights reserved.</p>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.7;">
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.7;" data-i18n="footer_village">
                         Built with Claude AI in a small village in Austria.
                     </p>
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- Floating Mobile Quick-Action Bar -->
+    <div id="mobileQuickBar" class="mobile-quick-bar" aria-label="Quick Pledge Action">
+        <div class="mobile-quick-bar-content">
+            <div class="quick-bar-info">
+                <span class="quick-bar-tag" data-i18n="float_label">Kickstarter Early Bird</span>
+                <span class="quick-bar-price" data-i18n="float_price">From €49</span>
+            </div>
+            <a href="#pricing" class="quick-bar-btn">
+                <span data-i18n="float_cta">Select Edition</span>
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h9M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
     </div>
 
     <script>
@@ -4213,6 +5125,25 @@
                 loadingOverlay.classList.add('hidden');
                 mainContent.classList.add('visible');
                 initAnimations();
+
+        // Floating Mobile Quick-Action Bar visibility logic
+        const mobileQuickBar = document.getElementById('mobileQuickBar');
+        if (mobileQuickBar) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const pricingEl = document.getElementById('pricing');
+                const pricingRect = pricingEl ? pricingEl.getBoundingClientRect() : null;
+                const inPricingView = pricingRect && pricingRect.top < window.innerHeight && pricingRect.bottom > 100;
+
+                // Slide in once past hero (>450px) and hide while actively viewing pricing table
+                if (scrolled > 450 && !inPricingView) {
+                    mobileQuickBar.classList.add('is-visible');
+                } else {
+                    mobileQuickBar.classList.remove('is-visible');
+                }
+            }, { passive: true });
+        }
+
             }, 500);
         });
 
@@ -4454,6 +5385,442 @@
         });
 
         // Console Easter Egg
+        
+        // ============================================================
+        // BILINGUAL I18N ENGINE (EN / DE)
+        // Instant in-page translation with persistence and browser detection
+        // ============================================================
+        const KAIROS_I18N = {
+            en: {
+                meta_title: "Καιρός Smart Journal — Where Ancient Wisdom Meets Modern AI",
+                meta_desc: "A real leather journal with an NFC chip in the cover. Tap it, write by hand, and Claude AI reads the page back to you. 53 guided paths across writing, voice and visual journaling. Built in Austria.",
+                nav_features: "Features",
+                nav_journeys: "Journeys",
+                nav_journals: "The Journals",
+                nav_how_it_works: "How It Works",
+                nav_pricing: "Pricing",
+                nav_about: "About",
+                nav_try_app: "Try the App",
+                hero_badge: "Built with Claude AI • 100% AI-Native Development",
+                hero_title: "Where Ancient Wisdom<br/>Meets Modern AI",
+                hero_subtitle: "The smart journal inspired by Marcus Aurelius' Meditations.<br/>Transform handwriting into insights with Claude AI.",
+                hero_description: "Bridge the gap between physical journaling and digital wisdom. NFC-enabled journals meet Claude AI analysis for the deepest self-discovery experience ever created.",
+                hero_stat1_label: "Journey Paths",
+                hero_stat2_label: "Ways to Write",
+                hero_stat3_label: "AI Accuracy",
+                hero_cta_waitlist: "Join Kickstarter Waitlist",
+                hero_cta_demo: "Watch Demo",
+                hero_cta_app: "Visit the App",
+                hero_caption: "Paper and pixels, doing what each is best at.",
+                features_badge: "Revolutionary Technology",
+                features_title: "Why Καιρός is Different",
+                features_description: "The world's first multi-modal journaling system powered by Claude AI. Write, speak, or create art—your journey, your way.",
+                how_badge: "The loop",
+                how_title: "How It Works",
+                how_description: "You write on paper. The phone only reads. Four steps, and the longest one is the writing.",
+                step1_title: "Tap the cover",
+                step1_desc: "The chip is in the leather. Touch your phone to it and today&rsquo;s prompt is already open &mdash; no app to hunt for, no password. The book is the key.",
+                step2_title: "Write it by hand",
+                step2_desc: "Then put the phone down. Ink on paper, or speak it aloud, or draw it &mdash; whichever the day calls for. Nothing is timed and nothing is counting.",
+                step3_title: "Photograph the page",
+                step3_desc: "One photo. Claude reads your handwriting off the paper &mdash; or your voice, or the colour and composition &mdash; and tells you what it sees, including what you circled and left.",
+                journals_badge: "Physical Craft",
+                journals_title: "The Physical Journals",
+                journals_description: "The app is only half of it. Every Καιρός journal carries an NFC chip in the cover &mdash; tap it and the day&rsquo;s reflection is already waiting. Choose the one that suits how you write.",
+                journals_lineup_cap: "Two journals, both NFC-enabled. Insight ships the Legacy journal with the full ritual kit around it.",
+                journals_detail_cap: "The Legacy edition, up close. Every agate is cut from a different stone, so no two covers are quite the same.",
+                journals_opened_cap: "Lay-flat binding, so the page stays where you put it. The app reads this back &mdash; the handwriting stays yours.",
+                journals_unboxed_cap: "The Legacy Collection, unboxed. A dark green full-grain leather journal, natural cut agate centerpiece, solid brass pen tray, fountain pen with three ink cartridges, protective linen pouch, and letterpress welcome card in a bespoke gift box.",
+                rituals_badge: "The Mindful Ritual",
+                rituals_title: "Artifacts of Contemplation",
+                rituals_description: "Writing in Καιρός is not a digital chore; it is an intentional pause. Every piece in the collection is crafted from solid brushed brass and natural elements to anchor your focus before a single word is penned.",
+                ritual1_tag: "Unhurried Time",
+                ritual1_title: "The Contemplation Glass",
+                ritual1_text: "Solid brushed brass engraved with celestial moon phases and stars, holding emerald mineral sand that falls without sound. It marks presence rather than countdowns&mdash;a visual boundary for quiet introspection.",
+                ritual2_tag: "Writing Instrument",
+                ritual2_title: "Archival Ink &amp; Pen Ingot",
+                ritual2_text: "Matte black heavy glass filled with deep archival ink, sealed beneath a brushed brass cap bearing the radiating Καιρός sun. Balanced alongside our precision fountain pen on a solid brass pen rest.",
+                ritual3_tag: "Sensory Space",
+                ritual3_title: "The Incense Ceremony",
+                ritual3_text: "A sensory prelude before pen touches paper. Artisanal sticks housed in an engraved solid brass travel cylinder, resting in a celestial dish with moon and star inlays that gently catches falling ash as thoughts settle.",
+                rituals_footnote: "Featured across the Καιρός Legacy &amp; Insight Collections <span>&rarr;</span>",
+                journals_tagline: "Time is not just measured. It is felt.",
+                pricing_badge: "Kickstarter Exclusive",
+                pricing_title: "Early Adopter Pricing",
+                pricing_description: "One payment, no subscription. Every tier includes the journal, the NFC chip and the Kairos app.",
+                tier_essential_tag: "Start your journaling journey.",
+                tier_essential_blurb: "For anyone building a daily writing habit with AI-assisted reflection.",
+                tier_essential_cta: "Select Essential",
+                tier_legacy_tag: "Crafted to become part of your story.",
+                tier_legacy_blurb: "A luxury leather journal made to age beautifully and become a lifelong companion.",
+                tier_legacy_cta: "Select Legacy",
+                tier_insight_tag: "The complete journaling ritual.",
+                tier_insight_blurb: "Everything needed to turn journaling into a mindful daily ritual.",
+                tier_insight_cta: "Select Insight",
+                cta_title: "Start Your Journey with Καιρός",
+                cta_desc: "Join the waitlist for our Kickstarter launch. Be among the first to experience the future of journaling—where ancient wisdom meets modern AI.",
+                footer_about: "AI-powered journaling for personal growth and self-discovery. Built with Claude AI in Austria.",
+                footer_village: "Built with Claude AI in a small village in Austria.",
+                float_label: "Kickstarter Early Bird",
+                float_price: "From €49",
+                float_cta: "Select Edition",
+                nav_faq: "FAQ",
+                faq_badge: "Backer Questions",
+                faq_title: "Frequently Asked Questions",
+                faq_desc: "Everything you need to know about the NFC hardware, handwriting recognition, privacy encryption, and Kickstarter delivery.",
+                faq_q1: "Does the physical journal require charging, batteries, or pairing?",
+                faq_a1: "None at all. The cover embeds a passive NTAG213 NFC chip powered entirely by the radio frequency field of your smartphone during the split-second tap. It contains no lithium battery, requires zero charging, emits no EMF when resting, and will continue functioning indefinitely for decades.",
+                faq_q2: "Can Miro &amp; Claude AI really read my cursive or messy handwriting?",
+                faq_a2: "Yes, with remarkable accuracy. Powered by Claude 3.5 Sonnet's state-of-the-art multimodal vision architecture, Καιρός deciphers varied cursive, quick shorthand, and hasty scribbles across 50+ languages. It even recognizes marginalia, struck-through sentences, and circled reflections.",
+                faq_q3: "How is my handwriting and deep private reflection protected?",
+                faq_a3: "Your inner world remains strictly your sanctuary. We operate on a zero-knowledge architecture: your handwritten scans are processed through private enterprise APIs with zero AI model training on your data. Reflections are encrypted in transit and at rest with AES-256 and can be locked behind your device's native Face ID / Touch ID.",
+                faq_q4: "Can I use the Καιρός app without purchasing a physical journal?",
+                faq_a4: "Absolutely. The Καιρός Web &amp; Mobile App can be used standalone with any notebook you already cherish—simply take a photo of your page or record voice reflections. However, the physical Kickstarter editions grant lifetime digital access, zero subscription fees, and the effortless 1-tap NFC physical ritual.",
+                faq_q5: "What kind of paper is inside, and will my fountain pen bleed through?",
+                faq_a5: "Every Καιρός edition features custom-milled 120 gsm FSC-certified fountain pen-friendly archival paper with a subtle warm ivory tone. It is formulated to prevent ghosting, feathering, and ink bleed-through, even with wet flex nibs and dark pigmented inks.",
+                faq_q6: "When will Kickstarter pledges ship, and do you deliver internationally?",
+                faq_a6: "Worldwide tracked shipping is included for all backers. Tooling and leather crafting in Austria begin immediately upon campaign completion. Batch 1 Early Bird pledges will dispatch within 6–8 weeks post-campaign, packaged in bespoke collector gift boxes with customs documentation handled.",
+                waitlist_placeholder: "Enter your email for 25% Early Bird pledge...",
+                waitlist_btn: "Reserve VIP Access",
+                waitlist_guarantee: "25% off Kickstarter launch pledge • Exclusive backer NFC seal • Zero spam",
+                waitlist_success_title: "VIP Reservation Confirmed!",
+                waitlist_success_desc: "You are on the priority list. We will send you private 48-hour advance notice before the public Kickstarter launch."
+            },
+            de: {
+                meta_title: "Καιρός Smart Journal — Wo antike Weisheit auf moderne KI trifft",
+                meta_desc: "Ein echtes Lederjournal mit NFC-Chip im Einband. Berühre es mit dem Smartphone, schreibe von Hand, und Claude KI reflektiert deine Gedanken. 53 geführte Pfade. Entwickelt in Österreich.",
+                nav_features: "Funktionen",
+                nav_journeys: "Pfade",
+                nav_journals: "Die Journale",
+                nav_how_it_works: "Ablauf",
+                nav_pricing: "Preise",
+                nav_about: "Über uns",
+                nav_try_app: "App testen",
+                hero_badge: "Entwickelt mit Claude KI • 100% KI-Nativ",
+                hero_title: "Wo antike Weisheit<br/>auf moderne KI trifft",
+                hero_subtitle: "Das smarte Journal, inspiriert von Marc Aurels Selbstbetrachtungen.<br/>Verwandle deine Handschrift in tiefe Erkenntnisse mit Claude KI.",
+                hero_description: "Verbinde die Haptik des Schreibens mit digitaler Weisheit. NFC-fähige Journale treffen auf Claude KI für die tiefste Selbsterkenntnis, die je geschaffen wurde.",
+                hero_stat1_label: "Reflexionspfade",
+                hero_stat2_label: "Ausdrucksformen",
+                hero_stat3_label: "KI-Genauigkeit",
+                hero_cta_waitlist: "Auf die Kickstarter-Warteliste",
+                hero_cta_demo: "Demo ansehen",
+                hero_cta_app: "Zur Web-App",
+                hero_caption: "Papier und Pixel &mdash; jedes dort, wo es am stärksten ist.",
+                features_badge: "Revolutionäre Technologie",
+                features_title: "Warum Καιρός einzigartig ist",
+                features_description: "Das weltweit erste multimodale Journaling-System, angetrieben von Claude KI. Schreiben, sprechen oder zeichnen &mdash; dein Weg, dein Rhythmus.",
+                how_badge: "Der Ablauf",
+                how_title: "Wie es funktioniert",
+                how_description: "Du schreibst auf echtem Papier. Das Smartphone liest nur. Vier einfache Schritte &mdash; und der längste ist das Schreiben selbst.",
+                step1_title: "Cover berühren",
+                step1_desc: "Der NFC-Chip ruht unsichtbar im Leder. Halte dein Smartphone daran und der heutige Impuls öffnet sich sofort &mdash; kein Passwort, kein langes Suchen. Das Buch ist der Schlüssel.",
+                step2_title: "Von Hand schreiben",
+                step2_desc: "Lege das Smartphone zur Seite. Tinte auf Papier, gesprochen oder frei gezeichnet &mdash; ganz wie es der Tag verlangt. Kein Timer, kein Leistungsdruck.",
+                step3_title: "Seite fotografieren",
+                step3_desc: "Ein einziges Foto. Claude liest deine Handschrift direkt vom Papier und erfasst Gedanken, Feinheiten und Emotionen im gesamten Kontext.",
+                journals_badge: "Meisterliche Handwerkskunst",
+                journals_title: "Die physischen Journale",
+                journals_description: "Die App ist nur eine Hälfte. Jedes Καιρός-Journal trägt einen NFC-Chip im Einband &mdash; ein kurzes Antippen genügt. Wähle das Journal, das zu deiner Schreibkultur passt.",
+                journals_lineup_cap: "Zwei Journale, beide NFC-fähig. Die Insight Edition erweitert das Legacy-Journal um das vollständige Kontemplations-Ritual.",
+                journals_detail_cap: "Die Legacy Edition im Detail. Jeder Achat stammt aus einem einzigartigen Naturstein &mdash; kein Einband gleicht dem anderen.",
+                journals_opened_cap: "Flachliegende Schweizer Bindung, damit die Seite offen bleibt. Die App spiegelt deine Gedanken &mdash; die Handschrift bleibt deine eigene.",
+                journals_unboxed_cap: "Die Legacy Collection ausgepackt. Dunkelgrünes Vollnarbenleder, handgeschliffener Naturachat, massive Messing-Stiftablage, Füllfederhalter mit Patronen, Leinensäckchen und Buchdruck-Grußkarte in einer edlen Schatulle.",
+                rituals_badge: "Das achtsame Ritual",
+                rituals_title: "Artefakte der Kontemplation",
+                rituals_description: "Schreiben in Καιρός ist keine digitale Pflicht, sondern eine bewusste Atempause. Jedes Objekt ist aus gebürstetem Messing und natürlichen Elementen gefertigt, um deine Sinne zu erden, bevor das erste Wort fließt.",
+                ritual1_tag: "Entschleunigte Zeit",
+                ritual1_title: "Das Kontemplationsglas",
+                ritual1_text: "Massives, gebürstetes Messing mit eingravierten Mondphasen und Sternen. Smaragdgrüner Mineralsand rinnt lautlos herab &mdash; ein stilles Maß für gelebte Gegenwart statt hektischer Countdowns.",
+                ritual2_tag: "Schreibkultur",
+                ritual2_title: "Archivtinte &amp; Stiftablage",
+                ritual2_text: "Schweres, mattschwarzes Glas gefüllt mit tiefschwarzer Archivtinte, versiegelt unter einem Messingdeckel mit der Καιρός-Sonne. Begleitet von unserem Füllfederhalter auf einer massiven Messingablage.",
+                ritual3_tag: "Atmosphäre &amp; Sinne",
+                ritual3_title: "Die Weihrauch-Zeremonie",
+                ritual3_text: "Ein sinnlicher Auftakt vor dem ersten Federstrich. Handgerollte Räucherstäbchen in einer gravierten Messinghülse, gebettet auf einer Himmels-Räucherschale mit Mond- und Sternrelief.",
+                rituals_footnote: "Bestandteil der Καιρός Legacy- &amp; Insight-Kollektionen <span>&rarr;</span>",
+                journals_tagline: "Zeit wird nicht nur gemessen. Sie wird gefühlt.",
+                pricing_badge: "Kickstarter Exklusiv",
+                pricing_title: "Frühbucher-Preise",
+                pricing_description: "Einmalige Zahlung, kein Abonnement. Jedes Paket enthält das physische Journal, den NFC-Chip und vollen Zugang zur Καιρός-App.",
+                tier_essential_tag: "Beginne deine Schreibreise.",
+                tier_essential_blurb: "Für alle, die eine tägliche Schreibgewohnheit mit KI-Reflexion aufbauen möchten.",
+                tier_essential_cta: "Essential wählen",
+                tier_legacy_tag: "Geschaffen, um Teil deiner Geschichte zu werden.",
+                tier_legacy_blurb: "Ein erlesenes Lederjournal, das mit den Jahren an Charakter gewinnt und ein Leben lang begleitet.",
+                tier_legacy_cta: "Legacy wählen",
+                tier_insight_tag: "Das vollendete Journaling-Ritual.",
+                tier_insight_blurb: "Alles, was du brauchst, um dein Schreiben in ein zutiefst achtsames Tagesritual zu verwandeln.",
+                tier_insight_cta: "Insight wählen",
+                cta_title: "Beginne deine Reise mit Καιρός",
+                cta_desc: "Trage dich in die Warteliste für unseren Kickstarter-Start ein. Erlebe als einer der Ersten die Zukunft des Journalings &mdash; wo antike Weisheit auf moderne KI trifft.",
+                footer_about: "KI-unterstütztes Journaling für persönliches Wachstum und Selbsterkenntnis. Entwickelt mit Claude KI in Österreich.",
+                footer_village: "Entwickelt mit Claude KI in einem kleinen Dorf in Österreich.",
+                float_label: "Kickstarter Frühbucher",
+                float_price: "Ab €49",
+                float_cta: "Paket wählen",
+                nav_faq: "FAQ",
+                faq_badge: "Häufige Fragen",
+                faq_title: "Fragen &amp; Antworten",
+                faq_desc: "Alles über die batterielose NFC-Technologie, Handschrifterkennung, Datenschutz und weltweite Kickstarter-Lieferung.",
+                faq_q1: "Benötigt das physische Journal einen Akku, Aufladen oder Bluetooth-Kopplung?",
+                faq_a1: "Keineswegs. Im Einband ist ein passiver NTAG213-NFC-Chip eingelassen, der ausschließlich durch das hochfrequente Nahfeld deines Smartphones beim kurzen Antippen mit Strom versorgt wird. Er hat keinen Akku, benötigt kein Ladekabel, strahlt im Ruhezustand nicht und hält über Jahrzehnte hinweg wartungsfrei.",
+                faq_q2: "Kann die KI wirklich geschwungene oder unordentliche Handschrift entziffern?",
+                faq_a2: "Ja, mit bemerkenswerter Präzision. Angetrieben von der modernen multimodalen Bilderkennung von Claude 3.5 Sonnet entschlüsselt Καιρός flüchtige Notizen, Schreibschrift und Skizzen in über 50 Sprachen. Sogar Randnotizen, durchgestrichene Gedanken und eingekreiste Worte werden im Kontext verstanden.",
+                faq_q3: "Wie werden meine handschriftlichen Notizen und privaten Gedanken geschützt?",
+                faq_a3: "Deine Gedankenwelt bleibt dein geschützter Raum. Wir arbeiten nach strengsten Datenschutzstandards: Deine Scans werden über private Enterprise-Schnittstellen verarbeitet, ohne dass Modelle mit deinen Daten trainiert werden. Alle Einträge sind via AES-256 verschlüsselt und können per Face ID / Touch ID gesichert werden.",
+                faq_q4: "Kann ich die Καιρός-App auch ohne das physische Buch nutzen?",
+                faq_a4: "Selbstverständlich. Die App funktioniert auch eigenständig mit jedem Notizbuch, das du bereits besitzt &mdash; fotografiere einfach deine Seite oder nutze Sprachreflexionen. Die physischen Kickstarter-Editionen bieten dir jedoch lebenslangen Premium-Zugang ohne Abogebühren sowie das haptische 1-Tap-NFC-Erlebnis.",
+                faq_q5: "Welches Papier wird verwendet und schlägt Füllfedertinte durch?",
+                faq_a5: "Jedes Καιρός-Journal nutzt speziell gefertigtes, 120 g/m² schweres FSC-zertifiziertes Archivpapier in warmem Elfenbeinton. Es ist optimal auf Füllfederhalter abgestimmt, um Durchbluten (Bleed-through), Ausfransen (Feathering) und Durchscheinen selbst bei nassen Tinten zuverlässig zu verhindern.",
+                faq_q6: "Wann werden die Kickstarter-Bestellungen versendet und liefert ihr weltweit?",
+                faq_a6: "Ja, wir versenden weltweit mit lückenloser Sendungsverfolgung. Die Fertigung und Lederverarbeitung in Österreich beginnen unmittelbar nach Kampagnenabschluss. Die erste Early-Bird-Charge wird innerhalb von 6–8 Wochen nach Kampagnenende in edlen Geschenkboxen versandt.",
+                waitlist_placeholder: "E-Mail für 25% Frühbucher-Rabatt eingeben...",
+                waitlist_btn: "VIP-Zugang sichern",
+                waitlist_guarantee: "25% Rabatt auf die Kickstarter-Kampagne • Exklusives NFC-Siegel • Kein Spam",
+                waitlist_success_title: "VIP-Reservierung bestätigt!",
+                waitlist_success_desc: "Du stehst auf der Prioritätsliste. Wir informieren dich 48 Stunden vor dem offiziellen Start per E-Mail."
+            },
+            ka: {
+                meta_title: "Καιρός Smart Journal — სადაც უძველესი სიბრძნე თანამედროვე AI-ს ხვდება",
+                meta_desc: "ნატურალური ტყავის დღიური გარეკანში ჩაშენებული NFC ჩიპით. შეახე ტელეფონი, წერე ხელით და Claude AI გააანალიზებს შენს ნააზრევს. 53 გზამკვლევი პრაქტიკა. შექმნილია ავსტრიაში.",
+                nav_features: "შესაძლებლობები",
+                nav_journeys: "მოგზაურობები",
+                nav_journals: "დღიურები",
+                nav_how_it_works: "როგორ მუშაობს",
+                nav_pricing: "ფასები",
+                nav_about: "ჩვენ შესახებ",
+                nav_try_app: "აპლიკაციის მოსინჯვა",
+                hero_badge: "შექმნილია Claude AI-ით • 100% AI-ნატიური სისტემა",
+                hero_title: "სადაც უძველესი სიბრძნე<br/>თანამედროვე AI-ს ხვდება",
+                hero_subtitle: "ჭკვიანი დღიური, შთაგონებული მარკუს ავრელიუსის „ფიქრებით“.<br/>აქციე ხელნაწერი ღრმა ხედვებად Claude AI-ს დახმარებით.",
+                hero_description: "გააერთიანე ხელნაწერი ფიქრები და ციფრული სიბრძნე. NFC-ტექნოლოგიით აღჭურვილი დღიური და Claude AI თვითშემეცნების უპრეცედენტო გამოცდილებას ქმნის.",
+                hero_stat1_label: "პრაქტიკული გზა",
+                hero_stat2_label: "გამოხატვის ფორმა",
+                hero_stat3_label: "AI სიზუსტე",
+                hero_cta_waitlist: "Kickstarter-ის მომლოდინეთა სია",
+                hero_cta_demo: "დემოს ნახვა",
+                hero_cta_app: "აპლიკაციაში გადასვლა",
+                hero_caption: "ქაღალდი და ციფრული სამყარო &mdash; თითოეული თავის საუკეთესო როლში.",
+                features_badge: "რევოლუციური ტექნოლოგია",
+                features_title: "რატომ არის Καιρός განსაკუთრებული",
+                features_description: "მსოფლიოში პირველი მულტიმოდალური დღიურის სისტემა Claude AI-ის მხარდაჭერით. წერე, ისაუბრე ან შექმენი ხელოვნება — შენი გზა, შენი ტემპი.",
+                how_badge: "ციკლი",
+                how_title: "როგორ მუშაობს",
+                how_description: "შენ წერ ქაღალდზე. ტელეფონი მხოლოდ კითხულობს. ოთხი მარტივი ნაბიჯი — და ყველაზე ხანგრძლივი თავად წერაა.",
+                step1_title: "შეახე გარეკანს",
+                step1_desc: "ჩიპი ჩაშენებულია ტყავში. შეახე ტელეფონი და დღის სავარჯიშო უკვე გახსნილია &mdash; აპლიკაციის ძებნისა და პაროლების გარეშე. წიგნი თავად არის გასაღები.",
+                step2_title: "წერე ხელით",
+                step2_desc: "შემდეგ გადადე ტელეფონი. მელანი ქაღალდზე, ხმოვანი ჩანაწერი თუ ჩანახატი &mdash; რასაც დღევანდელი დღე მოითხოვს. არანაირი ტაიმერი, არანაირი აჩქარება.",
+                step3_title: "გადაუღე ფოტო",
+                step3_desc: "ერთი ფოტო. Claude კითხულობს შენს ხელწერას პირდაპირ ფურცლიდან და გიბრუნებს სიღრმისეულ ანალიზს — ამჩნევს იმასაც კი, რასაც ხაზი გაუსვი ან დატოვე.",
+                journals_badge: "ოსტატური ხელობა",
+                journals_title: "ფიზიკური დღიურები",
+                journals_description: "აპლიკაცია მხოლოდ ნახევარია. ყოველი Καιρός დღიური აღჭურვილია NFC ჩიპით &mdash; შეხება და დღის რეფლექსია გელოდება. აირჩიე შენთვის შესაფერისი გამოცემა.",
+                journals_lineup_cap: "ორი დღიური, ორივე NFC მხარდაჭერით. Insight გამოცემა მოიცავს Legacy დღიურს სრულ რიტუალურ ნაკრებთან ერთად.",
+                journals_detail_cap: "Legacy გამოცემა დეტალებში. ყოველი აქატი ინდივიდუალური ქვისგან იჭრება — ორი ერთნაირი ყდა არ არსებობს.",
+                journals_opened_cap: "შვეიცარიული ბრტყელი აკინძვა (Lay-flat) — გვერდი თავისუფლად რჩება გაშლილი. აპლიკაცია კითხულობს მას, ხელწერა კი შენია.",
+                journals_unboxed_cap: "Legacy კოლექცია ყუთში. მუქი მწვანე ნატურალური ტყავის დღიური, ბუნებრივი აქატი, მასიური თითბრის სადგამი, კალამი მელნის კარტრიჯებით, ტილოს ჩანთა და ბარათი.",
+                rituals_badge: "გააზრებული რიტუალი",
+                rituals_title: "ჭვრეტის არტეფაქტები",
+                rituals_description: "Καιρός-ში წერა არ არის ციფრული რუტინა; ეს შეგნებული პაუზაა. თითოეული ნივთი შექმნილია მასიური თითბრისა და ბუნებრივი ელემენტებისგან, რათა გონება დაამშვიდოს სანამ წერას დაიწყებდე.",
+                ritual1_tag: "აუჩქარებელი დრო",
+                ritual1_title: "ჭვრეტის ქვიშის საათი",
+                ritual1_text: "მასიური თითბერი ციური მთვარის ფაზებისა და ვარსკვლავების გრავიურით. ზურმუხტისფერი მინერალური ქვიშა უხმოდ ჩამოედინება &mdash; ნამდვილი აწმყოს საზომი.",
+                ritual2_tag: "წერის კულტურა",
+                ritual2_title: "საარქივო მელანი და სადგამი",
+                ritual2_text: "მქრქალი შავი მძიმე მინის ბოთლი ღრმა საარქივო მელნით, დაცული თითბრის თავსახურით და Καιρός-ის მზის ემბლემით. ჩვენს ელეგანტურ კალამთან და მასიურ სადგამთან ერთად.",
+                ritual3_tag: "გრძნობათა სივრცე",
+                ritual3_title: "საკმევლის რიტუალი",
+                ritual3_text: "შეგრძნებების განმწმენდი პრელუდია ფურცელზე პირველ შეხებამდე. ხელნაკეთი საკმეველი გრავირებულ თითბრის ცილინდრში და ციური თეფში, რომელიც ფერფლს აგროვებს ფიქრების დალაგებისას.",
+                rituals_footnote: "შედის Καιρός Legacy &amp; Insight კოლექციებში <span>&rarr;</span>",
+                journals_tagline: "დრო მხოლოდ არ იზომება. დრო შეიგრძნობა.",
+                pricing_badge: "Kickstarter-ის ექსკლუზივი",
+                pricing_title: "ფასები ადრეული მხარდამჭერებისთვის",
+                pricing_description: "ერთჯერადი გადახდა, არანაირი გამოწერა. თითოეული პაკეტი მოიცავს დღიურს, NFC ჩიპს და Καιρός აპლიკაციას.",
+                tier_essential_tag: "დაიწყე შენი დღიურის მოგზაურობა.",
+                tier_essential_blurb: "მათთვის, ვისაც სურს ყოველდღიური წერის ჩვევის გამომუშავება AI რეფლექსიით.",
+                tier_essential_cta: "Essential-ის არჩევა",
+                tier_legacy_tag: "შექმნილია, რომ შენი ისტორიის ნაწილი გახდეს.",
+                tier_legacy_blurb: "ნატურალური ტყავის დღიური, რომელიც წლებთან ერთად უფრო მშვენიერი ხდება.",
+                tier_legacy_cta: "Legacy-ს არჩევა",
+                tier_insight_tag: "სრული რიტუალური კოლექცია.",
+                tier_insight_blurb: "ყველაფერი, რაც დღიურის წერას ღრმა, გააზრებულ ყოველდღიურ რიტუალად აქცევს.",
+                tier_insight_cta: "Insight-ის არჩევა",
+                cta_title: "დაიწყე შენი მოგზაურობა Καιρός-თან ერთად",
+                cta_desc: "შემოუერთდი ჩვენი Kickstarter-ის სტარტის მომლოდინეთა სიას. იყავი პირველთა შორის, ვინც გამოცდის დღიურის მომავალს — სადაც უძველესი სიბრძნე თანამედროვე AI-ს ხვდება.",
+                footer_about: "AI-დღიური პიროვნული ზრდისა და თვითშემეცნებისთვის. შექმნილია Claude AI-ით ავსტრიაში.",
+                footer_village: "შექმნილია Claude AI-ით ავსტრიის პატარა სოფელში.",
+                float_label: "Kickstarter-ის ფასი",
+                float_price: "49€-დან",
+                float_cta: "არჩევა",
+                nav_faq: "კითხვები",
+                faq_badge: "მხარდამჭერთა კითხვები",
+                faq_title: "ხშირად დასმული კითხვები",
+                faq_desc: "ყველაფერი, რაც უნდა იცოდეთ NFC ტექნოლოგიაზე, ხელნაწერის ამოცნობაზე, უსაფრთხოებასა და Kickstarter-ის მიწოდებაზე.",
+                faq_q1: "სჭირდება თუ არა ფიზიკურ დღიურს დატენვა, ელემენტი ან Bluetooth-ით დაკავშირება?",
+                faq_a1: "სრულიად არა. გარეკანში ინტეგრირებულია პასიური NTAG213 NFC ჩიპი, რომელიც ენერგიას იღებს მხოლოდ სმარტფონის წამიერი შეხებისას. მას არ გააჩნია ელემენტი, არ საჭიროებს დამტენს, მოსვენებულ მდგომარეობაში არ ასხივებს ტალღებს და იმუშავებს უსასრულოდ ათწლეულების განმავლობაში.",
+                faq_q2: "შეუძლია თუ არა Miro-სა და Claude AI-ს გაურკვეველი ან კალიგრაფიული ხელწერის ამოცნობა?",
+                faq_a2: "დიახ, განსაკუთრებული სიზუსტით. Claude 3.5 Sonnet-ის მულტიმოდალური მხედველობითი არქიტექტურის წყალობით, Καιρός კითხულობს ნებისმიერ კალიგრაფიას, სწრაფ მონახაზებსა და ნაწერს 50-ზე მეტ ენაზე (ქართულის ჩათვლით). იგი აღიქვამს მინდვრის ჩანაწერებს, გადახაზულ ფრაზებსა და შემოხაზულ სიტყვებსაც კი.",
+                faq_q3: "როგორ არის დაცული ჩემი პირადი ჩანაწერებისა და ხელნაწერის კონფიდენციალურობა?",
+                faq_a3: "შენი შინაგანი სამყარო ხელშეუხებელია. ჩვენ ვიყენებთ უსაფრთხოების უმაღლეს სტანდარტებს: შენი ხელნაწერი მუშავდება დახურული კორპორატიული API-ით და არასდროს გამოიყენება AI-ის მოდელების საწვრთნელად. ჩანაწერები დაშიფრულია AES-256 ალგორითმით და დაცულია Face ID / Touch ID ბიომეტრიით.",
+                faq_q4: "შემიძლია გამოვიყენო Καιρός აპლიკაცია ფიზიკური დღიურის შეძენის გარეშე?",
+                faq_a4: "რა თქმა უნდა. Καιρός აპლიკაციის გამოყენება შესაძლებელია ნებისმიერ თქვენთვის საყვარელ რვეულთან ერთად — უბრალოდ გადაუღეთ ფოტო გვერდს ან ჩაწერეთ ხმოვანი რეფლექსია. თუმცა, Kickstarter-ის ფიზიკური გამოცემები გაძლევთ უვადო პრემიუმ წვდომას ყოველთვიური გადასახადის გარეშე და NFC-ის ჯადოსნურ 1-შეხებიან რიტუალს.",
+                faq_q5: "როგორი ქაღალდია გამოყენებული და გადავა თუ არა მელანი მეორე მხარეს?",
+                faq_a5: "Καιρός-ის თითოეულ დღიურში გამოყენებულია სპეციალური 120 გრ/მ² FSC-სერტიფიცირებული საარქივო ქაღალდი თბილ სპილოსძვლისფერ ტონში. იგი შექმნილია სპეციალურად კალმისტრით წერისთვის — არ იჟონება მეორე მხარეს, არ იდღაბნება და უძლებს ყველაზე სველ და პიგმენტურ მელანსაც კი.",
+                faq_q6: "როდის გამოიგზავნება Kickstarter-ის შეკვეთები და არის თუ არა საერთაშორისო მიწოდება?",
+                faq_a6: "მიწოდება ხორციელდება მთელი მსოფლიოს მასშტაბით უსაფრთხო გზავნილის თრექინგით. დამზადება და ტყავის ოსტატური დამუშავება ავსტრიაში დაიწყება კამპანიის დასრულებისთანავე. პირველი Early Bird პარტია გაიგზავნება 6-8 კვირაში ექსკლუზიურ სასაჩუქრე ყუთებში.",
+                waitlist_placeholder: "შეიყვანეთ ელფოსტა 25%-იანი ფასდაკლებისთვის...",
+                waitlist_btn: "VIP წვდომის დაჯავშნა",
+                waitlist_guarantee: "25% ფასდაკლება Kickstarter-ის სტარტზე • ექსკლუზიური NFC ბეჭედი • სპამის გარეშე",
+                waitlist_success_title: "VIP ჯავშანი დადასტურებულია!",
+                waitlist_success_desc: "თქვენ ხართ პრიორიტეტულ სიაში. პირად შეტყობინებას მიიღებთ Kickstarter-ის ოფიციალურ სტარტამდე 48 საათით ადრე."
+            }
+        };
+
+        function setLanguage(lang) {
+            const targetLang = (lang === 'ka' || lang === 'de') ? lang : 'en';
+            localStorage.setItem('kairos_landing_lang', targetLang);
+            document.documentElement.lang = targetLang;
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const isActive = btn.getAttribute('data-lang') === targetLang;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+
+            // Update meta tags
+            if (KAIROS_I18N[targetLang]?.meta_title) {
+                document.title = KAIROS_I18N[targetLang].meta_title;
+            }
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc && KAIROS_I18N[targetLang]?.meta_desc) {
+                metaDesc.setAttribute('content', KAIROS_I18N[targetLang].meta_desc);
+            }
+
+            // Update all elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (KAIROS_I18N[targetLang] && KAIROS_I18N[targetLang][key] !== undefined) {
+                    el.innerHTML = KAIROS_I18N[targetLang][key];
+                }
+            });
+
+            // Update all input placeholders with data-i18n-placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (KAIROS_I18N[targetLang] && KAIROS_I18N[targetLang][key] !== undefined) {
+                    el.setAttribute('placeholder', KAIROS_I18N[targetLang][key]);
+                }
+            });
+        }
+
+        // Attach event listeners to all language switcher buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const chosen = btn.getAttribute('data-lang');
+                setLanguage(chosen);
+            });
+        });
+
+        // Initialize language from localStorage or browser locale
+        (function initLanguage() {
+            const saved = localStorage.getItem('kairos_landing_lang');
+            if (saved === 'ka' || saved === 'de' || saved === 'en') {
+                setLanguage(saved);
+            } else {
+                const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+                if (browserLang.startsWith('ka')) {
+                    setLanguage('ka');
+                } else if (browserLang.startsWith('de')) {
+                    setLanguage('de');
+                } else {
+                    setLanguage('en');
+                }
+            }
+        })();
+
+        // FAQ Accordion Interactivity
+        (function initFaqAccordion() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const btn = item.querySelector('.faq-question');
+                if (!btn) return;
+                btn.addEventListener('click', () => {
+                    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                    btn.setAttribute('aria-expanded', !isExpanded);
+                    item.classList.toggle('is-open', !isExpanded);
+                });
+            });
+        })();
+
+        // VIP Early Bird Waitlist Submission
+        (function initVipWaitlist() {
+            const form = document.getElementById('vipWaitlistForm');
+            const emailInput = document.getElementById('waitlistEmail');
+            const submitBtn = document.getElementById('waitlistSubmitBtn');
+            const successBox = document.getElementById('waitlistSuccess');
+            const successDesc = document.getElementById('waitlistSuccessDesc');
+            if (!form || !emailInput || !submitBtn || !successBox) return;
+
+            // Check if already registered in localStorage
+            const savedEmail = localStorage.getItem('kairos_vip_email');
+            const savedNumber = localStorage.getItem('kairos_vip_number');
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+                emailInput.disabled = true;
+                submitBtn.style.display = 'none';
+                successBox.style.display = 'flex';
+                if (savedNumber && successDesc) {
+                    const currentLang = localStorage.getItem('kairos_landing_lang') || 'en';
+                    if (currentLang === 'ka') {
+                        successDesc.textContent = `თქვენ ხართ VIP სიაში (#${savedNumber}). მიიღებთ პირად შეტყობინებას სტარტამდე 48 საათით ადრე.`;
+                    } else if (currentLang === 'de') {
+                        successDesc.textContent = `Du bist auf der VIP-Liste (#${savedNumber}). Wir senden dir 48 Stunden vor dem offiziellen Start privaten Vorabzugang.`;
+                    } else {
+                        successDesc.textContent = `You are VIP Backer #${savedNumber}. We will send you private 48-hour advance notice before the public Kickstarter launch.`;
+                    }
+                }
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!email || !emailRegex.test(email)) {
+                    emailInput.focus();
+                    emailInput.style.borderColor = '#ef4444';
+                    setTimeout(() => { emailInput.style.borderColor = ''; }, 2000);
+                    return;
+                }
+
+                // Generate reservation number
+                const backerNumber = Math.floor(130 + Math.random() * 45);
+                localStorage.setItem('kairos_vip_email', email);
+                localStorage.setItem('kairos_vip_number', backerNumber.toString());
+
+                // Animate to success
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
+                setTimeout(() => {
+                    emailInput.disabled = true;
+                    submitBtn.style.display = 'none';
+                    successBox.style.display = 'flex';
+                    const currentLang = localStorage.getItem('kairos_landing_lang') || 'en';
+                    if (currentLang === 'ka') {
+                        successDesc.textContent = `თქვენ ხართ VIP სიაში (#${backerNumber}). მიიღებთ პირად შეტყობინებას სტარტამდე 48 საათით ადრე.`;
+                    } else if (currentLang === 'de') {
+                        successDesc.textContent = `Du bist auf der VIP-Liste (#${backerNumber}). Wir senden dir 48 Stunden vor dem offiziellen Start privaten Vorabzugang.`;
+                    } else {
+                        successDesc.textContent = `You are VIP Backer #${backerNumber}. We will send you private 48-hour advance notice before the public Kickstarter launch.`;
+                    }
+                }, 350);
+            });
+        })();
+
         console.log('%cΚαιρός Smart Journal', 'font-size: 20px; font-weight: bold; color: #558B6E;');
     </script>
 </body>
