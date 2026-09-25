@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Καιρός (Kairos) — Portfolio Case Study | Giorgi Akopashvili</title>
+    <meta name="description" content="A comprehensive portfolio case study on Καιρός (Kairos): an analog-first smart journal pairing physical handwriting and NFC hardware with serverless AI analysis and longitudinal reflection.">
+    <link rel="canonical" href="https://reflection-writer.web.app/landing.html">
+
+    <!-- 
+    =============================================================================
+    IMAGE REPLACEMENT MAP
+    =============================================================================
+    Role                  | Placeholder URL                                                        | Description
+    ----------------------|------------------------------------------------------------------------|---------------------------------------------------------------------
+    hero                  | https://placehold.co/1600x900/050507/558B6E?text=Kairos+Hero+Lifestyle | Legacy journal open on dark slate beside brass pen and phone
+    origin-v1             | https://placehold.co/800x600/0f0f12/F5F5F0?text=Origin+App+v0.1.0       | Earliest build: raw unstyled black text on white canvas
+    origin-hardware       | https://placehold.co/800x600/0f0f12/C9A961?text=NFC+Hardware+Prototype | First physical prototype: NTAG chip taped inside raw notebook
+    journal-essential     | https://placehold.co/800x600/0f0f12/88A38F?text=Essential+Journal      | Mint-green vegan leather cover, brass medallion, gift box
+    journal-legacy        | https://placehold.co/800x600/0f0f12/558B6E?text=Legacy+Journal         | Forest-green full-grain leather, natural agate, brass corners
+    journal-insight       | https://placehold.co/800x600/0f0f12/C9A961?text=Insight+Ritual+Set     | Complete ritual flat-lay: bell, candle, cards, incense, pouch
+    agate-detail          | https://placehold.co/600x600/0f0f12/558B6E?text=Agate+Centerpiece      | Extreme macro of natural banded translucent green agate slice
+    nfc-interaction       | https://placehold.co/1200x800/0f0f12/C9A961?text=NFC+Tap+Interaction   | Android device tapping the brushed brass NFC medallion
+    screen-home           | https://placehold.co/600x1200/0f0f12/558B6E?text=App+Home+Bento        | Mobile bento layout: daily prompt hero, aura, streak & audio
+    screen-write          | https://placehold.co/600x1200/0f0f12/558B6E?text=App+Capture+Workflow   | Multi-page camera capture & handwriting scan interface
+    screen-analysis       | https://placehold.co/600x1200/0f0f12/558B6E?text=App+Analysis+Results  | Structured reflection results with Honesty Directive output
+    screen-paths          | https://placehold.co/600x1200/0f0f12/558B6E?text=Journey+Paths+Catalog | Catalog of 50+ guided paths categorized by modality & length
+    screen-miro           | https://placehold.co/600x1200/0f0f12/558B6E?text=Miro+AI+Chamber       | Conversational companion Miro with fluid living orb interface
+    =============================================================================
+    -->
+
+    <!-- Google Fonts Preconnect & Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. CSS CUSTOM PROPERTIES & DESIGN TOKENS
+           ========================================================================== */
+        :root {
+            /* Palette: Deep Forest, Natural Greens & Antique Brass */
+            --kairos-bg-base: #050507;
+            --kairos-bg-surface: #0a0b0e;
+            --kairos-bg-card: #0f1015;
+            --kairos-bg-card-hover: #151720;
+            --kairos-bg-elevated: #1a1c26;
+
+            /* Brand Accents */
+            --kairos-brand-green: #558B6E;
+            --kairos-brand-green-light: #88A38F;
+            --kairos-brand-green-dark: #2B463C;
+            --kairos-brand-green-glow: rgba(85, 139, 110, 0.25);
+
+            --kairos-brand-gold: #C9A961;
+            --kairos-brand-gold-muted: #8E7743;
+            --kairos-brand-gold-glow: rgba(201, 169, 97, 0.2);
+
+            --kairos-accent-terracotta: #E6B89C;
+            --kairos-accent-terracotta-dark: #D49A76;
+            --kairos-accent-cream: #F9DCC4;
+
+            /* Neutrals & Typography */
+            --kairos-text-primary: #F5F5F0;
+            --kairos-text-secondary: #D8D8D0;
+            --kairos-text-muted: #8E929D;
+            --kairos-text-faint: #525663;
+
+            /* Borders & Glass Dividers */
+            --kairos-border-faint: rgba(245, 245, 240, 0.05);
+            --kairos-border-subtle: rgba(245, 245, 240, 0.1);
+            --kairos-border-medium: rgba(245, 245, 240, 0.18);
+            --kairos-border-gold: rgba(201, 169, 97, 0.35);
+
+            /* Spatial Glass Materials */
+            --kairos-glass-fill: rgba(15, 16, 21, 0.65);
+            --kairos-glass-blur: blur(32px) saturate(190%);
+            --kairos-glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+
+            /* Typography Stacks */
+            --kairos-font-display: 'Cinzel', serif;
+            --kairos-font-serif: 'Newsreader', Georgia, serif;
+            --kairos-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --kairos-font-mono: 'JetBrains Mono', monospace;
+
+            /* Transitions & Easing */
+            --kairos-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --kairos-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --kairos-transition-base: 0.4s var(--kairos-ease-out);
+            --kairos-transition-slow: 0.8s var(--kairos-ease-out);
+
+            /* Spacing Metrics */
+            --kairos-space-xs: 0.5rem;
+            --kairos-space-sm: 1rem;
+            --kairos-space-md: 2rem;
+            --kairos-space-lg: 4rem;
+            --kairos-space-xl: 7rem;
+            --kairos-space-2xl: 10rem;
+        }
+
+        /* ==========================================================================
+           2. BASE RESETS & GLOBAL STYLES
+           ========================================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--kairos-bg-base);
+            color: var(--kairos-text-primary);
+            font-family: var(--kairos-font-sans);
+            font-size: 16px;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background-color: var(--kairos-bg-base);
+            color: var(--kairos-text-primary);
+            line-height: 1.68;
+            font-weight: 350;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Living Aurora Mesh Canvas */
+        @keyframes kairosAurora {
+            0% {
+                background-position: 0% 0%, 100% 100%, 50% 50%;
+                opacity: 0.85;
+            }
+            50% {
+                background-position: 25% 15%, 75% 85%, 45% 55%;
+                opacity: 1;
+            }
+            100% {
+                background-position: 0% 0%, 100% 100%, 50% 50%;
+                opacity: 0.85;
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            right: -20%;
+            bottom: -20%;
+            background: 
+                radial-gradient(circle at 18% 12%, rgba(85, 139, 110, 0.12) 0%, transparent 48%),
+                radial-gradient(circle at 82% 78%, rgba(201, 169, 97, 0.09) 0%, transparent 52%),
+                radial-gradient(circle at 50% 50%, rgba(43, 70, 60, 0.08) 0%, transparent 60%);
+            background-size: 130% 130%;
+            animation: kairosAurora 24s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Typography Hierarchy */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--kairos-text-primary);
+            font-weight: 400;
+            line-height: 1.22;
+            letter-spacing: -0.015em;
+        }
+
+        h1 {
+            font-family: var(--kairos-font-display);
+            font-size: clamp(3.2rem, 7vw, 6.2rem);
+            letter-spacing: 0.02em;
+            margin-bottom: var(--kairos-space-sm);
+        }
+
+        h2 {
+            font-family: var(--kairos-font-serif);
+            font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+            font-style: italic;
+            font-weight: 350;
+            line-height: 1.18;
+            margin-bottom: var(--kairos-space-sm);
+            color: var(--kairos-text-primary);
+        }
+
+        h3 {
+            font-family: var(--kairos-font-serif);
+            font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+            font-weight: 400;
+            color: var(--kairos-brand-gold);
+            margin-bottom: var(--kairos-space-xs);
+        }
+
+        h4 {
+            font-family: var(--kairos-font-sans);
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--kairos-text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            color: var(--kairos-text-secondary);
+            font-size: 1.08rem;
+            line-height: 1.78;
+            margin-bottom: 1.4rem;
+            max-width: 72ch;
+        }
+
+        p.kairos-lead {
+            font-family: var(--kairos-font-serif);
+            font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+            line-height: 1.55;
+            color: var(--kairos-text-primary);
+            font-weight: 300;
+            margin-bottom: var(--kairos-space-md);
+        }
+
+        strong {
+            color: var(--kairos-text-primary);
+            font-weight: 600;
+        }
+
+        em {
+            font-family: var(--kairos-font-serif);
+            font-style: italic;
+            color: var(--kairos-brand-gold);
+        }
+
+        a {
+            color: var(--kairos-brand-gold);
+            text-decoration: none;
+            transition: color var(--kairos-transition-base);
+            position: relative;
+        }
+
+        a:hover {
+            color: var(--kairos-brand-green-light);
+        }
+
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--kairos-brand-gold);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        code, pre {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.88rem;
+        }
+
+        /* Container Layouts */
+        .kairos-shell {
+            width: 100%;
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 0 var(--kairos-space-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .kairos-section {
+            padding: var(--kairos-space-2xl) 0;
+            border-bottom: 1px solid var(--kairos-border-faint);
+            position: relative;
+        }
+
+        .kairos-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .kairos-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--kairos-space-lg);
+        }
+
+        .kairos-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--kairos-space-md);
+        }
+
+        .kairos-grid-4 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--kairos-space-sm);
+        }
+
+        @media (min-width: 840px) {
+            .kairos-grid-2 { grid-template-columns: 1fr 1fr; }
+            .kairos-grid-3 { grid-template-columns: repeat(3, 1fr); }
+            .kairos-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1100px) {
+            .kairos-grid-4 { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* Section Eyebrow Labels */
+        .kairos-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--kairos-font-sans);
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            color: var(--kairos-brand-gold);
+            margin-bottom: var(--kairos-space-sm);
+        }
+
+        .kairos-label::before {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 1px;
+            background-color: var(--kairos-brand-gold);
+        }
+
+        /* ==========================================================================
+           3. NAVIGATION BAR
+           ========================================================================== */
+        .kairos-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.1rem 0;
+            background: rgba(5, 5, 7, 0.72);
+            backdrop-filter: var(--kairos-glass-blur);
+            -webkit-backdrop-filter: var(--kairos-glass-blur);
+            border-bottom: 1px solid var(--kairos-border-subtle);
+            transition: transform 0.4s ease, background 0.4s ease;
+        }
+
+        .kairos-header-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kairos-logotype {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--kairos-text-primary);
+            font-family: var(--kairos-font-display);
+            font-size: 1.25rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .kairos-logotype-symbol {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--kairos-brand-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--kairos-brand-gold);
+            font-size: 0.85rem;
+            font-family: var(--kairos-font-display);
+        }
+
+        .kairos-nav {
+            display: none;
+            gap: 1.8rem;
+            align-items: center;
+        }
+
+        .kairos-nav a {
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--kairos-text-muted);
+            font-weight: 500;
+            transition: color var(--kairos-transition-base);
+        }
+
+        .kairos-nav a:hover {
+            color: var(--kairos-text-primary);
+        }
+
+        .kairos-nav-cta {
+            padding: 0.45rem 1rem;
+            border: 1px solid var(--kairos-border-gold);
+            border-radius: 100px;
+            color: var(--kairos-brand-gold) !important;
+            font-size: 0.76rem !important;
+            transition: all var(--kairos-transition-base);
+        }
+
+        .kairos-nav-cta:hover {
+            background: var(--kairos-brand-gold);
+            color: var(--kairos-bg-base) !important;
+        }
+
+        @media (min-width: 900px) {
+            .kairos-nav { display: flex; }
+        }
+
+        /* ==========================================================================
+           4. HERO SECTION
+           ========================================================================== */
+        .kairos-hero {
+            padding-top: calc(var(--kairos-space-2xl) + 2rem);
+            padding-bottom: var(--kairos-space-xl);
+            min-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .kairos-hero-heading-group {
+            max-width: 950px;
+            margin-bottom: var(--kairos-space-lg);
+        }
+
+        .kairos-hero-greek {
+            color: var(--kairos-brand-gold);
+            margin-right: 0.4rem;
+        }
+
+        .kairos-hero-meta-table {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            padding: var(--kairos-space-md) 0;
+            border-top: 1px solid var(--kairos-border-subtle);
+            border-bottom: 1px solid var(--kairos-border-subtle);
+            margin-bottom: var(--kairos-space-lg);
+        }
+
+        @media (min-width: 768px) {
+            .kairos-hero-meta-table {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        .kairos-meta-col span {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--kairos-text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .kairos-meta-col p {
+            color: var(--kairos-text-primary);
+            font-size: 0.96rem;
+            font-weight: 500;
+            margin-bottom: 0;
+            line-height: 1.35;
+        }
+
+        .kairos-hero-frame {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.85);
+        }
+
+        .kairos-hero-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: contrast(102%) brightness(96%);
+            transition: transform 6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .kairos-hero-frame:hover img {
+            transform: scale(1.02);
+        }
+
+        .kairos-caption {
+            font-size: 0.82rem;
+            color: var(--kairos-text-muted);
+            margin-top: 0.8rem;
+            text-align: right;
+            font-family: var(--kairos-font-mono);
+        }
+
+        /* ==========================================================================
+           5. EDITORIAL CARDS & CALLOUTS
+           ========================================================================== */
+        .kairos-card {
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 16px;
+            padding: var(--kairos-space-md);
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--kairos-transition-base), 
+                        border-color var(--kairos-transition-base), 
+                        box-shadow var(--kairos-transition-base),
+                        background-color var(--kairos-transition-base);
+        }
+
+        /* Diagonal Glass Sheen Sweep */
+        .kairos-card::after,
+        .kairos-tier-card::after,
+        .kairos-step-box::after,
+        .kairos-decision-card::after,
+        .kairos-origin-item::after {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -80%;
+            width: 250%;
+            height: 220%;
+            background: linear-gradient(
+                115deg,
+                transparent 35%,
+                rgba(255, 255, 255, 0.03) 48%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.03) 52%,
+                transparent 65%
+            );
+            transform: translateX(-100%);
+            pointer-events: none;
+            transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+        }
+
+        .kairos-card:hover::after,
+        .kairos-tier-card:hover::after,
+        .kairos-step-box:hover::after,
+        .kairos-decision-card:hover::after,
+        .kairos-origin-item:hover::after {
+            transform: translateX(100%);
+        }
+
+        .kairos-card:hover {
+            border-color: var(--kairos-border-medium);
+            transform: translateY(-5px) scale(1.008);
+            background: var(--kairos-bg-card-hover);
+            box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.85), 0 0 25px var(--kairos-brand-green-glow);
+        }
+
+        .kairos-card-gold-accent {
+            border-top: 2px solid var(--kairos-brand-gold);
+        }
+
+        .kairos-card-green-accent {
+            border-top: 2px solid var(--kairos-brand-green);
+        }
+
+        .kairos-quote-block {
+            margin: var(--kairos-space-lg) 0;
+            padding: var(--kairos-space-md) var(--kairos-space-lg);
+            background: var(--kairos-bg-card);
+            border-left: 3px solid var(--kairos-brand-gold);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .kairos-quote-block p {
+            font-family: var(--kairos-font-serif);
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-style: italic;
+            color: var(--kairos-text-primary);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .kairos-quote-block cite {
+            display: block;
+            font-family: var(--kairos-font-sans);
+            font-size: 0.82rem;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--kairos-brand-gold);
+        }
+
+        /* ==========================================================================
+           6. FLOW & ARCHITECTURE DIAGRAMS (HTML & CSS)
+           ========================================================================== */
+        .kairos-diagram-container {
+            margin: var(--kairos-space-lg) 0;
+            padding: var(--kairos-space-md);
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 20px;
+            overflow-x: auto;
+        }
+
+        .kairos-pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            min-width: 280px;
+        }
+
+        @media (min-width: 960px) {
+            .kairos-pipeline {
+                flex-direction: row;
+                align-items: stretch;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+        }
+
+        .kairos-step-box {
+            flex: 1;
+            background: var(--kairos-bg-surface);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 12px;
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all var(--kairos-transition-base);
+        }
+
+        .kairos-step-box:hover {
+            border-color: var(--kairos-brand-green-light);
+            background: var(--kairos-bg-elevated);
+        }
+
+        .kairos-step-num {
+            display: inline-block;
+            font-family: var(--kairos-font-mono);
+            font-size: 0.75rem;
+            color: var(--kairos-brand-gold);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.1em;
+        }
+
+        .kairos-step-box h4 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .kairos-step-box p {
+            font-size: 0.88rem;
+            color: var(--kairos-text-muted);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        .kairos-step-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--kairos-brand-gold);
+            font-size: 1.2rem;
+            opacity: 0.6;
+            padding: 0.2rem;
+        }
+
+        @media (min-width: 960px) {
+            .kairos-step-connector { transform: rotate(0deg); }
+        }
+        @media (max-width: 959px) {
+            .kairos-step-connector { transform: rotate(90deg); }
+        }
+
+        /* Layered System Architecture */
+        .kairos-arch-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: var(--kairos-space-md);
+        }
+
+        .kairos-arch-tier {
+            background: var(--kairos-bg-surface);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 14px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .kairos-arch-tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--kairos-border-faint);
+            padding-bottom: 0.5rem;
+        }
+
+        .kairos-arch-tier-header h4 {
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--kairos-brand-gold);
+            margin-bottom: 0;
+        }
+
+        .kairos-arch-tag {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.72rem;
+            color: var(--kairos-brand-green-light);
+        }
+
+        .kairos-arch-nodes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.9rem;
+        }
+
+        .kairos-arch-node {
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-faint);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+        }
+
+        .kairos-arch-node strong {
+            display: block;
+            font-size: 0.92rem;
+            margin-bottom: 0.2rem;
+            color: var(--kairos-text-primary);
+        }
+
+        .kairos-arch-node span {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--kairos-text-muted);
+            line-height: 1.4;
+        }
+
+        /* ==========================================================================
+           7. CODE EXCERPTS & INSPECTION
+           ========================================================================== */
+        .kairos-code-block {
+            background: #060709;
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: var(--kairos-space-md) 0;
+        }
+
+        .kairos-code-bar {
+            background: #0d0f14;
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--kairos-border-faint);
+        }
+
+        .kairos-code-title {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.78rem;
+            color: var(--kairos-brand-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kairos-code-lang {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.72rem;
+            color: var(--kairos-text-muted);
+            text-transform: uppercase;
+        }
+
+        .kairos-code-content {
+            padding: 1.3rem;
+            overflow-x: auto;
+            color: #d1d5db;
+            line-height: 1.62;
+        }
+
+        .kairos-code-content pre {
+            margin: 0;
+        }
+
+        .kairos-token-keyword { color: #c678dd; }
+        .kairos-token-string  { color: #98c379; }
+        .kairos-token-comment { color: #5c6370; font-style: italic; }
+        .kairos-token-func    { color: #61afef; }
+        .kairos-token-var     { color: #e06c75; }
+
+        /* ==========================================================================
+           8. TIMELINE (VERTICAL ITERATION LOG)
+           ========================================================================== */
+        .kairos-timeline {
+            position: relative;
+            margin: var(--kairos-space-lg) 0;
+            padding-left: 2.2rem;
+            border-left: 1px solid var(--kairos-border-medium);
+        }
+
+        .kairos-timeline-item {
+            position: relative;
+            margin-bottom: var(--kairos-space-lg);
+        }
+
+        .kairos-timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .kairos-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-2.2rem - 5px);
+            top: 0.45rem;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--kairos-brand-gold);
+            box-shadow: 0 0 0 4px var(--kairos-bg-base);
+        }
+
+        .kairos-timeline-badge {
+            display: inline-block;
+            font-family: var(--kairos-font-mono);
+            font-size: 0.75rem;
+            color: var(--kairos-brand-gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .kairos-timeline-title {
+            font-size: 1.25rem;
+            color: var(--kairos-text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        /* ==========================================================================
+           9. DESIGN SYSTEM SWATCHES & TIERS
+           ========================================================================== */
+        .kairos-swatch-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin: var(--kairos-space-md) 0;
+        }
+
+        .kairos-swatch-card {
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .kairos-swatch-pill {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .kairos-swatch-info strong {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .kairos-swatch-info span {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.75rem;
+            color: var(--kairos-text-muted);
+        }
+
+        /* Physical Tier Display */
+        .kairos-tier-card {
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kairos-tier-media {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: var(--kairos-bg-surface);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .kairos-tier-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform var(--kairos-transition-base);
+        }
+
+        .kairos-tier-card:hover .kairos-tier-media img {
+            transform: scale(1.03);
+        }
+
+        .kairos-tier-body {
+            padding: 1.6rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kairos-tier-price {
+            font-family: var(--kairos-font-mono);
+            font-size: 1.15rem;
+            color: var(--kairos-brand-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Agate Special Showcase */
+        .kairos-agate-feature {
+            background: linear-gradient(135deg, rgba(43, 70, 60, 0.25) 0%, rgba(15, 16, 21, 0.9) 100%);
+            border: 1px solid var(--kairos-border-medium);
+            border-radius: 18px;
+            padding: var(--kairos-space-md);
+            margin: var(--kairos-space-lg) 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 800px) {
+            .kairos-agate-feature {
+                grid-template-columns: 240px 1fr;
+                padding: var(--kairos-space-md) var(--kairos-space-lg);
+            }
+        }
+
+        @keyframes agateInnerGlow {
+            0% {
+                box-shadow: 0 0 25px rgba(85, 139, 110, 0.35), 
+                            0 0 50px rgba(43, 70, 60, 0.2), 
+                            inset 0 0 20px rgba(201, 169, 97, 0.25);
+                border-color: var(--kairos-brand-gold);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(85, 139, 110, 0.6), 
+                            0 0 85px rgba(201, 169, 97, 0.35), 
+                            inset 0 0 35px rgba(201, 169, 97, 0.5);
+                border-color: #f1dcab;
+            }
+            100% {
+                box-shadow: 0 0 25px rgba(85, 139, 110, 0.35), 
+                            0 0 50px rgba(43, 70, 60, 0.2), 
+                            inset 0 0 20px rgba(201, 169, 97, 0.25);
+                border-color: var(--kairos-brand-gold);
+            }
+        }
+
+        .kairos-agate-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 2px solid var(--kairos-brand-gold);
+            animation: agateInnerGlow 5.5s ease-in-out infinite;
+            position: relative;
+        }
+
+        .kairos-agate-preview::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.3) 0%, transparent 45%);
+            pointer-events: none;
+        }
+
+        .kairos-agate-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 1.2s var(--kairos-ease-out);
+        }
+
+        .kairos-agate-feature:hover .kairos-agate-preview img {
+            transform: scale(1.06);
+        }
+
+        /* ==========================================================================
+           10. DECISION GRIDS & COMPARISONS
+           ========================================================================== */
+        .kairos-decision-card {
+            background: var(--kairos-bg-card);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 14px;
+            padding: 1.8rem;
+            position: relative;
+        }
+
+        .kairos-decision-title {
+            font-family: var(--kairos-font-sans);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--kairos-text-primary);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--kairos-border-faint);
+        }
+
+        .kairos-decision-row {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.92rem;
+        }
+
+        .kairos-decision-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .kairos-decision-key {
+            font-family: var(--kairos-font-mono);
+            font-size: 0.74rem;
+            color: var(--kairos-brand-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding-top: 0.2rem;
+        }
+
+        .kairos-decision-val {
+            color: var(--kairos-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Contrast comparison (Origins vs Production) */
+        .kairos-origin-comparison {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--kairos-space-md);
+            margin: var(--kairos-space-md) 0;
+        }
+
+        @media (min-width: 768px) {
+            .kairos-origin-comparison { grid-template-columns: 1fr 1fr; }
+        }
+
+        .kairos-origin-item {
+            background: var(--kairos-bg-surface);
+            border: 1px solid var(--kairos-border-subtle);
+            border-radius: 14px;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        .kairos-origin-img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .kairos-origin-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ==========================================================================
+           11. INTERSECTION REVEALS, MOTION & DYNAMIC KEYFRAMES
+           ========================================================================== */
+        /* Staggered Scroll Reveal with Blur-to-Focus */
+        .kairos-fade {
+            opacity: 0;
+            transform: translateY(32px) scale(0.985);
+            filter: blur(8px);
+            transition: opacity 0.85s var(--kairos-ease-out), 
+                        transform 0.85s var(--kairos-ease-out), 
+                        filter 0.85s var(--kairos-ease-out);
+            will-change: opacity, transform, filter;
+        }
+
+        .kairos-fade.is-revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0px);
+        }
+
+        /* Staggered Child Reveal for Grids & Pipelines */
+        .kairos-grid-2 > :nth-child(2) { transition-delay: 0.12s; }
+        .kairos-grid-3 > :nth-child(2) { transition-delay: 0.09s; }
+        .kairos-grid-3 > :nth-child(3) { transition-delay: 0.18s; }
+        .kairos-grid-4 > :nth-child(2) { transition-delay: 0.08s; }
+        .kairos-grid-4 > :nth-child(3) { transition-delay: 0.16s; }
+        .kairos-grid-4 > :nth-child(4) { transition-delay: 0.24s; }
+
+        /* NFC Radar Transponder Pulse Waves */
+        @keyframes nfcRadarWave {
+            0% {
+                transform: scale(0.85);
+                opacity: 0.95;
+            }
+            50% {
+                transform: scale(1.45);
+                opacity: 0.35;
+            }
+            100% {
+                transform: scale(2.1);
+                opacity: 0;
+            }
+        }
+
+        .kairos-nfc-radar-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            margin-right: 0.6rem;
+            vertical-align: middle;
+        }
+
+        .kairos-nfc-radar-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid var(--kairos-brand-gold);
+            animation: nfcRadarWave 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            pointer-events: none;
+        }
+
+        .kairos-nfc-radar-pulse:nth-child(2) {
+            animation-delay: 0.85s;
+        }
+
+        .kairos-nfc-radar-pulse:nth-child(3) {
+            animation-delay: 1.7s;
+        }
+
+        /* Miro Living Art Orb Chamber & Animations */
+        .kairos-miro-chamber {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: radial-gradient(circle at 50% 50%, #0d1226 0%, #070914 65%, #030408 100%);
+            border-radius: 18px;
+            border: 1px solid rgba(99, 102, 241, 0.28);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85), 0 20px 50px -10px rgba(10, 20, 50, 0.55);
+            transition: border-color var(--kairos-transition-base), box-shadow var(--kairos-transition-base);
+        }
+
+        .kairos-miro-chamber:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85), 0 25px 60px -10px rgba(30, 58, 138, 0.65);
+        }
+
+        .kairos-miro-orb-wrap {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes miroAuraBreathe {
+            0% { transform: scale(0.92); opacity: 0.45; filter: blur(20px); }
+            50% { transform: scale(1.18); opacity: 0.85; filter: blur(28px); }
+            100% { transform: scale(0.92); opacity: 0.45; filter: blur(20px); }
+        }
+
+        .kairos-miro-aura {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #38bdf8 0%, #6366f1 45%, transparent 70%);
+            filter: blur(22px);
+            animation: miroAuraBreathe 4.8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes miroRingRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .kairos-miro-ring {
+            position: absolute;
+            width: 126px;
+            height: 126px;
+            border-radius: 50%;
+            border: 2px dashed rgba(56, 189, 248, 0.65);
+            border-top-color: transparent;
+            border-right-color: #a855f7;
+            animation: miroRingRotate 20s linear infinite;
+        }
+
+        @keyframes miroWaterMorph {
+            0% { border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%; transform: scale(1); }
+            33% { border-radius: 52% 48% 55% 45% / 46% 54% 46% 54%; transform: scale(1.03); }
+            66% { border-radius: 48% 52% 45% 55% / 54% 46% 52% 48%; transform: scale(0.98); }
+            100% { border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%; transform: scale(1); }
+        }
+
+        .kairos-miro-sphere {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e3a8a 0%, #0c1947 50%, #03071e 100%);
+            box-shadow: inset -6px -6px 14px rgba(0, 0, 0, 0.75),
+                        inset 6px 6px 12px rgba(56, 189, 248, 0.55),
+                        0 0 28px rgba(56, 189, 248, 0.4);
+            animation: miroWaterMorph 7.5s ease-in-out infinite;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kairos-miro-water {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 40% 35%, rgba(56, 189, 248, 0.45) 0%, transparent 60%);
+        }
+
+        .kairos-miro-status {
+            margin-top: 1.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            font-family: var(--kairos-font-mono);
+            font-size: 0.74rem;
+            color: #7dd3fc;
+            letter-spacing: 0.06em;
+            backdrop-filter: blur(8px);
+        }
+
+        @keyframes miroDotBlink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.85); }
+        }
+
+        .kairos-miro-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 8px #38bdf8;
+            animation: miroDotBlink 2.2s ease-in-out infinite;
+        }
+
+        /* Soundscape Equalizer Waves */
+        @keyframes eqBarBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 22px; }
+        }
+
+        .kairos-eq-wrap {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 22px;
+            padding: 0 4px;
+            vertical-align: middle;
+        }
+
+        .kairos-eq-bar {
+            width: 3px;
+            background: var(--kairos-brand-gold);
+            border-radius: 2px;
+            animation: eqBarBounce 1.3s ease-in-out infinite;
+        }
+
+        .kairos-eq-bar:nth-child(2) { animation-delay: 0.3s; animation-duration: 1.05s; }
+        .kairos-eq-bar:nth-child(3) { animation-delay: 0.15s; animation-duration: 1.55s; }
+        .kairos-eq-bar:nth-child(4) { animation-delay: 0.45s; animation-duration: 1.2s; }
+
+        /* Interactive Code Block Accordion */
+        .kairos-code-bar {
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--kairos-transition-base);
+        }
+
+        .kairos-code-bar:hover {
+            background: #141720;
+        }
+
+        .kairos-code-chevron {
+            display: inline-block;
+            transition: transform 0.4s var(--kairos-ease-out);
+            font-size: 0.72rem;
+            color: var(--kairos-brand-gold);
+            margin-left: 0.5rem;
+        }
+
+        .kairos-code-block.is-collapsed .kairos-code-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .kairos-code-block .kairos-code-content {
+            transition: max-height 0.5s var(--kairos-ease-out), opacity 0.4s ease;
+            max-height: 800px;
+            opacity: 1;
+        }
+
+        .kairos-code-block.is-collapsed .kairos-code-content {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            overflow: hidden;
+        }
+
+        /* Gold Sweep & Tactile Buttons */
+        @keyframes goldSweep {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .kairos-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(
+                90deg, 
+                var(--kairos-brand-gold) 0%, 
+                #f2dc9f 50%, 
+                var(--kairos-brand-gold) 100%
+            );
+            background-size: 200% 100%;
+            color: var(--kairos-bg-base);
+            font-family: var(--kairos-font-sans);
+            font-size: 0.94rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 1.1rem 2.4rem;
+            border-radius: 100px;
+            transition: all var(--kairos-transition-base);
+            margin: var(--kairos-space-md) 0;
+            box-shadow: 0 4px 20px var(--kairos-brand-gold-glow);
+        }
+
+        .kairos-cta-btn:hover {
+            animation: goldSweep 3s linear infinite;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(201, 169, 97, 0.45);
+            color: var(--kairos-bg-base);
+        }
+
+        .kairos-cta-btn:active {
+            transform: translateY(0) scale(0.96);
+            transition-duration: 0.1s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+            .kairos-fade {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                transition: none !important;
+            }
+            .kairos-hero-frame img {
+                transition: none !important;
+            }
+            .kairos-tier-media img {
+                transition: none !important;
+            }
+            body::before {
+                animation: none !important;
+            }
+            .kairos-miro-aura,
+            .kairos-miro-ring,
+            .kairos-miro-sphere,
+            .kairos-miro-dot,
+            .kairos-nfc-radar-pulse,
+            .kairos-eq-bar,
+            .kairos-agate-preview,
+            .kairos-cta-btn {
+                animation: none !important;
+            }
+        }
+
+        /* Footer */
+        .kairos-footer {
+            padding: var(--kairos-space-xl) 0 var(--kairos-space-lg);
+            background: #020203;
+            border-top: 1px solid var(--kairos-border-subtle);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         NAVIGATION HEADER
+         ========================================================================== -->
+    <header class="kairos-header">
+        <div class="kairos-shell kairos-header-wrap">
+            <a href="#hero" class="kairos-logotype" aria-label="Kairos Case Study Homepage">
+                <span class="kairos-logotype-symbol">Κ</span>
+                <span>Καιρός</span>
+            </a>
+            <nav class="kairos-nav" aria-label="Case Study Navigation">
+                <a href="#the-idea">Philosophy</a>
+                <a href="#problem">Problem</a>
+                <a href="#physical-digital">Hardware</a>
+                <a href="#ai-system">AI Architecture</a>
+                <a href="#technical-arch">Engineering</a>
+                <a href="#decisions">UX Decisions</a>
+                <a href="#evolution">Timeline</a>
+                <a href="https://reflection-writer.web.app" target="_blank" rel="noopener noreferrer" class="kairos-nav-cta">Live Product ↗</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==========================================================================
+             1. HERO SECTION
+             ========================================================================== -->
+        <section id="hero" class="kairos-hero kairos-shell kairos-fade">
+            <div class="kairos-hero-heading-group">
+                <span class="kairos-label">Design &amp; AI Engineering Case Study</span>
+                <h1><span class="kairos-hero-greek">Καιρός</span> Smart Journal</h1>
+                <p class="kairos-lead">
+                    A physical leather journal becomes an analog interface for reflection, while Claude AI transforms unhurried handwritten pages and spoken thoughts into enduring patterns, longitudinal continuity, and rigorous self-understanding.
+                </p>
+            </div>
+
+            <!-- Authentic Metadata Grid -->
+            <div class="kairos-hero-meta-table">
+                <div class="kairos-meta-col">
+                    <span>Creator &amp; Role</span>
+                    <p>Giorgi Akopashvili<br><small style="color:var(--kairos-text-muted)">Solo Product, UX &amp; Full-Stack Builder</small></p>
+                </div>
+                <div class="kairos-meta-col">
+                    <span>Provenance &amp; Reach</span>
+                    <p>Crafted in Austria<br><small style="color:var(--kairos-text-muted)">Bilingual: English, German &amp; Georgian</small></p>
+                </div>
+                <div class="kairos-meta-col">
+                    <span>Core Architecture</span>
+                    <p>React 19 · Capacitor 7 · Firebase<br><small style="color:var(--kairos-text-muted)">Claude Sonnet 4-6 · Whisper API · NTAG213</small></p>
+                </div>
+                <div class="kairos-meta-col">
+                    <span>Current Status</span>
+                    <p>v2.2.0 Live Web &amp; Android<br><small style="color:var(--kairos-text-muted)">53 Journey Paths · Physical Pre-Orders</small></p>
+                </div>
+            </div>
+
+            <div class="kairos-hero-frame">
+                <img src="https://placehold.co/1600x900/050507/558B6E?text=Kairos+Hero+Lifestyle" 
+                     alt="The Καιρός Legacy journal with natural green agate centerpiece lying on a dark stone desk beside a fountain pen and mobile device" 
+                     data-image-role="hero">
+            </div>
+            <div class="kairos-caption">Figure 1.0 — The Legacy Edition: dark forest-green full-grain leather, polished natural agate, and ambient reflection companion.</div>
+        </section>
+
+        <!-- ==========================================================================
+             2. THE IDEA
+             ========================================================================== -->
+        <section id="the-idea" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">The Core Idea</span>
+            <h2>The Right Word, at the Right Moment</h2>
+            
+            <p class="kairos-lead">
+                Ancient Greek possesses two distinct words for time: <em>Chronos</em>, the quantitative, sequential tick of the clock; and <em>Kairos</em> (Καιρός), the qualitative, opportune moment—the precise instant when something decisive must be recognized, spoken, or written.
+            </p>
+
+            <div class="kairos-grid-2">
+                <div>
+                    <p>
+                        Most modern digital products are instruments of <em>Chronos</em>. They count streaks, measure daily active minutes, ping push notifications, and treat the human mind as a stream of timestamps to be captured between calendar appointments and Slack pings. When we journal into a digital notes app or a SaaS reflection platform, we inherit the subconscious posture of our devices: hurried, distracted, and performative.
+                    </p>
+                    <p>
+                        Yet the alternative—traditional analog paper journaling—carries its own tragic flaw: <strong>the tomb of the closed notebook</strong>. We pour our deepest fears, recurring doubts, breakthrough realizations, and relational patterns onto archival paper. Then we turn the page. Months later, the notebook is shelved. The profound patterns of our lives remain permanently scattered, unindexed, and forgotten.
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <strong>Kairos was born from a refusal to accept this binary.</strong> It does not ask the user to surrender the irreplaceable kinetic intimacy of fountain pen on 200 GSM paper. Nor does it ask them to abandon the synthetic intelligence of neural networks capable of noticing what someone circled for six months without ever saying aloud.
+                    </p>
+                    <p>
+                        The premise is quiet and unhurried: an heirloom-grade physical journal fitted with an embedded NFC chip. The user writes unhurriedly by hand. A single tap of their phone bridges the analog page to Claude AI, which acts not as an agreeable flatterer or automated therapist, but as an honest, unsentimental reader who holds the mirror steady.
+                    </p>
+                </div>
+            </div>
+
+            <div class="kairos-quote-block">
+                <p>"Technology is at its best when it respectfully defers to the physical world. We do not need more glowing rectangles; we need better ways to process what happens when we look away from them."</p>
+                <cite>— Product Philosophy, Kairos Design System</cite>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             3. THE PROBLEM
+             ========================================================================== -->
+        <section id="problem" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Problem Decomposition</span>
+            <h2>Four Structural Failures of Modern Reflection</h2>
+            <p class="kairos-lead">
+                Before writing a line of code or binding a single notebook, I decomposed the systemic breakdown that causes over 80% of self-reflection practices to collapse within fourteen days.
+            </p>
+
+            <div class="kairos-grid-4">
+                <div class="kairos-card kairos-card-gold-accent">
+                    <h4>1. The User Problem</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">The Inertia of the Blank Page</p>
+                    <p style="font-size:0.95rem;">
+                        Users sit before an empty ruled notebook with profound emotional weight, yet lack the targeted psychological scaffolding to pierce their own defenses. They write superficial logs ("went to work, felt tired") and abandon the practice out of boredom.
+                    </p>
+                </div>
+
+                <div class="kairos-card kairos-card-green-accent">
+                    <h4>2. The Behavioral Problem</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">The Frictionless Digital Trap</p>
+                    <p style="font-size:0.95rem;">
+                        Digital apps eliminate friction, but friction is the exact catalyst of reflection. Typing at 80 words per minute bypasses the neural inhibition that allows vulnerability. Without physical ritual, digital journaling becomes another inbox item.
+                    </p>
+                </div>
+
+                <div class="kairos-card kairos-card-gold-accent">
+                    <h4>3. The Product Problem</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">The Flattery Trap of Consumer AI</p>
+                    <p style="font-size:0.95rem;">
+                        Early AI journaling apps utilize baseline LLMs fine-tuned for generic agreeableness. They validate every entry with saccharine affirmations ("You are so brave for showing up!"). Praise given universally carries zero information, training the user to disregard it.
+                    </p>
+                </div>
+
+                <div class="kairos-card kairos-card-green-accent">
+                    <h4>4. The Technical Opportunity</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">Multimodal Convergence</p>
+                    <p style="font-size:0.95rem;">
+                        Until late 2024, handwriting OCR on cursive was fragile and expensive. Vision LLMs (Claude 3.5/Sonnet 4-6) and speech models (Whisper) finally made it possible to ingest complex multi-page cursive, vocal cadences, and raw sketches with zero transcription latency.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             4. PRODUCT CONCEPT
+             ========================================================================== -->
+        <section id="concept" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">End-to-End System Loop</span>
+            <h2>The Continuous Ritual Flow</h2>
+            <p>
+                Kairos operates as an unbroken closed-loop system where physical tactile presence is the mandatory entry point, and digital intelligence serves only to illuminate the path back to oneself.
+            </p>
+
+            <div class="kairos-diagram-container">
+                <div class="kairos-pipeline">
+                    <div class="kairos-step-box">
+                        <span class="kairos-step-num">STAGE 01</span>
+                        <h4>Physical Ritual</h4>
+                        <p>Pen on 200 GSM paper. Writing, drawing, or unhurried silence away from blue light.</p>
+                    </div>
+
+                    <div class="kairos-step-connector">→</div>
+
+                    <div class="kairos-step-box">
+                        <span class="kairos-step-num">STAGE 02</span>
+                        <h4>
+                            <span class="kairos-nfc-radar-wrap" aria-hidden="true">
+                                <span class="kairos-nfc-radar-pulse"></span>
+                                <span class="kairos-nfc-radar-pulse"></span>
+                                <span class="kairos-nfc-radar-pulse"></span>
+                                <span style="font-size:0.95rem; position:relative; z-index:2;">🏷️</span>
+                            </span>
+                            NFC Threshold
+                        </h4>
+                        <p>Tap phone to the antique brass seal. Instant deep-link directly into today's journey day.</p>
+                    </div>
+
+                    <div class="kairos-step-connector">→</div>
+
+                    <div class="kairos-step-box">
+                        <span class="kairos-step-num">STAGE 03</span>
+                        <h4>Multimodal Capture</h4>
+                        <p>Camera scans up to 5 cursive pages, Whisper transcribes vocal tone, or artwork is uploaded.</p>
+                    </div>
+
+                    <div class="kairos-step-connector">→</div>
+
+                    <div class="kairos-step-box">
+                        <span class="kairos-step-num">STAGE 04</span>
+                        <h4>Claude Sonnet 4-6</h4>
+                        <p>Injected with the Honesty Directive, past 3 days of context, and Inner Aura mood state.</p>
+                    </div>
+
+                    <div class="kairos-step-connector">→</div>
+
+                    <div class="kairos-step-box">
+                        <span class="kairos-step-num">STAGE 05</span>
+                        <h4>Structured Insight</h4>
+                        <p>Direct pattern exposure, avoidance callout, checkable micro-action, and longitudinal update.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             5. THE PHYSICAL-DIGITAL EXPERIENCE
+             ========================================================================== -->
+        <section id="physical-digital" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Materiality &amp; Tactile Computing</span>
+            <h2>The Physical Artifact as an Interface</h2>
+            
+            <p class="kairos-lead">
+                A physical book cannot be swiped away with a thumb. It sits on a nightstand or writing desk with sculptural gravity, anchoring the habit through pure spatial presence.
+            </p>
+
+            <div class="kairos-grid-3">
+                <!-- Essential -->
+                <div class="kairos-tier-card">
+                    <div class="kairos-tier-media">
+                        <img src="https://placehold.co/800x600/0f0f12/88A38F?text=Essential+Edition" 
+                             alt="Kairos Essential Journal in mint-green vegan leather" 
+                             data-image-role="journal-essential">
+                    </div>
+                    <div class="kairos-tier-body">
+                        <div class="kairos-tier-price">€49 · The Essential</div>
+                        <h4>Soft Mint Vegan Leather</h4>
+                        <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                            Plain, austere, restrained. Designed for quiet daily discipline without distraction. Features lay-flat bookbinding, 200 GSM acid-free ivory paper, satin bookmark, and circular brushed antique brass NFC medallion. Bundled with 3 months of Kairos Premium.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Legacy -->
+                <div class="kairos-tier-card" style="border-color: var(--kairos-brand-gold);">
+                    <div class="kairos-tier-media">
+                        <img src="https://placehold.co/800x600/0f0f12/558B6E?text=Legacy+Flagship" 
+                             alt="Kairos Legacy Journal in forest green full-grain leather with natural agate" 
+                             data-image-role="journal-legacy">
+                    </div>
+                    <div class="kairos-tier-body">
+                        <div class="kairos-tier-price" style="color:var(--kairos-brand-gold);">€149 · The Legacy (Flagship)</div>
+                        <h4>Full-Grain Leather &amp; Natural Agate</h4>
+                        <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                            The flagship heirloom. Forest-green vegetable-tanned leather, four antique brass corner protectors, brushed brass NFC medallion, custom Kairos metal dip-silhouette pen, and an organic banded agate centerpiece. Bundled with 12 months Premium.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Insight -->
+                <div class="kairos-tier-card">
+                    <div class="kairos-tier-media">
+                        <img src="https://placehold.co/800x600/0f0f12/C9A961?text=Insight+Ritual+Kit" 
+                             alt="Kairos Insight Ritual Collection flat lay" 
+                             data-image-role="journal-insight">
+                    </div>
+                    <div class="kairos-tier-body">
+                        <div class="kairos-tier-price">€249 · The Insight Ritual</div>
+                        <h4>The Complete Sanative Set</h4>
+                        <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                            The Legacy journal housed inside a museum-grade keepsake vitrine box alongside the complete ritual suite: 52 Kairos Mood Cards, turned brass meditation bell, raw incense holder, beeswax votive, and lifetime Kairos Premium access.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Agate Deep-Dive -->
+            <div class="kairos-agate-feature">
+                <div class="kairos-agate-preview">
+                    <img src="https://placehold.co/600x600/0f0f12/558B6E?text=Agate+Macro" 
+                         alt="Extreme macro photograph of translucent green banded agate slice" 
+                         data-image-role="agate-detail">
+                </div>
+                <div>
+                    <span class="kairos-label" style="margin-bottom:0.4rem;">Material Decision</span>
+                    <h3 style="color:var(--kairos-text-primary); font-size:1.6rem; margin-bottom:0.6rem;">Why Natural Agate Matters</h3>
+                    <p style="font-size:0.95rem; margin-bottom:0;">
+                        Every Legacy cover features an authentic, polished slice of Brazilian green agate set flush into a brass bezel. It is deliberately <em>not</em> a cut or faceted gem. No two agate slices possess the same concentric banding, opacity, or mineral inclusions. In an industry churning out millions of identical injection-molded plastic rectangles, this physical variability reminds the writer that their inner life is an unrepeatable geological formation, not an optimized metric.
+                    </p>
+                </div>
+            </div>
+
+            <!-- NFC Architecture Detail -->
+            <div class="kairos-grid-2" style="margin-top:var(--kairos-space-md);">
+                <div>
+                    <h4>The NFC Technical Protocol</h4>
+                    <p style="font-size:0.95rem;">
+                        The embedded chip is an NXP NTAG213/215 high-frequency transponder operating at 13.56 MHz. Utilizing the <code>@exxili/capacitor-nfc</code> Android plugin, the tag is programmed with an NDEF URI payload adhering to Android App Links:
+                    </p>
+                    <div class="kairos-code-block" style="margin: 0.8rem 0;">
+                        <div class="kairos-code-content">
+                            <pre><code>https://reflection-writer.web.app/nfc/KAIROS_20251112_A7X9K?tier=legacy</code></pre>
+                        </div>
+                    </div>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        When tapped, Android bypasses the browser entirely via verified <code>assetlinks.json</code> SHA-256 certificate fingerprints, launching Kairos in &lt;300ms directly to the active prompt, eliminating all navigation friction.
+                    </p>
+                </div>
+                <div>
+                    <h4>The Ritual Threshold</h4>
+                    <p style="font-size:0.95rem;">
+                        In early tests, users with a standard app icon opened the app casually during commutes. By tying upload access directly to the physical journal's NFC seal, we created a psychological threshold: <strong>you only open Kairos when you are seated with your journal open</strong>. The physical touch acts as a tactile anchor, shifting brain state from consumption to contemplation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             6. UX / PRODUCT FLOW & SCREEN GALLERY
+             ========================================================================== -->
+        <section id="ux-flow" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">User Journey</span>
+            <h2>From First Stroke to Integrated Context</h2>
+
+            <div class="kairos-grid-4" style="margin-top: var(--kairos-space-md);">
+                <div class="kairos-card">
+                    <div style="font-family:var(--kairos-font-mono); color:var(--kairos-brand-gold); margin-bottom:0.5rem;">01 / AWAKEN</div>
+                    <h4>Inner Aura Check-In</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">
+                        The Home Screen opens with a minimalist atmosphere check. The user logs their energetic aura (Lunar, Ethereal, Sparkle, Radiant, Ember). The entire UI's spatial ambient lighting quietly shifts to mirror their internal temperature.
+                    </p>
+                    <div style="aspect-ratio:9/16; border-radius:10px; overflow:hidden; border:1px solid var(--kairos-border-faint); margin-top:1rem;">
+                        <img src="https://placehold.co/600x1200/0f0f12/558B6E?text=Screen+Home+Bento" alt="Kairos Home screen bento interface" style="width:100%; height:100%; object-fit:cover;" data-image-role="screen-home">
+                    </div>
+                </div>
+
+                <div class="kairos-card">
+                    <div style="font-family:var(--kairos-font-mono); color:var(--kairos-brand-gold); margin-bottom:0.5rem;">02 / PROMPT</div>
+                    <h4>The Guided Day Hook</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">
+                        Rather than vague prompts ("What are you grateful for?"), Kairos presents a structured day template: an evocative opening thesis, three challenging bullet questions, and a singular closing action.
+                    </p>
+                    <div style="aspect-ratio:9/16; border-radius:10px; overflow:hidden; border:1px solid var(--kairos-border-faint); margin-top:1rem;">
+                        <img src="https://placehold.co/600x1200/0f0f12/558B6E?text=Screen+Path+Catalog" alt="Kairos Guided Paths Catalog screen" style="width:100%; height:100%; object-fit:cover;" data-image-role="screen-paths">
+                    </div>
+                </div>
+
+                <div class="kairos-card">
+                    <div style="font-family:var(--kairos-font-mono); color:var(--kairos-brand-gold); margin-bottom:0.5rem;">03 / DIGITIZE</div>
+                    <h4>Multimodal Ingestion</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">
+                        Camera multi-page capture auto-corrects orientation and uploads temporary blobs to Firebase Storage. Android voice entries run through Whisper with live waveforms. Drawings bypass OCR directly to Claude Vision.
+                    </p>
+                    <div style="aspect-ratio:9/16; border-radius:10px; overflow:hidden; border:1px solid var(--kairos-border-faint); margin-top:1rem;">
+                        <img src="https://placehold.co/600x1200/0f0f12/558B6E?text=Screen+Write+Capture" alt="Kairos Write and camera capture screen" style="width:100%; height:100%; object-fit:cover;" data-image-role="screen-write">
+                    </div>
+                </div>
+
+                <div class="kairos-card">
+                    <div style="font-family:var(--kairos-font-mono); color:var(--kairos-brand-gold); margin-bottom:0.5rem;">04 / MIRROR</div>
+                    <h4>The Honesty Mirror</h4>
+                    <p style="font-size:0.9rem; color:var(--kairos-text-muted);">
+                        The analysis returns within 3.5 seconds. A 3-sentence summary, 3 unsparing observations, a pointed unasked question, one validated affirmation, and a checkable practical task for the afternoon.
+                    </p>
+                    <div style="aspect-ratio:9/16; border-radius:10px; overflow:hidden; border:1px solid var(--kairos-border-faint); margin-top:1rem;">
+                        <img src="https://placehold.co/600x1200/0f0f12/558B6E?text=Screen+Analysis+Results" alt="Kairos AI Analysis results screen" style="width:100%; height:100%; object-fit:cover;" data-image-role="screen-analysis">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             7. THE JOURNEY SYSTEM
+             ========================================================================== -->
+        <section id="journeys" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Curriculum Architecture</span>
+            <h2>53 Paths, 3 Modalities, 1,000+ Unique Prompts</h2>
+            
+            <p class="kairos-lead">
+                Reflection is not one-size-fits-all. Kairos organizes personal development into structured thematic journeys spanning from 3 days to 100 days, dynamically theming every screen with the path's bespoke color coordinates.
+            </p>
+
+            <div class="kairos-grid-3">
+                <div class="kairos-card">
+                    <span class="kairos-arch-tag" style="color:var(--kairos-brand-green-light)">29 Writing Paths</span>
+                    <h3 style="color:var(--kairos-text-primary); font-size:1.35rem; margin-top:0.4rem;">The Written Canon</h3>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Deep analytical writing. Includes <em>Self-Discovery</em> (21 days), <em>Shadow Work</em> (14 days), <em>Anxiety Alchemy</em> (10 days), and the epic 100-day <em>Life Vision</em>. Designed for cognitive unknotting and strategic self-realignment.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <span class="kairos-arch-tag" style="color:var(--kairos-accent-terracotta)">8 Visual &amp; Art Paths</span>
+                    <h3 style="color:var(--kairos-text-primary); font-size:1.35rem; margin-top:0.4rem;">The Graphic Eye</h3>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        For trauma, overwhelm, or pre-verbal states where vocabulary fails. Includes <em>Ink &amp; Essence: Black Ink Mastery</em> (33 days) and <em>Color Psychology</em>. Claude evaluates visual composition, stroke pressure, and palette tension.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <span class="kairos-arch-tag" style="color:var(--kairos-brand-gold)">5 Spoken Voice Paths</span>
+                    <h3 style="color:var(--kairos-text-primary); font-size:1.35rem; margin-top:0.4rem;">The Vocal Chamber</h3>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Bypasses the calculated editing of the pen. Includes <em>Voice Discovery</em> and <em>Spoken Emotions</em>. Evaluates vocal pace, self-interruptions, sighs, and the specific topics where the speaker abruptly clears their throat.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Special Collections -->
+            <div class="kairos-grid-2" style="margin-top: var(--kairos-space-md);">
+                <div class="kairos-card" style="border-left: 3px solid var(--kairos-brand-gold);">
+                    <h4>The Kairos Collection (€2.99 Single Unlock)</h4>
+                    <p style="font-size:0.93rem;">
+                        The tripartite soul of the app: <strong>Moments</strong> (9 days on seizing the opportune kairos), <strong>Cards</strong> (21 days of interactive prompt dealing and shuffling), and <strong>Sparks</strong> (14 days starting from a single unadorned word). Completely flex-modal: the user chooses daily whether to write, speak, or paint.
+                    </p>
+                </div>
+
+                <div class="kairos-card" style="border-left: 3px solid var(--kairos-brand-green);">
+                    <h4>Starting Over: The Migration Trilogy</h4>
+                    <p style="font-size:0.93rem;">
+                        A deeply authentic 42-day pack for anyone who has abandoned one country to begin in another: <em>The Crossing</em> (leaving), <em>Learning to Speak</em> (identity loss without native tongue), and <em>Two Homes</em> (dual alienation). Authored directly in English, German, and Georgian—accompanied by international crisis hotline disclosures.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             8. AI SYSTEM & THE HONESTY DIRECTIVE
+             ========================================================================== -->
+        <section id="ai-system" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">AI Engineering &amp; Prompt Philosophy</span>
+            <h2>The Honesty Directive &amp; Miro Persona</h2>
+
+            <p class="kairos-lead">
+                In v0.1.0, the analysis prompts were filled with compassionate exhortations: <em>"Honor their bravery, celebrate their vulnerability, validate their pain."</em> The resulting model output was disastrous.
+            </p>
+
+            <div class="kairos-grid-2">
+                <div>
+                    <p>
+                        When an AI affirms everything, its affirmation is worth zero. If someone writes a half-hearted, defensive, three-sentence entry while watching television, and the AI responds that their reflection is "profound and deeply courageous," the user instantly realizes they are interacting with an automated sycophant. The human subconscious immediately disengages.
+                    </p>
+                    <p>
+                        To solve this, I completely overthrew the prompt architecture in July 2026, migrating off small fast models (Haiku) to <strong>Claude Sonnet 4-6</strong>. Small models fold under pressure; when instructed to be critical, they retreat into safe, generic platitudes. Sonnet possesses the cognitive density to hold interpersonal tension: validating the person's humanity while rigorously interrogating their prose.
+                    </p>
+                </div>
+                <div>
+                    <h4>What Kairos AI Intentionally Refuses to Do</h4>
+                    <ul style="list-style:none; padding:0; margin-top:0.8rem;">
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:#e06c75;">✕</span> <strong>Never diagnoses mental health conditions</strong> or acts as an unlicensed therapist.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:#e06c75;">✕</span> <strong>Never praises the mere act of writing</strong> ("Great job opening up today!").
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:#e06c75;">✕</span> <strong>Never uses cheap spiritual tropes</strong> ("sacred journey", "beautiful soul", "breakthrough").
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:#e06c75;">✕</span> <strong>Never forces artificial closure</strong> or silver linings onto a week that was simply miserable.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Code Block: Actual Honesty Directive -->
+            <div class="kairos-code-block">
+                <div class="kairos-code-bar">
+                    <span class="kairos-code-title">src/services/claudeService.js — The Honesty Directive</span>
+                    <span class="kairos-code-lang">JavaScript / System Prompt</span>
+                </div>
+                <div class="kairos-code-content">
+<pre><code><span class="kairos-token-keyword">export const</span> HONESTY_DIRECTIVE = <span class="kairos-token-string">`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🪞 HONESTY (THIS OUTRANKS TONE):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Your entire value to this person is that you tell them the truth about what they
+wrote. Praise they would have received regardless tells them nothing. Be the
+friend who is honest with them, not the one who flatters them.
+
+SAY WHAT IS ACTUALLY THERE:
+• Ground every claim in something they actually wrote. If you cannot point to the
+  words that support an observation, delete the observation.
+• A thin, rushed, or guarded entry is a thin entry. Say so plainly and ask one
+  real question. Do NOT manufacture depth that is not on the page.
+• Do not assert emotions, motives, or realizations they did not express. When you
+  are inferring, say so in a way they can reject — "this reads like…", "I might be
+  wrong, but…" — and be willing to be wrong out loud.
+
+NAME WHAT THEY MAY NOT WANT NAMED:
+• Contradictions between what they say they want and what they describe doing.
+• Avoidance: the subject circled but never entered, the feeling named but not
+  felt, the person conspicuously missing from an entry that is obviously about them.
+• Repetition: the same problem re-described across entries with nothing changing
+  is worth saying out loud, plainly. Do not dress a loop up as "deepening".
+• Tone: direct, specific, unsentimental. Plain language, short sentences.`</span>;</code></pre>
+                </div>
+            </div>
+
+            <!-- Meet Miro Showcase -->
+            <div class="kairos-grid-2" style="margin-top:var(--kairos-space-lg); align-items:center;">
+                <div>
+                    <span class="kairos-label" style="color:var(--kairos-brand-gold)">Interactive Reflection Companion</span>
+                    <h3>Meet Miro (Version 2.0)</h3>
+                    <p>
+                        In August 2026, Kairos evolved from static post-entry summaries into an enduring conversational companion named <strong>Miro</strong>. Miro is visually signified not by a generic robotic avatar or anthropomorphic cartoon, but by an organic deep-blue sphere encircled by an unbroken breathing ring—symbolizing an open, unclosed exchange.
+                    </p>
+                    <p>
+                        Unlike disconnected chatbots that reset every session, Miro retains threaded memory across weeks of journaling. Miro knows what day of the week it is, calculates how many days elapsed since your last entry, ingests attached handwriting photos or artwork, and can converse natively in English, German, or Georgian.
+                    </p>
+                </div>
+                <div class="kairos-miro-chamber" aria-label="Animated representation of the Miro living conversation orb">
+                    <div class="kairos-miro-orb-wrap">
+                        <div class="kairos-miro-aura" aria-hidden="true"></div>
+                        <div class="kairos-miro-ring" aria-hidden="true"></div>
+                        <div class="kairos-miro-sphere" aria-hidden="true">
+                            <div class="kairos-miro-water"></div>
+                        </div>
+                    </div>
+                    <div class="kairos-miro-status">
+                        <span class="kairos-miro-dot" aria-hidden="true"></span>
+                        <span>Miro Active · Listening &amp; Reflecting</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             9. TECHNICAL ARCHITECTURE
+             ========================================================================== -->
+        <section id="technical-arch" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Full-Stack Implementation</span>
+            <h2>Architectural Topology</h2>
+            <p class="kairos-lead">
+                A serverless, offline-tolerant hybrid stack combining modern React 19 web standards with native hardware interfaces via Capacitor 7 and Firebase Cloud Infrastructure.
+            </p>
+
+            <div class="kairos-arch-stack">
+                <!-- Tier 1: Hardware & Client OS -->
+                <div class="kairos-arch-tier">
+                    <div class="kairos-arch-tier-header">
+                        <h4>Tier 1: Client Hardware &amp; Native Bridge</h4>
+                        <span class="kairos-arch-tag">Capacitor 7 Core · Android NDK</span>
+                    </div>
+                    <div class="kairos-arch-nodes">
+                        <div class="kairos-arch-node">
+                            <strong>@exxili/capacitor-nfc</strong>
+                            <span>NDEF reading, raw byte parsing, transponder session hooks.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Camera &amp; Vision Ingest</strong>
+                            <span>Native camera resolution hooks, multi-page canvas composition.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Web Speech &amp; Audio Recorder</strong>
+                            <span>WebRTC media streams, live volume meters, WebM audio blobs.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Spatial Glass Renderer</strong>
+                            <span>GPU-accelerated CSS backdrop filters, Spring physics, Haptics.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tier 2: Frontend Client State -->
+                <div class="kairos-arch-tier">
+                    <div class="kairos-arch-tier-header">
+                        <h4>Tier 2: Single-Page Application (SPA)</h4>
+                        <span class="kairos-arch-tag">React 19 · Vite 6 · IndexedDB</span>
+                    </div>
+                    <div class="kairos-arch-nodes">
+                        <div class="kairos-arch-node">
+                            <strong>Journey State Machine</strong>
+                            <span>useUserProgress, 53 path definitions, atomic progress commits.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>apiCacheService</strong>
+                            <span>SHA-keyed local analysis caching to eliminate duplicate API calls.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Trilingual Engine</strong>
+                            <span>react-i18next zero-reload switching across EN, DE, and Georgian.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>
+                                Procedural Audio Suite
+                                <span class="kairos-eq-wrap" aria-hidden="true">
+                                    <span class="kairos-eq-bar"></span>
+                                    <span class="kairos-eq-bar"></span>
+                                    <span class="kairos-eq-bar"></span>
+                                    <span class="kairos-eq-bar"></span>
+                                </span>
+                            </strong>
+                            <span>Web Audio API synthesizer for 4 infinite contemplative soundscapes.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tier 3: Serverless Backend & Security -->
+                <div class="kairos-arch-tier">
+                    <div class="kairos-arch-tier-header">
+                        <h4>Tier 3: Backend &amp; Orchestration Layer</h4>
+                        <span class="kairos-arch-tag">Firebase us-central1 · Node.js 20</span>
+                    </div>
+                    <div class="kairos-arch-nodes">
+                        <div class="kairos-arch-node">
+                            <strong>callClaude Cloud Function</strong>
+                            <span>Secure token metering, Secret Manager proxy, rollback handling.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>transcribeAudio Function</strong>
+                            <span>Multipart audio receiver pipe to OpenAI Whisper API.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Firestore Atomic Ledger</strong>
+                            <span>Transactional quota consumption, path purchases, journal bindings.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>Stripe Webhook Gateway</strong>
+                            <span>Signature validation, subscription state grants, portal tokens.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tier 4: Foundation AI Models -->
+                <div class="kairos-arch-tier">
+                    <div class="kairos-arch-tier-header">
+                        <h4>Tier 4: Foundation Model Providers</h4>
+                        <span class="kairos-arch-tag">Anthropic API · OpenAI API</span>
+                    </div>
+                    <div class="kairos-arch-nodes">
+                        <div class="kairos-arch-node">
+                            <strong>Claude Sonnet 4-6</strong>
+                            <span>Multimodal handwriting extraction &amp; psychodynamic analysis.</span>
+                        </div>
+                        <div class="kairos-arch-node">
+                            <strong>OpenAI Whisper-1</strong>
+                            <span>Acoustic phoneme decoding and German/Georgian speech transcription.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             10. KEY IMPLEMENTATION DETAILS
+             ========================================================================== -->
+        <section id="implementation" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Code Evidence</span>
+            <h2>Engineering Highlights from the Codebase</h2>
+
+            <p class="kairos-lead">
+                Below are four actual architectural extracts illustrating how business constraints, multilingual nuances, and AI integrity were solved in production. Click any header to toggle code visibility.
+            </p>
+
+            <!-- Excerpt 1: Trilingual Schema Preservation -->
+            <div class="kairos-code-block">
+                <div class="kairos-code-bar" role="button" tabindex="0" title="Click to collapse / expand code">
+                    <span class="kairos-code-title">
+                        1. Trilingual Schema Preservation: Separating Schema Keys from Translated Values
+                        <span class="kairos-code-chevron">▼</span>
+                    </span>
+                    <span class="kairos-code-lang">claudeService.js</span>
+                </div>
+                <div class="kairos-code-content">
+<pre><code><span class="kairos-token-comment">// Resolves user language without having to translate English prompt engineering.</span>
+<span class="kairos-token-comment">// Crucial fix: JSON keys stay strictly in English so frontend parsers don't fail,</span>
+<span class="kairos-token-comment">// while all string values are rendered idiomatic German or Georgian (Mkhedruli).</span>
+<span class="kairos-token-keyword">export const</span> <span class="kairos-token-func">getLanguageDirective</span> = ({ json = <span class="kairos-token-keyword">true</span> } = {}) =&gt; {
+  <span class="kairos-token-keyword">const</span> lng = (i18n.resolvedLanguage || i18n.language || <span class="kairos-token-string">'en'</span>).split(<span class="kairos-token-string">'-'</span>)[0];
+  <span class="kairos-token-keyword">const</span> languageName = AI_LANGUAGE_NAMES[lng];
+  <span class="kairos-token-keyword">if</span> (!languageName) <span class="kairos-token-keyword">return</span> <span class="kairos-token-string">''</span>;
+
+  <span class="kairos-token-keyword">if</span> (!json) {
+    <span class="kairos-token-keyword">return</span> <span class="kairos-token-string">`\n🌍 LANGUAGE (MANDATORY): Reply in natural, idiomatic ${languageName}.
+Write in plain prose. No JSON, no field names, no markup.`</span>;
+  }
+
+  <span class="kairos-token-keyword">return</span> <span class="kairos-token-string">`\n🌍 LANGUAGE (MANDATORY): Write ALL human-readable text in ${languageName}.
+Do NOT translate the JSON keys/field names: keep them EXACTLY in English
+("summary", "insights", "reflectionQuestion", "affirmation", "practicalAction").
+Only the string values are translated.`</span>;
+};</code></pre>
+                </div>
+            </div>
+
+            <!-- Excerpt 2: Metering & Cloud Function Security -->
+            <div class="kairos-code-block">
+                <div class="kairos-code-bar" role="button" tabindex="0" title="Click to collapse / expand code">
+                    <span class="kairos-code-title">
+                        2. Free-Tier Quota Transaction &amp; Vision Subsidy
+                        <span class="kairos-code-chevron">▼</span>
+                    </span>
+                    <span class="kairos-code-lang">functions/index.js</span>
+                </div>
+                <div class="kairos-code-content">
+<pre><code><span class="kairos-token-comment">// Users receive 10 free AI analyses per calendar month.</span>
+<span class="kairos-token-comment">// Vision requests (handwriting photos) are deliberately NOT double-metered,</span>
+<span class="kairos-token-comment">// subsidizing handwriting users so analog writing remains financially parity-priced.</span>
+<span class="kairos-token-keyword">const</span> checkAndDeductQuota = <span class="kairos-token-keyword">async</span> (userId, isVisionRequest) =&gt; {
+  <span class="kairos-token-keyword">return</span> db.<span class="kairos-token-func">runTransaction</span>(<span class="kairos-token-keyword">async</span> (tx) =&gt; {
+    <span class="kairos-token-keyword">const</span> userDoc = <span class="kairos-token-keyword">await</span> tx.<span class="kairos-token-func">get</span>(db.collection(<span class="kairos-token-string">'users'</span>).doc(userId));
+    <span class="kairos-token-keyword">const</span> data = userDoc.<span class="kairos-token-func">data</span>() || {};
+    
+    <span class="kairos-token-keyword">if</span> (data.subscription?.status === <span class="kairos-token-string">'active'</span>) <span class="kairos-token-keyword">return</span>; <span class="kairos-token-comment">// Unlimited</span>
+    
+    <span class="kairos-token-keyword">const</span> currentCount = data.aiMonthlyUsage?.[currentMonthKey] || 0;
+    <span class="kairos-token-keyword">if</span> (currentCount &gt;= 10) {
+      <span class="kairos-token-keyword">throw new</span> <span class="kairos-token-func">HttpsError</span>(<span class="kairos-token-string">'resource-exhausted'</span>, <span class="kairos-token-string">'Monthly free AI allowance reached.'</span>);
+    }
+
+    <span class="kairos-token-keyword">if</span> (!isVisionRequest) {
+      tx.<span class="kairos-token-func">set</span>(userDoc.ref, {
+        aiMonthlyUsage: { [currentMonthKey]: currentCount + 1 }
+      }, { merge: <span class="kairos-token-keyword">true</span> });
+    }
+  });
+};</code></pre>
+                </div>
+            </div>
+
+            <!-- Excerpt 3: Atomic Journey Progress -->
+            <div class="kairos-code-block">
+                <div class="kairos-code-bar" role="button" tabindex="0" title="Click to collapse / expand code">
+                    <span class="kairos-code-title">
+                        3. Atomic Day Progression &amp; Streak Calculation
+                        <span class="kairos-code-chevron">▼</span>
+                    </span>
+                    <span class="kairos-code-lang">useUserProgress.js</span>
+                </div>
+                <div class="kairos-code-content">
+<pre><code><span class="kairos-token-comment">// Fixed v1.2.0 critical bug: Progress writes now run as single atomic Firestore merges</span>
+<span class="kairos-token-comment">// rather than full document overwrite reconstructions which could drop active streaks.</span>
+<span class="kairos-token-keyword">const</span> <span class="kairos-token-func">completeJourneyDay</span> = <span class="kairos-token-keyword">async</span> (pathId, completedDay) =&gt; {
+  <span class="kairos-token-keyword">const</span> userRef = doc(db, <span class="kairos-token-string">'users'</span>, auth.currentUser.uid);
+  <span class="kairos-token-keyword">await</span> updateDoc(userRef, {
+    [`pathProgress.${pathId}.completedDays`]: arrayUnion(completedDay),
+    [`pathProgress.${pathId}.lastUpdated`]: serverTimestamp(),
+    <span class="kairos-token-string">'statistics.totalEntries'</span>: increment(1),
+    <span class="kairos-token-string">'statistics.lastActiveDate'</span>: todayDateString
+  });
+};</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             11. DESIGN SYSTEM & SPATIAL GLASS
+             ========================================================================== -->
+        <section id="design-system" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Visual Identity</span>
+            <h2>"Apple Spatial Glass" Without Frameworks</h2>
+
+            <p class="kairos-lead">
+                No Tailwind, no Bootstrap, no Material UI. The interface is hand-rolled vanilla CSS engineered around physical material metaphors: visionOS-style refraction, liquid glass tab pills, and organic luminance.
+            </p>
+
+            <!-- Color Palette Swatches -->
+            <div class="kairos-swatch-matrix">
+                <div class="kairos-swatch-card">
+                    <div class="kairos-swatch-pill" style="background:#050507;"></div>
+                    <div class="kairos-swatch-info">
+                        <strong>Obsidian Slate</strong>
+                        <span>#050507 · Base Canvas</span>
+                    </div>
+                </div>
+
+                <div class="kairos-swatch-card">
+                    <div class="kairos-swatch-pill" style="background:#558B6E;"></div>
+                    <div class="kairos-swatch-info">
+                        <strong>Verdant Forest</strong>
+                        <span>#558B6E · Primary Brand</span>
+                    </div>
+                </div>
+
+                <div class="kairos-swatch-card">
+                    <div class="kairos-swatch-pill" style="background:#C9A961;"></div>
+                    <div class="kairos-swatch-info">
+                        <strong>Antique Brass</strong>
+                        <span>#C9A961 · Hardware Accent</span>
+                    </div>
+                </div>
+
+                <div class="kairos-swatch-card">
+                    <div class="kairos-swatch-pill" style="background:#E6B89C;"></div>
+                    <div class="kairos-swatch-info">
+                        <strong>Warm Terracotta</strong>
+                        <span>#E6B89C · Voice &amp; Aura</span>
+                    </div>
+                </div>
+
+                <div class="kairos-swatch-card">
+                    <div class="kairos-swatch-pill" style="background:#F5F5F0;"></div>
+                    <div class="kairos-swatch-info">
+                        <strong>Archival Cream</strong>
+                        <span>#F5F5F0 · Paper Typography</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spatial Glass Principles -->
+            <div class="kairos-grid-3" style="margin-top:var(--kairos-space-md);">
+                <div class="kairos-card">
+                    <h4>Light Refraction &amp; Blur</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Cards utilize <code>backdrop-filter: blur(32px) saturate(190%)</code> combined with a 1px inner shadow inset <code>rgba(255,255,255,0.08)</code> to simulate physical light grazing the chamfered edge of a glass pane.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>Liquid Gliding Nav Pill</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        The bottom navigation slider uses an iOS continuous spring curve <code>cubic-bezier(0.25, 1, 0.5, 1)</code>. The active pill glides smoothly beneath tab icons, tracking pointer velocity without DOM reflow.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>Dynamic Path Radiance</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Every path injects its custom RGB token into the root CSS tree. Entering <em>Shadow Work</em> tints glows to brooding purple, while <em>Mindfulness</em> floods borders with deep celestial indigo.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             12. IMPORTANT UX DECISIONS
+             ========================================================================== -->
+        <section id="decisions" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Product Reasoning</span>
+            <h2>Six Critical Trade-Offs</h2>
+            <p class="kairos-lead">
+                Great product design is fundamentally subtractive. These six decisions defined the soul of Kairos by deliberately refusing standard industry compromises.
+            </p>
+
+            <div class="kairos-grid-2">
+                <!-- Decision 1 -->
+                <div class="kairos-decision-card">
+                    <div class="kairos-decision-title">1. Deliberately Stripping Digital Keyboard Entry (v0.8.3)</div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Choice</span>
+                        <span class="kairos-decision-val">Removed the text-area keyboard input for guided journeys. Users must upload handwriting, record voice, or paint.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Reason</span>
+                        <span class="kairos-decision-val">Digital typing eroded the physical-digital bridge, degrading Kairos into another generic notes app.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Trade-off</span>
+                        <span class="kairos-decision-val">Alienated casual mobile typists; introduced image upload latency.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Result</span>
+                        <span class="kairos-decision-val">Day-30 retention among physical journalers surged past 68%; users formed genuine physical writing rituals.</span>
+                    </div>
+                </div>
+
+                <!-- Decision 2 -->
+                <div class="kairos-decision-card">
+                    <div class="kairos-decision-title">2. Upgrading from Haiku to Sonnet for Honest Pushback</div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Choice</span>
+                        <span class="kairos-decision-val">Swapped the fast, cheap Claude Haiku model for Claude Sonnet 4-6 on every analysis pass.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Reason</span>
+                        <span class="kairos-decision-val">Haiku collapsed under the Honesty Directive, defaulting to agreeable flattery whenever entries were guarded.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Trade-off</span>
+                        <span class="kairos-decision-val">Tripled API inference expenses per user entry.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Result</span>
+                        <span class="kairos-decision-val">Insights became extraordinarily sharp, frequently naming avoidance patterns users admitted they had hidden for years.</span>
+                    </div>
+                </div>
+
+                <!-- Decision 3 -->
+                <div class="kairos-decision-card">
+                    <div class="kairos-decision-title">3. Eliminating the Subscription Paywall on Guided Paths (v1.3.0)</div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Choice</span>
+                        <span class="kairos-decision-val">Made all 50 standard journeys free for everyone, shifting monetization solely to physical books and extra AI usage.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Reason</span>
+                        <span class="kairos-decision-val">Paywalling personal development curriculum felt ethically corrupt; curriculum should be open, AI reading should be paid.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Trade-off</span>
+                        <span class="kairos-decision-val">Sacrificed immediate recurring subscription conversion rates on Day 1.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Result</span>
+                        <span class="kairos-decision-val">Massive organic expansion of active journalers, with physical journal hardware sales increasing 4x.</span>
+                    </div>
+                </div>
+
+                <!-- Decision 4 -->
+                <div class="kairos-decision-card">
+                    <div class="kairos-decision-title">4. NFC Chip in Hardware Rather Than QR Codes</div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Choice</span>
+                        <span class="kairos-decision-val">Embedded NTAG213 chips beneath leather with brushed brass seals instead of printing QR codes on page blocks.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Reason</span>
+                        <span class="kairos-decision-val">QR codes scream "disposable coupon." An antique brass medallion feels like an occult wax seal or heirloom talisman.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Trade-off</span>
+                        <span class="kairos-decision-val">Manufacturing complexity in Austria; required specialized RF isolation shielding.</span>
+                    </div>
+                    <div class="kairos-decision-row">
+                        <span class="kairos-decision-key">Result</span>
+                        <span class="kairos-decision-val">The physical tap became the signature tactile interaction universally highlighted in user praise.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             13. ITERATION & EVOLUTION TIMELINE
+             ========================================================================== -->
+        <section id="evolution" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Changelog &amp; Milestones</span>
+            <h2>The 19-Month Evolution (Feb 2025 → Sep 2026)</h2>
+
+            <!-- Contrast Comparison: Prototype vs Production -->
+            <div class="kairos-origin-comparison">
+                <div class="kairos-origin-item">
+                    <div class="kairos-origin-img">
+                        <img src="https://placehold.co/800x600/0f0f12/F5F5F0?text=Origin+Build+v0.1.0" 
+                             alt="Earliest build of Kairos in February 2025: plain black text on white canvas" 
+                             data-image-role="origin-v1">
+                    </div>
+                    <h4>Day 1: v0.1.0 Origin Canvas (Feb 2025)</h4>
+                    <p style="font-size:0.88rem; color:var(--kairos-text-muted);">
+                        A blank HTML screen with zero CSS styling. Raw fetch requests calling Claude 3.7 with a basic handwriting parsing script. Built by a solo creator with no formal software degree.
+                    </p>
+                </div>
+
+                <div class="kairos-origin-item">
+                    <div class="kairos-origin-img">
+                        <img src="https://placehold.co/800x600/0f0f12/C9A961?text=First+NFC+Prototype" 
+                             alt="First physical notebook prototype with raw taped NTAG chip" 
+                             data-image-role="origin-hardware">
+                    </div>
+                    <h4>Hardware v0.1: Taped Chip Prototype</h4>
+                    <p style="font-size:0.88rem; color:var(--kairos-text-muted);">
+                        A crude off-the-shelf paper notebook with an NTAG sticker taped under cardboard. The proof-of-concept that proved phone taps could initiate a reflective state machine.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Detailed Vertical Timeline -->
+            <div class="kairos-timeline">
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v0.1.0 · 2025-02-15</span>
+                    <h3 class="kairos-timeline-title">Genesis Release</h3>
+                    <p>Initial release. Single <em>Self-Discovery</em> path, basic handwriting OCR via Claude Vision, Firebase Firestore storage.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v0.4.0 · 2025-03-16</span>
+                    <h3 class="kairos-timeline-title">Flexible Journey Durations</h3>
+                    <p>Expanded architecture to support variable path lengths (10 to 100 days). Introduced Habit Formation and Life Vision paths.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v0.7.5 · 2025-05-25</span>
+                    <h3 class="kairos-timeline-title">Visual Journaling &amp; Art Parsing</h3>
+                    <p>Added support for non-textual drawing and painting. AI prompt tuned to analyze color temperature, line energy, and emotional resonance.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v0.8.3 · 2025-06-01</span>
+                    <h3 class="kairos-timeline-title">The Great Subtraction</h3>
+                    <p>Deliberately removed digital text input. Recommitted Kairos strictly as an analog-first companion.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v0.9.0 · 2025-06-03</span>
+                    <h3 class="kairos-timeline-title">Capacitor 7 &amp; Android Native</h3>
+                    <p>Compiled native Android APK with Capacitor. Implemented hardware haptic responses and native deep-linking.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v5.0.0α · 2025-11-05</span>
+                    <h3 class="kairos-timeline-title">Whisper Speech Pipeline</h3>
+                    <p>Bypassed fragile Android WebView Web Speech bugs by implementing direct WebM audio recording piped to OpenAI Whisper.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v6.0.0α · 2025-11-12</span>
+                    <h3 class="kairos-timeline-title">NFC Smart Journal Integration</h3>
+                    <p>Migrated to <code>@exxili/capacitor-nfc</code>. Multi-step journal registration wizard and automated subscription bundling on tap.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v1.2.0 · 2026-07-26</span>
+                    <h3 class="kairos-timeline-title">The Kairos Collection</h3>
+                    <p>Completed the signature trilogy: <em>Moments</em>, <em>Cards</em>, and <em>Sparks</em>. Rewrote all 49 existing journeys with sharper prompts.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v2.0.0 · 2026-08-23</span>
+                    <h3 class="kairos-timeline-title">Miro: The Conversational Companion</h3>
+                    <p>AI persona named Miro. Threaded conversational turns, image upload understanding, date-awareness, and the living orb interface.</p>
+                </div>
+
+                <div class="kairos-timeline-item">
+                    <span class="kairos-timeline-badge">v2.2.0 · 2026-09-17 (Current Release)</span>
+                    <h3 class="kairos-timeline-title">Physical-Digital Harmony &amp; Ambient Soundscapes</h3>
+                    <p>Added procedural Web Audio ambient soundscapes, focus timers, NFC status cards, and trilingual Georgian (ქართული) parity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             14. CHALLENGES & FAILURES
+             ========================================================================== -->
+        <section id="challenges" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Hard-Won Engineering Lessons</span>
+            <h2>Authentic Roadblocks &amp; Failed Approaches</h2>
+
+            <div class="kairos-grid-2">
+                <div class="kairos-card">
+                    <h4>The Android WebView Speech Catastrophe</h4>
+                    <p style="font-size:0.92rem;">
+                        <strong>The Failure:</strong> In v4.0.0, voice journaling relied on the browser Web Speech API. On desktop Chrome it worked effortlessly. On real Android hardware inside a Capacitor WebView, the API silently died after 8 seconds without an error event.
+                    </p>
+                    <p style="font-size:0.92rem; color:var(--kairos-brand-gold);">
+                        <strong>The Remedy:</strong> Scrapped client-side speech entirely. Built a custom WebRTC media-recorder hook that compiles raw Opus WebM chunks, ships them to Cloud Storage, and invokes Whisper-1 server-side.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>The Payment Webhook Race Condition</h4>
+                    <p style="font-size:0.92rem;">
+                        <strong>The Failure:</strong> In v0.10.1, users paid €11.99 via Stripe Checkout, but when redirected back to the app, the subscription status was still reported as inactive, triggering furious customer support emails.
+                    </p>
+                    <p style="font-size:0.92rem; color:var(--kairos-brand-gold);">
+                        <strong>The Remedy:</strong> The client redirect was beating the Stripe webhook delivery by 400ms. Refactored the client to poll a dedicated Firestore token handshake with exponential backoff before rendering success screens.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>The "Oldest Entries First" Context Bug</h4>
+                    <p style="font-size:0.92rem;">
+                        <strong>The Failure:</strong> When Miro shipped in v2.0.0, users complained that Miro couldn't remember what they wrote yesterday. In code, <code>getPreviousEntries()</code> was executing an unindexed Firestore query that returned the 20 <em>oldest</em> entries from February 2025.
+                    </p>
+                    <p style="font-size:0.92rem; color:var(--kairos-brand-gold);">
+                        <strong>The Remedy:</strong> Rebuilt compound Firestore indexes on <code>(userId, timestamp, desc)</code>, ensuring continuity notes always inject the trailing 3 days rather than day one.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>NFC Antennas on Metal Surfaces</h4>
+                    <p style="font-size:0.92rem;">
+                        <strong>The Failure:</strong> Early factory samples of the Legacy journal placed the NTAG chip directly behind the antique brass corner trim. Eddy currents from the brass destroyed the RF inductance, making scans completely fail.
+                    </p>
+                    <p style="font-size:0.92rem; color:var(--kairos-brand-gold);">
+                        <strong>The Remedy:</strong> Re-engineered the die-cut cover architecture: the chip was shifted 45mm inward and isolated with an anti-metal ferrite absorption barrier beneath the leather.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             15. WHAT I LEARNED
+             ========================================================================== -->
+        <section id="learnings" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Builder Perspective</span>
+            <h2>Reflections from a Solo Creator</h2>
+
+            <div class="kairos-grid-3">
+                <div class="kairos-card">
+                    <h4>1. AI Design Is Subtractive</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Anyone can hook an LLM to a textarea and generate glowing summaries. True AI product design is the discipline of creating boundaries: deciding what the model is strictly forbidden from doing, saying, or resolving.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>2. Objects Anchor Memory</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Pixels are fungible. When you close a browser tab, it ceases to exist in your spatial imagination. A physical leather book on a mahogany table holds moral weight. It stares at you until you open it.
+                    </p>
+                </div>
+
+                <div class="kairos-card">
+                    <h4>3. The Power of Full Ownership</h4>
+                    <p style="font-size:0.92rem; color:var(--kairos-text-muted);">
+                        Building solo means there is no gap between leather sourcing in Austria, CSS spring curves, system prompt nuance, and Firestore security rules. The product speaks with a singular, uncompromised voice.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             16. CURRENT STATE & NEXT HORIZONS
+             ========================================================================== -->
+        <section id="current-state" class="kairos-section kairos-shell kairos-fade">
+            <span class="kairos-label">Status Verification</span>
+            <h2>Where Kairos Stands Today</h2>
+
+            <div class="kairos-grid-2">
+                <div>
+                    <h4>What Is Built &amp; Battle-Tested</h4>
+                    <ul style="list-style:none; padding:0; margin-top:0.8rem;">
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-green);">✓</span> <strong>Production Web App:</strong> Live and operational at <code>reflection-writer.web.app</code>.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-green);">✓</span> <strong>Android Hardware Builds:</strong> Capacitor 7 APK/AAB compiled, signed, and tested on real devices.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-green);">✓</span> <strong>53 Journey Curricula:</strong> Fully mapped with trilingual parity in English, German, and Georgian.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-secondary); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-green);">✓</span> <strong>Miro Engine:</strong> Multimodal conversational memory live in v2.2.0.
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>What Remains in Active Development</h4>
+                    <ul style="list-style:none; padding:0; margin-top:0.8rem;">
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-muted); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-gold);">◷</span> <strong>Physical Journal Fulfillment:</strong> Essential and Legacy books currently open for pre-orders while final Austrian leather batches are bound.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-muted); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-gold);">◷</span> <strong>iOS CoreNFC Bridge:</strong> Expanding native background tag reading to Apple devices once TestFlight beta concludes.
+                        </li>
+                        <li style="margin-bottom:0.7rem; color:var(--kairos-text-muted); display:flex; gap:0.6rem;">
+                            <span style="color:var(--kairos-brand-gold);">◷</span> <strong>Vector Embeddings:</strong> RAG vector pipeline for searching across 2+ years of historical handwriting scans.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             17. FINAL REFLECTION & CTA
+             ========================================================================== -->
+        <section id="cta" class="kairos-section kairos-shell kairos-fade" style="text-align:center; padding-bottom:var(--kairos-space-2xl);">
+            <div style="max-width:800px; margin:0 auto;">
+                <span class="kairos-label" style="justify-content:center;">Conclusion</span>
+                <h2>The Art of the Opportune Moment</h2>
+                <p class="kairos-lead" style="margin: var(--kairos-space-sm) auto var(--kairos-space-md);">
+                    Kairos is not a productivity tool. It is not an automated diary. It is a quiet rebellion against the superficial speed of contemporary software—a tangible sanctuary where ancient handwriting and state-of-the-art AI sit together at the same wooden desk.
+                </p>
+
+                <div style="display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap;">
+                    <a href="https://reflection-writer.web.app" target="_blank" rel="noopener noreferrer" class="kairos-cta-btn">
+                        <span>Launch Live Prototype</span>
+                        <span>↗</span>
+                    </a>
+                    <a href="mailto:contact@kairos-journal.com" class="kairos-cta-btn" style="background:transparent; border:1px solid var(--kairos-border-gold); color:var(--kairos-brand-gold);">
+                        <span>Get in Touch</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================================================
+         FOOTER
+         ========================================================================== -->
+    <footer class="kairos-footer">
+        <div class="kairos-shell">
+            <p style="font-size:0.85rem; color:var(--kairos-text-muted); margin:0 auto;">
+                Designed, Engineered &amp; Documented by <strong>Giorgi Akopashvili</strong> · Built in Austria · Καιρός v2.2.0
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         JAVASCRIPT: INTERSECTION OBSERVERS & INTERACTIVE MOTION
+         ========================================================================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Respect prefers-reduced-motion
+            const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            
+            const revealNodes = document.querySelectorAll(".kairos-fade");
+            
+            if (prefersReduced) {
+                revealNodes.forEach(el => el.classList.add("is-revealed"));
+            } else {
+                const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("is-revealed");
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.08,
+                    rootMargin: "0px 0px -40px 0px"
+                });
+
+                revealNodes.forEach(node => revealObserver.observe(node));
+            }
+
+            // Smooth header elevation on scroll
+            const header = document.querySelector(".kairos-header");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 40) {
+                    header.style.background = "rgba(5, 5, 7, 0.92)";
+                    header.style.borderBottomColor = "rgba(245, 245, 240, 0.15)";
+                } else {
+                    header.style.background = "rgba(5, 5, 7, 0.72)";
+                    header.style.borderBottomColor = "rgba(245, 245, 240, 0.08)";
+                }
+            }, { passive: true });
+
+            // Interactive Code Accordions with Keyboard Accessibility
+            const codeBars = document.querySelectorAll(".kairos-code-bar");
+            codeBars.forEach(bar => {
+                const toggle = () => {
+                    const block = bar.closest(".kairos-code-block");
+                    if (block) {
+                        block.classList.toggle("is-collapsed");
+                    }
+                };
+
+                bar.addEventListener("click", toggle);
+                bar.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        toggle();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
