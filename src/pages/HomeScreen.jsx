@@ -16,9 +16,6 @@ import VersionNews from '../components/common/VersionNews';
 import MoodWeather from '../components/common/MoodWeather';
 import HomeActivityCalendar from '../components/common/HomeActivityCalendar';
 import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones, Mic } from 'lucide-react';
-import PhysicalJournalCard from '../components/journal/PhysicalJournalCard';
-import JournalRegistration from '../components/journal/JournalRegistration';
-import MyJournalsList from '../components/journal/MyJournalsList';
 import '../styles/components/homeScreen.css';
 import '../styles/pages/analyticsScreen.css';
 import { useTheme } from '../contexts/ThemeContext';
@@ -33,8 +30,6 @@ const HomeScreen = ({ navigateToScreen }) => {
   const { statistics, isLoading: statsLoading } = useUserStatistics();
   const { inProgressPaths, hasActiveJourneys } = useUserProgress();
   
-  const [showRegistration, setShowRegistration] = useState(false);
-  const [showJournalsList, setShowJournalsList] = useState(false);
   const [quote, setQuote] = useState(quotes[0]);
   const [isQuoteChanging, setIsQuoteChanging] = useState(false);
   const [timeGradient, setTimeGradient] = useState('');
@@ -227,14 +222,6 @@ const HomeScreen = ({ navigateToScreen }) => {
         )}
       </div>
 
-      {/* ========== 2.5 PHYSICAL JOURNAL STATUS CARD ========== */}
-      <PhysicalJournalCard
-        userProfile={userProfile}
-        onOpenRegistration={() => setShowRegistration(true)}
-        onOpenJournalsList={() => setShowJournalsList(true)}
-        navigateToScreen={navigateToScreen}
-      />
-
       {/* ========== 3. ACTIVITY CALENDAR (Week on mobile, Month on tablet & desktop) ========== */}
       <HomeActivityCalendar
         allEntries={statistics.allEntries}
@@ -411,27 +398,6 @@ const HomeScreen = ({ navigateToScreen }) => {
         </div>,
         document.body
       )}
-
-
-      {/* Physical Journal Registration Modal */}
-      <JournalRegistration
-        isOpen={showRegistration}
-        onClose={() => setShowRegistration(false)}
-        onComplete={() => {
-          setShowRegistration(false);
-          window.location.reload();
-        }}
-      />
-
-      {/* Physical Journals Collection Modal */}
-      <MyJournalsList
-        isOpen={showJournalsList}
-        onClose={() => setShowJournalsList(false)}
-        onRegisterAnother={() => {
-          setShowJournalsList(false);
-          setTimeout(() => setShowRegistration(true), 300);
-        }}
-      />
 
     </div>
   );

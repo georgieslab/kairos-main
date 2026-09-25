@@ -31,4 +31,4 @@ dist
 keystore.properties
 *.apk
 *.aab
-.firebase/
+.firebase/

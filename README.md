@@ -41,10 +41,6 @@ An in-app procedural Web Audio suite designed to anchor your writing sessions:
 - **Procedural & Offline** — Generates soothing acoustic textures without network buffering or latency.
 - **Focus Session Timer** — Configurable reflection timers (15m–60m) with gentle 3-second acoustic fade-outs.
 
-### 📖 Physical-Digital Journal Harmony
-- **NFC Tap-to-Journal** — Tap your smartphone against the brushed brass medallion of a physical Καιρός journal to immediately unlock today's reflection prompt.
-- **Journal Status Card** — Apple Spatial Glass status showcase displaying active edition tier, stamped gold foil serial badge, and live NFC readiness.
-
 ### 🗺️ 53 Guided Journey Paths
 Multi-day programs (7–100 days) across self-discovery, emotional intelligence, mindfulness, habit formation, shadow work, creative expression, voice confidence, and more — each with professionally crafted daily prompts, its own color theme, and difficulty level.
 
@@ -118,7 +114,7 @@ src/
 │   ├── achievements/ analytics/ auth/ common/ journal/
 │   ├── journey/ layout/ paths/ settings/ subscription/
 │   ├── voice/ weather/ profile/
-│   └── (MiroVoiceModal, MiroThinking, PhysicalJournalCard, HomeActivityCalendar)
+│   └── (MiroVoiceModal, MiroThinking, HomeActivityCalendar)
 ├── pages/               # Top-level screens (Home, Insights, Profile, Listen...)
 ├── contexts/            # Auth, Theme, Navigation
 ├── hooks/               # useUserProgress, useUserStatistics, useNFC, ...
@@ -131,6 +127,7 @@ src/
 ├── constants/           # moods.js, inviteCodes.js, pathBundles.js
 ├── utils/               # pathTypeUtils, versionControl (changelog), ...
 └── styles/              # Per-component CSS (Apple Spatial Glass)
+```
 
 functions/               # Firebase Cloud Functions
 android/                 # Capacitor Android project (signed release ready)
