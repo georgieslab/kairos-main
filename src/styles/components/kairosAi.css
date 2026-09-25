@@ -923,18 +923,59 @@
   cursor: not-allowed;
 }
 
-/* ── Microphone Jewel Button ──────────────────────────────────────────────*/
+/* ── Empty State Starter Chips ───────────────────────────────────────────*/
+.kai-starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 2px;
+}
+
+.kai-starter-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12.5px;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: left;
+}
+
+.kai-starter-chip:hover {
+  background: rgba(116, 110, 205, 0.18);
+  border-color: rgba(116, 110, 205, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 12px rgba(116, 110, 205, 0.15);
+}
+
+.kai-starter-chip:active {
+  transform: scale(0.97);
+}
+
+.kai-starter-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Microphone Jewel Button (Seamless morph with send button) ───────────*/
 .kai-mic-btn {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 97, 0.32);
+  background: rgba(201, 169, 97, 0.09);
+  color: #C9A961;
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   flex-shrink: 0;
@@ -942,13 +983,19 @@
 }
 
 .kai-mic-btn:hover:not(:disabled) {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  background: rgba(201, 169, 97, 0.24);
+  border-color: rgba(201, 169, 97, 0.6);
+  box-shadow: 0 0 16px rgba(201, 169, 97, 0.28);
+  transform: translateY(-1px) scale(1.04);
+}
+
+.kai-mic-btn:active {
+  transform: scale(0.93);
 }
 
 .kai-mic-btn:disabled {
-  opacity: 0.3;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 

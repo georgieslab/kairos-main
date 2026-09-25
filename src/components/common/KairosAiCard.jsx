@@ -11,25 +11,22 @@
 // Subscribed users (Artisan) have unlimited, uninterrupted conversation turns.
 // Free users receive 1 message daily with a direct upgrade path.
 
-import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, ImagePlus, X, Sparkles, RotateCcw, Volume2, VolumeX, Mic, MicOff } from 'lucide-react';
+import { ArrowUp, ImagePlus, X, Sparkles, RotateCcw, Mic } from 'lucide-react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { callClaudeApi } from '../../utils/apiUtils';
 import { HONESTY_DIRECTIVE, getLanguageDirective } from '../../services/claudeService';
 import { getSubscriptionStatus, hasArtisanAccess, startUpgradeProcess } from '../../services/SubscriptionService';
-import speechRecognitionService from '../../services/speechRecognitionService';
-import textToSpeechService from '../../services/textToSpeechService';
 import hapticService from '../../services/hapticService';
 import MiroMark from './MiroMark';
 import MiroThinking from './MiroThinking';
-import MiroVoiceModal from './MiroVoiceModal';
 import '../../styles/components/kairosAi.css';
 
-// Storage key for Miro spoken response toggle
-const VOICE_ENABLED_KEY = 'kairos_miro_voice_enabled';
+// Lazy load the Voice Chamber modal so it never blocks the initial Home screen load
+const MiroVoiceModal = lazy(() => import('./MiroVoiceModal'));
 
 // Matches the cap every other history-fed generator uses.
 const CONTEXT_ENTRIES = 25;
@@ -116,15 +113,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const [subscription, setSubscription] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
-
-  // Voice mode & speech states
-  const [voiceEnabled, setVoiceEnabled] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return localStorage.getItem(VOICE_ENABLED_KEY) !== 'false';
-  });
-  const [isListening, setIsListening] = useState(false);
-  const [isMiroSpeaking, setIsMiroSpeaking] = useState(false);
-  const [micError, setMicError] = useState(null);
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
 
   const typingTimer = useRef(null);
@@ -190,8 +178,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   useEffect(() => {
     return () => {
       clearTimeout(typingTimer.current);
-      textToSpeechService.stop();
-      speechRecognitionService.cancel();
     };
   }, []);
 
@@ -201,23 +187,21 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, isThinking]);
 
-  const context = useMemo(
-    () =>
-      (entries || [])
-        .slice()
-        .sort((a, b) => (toDate(b?.timestamp)?.getTime() || 0) - (toDate(a?.timestamp)?.getTime() || 0))
-        .slice(0, CONTEXT_ENTRIES)
-        .map((e) => ({
-          day: e.day,
-          pathId: e.pathId || null,
-          theme: e.theme || '',
-          summary: e.analysis?.summary || '',
-          insights: e.analysis?.insights || [],
-          spoken: !!e.isVoiceEntry,
-          excerpt: (e.extractedText || e.transcription || '').substring(0, 300)
-        })),
-    [entries]
-  );
+  // Build journal context on-demand when sending to save CPU/memory on render
+  const getContext = () =>
+    (entries || [])
+      .slice()
+      .sort((a, b) => (toDate(b?.timestamp)?.getTime() || 0) - (toDate(a?.timestamp)?.getTime() || 0))
+      .slice(0, CONTEXT_ENTRIES)
+      .map((e) => ({
+        day: e.day,
+        pathId: e.pathId || null,
+        theme: e.theme || '',
+        summary: e.analysis?.summary || '',
+        insights: e.analysis?.insights || [],
+        spoken: !!e.isVoiceEntry,
+        excerpt: (e.extractedText || e.transcription || '').substring(0, 300)
+      }));
 
   const timeSense = () => {
     const now = new Date();
@@ -460,19 +444,6 @@ before the substance.`;
       const next = [...withUser, { role: 'assistant', content: text, at: Date.now() }];
       setMessages(next);
       persist(next);
-
-      // Spoken voice playback if voiceEnabled (only when modal is closed to prevent double-speak collision)
-      if (voiceEnabled && text && !isVoiceModalOpen) {
-        const activeLang = i18n.resolvedLanguage || i18n.language || 'en';
-        textToSpeechService.speak(text, {
-          lang: activeLang,
-          rate: 0.95,
-          pitch: 0.98,
-          onStart: () => setIsMiroSpeaking(true),
-          onEnd: () => setIsMiroSpeaking(false),
-          onError: () => setIsMiroSpeaking(false)
-        });
-      }
       return text;
     } catch (e) {
       const isExhausted = e?.reason === 'ai-daily-allowance-exhausted';
@@ -498,15 +469,9 @@ before the substance.`;
 
   const handleOpenVoiceModal = useCallback(() => {
     if (locked || isThinking) return;
-
-    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
-      textToSpeechService.stop();
-      setIsMiroSpeaking(false);
-    }
-
     hapticService.light?.();
     setIsVoiceModalOpen(true);
-  }, [locked, isThinking, isMiroSpeaking]);
+  }, [locked, isThinking]);
 
   // Global event listener to allow 1-tap voice trigger from Hero card or anywhere in app
   useEffect(() => {
@@ -555,33 +520,27 @@ before the substance.`;
       <div className="kai-head">
         <div className="kai-head-left">
           <div
-            className={`miro-orb-wrap${isMiroSpeaking ? ' miro-orb-interactive' : ' miro-orb-clickable'}`}
-            onClick={isMiroSpeaking ? handleStopSpeaking : handleOpenVoiceModal}
-            title={isMiroSpeaking ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('miro.openVoiceChamber', "Open Voice Chamber")}
+            className="miro-orb-wrap miro-orb-clickable"
+            onClick={handleOpenVoiceModal}
+            title={t('miro.openVoiceChamber', "Open Voice Chamber")}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                if (isMiroSpeaking) handleStopSpeaking();
-                else handleOpenVoiceModal();
+                handleOpenVoiceModal();
               }
             }}
           >
-            {isMiroSpeaking && <div className="miro-speaking-glow" aria-hidden="true" />}
             <MiroMark size={34} />
           </div>
           <div className="kai-title-wrap">
             <div className="kai-title-row">
               <span className="kai-title">{t('kairosAi.title', 'Miro')}</span>
-              {isArtisan ? (
+              {isArtisan && (
                 <span className="kai-artisan-badge" title={t('kairosAi.artisanUnlimited', 'Artisan · Unlimited')}>
                   <Sparkles size={11} />
                   <span>Artisan</span>
-                </span>
-              ) : (
-                <span className="kai-free-badge">
-                  <span>{t('kairosAi.freeDailyBadge', '1 daily')}</span>
                 </span>
               )}
             </div>
@@ -611,15 +570,6 @@ before the substance.`;
             </span>
           </button>
 
-          <button
-            className={`kai-voice-toggle-btn${voiceEnabled ? ' is-active' : ' is-muted'}`}
-            onClick={toggleVoiceEnabled}
-            title={voiceEnabled ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('kairosAi.unmuteVoice', "Unmute Miro's voice")}
-            aria-label={voiceEnabled ? t('kairosAi.muteVoice', "Mute Miro's voice") : t('kairosAi.unmuteVoice', "Unmute Miro's voice")}
-          >
-            {voiceEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
-          </button>
-
           {messages.length > 0 && (
             <button
               className="kai-new-chat-btn"
@@ -635,7 +585,7 @@ before the substance.`;
         </div>
       </div>
 
-      {messages.length > 0 && (
+      {messages.length > 0 ? (
         <div className="kai-thread" ref={threadRef}>
           {messages.map((m, i) => {
             const showDate =
@@ -653,8 +603,6 @@ before the substance.`;
                 )}
                 <div
                   className={m.role === 'user' ? 'kai-msg kai-msg-you' : 'kai-msg kai-msg-ai'}
-                  onClick={m.role === 'assistant' && isMiroSpeaking ? handleStopSpeaking : undefined}
-                  title={m.role === 'assistant' && isMiroSpeaking ? t('kairosAi.muteVoice', "Mute Miro's voice") : undefined}
                 >
                   {m.image && <img className="kai-msg-img" src={m.image.dataUrl} alt="" />}
                   {!m.image && m.hadImage && (
@@ -678,7 +626,26 @@ before the substance.`;
             </div>
           )}
         </div>
-      )}
+      ) : hasEnough ? (
+        <div className="kai-starters">
+          <button
+            type="button"
+            className="kai-starter-chip"
+            onClick={() => ask(t('miro.starterPrompt1', "How have I been doing lately?"))}
+            disabled={locked || isThinking}
+          >
+            <span>{t('miro.starterPrompt1', "How have I been doing lately?")}</span>
+          </button>
+          <button
+            type="button"
+            className="kai-starter-chip"
+            onClick={() => ask(t('miro.starterPrompt2', "What themes do you notice in my journal?"))}
+            disabled={locked || isThinking}
+          >
+            <span>{t('miro.starterPrompt2', "What themes do you notice in my journal?")}</span>
+          </button>
+        </div>
+      ) : null}
 
       {pending && (
         <div className="kai-attach">
@@ -693,7 +660,7 @@ before the substance.`;
         </div>
       )}
 
-      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}${isTyping ? ' is-typing' : ''}${isListening ? ' is-listening' : ''}`}>
+      <div className={`kai-input-row${isThinking ? ' is-thinking' : ''}${isTyping ? ' is-typing' : ''}`}>
         <input
           ref={fileRef}
           type="file"
@@ -706,23 +673,9 @@ before the substance.`;
           onClick={() => fileRef.current?.click()}
           disabled={locked || isThinking}
           aria-label={t('kairosAi.addImage', 'Add an image')}
+          title={t('kairosAi.addImage', 'Add an image')}
         >
           <ImagePlus size={17} />
-        </button>
-
-        <button
-          className={`kai-mic-btn${isListening ? ' is-listening' : ''}`}
-          onClick={handleOpenVoiceModal}
-          disabled={locked || isThinking}
-          title={t('miro.voiceTitle', 'Miro Voice')}
-          aria-label={t('miro.voiceTitle', 'Miro Voice')}
-        >
-          <span className="kai-mic-aura" aria-hidden="true" />
-          {isListening ? (
-            <MicOff size={16} className="kai-mic-icon" />
-          ) : (
-            <Mic size={16} className="kai-mic-icon" />
-          )}
         </button>
 
         <textarea
@@ -730,10 +683,6 @@ before the substance.`;
           rows={1}
           value={question}
           onChange={(e) => {
-            if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
-              textToSpeechService.stop();
-              setIsMiroSpeaking(false);
-            }
             setQuestion(e.target.value);
             setIsTyping(true);
             clearTimeout(typingTimer.current);
@@ -743,28 +692,39 @@ before the substance.`;
           onPaste={onPaste}
           disabled={locked || isThinking}
           placeholder={
-            isListening
-              ? t('kairosAi.listening', 'Listening...')
-              : exhausted && !isArtisan
-                ? t('kairosAi.placeholderTomorrow', 'Back tomorrow')
-                : hasEnough
-                  ? messages.length
-                    ? t('kairosAi.placeholderFollow', 'Say more…')
-                    : isArtisan
-                      ? t('kairosAi.placeholderArtisan', 'Talk with Miro about your journal…')
-                      : t('kairosAi.placeholder', 'Ask about what you have been writing…')
-                  : t('kairosAi.placeholderLocked', 'Write a few entries first')
+            exhausted && !isArtisan
+              ? t('kairosAi.placeholderTomorrow', 'Back tomorrow')
+              : hasEnough
+                ? messages.length
+                  ? t('kairosAi.placeholderFollow', 'Say more…')
+                  : isArtisan
+                    ? t('kairosAi.placeholderArtisan', 'Talk with Miro about your journal…')
+                    : t('kairosAi.placeholder', 'Ask about what you have been writing…')
+                : t('kairosAi.placeholderLocked', 'Write a few entries first')
           }
         />
-        <button
-          className={`kai-send${canSend ? ' is-ready' : ''}`}
-          onClick={() => ask()}
-          disabled={!canSend}
-          aria-label={t('kairosAi.send', 'Send')}
-        >
-          <span className="kai-send-aura" aria-hidden="true" />
-          <ArrowUp size={16} className="kai-send-icon" />
-        </button>
+
+        {canSend ? (
+          <button
+            className="kai-send is-ready"
+            onClick={() => ask()}
+            aria-label={t('kairosAi.send', 'Send')}
+          >
+            <span className="kai-send-aura" aria-hidden="true" />
+            <ArrowUp size={16} className="kai-send-icon" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="kai-mic-btn"
+            onClick={handleOpenVoiceModal}
+            disabled={locked || isThinking}
+            title={t('miro.voiceTitle', 'Miro Voice')}
+            aria-label={t('miro.voiceTitle', 'Miro Voice')}
+          >
+            <Mic size={16} className="kai-mic-icon" />
+          </button>
+        )}
       </div>
 
       {isDragging && (
@@ -785,25 +745,25 @@ before the substance.`;
             <span>{t('kairosAi.upgradeCta', 'Upgrade to Artisan')}</span>
           </button>
         </div>
-      ) : micError ? (
-        <p className="kai-error">{micError}</p>
       ) : error ? (
         <p className="kai-error">{error}</p>
       ) : null}
 
-      {/* Dedicated Spatial Glass Voice Chamber Popup */}
-      <MiroVoiceModal
-        isOpen={isVoiceModalOpen}
-        onClose={() => setIsVoiceModalOpen(false)}
-        messages={messages}
-        onSendMessage={ask}
-        isArtisan={isArtisan}
-        exhausted={exhausted}
-        onUpgrade={handleUpgrade}
-        locked={locked}
-        voiceEnabled={voiceEnabled}
-        onToggleVoiceEnabled={toggleVoiceEnabled}
-      />
+      {/* Dedicated Spatial Glass Voice Chamber Popup (Lazy Loaded) */}
+      {isVoiceModalOpen && (
+        <Suspense fallback={null}>
+          <MiroVoiceModal
+            isOpen={isVoiceModalOpen}
+            onClose={() => setIsVoiceModalOpen(false)}
+            messages={messages}
+            onSendMessage={ask}
+            isArtisan={isArtisan}
+            exhausted={exhausted}
+            onUpgrade={handleUpgrade}
+            locked={locked}
+          />
+        </Suspense>
+      )}
     </section>
   );
 };

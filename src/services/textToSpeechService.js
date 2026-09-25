@@ -72,16 +72,27 @@ class TextToSpeechService {
     };
 
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      this._loadVoices();
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = () => this._loadVoices();
+      // Defer voice discovery so it never blocks initial app render
+      const deferInit = () => {
+        this._loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+          window.speechSynthesis.onvoiceschanged = () => this._loadVoices();
+        }
+      };
+
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(deferInit, { timeout: 2000 });
+      } else {
+        setTimeout(deferInit, 1200);
       }
     }
   }
 
   _loadVoices() {
     try {
-      this._voices = window.speechSynthesis.getVoices() || [];
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        this._voices = window.speechSynthesis.getVoices() || [];
+      }
     } catch (e) {
       this._voices = [];
     }
