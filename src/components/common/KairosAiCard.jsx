@@ -129,8 +129,8 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
 
   const isArtisan = useMemo(() => hasArtisanAccess(subscription), [subscription]);
 
-  // Below a handful of entries there is nothing to reflect on
-  const hasEnough = totalEntries >= 3;
+  // Below a single entry there is nothing to reflect on yet; unlocks on day 1
+  const hasEnough = totalEntries >= 1;
   const locked = !hasEnough || (exhausted && !isArtisan);
 
   // Continuous active thread loading (with fallback to today's doc for seamless migration)
@@ -254,12 +254,13 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   const persist = async (next) => {
     if (!currentUser) return;
     try {
+      const journalContext = getContext();
       await setDoc(
         doc(db, 'users', currentUser.uid, 'kairos_conversations', ACTIVE_THREAD_KEY),
         {
           messages: next.map(({ image, ...m }) => (image ? { ...m, hadImage: true } : m)),
           title: next.find((m) => m.role === 'user')?.content?.slice(0, 80) || '',
-          entriesSeen: context.length,
+          entriesSeen: journalContext.length,
           updatedAt: serverTimestamp()
         },
         { merge: true }
@@ -269,39 +270,8 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     }
   };
 
-  const toggleVoiceEnabled = () => {
-    hapticService.light?.();
-    setVoiceEnabled((prev) => {
-      const next = !prev;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(VOICE_ENABLED_KEY, String(next));
-      }
-      if (!next && (isMiroSpeaking || textToSpeechService.isSpeaking())) {
-        textToSpeechService.stop();
-        setIsMiroSpeaking(false);
-      }
-      return next;
-    });
-  };
-
-  const handleStopSpeaking = () => {
-    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
-      hapticService.light?.();
-      textToSpeechService.stop();
-      setIsMiroSpeaking(false);
-    }
-  };
-
   const startNewChat = async () => {
     if (messages.length === 0 || isThinking || isClearing) return;
-    if (isMiroSpeaking || textToSpeechService.isSpeaking()) {
-      textToSpeechService.stop();
-      setIsMiroSpeaking(false);
-    }
-    if (isListening || speechRecognitionService.isListening()) {
-      speechRecognitionService.cancel();
-      setIsListening(false);
-    }
     setIsClearing(true);
     try {
       if (currentUser) {
@@ -323,7 +293,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
       }
       setMessages([]);
       setError(null);
-      setMicError(null);
       setExhausted(false);
     } catch (e) {
       console.warn('Error archiving thread:', e);
@@ -357,15 +326,6 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
   };
 
   const ask = async (textOverride) => {
-    if (textToSpeechService.isSpeaking()) {
-      textToSpeechService.stop();
-      setIsMiroSpeaking(false);
-    }
-    if (speechRecognitionService.isListening()) {
-      speechRecognitionService.stop();
-      setIsListening(false);
-    }
-
     const q = (typeof textOverride === 'string' ? textOverride : question).trim();
     if ((!q && !pending) || isThinking || locked || !currentUser) return;
 
@@ -376,9 +336,9 @@ const KairosAiCard = ({ entries = [], totalEntries = 0, statistics = {} }) => {
     setPending(null);
     setIsThinking(true);
     setError(null);
-    setMicError(null);
 
     const when = timeSense();
+    const journalContext = getContext();
     const system = `${HONESTY_DIRECTIVE}
 ${getLanguageDirective({ json: false })}
 
@@ -399,13 +359,15 @@ back to it rather than restating context they have just given you.
 
 Permission to say "I don't know" plainly when you are working from too little.
 Do not invent facts about their life or journal.
-
+${totalEntries <= 2 ? `
+They are at the very beginning of their journaling practice (${totalEntries} ${totalEntries === 1 ? 'entry' : 'entries'}). Acknowledge this first step with quiet respect. Do not overwhelm them with deep pattern analysis they haven't written yet; invite them to talk about what brought them here or how writing that first entry felt.
+` : ''}
 They may share an image: a page of handwriting, a drawing, a photograph of
 something from their day. Read it as part of what they are telling you and
 connect it to their journal where it genuinely connects.
 
-Their journal (${context.length} of ${totalEntries} entries, most recent first):
-${JSON.stringify(context)}
+Their journal (${journalContext.length} of ${totalEntries} entries, most recent first):
+${JSON.stringify(journalContext)}
 
 Current streak: ${statistics.currentStreak || 0} days.
 
@@ -546,8 +508,10 @@ before the substance.`;
             </div>
             <span className="kai-sub">
               {hasEnough
-                ? t('kairosAi.readCount', 'has read {{count}} of your entries', { count: Math.min(totalEntries, CONTEXT_ENTRIES) })
-                : t('kairosAi.needMore', 'a few more entries and it can start reading')}
+                ? totalEntries === 1
+                  ? t('kairosAi.readFirstEntry', 'has read your 1st entry · ready to reflect')
+                  : t('kairosAi.readCount', 'has read {{count}} of your entries', { count: Math.min(totalEntries, CONTEXT_ENTRIES) })
+                : t('kairosAi.needFirstEntry', 'write your 1st entry to unlock Miro')}
             </span>
           </div>
         </div>
@@ -628,22 +592,45 @@ before the substance.`;
         </div>
       ) : hasEnough ? (
         <div className="kai-starters">
-          <button
-            type="button"
-            className="kai-starter-chip"
-            onClick={() => ask(t('miro.starterPrompt1', "How have I been doing lately?"))}
-            disabled={locked || isThinking}
-          >
-            <span>{t('miro.starterPrompt1', "How have I been doing lately?")}</span>
-          </button>
-          <button
-            type="button"
-            className="kai-starter-chip"
-            onClick={() => ask(t('miro.starterPrompt2', "What themes do you notice in my journal?"))}
-            disabled={locked || isThinking}
-          >
-            <span>{t('miro.starterPrompt2', "What themes do you notice in my journal?")}</span>
-          </button>
+          {totalEntries <= 2 ? (
+            <>
+              <button
+                type="button"
+                className="kai-starter-chip"
+                onClick={() => ask(t('miro.starterPromptNew1', "Reflect on my first entry with me"))}
+                disabled={locked || isThinking}
+              >
+                <span>{t('miro.starterPromptNew1', "Reflect on my first entry with me")}</span>
+              </button>
+              <button
+                type="button"
+                className="kai-starter-chip"
+                onClick={() => ask(t('miro.starterPromptNew2', "What made you start a journal today?"))}
+                disabled={locked || isThinking}
+              >
+                <span>{t('miro.starterPromptNew2', "What made you start a journal today?")}</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="kai-starter-chip"
+                onClick={() => ask(t('miro.starterPrompt1', "How have I been doing lately?"))}
+                disabled={locked || isThinking}
+              >
+                <span>{t('miro.starterPrompt1', "How have I been doing lately?")}</span>
+              </button>
+              <button
+                type="button"
+                className="kai-starter-chip"
+                onClick={() => ask(t('miro.starterPrompt2', "What themes do you notice in my journal?"))}
+                disabled={locked || isThinking}
+              >
+                <span>{t('miro.starterPrompt2', "What themes do you notice in my journal?")}</span>
+              </button>
+            </>
+          )}
         </div>
       ) : null}
 
@@ -700,7 +687,7 @@ before the substance.`;
                   : isArtisan
                     ? t('kairosAi.placeholderArtisan', 'Talk with Miro about your journal…')
                     : t('kairosAi.placeholder', 'Ask about what you have been writing…')
-                : t('kairosAi.placeholderLocked', 'Write a few entries first')
+                : t('kairosAi.placeholderLockedFirst', 'Write your first entry to begin talking with Miro')
           }
         />
 

@@ -467,6 +467,21 @@
   border: 1px solid;
 }
 
+.hero-path-badge.is-celebration {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.16);
+  box-shadow: 0 0 16px rgba(var(--journey-color, 85, 139, 110), 0.25);
+  animation: pulseCelebration 3s ease-in-out infinite;
+}
+
+@keyframes pulseCelebration {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(var(--journey-color, 85, 139, 110), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(var(--journey-color, 85, 139, 110), 0.42);
+  }
+}
+
 .hero-prompt-block {
   margin: 16px 0 24px;
 }

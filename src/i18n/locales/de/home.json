@@ -19,6 +19,8 @@
     "typeMessage": "Nachricht eingeben...",
     "continuousActive": "Fortlaufender Dialog aktiv",
     "voiceWelcomePrompt": "Sprich ganz ungezwungen mit Miro über deinen Tag, deine Gedanken oder dein Journal.",
+    "starterPromptNew1": "Reflektiere mit mir über meinen ersten Eintrag",
+    "starterPromptNew2": "Was hat dich heute dazu bewegt, ein Journal zu beginnen?",
     "starterPrompt1": "Wie ging es mir in letzter Zeit?",
     "starterPrompt2": "Welche Muster siehst du in meinem Journal?",
     "starterPrompt3": "Hilf mir über den heutigen Tag nachzudenken",

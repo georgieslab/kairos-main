@@ -118,6 +118,22 @@ const HomeScreen = ({ navigateToScreen }) => {
 
   const glowColor = currentPath?.color || '85, 139, 110';
 
+  const hasWrittenToday = useMemo(() => {
+    const all = statistics.allEntries || [];
+    if (!all.length) return false;
+    const midnightToday = new Date();
+    midnightToday.setHours(0, 0, 0, 0);
+    return all.some((e) => {
+      const ts = e?.timestamp;
+      if (!ts) return false;
+      const d = ts.toDate ? ts.toDate() : ts.seconds != null ? new Date(ts.seconds * 1000) : new Date(ts);
+      return !isNaN(d.getTime()) && d >= midnightToday;
+    });
+  }, [statistics.allEntries]);
+
+  // First-day celebration: completed their 1st entry today! Miro is unlocked!
+  const isFirstEntryCelebration = statistics.totalEntries === 1 && hasWrittenToday;
+
   // Streak milestones (7/30/100/365) get a celebratory treatment on the flame card — CSS only
   const isStreakMilestone = [7, 30, 100, 365].includes(statistics.currentStreak || 0);
   // Any active streak gets a subtler ambient glow; milestones layer a stronger one on top
@@ -155,7 +171,50 @@ const HomeScreen = ({ navigateToScreen }) => {
         className={`hero-card ${timeGradient}`}
         style={{ '--glow-color': glowColor }}
       >
-        {hasActiveJourneys && currentPath ? (
+        {isFirstEntryCelebration ? (
+          <div className="hero-first-entry-celebration">
+            <div 
+              className="hero-path-badge is-celebration" 
+              style={{ color: `rgb(${glowColor})`, borderColor: `rgba(${glowColor}, 0.35)` }}
+            >
+              <Sparkles size={14} />
+              <span>{t('home.firstEntryCompleteBadge', 'Day 1 Complete · Miro Unlocked')}</span>
+            </div>
+
+            <div className="hero-prompt-block">
+              <p className="hero-prompt-label">{t('home.firstEntryMilestone', 'A New Practice Begins')}</p>
+              <h2 className="hero-prompt-text">
+                "{t('home.firstEntryCongrats', 'You took the first step. Miro has read your words and is ready to reflect whenever you are.')}"
+              </h2>
+            </div>
+
+            <div className="hero-cta-cluster">
+              <button
+                type="button"
+                className="hero-cta"
+                onClick={handleOpenVoiceReflection}
+                style={{ '--cta-color': glowColor }}
+              >
+                <Mic size={18} />
+                {t('home.talkToMiroCta', 'Reflect with Miro')}
+                <ArrowRight size={16} className="cta-arrow" />
+              </button>
+
+              {currentPath && (
+                <button
+                  type="button"
+                  className="hero-voice-cta"
+                  onClick={() => navigateToScreen('write', { pathId: currentPath.id, day: currentPath.nextDay })}
+                  title={t('home.previewDay2', 'Preview Day {{day}}', { day: currentPath.nextDay })}
+                  aria-label={t('home.previewDay2', 'Preview Day {{day}}', { day: currentPath.nextDay })}
+                >
+                  <Sparkles size={16} className="hero-voice-icon" />
+                  <span>{t('home.dayLabel', 'Day {{day}}', { day: currentPath.nextDay })}</span>
+                </button>
+              )}
+            </div>
+          </div>
+        ) : hasActiveJourneys && currentPath ? (
           <>
             <div 
               className="hero-path-badge" 
@@ -195,27 +254,17 @@ const HomeScreen = ({ navigateToScreen }) => {
           </>
         ) : (
           <div className="hero-empty">
-            <h2>{t('home.beginYourJourney', 'Begin your journey')}</h2>
-            <p>{t('home.discoverPaths', 'Discover guided paths to unlock your potential.')}</p>
+            <h2>{t('home.welcomeTitle', 'Your Journal Awaits')}</h2>
+            <p>{t('home.welcomeSubtitle', 'The first entry is the hardest one. Choose a guided path and take three quiet minutes for yourself.')}</p>
             <div className="hero-cta-cluster">
               <button
                 className="hero-cta"
                 onClick={() => navigateToScreen('path-selection')}
                 style={{ '--cta-color': '85, 139, 110' }}
               >
-                {t('home.explorePaths', 'Explore Paths')}
+                <Sparkles size={18} />
+                {t('home.startFirstEntry', 'Begin First Entry')}
                 <ArrowRight size={16} className="cta-arrow" />
-              </button>
-
-              <button
-                type="button"
-                className="hero-voice-cta"
-                onClick={handleOpenVoiceReflection}
-                title={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
-                aria-label={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
-              >
-                <Mic size={16} className="hero-voice-icon" />
-                <span>{t('miro.voiceReflection', 'Voice')}</span>
               </button>
             </div>
           </div>
