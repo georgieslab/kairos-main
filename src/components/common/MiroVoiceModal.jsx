@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { X, Mic, MicOff, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import MiroMark from './MiroMark';
 import MiroThinking from './MiroThinking';
+import AmbientSphere from './AmbientSphere';
 import speechRecognitionService from '../../services/speechRecognitionService';
 import textToSpeechService from '../../services/textToSpeechService';
 import hapticService from '../../services/hapticService';
@@ -343,52 +344,29 @@ const MiroVoiceModal = ({
         </button>
       </div>
 
-      {/* ── Center Stage & Reactive Living Orb ────────────────────────────*/}
+      {/* ── Center Stage & Reactive Living 3D Particle Orb ──────────────*/}
       <div className="mvm-stage">
-        <div
-          className="mvm-orb-container"
-          onClick={handleOrbClick}
-          title={
-            phase === 'speaking'
-              ? t('miro.tapToInterrupt', 'Tap orb to interrupt')
-              : phase === 'listening'
-              ? t('miro.done', 'Tap to finish speaking')
-              : t('miro.tapToSpeak', 'Tap to speak')
-          }
-        >
-          <div className="mvm-orb-ambient" />
-
-          {phase === 'listening' && <div className="mvm-listening-ripple" />}
-          {phase === 'speaking' && <div className="mvm-speaking-ripple" />}
-
-          <div className="mvm-orb-core">
-            {phase === 'thinking' ? (
-              <MiroThinking size={98} />
-            ) : (
-              <MiroMark size={98} />
-            )}
-          </div>
-        </div>
-
-        {/* State Subtitle Label */}
-        <div className="mvm-state-label">
-          <span className="mvm-state-main">
-            {phase === 'listening'
+        <AmbientSphere
+          isListening={phase === 'listening'}
+          isThinking={phase === 'thinking'}
+          isSpeaking={phase === 'speaking'}
+          onToggleListen={handleOrbClick}
+          name="Miro"
+          statusText={
+            phase === 'listening'
               ? t('miro.listeningSubtitle', 'Listening to you...')
               : phase === 'thinking'
-              ? t('miro.thinkingSubtitle', 'Miro is reflecting on your journal...')
+              ? t('miro.thinkingSubtitle', 'Miro is reflecting...')
               : phase === 'speaking'
-              ? t('miro.speakingSubtitle', 'Miro is speaking aloud...')
-              : t('miro.tapToSpeak', 'Tap orb or mic to speak')}
+              ? t('miro.speakingSubtitle', 'Miro is speaking...')
+              : t('miro.tapToSpeak', 'Tap sphere to converse')
+          }
+        />
+        {phase === 'speaking' && (
+          <span className="mvm-interrupt-hint">
+            {t('miro.tapToInterrupt', 'Tap sphere to interrupt')}
           </span>
-          <span className="mvm-state-sub">
-            {phase === 'speaking'
-              ? t('miro.tapToInterrupt', 'Tap orb anytime to interrupt')
-              : phase === 'listening'
-              ? t('miro.continuousActive', 'Hands-free dialogue active')
-              : ''}
-          </span>
-        </div>
+        )}
       </div>
 
         {/* ── Dedicated Voice Dialogue Stream ─────────────────────────────*/}

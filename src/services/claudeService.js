@@ -20,24 +20,9 @@ const rethrowIfAllowanceError = (error) => {
   if (error && error.code === 'free-allowance-exhausted') throw error;
 };
 
-// Claude API configuration
-const CLAUDE_EXTRACTION_MODEL = 'claude-sonnet-4-6';            // Updated july 2026
-
-// Analysis runs on Sonnet, not Haiku (changed july 2026, was
-// 'claude-haiku-4-5-20251001'). The prompts below ask for candid, specific,
-// sometimes unwelcome observations — naming an avoidance, contradicting the
-// journaler's own framing, saying an entry is thin. That is exactly the kind of
-// judgement a small fast model is weakest at: under pressure it retreats to safe
-// agreeable phrasing, which is the generic-and-too-kind output we're trying to
-// get rid of. The honesty prompting only pays off on a model big enough to hold
-// the tension.
-//
-// Deliberately NOT claude-sonnet-5: it rejects non-default `temperature` with a
-// 400, and every analysis call in this file sets one (0.65–0.85). It also runs
-// adaptive thinking by default, which would eat the 1200–1600 max_tokens budget
-// and truncate the JSON. Moving there means stripping temperature everywhere and
-// re-tuning max_tokens first — a separate job, not a constant swap.
-const CLAUDE_ANALYSIS_MODEL = 'claude-sonnet-4-6';
+// AI configuration (Amazon Bedrock)
+const CLAUDE_EXTRACTION_MODEL = import.meta.env?.VITE_BEDROCK_MODEL_ID || 'us.moonshotai.kimi-k3';
+const CLAUDE_ANALYSIS_MODEL = import.meta.env?.VITE_BEDROCK_MODEL_ID || 'us.moonshotai.kimi-k3';
 
 // =============================================================================
 // 🌍 AI OUTPUT LANGUAGE

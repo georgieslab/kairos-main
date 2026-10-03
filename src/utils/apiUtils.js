@@ -11,20 +11,23 @@
 
 import { getFunctions, httpsCallable } from 'firebase/functions';
 
-// Define supported models and fallback options
+const ACTIVE_BEDROCK_MODEL = import.meta.env?.VITE_BEDROCK_MODEL_ID || 'us.moonshotai.kimi-k3';
+
+// Define supported models and fallback options (Amazon Bedrock)
 const SUPPORTED_MODELS = {
-  DEFAULT: 'claude-sonnet-4-6',
+  DEFAULT: ACTIVE_BEDROCK_MODEL,
   FALLBACKS: {
-    // Old / retired model IDs map to current ones
-    'claude-3-haiku-20231023': 'claude-haiku-4-5',
-    'claude-3-5-sonnet-20240229': 'claude-sonnet-4-6',
-    'claude-3-7-sonnet-20250219': 'claude-sonnet-4-6',
-    'claude-opus-4-20250514': 'claude-sonnet-4-6',
-    'claude-sonnet-4-20250514': 'claude-sonnet-4-6',
-    // Current models pass through unchanged
-    'claude-sonnet-4-6': 'claude-sonnet-4-6',
-    'claude-haiku-4-5': 'claude-haiku-4-5',
-    'claude-haiku-4-5-20251001': 'claude-haiku-4-5-20251001'
+    'moonshotai.kimi-k3': ACTIVE_BEDROCK_MODEL,
+    'kimi-k3': ACTIVE_BEDROCK_MODEL,
+    'claude-3-haiku-20231023': ACTIVE_BEDROCK_MODEL,
+    'claude-3-5-sonnet-20240229': ACTIVE_BEDROCK_MODEL,
+    'claude-3-7-sonnet-20250219': ACTIVE_BEDROCK_MODEL,
+    'claude-opus-4-20250514': ACTIVE_BEDROCK_MODEL,
+    'claude-sonnet-4-20250514': ACTIVE_BEDROCK_MODEL,
+    'claude-sonnet-4-6': ACTIVE_BEDROCK_MODEL,
+    'claude-haiku-4-5': ACTIVE_BEDROCK_MODEL,
+    'claude-haiku-4-5-20251001': ACTIVE_BEDROCK_MODEL,
+    'anthropic.claude-sonnet-5-5': ACTIVE_BEDROCK_MODEL
   }
 };
 
@@ -327,6 +330,31 @@ export const callClaudeApi = async (requestOptions) => {
   // Ensure a model is set. claudeService already uses current model IDs,
   // but this is a safe default in case one is missing.
   requestBody.model = getCompatibleModel(requestBody.model);
+
+  // When running locally on Vite dev server (localhost), route directly to local Bedrock API
+  const isLocalDev = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  if (isLocalDev) {
+    try {
+      console.log('🤖 Invoking Amazon Bedrock via local dev endpoint (/api/callClaude)...');
+      const response = await fetch('/api/callClaude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        const errMsg = data.message || (typeof data === 'string' ? data : JSON.stringify(data));
+        console.error('❌ Bedrock dev API response error:', errMsg);
+        throw new Error(errMsg);
+      }
+      return data;
+    } catch (localErr) {
+      console.warn('Local Bedrock call failed:', localErr.message);
+      throw localErr;
+    }
+  }
 
   try {
     // Uses the default Firebase app (already initialized by your firebase config)

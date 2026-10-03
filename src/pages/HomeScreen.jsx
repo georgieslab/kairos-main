@@ -84,6 +84,7 @@ const HomeScreen = ({ navigateToScreen }) => {
     markAsRead: markInboxAsRead,
     markAllAsRead: markAllInboxAsRead,
     archiveItem: archiveInboxItem,
+    refresh: refreshInbox,
   } = useInbox(currentUser?.uid, capsules, statistics);
 
   const handleInboxAction = useCallback((action, item) => {
@@ -103,6 +104,10 @@ const HomeScreen = ({ navigateToScreen }) => {
     }
     if (action.type === 'navigate_analytics') {
       navigateToScreen('analytics-dashboard');
+      return;
+    }
+    if (action.type === 'open_journal') {
+      navigateToScreen('journal');
       return;
     }
   }, [handleOpenVoiceReflection, navigateToScreen]);
@@ -530,6 +535,8 @@ const HomeScreen = ({ navigateToScreen }) => {
       <InboxModal
         isOpen={showInbox}
         onClose={() => setShowInbox(false)}
+        userId={currentUser?.uid}
+        onRefresh={refreshInbox}
         items={inboxItems}
         unreadCount={inboxUnreadCount}
         onMarkAsRead={markInboxAsRead}

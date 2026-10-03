@@ -14,6 +14,7 @@ import {
   doc,
   getDocs,
   setDoc,
+  addDoc,
   updateDoc,
   deleteDoc,
   query,
@@ -22,8 +23,10 @@ import {
   serverTimestamp,
   writeBatch
 } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { db } from '../config/firebase';
 import { isArrived, toDate } from './timeCapsuleService';
+import { callClaudeApi } from '../utils/apiUtils';
 
 const LOCAL_READ_KEY = 'kairos_inbox_read_ids';
 const LOCAL_ARCHIVED_KEY = 'kairos_inbox_archived_ids';
@@ -333,6 +336,123 @@ export const useInbox = (userId, capsules = [], statistics = {}) => {
   };
 };
 
+/**
+ * Send an inbox message to a specific user
+ */
+export const sendInboxMessage = async (targetUserId, messageData) => {
+  if (!targetUserId) throw new Error('Target user ID is required');
+  if (!messageData || !messageData.title) throw new Error('Message title is required');
+
+  const ref = collection(db, 'users', targetUserId, 'inbox');
+  const payload = {
+    title: messageData.title.trim(),
+    subtitle: messageData.subtitle?.trim() || '',
+    preview: messageData.preview?.trim() || messageData.body?.slice(0, 140)?.trim() || '',
+    body: messageData.body?.trim() || '',
+    type: messageData.type || 'whisper', // 'whisper' | 'miro_note' | 'capsule' | 'milestone' | 'user_note'
+    author: messageData.author || 'Miro',
+    createdAt: serverTimestamp(),
+    read: false,
+    archived: false,
+    ...(messageData.action ? { action: messageData.action } : {}),
+    ...(messageData.metadata ? { metadata: messageData.metadata } : {}),
+  };
+
+  const newDoc = await addDoc(ref, payload);
+  return { id: newDoc.id, ...payload };
+};
+
+/**
+ * Broadcast an inbox message to all users via Cloud Function (with local preview fallback)
+ */
+export const broadcastInboxMessage = async (messageData, fallbackUserId) => {
+  if (!messageData || !messageData.title) throw new Error('Message title is required');
+
+  try {
+    const functions = getFunctions();
+    const sendFn = httpsCallable(functions, 'sendInboxMessage');
+    const res = await sendFn({ broadcast: true, message: messageData });
+    return res.data;
+  } catch (err) {
+    console.warn(
+      'Cloud Function sendInboxMessage failed or is not yet deployed on Firebase Cloud Functions:',
+      err.message || err
+    );
+
+    // If fallback user ID is available, save to their own inbox so the note is immediately visible
+    if (fallbackUserId) {
+      console.log('Delivering broadcast note to current user inbox as preview...');
+      await sendInboxMessage(fallbackUserId, messageData);
+      return {
+        success: true,
+        count: 1,
+        fallbackToSelf: true,
+        message: 'Delivered to your Sanctuary Inbox as a preview.'
+      };
+    }
+
+    throw new Error(
+      'Cloud Function sendInboxMessage is not yet deployed. Please select "Myself (Test)" to test.'
+    );
+  }
+};
+
+/**
+ * Send a personal contemplative note to Miro in the inbox and receive Miro's thoughtful reflection
+ */
+export const sendNoteToMiro = async (userId, { title, text, askMiro = true }) => {
+  if (!userId) throw new Error('User ID is required');
+  if (!text || !text.trim()) throw new Error('Note text is required');
+
+  const noteTitle = (title || 'Personal Reflection').trim();
+  const noteBody = text.trim();
+
+  // 1. Save user's note to their inbox
+  const userNote = await sendInboxMessage(userId, {
+    title: noteTitle,
+    subtitle: 'Note from you',
+    preview: noteBody.slice(0, 140),
+    body: noteBody,
+    type: 'user_note',
+    author: 'You',
+  });
+
+  // 2. If askMiro is true, generate Miro's reflection response note
+  if (askMiro) {
+    try {
+      const response = await callClaudeApi({
+        method: 'POST',
+        body: JSON.stringify({
+          system: 'You are Miro, an empathetic and honest reflection companion in Kairos. The user has left a personal contemplative note in their sanctuary inbox. Write a thoughtful, grounded reflection note (1-2 short paragraphs, under 140 words) acknowledging their words, pointing out an honest observation, and offering a gentle question. Plain language, no excessive praise.',
+          messages: [{ role: 'user', content: `The user wrote this note in their inbox:\n\nTitle: "${noteTitle}"\nNote: "${noteBody}"` }],
+          max_tokens: 400
+        })
+      });
+
+      const replyText = response?.content?.[0]?.text;
+      if (replyText) {
+        await sendInboxMessage(userId, {
+          title: `Reflection on: ${noteTitle}`,
+          subtitle: 'Miro’s Observation',
+          preview: replyText.slice(0, 140),
+          body: replyText,
+          type: 'miro_note',
+          author: 'Miro',
+          action: {
+            type: 'open_voice',
+            labelKey: 'inbox.reflectWithMiroCta',
+            labelFallback: 'Reflect in Voice'
+          }
+        });
+      }
+    } catch (aiErr) {
+      console.warn('Could not generate Miro reply to user note:', aiErr);
+    }
+  }
+
+  return userNote;
+};
+
 export default {
   getFirestoreInboxItems,
   markItemAsRead,
@@ -340,5 +460,8 @@ export default {
   archiveInboxItem,
   deleteAllInboxItems,
   synthesizeDynamicItems,
+  sendInboxMessage,
+  broadcastInboxMessage,
+  sendNoteToMiro,
   useInbox,
 };

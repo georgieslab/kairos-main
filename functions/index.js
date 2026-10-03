@@ -1379,13 +1379,21 @@ exports.callClaude = functions
         );
       }
 
-      const key = anthropicApiKey.value();
-      if (!key) {
-        console.error("❌ ANTHROPIC_API_KEY secret is empty / not set");
-        throw new functions.https.HttpsError(
-          "failed-precondition",
-          "Anthropic API key not configured"
-        );
+      const provider = process.env.AI_PROVIDER || 'bedrock';
+      const awsAccessKey = process.env.AWS_ACCESS_KEY_ID;
+      const awsSecretKey = process.env.AWS_SECRET_ACCESS_KEY;
+      const awsRegion = process.env.AWS_REGION || 'eu-north-1';
+      const bedrockModel = process.env.BEDROCK_MODEL_ID || 'anthropic.claude-sonnet-5-5';
+
+      if (provider !== 'bedrock' || (!awsAccessKey && !awsSecretKey)) {
+        const key = anthropicApiKey.value();
+        if (!key) {
+          console.error("❌ Neither Bedrock nor Anthropic credentials configured");
+          throw new functions.https.HttpsError(
+            "failed-precondition",
+            "AI service credentials not configured"
+          );
+        }
       }
 
       const requestBody = data || {};
@@ -1401,7 +1409,9 @@ exports.callClaude = functions
       }
 
       console.log(
-        "🤖 callClaude:",
+        "🤖 callClaude | provider:",
+        provider,
+        "| model:",
         requestBody.model,
         "| max_tokens:",
         requestBody.max_tokens,
@@ -1450,7 +1460,7 @@ exports.callClaude = functions
         }
       }
 
-      // The body is forwarded to Anthropic verbatim, so anything Kairos added
+      // The body is forwarded to Anthropic/Bedrock verbatim, so anything Kairos added
       // for its own purposes has to come off first — the API rejects unknown
       // top-level parameters with a 400, and the request never reaches the
       // model. `kairosAi` is ours: it chose the allowance above and has no
@@ -1459,26 +1469,136 @@ exports.callClaude = functions
 
       let result;
       try {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": key,
-            "anthropic-version": "2023-06-01",
-          },
-          body: JSON.stringify(requestBody),
-        });
+        if (provider === 'bedrock' && awsAccessKey && awsSecretKey) {
+          let chosenModel = requestBody.model || bedrockModel || 'us.moonshotai.kimi-k3';
+          if (chosenModel.includes('kimi') || chosenModel.includes('moonshot')) {
+            chosenModel = 'us.moonshotai.kimi-k3';
+          } else if (chosenModel.startsWith('claude-') || !chosenModel.includes('.')) {
+            chosenModel = bedrockModel || 'us.moonshotai.kimi-k3';
+          }
 
-        if (!response.ok) {
-          const errText = await response.text().catch(() => "");
-          console.error("❌ Anthropic API error:", response.status, errText);
-          throw new functions.https.HttpsError(
-            "internal",
-            `Claude API error: ${response.status}`
-          );
+          let effectiveRegion = awsRegion || 'eu-north-1';
+          if (chosenModel.startsWith('us.') && (effectiveRegion.startsWith('eu-') || effectiveRegion.startsWith('ap-'))) {
+            effectiveRegion = 'us-east-1';
+          } else if (chosenModel.startsWith('eu.') && !effectiveRegion.startsWith('eu-')) {
+            effectiveRegion = 'eu-central-1';
+          }
+
+          console.log(`🚀 Invoking Amazon Bedrock (${effectiveRegion}) with model: ${chosenModel}`);
+          const { BedrockRuntimeClient, ConverseCommand, InvokeModelCommand } = require("@aws-sdk/client-bedrock-runtime");
+
+          const bedrockClient = new BedrockRuntimeClient({
+            region: effectiveRegion,
+            credentials: {
+              accessKeyId: awsAccessKey,
+              secretAccessKey: awsSecretKey,
+            },
+          });
+
+          const isConverse = chosenModel.includes('moonshot') || chosenModel.includes('kimi') || chosenModel.includes('nova');
+
+          if (isConverse) {
+            const formattedMessages = (requestBody.messages || []).map(m => {
+              let contentList = [];
+              if (typeof m.content === 'string') {
+                contentList = [{ text: m.content }];
+              } else if (Array.isArray(m.content)) {
+                contentList = m.content.map(c => {
+                  if (c.type === 'text') return { text: c.text };
+                  if (c.text) return { text: c.text };
+                  return { text: JSON.stringify(c) };
+                });
+              } else {
+                contentList = [{ text: String(m.content || '') }];
+              }
+              return {
+                role: m.role === 'assistant' ? 'assistant' : 'user',
+                content: contentList
+              };
+            });
+
+            const inferenceConfig = {
+              maxTokens: requestBody.max_tokens || 2048
+            };
+            if (!chosenModel.includes('kimi') && requestBody.temperature !== undefined) {
+              inferenceConfig.temperature = requestBody.temperature;
+            }
+
+            const converseParams = {
+              modelId: chosenModel,
+              messages: formattedMessages,
+              inferenceConfig
+            };
+
+            if (requestBody.system) {
+              const sysText = typeof requestBody.system === 'string'
+                ? requestBody.system
+                : (Array.isArray(requestBody.system) ? requestBody.system.map(s => s.text || '').join('\n') : String(requestBody.system));
+              converseParams.system = [{ text: sysText }];
+            }
+
+            const response = await bedrockClient.send(new ConverseCommand(converseParams));
+            const contentItems = response.output?.message?.content || [];
+            const textItem = contentItems.find(c => typeof c.text === 'string' && c.text.length > 0);
+            const text = textItem ? textItem.text : '';
+
+            result = {
+              id: 'bedrock-' + Date.now(),
+              type: 'message',
+              role: 'assistant',
+              content: [{ type: 'text', text }],
+              model: chosenModel,
+              stop_reason: response.stopReason || 'end_turn',
+              usage: {
+                input_tokens: response.usage?.inputTokens || 0,
+                output_tokens: response.usage?.outputTokens || 0
+              }
+            };
+          } else {
+            // Build Bedrock Anthropic Messages API payload
+            const bedrockPayload = {
+              anthropic_version: "bedrock-2023-05-31",
+              max_tokens: requestBody.max_tokens || 4096,
+              messages: requestBody.messages,
+              ...(requestBody.system ? { system: requestBody.system } : {}),
+              ...(requestBody.temperature !== undefined ? { temperature: requestBody.temperature } : {}),
+              ...(requestBody.top_p !== undefined ? { top_p: requestBody.top_p } : {}),
+              ...(requestBody.stop_sequences ? { stop_sequences: requestBody.stop_sequences } : {}),
+            };
+
+            const command = new InvokeModelCommand({
+              modelId: chosenModel,
+              contentType: "application/json",
+              accept: "application/json",
+              body: JSON.stringify(bedrockPayload),
+            });
+
+            const bedrockResponse = await bedrockClient.send(command);
+            result = JSON.parse(new TextDecoder().decode(bedrockResponse.body));
+          }
+        } else {
+          const key = anthropicApiKey.value();
+          const response = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": key,
+              "anthropic-version": "2023-06-01",
+            },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (!response.ok) {
+            const errText = await response.text().catch(() => "");
+            console.error("❌ Anthropic API error:", response.status, errText);
+            throw new functions.https.HttpsError(
+              "internal",
+              `Claude API error: ${response.status}`
+            );
+          }
+
+          result = await response.json();
         }
-
-        result = await response.json();
       } catch (callError) {
         // The user got nothing, so they should not be charged for it — and the
         // refund has to go back to whichever of the two allowances was drawn
@@ -1519,3 +1639,75 @@ exports.callClaude = functions
       );
     }
   });
+
+/**
+ * Dispatch or broadcast an inbox message
+ */
+exports.sendInboxMessage = functions.https.onCall(async (data, context) => {
+  try {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { broadcast, targetUserId, message } = data || {};
+    if (!message || !message.title) {
+      throw new functions.https.HttpsError('invalid-argument', 'Message title is required');
+    }
+
+    const payload = {
+      title: String(message.title).trim(),
+      subtitle: String(message.subtitle || '').trim(),
+      preview: String(message.preview || message.body?.slice(0, 140) || '').trim(),
+      body: String(message.body || '').trim(),
+      type: message.type || 'whisper',
+      author: message.author || 'Miro',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      read: false,
+      archived: false,
+      ...(message.action ? { action: message.action } : {}),
+      ...(message.metadata ? { metadata: message.metadata } : {}),
+    };
+
+    if (broadcast) {
+      const usersSnap = await db.collection('users').get();
+      if (usersSnap.empty) {
+        return { success: true, count: 0 };
+      }
+
+      const BATCH_SIZE = 450;
+      let batch = db.batch();
+      let opCount = 0;
+      let totalSent = 0;
+
+      for (const userDoc of usersSnap.docs) {
+        const inboxRef = db.collection('users').doc(userDoc.id).collection('inbox').doc();
+        batch.set(inboxRef, payload);
+        opCount++;
+        totalSent++;
+
+        if (opCount >= BATCH_SIZE) {
+          await batch.commit();
+          batch = db.batch();
+          opCount = 0;
+        }
+      }
+
+      if (opCount > 0) {
+        await batch.commit();
+      }
+
+      console.log(`📢 Broadcasted inbox message to ${totalSent} users`);
+      return { success: true, count: totalSent };
+    } else {
+      const recipientId = targetUserId || context.auth.uid;
+      const ref = await db.collection('users').doc(recipientId).collection('inbox').add(payload);
+      return { success: true, id: ref.id, message: payload };
+    }
+  } catch (error) {
+    console.error('❌ sendInboxMessage error:', error);
+    if (error.code && String(error.code).startsWith('functions/')) {
+      throw error;
+    }
+    throw new functions.https.HttpsError('internal', `Failed to send inbox message: ${error.message}`);
+  }
+});

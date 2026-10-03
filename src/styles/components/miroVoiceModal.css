@@ -166,7 +166,16 @@
   max-width: 520px;
   flex: 1;
   padding: 16px 0;
-  gap: 28px;
+  gap: 12px;
+}
+
+.mvm-interrupt-hint {
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.48);
+  margin-top: 4px;
+  animation: mvmFadeIn 0.3s ease forwards;
+  pointer-events: none;
 }
 
 .mvm-orb-container {
