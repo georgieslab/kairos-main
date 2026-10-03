@@ -19,15 +19,16 @@ import {
   Plane, MessagesSquare, Home, ChevronLeft, ChevronRight, Route,
   HeartCrack, Scale, Infinity as InfinityIcon, Activity,
   MessageCircle, BookOpen, CalendarDays, Headphones, Radio,
-  CloudRain, Bell, Timer, Mic
+  CloudRain, Bell, Timer, Mic, Lock
 } from 'lucide-react';
+import TimeLetterIcon from './TimeLetterIcon';
 import '../../styles/components/whatsNew.css';
 
 const SEEN_KEY = 'kairos_whats_new_seen';
 
 // Bump to the newest slide's id when something ships. The unseen dot compares
 // against this, so it reappears for everyone exactly once per announcement.
-const ANNOUNCEMENT_ID = 'ambient-audio';
+const ANNOUNCEMENT_ID = 'time-capsule';
 
 // Newest first. Path names are brand and stay untranslated; everything else
 // runs through i18n with the English as fallback. Colours mirror each path's
@@ -39,6 +40,29 @@ const PACK_PRICE = {
 };
 
 const SLIDES = [
+  {
+    id: 'time-capsule',
+    halo: TimeLetterIcon,
+    accent: ['249, 115, 22', '201, 169, 97', '180, 83, 9'],
+    eyebrowKey: 'whatsNew.timeCapsuleEyebrow',  eyebrow: 'Version 2.3 · Future Self',
+    titleKey: 'whatsNew.timeCapsuleTitle',      title: 'Letters to Your Future Self',
+    textKey: 'whatsNew.timeCapsuleText',        text: 'Write a letter today, choose delivery in 30, 90, or 365 days. Miro seals it in digital time and reflects with you on what changed when it arrives.',
+    ctaKey: 'whatsNew.timeCapsuleCta',          cta: 'Write to Future Self',
+    action: 'capsule',
+    rows: [
+      { icon: Lock,     color: '201, 169, 97', nameKey: 'whatsNew.tcSealedName',   name: 'Sealed & Untouchable',
+        descKey: 'whatsNew.tcSealedDesc',   desc: 'True digital time lock. No peeking until delivery day.' },
+      { icon: Sparkles, color: '249, 115, 22', nameKey: 'whatsNew.tcMiroName',     name: 'Miro Reflection',
+        descKey: 'whatsNew.tcMiroDesc',     desc: 'Compares snapshots of who you were then vs. who you are now.' },
+      { icon: Bell,     color: '180, 83, 9',   nameKey: 'whatsNew.tcNotifyName',   name: '09:00 Delivery Chime',
+        descKey: 'whatsNew.tcNotifyDesc',   desc: 'A quiet morning arrival notification on your device.' },
+    ],
+    price: {
+      icon: Sparkles,
+      badgeKey: 'whatsNew.tcPriceBadge', badge: 'Free for All',
+      noteKey: 'whatsNew.tcPriceNote',  note: 'Write as many letters to your future self as you wish.',
+    },
+  },
   {
     id: 'ambient-audio',
     halo: Headphones,
@@ -211,6 +235,14 @@ const WhatsNew = ({ navigateToScreen }) => {
   // somewhere the user already is.
   const onCta = () => {
     setIsOpen(false);
+    if (slide.action === 'capsule') {
+      setTimeout(() => {
+        document.querySelector('.tc-card')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        window.dispatchEvent(new CustomEvent('kairos:open-time-capsule'));
+      }, 140);
+      return;
+    }
     if (slide.action === 'miro') {
       // After the sheet unmounts, or the scroll competes with the overlay.
       setTimeout(() => {

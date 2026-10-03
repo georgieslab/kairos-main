@@ -1,0 +1,968 @@
+/* src/styles/components/timeCapsule.css */
+/* Apple Spatial Glass styling for Letters to your Future Self */
+
+/* ==========================================================================
+   1. Home Featured Card (Bigger Apple Spatial Glass Card)
+   ========================================================================== */
+
+.tc-card {
+  position: relative;
+  width: 100%;
+  margin: 20px 0 28px;
+  padding: 24px 26px;
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 12px 36px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: hidden;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+  .tc-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 18px 48px rgba(0, 0, 0, 0.36);
+  }
+}
+
+.tc-card-ambient {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--journey-color, 85, 139, 110), 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(28px);
+}
+
+/* Card Header */
+.tc-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tc-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tc-card-badge.is-empty-badge {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.18);
+  color: rgb(var(--journey-color, 85, 139, 110));
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.35);
+}
+
+.tc-card-badge.is-sealed-badge {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.tc-card-badge.is-arrived-badge {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.28), rgba(234, 88, 12, 0.18));
+  color: #fb923c;
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  box-shadow: 0 0 14px rgba(249, 115, 22, 0.25);
+}
+
+.tc-card-horizon-hint,
+.tc-card-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.48);
+  letter-spacing: 0.02em;
+}
+
+/* Card Body */
+.tc-card-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tc-card-seal-wrap {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.tc-card-wax-seal {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.tc-card-seal-wrap:hover .tc-card-wax-seal {
+  transform: scale(1.06);
+}
+
+.tc-card-wax-seal.is-empty-seal {
+  background: radial-gradient(circle at 35% 35%, rgba(var(--journey-color, 85, 139, 110), 0.35), rgba(var(--journey-color, 85, 139, 110), 0.15));
+  border: 1.5px solid rgba(var(--journey-color, 85, 139, 110), 0.45);
+  color: rgb(var(--journey-color, 85, 139, 110));
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.25),
+    0 4px 16px rgba(var(--journey-color, 85, 139, 110), 0.25);
+}
+
+.tc-card-wax-seal.is-sealed-seal {
+  background: radial-gradient(circle at 35% 35%, #9a3412, #431407);
+  border: 1.5px solid rgba(249, 115, 22, 0.45);
+  color: #fdba74;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.45),
+    0 6px 18px rgba(154, 52, 18, 0.35);
+}
+
+.tc-card-wax-seal.is-arrived-seal {
+  background: radial-gradient(circle at 35% 35%, #ea580c, #7c2d12);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  box-shadow:
+    inset 0 2px 5px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(234, 88, 12, 0.5);
+  animation: tcWaxPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes tcWaxPulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 2px 5px rgba(255, 255, 255, 0.4),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+      0 8px 20px rgba(234, 88, 12, 0.4);
+  }
+  50% {
+    box-shadow:
+      inset 0 2px 5px rgba(255, 255, 255, 0.5),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+      0 12px 32px rgba(234, 88, 12, 0.7);
+  }
+}
+
+.tc-card-seal-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.4) 0%, transparent 70%);
+  animation: tcAuraPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.time-letter-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tc-card-seal-wrap:hover .time-letter-icon {
+  transform: scale(1.08);
+}
+
+.tc-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tc-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+  line-height: 1.25;
+}
+
+.tc-card-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 5px;
+}
+
+.tc-card-countdown-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.tc-card-countdown-num {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-card-countdown-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Card Actions */
+.tc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.tc-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+}
+
+.tc-card-btn-primary {
+  background: linear-gradient(135deg, rgb(var(--journey-color, 85, 139, 110)), rgba(var(--journey-color, 85, 139, 110), 0.85));
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(var(--journey-color, 85, 139, 110), 0.38);
+}
+
+@media (hover: hover) {
+  .tc-card-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(var(--journey-color, 85, 139, 110), 0.52);
+  }
+}
+
+.tc-card-btn-primary.is-arrived-btn {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.45);
+}
+
+@media (hover: hover) {
+  .tc-card-btn-primary.is-arrived-btn:hover {
+    box-shadow: 0 8px 28px rgba(234, 88, 12, 0.65);
+  }
+}
+
+.tc-card-btn-glass {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (hover: hover) {
+  .tc-card-btn-glass:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+}
+
+.tc-card-btn-secondary {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  padding: 11px 18px;
+}
+
+@media (hover: hover) {
+  .tc-card-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Card States */
+.tc-card.is-arrived {
+  border-color: rgba(249, 115, 22, 0.42);
+  background: linear-gradient(135deg, rgba(48, 24, 16, 0.72), rgba(28, 28, 30, 0.68));
+  box-shadow:
+    inset 0 1px 0 rgba(249, 115, 22, 0.38),
+    0 14px 40px rgba(249, 115, 22, 0.2);
+}
+
+.tc-card.is-arrived .tc-card-ambient {
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%);
+}
+
+@keyframes tcAuraPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+/* ==========================================================================
+   2. Time Capsule Modal (Spatial Glass Pop-up)
+   ========================================================================== */
+
+.tc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: tcFadeIn 0.22s ease-out;
+}
+
+@keyframes tcFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tc-modal {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 26px 24px;
+  background: rgba(24, 24, 28, 0.88);
+  backdrop-filter: blur(45px) saturate(200%);
+  -webkit-backdrop-filter: blur(45px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 24px 60px rgba(0, 0, 0, 0.55);
+  color: #fff;
+  animation: tcScaleUp 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tcScaleUp {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.tc-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  z-index: 10;
+}
+
+@media (hover: hover) {
+  .tc-close:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    transform: scale(1.05);
+  }
+}
+
+.tc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tc-head-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(var(--journey-color, 85, 139, 110), 0.16);
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.35);
+  color: rgb(var(--journey-color, 85, 139, 110));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tc-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.tc-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.tc-sub {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
+/* Paper Stationery Writing Box */
+.tc-paper {
+  width: 100%;
+  min-height: 180px;
+  max-height: 320px;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-family: inherit;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tc-paper:focus {
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.55);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.35),
+    0 0 16px rgba(var(--journey-color, 85, 139, 110), 0.22);
+}
+
+.tc-paper::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+/* Horizon Delivery Picker */
+.tc-horizon {
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tc-horizon-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.01em;
+}
+
+.tc-horizon-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tc-chip {
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+@media (hover: hover) {
+  .tc-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+}
+
+.tc-chip.is-active {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.22);
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.55);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(var(--journey-color, 85, 139, 110), 0.24);
+}
+
+.tc-horizon-date {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Actions & Buttons */
+.tc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.tc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.tc-btn-primary {
+  background: linear-gradient(135deg, rgb(var(--journey-color, 85, 139, 110)), rgba(var(--journey-color, 85, 139, 110), 0.8));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(var(--journey-color, 85, 139, 110), 0.35);
+}
+
+@media (hover: hover) {
+  .tc-btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(var(--journey-color, 85, 139, 110), 0.5);
+  }
+}
+
+.tc-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.tc-btn-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (hover: hover) {
+  .tc-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+}
+
+/* Wax Seal Confirmation */
+.tc-sealed-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.tc-wax {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ea580c, #9a3412);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(234, 88, 12, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.tc-wax-button {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .tc-wax-button:hover {
+    transform: scale(1.08);
+    box-shadow:
+      inset 0 2px 4px rgba(255, 255, 255, 0.5),
+      0 12px 32px rgba(234, 88, 12, 0.65);
+  }
+}
+
+.tc-sealed-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.tc-sealed-sub {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 22px;
+}
+
+/* Sealed / Arrived / Opened Lists */
+.tc-lists {
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 18px;
+}
+
+.tc-list-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 12px 0 8px;
+}
+
+.tc-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  margin-bottom: 6px;
+  text-align: left;
+  transition: background 0.18s ease;
+}
+
+.tc-row.is-arrived {
+  background: rgba(249, 115, 22, 0.12);
+  border-color: rgba(249, 115, 22, 0.35);
+  color: #fb923c;
+  cursor: pointer;
+}
+
+.tc-row.is-opened {
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .tc-row.is-arrived:hover,
+  .tc-row.is-opened:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.tc-row-main {
+  font-weight: 500;
+  flex: 1;
+}
+
+.tc-row-meta {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.tc-row-delete {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+@media (hover: hover) {
+  .tc-row-delete:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.25);
+  }
+}
+
+.tc-row-delete.is-confirm {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3. Reveal View & Miro's Note
+   ========================================================================== */
+
+.tc-envelope {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 20px;
+}
+
+.tc-reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.tc-letter {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 20px 22px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.tc-letter p {
+  margin-bottom: 8px;
+}
+.tc-letter p:last-child {
+  margin-bottom: 0;
+}
+
+/* Miro's Note on What Changed */
+.tc-miro {
+  background: linear-gradient(135deg, rgba(var(--journey-color, 85, 139, 110), 0.12), rgba(0, 0, 0, 0.2));
+  border: 1px solid rgba(var(--journey-color, 85, 139, 110), 0.32);
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tc-miro-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(var(--journey-color, 85, 139, 110));
+}
+
+.tc-miro-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+.tc-miro-note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tc-miro-error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tc-error {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: #f87171;
+  text-align: center;
+}
+
+/* Skeletons */
+.tc-card-skeleton {
+  pointer-events: none;
+  min-height: 180px;
+}
+
+.tc-card-skel-head {
+  width: 140px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tc-card-skel-body {
+  width: 75%;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tc-card-skel-btn {
+  width: 160px;
+  height: 42px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   4. Light Mode (.hs-light)
+   ========================================================================== */
+
+.hs-light .tc-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #1c1c1e;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 8px 28px rgba(0, 0, 0, 0.06);
+}
+
+.hs-light .tc-card-title {
+  color: rgba(0, 0, 0, 0.92);
+}
+
+.hs-light .tc-card-desc {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.hs-light .tc-card-countdown-num {
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.hs-light .tc-card-countdown-label {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.hs-light .tc-card-horizon-hint,
+.hs-light .tc-card-count {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.hs-light .tc-card-badge.is-sealed-badge {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.75);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.hs-light .tc-card.is-arrived {
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.92), rgba(255, 255, 255, 0.85));
+  border-color: rgba(249, 115, 22, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 32px rgba(249, 115, 22, 0.14);
+}
+
+.hs-light .tc-card-btn-glass {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.hs-light .tc-card-btn-secondary {
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.hs-light .tc-modal {
+  background: rgba(250, 250, 252, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #1c1c1e;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 24px 60px rgba(0, 0, 0, 0.18);
+}
+
+.hs-light .tc-close {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.hs-light .tc-title {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.hs-light .tc-sub {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.hs-light .tc-paper {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.hs-light .tc-paper::placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.hs-light .tc-chip {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.hs-light .tc-btn-ghost {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.hs-light .tc-row {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.hs-light .tc-letter {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.hs-light .tc-miro {
+  background: rgba(var(--journey-color, 85, 139, 110), 0.08);
+  border-color: rgba(var(--journey-color, 85, 139, 110), 0.25);
+}
+
+.hs-light .tc-miro-note {
+  color: rgba(0, 0, 0, 0.85);
+}

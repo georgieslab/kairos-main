@@ -357,6 +357,7 @@ const WelcomeScreen = ({ onStart, onNavigate }) => {
         <span className="ws-journey-tag">{t('welcomeScreen.journeys.tagShadowWork', 'Shadow Work')}</span>
         <span className="ws-journey-tag">{t('welcomeScreen.journeys.tagGratitude', 'Gratitude')}</span>
         <span className="ws-journey-tag">{t('welcomeScreen.journeys.tagCreativeExpression', 'Creative Expression')}</span>
+        <span className="ws-journey-tag">{t('welcomeScreen.journeys.tagTimeCapsule', 'Future Self Letters')}</span>
       </div>
 
       <div className="ws-journey-stats">

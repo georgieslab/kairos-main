@@ -1,11 +1,14 @@
 // src/pages/HomeScreen.jsx - Apple Spatial Glass Dashboard (Fixed Layout)
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress } from '../hooks/useUserProgress';
 import { useUserStatistics } from '../hooks/useUserStatistics';
 import KairosAiCard from '../components/common/KairosAiCard';
+import TimeCapsuleTile from '../components/common/TimeCapsuleTile';
+import TimeCapsuleModal from '../components/common/TimeCapsuleModal';
+import { listCapsules } from '../services/timeCapsuleService';
 import { getJourneyDay } from '../data/JourneyData';
 import { getMostRecentActivePathId, getActiveJourneysCompletion } from '../utils/pathUtils';
 import DynamicIcon from '../components/common/DynamicIcon';
@@ -13,6 +16,9 @@ import ThemeSwitcher from '../components/common/ThemeSwitcher';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
 import WhatsNew from '../components/common/WhatsNew';
 import VersionNews from '../components/common/VersionNews';
+import InboxButton from '../components/common/InboxButton';
+import InboxModal from '../components/common/InboxModal';
+import { useInbox } from '../services/inboxService';
 import MoodWeather from '../components/common/MoodWeather';
 import HomeActivityCalendar from '../components/common/HomeActivityCalendar';
 import { Sparkles, ArrowRight, Flame, FileText, Target, Quote, X, ChevronRight, Headphones, Mic } from 'lucide-react';
@@ -25,7 +31,7 @@ import hapticService from '../services/hapticService';
 
 const HomeScreen = ({ navigateToScreen }) => {
   const { t, i18n } = useTranslation(['journey', 'settings', 'home']);
-  const { userProfile } = useAuth();
+  const { currentUser, userProfile } = useAuth();
   const { isDarkMode } = useTheme();
   const { statistics, isLoading: statsLoading } = useUserStatistics();
   const { inProgressPaths, hasActiveJourneys } = useUserProgress();
@@ -35,10 +41,71 @@ const HomeScreen = ({ navigateToScreen }) => {
   const [timeGradient, setTimeGradient] = useState('');
   const [showJourneys, setShowJourneys] = useState(false);
 
-  const handleOpenVoiceReflection = () => {
+  // Time Capsule (Letters to your future self) state
+  const [capsules, setCapsules] = useState([]);
+  const [capsulesLoading, setCapsulesLoading] = useState(true);
+  const [capsuleModal, setCapsuleModal] = useState(null);
+
+  const loadCapsules = useCallback(async () => {
+    if (!currentUser?.uid) {
+      setCapsulesLoading(false);
+      return;
+    }
+    try {
+      const list = await listCapsules(currentUser.uid);
+      setCapsules(list);
+    } catch (err) {
+      console.warn('Could not load time capsules:', err);
+    } finally {
+      setCapsulesLoading(false);
+    }
+  }, [currentUser?.uid]);
+
+  useEffect(() => {
+    loadCapsules();
+  }, [loadCapsules]);
+
+  useEffect(() => {
+    const handleOpenCapsule = () => setCapsuleModal('compose');
+    window.addEventListener('kairos:open-time-capsule', handleOpenCapsule);
+    return () => window.removeEventListener('kairos:open-time-capsule', handleOpenCapsule);
+  }, []);
+
+  const handleOpenVoiceReflection = useCallback(() => {
     hapticService.medium?.();
     window.dispatchEvent(new CustomEvent('kairos:open-voice-modal'));
-  };
+  }, []);
+
+  // Sanctuary Inbox state & reactive hook
+  const [showInbox, setShowInbox] = useState(false);
+  const {
+    items: inboxItems,
+    unreadCount: inboxUnreadCount,
+    markAsRead: markInboxAsRead,
+    markAllAsRead: markAllInboxAsRead,
+    archiveItem: archiveInboxItem,
+  } = useInbox(currentUser?.uid, capsules, statistics);
+
+  const handleInboxAction = useCallback((action, item) => {
+    setShowInbox(false);
+    if (!action) return;
+    if (action.type === 'open_capsule') {
+      if (action.capsule) {
+        setCapsuleModal({ view: 'reveal', capsule: action.capsule });
+      } else {
+        setCapsuleModal({ view: 'compose', capsule: null });
+      }
+      return;
+    }
+    if (action.type === 'open_voice') {
+      handleOpenVoiceReflection();
+      return;
+    }
+    if (action.type === 'navigate_analytics') {
+      navigateToScreen('analytics-dashboard');
+      return;
+    }
+  }, [handleOpenVoiceReflection, navigateToScreen]);
 
   useEffect(() => {
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -158,6 +225,7 @@ const HomeScreen = ({ navigateToScreen }) => {
         <div className="header-actions-cluster">
           {/* Main Controls Pillar */}
           <div className="header-controls-dock" role="toolbar" aria-label={t('home.quickControls', 'Quick controls')}>
+            <InboxButton unreadCount={inboxUnreadCount} onClick={() => setShowInbox(true)} />
             <WhatsNew navigateToScreen={navigateToScreen} />
             <ThemeSwitcher />
             <LanguageSwitcher />
@@ -238,17 +306,6 @@ const HomeScreen = ({ navigateToScreen }) => {
                 <Sparkles size={18} />
                 {t('home.beginJournaling', 'Begin Journaling')}
                 <ArrowRight size={16} className="cta-arrow" />
-              </button>
-
-              <button
-                type="button"
-                className="hero-voice-cta"
-                onClick={handleOpenVoiceReflection}
-                title={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
-                aria-label={t('miro.openVoiceChamber', 'Reflect with Miro Voice')}
-              >
-                <Mic size={16} className="hero-voice-icon" />
-                <span>{t('miro.voiceReflection', 'Voice')}</span>
               </button>
             </div>
           </>
@@ -355,6 +412,14 @@ const HomeScreen = ({ navigateToScreen }) => {
         statistics={statistics}
       />
 
+      {/* ========== 5.5 TIME CAPSULE (Letters to your future self) ========== */}
+      <TimeCapsuleTile
+        capsules={capsules}
+        loading={capsulesLoading}
+        onOpenCompose={() => setCapsuleModal({ view: 'compose', capsule: null })}
+        onOpenReveal={(letter) => setCapsuleModal({ view: 'reveal', capsule: letter })}
+      />
+
       {/* ========== 6. BENTO PAIR (Listen & Spark) ========== */}
       <div className="home-bento-grid">
         <button className="home-listen-card" onClick={() => navigateToScreen('listen')}>
@@ -447,6 +512,31 @@ const HomeScreen = ({ navigateToScreen }) => {
         </div>,
         document.body
       )}
+
+      {/* Time Capsule Modal (Compose & Reveal) */}
+      {capsuleModal && currentUser && (
+        <TimeCapsuleModal
+          uid={currentUser.uid}
+          initialView={capsuleModal.view}
+          initialCapsule={capsuleModal.capsule}
+          capsules={capsules}
+          entries={statistics.allEntries || []}
+          onClose={() => setCapsuleModal(null)}
+          onChanged={loadCapsules}
+        />
+      )}
+
+      {/* Sanctuary Inbox Modal */}
+      <InboxModal
+        isOpen={showInbox}
+        onClose={() => setShowInbox(false)}
+        items={inboxItems}
+        unreadCount={inboxUnreadCount}
+        onMarkAsRead={markInboxAsRead}
+        onMarkAllAsRead={markAllInboxAsRead}
+        onArchiveItem={archiveInboxItem}
+        onExecuteAction={handleInboxAction}
+      />
 
     </div>
   );

@@ -1,6 +1,6 @@
 // src/utils/versionControl.js
 
-export const APP_VERSION = '2.2.0';
+export const APP_VERSION = '2.3.0';
 
 export const VERSION_HISTORY = [
   {
@@ -2527,6 +2527,30 @@ export const VERSION_HISTORY = [
   bugFixes: [
     'Fixed voice chamber modal unclosed DOM elements and turn-taking loop.',
     'Ensured full offline playback for ambient soundscapes without network latency.'
+  ]
+},
+{
+  version: '2.3.0',
+  releaseDate: '2026-10-03',
+  codename: 'Sanctuary Inbox & Letters to Future Self',
+  features: [
+    'Sanctuary Inbox: A quiet postal desk in the header controls dock, gathering arrived time capsule letters, Miro\'s reflection notes, and personal milestones in a frosted Spatial Glass drawer.',
+    'Letters to Your Future Self (Time Capsule): Write a letter to your future self today, select a delivery horizon of 30, 90, or 365 days, and seal it in digital time.',
+    'Cryptographic & Time Seal Security: Sealed letters remain strictly locked and unreadable until their designated delivery morning.',
+    'Miro Temporal Reflection: On arrival, Miro provides a one-time comparative reflection highlighting personal growth between the snapshot of who you were then vs. who you are now.',
+    'Prominent Spatial Glass Time Capsule Card: High-visibility Home screen card featuring tactile wax seal emblem, live countdown, and one-tap compose or reveal.',
+    'Custom Time & Letter Iconic Emblem: Crafted SVG iconography blending temporal dials and epistolary envelope silhouettes.',
+    'Morning 09:00 Delivery Notifications: Automated local notification scheduled directly for the delivery morning.'
+  ],
+  improvements: [
+    'Softened Today\'s Inner Aura styling for a tranquil, glare-free ambient experience when checked in.',
+    'Focused Today\'s Reflection card on the Home screen by streamlining primary journaling flow.',
+    'Full trilingual integration across English, German, and Georgian for all time capsule flows.',
+    'GDPR-compliant account deletion cascading to delete all stored time capsules and cancel pending notifications.'
+  ],
+  bugFixes: [
+    'Avoided notification ID collisions by allocating an isolated hash range for time capsules.',
+    'Cached Miro reflection note in Firestore to eliminate redundant AI calls on repeated opens.'
   ]
 }
 

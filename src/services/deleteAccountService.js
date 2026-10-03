@@ -13,6 +13,8 @@ import {
 import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { ref, deleteObject, listAll } from 'firebase/storage';
 import { db, auth, storage } from '../config/firebase';
+import { deleteAllCapsules } from './timeCapsuleService';
+import { deleteAllInboxItems } from './inboxService';
 
 /**
  * Deletes all user data from Firestore, Storage, and Auth
@@ -105,7 +107,23 @@ export const deleteUserAccount = async (userId, password) => {
       console.log('ℹ️ No storage files found or already deleted');
     }
 
-    // Step 5: Delete user profile document
+    // Step 5: Delete user time capsules & pending arrival notifications
+    try {
+      const deletedCapsules = await deleteAllCapsules(userId);
+      console.log(`✅ Deleted ${deletedCapsules} time capsule letters`);
+    } catch (capsuleError) {
+      console.warn('⚠️ Could not delete time capsules:', capsuleError);
+    }
+
+    // Step 5.5: Delete user sanctuary inbox items
+    try {
+      await deleteAllInboxItems(userId);
+      console.log('✅ Deleted sanctuary inbox items');
+    } catch (inboxError) {
+      console.warn('⚠️ Could not delete inbox items:', inboxError);
+    }
+
+    // Step 6: Delete user profile document
     console.log('👤 Deleting user profile...');
     const userProfileRef = doc(db, 'users', userId);
     await deleteDoc(userProfileRef);
